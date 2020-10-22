@@ -5,8 +5,24 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/import_database_ic"
+            android:id="@+id/import_database"
+            android:icon="@drawable/ic_import_database"
             android:title="@string/import_database" />
+        <item
+            android:id="@+id/check_for_updates"
+            android:icon="@drawable/ic_check_for_updates"
+            android:title="@string/check_for_updates" />
+        <item
+            android:id="@+id/changelog"
+            android:icon="@drawable/ic_changelog"
+            android:title="@string/changelog" />
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/settings" />
+        <item
+            android:id="@+id/about"
+            android:icon="@drawable/ic_about"
+            android:title="@string/about" />
     </group>
 </menu>

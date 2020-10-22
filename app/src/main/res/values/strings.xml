@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">MyAccounts</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="action_settings" translatable="false">Settings</string>
+    <string name="settings">Settings</string>
     <string name="import_database">Import Database</string>
+    <string name="check_for_updates">Check for Updates</string>
+    <string name="changelog">Changelog</string>
+    <string name="about">About</string>
 </resources>
