@@ -6,4 +6,8 @@
     <string name="check_for_updates">Check for Updates</string>
     <string name="changelog">Changelog</string>
     <string name="about">About</string>
+    <string name="edit">Edit</string>
+    <string name="close">Close</string>
+    <string name="delete">Delete</string>
+    <string name="export">Export</string>
 </resources>

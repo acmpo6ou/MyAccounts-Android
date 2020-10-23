@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/export_database_item"
+        android:icon="@drawable/ic_import_database"
+        android:title="@string/export" />
+    <item
+        android:id="@+id/delete_database_item"
+        android:icon="@drawable/ic_close"
+        android:title="@string/delete" />
+    <item
+        android:id="@+id/edit_database_item"
+        android:title="@string/edit" />
+    <item
+        android:id="@+id/close_database_item"
+        android:title="@string/close" />
+</menu>
