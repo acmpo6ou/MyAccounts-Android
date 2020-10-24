@@ -6,17 +6,19 @@
     <string name="check_for_updates">Check for Updates</string>
     <string name="changelog">Changelog</string>
     <string name="about">About</string>
+
     <string name="edit">Edit</string>
     <string name="close">Close</string>
     <string name="delete">Delete</string>
     <string name="export">Export</string>
-    <string name="password_colon">Password:</string>
+
     <string name="password">Password</string>
     <string name="open_database">Open Database</string>
+
     <string name="database_name">Database name</string>
     <string name="database_name_tip">Only latin symbols, numbers and .()-_  are supported</string>
     <string name="repeat_password">Repeat password</string>
-    <string name="password_tip">"You can generate it usign button below "</string>
+    <string name="password_tip">You can generate it using button below</string>
     <string name="generate">Generate</string>
     <string name="create">Create</string>
 </resources>
