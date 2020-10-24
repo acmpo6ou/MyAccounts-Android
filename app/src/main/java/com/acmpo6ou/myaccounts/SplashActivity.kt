@@ -16,6 +16,6 @@ class SplashActivity : AppCompatActivity() {
                     val i = Intent(this, MainActivity::class.java)
                     startActivity(i)
                     finish()
-                }, 650L)
+                }, 600L)
     }
 }
