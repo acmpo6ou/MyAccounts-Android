@@ -10,4 +10,7 @@
     <string name="close">Close</string>
     <string name="delete">Delete</string>
     <string name="export">Export</string>
+    <string name="password_colon">Password:</string>
+    <string name="password">Password</string>
+    <string name="open_database">Open Database</string>
 </resources>
