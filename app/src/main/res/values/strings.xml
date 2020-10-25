@@ -30,13 +30,27 @@
     <string name="credits">Credits</string>
     <string name="about_text">
         <p><b>MyAccounts </b>— is simple account database manager.</p><br />
-        <p>It is an android version of <a href="https://github.com/Acmpo6ou/PyQtAccounts">PyQtAccounts.</a></p><br/>
-        <p>You can easily manage your accounts and store them safely in encrypted databases.</p><br/>
-        <p>The interface of MyAccounts is common and easy to use.</p><br/>
-        <p>MyAccounts is completely free and open source project (see our license).</p><br/>
+        <p>It is an android version of <a href="https://github.com/Acmpo6ou/PyQtAccounts">PyQtAccounts.</a></p><br />
+        <p>You can easily manage your accounts and store them safely in encrypted databases.</p><br />
+        <p>The interface of MyAccounts is common and easy to use.</p><br />
+        <p>MyAccounts is completely free and open source project (see our license).</p><br />
         <p>Also here you can see MyAccounts source code
-        <a href="https://github.com/Acmpo6ou/MyAccounts">GitHub</a></p><br/>
+        <a href="https://github.com/Acmpo6ou/MyAccounts">GitHub</a></p><br />
         <p>According to our privacy policy you must know that we do not saving nor do we sharing
         any of your private data such as your account passwords or databases.</p>
     </string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 </resources>
