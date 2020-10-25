@@ -22,4 +22,12 @@
     <string name="generate">Generate</string>
     <string name="create">Create</string>
     <string name="save">Save</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="about_myaccounts">About MyAccounts</string>
+    <string name="author_name">Author: Kolvakh Bohdan</string>
+    <string name="version">Version:</string>
+    <string name="about">About</string>
+    <string name="license">License</string>
+    <string name="credits">Credits</string>
 </resources>
