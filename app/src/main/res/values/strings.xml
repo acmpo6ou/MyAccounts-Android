@@ -41,4 +41,13 @@
     </string>
     <!-- Preference Titles -->
     <string name="language">Language</string>
+    <string name="fingerprint_summary">Use your fingerprint to open databases without typing password</string>
+    <string name="fingerprint_unlock">Fingerprint unlock</string>
+    <string name="dark_theme">Dark theme</string>
+    <string name="block_screen_capture">Block screen capture</string>
+    <string name="block_screen_capture_summary">to avoid sensitive info leak</string>
+    <string name="main_database_category">Main database</string>
+    <string name="main_database_feature">Main database feature</string>
+    <string name="main_database_summary">Main database will be automatically selected at app startup</string>
+    <string name="main_database">Main database</string>
 </resources>

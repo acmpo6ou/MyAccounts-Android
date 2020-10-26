@@ -3,9 +3,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <ListPreference
+        android:dialogIcon="@drawable/ic_language"
         android:entries="@array/languages"
         android:entryValues="@array/lang_values"
+        android:icon="@drawable/ic_language"
         android:key="language"
-        app:useSimpleSummaryProvider="true"
-        android:title="@string/language" />
+        android:title="@string/language"
+        app:useSimpleSummaryProvider="true" />
+    <SwitchPreference
+        android:defaultValue="true"
+        android:icon="@drawable/ic_theme"
+        android:key="dark_theme"
+        android:title="@string/dark_theme" />
+    <SwitchPreference
+        android:defaultValue="true"
+        android:icon="@drawable/ic_fingerprint"
+        android:key="fingerprint"
+        android:summary="@string/fingerprint_summary"
+        android:title="@string/fingerprint_unlock" />
+    <SwitchPreference
+        android:defaultValue="true"
+        android:icon="@drawable/ic_security"
+        android:key="block_screen_capture"
+        android:summary="@string/block_screen_capture_summary"
+        android:title="@string/block_screen_capture" />
+    <PreferenceCategory android:title="@string/main_database_category">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="main_database_feature"
+            android:summary="@string/main_database_summary"
+            android:title="@string/main_database_feature" />
+        <ListPreference
+            android:key="main_database"
+            android:title="@string/main_database"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
 </PreferenceScreen>
