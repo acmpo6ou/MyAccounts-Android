@@ -2,4 +2,11 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation" />
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/accountsFragment">
+    <fragment
+        android:id="@+id/accountsFragment"
+        android:name="com.acmpo6ou.myaccounts.ui.AccountsFragment"
+        android:label="fragment_accounts_list"
+        tools:layout="@layout/fragment_accounts_list" />
+</navigation>
