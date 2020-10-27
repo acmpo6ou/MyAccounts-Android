@@ -50,4 +50,14 @@
     <string name="main_database_feature">Main database feature</string>
     <string name="main_database_summary">Main database will be automatically selected at app startup</string>
     <string name="main_database">Main database</string>
+    <string name="title_activity_accounts">AccountsActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
 </resources>
