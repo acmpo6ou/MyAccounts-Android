@@ -1,7 +1,8 @@
-package com.acmpo6ou.myaccounts
+package com.acmpo6ou.myaccounts.ui
 
 import android.os.Bundle
 import androidx.preference.PreferenceFragmentCompat
+import com.acmpo6ou.myaccounts.R
 
 class SettingsFragment : PreferenceFragmentCompat() {
 

@@ -1,4 +1,4 @@
-package com.acmpo6ou.myaccounts
+package com.acmpo6ou.myaccounts.ui
 
 import androidx.lifecycle.ViewModel
 
