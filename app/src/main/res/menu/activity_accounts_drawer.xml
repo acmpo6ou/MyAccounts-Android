@@ -5,9 +5,9 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/import_database"
-            android:icon="@drawable/ic_import_database"
-            android:title="@string/import_database" />
+            android:id="@+id/save"
+            android:icon="@drawable/ic_save"
+            android:title="@string/save" />
         <item
             android:id="@+id/check_for_updates"
             android:icon="@drawable/ic_check_for_updates"
