@@ -81,6 +81,7 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:src="@drawable/ic_copy"
-        tools:layout_editor_absoluteX="307dp"
-        tools:layout_editor_absoluteY="636dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:focusable="true" />
 </androidx.constraintlayout.widget.ConstraintLayout>
