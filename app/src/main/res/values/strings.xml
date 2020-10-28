@@ -68,4 +68,8 @@
     <string name="password_">Password:</string>
     <string name="date_of_birth_">Date of birth:</string>
     <string name="comment_">Comment:</string>
+    <string name="account_name">Account name</string>
+    <string name="username">Username</string>
+    <string name="e_mail">E-mail</string>
+    <string name="comment">Comment</string>
 </resources>
