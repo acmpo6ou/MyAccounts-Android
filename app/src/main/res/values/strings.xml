@@ -60,4 +60,12 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="account_">Account:</string>
+    <string name="username_">Username:</string>
+    <string name="e_mail_">E-mail:</string>
+    <string name="password_">Password:</string>
+    <string name="date_of_birth_">Date of birth:</string>
+    <string name="comment_">Comment:</string>
 </resources>
