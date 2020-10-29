@@ -39,7 +39,7 @@ class AccountsFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = MyAccountRecyclerViewAdapter(DummyContent.ITEMS)
+                adapter = DisplayAccountRecyclerViewAdapter(DummyContent.ITEMS)
             }
         }
         return view
