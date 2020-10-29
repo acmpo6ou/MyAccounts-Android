@@ -33,7 +33,7 @@ class DisplayAccountRecyclerViewAdapter(
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val idView: TextView = view.findViewById(R.id.item_number)
-        val contentView: TextView = view.findViewById(R.id.content)
+        val contentView: TextView = view.findViewById(R.id.accountItemName)
 
         override fun toString(): String {
             return super.toString() + " '" + contentView.text + "'"

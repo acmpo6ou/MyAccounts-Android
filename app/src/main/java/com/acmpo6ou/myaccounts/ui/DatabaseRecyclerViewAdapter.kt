@@ -31,7 +31,7 @@ class DatabaseRecyclerViewAdapter(
     override fun getItemCount(): Int = values.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val contentView: TextView = view.findViewById(R.id.content)
+        val contentView: TextView = view.findViewById(R.id.accountItemName)
 
         override fun toString(): String {
             return super.toString() + " '" + contentView.text + "'"
