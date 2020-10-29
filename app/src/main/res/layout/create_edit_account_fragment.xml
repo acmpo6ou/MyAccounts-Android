@@ -132,7 +132,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginRight="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/generateButton"
+        app:layout_constraintBottom_toTopOf="@+id/accountGenerate"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/birthDate">
@@ -151,18 +151,18 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/generateButton"
+        android:id="@+id/accountGenerate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:text="@string/generate"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/createButton"
+        app:layout_constraintEnd_toStartOf="@+id/accountCreate"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/createButton"
+        android:id="@+id/accountCreate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:enabled="false"
@@ -170,5 +170,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/generateButton" />
+        app:layout_constraintStart_toEndOf="@+id/accountGenerate" />
 </androidx.constraintlayout.widget.ConstraintLayout>
