@@ -20,7 +20,7 @@ class CreateAccountFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.create_account_fragment, container, false)
+        return inflater.inflate(R.layout.create_edit_account_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
