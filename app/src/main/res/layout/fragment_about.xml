@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout4"
+    android:id="@+id/aboutLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="16dp"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/authorLabel"
         android:layout_width="0dp"
         android:layout_height="33dp"
         android:layout_marginTop="28dp"
@@ -51,22 +51,26 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView3">
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/aboutTab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/about" />
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/licenseTab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/license" />
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/creditsTab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/credits" />
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/aboutPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

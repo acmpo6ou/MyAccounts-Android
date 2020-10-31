@@ -8,24 +8,24 @@ import android.view.View
 import android.view.ViewGroup
 import com.acmpo6ou.myaccounts.R
 
-class CreateAccountFragment : Fragment() {
+class UpdatesFragment : Fragment() {
 
     companion object {
-        fun newInstance() = CreateAccountFragment()
+        fun newInstance() = UpdatesFragment()
     }
 
-    private lateinit var viewModel: CreateAccountViewModel
+    private lateinit var viewModel: UpdatesViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.create_edit_account_fragment, container, false)
+    ): View {
+        return inflater.inflate(R.layout.updates_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CreateAccountViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(UpdatesViewModel::class.java)
         // TODO: Use the ViewModel
     }
 

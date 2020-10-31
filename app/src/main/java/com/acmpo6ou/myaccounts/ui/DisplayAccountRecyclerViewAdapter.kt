@@ -13,9 +13,9 @@ import com.acmpo6ou.myaccounts.dummy.DummyContent.DummyItem
  * [RecyclerView.Adapter] that can display a [DummyItem].
  * TODO: Replace the implementation with code for your data type.
  */
-class MyAccountRecyclerViewAdapter(
+class DisplayAccountRecyclerViewAdapter(
     private val values: List<DummyItem>
-) : RecyclerView.Adapter<MyAccountRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<DisplayAccountRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)

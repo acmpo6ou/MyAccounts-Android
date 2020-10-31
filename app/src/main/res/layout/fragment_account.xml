@@ -14,7 +14,7 @@
         app:srcCompat="@drawable/ic_account" />
 
     <TextView
-        android:id="@+id/content"
+        android:id="@+id/accountItemName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"

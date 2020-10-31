@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">MyAccounts</string>
-    <string name="nav_header_subtitle">1.0.0</string>
+    <string name="app_name" translatable="false">MyAccounts</string>
+    <string name="version_string" translatable="false">v1.0.0</string>
     <string name="settings">Settings</string>
     <string name="import_database">Import Database</string>
     <string name="check_for_updates">Check for Updates</string>
@@ -28,7 +28,7 @@
     <string name="version">Version:</string>
     <string name="license">License</string>
     <string name="credits">Credits</string>
-    <string name="about_text">
+    <string name="about_text" translatable="false">
         <p><b>MyAccounts </b>— is simple account database manager.</p><br />
         <p>It is an android version of <a href="https://github.com/Acmpo6ou/PyQtAccounts">PyQtAccounts.</a></p><br />
         <p>You can easily manage your accounts and store them safely in encrypted databases.</p><br />
@@ -46,22 +46,12 @@
     <string name="dark_theme">Dark theme</string>
     <string name="block_screen_capture">Block screen capture</string>
     <string name="block_screen_capture_summary">to avoid sensitive info leak</string>
-    <string name="main_database_category">Main database</string>
     <string name="main_database_feature">Main database feature</string>
     <string name="main_database_summary">Main database will be automatically selected at app startup</string>
     <string name="main_database">Main database</string>
-    <string name="title_activity_accounts">AccountsActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
+    <string name="title_activity_accounts" translatable="false">AccountsActivity</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="account_">Account:</string>
     <string name="username_">Username:</string>
     <string name="e_mail_">E-mail:</string>
@@ -72,4 +62,7 @@
     <string name="username">Username</string>
     <string name="e_mail">E-mail</string>
     <string name="comment">Comment</string>
+    <string name="no_changelog_yet">No changelog yet</string>
+    <string name="download">Download</string>
+    <string name="later">Later</string>
 </resources>

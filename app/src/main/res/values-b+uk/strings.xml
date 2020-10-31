@@ -1,0 +1,45 @@
+<resources>
+    <string name="settings">Налаштування</string>
+    <string name="import_database">Імпортувати базу</string>
+    <string name="check_for_updates">Перевірити оновлення</string>
+    <string name="about">Про програму</string>
+
+    <string name="close">Закрити</string>
+
+    <string name="database_name_tip">Підтримуються тільки латинські символи, цифри і .()-_</string>
+    <string name="repeat_password">Повторіть пароль</string>
+    <string name="password_tip">Ви можете згенерувати його з кнопкою нижче</string>
+    <string name="generate">Згенерувати</string>
+    <string name="create">Створити</string>
+    <string name="save">Зберегти</string>
+
+    <string name="about_myaccounts">Про MyAccounts</string>
+    <string name="author_name">Автор: Кольвах Богдан</string>
+    <string name="version">Версія:</string>
+    <string name="license">Ліцензія</string>
+    <string name="credits">Кредити</string>
+    <!-- Preference Titles -->
+    <string name="language">Мова</string>
+    <string name="fingerprint_summary">Використовуйте відбиток пальця замість пароля для відкриття баз данних</string>
+    <string name="fingerprint_unlock">Розблокування відбитком пальця</string>
+    <string name="block_screen_capture">Блокувати захоплення екрану</string>
+    <string name="block_screen_capture_summary">щоб уникнути витоку конфіденційної інформації</string>
+    <string name="main_database_feature">Функція головної бази данних</string>
+    <string name="main_database_summary">Головна база данних буде автоматично вибрана при запуску програми</string>
+    <string name="main_database">Головна база данних</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="account_">Акаунт:</string>
+    <string name="username_">Ім\'я:</string>
+    <string name="e_mail_">E-mail:</string>
+    <string name="password_">Пароль:</string>
+    <string name="date_of_birth_">Дата народження:</string>
+    <string name="comment_">Нотатки:</string>
+    <string name="account_name">Ім\'я акаунту</string>
+    <string name="username">Ім\'я</string>
+    <string name="e_mail">E-mail</string>
+    <string name="comment">Нотатки</string>
+    <string name="no_changelog_yet">Немає журналу змін</string>
+    <string name="download">Скачати</string>
+    <string name="later">Пізніше</string>
+</resources>
