@@ -1,7 +1,7 @@
 <resources>
     <string name="settings">Налаштування</string>
     <string name="import_database">Імпортувати базу</string>
-    <string name="check_for_updates">Перевірити наявність оновленнь</string>
+    <string name="check_for_updates">Перевірити оновлення</string>
     <string name="about">Про програму</string>
 
     <string name="close">Закрити</string>
