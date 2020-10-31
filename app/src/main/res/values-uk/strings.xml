@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="changelog">Журнал змін</string>
+    <string name="edit">Редагувати</string>
+    <string name="delete">Видалити</string>
+    <string name="export">Експортувати</string>
+    <string name="password">Пароль</string>
+    <string name="open_database">Відкрити базу данних</string>
+    <string name="database_name">Ім\'я бази данних</string>
+    <string name="dark_theme">Темна тема</string>
+</resources>
