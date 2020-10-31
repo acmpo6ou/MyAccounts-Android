@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <ListPreference
+        android:defaultValue="En"
         android:dialogIcon="@drawable/ic_language"
         android:entries="@array/languages"
         android:entryValues="@array/lang_values"
@@ -27,7 +28,7 @@
         android:key="block_screen_capture"
         android:summary="@string/block_screen_capture_summary"
         android:title="@string/block_screen_capture" />
-    <PreferenceCategory android:title="@string/main_database_category">
+    <PreferenceCategory android:title="@string/main_database">
 
         <SwitchPreference
             android:defaultValue="false"

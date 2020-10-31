@@ -8,7 +8,7 @@
 
     <string name="database_name_tip">Підтримуються тільки латинські символи, цифри і .()-_</string>
     <string name="repeat_password">Повторіть пароль</string>
-    <string name="password_tip">You can generate it using button below</string>
+    <string name="password_tip">Ви можете згенерувати його з кнопкою нижче</string>
     <string name="generate">Згенерувати</string>
     <string name="create">Створити</string>
     <string name="save">Зберегти</string>
@@ -24,7 +24,7 @@
     <string name="fingerprint_unlock">Розблокування відбитком пальця</string>
     <string name="block_screen_capture">Блокувати захоплення екрану</string>
     <string name="block_screen_capture_summary">щоб уникнути витоку конфіденційної інформації</string>
-    <string name="main_database_feature">Функція основної бази данних</string>
+    <string name="main_database_feature">Функція головної бази данних</string>
     <string name="main_database_summary">Головна база данних буде автоматично вибрана при запуску програми</string>
     <string name="main_database">Головна база данних</string>
 
