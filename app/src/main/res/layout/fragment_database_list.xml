@@ -23,7 +23,8 @@
         android:backgroundTint="@color/green"
         android:clickable="true"
         android:focusable="true"
-        android:src="@drawable/ic_add" />
+        android:src="@drawable/ic_add"
+        app:tint="@color/white" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
