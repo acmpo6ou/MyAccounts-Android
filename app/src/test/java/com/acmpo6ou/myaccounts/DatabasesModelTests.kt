@@ -1,6 +1,7 @@
 package com.acmpo6ou.myaccounts
 
 import com.acmpo6ou.myaccounts.core.Database
+import com.acmpo6ou.myaccounts.core.DatabasesModel
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -50,7 +51,7 @@ class DatabasesModelTests {
         if(srcFolder.exists()){
             srcFolder.deleteRecursively()
         }
-        srcFolder.mkdir()
+        srcFolder.mkdirs()
     }
 
     /**
@@ -74,8 +75,27 @@ class DatabasesModelTests {
     }
 
     @Test
-    fun `crateDatabase should create new encrypted database given name and password`(){
+    fun `createDatabase should create new encrypted database given name and password`(){
+        // here we instantiate DatabasesModel and create empty database with it
         val model = DatabasesModel(SRC_DIR)
         model.createDatabase("main", "main")
+
+        val expectedDb = File("sampledata/main.db").readBytes()
+        val expectedBin = File("sampledata/main.bin").readBytes()
+
+        val actualDb = File("${SRC_DIR}main.db").readBytes()
+        val actualBin = File("${SRC_DIR}main.bin").readBytes()
+
+        assertEquals(
+                "createDatabase has created incorrectly encrypted database!",
+                expectedDb,
+                actualDb,
+        )
+
+        assertEquals(
+                "createDatabase has created incorrect salt file for database!",
+                expectedBin,
+                actualBin,
+        )
     }
 }

@@ -1,5 +1,7 @@
 package com.acmpo6ou.myaccounts.core
 
+import java.io.File
+
 /** This module contains classes related to DatabasesModel */
 
 
@@ -16,8 +18,19 @@ class Account{}
  */
 data class Database(val name: String,
                     val password: String? = null,
-                    val data: Map<String, Account>? = null){
+                    val data: Map<String, Account>? = emptyMap()){
     var isOpen: Boolean = false
         get() = password != null
         private set
+}
+
+class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
+    fun createDatabase(name: String, password: String) {
+        val databaseFile = File("$SRC_DIR$name.db")
+        val saltFile = File("$SRC_DIR$name.bin")
+
+        databaseFile.createNewFile()
+        saltFile.createNewFile()
+    }
+
 }
