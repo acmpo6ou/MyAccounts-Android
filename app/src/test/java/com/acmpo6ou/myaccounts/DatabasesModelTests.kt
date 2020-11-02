@@ -2,10 +2,13 @@ package com.acmpo6ou.myaccounts
 
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesModel
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import java.io.File
+import java.security.SecureRandom
+import kotlin.math.exp
 
 class DatabasesTests {
     @Test
@@ -76,12 +79,12 @@ class DatabasesModelTests {
 
     @Test
     fun `createDatabase should create new encrypted database given name and password`(){
+        val expectedDb = File("sampledata/main.db").readBytes()
+        val expectedBin: ByteArray = File("sampledata/main.bin").readBytes()
+
         // here we instantiate DatabasesModel and create empty database with it
         val model = DatabasesModel(SRC_DIR)
-        model.createDatabase("main", "main")
-
-        val expectedDb = File("sampledata/main.db").readBytes()
-        val expectedBin = File("sampledata/main.bin").readBytes()
+        model.createDatabase("main", "main", expectedBin)
 
         val actualDb = File("${SRC_DIR}main.db").readBytes()
         val actualBin = File("${SRC_DIR}main.bin").readBytes()

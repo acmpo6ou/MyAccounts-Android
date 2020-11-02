@@ -1,6 +1,7 @@
 package com.acmpo6ou.myaccounts.core
 
 import java.io.File
+import java.security.SecureRandom
 
 /** This module contains classes related to DatabasesModel */
 
@@ -25,12 +26,13 @@ data class Database(val name: String,
 }
 
 class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
-    fun createDatabase(name: String, password: String) {
+    fun createDatabase(name: String, password: String, salt: ByteArray) {
         val databaseFile = File("$SRC_DIR$name.db")
         val saltFile = File("$SRC_DIR$name.bin")
 
         databaseFile.createNewFile()
         saltFile.createNewFile()
+
     }
 
 }
