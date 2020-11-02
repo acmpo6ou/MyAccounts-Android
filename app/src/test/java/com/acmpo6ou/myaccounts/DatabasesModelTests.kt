@@ -33,7 +33,7 @@ class DatabasesTests {
 }
 
 class DatabasesModelTests {
-    // this is where DatabaseModel will create delete and edit databases during test
+    // this is where DatabasesModel will create delete and edit databases during test
     // /dev/shm/ is a fake in-memory file system
     val SRC_DIR = "/dev/shm/accounts/src/"
 
