@@ -11,9 +11,12 @@ package com.acmpo6ou.myaccounts.core
  * @property isOpen dynamically returns whether database is open or not, the database is
  * considered open when [password] is not null.
  */
+
+class Account{}
+
 data class Database(val name: String,
                     val password: String? = null,
-                    val data: Map<String, Int>? = null){
+                    val data: Map<String, Account>? = null){
     var isOpen: Boolean = false
         get() = password != null
         private set
