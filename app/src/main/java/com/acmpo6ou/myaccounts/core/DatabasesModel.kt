@@ -2,6 +2,7 @@ package com.acmpo6ou.myaccounts.core
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.macasaet.fernet.Key
 import java.io.File
 import java.security.SecureRandom
 import java.util.*
@@ -46,16 +47,17 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
      *
      * @param[password] key password
      * @param[salt] salt for key
-     * @return created fernet key string
+     * @return created fernet key
      */
     @RequiresApi(Build.VERSION_CODES.O)
-    fun deriveKey(password: String, salt: ByteArray): String {
+    fun deriveKey(password: String, salt: ByteArray): Key {
         val iterations = 100000
         val derivedKeyLength = 256
         val spec = PBEKeySpec(password.toCharArray(), salt, iterations, derivedKeyLength)
         val secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
         val key = secretKeyFactory.generateSecret(spec).encoded
-        return Base64.getUrlEncoder().encodeToString(key)
+        val strKey = Base64.getUrlEncoder().encodeToString(key)
+        return Key(strKey)
     }
 
     fun createDatabase(name: String, password: String, salt: ByteArray) {
