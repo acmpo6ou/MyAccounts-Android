@@ -3,10 +3,7 @@ package com.acmpo6ou.myaccounts.core
 import java.io.File
 import java.security.SecureRandom
 
-/** This module contains classes related to DatabasesModel */
-
-
-class Account{}
+class Account
 
 /**
  * Class that represents database of Accounts.
@@ -26,6 +23,19 @@ data class Database(val name: String,
 }
 
 class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
+
+    /**
+     * This method generates purely random salt for encryption.
+     *
+     * @return salt for encryption
+     */
+    fun generateSalt(): ByteArray {
+        val random = SecureRandom()
+        val salt = ByteArray(16)
+        random.nextBytes(salt)
+        return salt
+    }
+
     fun createDatabase(name: String, password: String, salt: ByteArray) {
         val databaseFile = File("$SRC_DIR$name.db")
         val saltFile = File("$SRC_DIR$name.bin")
