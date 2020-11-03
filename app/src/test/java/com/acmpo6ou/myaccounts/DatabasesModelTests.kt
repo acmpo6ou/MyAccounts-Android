@@ -3,6 +3,10 @@ package com.acmpo6ou.myaccounts
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesModel
 import com.nhaarman.mockitokotlin2.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Ignore
@@ -101,6 +105,19 @@ class DatabasesModelTests {
                 "createDatabase has created incorrect salt file for database!",
                 expectedBin,
                 actualBin,
+        )
+    }
+
+    @Test
+    fun `deriveKey returns fernet key`(){
+        val salt = "1234567890abcdef".toByteArray() // 16 bytes of salt
+        val password = "my password"
+        val model = DatabasesModel()
+        val key = model.deriveKey(password, salt)
+        assertEquals(
+            "deriveKey has returned incorrect key",
+            "Bzfu6SFkh5mXZqhGh7A7G4WLpdyhYaF0uuMA74gFZjQ=",
+            key,
         )
     }
 }

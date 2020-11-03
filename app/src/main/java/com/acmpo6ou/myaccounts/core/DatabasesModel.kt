@@ -1,7 +1,12 @@
 package com.acmpo6ou.myaccounts.core
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import java.io.File
 import java.security.SecureRandom
+import java.util.*
+import javax.crypto.SecretKeyFactory
+import javax.crypto.spec.PBEKeySpec
 
 class Account
 
@@ -34,6 +39,23 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         val salt = ByteArray(16)
         random.nextBytes(salt)
         return salt
+    }
+
+    /**
+     * This method creates fernet key given password and salt.
+     *
+     * @param[password] key password
+     * @param[salt] salt for key
+     * @return created fernet key string
+     */
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun deriveKey(password: String, salt: ByteArray): String {
+        val iterations = 100000
+        val derivedKeyLength = 256
+        val spec = PBEKeySpec(password.toCharArray(), salt, iterations, derivedKeyLength)
+        val secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
+        val key = secretKeyFactory.generateSecret(spec).encoded
+        return Base64.getUrlEncoder().encodeToString(key)
     }
 
     fun createDatabase(name: String, password: String, salt: ByteArray) {
