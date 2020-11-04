@@ -90,6 +90,7 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         return token.serialise()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun createDatabase(database: Database) {
         val name = database.name
 
@@ -98,5 +99,12 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         saltFile.createNewFile()
         saltFile.writeBytes(database.salt!!)
 
+        // create database file
+        val databaseFile = File("$SRC_DIR$name.db")
+        databaseFile.createNewFile()
+
+        // encrypt database
+        val token = encryptDatabase(database)
+        databaseFile.writeText(token)
     }
 }

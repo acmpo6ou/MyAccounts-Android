@@ -86,19 +86,18 @@ class DatabasesModelTests {
         binFile.copyTo(binDestination)
         dbFile.copyTo(dbDestination)
     }
-    @Test
-    fun `dumps should return empty string when passed empty map`(){
-        val dumpStr = model.dumps(mapOf())
-        assertTrue(dumpStr.isEmpty())
+
+    private fun createEmptyDatabase(){
+        // instantiate empty database with name, password and salt
+        val database = Database(
+                "main",
+                "123",
+                salt
+        )
+        model.createDatabase(database)
     }
 
-    @Test
-    fun `loads should return empty map when passed empty string`(){
-        val loadMap = model.loads("")
-        assertTrue(loadMap.isEmpty())
-    }
-
-    fun decryptStr(string: String, password: String, salt: ByteArray): String{
+    private fun decryptStr(string: String, password: String, salt: ByteArray): String{
         val key = model.deriveKey(password, salt)
         val validator: Validator<String> = object : StringValidator {
             // this checks whether our encrypted json string is expired or not
@@ -109,6 +108,18 @@ class DatabasesModelTests {
         }
         val token = Token.fromString(string)
         return token.validateAndDecrypt(key, validator)
+    }
+
+    @Test
+    fun `dumps should return empty string when passed empty map`(){
+        val dumpStr = model.dumps(mapOf())
+        assertTrue(dumpStr.isEmpty())
+    }
+
+    @Test
+    fun `loads should return empty map when passed empty string`(){
+        val loadMap = model.loads("")
+        assertTrue(loadMap.isEmpty())
     }
 
     @Test
@@ -133,16 +144,6 @@ class DatabasesModelTests {
         )
     }
 
-    fun createEmptyDatabase(){
-        // instantiate empty database with name, password and salt
-        val database = Database(
-                "main",
-                "123",
-                salt
-        )
-        model.createDatabase(database)
-    }
-
     @Test
     fun `createDatabase should create salt file given Database instance`(){
         createEmptyDatabase()
@@ -164,8 +165,18 @@ class DatabasesModelTests {
         // this is a .db file that createDatabase should create for us
         val actualDb = File("$SRC_DIR/main.db").readBytes()
 
-        // here we decrypt data saved to .db file to check whether it was encrypted correctly
+        // here we decrypt data saved to .db file to check that it was encrypted correctly
         val data = decryptStr(String(actualDb), "123", salt)
+        assertEquals(
+                "createDatabase creates incorrectly encrypted database!",
+                "",
+                data
+        )
+    }
+
+    @Test
+    fun `createDatabase should return Response object indicating success`(){
+
     }
 
 }
