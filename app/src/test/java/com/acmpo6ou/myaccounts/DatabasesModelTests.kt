@@ -118,4 +118,14 @@ class DatabasesModelTests {
             dumpStr.isEmpty()
         )
     }
+
+    @Test
+    fun `loads should return empty map when passed empty string`(){
+        val model = DatabasesModel()
+        val loadMap = model.loads("")
+        assertTrue(
+                "loads must return empty map when passed empty string!",
+                loadMap.isEmpty()
+        )
+    }
 }

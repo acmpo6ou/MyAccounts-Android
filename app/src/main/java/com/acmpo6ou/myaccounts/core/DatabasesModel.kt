@@ -64,6 +64,10 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         return ""
     }
 
+    fun loads(jsonStr: String): Map<String, Account>{
+        return mapOf()
+    }
+
     fun createDatabase(name: String, password: String, salt: ByteArray) {
         val databaseFile = File("$SRC_DIR$name.db")
         val saltFile = File("$SRC_DIR$name.bin")
