@@ -103,7 +103,7 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         val databaseFile = File("$SRC_DIR$name.db")
         databaseFile.createNewFile()
 
-        // encrypt database
+        // encrypt and write database to .db file
         val token = encryptDatabase(database)
         databaseFile.writeText(token)
     }

@@ -87,6 +87,12 @@ class DatabasesModelTests {
         dbFile.copyTo(dbDestination)
     }
 
+    /**
+     * This is a helper method that simply creates empty database.
+     *
+     * It creates database with name `main` and password `123`.
+     * Also it uses createDatabase method of DatabasesModel class for this.
+     */
     private fun createEmptyDatabase(){
         // instantiate empty database with name, password and salt
         val database = Database(
@@ -97,6 +103,14 @@ class DatabasesModelTests {
         model.createDatabase(database)
     }
 
+    /**
+     * This method decrypts given string.
+     *
+     * @param[string] string to decrypt.
+     * @param[password] password for decryption.
+     * @param[salt] salt for decryption.
+     * @return decrypted string.
+     */
     private fun decryptStr(string: String, password: String, salt: ByteArray): String{
         val key = model.deriveKey(password, salt)
         val validator: Validator<String> = object : StringValidator {
@@ -134,7 +148,7 @@ class DatabasesModelTests {
         // get encrypted json string
         val jsonStr = model.encryptDatabase(database)
 
-        // here we gonna decrypt the json string using salt and password we defined earlier
+        // here we decrypt the json string using salt and password we defined earlier
         // to check if it were encrypted correctly
         val data = decryptStr(jsonStr, database.password!!, database.salt!!)
 
@@ -173,10 +187,4 @@ class DatabasesModelTests {
                 data
         )
     }
-
-    @Test
-    fun `createDatabase should return Response object indicating success`(){
-
-    }
-
 }
