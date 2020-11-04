@@ -90,12 +90,13 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         return token.serialise()
     }
 
-    fun createDatabase(name: String, password: String, salt: ByteArray) {
-        val databaseFile = File("$SRC_DIR$name.db")
-        val saltFile = File("$SRC_DIR$name.bin")
+    fun createDatabase(database: Database) {
+        val name = database.name
 
-        databaseFile.createNewFile()
+        // create salt file
+        val saltFile = File("$SRC_DIR$name.bin")
         saltFile.createNewFile()
+        saltFile.writeBytes(database.salt!!)
 
     }
 }
