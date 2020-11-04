@@ -107,4 +107,17 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         val token = encryptDatabase(database)
         databaseFile.writeText(token)
     }
+
+    /**
+     * This method deletes .db and .bin files of database given its name.
+     *
+     * @param[name] name of database to delete.
+     */
+    fun deleteDatabase(name: String){
+        val binFile = File("$SRC_DIR/$name.bin")
+        binFile.delete()
+
+        val dbFile = File("$SRC_DIR/$name.db")
+        dbFile.delete()
+    }
 }

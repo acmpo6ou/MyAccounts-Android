@@ -187,4 +187,25 @@ class DatabasesModelTests {
                 data
         )
     }
+
+    @Test
+    fun `deleteDatabase removes db and bin files from disk`(){
+        // create empty database so that we can delete it using deleteDatabase
+        createEmptyDatabase()
+
+        model.deleteDatabase("main")
+
+        // files that should be deleted
+        val binFile = File("$SRC_DIR/main.bin")
+        val dbFile = File("$SRC_DIR/main.db")
+
+        assertFalse(
+                "deleteDatabase doesn't delete .bin file",
+                binFile.exists()
+        )
+        assertFalse(
+                "deleteDatabase doesn't delete .db file",
+                dbFile.exists()
+        )
+    }
 }
