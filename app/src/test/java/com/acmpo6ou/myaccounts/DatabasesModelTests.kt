@@ -1,5 +1,6 @@
 package com.acmpo6ou.myaccounts
 
+import com.acmpo6ou.myaccounts.core.Account
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesModel
 import com.nhaarman.mockitokotlin2.*
@@ -105,6 +106,16 @@ class DatabasesModelTests {
                 "createDatabase has created incorrect salt file for database!",
                 expectedBin,
                 actualBin,
+        )
+    }
+
+    @Test
+    fun `dumps should return empty string when passed empty map`(){
+        val model = DatabasesModel()
+        val dumpStr = model.dumps(mapOf())
+        assertTrue(
+            "dumps must return empty string when passed empty map!",
+            dumpStr.isEmpty()
         )
     }
 }
