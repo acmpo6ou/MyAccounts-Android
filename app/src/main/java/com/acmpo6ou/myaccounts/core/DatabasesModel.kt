@@ -3,6 +3,7 @@ package com.acmpo6ou.myaccounts.core
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.macasaet.fernet.Key
+import com.macasaet.fernet.Token
 import java.io.File
 import java.security.SecureRandom
 import java.util.*
@@ -22,7 +23,8 @@ class Account
  */
 data class Database(val name: String,
                     val password: String? = null,
-                    val data: Map<String, Account>? = emptyMap()){
+                    val salt: ByteArray? = null,
+                    val data: Map<String, Account> = emptyMap()){
     var isOpen: Boolean = false
         get() = password != null
         private set
@@ -66,6 +68,14 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
 
     fun loads(jsonStr: String): Map<String, Account>{
         return mapOf()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun encryptDatabase(database: Database): String{
+        val key = deriveKey(database.password!!, database.salt!!)
+        val data = dumps(database.data)
+        val token = Token.generate(key, data)
+        return token.serialise()
     }
 
     fun createDatabase(name: String, password: String, salt: ByteArray) {

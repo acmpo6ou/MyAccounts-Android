@@ -1,20 +1,17 @@
 package com.acmpo6ou.myaccounts
 
-import com.acmpo6ou.myaccounts.core.Account
-import com.acmpo6ou.myaccounts.core.Database
-import com.acmpo6ou.myaccounts.core.DatabasesModel
+import com.acmpo6ou.myaccounts.core.*
+import com.macasaet.fernet.*
 import com.nhaarman.mockitokotlin2.*
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
+import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
 import org.junit.Assert.*
-import org.junit.Before
-import org.junit.Ignore
-import org.junit.Test
+import org.junit.*
 import java.io.File
 import java.security.SecureRandom
-import kotlin.math.exp
+import java.time.Duration
+import java.time.Instant
+import java.time.temporal.TemporalAmount
 
 class DatabasesTests {
     @Test
@@ -46,6 +43,7 @@ class DatabasesModelTests {
     // this is where DatabasesModel will create delete and edit databases during test
     // /dev/shm/ is a fake in-memory file system
     val SRC_DIR = "/dev/shm/accounts/src/"
+    lateinit var model: DatabasesModel
 
     /**
      * This method creates empty src folder in a fake file system, it ensures that
@@ -61,6 +59,11 @@ class DatabasesModelTests {
             srcFolder.deleteRecursively()
         }
         srcFolder.mkdirs()
+    }
+
+    @Before
+    fun setUpDatabasesModel(){
+        model = DatabasesModel(SRC_DIR)
     }
 
     /**
@@ -90,7 +93,6 @@ class DatabasesModelTests {
         val expectedBin: ByteArray = File("sampledata/main.bin").readBytes()
 
         // here we instantiate DatabasesModel and create empty database with it
-        val model = DatabasesModel(SRC_DIR)
         model.createDatabase("main", "main", expectedBin)
 
         val actualDb = File("${SRC_DIR}main.db").readBytes()
@@ -111,7 +113,6 @@ class DatabasesModelTests {
 
     @Test
     fun `dumps should return empty string when passed empty map`(){
-        val model = DatabasesModel()
         val dumpStr = model.dumps(mapOf())
         assertTrue(
             "dumps must return empty string when passed empty map!",
@@ -121,11 +122,35 @@ class DatabasesModelTests {
 
     @Test
     fun `loads should return empty map when passed empty string`(){
-        val model = DatabasesModel()
         val loadMap = model.loads("")
         assertTrue(
                 "loads must return empty map when passed empty string!",
                 loadMap.isEmpty()
+        )
+    }
+
+    @Test
+    fun `encryptDatabase should return encrypted json string when given empty Database object`(){
+        val salt = "0123456789abcdef".toByteArray() // 16 bytes of salt
+        val database = Database(
+                "somedata",
+                "some password",
+                salt
+        )
+        val jsonStr = model.encryptDatabase(database)
+
+        val key = model.deriveKey(database.password!!, database.salt!!)
+        val validator: Validator<String> = object : StringValidator {
+            override fun getTimeToLive(): TemporalAmount {
+                return Duration.ofSeconds(Instant.MAX.epochSecond)
+            }
+        }
+        val token = Token.fromString(jsonStr)
+        val data = token.validateAndDecrypt(key, validator)
+
+        assertTrue(
+                "encryptDatabase has returned incorrectly encrypted json string!",
+                data.isEmpty()
         )
     }
 }
