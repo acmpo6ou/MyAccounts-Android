@@ -2,8 +2,7 @@ package com.acmpo6ou.myaccounts.core
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.macasaet.fernet.Key
-import com.macasaet.fernet.Token
+import com.macasaet.fernet.*
 import java.io.File
 import java.security.SecureRandom
 import java.util.*
@@ -18,6 +17,7 @@ class Account
  * @param[name] name of the database.
  * @param[password] password of the database.
  * @param[data] map of account names to corresponding Account instances.
+ * @param[salt] salt of the database.
  * @property isOpen dynamically returns whether database is open or not, the database is
  * considered open when [password] is not null.
  */
@@ -30,6 +30,12 @@ data class Database(val name: String,
         private set
 }
 
+/**
+ * Class that contains various functions related to database operations such as encrypting,
+ * decrypting, deleting and creating databases.
+ *
+ * @param[SRC_DIR] path to directory that contains databases, default path is Internal Storage.
+ */
 class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
 
     /**
@@ -70,6 +76,12 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         return mapOf()
     }
 
+    /**
+     * This method is for database serialization and encryption.
+     *
+     * @param[database] Database instance to encrypt.
+     * @return encrypted json string.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     fun encryptDatabase(database: Database): String{
         val key = deriveKey(database.password!!, database.salt!!)
@@ -86,5 +98,4 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         saltFile.createNewFile()
 
     }
-
 }

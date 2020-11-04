@@ -8,7 +8,6 @@ import kotlinx.serialization.json.Json
 import org.junit.Assert.*
 import org.junit.*
 import java.io.File
-import java.security.SecureRandom
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.TemporalAmount
@@ -40,7 +39,7 @@ class DatabasesTests {
 }
 
 class DatabasesModelTests {
-    // this is where DatabasesModel will create delete and edit databases during test
+    // this is where DatabasesModel will create delete and edit databases during testing
     // /dev/shm/ is a fake in-memory file system
     val SRC_DIR = "/dev/shm/accounts/src/"
     lateinit var model: DatabasesModel
@@ -114,33 +113,33 @@ class DatabasesModelTests {
     @Test
     fun `dumps should return empty string when passed empty map`(){
         val dumpStr = model.dumps(mapOf())
-        assertTrue(
-            "dumps must return empty string when passed empty map!",
-            dumpStr.isEmpty()
-        )
+        assertTrue(dumpStr.isEmpty())
     }
 
     @Test
     fun `loads should return empty map when passed empty string`(){
         val loadMap = model.loads("")
-        assertTrue(
-                "loads must return empty map when passed empty string!",
-                loadMap.isEmpty()
-        )
+        assertTrue(loadMap.isEmpty())
     }
 
     @Test
     fun `encryptDatabase should return encrypted json string when given empty Database object`(){
-        val salt = "0123456789abcdef".toByteArray() // 16 bytes of salt
+        // create database using name, password and salt
         val database = Database(
                 "somedata",
                 "some password",
-                salt
+                "0123456789abcdef".toByteArray() // 16 bytes of salt
         )
+
+        // get encrypted json string
         val jsonStr = model.encryptDatabase(database)
 
+        // here we gonna decrypt the json string using salt and password we defined earlier
+        // to check if it were encrypted correctly
         val key = model.deriveKey(database.password!!, database.salt!!)
         val validator: Validator<String> = object : StringValidator {
+            // this checks whether our encrypted json string is expired or not
+            // in our app we don't care about expiration so we return Instant.MAX.epochSecond
             override fun getTimeToLive(): TemporalAmount {
                 return Duration.ofSeconds(Instant.MAX.epochSecond)
             }
