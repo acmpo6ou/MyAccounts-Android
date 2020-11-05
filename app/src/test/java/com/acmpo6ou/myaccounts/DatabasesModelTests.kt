@@ -131,6 +131,32 @@ class DatabasesModelTests {
     }
 
     @Test
+    fun `dumps should return serialized string when passed non empty map`(){
+        // create database with account that we will serialize
+        val account = Account(
+                account="gmail",
+                name="Tom",
+                email="tom@gmail.com",
+                password="123",
+                date="01.01.1990",
+                comment="My gmail account.",
+        )
+        val database = mapOf("gmail" to account)
+
+        // serialize database and check resulting json string
+        val dumpStr = model.dumps(database)
+        val expectedStr =
+            "{\"gmail\":{\"account\":\"gmail\",\"name\":\"Tom\",\"email\":"+
+            "\"tom@gmail.com\",\"password\":\"123\",\"date\":\"01.01.1990\","+
+            "\"comment\":\"My gmail account.\"}}"
+        assertEquals(
+                "Incorrect serialization! dumps method",
+                expectedStr,
+                dumpStr
+        )
+    }
+
+    @Test
     fun `loads should return empty map when passed empty string`(){
         val loadMap = model.loads("")
         assertTrue(loadMap.isEmpty())

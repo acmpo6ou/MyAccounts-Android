@@ -3,13 +3,35 @@ package com.acmpo6ou.myaccounts.core
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.macasaet.fernet.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import java.io.File
 import java.security.SecureRandom
 import java.util.*
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 
-class Account
+/**
+ * Class that represents Account, it stores all account data such
+ * as name, password, email, etc.
+ *
+ * @param[account] account name.
+ * @param[name] account username.
+ * @param[email] account email.
+ * @param[password] account password.
+ * @param[date] account date of birth.
+ * @param[comment] account comment.
+ */
+@Serializable
+data class Account(
+        val account: String,
+        val name: String,
+        val email: String,
+        val password: String,
+        val date: String,
+        val comment: String,
+)
 
 /**
  * Class that represents database of Accounts.
@@ -68,8 +90,19 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         return Key(strKey)
     }
 
+    /**
+     * Method used to serialize database map to json string.
+     *
+     * @param[data] map to serialize.
+     * @return when [data] is empty returns empty string, when [data] is not empty –
+     * serialized json string.
+     */
     fun dumps(data: Map<String, Account>): String{
-        return ""
+        var json = ""
+        if (data.isNotEmpty()){
+            json = Json.encodeToString(data)
+        }
+        return json
     }
 
     fun loads(jsonStr: String): Map<String, Account>{
@@ -90,6 +123,12 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         return token.serialise()
     }
 
+    /**
+     * Creates .db and .bin files for database given Database instance.
+     *
+     * @param[database] Database instance from which database name, password and salt are
+     * extracted for database files creation.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     fun createDatabase(database: Database) {
         val name = database.name
