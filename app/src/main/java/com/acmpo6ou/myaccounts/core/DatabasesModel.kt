@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.macasaet.fernet.*
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -106,7 +107,11 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
     }
 
     fun loads(jsonStr: String): Map<String, Account>{
-        return mapOf()
+        var map = mapOf<String, Account>()
+        if (jsonStr.isNotEmpty()){
+            map = Json.decodeFromString(jsonStr)
+        }
+        return map
     }
 
     /**

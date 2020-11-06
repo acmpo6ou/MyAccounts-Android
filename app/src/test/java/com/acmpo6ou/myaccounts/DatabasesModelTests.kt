@@ -163,6 +163,31 @@ class DatabasesModelTests {
     }
 
     @Test
+    fun `loads should return non empty map when passed non empty string`(){
+        val jsonStr =
+                "{\"gmail\":{\"account\":\"gmail\",\"name\":\"Tom\",\"email\":"+
+                "\"tom@gmail.com\",\"password\":\"123\",\"date\":\"01.01.1990\","+
+                "\"comment\":\"My gmail account.\"}}"
+        val map = model.loads(jsonStr)
+
+        val account = Account(
+                account="gmail",
+                name="Tom",
+                email="tom@gmail.com",
+                password="123",
+                date="01.01.1990",
+                comment="My gmail account.",
+        )
+        val expectedMap = mapOf("gmail" to account)
+
+        assertEquals(
+                "Incorrect deserialization! loads method",
+                expectedMap,
+                map,
+        )
+    }
+
+    @Test
     fun `encryptDatabase should return encrypted json string when given empty Database object`(){
         // create database using name, password and salt
         val database = Database(
