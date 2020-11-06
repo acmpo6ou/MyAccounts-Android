@@ -3,12 +3,12 @@ package com.acmpo6ou.myaccounts.core
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.macasaet.fernet.*
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
+import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
 import java.io.File
 import java.security.SecureRandom
+import java.time.*
+import java.time.temporal.TemporalAmount
 import java.util.*
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
@@ -170,5 +170,21 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
 
         val dbFile = File("$SRC_DIR/$name.db")
         dbFile.delete()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun decryptDatabase(string: String, password: String, salt: ByteArray): Map<String, Account> {
+        val key = deriveKey(password, salt)
+        val validator: Validator<String> = object : StringValidator {
+            // this checks whether our encrypted json string is expired or not
+            // in our app we don't care about expiration so we return Instant.MAX.epochSecond
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun getTimeToLive(): TemporalAmount {
+                return Duration.ofSeconds(Instant.MAX.epochSecond)
+            }
+        }
+        val token = Token.fromString(string)
+        val decrypted = token.validateAndDecrypt(key, validator)
+        return loads(decrypted)
     }
 }

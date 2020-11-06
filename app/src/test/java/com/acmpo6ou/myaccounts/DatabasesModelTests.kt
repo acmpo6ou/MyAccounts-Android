@@ -2,9 +2,6 @@ package com.acmpo6ou.myaccounts
 
 import com.acmpo6ou.myaccounts.core.*
 import com.macasaet.fernet.*
-import com.nhaarman.mockitokotlin2.*
-import kotlinx.serialization.*
-import kotlinx.serialization.json.Json
 import org.junit.Assert.*
 import org.junit.*
 import java.io.File
@@ -44,7 +41,7 @@ class DatabasesModelTests {
     val SRC_DIR = "/dev/shm/accounts/src/"
     lateinit var model: DatabasesModel
     lateinit var salt: ByteArray
-    private val json_database =
+    private val jsonDatabase =
             "{\"gmail\":{\"account\":\"gmail\",\"name\":\"Tom\",\"email\":"+
             "\"tom@gmail.com\",\"password\":\"123\",\"date\":\"01.01.1990\","+
             "\"comment\":\"My gmail account.\"}}"
@@ -129,6 +126,13 @@ class DatabasesModelTests {
         return token.validateAndDecrypt(key, validator)
     }
 
+    private fun encryptStr(map: Map<String, Account>, password: String, salt: ByteArray): String{
+        val key = model.deriveKey(password!!, salt!!)
+        val data = model.dumps(map)
+        val token = Token.generate(key, data)
+        return token.serialise()
+    }
+
     private fun setUpDatabaseMap(): Map<String, Account> {
         val account = Account(
                 account="gmail",
@@ -154,7 +158,7 @@ class DatabasesModelTests {
 
         // serialize database and check resulting json string
         val dumpStr = model.dumps(database)
-        val expectedStr = json_database
+        val expectedStr = jsonDatabase
         assertEquals(
                 "Incorrect serialization! dumps method",
                 expectedStr,
@@ -171,7 +175,7 @@ class DatabasesModelTests {
     @Test
     fun `loads should return non empty map when passed non empty string`(){
         // load database map from json string
-        val map = model.loads(json_database)
+        val map = model.loads(jsonDatabase)
 
         // get database map that we expect
         val expectedMap = setUpDatabaseMap()
@@ -204,7 +208,7 @@ class DatabasesModelTests {
 
         assertEquals(
                 "encryptDatabase has returned incorrectly encrypted json string!",
-                json_database,
+                jsonDatabase,
                 data
         )
     }
@@ -257,6 +261,24 @@ class DatabasesModelTests {
         assertFalse(
                 "deleteDatabase doesn't delete .db file",
                 dbFile.exists()
+        )
+    }
+
+    @Test
+    fun `decryptDatabase should return decrypted and deserialized map given string`(){
+        // encrypt database so we can check how decryptDatabase will decrypt it
+        val expectedMap = setUpDatabaseMap()
+        val encryptedJson = encryptStr(
+                expectedMap,
+                "123",
+                salt
+        )
+
+        val map = model.decryptDatabase(encryptedJson, "123", salt)
+        assertEquals(
+                "Incorrect decryption! decryptDatabase method",
+                expectedMap,
+                map
         )
     }
 }
