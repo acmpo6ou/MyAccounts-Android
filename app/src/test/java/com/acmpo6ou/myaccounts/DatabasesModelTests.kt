@@ -129,7 +129,7 @@ class DatabasesModelTests {
         return token.validateAndDecrypt(key, validator)
     }
 
-    fun setUpDatabaseMap(): Map<String, Account> {
+    private fun setUpDatabaseMap(): Map<String, Account> {
         val account = Account(
                 account="gmail",
                 name="Tom",
@@ -182,35 +182,12 @@ class DatabasesModelTests {
                 map,
         )
     }
-
     @Test
-    fun `encryptDatabase should return encrypted json string when given empty Database object`(){
-        // create empty database
-        val database = Database(
-                "somedata",
-                "some password",
-                salt
-        )
-
-        // get encrypted json string
-        val jsonStr = model.encryptDatabase(database)
-
-        // here we decrypt the json string using salt and password we defined earlier
-        // to check if it were encrypted correctly
-        val data = decryptStr(jsonStr, database.password!!, database.salt!!)
-
-        assertTrue(
-                "encryptDatabase has returned incorrectly encrypted json string!",
-                data.isEmpty()
-        )
-    }
-
-    @Test
-    fun `encryptDatabase should return encrypted json string when given non empty Database`(){
+    fun `encryptDatabase should return encrypted json string when given Database`(){
         // get database map
         val dataMap = setUpDatabaseMap()
 
-        // create non empty database
+        // create database
         val database = Database(
                 "somedata",
                 "some password",
