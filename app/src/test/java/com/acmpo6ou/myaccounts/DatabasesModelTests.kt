@@ -185,7 +185,7 @@ class DatabasesModelTests {
 
     @Test
     fun `encryptDatabase should return encrypted json string when given empty Database object`(){
-        // create database using name, password and salt
+        // create empty database
         val database = Database(
                 "somedata",
                 "some password",
@@ -202,6 +202,33 @@ class DatabasesModelTests {
         assertTrue(
                 "encryptDatabase has returned incorrectly encrypted json string!",
                 data.isEmpty()
+        )
+    }
+
+    @Test
+    fun `encryptDatabase should return encrypted json string when given non empty Database`(){
+        // get database map
+        val dataMap = setUpDatabaseMap()
+
+        // create non empty database
+        val database = Database(
+                "somedata",
+                "some password",
+                salt,
+                dataMap
+        )
+
+        // get encrypted json string
+        val jsonStr = model.encryptDatabase(database)
+
+        // here we decrypt the json string using salt and password we defined earlier
+        // to check if it were encrypted correctly
+        val data = decryptStr(jsonStr, database.password!!, database.salt!!)
+
+        assertEquals(
+                "encryptDatabase has returned incorrectly encrypted json string!",
+                json_database,
+                data
         )
     }
 
