@@ -172,8 +172,17 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         dbFile.delete()
     }
 
+    /**
+     * Used to decrypt and deserialize encrypted json string to a database map.
+     *
+     * @param[string] encrypted json string to decrypt.
+     * @param[password] password for decryption.
+     * @param[salt] salt for decryption.
+     * @return decrypted database map.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     fun decryptDatabase(string: String, password: String, salt: ByteArray): Map<String, Account> {
+        // get key and validator
         val key = deriveKey(password, salt)
         val validator: Validator<String> = object : StringValidator {
             // this checks whether our encrypted json string is expired or not
@@ -183,6 +192,8 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
                 return Duration.ofSeconds(Instant.MAX.epochSecond)
             }
         }
+
+        // decrypt and deserialize string
         val token = Token.fromString(string)
         val decrypted = token.validateAndDecrypt(key, validator)
         return loads(decrypted)
