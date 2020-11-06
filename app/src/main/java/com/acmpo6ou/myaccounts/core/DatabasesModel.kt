@@ -47,7 +47,7 @@ data class Account(
 data class Database(val name: String,
                     val password: String? = null,
                     val salt: ByteArray? = null,
-                    val data: Map<String, Account> = emptyMap()){
+                    var data: Map<String, Account> = emptyMap()){
     var isOpen: Boolean = false
         get() = password != null
         private set
@@ -197,5 +197,13 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         val token = Token.fromString(string)
         val decrypted = token.validateAndDecrypt(key, validator)
         return loads(decrypted)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun openDatabase(database: Database): Database {
+        val jsonStr = File("$SRC_DIR/${database.name}.db").readText()
+        val data = decryptDatabase(jsonStr, database.password!!, database.salt!!)
+        database.data = data
+        return database
     }
 }
