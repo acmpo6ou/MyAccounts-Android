@@ -44,6 +44,11 @@ class DatabasesModelTests {
     val SRC_DIR = "/dev/shm/accounts/src/"
     lateinit var model: DatabasesModel
     lateinit var salt: ByteArray
+    private val json_database =
+            "{\"gmail\":{\"account\":\"gmail\",\"name\":\"Tom\",\"email\":"+
+            "\"tom@gmail.com\",\"password\":\"123\",\"date\":\"01.01.1990\","+
+            "\"comment\":\"My gmail account.\"}}"
+
 
     /**
      * This method creates empty src folder in a fake file system, it ensures that
@@ -124,6 +129,18 @@ class DatabasesModelTests {
         return token.validateAndDecrypt(key, validator)
     }
 
+    fun setUpDatabaseMap(): Map<String, Account> {
+        val account = Account(
+                account="gmail",
+                name="Tom",
+                email="tom@gmail.com",
+                password="123",
+                date="01.01.1990",
+                comment="My gmail account.",
+        )
+        return mapOf("gmail" to account)
+    }
+
     @Test
     fun `dumps should return empty string when passed empty map`(){
         val dumpStr = model.dumps(mapOf())
@@ -133,22 +150,11 @@ class DatabasesModelTests {
     @Test
     fun `dumps should return serialized string when passed non empty map`(){
         // create database with account that we will serialize
-        val account = Account(
-                account="gmail",
-                name="Tom",
-                email="tom@gmail.com",
-                password="123",
-                date="01.01.1990",
-                comment="My gmail account.",
-        )
-        val database = mapOf("gmail" to account)
+        val database = setUpDatabaseMap()
 
         // serialize database and check resulting json string
         val dumpStr = model.dumps(database)
-        val expectedStr =
-            "{\"gmail\":{\"account\":\"gmail\",\"name\":\"Tom\",\"email\":"+
-            "\"tom@gmail.com\",\"password\":\"123\",\"date\":\"01.01.1990\","+
-            "\"comment\":\"My gmail account.\"}}"
+        val expectedStr = json_database
         assertEquals(
                 "Incorrect serialization! dumps method",
                 expectedStr,
@@ -164,21 +170,11 @@ class DatabasesModelTests {
 
     @Test
     fun `loads should return non empty map when passed non empty string`(){
-        val jsonStr =
-                "{\"gmail\":{\"account\":\"gmail\",\"name\":\"Tom\",\"email\":"+
-                "\"tom@gmail.com\",\"password\":\"123\",\"date\":\"01.01.1990\","+
-                "\"comment\":\"My gmail account.\"}}"
-        val map = model.loads(jsonStr)
+        // load database map from json string
+        val map = model.loads(json_database)
 
-        val account = Account(
-                account="gmail",
-                name="Tom",
-                email="tom@gmail.com",
-                password="123",
-                date="01.01.1990",
-                comment="My gmail account.",
-        )
-        val expectedMap = mapOf("gmail" to account)
+        // get database map that we expect
+        val expectedMap = setUpDatabaseMap()
 
         assertEquals(
                 "Incorrect deserialization! loads method",

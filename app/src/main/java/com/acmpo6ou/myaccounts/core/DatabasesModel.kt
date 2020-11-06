@@ -106,6 +106,13 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         return json
     }
 
+    /**
+     * Used to deserialize json string to database map.
+     *
+     * @param[jsonStr] json string to deserialize.
+     * @return when [jsonStr] is empty returns empty map, when [data] is not empty –
+     * deserialized database map.
+     */
     fun loads(jsonStr: String): Map<String, Account>{
         var map = mapOf<String, Account>()
         if (jsonStr.isNotEmpty()){
