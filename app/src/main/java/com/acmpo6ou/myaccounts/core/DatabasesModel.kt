@@ -217,4 +217,8 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         database.data = data
         return database
     }
+
+    fun saveDatabase(oldName: String, database: Database){
+        deleteDatabase(oldName)
+    }
 }

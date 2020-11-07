@@ -308,4 +308,39 @@ class DatabasesModelTests {
                 actualDatabase
         )
     }
+
+    @Test
+    fun `saveDatabase should delete files of old database`(){
+        // this database will be deleted by saveDatabase
+        val db = Database(
+                "test",
+                "123",
+                salt
+        )
+        model.createDatabase(db)
+
+        // this database will be created by saveDatabase
+        val newDb = Database(
+                "test2",
+                "321",
+                salt.reversedArray(),
+        )
+
+        // save newDb deleting db
+        model.saveDatabase("test", newDb)
+
+        // check that there is no longer test.db and test.bin files
+        val oldDb = File("$SRC_DIR/test.db")
+        val oldBin = File("$SRC_DIR/test.bin")
+
+        assertFalse(
+                ".db file of old database is not deleted by saveDatabase method!",
+                oldDb.exists()
+        )
+        assertFalse(
+                ".bin file of old database is not deleted by saveDatabase method!",
+                oldBin.exists()
+        )
+    }
+
 }
