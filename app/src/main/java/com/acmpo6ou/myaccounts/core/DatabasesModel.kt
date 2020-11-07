@@ -199,6 +199,17 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         return loads(decrypted)
     }
 
+    /**
+     * Used to open databases by given Database instance.
+     *
+     * In particular opening database means reading content of corresponding .db file,
+     * decrypting and deserializing it, then assigning deserialized database map to `data`
+     * property of given Database.
+     *
+     * @param[database] Database instance with password, name and salt to open database.
+     * @return same Database instance but with `data` property filled with deserialized
+     * database map.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     fun openDatabase(database: Database): Database {
         val jsonStr = File("$SRC_DIR/${database.name}.db").readText()

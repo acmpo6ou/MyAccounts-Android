@@ -284,33 +284,22 @@ class DatabasesModelTests {
 
     @Test
     fun `openDatabase should return Database instance with non empty data property`(){
-        // here we copy `fire` database to the fake file system so that we can open it later
-        val name = "fire"
-        val password = "import_database"
-        copyDatabase(name)
+        // here we copy `main` database to the fake file system so that we can open it later
+        copyDatabase("main")
 
-        // get salt of copied database and create corresponding Database instance
-        val salt = File("$SRC_DIR/$name.bin").readBytes()
+        // create corresponding Database instance
         val db = Database(
-                name,
-                password,
+                "main",
+                "123",
                 salt
         )
 
         val actualDatabase = model.openDatabase(db)
-        val account = Account(
-                "firefox",
-                "Fire Fox",
-                "firefox@gmail.com",
-                "fire",
-                "01.01.2000",
-                "Mozilla foundation."
-        )
         val expectedDatabase = Database(
-                name,
-                password,
+                "main",
+                "123",
                 salt,
-                mapOf("firefox" to account)
+                setUpDatabaseMap()
         )
 
         assertEquals(
