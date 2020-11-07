@@ -218,7 +218,17 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         return database
     }
 
+    /**
+     * This method simply deletes old database (which is determined by [oldName]) and
+     * creates new one using [database], to more specifically say: it replaces old database
+     * with a new one.
+     *
+     * @param[oldName] name of the old database that is to be replaced.
+     * @param[database] new database to be created, replacing the old one.
+     */
+    @RequiresApi(Build.VERSION_CODES.O)
     fun saveDatabase(oldName: String, database: Database){
         deleteDatabase(oldName)
+        createDatabase(database)
     }
 }
