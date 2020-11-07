@@ -126,6 +126,14 @@ class DatabasesModelTests {
         return token.validateAndDecrypt(key, validator)
     }
 
+    /**
+     * This helper method encrypts given map using [password] and [salt].
+     *
+     * @param[map] database map to encrypt.
+     * @param[password] password for encryption.
+     * @param[salt] salt for encryption.
+     * @return encrypted json string of database map.
+     */
     private fun encryptStr(map: Map<String, Account>, password: String, salt: ByteArray): String{
         val key = model.deriveKey(password!!, salt!!)
         val data = model.dumps(map)
@@ -133,7 +141,12 @@ class DatabasesModelTests {
         return token.serialise()
     }
 
-    private fun setUpDatabaseMap(): Map<String, Account> {
+    /**
+     * Helper function that creates simple database map used in tests.
+     *
+     * @return created database map.
+     */
+    private fun getDatabaseMap(): Map<String, Account> {
         val account = Account(
                 account="gmail",
                 name="Tom",
@@ -154,7 +167,7 @@ class DatabasesModelTests {
     @Test
     fun `dumps should return serialized string when passed non empty map`(){
         // create database with account that we will serialize
-        val database = setUpDatabaseMap()
+        val database = getDatabaseMap()
 
         // serialize database and check resulting json string
         val dumpStr = model.dumps(database)
@@ -178,7 +191,7 @@ class DatabasesModelTests {
         val map = model.loads(jsonDatabase)
 
         // get database map that we expect
-        val expectedMap = setUpDatabaseMap()
+        val expectedMap = getDatabaseMap()
 
         assertEquals(
                 "Incorrect deserialization! loads method",
@@ -189,7 +202,7 @@ class DatabasesModelTests {
     @Test
     fun `encryptDatabase should return encrypted json string when given Database`(){
         // get database map
-        val dataMap = setUpDatabaseMap()
+        val dataMap = getDatabaseMap()
 
         // create database
         val database = Database(
@@ -229,7 +242,14 @@ class DatabasesModelTests {
 
     @Test
     fun `createDatabase should create database file given Database instance`(){
-        createEmptyDatabase()
+        // create database using createDatabase
+        val database = Database(
+                "main",
+                "123",
+                salt,
+                getDatabaseMap()
+        )
+        model.createDatabase(database)
 
         // this is a .db file that createDatabase should create for us
         val actualDb = File("$SRC_DIR/main.db").readBytes()
@@ -238,7 +258,7 @@ class DatabasesModelTests {
         val data = decryptStr(String(actualDb), "123", salt)
         assertEquals(
                 "createDatabase creates incorrectly encrypted database!",
-                "",
+                jsonDatabase,
                 data
         )
     }
@@ -267,7 +287,7 @@ class DatabasesModelTests {
     @Test
     fun `decryptDatabase should return decrypted and deserialized map given string`(){
         // encrypt database so we can check how decryptDatabase will decrypt it
-        val expectedMap = setUpDatabaseMap()
+        val expectedMap = getDatabaseMap()
         val encryptedJson = encryptStr(
                 expectedMap,
                 "123",
@@ -299,7 +319,7 @@ class DatabasesModelTests {
                 "main",
                 "123",
                 salt,
-                setUpDatabaseMap()
+                getDatabaseMap()
         )
 
         assertEquals(
@@ -309,8 +329,11 @@ class DatabasesModelTests {
         )
     }
 
-    @Test
-    fun `saveDatabase should delete files of old database`(){
+    /**
+     * Helper method used by saveDatabase test to create old database and to call saveDatabase
+     * passing through new database.
+     */
+    private fun setUpSaveDatabase(){
         // this database will be deleted by saveDatabase
         val db = Database(
                 "test",
@@ -324,10 +347,16 @@ class DatabasesModelTests {
                 "test2",
                 "321",
                 salt.reversedArray(),
+                getDatabaseMap()
         )
 
         // save newDb deleting db
         model.saveDatabase("test", newDb)
+    }
+
+    @Test
+    fun `saveDatabase should delete files of old database`(){
+        setUpSaveDatabase()
 
         // check that there is no longer test.db and test.bin files
         val oldDb = File("$SRC_DIR/test.db")
@@ -343,4 +372,47 @@ class DatabasesModelTests {
         )
     }
 
+    @Test
+    fun `saveDatabase should create new, non empty database file`(){
+        setUpSaveDatabase()
+
+        // this is a .db file that saveDatabase should create for us
+        val actualDb = File("$SRC_DIR/test2.db").readBytes()
+
+        // created .db file must not be empty
+        assertTrue(
+                "saveDatabase created empty .db file!",
+                actualDb.isNotEmpty()
+        )
+
+        // here we decrypt data saved to .db file to check that it was encrypted correctly
+        val data = decryptStr(String(actualDb), "321", salt.reversedArray())
+        assertEquals(
+                "saveDatabase creates incorrect database!",
+                jsonDatabase,
+                data
+        )
+
+    }
+
+    @Test
+    fun `saveDatabase should create new, non empty salt file`(){
+        setUpSaveDatabase()
+
+        // this is a .bin file that saveDatabase should create for us
+        val actualBin = File("$SRC_DIR/test2.bin").readBytes()
+
+        // created .bin file must not be empty
+        assertTrue(
+                "saveDatabase created empty .bin file!",
+                actualBin.isNotEmpty()
+        )
+
+        // .bin file must have appropriate content (i.e. salt)
+        assertEquals(
+                "saveDatabase created .bin file with incorrect salt!",
+                String(salt.reversedArray()),
+                String(actualBin)
+        )
+    }
 }
