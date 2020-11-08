@@ -232,9 +232,19 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         createDatabase(database)
     }
 
+    /**
+     * Used to get a list of Database instances – databases that reside in SRC_DIR directory.
+     *
+     * @return list of databases that are found in src directory.
+     */
     fun getDatabases(): List<Database> {
         val databases = mutableListOf<Database>()
+        // src folder where all database files are stored
         val src = File(SRC_DIR)
+
+        // walk through all files in src directory, for each whose extension is .db
+        // add corresponding Database instance to databases list passing through as a parameter
+        // name of that file without .db extension
         src.list().forEach {
             if(it.endsWith(".db")){
                 val name = it.removeSuffix(".db")
