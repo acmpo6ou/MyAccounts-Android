@@ -1,15 +1,20 @@
 package com.acmpo6ou.myaccounts.core
 
 import android.os.Build
+import android.annotation.SuppressLint
 import androidx.annotation.RequiresApi
-import com.macasaet.fernet.*
+
 import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
+
 import java.io.File
-import java.security.SecureRandom
+import java.util.*
+import android.util.Base64.DEFAULT
 import java.time.*
 import java.time.temporal.TemporalAmount
-import java.util.*
+
+import com.macasaet.fernet.*
+import java.security.SecureRandom
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 
@@ -80,14 +85,29 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
      * @param[salt] salt for key
      * @return created fernet key
      */
-    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("NewApi")
     fun deriveKey(password: String, salt: ByteArray): Key {
         val iterations = 100000
         val derivedKeyLength = 256
         val spec = PBEKeySpec(password.toCharArray(), salt, iterations, derivedKeyLength)
         val secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
         val key = secretKeyFactory.generateSecret(spec).encoded
-        val strKey = Base64.getUrlEncoder().encodeToString(key)
+
+        // there are some differences in API versions:
+        // Base64 from java.util is supported only from API 26 but we can use it in tests
+        // without mocking
+        // there is also Base64 from android.util which supported by all versions but
+        // doesn't work in tests
+        var strKey: String
+        try{
+            // our min sdk version is 25, so here we first try to use Base64 from java.utils
+            // (this will work for android 8 or later and also during testing)
+            strKey = Base64.getUrlEncoder().encodeToString(key)
+        }catch (e: Error){
+            // however it will not work on android 7, so here we use Base64 from android.util
+            println(e.stackTraceToString())
+            strKey = android.util.Base64.encodeToString(key, DEFAULT)
+        }
         return Key(strKey)
     }
 
