@@ -231,4 +231,17 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         deleteDatabase(oldName)
         createDatabase(database)
     }
+
+    fun getDatabases(): List<Database> {
+        val databases = mutableListOf<Database>()
+        val src = File(SRC_DIR)
+        src.list().forEach {
+            if(it.endsWith(".db")){
+                val name = it.removeSuffix(".db")
+                val database = Database(name)
+                databases.add(database)
+            }
+        }
+        return databases
+    }
 }

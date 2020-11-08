@@ -415,4 +415,25 @@ class DatabasesModelTests {
                 String(actualBin)
         )
     }
+
+    @Test
+    fun `getDatabases should return list of Databases that reside in SRC_DIR`(){
+        // first we copy some database to our fake file system
+        copyDatabase("main")
+        copyDatabase("crypt")
+        copyDatabase("database")
+
+        // then we get databases and check the result
+        val databases = model.getDatabases()
+        val expectedDatabases = listOf(
+                Database("database"),
+                Database("crypt"),
+                Database("main"),
+        )
+        assertEquals(
+                "getDatabases returns incorrect list of Databases!",
+                expectedDatabases,
+                databases
+        )
+    }
 }
