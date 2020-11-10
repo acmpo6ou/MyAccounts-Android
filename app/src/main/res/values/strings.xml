@@ -65,4 +65,5 @@
     <string name="no_changelog_yet">No changelog yet</string>
     <string name="download">Download</string>
     <string name="later">Later</string>
+    <string name="dots_menu">⋮</string>
 </resources>

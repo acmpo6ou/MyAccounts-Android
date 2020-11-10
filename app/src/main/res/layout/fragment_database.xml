@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
@@ -9,14 +9,25 @@
         android:id="@+id/databaseLock"
         android:layout_width="40dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         app:srcCompat="@drawable/ic_locked" />
 
     <TextView
         android:id="@+id/databaseItemName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_margin="@dimen/text_margin"
+        android:layout_weight="1"
         android:text="@sample/databases"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/textViewOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:text="@string/dots_menu"
+        android:textAppearance="?android:textAppearanceLarge" />
 </LinearLayout>
