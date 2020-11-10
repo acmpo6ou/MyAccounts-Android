@@ -1,8 +1,6 @@
 package com.acmpo6ou.myaccounts.core
 
-import android.os.Build
 import android.annotation.SuppressLint
-import androidx.annotation.RequiresApi
 
 import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
@@ -147,7 +145,6 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
      * @param[database] Database instance to encrypt.
      * @return encrypted json string.
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     fun encryptDatabase(database: Database): String{
         val key = deriveKey(database.password!!, database.salt!!)
         val data = dumps(database.data)
@@ -161,7 +158,6 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
      * @param[database] Database instance from which database name, password and salt are
      * extracted for database files creation.
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     fun createDatabase(database: Database) {
         val name = database.name
 
@@ -200,14 +196,12 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
      * @param[salt] salt for decryption.
      * @return decrypted database map.
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     fun decryptDatabase(string: String, password: String, salt: ByteArray): Map<String, Account> {
         // get key and validator
         val key = deriveKey(password, salt)
         val validator: Validator<String> = object : StringValidator {
             // this checks whether our encrypted json string is expired or not
             // in our app we don't care about expiration so we return Instant.MAX.epochSecond
-            @RequiresApi(Build.VERSION_CODES.O)
             override fun getTimeToLive(): TemporalAmount {
                 return Duration.ofSeconds(Instant.MAX.epochSecond)
             }
@@ -230,7 +224,6 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
      * @return same Database instance but with `data` property filled with deserialized
      * database map.
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     fun openDatabase(database: Database): Database {
         val jsonStr = File("$SRC_DIR/${database.name}.db").readText()
         val data = decryptDatabase(jsonStr, database.password!!, database.salt!!)
@@ -246,7 +239,6 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
      * @param[oldName] name of the old database that is to be replaced.
      * @param[database] new database to be created, replacing the old one.
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     fun saveDatabase(oldName: String, database: Database){
         deleteDatabase(oldName)
         createDatabase(database)
