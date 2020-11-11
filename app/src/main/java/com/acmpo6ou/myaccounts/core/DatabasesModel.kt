@@ -31,6 +31,10 @@ import java.time.*
 import java.time.temporal.TemporalAmount
 
 import com.macasaet.fernet.*
+import org.kamranzafar.jtar.TarEntry
+import org.kamranzafar.jtar.TarOutputStream
+import java.io.BufferedOutputStream
+import java.io.FileOutputStream
 import java.security.SecureRandom
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
@@ -293,16 +297,21 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
      * @param[destination] path to folder where we want to export database.
      */
     fun exportDatabase(name: String, destination: String) {
-        // files to be exported
-        val dbFile = File("$SRC_DIR$name.db")
-        val binFile = File("$SRC_DIR$name.bin")
+        val tarFile = FileOutputStream("$destination$name.tar")
+        val outStream = TarOutputStream(BufferedOutputStream(tarFile))
 
-        // destinations where to export database files
-        val dbDestination = File("$destination$name.db")
-        val binDestination = File("$destination$name.bin")
+        val dbFiles = listOf(
+            File("$SRC_DIR$name.db"),
+            File("$SRC_DIR$name.bin"),
+        )
 
-        // export database files
-        dbFile.copyTo(dbDestination)
-        binFile.copyTo(binDestination)
+        for(f in dbFiles){
+            val entry = TarEntry(f, f.name)
+            outStream.putNextEntry(entry)
+
+            outStream.write(f.readBytes())
+        }
+        outStream.flush()
+        outStream.close()
     }
 }

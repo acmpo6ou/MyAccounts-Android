@@ -106,14 +106,19 @@ class DatabasesModelTests {
         val dbDestination = File("$SRC_DIR$name.db")
 
         // this are the database files that we want to copy
-        val binFile = File("sampledata/$name.bin")
-        val dbFile = File("sampledata/$name.db")
+        val binFile = File("sampledata/src/$name.bin")
+        val dbFile = File("sampledata/src/$name.db")
 
         // here we copy database files to the fake file system
         binFile.copyTo(binDestination)
         dbFile.copyTo(dbDestination)
     }
 
+    private fun copyTar(name: String){
+        val tarFile = File("sampledata/tar/$name.tar")
+        val destFile = File("$SRC_DIR$name.tar")
+        tarFile.copyTo(destFile)
+    }
     /**
      * This is a helper method that simply creates empty database.
      *
@@ -463,29 +468,22 @@ class DatabasesModelTests {
     }
 
     @Test
-    fun `exportDatabase should copy database files to given location`(){
+    fun `exportDatabase should export database tar to given location`(){
         copyDatabase("main")
+        copyTar("main")
 
         // export database `main` to the fake file system
         val destination = "/dev/shm/accounts/"
         model.exportDatabase("main", destination)
 
-        // check that all database files were exported properly
-        val expectedDb = File("sampledata/main.db").readBytes()
-        val expectedBin = File("sampledata/main.bin").readBytes()
-
-        val actualDb = File("$destination/main.db").readBytes()
-        val actualBin = File("$destination/main.bin").readBytes()
+        // check that tar database file were exported properly
+        val expectedTar = File("sampledata/tar/main.tar").readBytes()
+        val actualTar = File("$destination/main.tar").readBytes()
 
         assertEquals(
-                "exportDatabase incorrectly exported .db file",
-                String(expectedDb),
-                String(actualDb)
-        )
-        assertEquals(
-                "exportDatabase incorrectly exported .bin file",
-                String(expectedBin),
-                String(actualBin)
+                "exportDatabase incorrectly exported database tar file!",
+                String(expectedTar),
+                String(actualTar)
         )
     }
 }
