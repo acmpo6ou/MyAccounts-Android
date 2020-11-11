@@ -286,6 +286,12 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         return databases
     }
 
+    /**
+     * Used to export (simply copy) database to given destination.
+     *
+     * @param[name] name of the database to export.
+     * @param[destination] path to folder where we want to export database.
+     */
     fun exportDatabase(name: String, destination: String) {
         // files to be exported
         val dbFile = File("$SRC_DIR$name.db")
