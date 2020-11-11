@@ -58,7 +58,9 @@ class DatabasesTests {
 class DatabasesModelTests {
     // this is where DatabasesModel will create delete and edit databases during testing
     // /dev/shm/ is a fake in-memory file system
-    val SRC_DIR = "/dev/shm/accounts/src/"
+    private val accountsDir = "/dev/shm/accounts/"
+    val SRC_DIR = "$accountsDir/src/"
+
     lateinit var model: DatabasesModel
     lateinit var salt: ByteArray
     private val jsonDatabase =
@@ -74,12 +76,15 @@ class DatabasesModelTests {
     @Before
     fun setUpScrFolder(){
         val srcFolder = File(SRC_DIR)
+        val accountsFolder = File(accountsDir)
 
-        // here we delete folder if it already exists to ensure that it will be empty as is
-        // needed for our tests
-        if(srcFolder.exists()){
-            srcFolder.deleteRecursively()
+        // here we delete accounts folder if it already exists to ensure that it will
+        // be empty as is needed for our tests
+        if(accountsFolder.exists()){
+            accountsFolder.deleteRecursively()
         }
+
+        // then we create accounts folder and src inside it
         srcFolder.mkdirs()
     }
 
@@ -95,7 +100,7 @@ class DatabasesModelTests {
      *
      * @param[name] name of the database that we want to copy to the fake file system
      */
-    fun copyDatabase(name: String ="database"){
+    private fun copyDatabase(name: String ="database"){
         // this are were we want to copy database .bin and .db files
         val binDestination = File("$SRC_DIR$name.bin")
         val dbDestination = File("$SRC_DIR$name.db")
@@ -454,6 +459,33 @@ class DatabasesModelTests {
                 "getDatabases returns incorrect list of Databases!",
                 expectedDatabases,
                 databases
+        )
+    }
+
+    @Test
+    fun `exportDatabase should copy database files to given location`(){
+        copyDatabase("main")
+
+        // export database `main` to the fake file system
+        val destination = "/dev/shm/accounts/"
+        model.exportDatabase("main", destination)
+
+        // check that all database files were exported properly
+        val expectedDb = File("sampledata/main.db").readBytes()
+        val expectedBin = File("sampledata/main.bin").readBytes()
+
+        val actualDb = File("$destination/main.db").readBytes()
+        val actualBin = File("$destination/main.bin").readBytes()
+
+        assertEquals(
+                "exportDatabase incorrectly exported .db file",
+                String(expectedDb),
+                String(actualDb)
+        )
+        assertEquals(
+                "exportDatabase incorrectly exported .bin file",
+                String(expectedBin),
+                String(actualBin)
         )
     }
 }

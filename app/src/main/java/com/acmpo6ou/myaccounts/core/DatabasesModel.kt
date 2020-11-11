@@ -285,4 +285,18 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         }
         return databases
     }
+
+    fun exportDatabase(name: String, destination: String) {
+        // files to be exported
+        val dbFile = File("$SRC_DIR$name.db")
+        val binFile = File("$SRC_DIR$name.bin")
+
+        // destinations where to export database files
+        val dbDestination = File("$destination$name.db")
+        val binDestination = File("$destination$name.bin")
+
+        // export database files
+        dbFile.copyTo(dbDestination)
+        binFile.copyTo(binDestination)
+    }
 }
