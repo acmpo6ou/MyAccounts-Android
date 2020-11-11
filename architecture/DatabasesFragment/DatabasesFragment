@@ -1,0 +1,9 @@
+* layoutManager - layout manager of DatabasesRecycler
+* adapter - adapter of DatabasesRecycler
+
+Note: all properties above are initialized in onCreate
+
+* onCreate:
+
+initializes DatabasesRecycler with corresponding LinearLayoutManager and
+DatabasesAdapter
