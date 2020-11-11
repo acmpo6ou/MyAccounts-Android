@@ -1,0 +1,12 @@
+ViewHolder for DatabasesAdapter
+
+* lockImg - ImageView representing whether database is opened or closed
+* databaseName - TextView which holds database name
+* menu - 3 dots menu
+
+init constructor:
+* initializes all properties above
+* sets onClickListener on itemView that obtains view position (using getAdapterPosition)
+  and navigates to OpenDatabaseFragment passing through obtained position
+  Note: it may notify DatabasesPresenter about click and DatabasesPresenter
+  should navigate to OpenDatabaseFragment
