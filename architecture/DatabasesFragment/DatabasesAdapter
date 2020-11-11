@@ -1,0 +1,26 @@
+Adapter for DatabasesRecycler
+
+* databases - property that holds a List of Database instances that are used to build a list by DatabasesRecycler
+Note: it passed to DatabasesAdapter's constructor
+
+* onCreateViewHolder - inflates fragment_database.xml file and returns inflated view
+
+* onBindViewHolder(viewHolder: ViewHolder, i: Int) - configures viewHolder:
+	* sets lockImg icon according to isOpen property of Database instance from
+	  databases property
+	* sets databaseName to name property of Database instance
+	* sets onClickListener on 3 dots menu:
+
+	Creates popup menu inflating database_item_menu.xml
+	Sets onMenuItemClickListener to respond to clicks on menu items
+
+Popup menu onMenuItemClick:
+when
+Export - call exportDatabase method of DatabasesPresenter
+Delete - call deleteDatabase method of DatabasesPresenter
+Edit - call editDatabase method of DatabasesPresenter
+Close - call closeDatabase method of DatabasesPresenter
+
+Note: to all methods above passed name of the database which posses the popup menu
+
+* getItemCount - returns size of databases property
