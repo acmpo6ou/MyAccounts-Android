@@ -520,13 +520,15 @@ class DatabasesModelTests {
                 File("$SRC_DIR/main.db").readBytes()
         )
 
-        assertTrue(
+        assertEquals(
                 "importDatabase incorrectly imported .db file!",
-                expectedDb in actualDb
+                expectedDb,
+                actualDb
         )
-        assertTrue(
+        assertEquals(
                 "importDatabase incorrectly imported .bin file!",
-                expectedBin in actualBin
+                expectedBin,
+                actualBin
         )
     }
 }

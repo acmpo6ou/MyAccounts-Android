@@ -332,7 +332,7 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         while (entry != null) {
             val outStream = FileOutputStream("$destFolder${entry.name}")
             val dest = BufferedOutputStream(outStream)
-            val data = ByteArray(2048)
+            val data = ByteArray(1)
 
             while (inputStream.read(data) != -1) {
                 dest.write(data)
