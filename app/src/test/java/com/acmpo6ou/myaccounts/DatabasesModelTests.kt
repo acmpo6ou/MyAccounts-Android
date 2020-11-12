@@ -114,11 +114,6 @@ class DatabasesModelTests {
         dbFile.copyTo(dbDestination)
     }
 
-    private fun copyTar(name: String){
-        val tarFile = File("sampledata/tar/$name.tar")
-        val destFile = File("$SRC_DIR$name.tar")
-        tarFile.copyTo(destFile)
-    }
     /**
      * This is a helper method that simply creates empty database.
      *
@@ -470,20 +465,40 @@ class DatabasesModelTests {
     @Test
     fun `exportDatabase should export database tar to given location`(){
         copyDatabase("main")
-        copyTar("main")
 
         // export database `main` to the fake file system
-        val destination = "/dev/shm/accounts/"
+        val destination = accountsDir
         model.exportDatabase("main", destination)
 
-        // check that tar database file were exported properly
-        val expectedTar = File("sampledata/tar/main.tar").readBytes()
-        val actualTar = File("$destination/main.tar").readBytes()
+        // check that database tar file was exported properly
+        val exportedTar = String(
+                File("$destination/main.tar").readBytes()
+        )
+        val expectedDb = String(
+                File("$SRC_DIR/main.db").readBytes()
+        )
+        val expectedBin = String(
+                File("$SRC_DIR/main.bin").readBytes()
+        )
 
-        assertEquals(
-                "exportDatabase incorrectly exported database tar file!",
-                String(expectedTar),
-                String(actualTar)
+        // check that files are present and they reside in `src` folder
+        assertTrue(
+                "exportDatabase incorrect export: tar file doesn't contain .db file!",
+                "src/main.db" in exportedTar
+        )
+        assertTrue(
+                "exportDatabase incorrect export: tar file doesn't contain .bin file!",
+                "src/main.bin" in exportedTar
+        )
+
+        // check that files have appropriate content
+        assertTrue(
+                "exportDatabase incorrect export: content of .db file is incorrect!",
+                expectedDb in exportedTar
+        )
+        assertTrue(
+                "exportDatabase incorrect export: content of .bin file is incorrect!",
+                expectedBin in exportedTar
         )
     }
 }

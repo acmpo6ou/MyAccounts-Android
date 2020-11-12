@@ -291,24 +291,31 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
     }
 
     /**
-     * Used to export (simply copy) database to given destination.
+     * Used to export database as tar file to given destination.
      *
+     * Tar file structure:
+     * ( where main is database name )
+     * src
+     * ├── main.bin – salt file.
+     * └── main.db  – encrypted database file.
      * @param[name] name of the database to export.
      * @param[destination] path to folder where we want to export database.
      */
     fun exportDatabase(name: String, destination: String) {
+        // create tar file
         val tarFile = FileOutputStream("$destination$name.tar")
         val outStream = TarOutputStream(BufferedOutputStream(tarFile))
 
+        // salt and database files to compress to a tar file
         val dbFiles = listOf(
             File("$SRC_DIR$name.db"),
             File("$SRC_DIR$name.bin"),
         )
 
+        // each file is added to tar file
         for(f in dbFiles){
-            val entry = TarEntry(f, f.name)
+            val entry = TarEntry(f, "src/${f.name}")
             outStream.putNextEntry(entry)
-
             outStream.write(f.readBytes())
         }
         outStream.flush()
