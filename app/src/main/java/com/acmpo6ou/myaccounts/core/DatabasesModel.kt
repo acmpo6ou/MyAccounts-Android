@@ -280,7 +280,7 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         // walk through all files in src directory, for each whose extension is .db
         // add corresponding Database instance to databases list passing through as a parameter
         // name of that file without .db extension
-        src.list().forEach {
+        src.list()?.forEach {
             if(it.endsWith(".db")){
                 val name = it.removeSuffix(".db")
                 val database = Database(name)
@@ -332,11 +332,12 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         while (entry != null) {
             val outStream = FileOutputStream("$destFolder${entry.name}")
             val dest = BufferedOutputStream(outStream)
-            val data = ByteArray(1)
 
-            while (inputStream.read(data) != -1) {
-                dest.write(data)
-            }
+            val size = entry.size.toInt()
+            val data = ByteArray(size)
+            inputStream.read(data)
+            dest.write(data)
+
             dest.flush()
             dest.close()
             entry = inputStream.nextEntry
