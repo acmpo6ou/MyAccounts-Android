@@ -531,4 +531,24 @@ class DatabasesModelTests {
                 actualBin
         )
     }
+
+    @Test
+    fun `importDatabase should extract database files only from given tar file`(){
+        model.importDatabase("sampledata/tar/main.tar")
+
+        // there is no other files in parent of `src` folder
+        val srcParent = File(accountsDir)
+        val filesList = srcParent.list()
+
+        assertEquals(
+                "importDatabase must extract only .db and .bin files from given tar!",
+                1, // there must be only one directory – `src`
+                filesList.size
+        )
+        assertEquals(
+                "importDatabase must extract only .db and .bin files from given tar!",
+                "src", // the only directory must be `src`
+                filesList.first()
+        )
+    }
 }
