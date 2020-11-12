@@ -59,7 +59,7 @@ class DatabasesModelTests {
     // this is where DatabasesModel will create delete and edit databases during testing
     // /dev/shm/ is a fake in-memory file system
     private val accountsDir = "/dev/shm/accounts/"
-    val SRC_DIR = "$accountsDir/src/"
+    private val SRC_DIR = "$accountsDir/src/"
 
     lateinit var model: DatabasesModel
     lateinit var salt: ByteArray

@@ -31,9 +31,7 @@ import java.time.temporal.TemporalAmount
 
 import com.macasaet.fernet.*
 import kotlinx.serialization.Serializable
-import org.kamranzafar.jtar.TarEntry
-import org.kamranzafar.jtar.TarInputStream
-import org.kamranzafar.jtar.TarOutputStream
+import org.kamranzafar.jtar.*
 import java.io.*
 import java.security.SecureRandom
 import javax.crypto.SecretKeyFactory
@@ -85,12 +83,12 @@ data class Database(val name: String,
  *
  * @param[SRC_DIR] path to directory that contains databases, default path is Internal Storage.
  */
-class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
+class DatabasesModel(private val SRC_DIR: String = "/storage/emulated/0/"){
 
     /**
      * This method generates purely random salt for encryption.
      *
-     * @return salt for encryption
+     * @return salt for encryption.
      */
     fun generateSalt(): ByteArray {
         val random = SecureRandom()
@@ -102,9 +100,9 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
     /**
      * This method creates fernet key given password and salt.
      *
-     * @param[password] key password
-     * @param[salt] salt for key
-     * @return created fernet key
+     * @param[password] key password.
+     * @param[salt] salt for key.
+     * @return created fernet key.
      */
     @SuppressLint("NewApi")
     fun deriveKey(password: String, salt: ByteArray): Key {
@@ -151,7 +149,7 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
      * Used to deserialize json string to database map.
      *
      * @param[jsonStr] json string to deserialize.
-     * @return when [jsonStr] is empty returns empty map, when [data] is not empty –
+     * @return when [jsonStr] is empty returns empty map, when it's not empty –
      * deserialized database map.
      */
     fun loads(jsonStr: String): Map<String, Account>{
@@ -219,7 +217,8 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
      * @param[salt] salt for decryption.
      * @return decrypted database map.
      */
-    fun decryptDatabase(string: String, password: String, salt: ByteArray): Map<String, Account> {
+    fun decryptDatabase(string: String, password: String, salt: ByteArray):
+            Map<String, Account> {
         // get key and validator
         val key = deriveKey(password, salt)
         val validator: Validator<String> = object : StringValidator {
