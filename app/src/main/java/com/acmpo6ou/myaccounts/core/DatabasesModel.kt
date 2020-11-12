@@ -24,17 +24,17 @@ import android.annotation.SuppressLint
 import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
 
-import java.io.File
 import java.util.*
 import android.util.Base64.DEFAULT
 import java.time.*
 import java.time.temporal.TemporalAmount
 
 import com.macasaet.fernet.*
+import kotlinx.serialization.Serializable
 import org.kamranzafar.jtar.TarEntry
+import org.kamranzafar.jtar.TarInputStream
 import org.kamranzafar.jtar.TarOutputStream
-import java.io.BufferedOutputStream
-import java.io.FileOutputStream
+import java.io.*
 import java.security.SecureRandom
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
@@ -320,5 +320,27 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         }
         outStream.flush()
         outStream.close()
+    }
+
+    fun importDatabase(tarFile: String) {
+        val destFolder = "$SRC_DIR/../"
+        val inputStream = TarInputStream(
+                BufferedInputStream(FileInputStream(tarFile))
+        )
+        var entry: TarEntry? = inputStream.nextEntry
+
+        while (entry != null) {
+            val outStream = FileOutputStream("$destFolder${entry.name}")
+            val dest = BufferedOutputStream(outStream)
+            val data = ByteArray(2048)
+
+            while (inputStream.read(data) != -1) {
+                dest.write(data)
+            }
+            dest.flush()
+            dest.close()
+            entry = inputStream.nextEntry
+        }
+        inputStream.close()
     }
 }

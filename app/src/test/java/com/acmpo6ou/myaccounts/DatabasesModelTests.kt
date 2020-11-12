@@ -501,4 +501,32 @@ class DatabasesModelTests {
                 expectedBin in exportedTar
         )
     }
+
+    @Test
+    fun `importDatabase should extract given tar file to src folder`(){
+        // import database
+        model.importDatabase("sampledata/tar/main.tar")
+
+        // check that all database files are imported correctly
+        val expectedBin = String(salt)
+        val expectedDb = String(
+                File("sampledata/src/main.db").readBytes()
+        )
+
+        val actualBin = String(
+                File("$SRC_DIR/main.bin").readBytes()
+        )
+        val actualDb = String(
+                File("$SRC_DIR/main.db").readBytes()
+        )
+
+        assertTrue(
+                "importDatabase incorrectly imported .db file!",
+                expectedDb in actualDb
+        )
+        assertTrue(
+                "importDatabase incorrectly imported .bin file!",
+                expectedBin in actualBin
+        )
+    }
 }
