@@ -1,0 +1,21 @@
+* databases - property that holds a List of Database instances 
+* EXPORT_RC - request code used when exporting database
+* exportIndex - used to identify which database to export after user chose location in export database dialog
+
+* exportChosen(i) - called when user chose `export` option in database item menu
+i - index of database that is to be exported
+1. calls DatabaseFragment.showExportDialog(name)
+name - name of the database retrieved from `databases` property by index `i`
+2. saves database index `i` to exportIndex property
+
+* exportDatabase(location) - exports database (identified by `exportIndex`):
+1. retrieves location where to export database from given uri `location`
+2. calls DatabasesModel.exportDatabase(name, location) in try-catch block
+handling all errors:
+2.1 if there are no errors - calls DatabaseFragment.showSuccessDialog(details) to
+show dialog about success
+details - details about successful operation
+2.2 if there are any errors - calls DatabaseFragment.showErrorDialog(title, details)
+to show error dialog with helpful information
+title - title of error dialog
+details - details about particular exception that occured

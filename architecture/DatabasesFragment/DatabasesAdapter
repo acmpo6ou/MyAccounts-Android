@@ -16,7 +16,10 @@ Note: it passed to DatabasesAdapter's constructor
 
 Popup menu onMenuItemClick:
 when
-Export - call exportDatabase method of DatabasesPresenter
+Export:
+1. calls DatabasesPresenter.exportChosen(i) that will handle the event
+i - is an index of database that will be exported
+
 Delete - call deleteDatabase method of DatabasesPresenter
 Edit - call editDatabase method of DatabasesPresenter
 Close - call closeDatabase method of DatabasesPresenter

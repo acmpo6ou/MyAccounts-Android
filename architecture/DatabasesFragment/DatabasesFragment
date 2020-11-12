@@ -1,9 +1,22 @@
+* EXPORT_RC - request code used when exporting database
+
 * layoutManager - layout manager of DatabasesRecycler
 * adapter - adapter of DatabasesRecycler
 
 Note: all properties above are initialized in onCreate
 
 * onCreate:
-
-initializes DatabasesRecycler with corresponding LinearLayoutManager and
+1. initializes DatabasesRecycler with corresponding LinearLayoutManager and
 DatabasesAdapter
+
+* showExportDialog(name) - displays dialog to chose a location and name of tar file to be exported:
+name - is the default name of the database to be displayed in export dialog
+1. creates intent ACTION_CREATE_DOCUMENT of type 'application/x-tar' and with
+name '$name.tar'
+1.2 starts intent using startActivityForResult()
+
+* onActivityResult(requestCode: Int, resultCode: Int,
+                   resultData: Intent?) - handles result from various dialogs:
+1. if result code is activity OK (i.e. user did chose the location) and if the
+request code is EXPORT_RC then call DatabasesPresenter.exportDatabase(location)
+* location - is a uri object containing path that user picked in export dialog
