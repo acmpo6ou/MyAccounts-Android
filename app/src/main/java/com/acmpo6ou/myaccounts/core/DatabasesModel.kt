@@ -322,22 +322,48 @@ class DatabasesModel(val SRC_DIR: String = "/storage/emulated/0/"){
         outStream.close()
     }
 
+    /**
+     * Used to import database from given tar archive.
+     *
+     * Extracts .db and .bin files from given tar archive to `src` directory.
+     * @param[tarFile] path to tar archive that contains database files we need to extract.
+     */
     fun importDatabase(tarFile: String) {
+        // destination is actually should be the `src` folder but because of the way files
+        // are stored in tar file we extract them in the parent directory of `src`
+        // for more details see exportDatabase() documentation
         val destFolder = "$SRC_DIR/../"
+
+        // open tar file
         val inputStream = TarInputStream(
                 BufferedInputStream(FileInputStream(tarFile))
         )
+
+        // get first file from tar
         var entry: TarEntry? = inputStream.nextEntry
 
+        // extract database files from tar archive
         while (entry != null) {
+            // extract only .db and .bin files, skip all other such as tar headers
+            if(!(
+                entry.name.endsWith(".db") ||
+                entry.name.endsWith(".bin")
+            )){
+                entry = inputStream.nextEntry
+                continue
+            }
+
+            // create file we want to extract
             val outStream = FileOutputStream("$destFolder${entry.name}")
             val dest = BufferedOutputStream(outStream)
 
+            // write data into previously created file
             val size = entry.size.toInt()
             val data = ByteArray(size)
             inputStream.read(data)
             dest.write(data)
 
+            // flush buffers and proceed to next file
             dest.flush()
             dest.close()
             entry = inputStream.nextEntry
