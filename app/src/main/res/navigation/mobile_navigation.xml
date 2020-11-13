@@ -27,5 +27,19 @@
         android:id="@+id/databaseFragment"
         android:name="com.acmpo6ou.myaccounts.ui.DatabaseFragment"
         android:label="fragment_database_list"
-        tools:layout="@layout/fragment_database_list" />
+        tools:layout="@layout/fragment_database_list" >
+        <action
+            android:id="@+id/actionCreateDatabase"
+            app:destination="@id/createDatabaseFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createDatabaseFragment"
+        android:name="com.acmpo6ou.myaccounts.ui.CreateDatabaseFragment"
+        android:label="create_edit_database_fragment"
+        tools:layout="@layout/create_edit_database_fragment" >
+        <argument
+            android:name="create"
+            app:argType="boolean"
+            android:defaultValue="true" />
+    </fragment>
 </navigation>
