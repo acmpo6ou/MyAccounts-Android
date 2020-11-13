@@ -1,21 +1,25 @@
+Constructor:
+* model - DatabasesModel
+* view - DatabaseFragment
 * databases - property that holds a List of Database instances 
+
 * EXPORT_RC - request code used when exporting database
 * exportIndex - used to identify which database to export after user chose location in export database dialog
 
-* exportChosen(i) - called when user chose `export` option in database item menu
-i - index of database that is to be exported
-1. calls DatabaseFragment.showExportDialog(name)
-name - name of the database retrieved from `databases` property by index `i`
-2. saves database index `i` to exportIndex property
-
 * exportDatabase(location) - exports database (identified by `exportIndex`):
 1. retrieves location where to export database from given uri `location`
-2. calls DatabasesModel.exportDatabase(name, location) in try-catch block
+2. calls model.exportDatabase(name, location) in try-catch block
 handling all errors:
-2.1 if there are no errors - calls DatabaseFragment.showSuccessDialog(details) to
+2.1 if there are no errors - calls view.showSuccess() to
 show dialog about success
-details - details about successful operation
-2.2 if there are any errors - calls DatabaseFragment.showErrorDialog(title, details)
+2.2 if there are any errors - calls view.showError(title, details)
 to show error dialog with helpful information
 title - title of error dialog
-details - details about particular exception that occured
+details - details about particular exception that occurred
+
+* deleteDatabase(name) - deletes given database
+name - name of the database to delete
+1. calls model.deleteDatabase(name) in try-catch block handling all errors
+1.1 if there are any errors calls view.showError(title, details)
+1.2.1 if there are no errors calls view.showSuccess()
+1.2.2 calls view.adapter.removeItem(name)

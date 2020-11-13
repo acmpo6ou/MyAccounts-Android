@@ -1,11 +1,10 @@
+onCreate:
 * EXPORT_RC - request code used when exporting database
 
-* layoutManager - layout manager of DatabasesRecycler
-* adapter - adapter of DatabasesRecycler
+* presenter - DatabasesPresenter
+* layoutManager - layout manager for DatabasesRecycler
+* adapter - DatabasesAdapter for DatabasesRecycler
 
-Note: all properties above are initialized in onCreate
-
-* onCreate:
 1. initializes DatabasesRecycler with corresponding LinearLayoutManager and
 DatabasesAdapter
 
@@ -15,8 +14,20 @@ name - is the default name of the database to be displayed in export dialog
 name '$name.tar'
 1.2 starts intent using startActivityForResult()
 
+* confirmDelete(name) - displays confirmation dialog to confirm the deletion of database
+name - name of the database to delete
+1. Builds and displays dialog with message
+`Are you sure you want to delete database $name?`
+2. if user pressed `Yes` in dialog then call presenter.deleteDatabase(name)
+
+* showSucces() - displays snackbar saying `Operation successful!`
+
+* showError(title, details) - displays error dialog
+title - error name
+details - details about why the error might occurred and how to resolve it
+
 * onActivityResult(requestCode: Int, resultCode: Int,
                    resultData: Intent?) - handles result from various dialogs:
 1. if result code is activity OK (i.e. user did chose the location) and if the
-request code is EXPORT_RC then call DatabasesPresenter.exportDatabase(location)
+request code is EXPORT_RC then call presenter.exportDatabase(location)
 * location - is a uri object containing path that user picked in export dialog

@@ -1,7 +1,9 @@
 Adapter for DatabasesRecycler
 
+Constructor:
 * databases - property that holds a List of Database instances that are used to build a list by DatabasesRecycler
-Note: it passed to DatabasesAdapter's constructor
+* presenter - DatabasesPresenter
+* view - DatabaseFragment
 
 * onCreateViewHolder - inflates fragment_database.xml file and returns inflated view
 
@@ -15,15 +17,23 @@ Note: it passed to DatabasesAdapter's constructor
 	Sets onMenuItemClickListener to respond to clicks on menu items
 
 Popup menu onMenuItemClick:
-when
 Export:
-1. calls DatabasesPresenter.exportChosen(i) that will handle the event
-i - is an index of database that will be exported
+0. get `i` using getAdapterPosition()
+1. calls view.showExportDialog(name)
+name - name of the database retrieved from `databases` property by index `i`
+2. saves database index `i` to presenter.exportIndex
 
-Delete - call deleteDatabase method of DatabasesPresenter
+Delete:
+0. obtains `name` of the database to delete using getAdapterPosition()
+1. view.confirmDelete(name) - show dialog to confirm deletion of database
+
 Edit - call editDatabase method of DatabasesPresenter
 Close - call closeDatabase method of DatabasesPresenter
 
-Note: to all methods above passed name of the database which posses the popup menu
-
 * getItemCount - returns size of databases property
+
+* removeItem(name) - removes database by specified name
+0. searches for database by its name in `databases` property
+1. removes database from `databases` property
+2. notifyItemRemoved(index: Int)
+3. notifyItemRangeRemoved(startPosition: Int, itemCount: Int)

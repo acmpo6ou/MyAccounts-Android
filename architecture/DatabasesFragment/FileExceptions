@@ -1,0 +1,15 @@
+AccessDeniedException
+"Access denied!"
+"You don't have permissions to extract/write file in that location."
+
+FileAlreadyExistsException
+"File already exists!"
+"You can't export to that location because file already exists."
+
+NoSuchFileException
+"File not found!"
+"The given file is not found."
+
+IOException
+"I/O error!"
+"The reason is any i/o related error such as disk is low on space."
