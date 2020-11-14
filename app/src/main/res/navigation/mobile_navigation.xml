@@ -36,10 +36,5 @@
         android:id="@+id/createDatabaseFragment"
         android:name="com.acmpo6ou.myaccounts.ui.CreateDatabaseFragment"
         android:label="create_edit_database_fragment"
-        tools:layout="@layout/create_edit_database_fragment" >
-        <argument
-            android:name="create"
-            app:argType="boolean"
-            android:defaultValue="true" />
-    </fragment>
+        tools:layout="@layout/create_edit_database_fragment" />
 </navigation>
