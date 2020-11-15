@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts
 
+import android.view.View
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
@@ -32,26 +33,29 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class DatabaseFragmentTests {
     @Test
-    fun testNavigationToInGameScreen() {
+    fun `+ FAB must navigate to CreateDatabaseFragment`() {
         // Create a TestNavHostController
         val navController = TestNavHostController(
             ApplicationProvider.getApplicationContext())
         navController.setGraph(R.navigation.mobile_navigation)
 
-        // Create a graphical FragmentScenario for the TitleScreen
+        // Create a graphical FragmentScenario for the DatabaseFragment
         val databaseScenario = launchFragmentInContainer<DatabaseFragment>(
                 themeResId = R.style.Theme_MyAccounts_NoActionBar)
 
-        // Set the NavController property on the fragment
         databaseScenario.onFragment { fragment ->
+            // Set the NavController property on the fragment
             Navigation.setViewNavController(fragment.requireView(), navController)
+
+            // Verify that performing a click changes the NavController’s state
+            val addButton = fragment.view?.findViewById<View>(R.id.addDatabase)
+            addButton?.performClick()
         }
 
-        // Verify that performing a click changes the NavController’s state
-//        onView(ViewMatchers.withId(R.id.addDatabase)).perform(ViewActions.click())
         assertEquals(
-                navController.currentDestination?.id,
-                R.id.createDatabaseFragment
+            "(+) FAB on DatabaseFragment doesn't navigate to CreateDatabaseFragment!",
+            navController.currentDestination?.id,
+            R.id.createDatabaseFragment
         )
     }
 
