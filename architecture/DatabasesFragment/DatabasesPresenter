@@ -23,3 +23,15 @@ name - name of the database to delete
 1.1 if there are any errors calls view.showError(title, details)
 1.2.1 if there are no errors calls view.showSuccess()
 1.2.2 calls view.adapter.removeItem(name)
+
+* closeDatabase(i) - closes given database
+i - database index
+1. Retrieves database by its index
+2. sets database.password to null
+3. calls view.notifyChanged(i) - so that adapter can change database lock icon
+
+* openDatabase(i) - opens given database
+i - database index
+1. Retrieves database by its index
+2. if database.isOpen is true then call view.startDatabase(database)
+3. if it's false then navigates to OpenDatabaseFragment passing through the Database instance

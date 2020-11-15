@@ -31,3 +31,11 @@ details - details about why the error might occurred and how to resolve it
 1. if result code is activity OK (i.e. user did chose the location) and if the
 request code is EXPORT_RC then call presenter.exportDatabase(location)
 * location - is a uri object containing path that user picked in export dialog
+
+* notifyChanged(i):
+1. calls adapter.notifyItemChanged(i)
+2. adapter.notifyItemRangeChanged(i, 1)
+
+* startDatabase(database) - launchs AccountsActivity for given database
+database - Database instance of the database we going to launch AccountsActivity for
+1. creates intent and launchs AccountsActivity passing through Database instance
