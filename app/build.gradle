@@ -35,6 +35,9 @@ plugins {
 }
 apply plugin: 'kotlinx-serialization'
 apply plugin: 'androidx.navigation.safeargs'
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 29
@@ -95,10 +98,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.1'
     testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0'
     testImplementation 'org.robolectric:robolectric:4.4'
+    testImplementation 'androidx.navigation:navigation-testing:2.3.1'
 
     debugImplementation "androidx.fragment:fragment-testing:1.2.5"
-
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    testImplementation 'androidx.navigation:navigation-testing:2.3.1'
 }
