@@ -27,8 +27,10 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.ui.dummy.DummyContent
+import kotlinx.android.synthetic.main.fragment_database_list.*
 
 /**
  * A fragment representing a list of Items.
@@ -62,6 +64,13 @@ class DatabaseFragment : Fragment() {
             }
         }
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // when clicking on (+) FAB navigate to CreateDatabaseFragment
+        addDatabase.setOnClickListener{
+            view.findNavController().navigate(R.id.createDatabaseFragment)
+        }
     }
 
     companion object {
