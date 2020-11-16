@@ -19,8 +19,11 @@
 
 package com.acmpo6ou.myaccounts.core
 
+import android.content.Intent
 import android.net.Uri
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
+import com.acmpo6ou.myaccounts.ui.DatabasesAdapter
 
 interface DatabasesPresenterInter{
     var view: DatabaseFragment
@@ -32,4 +35,17 @@ interface DatabasesPresenterInter{
     fun deleteDatabase(name: String)
     fun closeDatabase(i: Int)
     fun openDatabase(i: Int)
+}
+
+interface DatabasesFragmentInter{
+    val EXPORT_RC: Int
+    val adapter: DatabasesAdapter
+    val layoutManager: LinearLayoutManager
+
+    fun exportDialog(name: String)
+    fun confirmDelete(name: String)
+    fun showSuccess(title: String, details: String)
+    fun showError(title: String, details: String)
+    fun startDatabase(database: Database)
+    fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?)
 }
