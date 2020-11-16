@@ -31,7 +31,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class DatabaseFragmentTests {
+class DatabaseFragmentInstrumentation {
     @Test
     fun `+ FAB must navigate to CreateDatabaseFragment`() {
         // Create a TestNavHostController
