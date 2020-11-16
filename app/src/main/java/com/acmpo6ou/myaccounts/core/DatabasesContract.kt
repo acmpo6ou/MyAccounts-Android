@@ -29,20 +29,23 @@ interface DatabasesPresenterInter{
     var view: DatabaseFragment
     var exportIndex: Int
 
-    fun exportDatabase(location: Uri)
+    fun exportDatabase(location: String)
     fun deleteDatabase(name: String)
     fun closeDatabase(i: Int)
     fun openDatabase(i: Int)
 }
 
 interface DatabaseFragmentInter{
-    val adapter: DatabasesAdapter
-    val layoutManager: LinearLayoutManager
+    val adapter: DatabasesAdapterInter
 
-    fun exportDialog(name: String)
-    fun confirmDelete(name: String)
-    fun showSuccess(title: String, details: String)
-    fun showError(title: String, details: String)
-    fun startDatabase(database: Database)
+//    fun exportDialog(name: String)
+//    fun confirmDelete(name: String)
+//    fun showSuccess(title: String, details: String)
+//    fun showError(title: String, details: String)
+//    fun startDatabase(database: Database)
     fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?)
+}
+
+interface DatabasesAdapterInter{
+
 }
