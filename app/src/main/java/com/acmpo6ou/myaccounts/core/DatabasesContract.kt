@@ -27,8 +27,6 @@ import com.acmpo6ou.myaccounts.ui.DatabasesAdapter
 
 interface DatabasesPresenterInter{
     var view: DatabaseFragment
-    val EXPORT_RC: Int
-        get() = 101
     var exportIndex: Int
 
     fun exportDatabase(location: Uri)
@@ -37,8 +35,7 @@ interface DatabasesPresenterInter{
     fun openDatabase(i: Int)
 }
 
-interface DatabasesFragmentInter{
-    val EXPORT_RC: Int
+interface DatabaseFragmentInter{
     val adapter: DatabasesAdapter
     val layoutManager: LinearLayoutManager
 
