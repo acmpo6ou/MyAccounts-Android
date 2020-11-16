@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,16 +29,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.core.DatabasesAdapterInter
 import com.acmpo6ou.myaccounts.core.DatabaseFragmentInter
+import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import kotlinx.android.synthetic.main.fragment_database_list.*
 
 /**
  * A fragment representing a list of Databases.
  */
-class DatabaseFragment(override val adapter: DatabasesAdapter) : Fragment(), DatabaseFragmentInter {
+class DatabaseFragment(
+        override val adapter: DatabasesAdapterInter,
+        val presenter: DatabasesPresenterInter
+) : Fragment(), DatabaseFragmentInter {
 
     val EXPORT_RC = 101
-    val manager = LinearLayoutManager(context)
+    val layoutManager = LinearLayoutManager(context)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,8 +66,18 @@ class DatabaseFragment(override val adapter: DatabasesAdapter) : Fragment(), Dat
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        println(data)
+        println(data?.data)
+        presenter.exportDatabase(data?.data.toString())
+    }
+
     companion object {
         @JvmStatic
-        fun newInstance() = DatabaseFragment()
+        fun newInstance(
+                adapter: DatabasesAdapterInter,
+                presenter: DatabasesPresenterInter
+        ) = DatabaseFragment(adapter, presenter)
     }
 }
