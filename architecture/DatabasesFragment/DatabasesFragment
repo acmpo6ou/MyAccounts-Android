@@ -8,7 +8,7 @@ onCreate:
 1. initializes DatabasesRecycler with corresponding LinearLayoutManager and
 DatabasesAdapter
 
-* showExportDialog(name) - displays dialog to chose a location and name of tar file to be exported:
+* exportDialog(name) - displays dialog to chose a location and name of tar file to be exported:
 name - is the default name of the database to be displayed in export dialog
 1. creates intent ACTION_CREATE_DOCUMENT of type 'application/x-tar' and with
 name '$name.tar'

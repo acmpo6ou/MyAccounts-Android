@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.ui
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -68,9 +69,12 @@ class DatabaseFragment(
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        println(data)
-        println(data?.data)
-        presenter.exportDatabase(data?.data.toString())
+        if (resultCode != Activity.RESULT_OK){
+            return
+        }
+        when(requestCode) {
+            EXPORT_RC -> presenter.exportDatabase(data?.data.toString())
+        }
     }
 
     companion object {

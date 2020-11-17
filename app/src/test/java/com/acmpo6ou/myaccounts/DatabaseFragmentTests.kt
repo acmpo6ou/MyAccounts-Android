@@ -22,30 +22,49 @@ package com.acmpo6ou.myaccounts
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import com.acmpo6ou.myaccounts.core.DatabasesAdapterInter
-import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
+import com.acmpo6ou.myaccounts.core.*
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
-import org.junit.Test
+import com.nhaarman.mockitokotlin2.*
+import org.junit.*
 
 class DatabaseFragmentTests {
-    @Test
-    fun `onActivityResult should call exportDatabase when code is EXPORT_RC`(){
+    lateinit var fragment: DatabaseFragment
+    lateinit var intent: Intent
+    lateinit var presenter: DatabasesPresenterInter
+
+    @Before
+    fun setUp(){
         val adapter = mock<DatabasesAdapterInter>()
-        val presenter = mock<DatabasesPresenterInter>()
-        val intent = mock<Intent>()
+        presenter = mock()
+        intent = mock()
         val uri = mock<Uri>()
         whenever(uri.toString()).thenReturn("location")
         whenever(intent.data).thenReturn(uri)
-        val fragment = DatabaseFragment(adapter, presenter)
+        fragment = DatabaseFragment(adapter, presenter)
+    }
 
+    @Test
+    fun `onActivityResult should call exportDatabase when code is EXPORT_RC`(){
         // call onActivityResult passing export request code, result ok and intent with
         // location where to export database
         fragment.onActivityResult(fragment.EXPORT_RC, Activity.RESULT_OK, intent)
 
         verify(presenter).exportDatabase(eq("location"))
+    }
+
+    @Test
+    fun `onActivityResult should not call exportDatabase when code is other than EXPORT_RC`(){
+        // call onActivityResult passing other request code, result ok and intent
+        fragment.onActivityResult(100, Activity.RESULT_OK, intent)
+
+        verify(presenter, never()).exportDatabase(eq("location"))
+    }
+
+    @Test
+    fun `onActivityResult should not call exportDatabase when result code is canceled`(){
+        // call onActivityResult passing other request code, result canceled and intent
+        fragment.onActivityResult(fragment.EXPORT_RC, Activity.RESULT_CANCELED, intent)
+
+        verify(presenter, never()).exportDatabase(eq("location"))
     }
 }
