@@ -19,16 +19,23 @@
 
 package com.acmpo6ou.myaccounts
 
+import android.content.Intent
 import android.view.View
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
+import com.acmpo6ou.myaccounts.core.DatabasesAdapterInter
+import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
+import com.nhaarman.mockitokotlin2.mock
 import org.junit.*
 import org.junit.Assert.assertEquals
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
+import org.robolectric.Shadows.shadowOf
+import kotlin.math.exp
 
 @RunWith(RobolectricTestRunner::class)
 class DatabaseFragmentInstrumentation {
@@ -59,4 +66,20 @@ class DatabaseFragmentInstrumentation {
         )
     }
 
+    @Test
+    fun `exportDialog should start appropriate intent`(){
+        // create expected intent with default file name `main.tar` and file type `.tar`
+        val expectedIntent = Intent(Intent.ACTION_CREATE_DOCUMENT)
+        expectedIntent.addCategory(Intent.CATEGORY_OPENABLE)
+        expectedIntent.type = "application/x-tar"
+        expectedIntent.putExtra(Intent.EXTRA_TITLE, "main.tar")
+
+        val adapter = mock<DatabasesAdapterInter>()
+        var presenter: DatabasesPresenterInter = mock()
+        val fragment = DatabaseFragment(adapter, presenter)
+        fragment.exportDialog("main")
+
+        val actual: Intent = shadowOf(RuntimeEnvironment.application).nextStartedActivity
+        assertEquals(expectedIntent, actual)
+    }
 }

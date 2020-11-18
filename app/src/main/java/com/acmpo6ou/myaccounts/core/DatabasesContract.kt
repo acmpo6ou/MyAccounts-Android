@@ -38,7 +38,7 @@ interface DatabasesPresenterInter{
 interface DatabaseFragmentInter{
     val adapter: DatabasesAdapterInter
 
-//    fun exportDialog(name: String)
+    fun exportDialog(name: String)
 //    fun confirmDelete(name: String)
 //    fun showSuccess(title: String, details: String)
 //    fun showError(title: String, details: String)
