@@ -25,6 +25,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.core.DatabasesAdapterInter
 
 import com.acmpo6ou.myaccounts.ui.dummy.DummyContent.DummyItem
 
@@ -33,8 +34,8 @@ import com.acmpo6ou.myaccounts.ui.dummy.DummyContent.DummyItem
  * TODO: Replace the implementation with code for your data type.
  */
 class DatabasesAdapter(
-    private val values: List<DummyItem>
-) : RecyclerView.Adapter<DatabasesAdapter.ViewHolder>() {
+    private val values: List<DummyItem> = listOf()
+) : RecyclerView.Adapter<DatabasesAdapter.ViewHolder>(), DatabasesAdapterInter {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
