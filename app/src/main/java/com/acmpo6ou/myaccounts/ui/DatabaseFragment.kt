@@ -77,6 +77,9 @@ class DatabaseFragment(
         startActivityForResult(intent, EXPORT_RC)
     }
 
+    /**
+     * Used to display a snackbar with success message.
+     */
     override fun showSuccess() {
         Snackbar.make(
             databaseCoordinator,
@@ -84,12 +87,22 @@ class DatabaseFragment(
             Snackbar.LENGTH_LONG).show()
     }
 
+    /**
+     * Handles various dialog results.
+     *
+     * @param[requestCode] the code of operation being handled.
+     * @param[resultCode] represents whether the operation was actually performed or canceled.
+     * @param[data] data needed for operation handling.
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        // if activity was canceled don't do anything
         if (resultCode != Activity.RESULT_OK){
             return
         }
+
         when(requestCode) {
+            // if the result is from export database dialog call appropriate method
             EXPORT_RC -> presenter.exportDatabase(data?.data.toString())
         }
     }

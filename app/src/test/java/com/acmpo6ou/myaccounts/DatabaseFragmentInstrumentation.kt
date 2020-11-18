@@ -41,6 +41,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
 
+// This two extensions used to find a snackbar during tests
 /**
  * @return a TextView if a snackbar is shown anywhere in the view hierarchy.
  *
@@ -119,7 +120,7 @@ class DatabaseFragmentInstrumentation {
         expectedIntent.putExtra(Intent.EXTRA_TITLE, "main.tar")
 
         val adapter = mock<DatabasesAdapterInter>()
-        var presenter: DatabasesPresenterInter = mock()
+        val presenter: DatabasesPresenterInter = mock()
         val fragment = DatabaseFragment(adapter, presenter)
         fragment.exportDialog("main")
 
@@ -132,6 +133,7 @@ class DatabaseFragmentInstrumentation {
         databaseScenario.onFragment {
             // call showSuccess and get the snackbar
             it.showSuccess()
+            // this is because of some Robolectric main looper problems
             shadowOf(getMainLooper()).idle()
             val snackbar: TextView? = it.view?.findSnackbarTextView()
 
