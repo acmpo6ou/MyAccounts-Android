@@ -26,13 +26,12 @@ import com.acmpo6ou.myaccounts.ui.DatabaseFragment
 import com.acmpo6ou.myaccounts.ui.DatabasesAdapter
 
 interface DatabasesPresenterInter{
-    var view: DatabaseFragment
-    var exportIndex: Int
+//    var exportIndex: Int
 
     fun exportDatabase(location: String)
-    fun deleteDatabase(name: String)
-    fun closeDatabase(i: Int)
-    fun openDatabase(i: Int)
+//    fun deleteDatabase(name: String)
+//    fun closeDatabase(i: Int)
+//    fun openDatabase(i: Int)
 }
 
 interface DatabaseFragmentInter{
@@ -40,7 +39,7 @@ interface DatabaseFragmentInter{
 
     fun exportDialog(name: String)
 //    fun confirmDelete(name: String)
-//    fun showSuccess(title: String, details: String)
+    fun showSuccess()
 //    fun showError(title: String, details: String)
 //    fun startDatabase(database: Database)
     fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?)
