@@ -32,6 +32,7 @@ import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.DatabasesAdapterInter
 import com.acmpo6ou.myaccounts.core.DatabaseFragmentInter
+import com.acmpo6ou.myaccounts.core.DatabasesPresenter
 import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import kotlinx.android.synthetic.main.fragment_database_list.*
 
@@ -39,8 +40,8 @@ import kotlinx.android.synthetic.main.fragment_database_list.*
  * A fragment representing a list of Databases.
  */
 class DatabaseFragment(
-        override val adapter: DatabasesAdapterInter,
-        val presenter: DatabasesPresenterInter
+        override val adapter: DatabasesAdapterInter = DatabasesAdapter(),
+        val presenter: DatabasesPresenterInter = DatabasesPresenter()
 ) : Fragment(), DatabaseFragmentInter {
 
     val EXPORT_RC = 101
@@ -75,6 +76,10 @@ class DatabaseFragment(
         startActivityForResult(intent, EXPORT_RC)
     }
 
+    override fun showSuccess() {
+
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_OK){
@@ -87,9 +92,6 @@ class DatabaseFragment(
 
     companion object {
         @JvmStatic
-        fun newInstance(
-                adapter: DatabasesAdapterInter,
-                presenter: DatabasesPresenterInter
-        ) = DatabaseFragment(adapter, presenter)
+        fun newInstance() = DatabaseFragment()
     }
 }
