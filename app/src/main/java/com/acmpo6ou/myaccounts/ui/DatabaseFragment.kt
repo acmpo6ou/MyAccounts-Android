@@ -34,6 +34,7 @@ import com.acmpo6ou.myaccounts.core.DatabasesAdapterInter
 import com.acmpo6ou.myaccounts.core.DatabaseFragmentInter
 import com.acmpo6ou.myaccounts.core.DatabasesPresenter
 import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_database_list.*
 
 /**
@@ -77,7 +78,10 @@ class DatabaseFragment(
     }
 
     override fun showSuccess() {
-
+        Snackbar.make(
+            databaseCoordinator,
+            R.string.success_message,
+            Snackbar.LENGTH_LONG).show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
