@@ -70,6 +70,13 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
         }
     }
 
+    /**
+     * Used to display export dialog where user can chose location where to export database.
+     *
+     * Starts intent with export request code. Shows dialog to chose location using Storage
+     * Access framework.
+     * @param[name] name of the database to export, used as default name of exported tar file.
+     */
     override fun exportDialog(name: String) {
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
