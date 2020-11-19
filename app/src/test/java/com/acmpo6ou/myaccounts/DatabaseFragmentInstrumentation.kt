@@ -119,7 +119,7 @@ class DatabaseFragmentInstrumentation {
         expectedIntent.type = "application/x-tar"
         expectedIntent.putExtra(Intent.EXTRA_TITLE, "main.tar")
 
-        // set mocked adapter and presenter on fragment
+        // set mocked adapter and presenter on fragment and call exportDialog
         val adapter = mock<DatabasesAdapterInter>()
         val presenter = mock<DatabasesPresenterInter>()
         databaseScenario.onFragment {
@@ -129,6 +129,7 @@ class DatabaseFragmentInstrumentation {
             it.exportDialog("main")
         }
 
+        // check all intent properties
         val actual: Intent = shadowOf(RuntimeEnvironment.application).nextStartedActivity
         assertEquals(
                 "exportDatabase: incorrect intent action!",

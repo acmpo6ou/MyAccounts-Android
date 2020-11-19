@@ -40,6 +40,8 @@ class DatabaseFragmentTests {
         val uri = mock<Uri>()
         whenever(uri.toString()).thenReturn("location")
         whenever(intent.data).thenReturn(uri)
+
+        // setup fragment with mocked adapter and presenter
         fragment = DatabaseFragment()
         fragment.adapter = adapter
         fragment.presenter = presenter
