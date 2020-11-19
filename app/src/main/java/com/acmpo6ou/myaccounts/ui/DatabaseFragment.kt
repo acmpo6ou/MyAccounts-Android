@@ -40,16 +40,17 @@ import kotlinx.android.synthetic.main.fragment_database_list.*
 /**
  * A fragment representing a list of Databases.
  */
-class DatabaseFragment(
-        override val adapter: DatabasesAdapterInter = DatabasesAdapter(),
-        val presenter: DatabasesPresenterInter = DatabasesPresenter()
-) : Fragment(), DatabaseFragmentInter {
+class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
 
     val EXPORT_RC = 101
     val layoutManager = LinearLayoutManager(context)
+    override lateinit var adapter: DatabasesAdapterInter
+    lateinit var presenter: DatabasesPresenterInter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        adapter = DatabasesAdapter()
+        presenter = DatabasesPresenter()
     }
 
     override fun onCreateView(
@@ -72,7 +73,7 @@ class DatabaseFragment(
     override fun exportDialog(name: String) {
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.type = "text/plain"
+        intent.type = "application/x-tar"
         intent.putExtra(Intent.EXTRA_TITLE, "$name.tar")
         startActivityForResult(intent, EXPORT_RC)
     }
