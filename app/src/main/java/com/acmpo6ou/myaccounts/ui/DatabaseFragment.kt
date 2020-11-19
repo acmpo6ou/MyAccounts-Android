@@ -20,6 +20,8 @@
 package com.acmpo6ou.myaccounts.ui
 
 import android.app.Activity
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -34,6 +36,7 @@ import com.acmpo6ou.myaccounts.core.DatabasesAdapterInter
 import com.acmpo6ou.myaccounts.core.DatabaseFragmentInter
 import com.acmpo6ou.myaccounts.core.DatabasesPresenter
 import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_database_list.*
 
@@ -46,6 +49,12 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
     val layoutManager = LinearLayoutManager(context)
     override lateinit var adapter: DatabasesAdapterInter
     lateinit var presenter: DatabasesPresenterInter
+    lateinit var myContext: Context
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        myContext = context
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,6 +102,14 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
             databaseCoordinator,
             R.string.success_message,
             Snackbar.LENGTH_LONG).show()
+    }
+
+    override fun showError(details: String) {
+        MaterialAlertDialogBuilder(myContext)
+                .setTitle(R.string.error)
+                .setNeutralButton("Ok"){ _: DialogInterface, _: Int -> }
+                .setMessage(details)
+                .show()
     }
 
     /**

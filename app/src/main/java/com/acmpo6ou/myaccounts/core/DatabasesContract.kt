@@ -40,7 +40,7 @@ interface DatabaseFragmentInter{
     fun exportDialog(name: String)
 //    fun confirmDelete(name: String)
     fun showSuccess()
-//    fun showError(title: String, details: String)
+    fun showError(details: String)
 //    fun startDatabase(database: Database)
     fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?)
 }

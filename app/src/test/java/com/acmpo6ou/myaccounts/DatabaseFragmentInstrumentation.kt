@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Looper.getMainLooper
 import android.view.View
@@ -40,6 +41,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
+import org.robolectric.shadows.ShadowAlertDialog
 
 // This two extensions used to find a snackbar during tests
 /**
@@ -174,5 +176,18 @@ class DatabaseFragmentInstrumentation {
                     snackbar?.text
             )
         }
+    }
+
+    @Test
+    fun `showError should display error dialog`(){
+        databaseScenario.onFragment {
+            it.showError("Error details.")
+        }
+        val dialog: Dialog? = ShadowAlertDialog.getLatestDialog()
+        println(dialog)
+        assertTrue(
+                "showError doesn't display dialog!",
+                dialog != null
+        )
     }
 }
