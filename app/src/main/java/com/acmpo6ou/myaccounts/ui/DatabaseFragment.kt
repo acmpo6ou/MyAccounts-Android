@@ -77,6 +77,7 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
         addDatabase.setOnClickListener{
             view.findNavController().navigate(R.id.createDatabaseFragment)
         }
+        showError("Error message problem!")
     }
 
     /**
@@ -98,6 +99,7 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
          MaterialAlertDialogBuilder(myContext)
                 .setTitle(R.string.warning)
                 .setMessage("Are you sure you want to delete database $name?")
+                .setIcon(R.drawable.ic_warning)
                 .setNegativeButton(R.string.no) { _: DialogInterface, _: Int -> }
                 .setPositiveButton(R.string.yes){ _: DialogInterface, _: Int ->
                     presenter.deleteDatabase(name)
@@ -118,6 +120,7 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
     override fun showError(details: String) {
         MaterialAlertDialogBuilder(myContext)
                 .setTitle(R.string.error)
+                .setIcon(R.drawable.ic_error)
                 .setNeutralButton("Ok"){ _: DialogInterface, _: Int -> }
                 .setMessage(details)
                 .show()
