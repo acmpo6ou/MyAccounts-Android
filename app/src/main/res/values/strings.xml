@@ -87,4 +87,7 @@
     <string name="dots_menu">⋮</string>
     <string name="success_message">Operation successful!</string>
     <string name="error">Error!</string>
+    <string name="warning">Warning!</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
 </resources>

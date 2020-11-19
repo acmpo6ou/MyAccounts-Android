@@ -25,6 +25,7 @@ import android.os.Looper.getMainLooper
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.testing.*
 import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
@@ -32,14 +33,13 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.core.*
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.snackbar.SnackbarContentLayout
-import com.nhaarman.mockitokotlin2.mock
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.snackbar.*
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.*
 import org.junit.*
 import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
+import org.robolectric.*
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.shadows.ShadowAlertDialog
 
@@ -177,17 +177,50 @@ class DatabaseFragmentInstrumentation {
             )
         }
     }
-
     @Test
     fun `showError should display error dialog`(){
         databaseScenario.onFragment {
             it.showError("Error details.")
         }
         val dialog: Dialog? = ShadowAlertDialog.getLatestDialog()
-        println(dialog)
         assertTrue(
                 "showError doesn't display dialog!",
                 dialog != null
+        )
+    }
+
+    @Test
+    fun `confirmDelete should call deleteDatabase when Yes is chosen in dialog`(){
+        // create dialog
+        val presenter = mock<DatabasesPresenterInter>()
+        databaseScenario.onFragment {
+            it.presenter = presenter
+            it.confirmDelete("main")
+        }
+
+        // chose Yes
+        val dialog = ShadowAlertDialog.getLatestDialog() as AlertDialog
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).callOnClick()
+
+        // verify that method was called
+        verify(presenter).deleteDatabase(any())
+    }
+
+    @Test
+    fun `confirmDelete should create dialog with appropriate message`(){
+        // create dialog
+        val presenter = mock<DatabasesPresenterInter>()
+        databaseScenario.onFragment {
+            it.presenter = presenter
+            it.confirmDelete("main")
+        }
+
+        val dialog = ShadowAlertDialog.getLatestDialog() as AlertDialog
+        val message = dialog.findViewById<TextView>(android.R.id.message)
+        assertEquals(
+                "confirmDeelete created dialog with incorrect message!",
+                "Are you sure you want to delete database main?",
+                message?.text
         )
     }
 }
