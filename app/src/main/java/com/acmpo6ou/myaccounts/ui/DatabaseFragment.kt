@@ -94,6 +94,17 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
         startActivityForResult(intent, EXPORT_RC)
     }
 
+    override fun confirmDelete(name: String) {
+         MaterialAlertDialogBuilder(myContext)
+                .setTitle(R.string.warning)
+                .setMessage("Are you sure you want to delete database $name?")
+                .setNegativeButton(R.string.no) { _: DialogInterface, _: Int -> }
+                .setPositiveButton(R.string.yes){ _: DialogInterface, _: Int ->
+                    presenter.deleteDatabase(name)
+                }
+                .show()
+    }
+
     /**
      * Used to display a snackbar with success message.
      */

@@ -29,7 +29,7 @@ interface DatabasesPresenterInter{
 //    var exportIndex: Int
 
     fun exportDatabase(location: String)
-//    fun deleteDatabase(name: String)
+    fun deleteDatabase(name: String)
 //    fun closeDatabase(i: Int)
 //    fun openDatabase(i: Int)
 }
@@ -38,7 +38,7 @@ interface DatabaseFragmentInter{
     val adapter: DatabasesAdapterInter
 
     fun exportDialog(name: String)
-//    fun confirmDelete(name: String)
+    fun confirmDelete(name: String)
     fun showSuccess()
     fun showError(details: String)
 //    fun startDatabase(database: Database)
