@@ -6,4 +6,8 @@ class DatabasesPresenter: DatabasesPresenterInter {
     override fun exportDatabase(location: String) {
 
     }
+
+    override fun deleteDatabase(name: String) {
+
+    }
 }
