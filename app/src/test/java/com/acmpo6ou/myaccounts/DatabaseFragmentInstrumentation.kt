@@ -34,12 +34,10 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.core.*
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.*
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.*
