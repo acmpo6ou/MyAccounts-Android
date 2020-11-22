@@ -30,6 +30,12 @@ import androidx.fragment.app.testing.*
 import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers.isDialog
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.core.*
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
@@ -217,11 +223,13 @@ class DatabaseFragmentInstrumentation {
         }
 
         // chose Yes
-        val dialog: Dialog? = ShadowAlertDialog.getLatestDialog()
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).callOnClick()
-
+//        val dialog: Dialog? = ShadowAlertDialog.getLatestDialog()
+        onView(withText("Yes"))
+                .inRoot(isDialog())
+                .check(matches(isDisplayed()))
+                .perform(click())
         // verify that method was called
-        verify(presenter).deleteDatabase(any())
+        verify(presenter).deleteDatabase(eq("main"))
     }
 
     @Test
