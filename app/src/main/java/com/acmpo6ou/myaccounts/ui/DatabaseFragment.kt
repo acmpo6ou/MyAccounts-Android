@@ -60,6 +60,7 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
         super.onCreate(savedInstanceState)
         adapter = DatabasesAdapter()
         presenter = DatabasesPresenter()
+
     }
 
     override fun onCreateView(
@@ -77,7 +78,6 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
         addDatabase.setOnClickListener{
             view.findNavController().navigate(R.id.createDatabaseFragment)
         }
-        showError("Error message problem!")
     }
 
     /**
