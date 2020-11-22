@@ -41,6 +41,7 @@ import org.junit.*
 import org.junit.runner.RunWith
 import org.robolectric.*
 import org.robolectric.Shadows.shadowOf
+import org.robolectric.annotation.LooperMode
 import org.robolectric.shadows.ShadowAlertDialog
 
 // This two extensions used to find a snackbar during tests
@@ -75,6 +76,7 @@ private fun View.findSnackbarLayout(): Snackbar.SnackbarLayout? {
 }
 
 @RunWith(RobolectricTestRunner::class)
+@LooperMode(LooperMode.Mode.PAUSED)
 class DatabaseFragmentInstrumentation {
     lateinit var navController: TestNavHostController
     lateinit var databaseScenario: FragmentScenario<DatabaseFragment>
@@ -177,6 +179,7 @@ class DatabaseFragmentInstrumentation {
             )
         }
     }
+
     @Test
     fun `showError should display error dialog`(){
         databaseScenario.onFragment {
@@ -190,6 +193,21 @@ class DatabaseFragmentInstrumentation {
     }
 
     @Test
+    fun `showError should create dialog with appropriate message`(){
+        val expectedMsg = "Error details."
+        databaseScenario.onFragment {
+            it.showError(expectedMsg)
+        }
+        val dialog: Dialog? = ShadowAlertDialog.getLatestDialog()
+        val message = dialog?.findViewById<TextView>(android.R.id.message)
+        assertEquals(
+                "showError created dialog with incorrect message!",
+                expectedMsg,
+                message?.text,
+        )
+    }
+
+    @Test
     fun `confirmDelete should call deleteDatabase when Yes is chosen in dialog`(){
         // create dialog
         val presenter = mock<DatabasesPresenterInter>()
@@ -199,7 +217,7 @@ class DatabaseFragmentInstrumentation {
         }
 
         // chose Yes
-        val dialog = ShadowAlertDialog.getLatestDialog() as AlertDialog
+        val dialog: Dialog? = ShadowAlertDialog.getLatestDialog()
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).callOnClick()
 
         // verify that method was called
@@ -209,9 +227,7 @@ class DatabaseFragmentInstrumentation {
     @Test
     fun `confirmDelete should create dialog with appropriate message`(){
         // create dialog
-        val presenter = mock<DatabasesPresenterInter>()
         databaseScenario.onFragment {
-            it.presenter = presenter
             it.confirmDelete("main")
         }
 
