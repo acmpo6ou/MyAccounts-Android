@@ -1,22 +1,3 @@
-/*
- * Copyright (c) 2020. Kolvakh Bohdan
- * This file is part of MyAccounts.
- *
- * MyAccounts is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * MyAccounts is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- *
- */
-
 buildscript {
     ext.kotlin_version = '1.4.10'
     repositories {
@@ -34,9 +15,6 @@ plugins {
     id 'kotlin-android'
 }
 apply plugin: 'kotlinx-serialization'
-apply plugin: 'androidx.navigation.safeargs'
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
@@ -99,13 +77,14 @@ dependencies {
     testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0'
     testImplementation 'org.robolectric:robolectric:4.4'
     testImplementation 'androidx.navigation:navigation-testing:2.3.1'
-    testImplementation 'androidx.test:core:1.3.0'
-    testImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    testImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 
     androidTestImplementation 'androidx.navigation:navigation-testing:2.3.1'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test:core:1.1.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+    androidTestImplementation 'androidx.test:rules:1.1.1'
 
     debugImplementation "androidx.fragment:fragment-testing:1.2.5"
-
 }
