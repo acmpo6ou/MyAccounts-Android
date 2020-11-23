@@ -41,7 +41,7 @@ interface DatabaseFragmentInter{
     fun confirmDelete(name: String)
     fun showSuccess()
     fun showError(details: String)
-//    fun startDatabase(database: Database)
+    fun startDatabase(database: String)
     fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?)
 }
 

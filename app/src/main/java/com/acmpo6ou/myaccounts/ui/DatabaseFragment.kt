@@ -31,6 +31,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
+import com.acmpo6ou.myaccounts.AccountsActivity
+import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.DatabasesAdapterInter
 import com.acmpo6ou.myaccounts.core.DatabaseFragmentInter
@@ -125,6 +127,12 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
                 .setNeutralButton("Ok"){ _: DialogInterface, _: Int -> }
                 .setMessage(details)
                 .show()
+    }
+
+    override fun startDatabase(database: String) {
+        val intent = Intent(myContext, AccountsActivity::class.java)
+        intent.putExtra("database", database)
+        startActivity(intent)
     }
 
     /**

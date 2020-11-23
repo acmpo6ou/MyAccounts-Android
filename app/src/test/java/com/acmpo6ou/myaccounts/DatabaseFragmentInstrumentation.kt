@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.os.Looper.getMainLooper
 import android.view.View
@@ -155,15 +156,34 @@ class DatabaseFragmentInstrumentation {
     }
 
     @Test
-    fun `startActivity should start appropriate intent`(){
+    fun `startDatabase should start appropriate intent`(){
         // serialized database string that wil be passed with intent
         val databaseString = "serialized database string"
 
         // create expected intent
-        val expectedIntent = Intent()
-        expectedIntent.putExtra("database", databaseString)
+        var expectedIntent = Intent()
 
+        // call startDatabase
+        databaseScenario.onFragment {
+            expectedIntent = Intent(it.myContext, AccountsActivity::class.java)
+            expectedIntent.putExtra("database", databaseString)
 
+            it.startDatabase(databaseString)
+        }
+
+        // check that appropriate intent was started
+        val actual: Intent = shadowOf(RuntimeEnvironment.application).nextStartedActivity
+
+        assertEquals(
+                "startDatabase has started intent with incorrect serialized string!",
+                expectedIntent.getStringExtra("database"),
+                actual.getStringExtra("database"),
+        )
+        assertEquals(
+                "startDatabase should start AccountsActivity!",
+                expectedIntent.component?.className,
+                actual.component?.className,
+        )
     }
 
     @Test
