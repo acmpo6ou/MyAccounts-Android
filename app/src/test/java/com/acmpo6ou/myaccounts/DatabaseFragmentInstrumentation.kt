@@ -26,20 +26,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.testing.*
+import androidx.fragment.app.testing.FragmentScenario
+import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.RootMatchers.isDialog
-import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
-import com.acmpo6ou.myaccounts.core.*
+import com.acmpo6ou.myaccounts.core.DatabasesAdapterInter
+import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
 import com.google.android.material.snackbar.*
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.mock
 import org.junit.Assert.*
 import org.junit.*
 import org.junit.runner.RunWith
@@ -209,25 +206,6 @@ class DatabaseFragmentInstrumentation {
                 expectedMsg,
                 message?.text,
         )
-    }
-
-    @Test
-    fun `confirmDelete should call deleteDatabase when Yes is chosen in dialog`(){
-        // create dialog
-        val presenter = mock<DatabasesPresenterInter>()
-        databaseScenario.onFragment {
-            it.presenter = presenter
-            it.confirmDelete("main")
-        }
-
-        // chose Yes
-//        val dialog: Dialog? = ShadowAlertDialog.getLatestDialog()
-        onView(withText("Yes"))
-                .inRoot(isDialog())
-                .check(matches(isDisplayed()))
-                .perform(click())
-        // verify that method was called
-        verify(presenter).deleteDatabase(eq("main"))
     }
 
     @Test
