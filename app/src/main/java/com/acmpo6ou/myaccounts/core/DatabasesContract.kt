@@ -20,10 +20,6 @@
 package com.acmpo6ou.myaccounts.core
 
 import android.content.Intent
-import android.net.Uri
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.acmpo6ou.myaccounts.ui.DatabaseFragment
-import com.acmpo6ou.myaccounts.ui.DatabasesAdapter
 
 interface DatabasesPresenterInter{
 //    var exportIndex: Int
@@ -41,7 +37,7 @@ interface DatabaseFragmentInter{
     fun confirmDelete(name: String)
     fun showSuccess()
     fun showError(details: String)
-    fun startDatabase(database: String)
+    fun startDatabase(databaseJson: String)
     fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?)
 }
 

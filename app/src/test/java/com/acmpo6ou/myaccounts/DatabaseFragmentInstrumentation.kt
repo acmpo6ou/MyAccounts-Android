@@ -20,7 +20,6 @@
 package com.acmpo6ou.myaccounts
 
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.os.Looper.getMainLooper
 import android.view.View
@@ -33,12 +32,8 @@ import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
-import com.acmpo6ou.myaccounts.core.Database
-import com.acmpo6ou.myaccounts.core.DatabasesAdapterInter
-import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
 import com.google.android.material.snackbar.*
-import com.nhaarman.mockitokotlin2.mock
 import org.junit.Assert.*
 import org.junit.*
 import org.junit.runner.RunWith

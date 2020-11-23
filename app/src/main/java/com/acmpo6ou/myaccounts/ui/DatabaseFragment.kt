@@ -26,13 +26,11 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.AccountsActivity
-import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.DatabasesAdapterInter
 import com.acmpo6ou.myaccounts.core.DatabaseFragmentInter
@@ -49,6 +47,7 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
 
     val EXPORT_RC = 101
     val ACCOUNTS_RC = 200
+
     val layoutManager = LinearLayoutManager(context)
     override lateinit var adapter: DatabasesAdapterInter
     lateinit var presenter: DatabasesPresenterInter
@@ -56,14 +55,15 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        // saving context to use it later
         myContext = context
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // initializing recycler adapter and presenter
         adapter = DatabasesAdapter()
         presenter = DatabasesPresenter()
-
     }
 
     override fun onCreateView(
@@ -98,6 +98,12 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
         startActivityForResult(intent, EXPORT_RC)
     }
 
+    /**
+     * Displays a dialog for user to confirm deletion of database.
+     *
+     * If user is choosing No – we will do nothing, if Yes – delete database.
+     * @param[name] - name of the database to delete.
+     */
     override fun confirmDelete(name: String) {
          MaterialAlertDialogBuilder(myContext)
                 .setTitle(R.string.warning)
@@ -120,6 +126,11 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
             Snackbar.LENGTH_LONG).show()
     }
 
+    /**
+     * Used to display dialog saying that the error occurred.
+     *
+     * @param[details] details about the error.
+     */
     override fun showError(details: String) {
         MaterialAlertDialogBuilder(myContext)
                 .setTitle(R.string.error)
@@ -129,9 +140,15 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
                 .show()
     }
 
-    override fun startDatabase(database: String) {
+    /**
+     * Used to start AccountsActivity for given database.
+     *
+     * @param[databaseJson] a serialized json string representing database for which
+     * we want to start AccountsActivity.
+     */
+    override fun startDatabase(databaseJson: String) {
         val intent = Intent(myContext, AccountsActivity::class.java)
-        intent.putExtra("database", database)
+        intent.putExtra("database", databaseJson)
         startActivity(intent)
     }
 
