@@ -20,8 +20,10 @@
 package com.acmpo6ou.myaccounts.core
 
 import android.content.Intent
+import com.acmpo6ou.myaccounts.ui.DatabasesAdapter
 
 interface DatabasesPresenterInter{
+    var databases: List<Database>
 //    var exportIndex: Int
 
     fun exportDatabase(location: String)
@@ -31,7 +33,7 @@ interface DatabasesPresenterInter{
 }
 
 interface DatabaseFragmentInter{
-    val adapter: DatabasesAdapterInter
+    val adapter: DatabasesAdapter
 
     fun exportDialog(name: String)
     fun confirmDelete(name: String)
@@ -39,8 +41,4 @@ interface DatabaseFragmentInter{
     fun showError(details: String)
     fun startDatabase(databaseJson: String)
     fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?)
-}
-
-interface DatabasesAdapterInter{
-
 }
