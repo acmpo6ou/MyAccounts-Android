@@ -46,6 +46,7 @@ import kotlinx.android.synthetic.main.fragment_database_list.*
 class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
 
     val EXPORT_RC = 101
+    val ACCOUNTS_RC = 200
     val layoutManager = LinearLayoutManager(context)
     override lateinit var adapter: DatabasesAdapterInter
     lateinit var presenter: DatabasesPresenterInter

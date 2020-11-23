@@ -32,6 +32,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
+import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesAdapterInter
 import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
@@ -124,13 +125,8 @@ class DatabaseFragmentInstrumentation {
         expectedIntent.type = "application/x-tar"
         expectedIntent.putExtra(Intent.EXTRA_TITLE, "main.tar")
 
-        // set mocked adapter and presenter on fragment and call exportDialog
-        val adapter = mock<DatabasesAdapterInter>()
-        val presenter = mock<DatabasesPresenterInter>()
+        // call exportDialog
         databaseScenario.onFragment {
-            it.adapter = adapter
-            it.presenter = presenter
-
             it.exportDialog("main")
         }
 
@@ -156,6 +152,18 @@ class DatabaseFragmentInstrumentation {
                 expectedIntent.getStringExtra(Intent.EXTRA_TITLE),
                 actual.getStringExtra(Intent.EXTRA_TITLE)
         )
+    }
+
+    @Test
+    fun `startActivity should start appropriate intent`(){
+        // serialized database string that wil be passed with intent
+        val databaseString = "serialized database string"
+
+        // create expected intent
+        val expectedIntent = Intent()
+        expectedIntent.putExtra("database", databaseString)
+
+
     }
 
     @Test
