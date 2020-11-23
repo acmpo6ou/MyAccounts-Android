@@ -13,13 +13,14 @@ import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class ExampleInstrumentedTest {
+class DatabaseFragmentInst {
 
     lateinit var navController: TestNavHostController
     lateinit var databaseScenario: FragmentScenario<DatabaseFragment>
@@ -54,5 +55,21 @@ class ExampleInstrumentedTest {
 
         // verify that method was called
         verify(presenter).deleteDatabase(eq("main"))
+    }
+
+    @Test
+    fun confirmDelete_should_not_call_deleteDatabase_when_No_is_chosen_in_dialog() {
+        // create dialog and call confirmDelete
+        val presenter = mock<DatabasesPresenterInter>()
+        databaseScenario.onFragment {
+            it.presenter = presenter
+            it.confirmDelete("main")
+        }
+
+        // chose No
+        onView(withId(android.R.id.button2)).perform(click())
+
+        // verify that method was called
+        verify(presenter, never()).deleteDatabase(eq("main"))
     }
 }
