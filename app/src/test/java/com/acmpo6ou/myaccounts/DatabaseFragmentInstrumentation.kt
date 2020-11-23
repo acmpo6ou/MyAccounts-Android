@@ -218,7 +218,7 @@ class DatabaseFragmentInstrumentation {
         val dialog = ShadowAlertDialog.getLatestDialog() as AlertDialog
         val message = dialog.findViewById<TextView>(android.R.id.message)
         assertEquals(
-                "confirmDeelete created dialog with incorrect message!",
+                "confirmDelete created dialog with incorrect message!",
                 "Are you sure you want to delete database main?",
                 message?.text
         )
