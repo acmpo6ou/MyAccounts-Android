@@ -76,7 +76,6 @@ private fun View.findSnackbarLayout(): Snackbar.SnackbarLayout? {
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 class DatabaseFragmentInstrumentation {
-    lateinit var navController: TestNavHostController
     lateinit var databaseScenario: FragmentScenario<DatabaseFragment>
 
     // get string resources
@@ -85,11 +84,6 @@ class DatabaseFragmentInstrumentation {
 
     @Before
     fun setUp(){
-        // Create a TestNavHostController
-        navController = TestNavHostController(
-            ApplicationProvider.getApplicationContext())
-        navController.setGraph(R.navigation.mobile_navigation)
-
         // Create a graphical FragmentScenario for the DatabaseFragment
         databaseScenario = launchFragmentInContainer<DatabaseFragment>(
             themeResId = R.style.Theme_MyAccounts_NoActionBar)
@@ -97,6 +91,11 @@ class DatabaseFragmentInstrumentation {
 
     @Test
     fun `+ FAB must navigate to CreateDatabaseFragment`() {
+        // Create a TestNavHostController
+        val navController = TestNavHostController(
+                ApplicationProvider.getApplicationContext())
+        navController.setGraph(R.navigation.mobile_navigation)
+
         databaseScenario.onFragment { fragment ->
             // Set the NavController property on the fragment
             Navigation.setViewNavController(fragment.requireView(), navController)
