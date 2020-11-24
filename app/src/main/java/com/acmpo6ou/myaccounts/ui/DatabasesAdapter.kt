@@ -27,6 +27,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.Database
+import com.acmpo6ou.myaccounts.core.DatabaseFragmentInter
 import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 
 
@@ -34,8 +35,10 @@ import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
  * [RecyclerView.Adapter] that can display a [Database].
  */
 class DatabasesAdapter(
-        private val presenter: DatabasesPresenterInter
+        private val view: DatabaseFragmentInter
 ) : RecyclerView.Adapter<DatabasesAdapter.ViewHolder>() {
+    val presenter: DatabasesPresenterInter
+        get() = view.presenter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)

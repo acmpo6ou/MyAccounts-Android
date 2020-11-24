@@ -24,6 +24,7 @@ import android.content.Intent
 import android.net.Uri
 import com.acmpo6ou.myaccounts.core.*
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
+import com.acmpo6ou.myaccounts.ui.DatabasesAdapter
 import com.nhaarman.mockitokotlin2.*
 import org.junit.*
 
@@ -34,7 +35,6 @@ class DatabaseFragmentTests {
 
     @Before
     fun setUp(){
-        val adapter = mock<DatabasesAdapterInter>()
         presenter = mock()
         intent = mock()
         val uri = mock<Uri>()
@@ -43,7 +43,6 @@ class DatabaseFragmentTests {
 
         // setup fragment with mocked adapter and presenter
         fragment = DatabaseFragment()
-        fragment.adapter = adapter
         fragment.presenter = presenter
     }
 

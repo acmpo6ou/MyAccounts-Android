@@ -33,6 +33,7 @@ interface DatabasesPresenterInter{
 }
 
 interface DatabaseFragmentInter{
+    val presenter: DatabasesPresenterInter
     val adapter: DatabasesAdapter
 
     fun exportDialog(name: String)

@@ -32,7 +32,6 @@ import android.view.ViewGroup
 import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.DatabasesAdapterInter
 import com.acmpo6ou.myaccounts.core.DatabaseFragmentInter
 import com.acmpo6ou.myaccounts.core.DatabasesPresenter
 import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
@@ -49,8 +48,8 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
     val ACCOUNTS_RC = 200
 
     val layoutManager = LinearLayoutManager(context)
-    override lateinit var adapter: DatabasesAdapterInter
-    lateinit var presenter: DatabasesPresenterInter
+    override lateinit var adapter: DatabasesAdapter
+    override lateinit var presenter: DatabasesPresenterInter
     lateinit var myContext: Context
 
     override fun onAttach(context: Context) {
@@ -62,7 +61,7 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // initializing recycler adapter and presenter
-        adapter = DatabasesAdapter()
+        adapter = DatabasesAdapter(this)
         presenter = DatabasesPresenter()
     }
 
