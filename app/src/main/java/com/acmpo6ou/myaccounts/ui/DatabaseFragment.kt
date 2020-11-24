@@ -60,7 +60,7 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // initializing recycler adapter and presenter
+        // initializing recycler's adapter and presenter
         adapter = DatabasesAdapter(this)
         presenter = DatabasesPresenter()
     }
@@ -69,10 +69,7 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_database_list, container, false)
-
-        // Set the adapter
-        return view
+        return inflater.inflate(R.layout.fragment_database_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -80,6 +77,11 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
         addDatabase.setOnClickListener{
             view.findNavController().navigate(R.id.createDatabaseFragment)
         }
+
+        // initializing recycler itself
+        databasesList.layoutManager = layoutManager
+        databasesList.adapter = adapter
+
     }
 
     /**

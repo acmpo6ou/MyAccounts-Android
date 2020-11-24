@@ -29,7 +29,7 @@ interface DatabasesPresenterInter{
     fun exportDatabase(location: String)
     fun deleteDatabase(name: String)
 //    fun closeDatabase(i: Int)
-//    fun openDatabase(i: Int)
+    fun openDatabase(i: Int)
 }
 
 interface DatabaseFragmentInter{

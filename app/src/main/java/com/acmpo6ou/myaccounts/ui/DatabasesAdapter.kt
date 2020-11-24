@@ -61,6 +61,10 @@ class DatabasesAdapter(
             lockImage = view.findViewById(R.id.databaseLock)
             databaseName = view.findViewById(R.id.databaseItemName)
             menu = view.findViewById(R.id.dots_menu)
+
+            view.setOnClickListener{
+                presenter.openDatabase(adapterPosition)
+            }
         }
     }
 }
