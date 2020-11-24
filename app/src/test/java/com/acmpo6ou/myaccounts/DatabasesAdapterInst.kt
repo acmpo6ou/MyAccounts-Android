@@ -21,7 +21,14 @@ package com.acmpo6ou.myaccounts
 
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.recyclerview.widget.RecyclerView
+import com.acmpo6ou.myaccounts.core.Database
+import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
+import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -42,6 +49,17 @@ class DatabasesAdapterInst {
 
     @Test
     fun `click on recycler item should call openDatabase`(){
-        databaseScenario.onFragment {  }
+        val databases = listOf(
+                Database("main")
+        )
+        val presenter = mock<DatabasesPresenterInter>()
+        whenever(presenter.databases).thenReturn(databases)
+
+        databaseScenario.onFragment {
+            it.presenter = presenter
+            val recycler = it.view?.findViewById<RecyclerView>(R.id.databasesList)
+            recycler?.getChildAt(0)?.performClick()
+        }
+        verify(presenter).openDatabase(eq(0))
     }
 }
