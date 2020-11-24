@@ -23,6 +23,8 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
@@ -32,7 +34,7 @@ import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
  * [RecyclerView.Adapter] that can display a [Database].
  */
 class DatabasesAdapter(
-        val presenter: DatabasesPresenterInter
+        private val presenter: DatabasesPresenterInter
 ) : RecyclerView.Adapter<DatabasesAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -48,6 +50,14 @@ class DatabasesAdapter(
     override fun getItemCount(): Int = presenter.databases.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        var lockImage: ImageView
+        var databaseName: TextView
+        var menu: TextView
 
+        init{
+            lockImage = view.findViewById(R.id.databaseLock)
+            databaseName = view.findViewById(R.id.databaseItemName)
+            menu = view.findViewById(R.id.dots_menu)
+        }
     }
 }
