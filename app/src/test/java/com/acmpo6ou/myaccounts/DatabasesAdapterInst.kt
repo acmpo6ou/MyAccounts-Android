@@ -19,6 +19,8 @@
 
 package com.acmpo6ou.myaccounts
 
+import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
@@ -44,6 +46,7 @@ class DatabasesAdapterInst {
     lateinit var databaseScenario: FragmentScenario<DatabaseFragment>
     lateinit var presenter: DatabasesPresenterInter
     var recycler: RecyclerView? = null
+    var itemLayout: View? = null
 
     @Before
     fun setUp() {
@@ -68,28 +71,36 @@ class DatabasesAdapterInst {
             recycler?.measure(0, 0)
             recycler?.layout(0, 0, 100, 10000)
         }
+        // get item layout from recycler
+        itemLayout = recycler?.getChildAt(0)
     }
 
     @Test
     fun `click on recycler item should call openDatabase`(){
-        databaseScenario.onFragment {
-            // perform click on database item
-            recycler?.getChildAt(0)?.performClick()
-        }
+        // perform click on database item
+        itemLayout?.performClick()
 
         verify(presenter).openDatabase(eq(0))
     }
 
     @Test
     fun `database item should have appropriate name`(){
-        databaseScenario.onFragment {
-            val itemLayout = recycler?.getChildAt(0)
-            val databaseName = itemLayout?.findViewById<TextView>(R.id.databaseItemName)
-            assertEquals(
-                    "item in databases list has incorrect name!",
-                    "main",
-                    databaseName?.text
-            )
-        }
+        val databaseName = itemLayout?.findViewById<TextView>(R.id.databaseItemName)
+        assertEquals(
+                "item in databases list has incorrect name!",
+                "main",
+                databaseName?.text
+        )
+    }
+
+    @Test
+    fun `database item should have appropriate lock icon when isOpen of Database is false`(){
+        // the first database in the list above doesn't have password set hence isOpen is false
+        val itemLock = itemLayout?.findViewById<ImageView>(R.id.databaseLock)
+        assertEquals(
+    "database item has incorrect lock icon when isOpen of Database is false!",
+            R.drawable.ic_locked,
+            itemLock?.tag,
+        )
     }
 }
