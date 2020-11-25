@@ -13,6 +13,10 @@ class DatabasesPresenter: DatabasesPresenterInter {
 
     }
 
+    override fun closeDatabase(i: Int) {
+
+    }
+
     override fun openDatabase(i: Int) {
 
     }

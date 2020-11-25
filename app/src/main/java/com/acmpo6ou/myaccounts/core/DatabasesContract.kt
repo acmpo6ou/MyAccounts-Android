@@ -24,11 +24,10 @@ import com.acmpo6ou.myaccounts.ui.DatabasesAdapter
 
 interface DatabasesPresenterInter{
     var databases: List<Database>
-//    var exportIndex: Int
 
     fun exportDatabase(location: String)
     fun deleteDatabase(name: String)
-//    fun closeDatabase(i: Int)
+    fun closeDatabase(i: Int)
     fun openDatabase(i: Int)
 }
 

@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts
 
+import android.view.Menu.FLAG_ALWAYS_PERFORM_CLOSE
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -39,6 +40,8 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.LooperMode
 import org.junit.Assert.*
+import org.robolectric.shadows.ShadowPopupMenu
+import org.w3c.dom.Text
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
@@ -47,6 +50,7 @@ class DatabasesAdapterInst {
     lateinit var presenter: DatabasesPresenterInter
     var recycler: RecyclerView? = null
     var itemLayout: View? = null
+    var itemLayout2: View? = null
 
     @Before
     fun setUp() {
@@ -75,6 +79,7 @@ class DatabasesAdapterInst {
 
         // get item layout from recycler
         itemLayout = recycler?.getChildAt(0)
+        itemLayout2 = recycler?.getChildAt(1)
     }
 
     @Test
@@ -109,12 +114,24 @@ class DatabasesAdapterInst {
     @Test
     fun `database item should have opened icon when isOpen of Database is true`(){
         // the second database in the list above does have password set hence isOpen is true
-        val itemLayout = recycler?.getChildAt(1)
-        val itemLock = itemLayout?.findViewById<ImageView>(R.id.databaseLock)
+        val itemLock = itemLayout2?.findViewById<ImageView>(R.id.databaseLock)
         assertEquals(
                 "database item has incorrect lock icon when isOpen of Database is true!",
                 R.drawable.ic_opened,
                 itemLock?.tag,
         )
+    }
+
+    @Test
+    fun `clicking on close in popup menu of database item should call closeDatabase`(){
+        // click on 3 dots to display popup menu
+        val dotsMenu = itemLayout2?.findViewById<TextView>(R.id.dots_menu)
+        dotsMenu?.performClick()
+
+        // find the popup menu and click on `Close` item
+        val menu = ShadowPopupMenu.getLatestPopupMenu().menu
+        menu.performIdentifierAction(R.id.close_database_item, FLAG_ALWAYS_PERFORM_CLOSE)
+
+        verify(presenter).closeDatabase(eq(1))
     }
 }
