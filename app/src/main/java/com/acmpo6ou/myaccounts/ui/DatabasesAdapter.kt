@@ -38,7 +38,9 @@ class DatabasesAdapter(
         private val view: DatabaseFragmentInter
 ) : RecyclerView.Adapter<DatabasesAdapter.ViewHolder>() {
     val presenter: DatabasesPresenterInter
-        get() = view.presenter
+        get() = view.presenter // alias
+    val databases: List<Database>
+        get() = presenter.databases // alias
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -47,7 +49,9 @@ class DatabasesAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
+        // set database item name
+        val name = databases[position].name
+        holder.databaseName.text = name
     }
 
     override fun getItemCount(): Int = presenter.databases.size
