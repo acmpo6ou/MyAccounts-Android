@@ -1,0 +1,30 @@
+<!--
+  ~ Copyright (c) 2020. Kolvakh Bohdan
+  ~ This file is part of MyAccounts.
+  ~
+  ~ MyAccounts is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ MyAccounts is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="#FFFFFF"
+    android:alpha="0.8">
+  <path
+      android:fillColor="#FF000000"
+      android:pathData="m6.3431,6.3431c3.1183,-3.1183 8.1954,-3.1183 11.3137,0 3.1183,3.1183 3.1183,8.1954 -0,11.3137C14.5385,20.7752 9.4615,20.7752 6.3431,17.6569 3.2248,14.5385 3.2248,9.4615 6.3431,6.3431M4.9289,4.9289C1.0257,8.8322 1.0257,15.1678 4.9289,19.0711 8.8322,22.9743 15.1678,22.9743 19.0711,19.0711 22.9743,15.1678 22.9743,8.8322 19.0711,4.9289 15.1678,1.0257 8.8322,1.0257 4.9289,4.9289ZM12.7071,11.2929L10.5858,9.1716C10.1969,8.7827 9.5605,8.7827 9.1716,9.1716l0,0c-0.3889,0.3889 -0.3889,1.0253 -0,1.4142l2.1213,2.1213L10.0272,13.9728c-0.3182,0.3182 -0.0919,0.8556 0.3536,0.8485l3.9457,0c0.2828,0 0.502,-0.2192 0.502,-0.502l0,-3.9457C14.8284,9.9352 14.291,9.709 13.9799,10.0201L12.7071,11.2929Z"/>
+</vector>
