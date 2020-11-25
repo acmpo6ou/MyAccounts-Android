@@ -19,12 +19,14 @@
 
 package com.acmpo6ou.myaccounts
 
+import android.widget.TextView
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
+import com.acmpo6ou.myaccounts.ui.DatabasesAdapter
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -34,6 +36,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.LooperMode
+import org.junit.Assert.*
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
@@ -79,6 +82,14 @@ class DatabasesAdapterInst {
 
     @Test
     fun `database item should have appropriate name`(){
-
+        databaseScenario.onFragment {
+            val itemLayout = recycler?.getChildAt(0)
+            val databaseName = itemLayout?.findViewById<TextView>(R.id.databaseItemName)
+            assertEquals(
+                    "item in databases list has incorrect name!",
+                    "main",
+                    databaseName?.text
+            )
+        }
     }
 }

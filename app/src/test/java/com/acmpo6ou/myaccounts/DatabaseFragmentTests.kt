@@ -24,7 +24,6 @@ import android.content.Intent
 import android.net.Uri
 import com.acmpo6ou.myaccounts.core.*
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
-import com.acmpo6ou.myaccounts.ui.DatabasesAdapter
 import com.nhaarman.mockitokotlin2.*
 import org.junit.*
 
