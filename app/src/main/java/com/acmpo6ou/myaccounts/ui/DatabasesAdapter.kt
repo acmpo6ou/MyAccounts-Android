@@ -62,6 +62,9 @@ class DatabasesAdapter(
             databaseName = view.findViewById(R.id.databaseItemName)
             menu = view.findViewById(R.id.dots_menu)
 
+            // when click is performed on database item we should display open database form
+            // or start AccountsActivity for given database, this behaviour is decided in
+            // openDatabase method
             view.setOnClickListener{
                 presenter.openDatabase(adapterPosition)
             }

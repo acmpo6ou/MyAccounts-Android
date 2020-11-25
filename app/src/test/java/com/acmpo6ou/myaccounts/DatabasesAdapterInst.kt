@@ -49,6 +49,7 @@ class DatabasesAdapterInst {
 
     @Test
     fun `click on recycler item should call openDatabase`(){
+        // mock the list of databases for test
         val databases = listOf(
                 Database("main")
         )
@@ -56,12 +57,16 @@ class DatabasesAdapterInst {
         whenever(presenter.databases).thenReturn(databases)
 
         databaseScenario.onFragment {
+            // set mocked presenter
             it.presenter = presenter
+
+            // find recycler and perform click on database item
             val recycler = it.view?.findViewById<RecyclerView>(R.id.databasesList)
-            recycler?.measure(0, 0);
-            recycler?.layout(0, 0, 100, 10000);
+            recycler?.measure(0, 0)
+            recycler?.layout(0, 0, 100, 10000)
             recycler?.getChildAt(0)?.performClick()
         }
+
         verify(presenter).openDatabase(eq(0))
     }
 }
