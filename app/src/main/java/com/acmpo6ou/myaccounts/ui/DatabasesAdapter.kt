@@ -49,9 +49,19 @@ class DatabasesAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val database = databases[position]
         // set database item name
-        val name = databases[position].name
-        holder.databaseName.text = name
+        holder.databaseName.text = database.name
+
+        // set appropriate lock icon according to isOpen property
+        // note: we also set tag on lock icon so later we can determine icon resource
+        if(database.isOpen){
+
+        }
+        else{
+            holder.lockImage.setImageResource(R.drawable.ic_locked)
+            holder.lockImage.tag = R.drawable.ic_locked
+        }
     }
 
     override fun getItemCount(): Int = presenter.databases.size
