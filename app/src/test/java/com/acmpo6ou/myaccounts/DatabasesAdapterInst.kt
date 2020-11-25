@@ -65,12 +65,13 @@ class DatabasesAdapterInst {
             // set mocked presenter
             it.presenter = presenter
 
-            // find recycler measure and lay it out as is needed so we can later obtain its
-            // items
+            // find recycler
             recycler = it.view?.findViewById(R.id.databasesList)
-            recycler?.measure(0, 0)
-            recycler?.layout(0, 0, 100, 10000)
         }
+        // measure and lay recycler out as is needed so we can later obtain its items
+        recycler?.measure(0, 0)
+        recycler?.layout(0, 0, 100, 10000)
+
         // get item layout from recycler
         itemLayout = recycler?.getChildAt(0)
     }
