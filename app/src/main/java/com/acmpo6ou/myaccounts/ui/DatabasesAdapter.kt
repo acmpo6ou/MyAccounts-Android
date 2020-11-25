@@ -56,7 +56,8 @@ class DatabasesAdapter(
         // set appropriate lock icon according to isOpen property
         // note: we also set tag on lock icon so later we can determine icon resource
         if(database.isOpen){
-
+            holder.lockImage.setImageResource(R.drawable.ic_opened)
+            holder.lockImage.tag = R.drawable.ic_opened
         }
         else{
             holder.lockImage.setImageResource(R.drawable.ic_locked)

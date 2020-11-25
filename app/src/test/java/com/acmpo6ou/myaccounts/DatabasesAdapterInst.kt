@@ -56,7 +56,8 @@ class DatabasesAdapterInst {
 
         // mock the list of databases for test
         val databases = listOf(
-                Database("main")
+                Database("main"), // locked
+                Database("test", password = "123") // opened
         )
         presenter = mock()
         whenever(presenter.databases).thenReturn(databases)
@@ -95,13 +96,25 @@ class DatabasesAdapterInst {
     }
 
     @Test
-    fun `database item should have appropriate lock icon when isOpen of Database is false`(){
+    fun `database item should have locked icon when isOpen of Database is false`(){
         // the first database in the list above doesn't have password set hence isOpen is false
         val itemLock = itemLayout?.findViewById<ImageView>(R.id.databaseLock)
         assertEquals(
     "database item has incorrect lock icon when isOpen of Database is false!",
             R.drawable.ic_locked,
             itemLock?.tag,
+        )
+    }
+
+    @Test
+    fun `database item should have opened icon when isOpen of Database is true`(){
+        // the second database in the list above does have password set hence isOpen is true
+        val itemLayout = recycler?.getChildAt(1)
+        val itemLock = itemLayout?.findViewById<ImageView>(R.id.databaseLock)
+        assertEquals(
+                "database item has incorrect lock icon when isOpen of Database is true!",
+                R.drawable.ic_opened,
+                itemLock?.tag,
         )
     }
 }
