@@ -58,6 +58,8 @@ class DatabasesAdapterInst {
         databaseScenario.onFragment {
             it.presenter = presenter
             val recycler = it.view?.findViewById<RecyclerView>(R.id.databasesList)
+            recycler?.measure(0, 0);
+            recycler?.layout(0, 0, 100, 10000);
             recycler?.getChildAt(0)?.performClick()
         }
         verify(presenter).openDatabase(eq(0))
