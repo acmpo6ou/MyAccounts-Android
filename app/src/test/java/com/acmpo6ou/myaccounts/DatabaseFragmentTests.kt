@@ -35,6 +35,7 @@ class DatabaseFragmentTests {
 
     @Before
     fun setUp(){
+        // mock presenter and intent with uri
         presenter = mock()
         intent = mock()
         val uri = mock<Uri>()
