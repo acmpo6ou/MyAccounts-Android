@@ -39,34 +39,46 @@ import org.robolectric.annotation.LooperMode
 @LooperMode(LooperMode.Mode.PAUSED)
 class DatabasesAdapterInst {
     lateinit var databaseScenario: FragmentScenario<DatabaseFragment>
+    lateinit var presenter: DatabasesPresenterInter
+    var recycler: RecyclerView? = null
 
     @Before
-    fun setUp(){
+    fun setUp() {
         // Create a graphical FragmentScenario for the DatabaseFragment
         databaseScenario = launchFragmentInContainer<DatabaseFragment>(
                 themeResId = R.style.Theme_MyAccounts_NoActionBar)
-    }
 
-    @Test
-    fun `click on recycler item should call openDatabase`(){
         // mock the list of databases for test
         val databases = listOf(
                 Database("main")
         )
-        val presenter = mock<DatabasesPresenterInter>()
+        presenter = mock()
         whenever(presenter.databases).thenReturn(databases)
 
         databaseScenario.onFragment {
             // set mocked presenter
             it.presenter = presenter
 
-            // find recycler and perform click on database item
-            val recycler = it.view?.findViewById<RecyclerView>(R.id.databasesList)
+            // find recycler measure and lay it out as is needed so we can later obtain its
+            // items
+            recycler = it.view?.findViewById(R.id.databasesList)
             recycler?.measure(0, 0)
             recycler?.layout(0, 0, 100, 10000)
+        }
+    }
+
+    @Test
+    fun `click on recycler item should call openDatabase`(){
+        databaseScenario.onFragment {
+            // perform click on database item
             recycler?.getChildAt(0)?.performClick()
         }
 
         verify(presenter).openDatabase(eq(0))
+    }
+
+    @Test
+    fun `database item should have appropriate name`(){
+
     }
 }
