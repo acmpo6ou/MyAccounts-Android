@@ -24,6 +24,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.TextView
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.Database
@@ -62,6 +63,20 @@ class DatabasesAdapter(
         else{
             holder.lockImage.setImageResource(R.drawable.ic_locked)
             holder.lockImage.tag = R.drawable.ic_locked
+        }
+
+        // set popup menu on item
+        holder.menu.setOnClickListener { it ->
+            val popup = PopupMenu(view.myContext, it)
+            popup.inflate(R.menu.database_item_menu)
+            popup.setOnMenuItemClickListener {
+                when(it.itemId){
+                    R.id.close_database_item -> presenter.closeDatabase(position)
+                    else -> return@setOnMenuItemClickListener false
+                }
+                true
+            }
+            popup.show()
         }
     }
 

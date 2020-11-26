@@ -50,7 +50,7 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
     val layoutManager = LinearLayoutManager(context)
     override lateinit var adapter: DatabasesAdapter
     override lateinit var presenter: DatabasesPresenterInter
-    lateinit var myContext: Context
+    override lateinit var myContext: Context
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

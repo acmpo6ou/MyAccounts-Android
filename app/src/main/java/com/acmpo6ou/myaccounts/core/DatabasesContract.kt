@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.core
 
+import android.content.Context
 import android.content.Intent
 import com.acmpo6ou.myaccounts.ui.DatabasesAdapter
 
@@ -34,6 +35,7 @@ interface DatabasesPresenterInter{
 interface DatabaseFragmentInter{
     val presenter: DatabasesPresenterInter
     val adapter: DatabasesAdapter
+    val myContext: Context
 
     fun exportDialog(name: String)
     fun confirmDelete(name: String)
