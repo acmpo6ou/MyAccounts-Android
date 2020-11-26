@@ -129,11 +129,11 @@ class DatabasesAdapterInst {
         val menu = ShadowPopupMenu.getLatestPopupMenu().menu
         menu.performIdentifierAction(R.id.close_database_item, FLAG_ALWAYS_PERFORM_CLOSE)
 
-        verify(presenter).closeDatabase(eq(1))
+        verify(presenter).closeDatabase(1)
     }
 
     @Test
-    fun `clicking on delete in popup menu of database item should call deleteDatabase`(){
+    fun `clicking on delete in popup menu of database item should call deleteSelected`(){
         // click on 3 dots to display popup menu
         val dotsMenu = itemLayout?.findViewById<TextView>(R.id.dots_menu)
         dotsMenu?.performClick()
@@ -142,18 +142,11 @@ class DatabasesAdapterInst {
         val menu = ShadowPopupMenu.getLatestPopupMenu().menu
         menu.performIdentifierAction(R.id.delete_database_item, FLAG_ALWAYS_PERFORM_CLOSE)
 
-        verify(presenter).deleteDatabase("main")
+        verify(presenter).deleteSelected(0)
     }
 
     @Test
-    fun `clicking on export in popup menu of database item should call exportDatabase`(){
-        var adapter: DatabasesAdapter? = null
-        databaseScenario.onFragment {
-            val a = DatabasesAdapter(it)
-            adapter = spy(a::class.java) as DatabasesAdapter
-            it.adapter = adapter as DatabasesAdapter
-        }
-
+    fun `clicking on export in popup menu of database item should call exportSelected`(){
         // click on 3 dots to display popup menu
         val dotsMenu = itemLayout?.findViewById<TextView>(R.id.dots_menu)
         dotsMenu?.performClick()
@@ -162,6 +155,6 @@ class DatabasesAdapterInst {
         val menu = ShadowPopupMenu.getLatestPopupMenu().menu
         menu.performIdentifierAction(R.id.export_database_item, FLAG_ALWAYS_PERFORM_CLOSE)
 
-        verify(adapter?.view)?.exportDialog("main")
+        verify(presenter).exportSelected(0)
     }
 }

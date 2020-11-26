@@ -70,10 +70,10 @@ class DatabasesAdapter(
             val popup = PopupMenu(view.myContext, it)
             popup.inflate(R.menu.database_item_menu)
             popup.setOnMenuItemClickListener {
-                val name = databases[position].name
                 when(it.itemId){
                     R.id.close_database_item -> presenter.closeDatabase(position)
-                    R.id.delete_database_item -> presenter.deleteDatabase(name)
+                    R.id.delete_database_item -> presenter.deleteSelected(position)
+                    R.id.export_database_item -> presenter.exportSelected(position)
                     else -> return@setOnMenuItemClickListener false
                 }
                 true

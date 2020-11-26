@@ -1,11 +1,17 @@
 package com.acmpo6ou.myaccounts.core
 
-import com.acmpo6ou.myaccounts.ui.DatabaseFragment
 
 class DatabasesPresenter: DatabasesPresenterInter {
     override var databases: List<Database> = listOf()
+    override fun exportSelected(i: Int) {
+
+    }
 
     override fun exportDatabase(location: String) {
+
+    }
+
+    override fun deleteSelected(i: Int) {
 
     }
 
