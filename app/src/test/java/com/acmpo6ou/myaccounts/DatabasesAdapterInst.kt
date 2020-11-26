@@ -30,10 +30,7 @@ import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
 import com.acmpo6ou.myaccounts.ui.DatabasesAdapter
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -146,5 +143,25 @@ class DatabasesAdapterInst {
         menu.performIdentifierAction(R.id.delete_database_item, FLAG_ALWAYS_PERFORM_CLOSE)
 
         verify(presenter).deleteDatabase("main")
+    }
+
+    @Test
+    fun `clicking on export in popup menu of database item should call exportDatabase`(){
+        var adapter: DatabasesAdapter? = null
+        databaseScenario.onFragment {
+            val a = DatabasesAdapter(it)
+            adapter = spy(a::class.java) as DatabasesAdapter
+            it.adapter = adapter as DatabasesAdapter
+        }
+
+        // click on 3 dots to display popup menu
+        val dotsMenu = itemLayout?.findViewById<TextView>(R.id.dots_menu)
+        dotsMenu?.performClick()
+
+        // find the popup menu and click on `Export` item
+        val menu = ShadowPopupMenu.getLatestPopupMenu().menu
+        menu.performIdentifierAction(R.id.export_database_item, FLAG_ALWAYS_PERFORM_CLOSE)
+
+        verify(adapter?.view)?.exportDialog("main")
     }
 }
