@@ -6,8 +6,14 @@ Constructor:
 * EXPORT_RC - request code used when exporting database
 * exportIndex - used to identify which database to export after user chose location in export database dialog
 
+* exportSelected(i)
+i - database index
+1. calls view.exportDialog(name)
+name - name of the database retrieved from `databases` property by index `i`
+2. saves database index `i` to exportIndex
+
 * exportDatabase(location) - exports database (identified by `exportIndex`):
-1. retrieves location where to export database from given uri `location`
+location - string representing location where to export the database
 2. calls model.exportDatabase(name, location) in try-catch block
 handling all errors:
 2.1 if there are no errors - calls view.showSuccess() to
@@ -16,6 +22,9 @@ show dialog about success
 to show error dialog with helpful information
 title - title of error dialog
 details - details about particular exception that occurred
+
+* deleteSelected(i)
+calls view.confirmDelete(name) where `name` is a name of the database to be deleted
 
 * deleteDatabase(name) - deletes given database
 name - name of the database to delete

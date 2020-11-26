@@ -20,13 +20,10 @@ Constructor:
 
 Popup menu onMenuItemClick:
 Export:
-0. get `i` using getAdapterPosition()
-1. calls view.showExportDialog(name)
-name - name of the database retrieved from `databases` property by index `i`
-2. saves database index `i` to presenter.exportIndex
+calls presenter.exportSelected(i)
 
 Delete:
-0. obtains `name` of the database to delete using getAdapterPosition()
+calls presenter.deleteSelected(i)
 1. view.confirmDelete(name) - show dialog to confirm deletion of database
 
 Edit:
