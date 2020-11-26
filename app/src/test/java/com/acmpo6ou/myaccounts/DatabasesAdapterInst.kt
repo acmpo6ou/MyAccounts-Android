@@ -157,4 +157,16 @@ class DatabasesAdapterInst {
 
         verify(presenter).exportSelected(0)
     }
+
+    @Test
+    fun `clicking on 'Edit' should navigate to EditDatabaseFragment passing Database`(){
+        // click on 3 dots to display popup menu
+        val dotsMenu = itemLayout2?.findViewById<TextView>(R.id.dots_menu)
+        dotsMenu?.performClick()
+
+        // find the popup menu and click on `Edit` item
+        val menu = ShadowPopupMenu.getLatestPopupMenu().menu
+        menu.performIdentifierAction(R.id.edit_database_item, FLAG_ALWAYS_PERFORM_CLOSE)
+
+    }
 }
