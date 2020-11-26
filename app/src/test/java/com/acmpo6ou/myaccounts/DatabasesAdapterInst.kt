@@ -134,4 +134,17 @@ class DatabasesAdapterInst {
 
         verify(presenter).closeDatabase(eq(1))
     }
+
+    @Test
+    fun `clicking on delete in popup menu of database item should call deleteDatabase`(){
+        // click on 3 dots to display popup menu
+        val dotsMenu = itemLayout?.findViewById<TextView>(R.id.dots_menu)
+        dotsMenu?.performClick()
+
+        // find the popup menu and click on `Delete` item
+        val menu = ShadowPopupMenu.getLatestPopupMenu().menu
+        menu.performIdentifierAction(R.id.delete_database_item, FLAG_ALWAYS_PERFORM_CLOSE)
+
+        verify(presenter).deleteDatabase("main")
+    }
 }
