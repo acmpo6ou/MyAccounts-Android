@@ -32,6 +32,7 @@ import android.view.ViewGroup
 import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabaseFragmentInter
 import com.acmpo6ou.myaccounts.core.DatabasesPresenter
 import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
@@ -63,6 +64,10 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
         // initializing recycler's adapter and presenter
         adapter = DatabasesAdapter(this)
         presenter = DatabasesPresenter()
+        presenter.databases = listOf(
+                Database("main"), // locked
+                Database("test", password = "123") // opened
+        )
     }
 
     override fun onCreateView(
