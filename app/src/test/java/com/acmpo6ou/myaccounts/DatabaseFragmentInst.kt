@@ -22,6 +22,7 @@ package com.acmpo6ou.myaccounts
 import android.app.Dialog
 import android.content.Intent
 import android.os.Looper.getMainLooper
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -41,6 +42,7 @@ import org.robolectric.*
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.LooperMode
 import org.robolectric.shadows.ShadowAlertDialog
+import org.robolectric.shadows.ShadowPopupMenu
 
 // This two extensions used to find a snackbar during tests
 /**
@@ -109,6 +111,29 @@ class DatabaseFragmentInstrumentation {
             "(+) FAB on DatabaseFragment doesn't navigate to CreateDatabaseFragment!",
             navController.currentDestination?.id,
             R.id.createDatabaseFragment
+        )
+    }
+
+    @Test
+    fun `navigateToEdit should navigate to EditDatabaseFragment`(){
+        // Create a TestNavHostController
+        val navController = TestNavHostController(
+                ApplicationProvider.getApplicationContext())
+        navController.setGraph(R.navigation.mobile_navigation)
+
+        databaseScenario.onFragment {
+            // Set the NavController property on the fragment
+            Navigation.setViewNavController(it.requireView(), navController)
+
+            // call navigateToEdit
+            it.navigateToEdit()
+        }
+
+        // verify that we navigated to edit database
+        assertEquals(
+                "navigateToEdit doesn't navigate to EditDatabaseFragment!",
+                navController.currentDestination?.id,
+                R.id.editDatabaseFragment
         )
     }
 
