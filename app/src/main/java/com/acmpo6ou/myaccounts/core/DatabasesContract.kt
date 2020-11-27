@@ -33,6 +33,7 @@ interface DatabasesPresenterInter{
     fun deleteSelected(i: Int)
     fun deleteDatabase(name: String)
 
+    fun editSelected(i: Int)
     fun closeDatabase(i: Int)
     fun openDatabase(i: Int)
 }

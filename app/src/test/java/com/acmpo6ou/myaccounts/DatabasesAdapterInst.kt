@@ -162,17 +162,7 @@ class DatabasesAdapterInst {
     }
 
     @Test
-    fun `clicking on 'Edit' should navigate to EditDatabaseFragment passing Database`(){
-        // Create a TestNavHostController
-        val navController = TestNavHostController(
-                ApplicationProvider.getApplicationContext())
-        navController.setGraph(R.navigation.mobile_navigation)
-
-        databaseScenario.onFragment {
-            // Set the NavController property on the fragment
-            Navigation.setViewNavController(it.requireView(), navController)
-        }
-
+    fun `clicking on 'Edit' should call editSelected`(){
         // click on 3 dots to display popup menu
         val dotsMenu = itemLayout2?.findViewById<TextView>(R.id.dots_menu)
         dotsMenu?.performClick()
@@ -181,11 +171,7 @@ class DatabasesAdapterInst {
         val menu = ShadowPopupMenu.getLatestPopupMenu().menu
         menu.performIdentifierAction(R.id.edit_database_item, FLAG_ALWAYS_PERFORM_CLOSE)
 
-        // verify that we navigated to edit database
-        assertEquals(
-                "`Edit` of database item doesn't navigate to EditDatabaseFragment!",
-                navController.currentDestination?.id,
-                R.id.editDatabaseFragment
-        )
+        // verify that we called the appropriate method
+        verify(presenter).editSelected(1)
     }
 }

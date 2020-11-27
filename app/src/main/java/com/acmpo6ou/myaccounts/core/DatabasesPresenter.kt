@@ -19,6 +19,10 @@ class DatabasesPresenter: DatabasesPresenterInter {
 
     }
 
+    override fun editSelected(i: Int) {
+
+    }
+
     override fun closeDatabase(i: Int) {
 
     }
