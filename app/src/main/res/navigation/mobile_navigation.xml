@@ -31,10 +31,18 @@
         <action
             android:id="@+id/actionCreateDatabase"
             app:destination="@id/createDatabaseFragment" />
+        <action
+            android:id="@+id/actionEditDatabase"
+            app:destination="@id/editDatabaseFragment" />
     </fragment>
     <fragment
         android:id="@+id/createDatabaseFragment"
         android:name="com.acmpo6ou.myaccounts.ui.CreateDatabaseFragment"
         android:label="create_edit_database_fragment"
+        tools:layout="@layout/create_edit_database_fragment" />
+    <fragment
+        android:id="@+id/editDatabaseFragment"
+        android:name="com.acmpo6ou.myaccounts.ui.EditDatabaseFragment"
+        android:label="EditDatabaseFragment"
         tools:layout="@layout/create_edit_database_fragment" />
 </navigation>

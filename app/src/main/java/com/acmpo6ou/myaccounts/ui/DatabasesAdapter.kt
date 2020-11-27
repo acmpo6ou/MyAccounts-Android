@@ -40,7 +40,7 @@ class DatabasesAdapter(
 ) : RecyclerView.Adapter<DatabasesAdapter.ViewHolder>() {
     val presenter: DatabasesPresenterInter
         get() = view.presenter // alias
-    val databases: List<Database>
+    private val databases: List<Database>
         get() = presenter.databases // alias
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -74,6 +74,7 @@ class DatabasesAdapter(
                     R.id.close_database_item -> presenter.closeDatabase(position)
                     R.id.delete_database_item -> presenter.deleteSelected(position)
                     R.id.export_database_item -> presenter.exportSelected(position)
+                    R.id.edit_database_item -> view.navigateToEdit()
                     else -> return@setOnMenuItemClickListener false
                 }
                 true

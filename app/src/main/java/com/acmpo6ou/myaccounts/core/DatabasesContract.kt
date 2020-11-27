@@ -44,8 +44,11 @@ interface DatabaseFragmentInter{
 
     fun exportDialog(name: String)
     fun confirmDelete(name: String)
+    fun navigateToEdit()
+
     fun showSuccess()
     fun showError(details: String)
+
     fun startDatabase(databaseJson: String)
     fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?)
 }
