@@ -64,6 +64,8 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
         // initializing recycler's adapter and presenter
         adapter = DatabasesAdapter(this)
         presenter = DatabasesPresenter()
+
+        // add some databases for testing
         presenter.databases = listOf(
                 Database("main"), // locked
                 Database("test", password = "123") // opened
