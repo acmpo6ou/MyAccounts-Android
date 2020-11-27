@@ -71,7 +71,7 @@ class DatabasesAdapter(
             popup.inflate(R.menu.database_item_menu)
             popup.setOnMenuItemClickListener {
                 when(it.itemId){
-                    R.id.close_database_item -> presenter.closeDatabase(position)
+                    R.id.close_database_item -> presenter.closeSelected(position)
                     R.id.delete_database_item -> presenter.deleteSelected(position)
                     R.id.export_database_item -> presenter.exportSelected(position)
                     R.id.edit_database_item -> presenter.editSelected(position)
