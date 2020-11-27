@@ -24,7 +24,7 @@ title - title of error dialog
 details - details about particular exception that occurred
 
 * deleteSelected(i)
-calls view.confirmDelete(name) where `name` is a name of the database to be deleted
+calls view.confirmDelete(i) 
 
 * deleteDatabase(name) - deletes given database
 name - name of the database to delete
@@ -33,11 +33,17 @@ name - name of the database to delete
 1.2.1 if there are no errors calls view.showSuccess()
 1.2.2 calls view.adapter.removeItem(name)
 
+* closeSelected(i) - decides whether to close database or not depending on whether it is saved or not
+1. if it is saved then just call closeDatabase(i)
+2. if it is not then call view.confirmClose(i) to show a dialog of close confirmation
+
 * closeDatabase(i) - closes given database
 i - database index
 1. Retrieves database by its index
 2. sets database.password to null
 3. calls view.notifyChanged(i) - so that adapter can change database lock icon
+
+* editSelected(i) 
 
 * openDatabase(i) - opens given database
 i - database index

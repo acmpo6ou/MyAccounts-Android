@@ -8,17 +8,26 @@ onCreate:
 1. initializes DatabasesRecycler with corresponding LinearLayoutManager and
 DatabasesAdapter
 
-* exportDialog(name) - displays dialog to chose a location and name of tar file to be exported:
+* exportDialog(i) - displays dialog to chose a location and name of tar file to be exported:
 name - is the default name of the database to be displayed in export dialog
 1. creates intent ACTION_CREATE_DOCUMENT of type 'application/x-tar' and with
 name '$name.tar'
 1.2 starts intent using startActivityForResult()
 
-* confirmDelete(name) - displays confirmation dialog to confirm the deletion of database
-name - name of the database to delete
+* confirmDelete(i) - displays confirmation dialog to confirm the deletion of database
 1. Builds and displays dialog with message
 `Are you sure you want to delete database $name?`
-2. if user pressed `Yes` in dialog then call presenter.deleteDatabase(name)
+2. if user pressed `Yes` in dialog then call presenter.deleteDatabase(i)
+
+* confirmClose(i) - displays confirmation dialog to confirm the close of the database
+1. Builds and displays dialog with message
+`Are you sure you want to close database $name?`
+2. if user pressed `Yes` in dialog then call presenter.closeDatabase(i)
+
+* navigateToEdit(databaseJson) - navigates to EditDatabaseFragment passing through database
+ json string
+1. Using safeargs passes databaseJson to EditDatabaseFragment
+2. navigates to EditDatabaseFragment
 
 * showSucces() - displays snackbar saying `Operation successful!`
 

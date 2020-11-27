@@ -19,18 +19,10 @@ Constructor:
 	item.setEnabled(false)
 
 Popup menu onMenuItemClick:
-Export:
-calls presenter.exportSelected(i)
-
-Delete:
-calls presenter.deleteSelected(i)
-1. view.confirmDelete(name) - show dialog to confirm deletion of database
-
-Edit:
-navigate to EditDatabaseFragment passing through Database instance
-
-Close:
-calls presenter.closeDatabase(i) where `i` is database index
+Export: calls presenter.exportSelected(i)
+Delete: calls presenter.deleteSelected(i)
+Edit:   calls presenter.editSelected(i)
+Close:  calls presenter.closeDatabase(i) 
 
 * getItemCount - returns size of databases property
 
