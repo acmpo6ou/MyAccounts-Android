@@ -74,7 +74,7 @@ class DatabasesAdapter(
                     R.id.close_database_item -> presenter.closeDatabase(position)
                     R.id.delete_database_item -> presenter.deleteSelected(position)
                     R.id.export_database_item -> presenter.exportSelected(position)
-                    R.id.edit_database_item -> view.navigateToEdit()
+                    R.id.edit_database_item -> presenter.editSelected(position)
                     else -> return@setOnMenuItemClickListener false
                 }
                 true
