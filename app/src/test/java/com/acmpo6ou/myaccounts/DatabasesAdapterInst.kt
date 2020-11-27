@@ -123,7 +123,7 @@ class DatabasesAdapterInst {
     }
 
     @Test
-    fun `clicking on close in popup menu of database item should call closeDatabase`(){
+    fun `clicking on close in popup menu of database item should call closeSelected`(){
         // click on 3 dots to display popup menu
         val dotsMenu = itemLayout2?.findViewById<TextView>(R.id.dots_menu)
         dotsMenu?.performClick()
@@ -132,7 +132,7 @@ class DatabasesAdapterInst {
         val menu = ShadowPopupMenu.getLatestPopupMenu().menu
         menu.performIdentifierAction(R.id.close_database_item, FLAG_ALWAYS_PERFORM_CLOSE)
 
-        verify(presenter).closeDatabase(1)
+        verify(presenter).closeSelected(1)
     }
 
     @Test
