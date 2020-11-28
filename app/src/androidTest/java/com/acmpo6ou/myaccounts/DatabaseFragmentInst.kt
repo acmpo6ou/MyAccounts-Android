@@ -9,12 +9,10 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -39,6 +37,16 @@ class DatabaseFragmentInst {
         // Create a graphical FragmentScenario for the DatabaseFragment
         databaseScenario = launchFragmentInContainer<DatabaseFragment>(
                 themeResId = R.style.Theme_MyAccounts_NoActionBar)
+
+        // mock presenter with fake databases
+        val databases = listOf(
+                Database("main")
+        )
+        val presenter = mock<DatabasesPresenterInter>()
+        whenever(presenter.databases).thenReturn(databases)
+        databaseScenario.onFragment {
+            it.presenter = presenter
+        }
     }
 
     @Test
@@ -47,7 +55,7 @@ class DatabaseFragmentInst {
         val presenter = mock<DatabasesPresenterInter>()
         databaseScenario.onFragment {
             it.presenter = presenter
-            it.confirmDelete("main")
+            it.confirmDelete(0)
         }
 
         // chose Yes
@@ -63,7 +71,7 @@ class DatabaseFragmentInst {
         val presenter = mock<DatabasesPresenterInter>()
         databaseScenario.onFragment {
             it.presenter = presenter
-            it.confirmDelete("main")
+            it.confirmDelete(0)
         }
 
         // chose No

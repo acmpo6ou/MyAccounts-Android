@@ -45,8 +45,9 @@ interface DatabaseFragmentInter{
     val adapter: DatabasesAdapter
     val myContext: Context
 
-    fun exportDialog(name: String)
-    fun confirmDelete(name: String)
+    fun exportDialog(i: Int)
+    fun confirmDelete(i: Int)
+    fun confirmClose(i: Int)
     fun navigateToEdit()
 
     fun showSuccess()

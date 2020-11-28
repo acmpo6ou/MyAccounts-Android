@@ -51,6 +51,9 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
     val layoutManager = LinearLayoutManager(context)
     override lateinit var adapter: DatabasesAdapter
     override lateinit var presenter: DatabasesPresenterInter
+
+    private var databases: List<Database> = listOf() // alias
+        get() = presenter.databases
     override lateinit var myContext: Context
 
     override fun onAttach(context: Context) {
@@ -96,9 +99,11 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
      *
      * Starts intent with export request code. Shows dialog to chose location using Storage
      * Access framework.
-     * @param[name] name of the database to export, used as default name of exported tar file.
+     * @param[i] index of database we want to export, used to get database name that will be
+     * used as default in export dialog.
      */
-    override fun exportDialog(name: String) {
+    override fun exportDialog(i: Int) {
+        val name = databases[i].name
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.type = "application/x-tar"
@@ -110,9 +115,11 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
      * Displays a dialog for user to confirm deletion of database.
      *
      * If user is choosing No – we will do nothing, if Yes – delete database.
-     * @param[name] - name of the database to delete.
+     * @param[i] - database index
      */
-    override fun confirmDelete(name: String) {
+    override fun confirmDelete(i: Int) {
+        // get name of the database to delete
+        val name = databases[i].name
          MaterialAlertDialogBuilder(myContext)
                 .setTitle(R.string.warning)
                 .setMessage("Are you sure you want to delete database $name?")
@@ -122,6 +129,10 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
                     presenter.deleteDatabase(name)
                 }
                 .show()
+    }
+
+    override fun confirmClose(i: Int) {
+
     }
 
     override fun navigateToEdit() {

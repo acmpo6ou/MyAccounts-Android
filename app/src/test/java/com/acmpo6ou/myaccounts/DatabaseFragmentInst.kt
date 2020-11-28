@@ -22,7 +22,6 @@ package com.acmpo6ou.myaccounts
 import android.app.Dialog
 import android.content.Intent
 import android.os.Looper.getMainLooper
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -33,16 +32,23 @@ import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
+import com.acmpo6ou.myaccounts.core.Database
+import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
-import com.google.android.material.snackbar.*
-import org.junit.Assert.*
-import org.junit.*
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.snackbar.SnackbarContentLayout
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.whenever
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.*
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.LooperMode
 import org.robolectric.shadows.ShadowAlertDialog
-import org.robolectric.shadows.ShadowPopupMenu
 
 // This two extensions used to find a snackbar during tests
 /**
@@ -89,6 +95,16 @@ class DatabaseFragmentInstrumentation {
         // Create a graphical FragmentScenario for the DatabaseFragment
         databaseScenario = launchFragmentInContainer<DatabaseFragment>(
             themeResId = R.style.Theme_MyAccounts_NoActionBar)
+
+        // mock presenter with fake databases
+        val databases = listOf(
+                Database("main")
+        )
+        val presenter = mock<DatabasesPresenterInter>()
+        whenever(presenter.databases).thenReturn(databases)
+        databaseScenario.onFragment {
+            it.presenter = presenter
+        }
     }
 
     @Test
@@ -147,7 +163,7 @@ class DatabaseFragmentInstrumentation {
 
         // call exportDialog
         databaseScenario.onFragment {
-            it.exportDialog("main")
+            it.exportDialog(0)
         }
 
         // check all intent properties
@@ -259,7 +275,7 @@ class DatabaseFragmentInstrumentation {
     fun `confirmDelete should create dialog with appropriate message`(){
         // create dialog
         databaseScenario.onFragment {
-            it.confirmDelete("main")
+            it.confirmDelete(0)
         }
 
         val dialog = ShadowAlertDialog.getLatestDialog() as AlertDialog
