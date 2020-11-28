@@ -45,6 +45,6 @@ request code is EXPORT_RC then call presenter.exportDatabase(location)
 1. calls adapter.notifyItemChanged(i)
 2. adapter.notifyItemRangeChanged(i, 1)
 
-* startDatabase(database) - launchs AccountsActivity for given database
-database - Database instance of the database we going to launch AccountsActivity for
-1. creates intent and launchs AccountsActivity passing through Database instance
+* startDatabase(databaseJson) - launchs AccountsActivity for given database
+databaseJson - serialized database string
+1. creates intent and launchs AccountsActivity passing through serialized database string

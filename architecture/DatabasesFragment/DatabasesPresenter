@@ -44,11 +44,14 @@ i - database index
 3. calls view.notifyChanged(i) - so that adapter can change database lock icon
 
 * editSelected(i) 
+1. serializes database to json using model.dumps()
+2. calls view.navigateToEdit(databaseJson) passing through serializes database string
 
 * openDatabase(i) - opens given database
 i - database index
 1. Retrieves database by its index
-2. if database.isOpen is true then call view.startDatabase(database)
+1.2 serializes database using model.dumps()
+2. if database.isOpen is true then call view.startDatabase(databaseJson)
 3. if it's false then navigates to OpenDatabaseFragment passing through the Database instance
 
 * checkTarFile(path) - checks given database tar file on correctness
