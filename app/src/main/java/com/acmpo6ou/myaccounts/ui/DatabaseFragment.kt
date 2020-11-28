@@ -126,13 +126,29 @@ class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
                 .setIcon(R.drawable.ic_warning)
                 .setNegativeButton(R.string.no) { _: DialogInterface, _: Int -> }
                 .setPositiveButton(R.string.yes){ _: DialogInterface, _: Int ->
-                    presenter.deleteDatabase(name)
+                    presenter.deleteDatabase(i)
                 }
                 .show()
     }
 
+    /**
+     * Displays a dialog for user to confirm closing of database.
+     *
+     * If user is choosing No – we will do nothing, if Yes – close database.
+     * @param[i] - database index
+     */
     override fun confirmClose(i: Int) {
-
+        // get name of the database to close
+        val name = databases[i].name
+        MaterialAlertDialogBuilder(myContext)
+                .setTitle(R.string.warning)
+                .setMessage("Are you sure you want to close database $name?")
+                .setIcon(R.drawable.ic_warning)
+                .setNegativeButton(R.string.no) { _: DialogInterface, _: Int -> }
+                .setPositiveButton(R.string.yes){ _: DialogInterface, _: Int ->
+                    presenter.closeDatabase(i)
+                }
+                .show()
     }
 
     override fun navigateToEdit() {
