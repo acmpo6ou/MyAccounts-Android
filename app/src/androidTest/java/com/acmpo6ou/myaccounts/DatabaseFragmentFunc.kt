@@ -2,13 +2,10 @@ package com.acmpo6ou.myaccounts
 
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
-import androidx.navigation.testing.TestNavHostController
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
@@ -20,6 +17,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class DatabaseFragmentInst {
     lateinit var databaseScenario: FragmentScenario<DatabaseFragment>
+    lateinit var presenter: DatabasesPresenterInter
 
     @Before
     fun setUp(){
@@ -31,7 +29,7 @@ class DatabaseFragmentInst {
         val databases = listOf(
                 Database("main")
         )
-        val presenter = mock<DatabasesPresenterInter>()
+        presenter = mock()
         whenever(presenter.databases).thenReturn(databases)
         databaseScenario.onFragment {
             it.presenter = presenter
@@ -41,9 +39,7 @@ class DatabaseFragmentInst {
     @Test
     fun confirmDelete_should_call_deleteDatabase_when_Yes_is_chosen_in_dialog() {
         // create dialog and call confirmDelete
-        val presenter = mock<DatabasesPresenterInter>()
         databaseScenario.onFragment {
-            it.presenter = presenter
             it.confirmDelete(0)
         }
 
@@ -57,9 +53,7 @@ class DatabaseFragmentInst {
     @Test
     fun confirmDelete_should_not_call_deleteDatabase_when_No_is_chosen_in_dialog() {
         // create dialog and call confirmDelete
-        val presenter = mock<DatabasesPresenterInter>()
         databaseScenario.onFragment {
-            it.presenter = presenter
             it.confirmDelete(0)
         }
 
