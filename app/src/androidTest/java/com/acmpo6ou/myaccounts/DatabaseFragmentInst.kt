@@ -19,21 +19,10 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class DatabaseFragmentInst {
-
-    lateinit var navController: TestNavHostController
     lateinit var databaseScenario: FragmentScenario<DatabaseFragment>
-
-    // get string resources
-    val context = InstrumentationRegistry.getInstrumentation().targetContext
-    val successMessage = context.resources.getString(R.string.success_message)
 
     @Before
     fun setUp(){
-        // Create a TestNavHostController
-        navController = TestNavHostController(
-                ApplicationProvider.getApplicationContext())
-        navController.setGraph(R.navigation.mobile_navigation)
-
         // Create a graphical FragmentScenario for the DatabaseFragment
         databaseScenario = launchFragmentInContainer<DatabaseFragment>(
                 themeResId = R.style.Theme_MyAccounts_NoActionBar)
