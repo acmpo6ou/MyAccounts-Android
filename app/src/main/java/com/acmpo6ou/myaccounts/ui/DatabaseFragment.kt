@@ -43,7 +43,7 @@ import kotlinx.android.synthetic.main.fragment_database_list.*
 /**
  * A fragment representing a list of Databases.
  */
-class DatabaseFragment() : Fragment(), DatabaseFragmentInter {
+class DatabaseFragment: Fragment(), DatabaseFragmentInter {
 
     val EXPORT_RC = 101
     val ACCOUNTS_RC = 200

@@ -42,6 +42,8 @@ class DatabaseFragmentInst {
         databaseScenario.onFragment {
             it.confirmDelete(0)
         }
+        // wait for dialog to appear
+        Thread.sleep(100)
 
         // chose Yes
         onView(withId(android.R.id.button1)).perform(click())
@@ -56,6 +58,8 @@ class DatabaseFragmentInst {
         databaseScenario.onFragment {
             it.confirmDelete(0)
         }
+        // wait for dialog to appear
+        Thread.sleep(100)
 
         // chose No
         onView(withId(android.R.id.button2)).perform(click())
