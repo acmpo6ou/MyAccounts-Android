@@ -286,4 +286,20 @@ class DatabaseFragmentInstrumentation {
                 message?.text
         )
     }
+
+    @Test
+    fun `confirmClose should create dialog with appropriate message`(){
+        // create dialog
+        databaseScenario.onFragment {
+            it.confirmClose(0)
+        }
+
+        val dialog = ShadowAlertDialog.getLatestDialog() as AlertDialog
+        val message = dialog.findViewById<TextView>(android.R.id.message)
+        assertEquals(
+                "confirmClose created dialog with incorrect message!",
+                "Are you sure you want to close database main?",
+                message?.text
+        )
+    }
 }
