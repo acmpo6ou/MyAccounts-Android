@@ -44,9 +44,5 @@
         android:id="@+id/editDatabaseFragment"
         android:name="com.acmpo6ou.myaccounts.ui.EditDatabaseFragment"
         android:label="EditDatabaseFragment"
-        tools:layout="@layout/create_edit_database_fragment" >
-        <argument
-            android:name="database"
-            app:argType="string" />
-    </fragment>
+        tools:layout="@layout/create_edit_database_fragment" />
 </navigation>
