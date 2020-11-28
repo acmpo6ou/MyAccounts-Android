@@ -28,6 +28,7 @@
     <ImageView
         android:layout_width="40dp"
         android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
         app:srcCompat="@drawable/ic_account" />
 
     <TextView
@@ -44,6 +45,7 @@
         android:id="@+id/textViewOptions"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginEnd="16dp"
         android:gravity="center"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"

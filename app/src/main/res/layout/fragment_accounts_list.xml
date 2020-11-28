@@ -25,15 +25,13 @@
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/accountsList"
-    android:name="com.acmpo6ou.myaccounts.AccountsFragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    app:layoutManager="LinearLayoutManager"
-    tools:context=".ui.AccountsFragment"
-    tools:listitem="@layout/fragment_account" >
+        android:id="@+id/accountsList"
+        android:name="com.acmpo6ou.myaccounts.AccountsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="LinearLayoutManager"
+        tools:context=".ui.AccountsFragment"
+        tools:listitem="@layout/fragment_account">
 
     </androidx.recyclerview.widget.RecyclerView>
 
