@@ -47,7 +47,7 @@ class DatabaseFragmentInst {
         onView(withId(android.R.id.button1)).perform(click())
 
         // verify that method was called
-        verify(presenter).deleteDatabase(eq("main"))
+        verify(presenter).deleteDatabase(0)
     }
 
     @Test
@@ -61,6 +61,6 @@ class DatabaseFragmentInst {
         onView(withId(android.R.id.button2)).perform(click())
 
         // verify that method was called
-        verify(presenter, never()).deleteDatabase(eq("main"))
+        verify(presenter, never()).deleteDatabase(0)
     }
 }

@@ -31,7 +31,7 @@ interface DatabasesPresenterInter{
     fun exportDatabase(location: String)
 
     fun deleteSelected(i: Int)
-    fun deleteDatabase(name: String)
+    fun deleteDatabase(i: Int)
 
     fun closeSelected(i: Int)
     fun closeDatabase(i: Int)
