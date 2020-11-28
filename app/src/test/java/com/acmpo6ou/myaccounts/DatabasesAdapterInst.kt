@@ -77,7 +77,7 @@ class DatabasesAdapterInst {
         recycler?.measure(0, 0)
         recycler?.layout(0, 0, 100, 10000)
 
-        // get item layout from recycler
+        // get item layouts from recycler
         itemLayout = recycler?.getChildAt(0)
         itemLayout2 = recycler?.getChildAt(1)
     }
@@ -123,7 +123,7 @@ class DatabasesAdapterInst {
     }
 
     @Test
-    fun `clicking on close in popup menu of database item should call closeSelected`(){
+    fun `clicking on 'Close' should call closeSelected`(){
         // click on 3 dots to display popup menu
         val dotsMenu = itemLayout2?.findViewById<TextView>(R.id.dots_menu)
         dotsMenu?.performClick()
@@ -136,7 +136,7 @@ class DatabasesAdapterInst {
     }
 
     @Test
-    fun `clicking on delete in popup menu of database item should call deleteSelected`(){
+    fun `clicking on 'Delete' should call deleteSelected`(){
         // click on 3 dots to display popup menu
         val dotsMenu = itemLayout?.findViewById<TextView>(R.id.dots_menu)
         dotsMenu?.performClick()
@@ -149,7 +149,7 @@ class DatabasesAdapterInst {
     }
 
     @Test
-    fun `clicking on export in popup menu of database item should call exportSelected`(){
+    fun `clicking on 'Export' should call exportSelected`(){
         // click on 3 dots to display popup menu
         val dotsMenu = itemLayout?.findViewById<TextView>(R.id.dots_menu)
         dotsMenu?.performClick()
