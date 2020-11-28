@@ -38,6 +38,7 @@ import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 class DatabasesAdapter(
         val view: DatabaseFragmentInter
 ) : RecyclerView.Adapter<DatabasesAdapter.ViewHolder>() {
+
     val presenter: DatabasesPresenterInter
         get() = view.presenter // alias
     private val databases: List<Database>
@@ -83,8 +84,11 @@ class DatabasesAdapter(
         }
     }
 
-    override fun getItemCount(): Int = presenter.databases.size
+    override fun getItemCount(): Int = databases.size
 
+    /**
+     * Represents ViewHolder for item of databases list.
+     */
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var lockImage: ImageView
         var databaseName: TextView
@@ -97,7 +101,7 @@ class DatabasesAdapter(
 
             // when click is performed on database item we should display open database form
             // or start AccountsActivity for given database, this behaviour is decided in
-            // openDatabase method
+            // openDatabase method of presenter
             view.setOnClickListener{
                 presenter.openDatabase(adapterPosition)
             }
