@@ -28,6 +28,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
@@ -85,6 +86,7 @@ private fun View.findSnackbarLayout(): Snackbar.SnackbarLayout? {
 @LooperMode(LooperMode.Mode.PAUSED)
 class DatabaseFragmentInstrumentation {
     lateinit var databaseScenario: FragmentScenario<DatabaseFragment>
+    private lateinit var navController: NavController
 
     // get string resources
     val context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -107,19 +109,24 @@ class DatabaseFragmentInstrumentation {
         }
     }
 
-    @Test
-    fun `+ FAB must navigate to CreateDatabaseFragment`() {
+    private fun setUpNavController() {
         // Create a TestNavHostController
-        val navController = TestNavHostController(
+        navController = TestNavHostController(
                 ApplicationProvider.getApplicationContext())
         navController.setGraph(R.navigation.mobile_navigation)
 
         databaseScenario.onFragment { fragment ->
             // Set the NavController property on the fragment
             Navigation.setViewNavController(fragment.requireView(), navController)
+        }
+    }
 
-            // Verify that performing a click changes the NavController’s state
-            val addButton = fragment.view?.findViewById<View>(R.id.addDatabase)
+    @Test
+    fun `+ FAB must navigate to CreateDatabaseFragment`() {
+        setUpNavController()
+        // Verify that performing a click changes the NavController’s state
+        databaseScenario.onFragment {
+            val addButton = it.view?.findViewById<View>(R.id.addDatabase)
             addButton?.performClick()
         }
 
@@ -132,17 +139,10 @@ class DatabaseFragmentInstrumentation {
 
     @Test
     fun `navigateToEdit should navigate to EditDatabaseFragment`(){
-        // Create a TestNavHostController
-        val navController = TestNavHostController(
-                ApplicationProvider.getApplicationContext())
-        navController.setGraph(R.navigation.mobile_navigation)
-
+        setUpNavController()
         databaseScenario.onFragment {
-            // Set the NavController property on the fragment
-            Navigation.setViewNavController(it.requireView(), navController)
-
             // call navigateToEdit
-            it.navigateToEdit()
+            it.navigateToEdit("")
         }
 
         // verify that we navigated to edit database
@@ -151,6 +151,11 @@ class DatabaseFragmentInstrumentation {
                 navController.currentDestination?.id,
                 R.id.editDatabaseFragment
         )
+    }
+
+    @Test
+    fun `navigateToEdit should pass database json string to EditDatabaseFragment`(){
+
     }
 
     @Test
