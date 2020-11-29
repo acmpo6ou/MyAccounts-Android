@@ -67,4 +67,37 @@ class DatabaseFragmentInst {
         // verify that method was called
         verify(presenter, never()).deleteDatabase(0)
     }
+
+    @Test
+    fun confirmClose_should_call_closeDatabase_when_Yes_is_chosen_in_dialog() {
+        // create dialog and call confirmClose
+        databaseScenario.onFragment {
+            it.confirmClose(0)
+        }
+        // wait for dialog to appear
+        Thread.sleep(100)
+
+        // chose Yes
+        onView(withId(android.R.id.button1)).perform(click())
+
+        // verify that method was called
+        verify(presenter).closeDatabase(0)
+    }
+
+    @Test
+    fun confirmClose_should_not_call_closeDatabase_when_No_is_chosen_in_dialog() {
+        // create dialog and call confirmClose
+        databaseScenario.onFragment {
+            it.confirmClose(0)
+        }
+        // wait for dialog to appear
+        Thread.sleep(100)
+
+        // chose No
+        onView(withId(android.R.id.button2)).perform(click())
+
+        // verify that method was called
+        verify(presenter, never()).closeDatabase(0)
+    }
+
 }
