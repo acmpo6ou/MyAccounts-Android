@@ -155,6 +155,7 @@ class DatabaseFragmentInstrumentation {
 
     @Test
     fun `navigateToEdit should pass database json string to EditDatabaseFragment`(){
+        setUpNavController()
 
     }
 

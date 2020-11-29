@@ -151,7 +151,7 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
                 .show()
     }
 
-    override fun navigateToEdit() {
+    override fun navigateToEdit(databaseJson: String) {
         view?.findNavController()?.navigate(R.id.actionEditDatabase)
     }
 
