@@ -1,10 +1,15 @@
 package com.acmpo6ou.myaccounts.core
 
 
-class DatabasesPresenter: DatabasesPresenterInter {
+class DatabasesPresenter(
+        private val view: DatabaseFragmentInter
+): DatabasesPresenterInter {
     override var databases: List<Database> = listOf()
-    override fun exportSelected(i: Int) {
+    var exportIndex: Int? = null
 
+    override fun exportSelected(i: Int) {
+        exportIndex = i
+        view.exportDialog(i)
     }
 
     override fun exportDatabase(location: String) {
@@ -15,7 +20,7 @@ class DatabasesPresenter: DatabasesPresenterInter {
 
     }
 
-    override fun deleteDatabase(name: String) {
+    override fun deleteDatabase(i: Int) {
 
     }
 

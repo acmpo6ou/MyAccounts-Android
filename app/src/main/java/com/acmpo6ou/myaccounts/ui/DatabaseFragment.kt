@@ -66,7 +66,7 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
         super.onCreate(savedInstanceState)
         // initializing recycler's adapter and presenter
         adapter = DatabasesAdapter(this)
-        presenter = DatabasesPresenter()
+        presenter = DatabasesPresenter(this)
 
         // add some databases for testing
         presenter.databases = listOf(

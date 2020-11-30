@@ -8,8 +8,7 @@ Constructor:
 
 * exportSelected(i)
 i - database index
-1. calls view.exportDialog(name)
-name - name of the database retrieved from `databases` property by index `i`
+1. calls view.exportDialog(i)
 2. saves database index `i` to exportIndex
 
 * exportDatabase(location) - exports database (identified by `exportIndex`):
