@@ -32,7 +32,7 @@ name - name of the database to delete
 1.2.1 if there are no errors calls view.showSuccess()
 1.2.2 calls view.adapter.removeItem(name)
 
-* closeSelected(i) - decides whether to close database or not depending on whether it is saved or not
+* closeSelected(i) - decides whether to close database depending on whether it is saved or not
 1. if it is saved then just call closeDatabase(i)
 2. if it is not then call view.confirmClose(i) to show a dialog of close confirmation
 
@@ -63,3 +63,10 @@ path - path to database tar file
 minimal size should be 116 bytes" to issues
 6. if issues is not empty then call view.showWarning(title, issues)
 title - "Are you sure you want to import this file?"
+
+* isDatabaseSaved(i)
+0. retrieve database by its index to `actualDatabase`
+1. creates `diskDatabase` Database instance with name, password and salt from actual
+database
+2. calls model.openDatabase(diskDatabase) to get content of database on the disk
+3. compares actualDatabase.data and diskDatabase.data and returns resulting boolean

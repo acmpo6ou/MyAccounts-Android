@@ -19,17 +19,18 @@
 
 package com.acmpo6ou.myaccounts
 
+import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabaseFragmentInter
 import com.acmpo6ou.myaccounts.core.DatabasesPresenter
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
 class DatabasesPresenterTests {
     private lateinit var view: DatabaseFragmentInter
-    private lateinit var presenter: DatabasesPresenter
+    private lateinit var presenter: DatabasesPresenterInter
 
     @Before
     fun setUp(){
@@ -53,5 +54,16 @@ class DatabasesPresenterTests {
     fun `deleteSelected should call confirmDelete`(){
         presenter.deleteSelected(0)
         verify(view).confirmDelete(0)
+    }
+
+    @Test
+    fun `closeSelected should call closeDatabase when database is saved`(){
+        val presenterSpy = spy(presenter)
+        presenterSpy.view = view
+        presenterSpy.databases = listOf(Database("main"))
+        whenever(presenterSpy.isDatabaseSaved(0)).thenReturn(true)
+
+        presenterSpy.closeSelected(0)
+        verify(presenterSpy).closeDatabase(0)
     }
 }

@@ -1,11 +1,11 @@
 package com.acmpo6ou.myaccounts.core
 
 
-class DatabasesPresenter(
-        private val view: DatabaseFragmentInter
+open class DatabasesPresenter(
+        override var view: DatabaseFragmentInter
 ): DatabasesPresenterInter {
     override var databases: List<Database> = listOf()
-    var exportIndex: Int? = null
+    override var exportIndex: Int? = null
 
     override fun exportSelected(i: Int) {
         exportIndex = i
@@ -38,5 +38,9 @@ class DatabasesPresenter(
 
     override fun openDatabase(i: Int) {
 
+    }
+
+    override fun isDatabaseSaved(i: Int): Boolean{
+        return false
     }
 }
