@@ -17,7 +17,7 @@ class DatabasesPresenter(
     }
 
     override fun deleteSelected(i: Int) {
-
+        view.confirmDelete(i)
     }
 
     override fun deleteDatabase(i: Int) {

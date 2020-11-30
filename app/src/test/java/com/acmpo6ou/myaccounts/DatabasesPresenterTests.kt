@@ -48,4 +48,10 @@ class DatabasesPresenterTests {
         presenter.exportSelected(1)
         assertEquals(1, presenter.exportIndex)
     }
+
+    @Test
+    fun `deleteSelected should call confirmDelete`(){
+        presenter.deleteSelected(0)
+        verify(view).confirmDelete(0)
+    }
 }
