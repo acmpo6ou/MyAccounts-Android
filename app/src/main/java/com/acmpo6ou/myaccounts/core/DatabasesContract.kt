@@ -53,7 +53,7 @@ interface DatabaseFragmentInter{
     fun navigateToEdit(databaseJson: String)
 
     fun showSuccess()
-    fun showError(details: String)
+    fun showError(title: String, details: String)
 
     fun startDatabase(databaseJson: String)
     fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?)

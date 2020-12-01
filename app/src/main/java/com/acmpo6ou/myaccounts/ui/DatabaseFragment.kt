@@ -170,9 +170,9 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
      *
      * @param[details] details about the error.
      */
-    override fun showError(details: String) {
+    override fun showError(title: String, details: String) {
         MaterialAlertDialogBuilder(myContext)
-                .setTitle(R.string.error)
+                .setTitle(title)
                 .setIcon(R.drawable.ic_error)
                 .setNeutralButton("Ok"){ _: DialogInterface, _: Int -> }
                 .setMessage(details)

@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.os.Looper.getMainLooper
 import android.view.View
@@ -50,6 +51,7 @@ import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.LooperMode
 import org.robolectric.shadows.ShadowAlertDialog
+import org.robolectric.shadows.ShadowPackageManager.resources
 
 // This two extensions used to find a snackbar during tests
 /**
@@ -89,8 +91,8 @@ class DatabaseFragmentInstrumentation {
     private lateinit var navController: NavController
 
     // get string resources
-    val context = InstrumentationRegistry.getInstrumentation().targetContext
-    val successMessage = context.resources.getString(R.string.success_message)
+    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
+    private val successMessage = context.resources.getString(R.string.success_message)
 
     @Before
     fun setUp(){
@@ -253,7 +255,7 @@ class DatabaseFragmentInstrumentation {
     @Test
     fun `showError should display error dialog`(){
         databaseScenario.onFragment {
-            it.showError("Error details.")
+            it.showError("Error occurred!", "Error details.")
         }
         val dialog: Dialog? = ShadowAlertDialog.getLatestDialog()
         assertTrue(
@@ -263,13 +265,22 @@ class DatabaseFragmentInstrumentation {
     }
 
     @Test
-    fun `showError should create dialog with appropriate message`(){
+    fun `showError should create dialog with appropriate title and message`(){
+        val expectedTitle = "Error occurred!"
         val expectedMsg = "Error details."
         databaseScenario.onFragment {
-            it.showError(expectedMsg)
+            it.showError(expectedTitle, expectedMsg)
         }
+
         val dialog: Dialog? = ShadowAlertDialog.getLatestDialog()
+        val title = dialog?.findViewById<TextView>(R.id.alertTitle)
         val message = dialog?.findViewById<TextView>(android.R.id.message)
+
+        assertEquals(
+                "showError created dialog with incorrect title!",
+                expectedTitle,
+                title?.text,
+        )
         assertEquals(
                 "showError created dialog with incorrect message!",
                 expectedMsg,
