@@ -25,7 +25,12 @@ open class DatabasesPresenter(
     }
 
     override fun closeSelected(i: Int) {
-
+        if(isDatabaseSaved(i)) {
+            closeDatabase(i)
+        }
+        else{
+            view.confirmClose(i)
+        }
     }
 
     override fun editSelected(i: Int) {
