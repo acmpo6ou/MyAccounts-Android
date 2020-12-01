@@ -93,6 +93,8 @@ class DatabaseFragmentInstrumentation {
     // get string resources
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     private val successMessage = context.resources.getString(R.string.success_message)
+    private val warningTitle = context.resources.getString(R.string.warning)
+    private val confirmDeleteMsg = context.resources.getString(R.string.confirm_delete)
 
     @Before
     fun setUp(){
@@ -289,17 +291,24 @@ class DatabaseFragmentInstrumentation {
     }
 
     @Test
-    fun `confirmDelete should create dialog with appropriate message`(){
+    fun `confirmDelete should create dialog with appropriate message and title`(){
         // create dialog
         databaseScenario.onFragment {
             it.confirmDelete(0)
         }
 
         val dialog = ShadowAlertDialog.getLatestDialog() as AlertDialog
+        val title = dialog.findViewById<TextView>(R.id.alertTitle)
         val message = dialog.findViewById<TextView>(android.R.id.message)
+
+        assertEquals(
+                "confirmDelete created dialog with incorrect title!",
+                warningTitle,
+                title?.text
+        )
         assertEquals(
                 "confirmDelete created dialog with incorrect message!",
-                "Are you sure you want to delete database main?",
+                String.format(confirmDeleteMsg, "main"),
                 message?.text
         )
     }

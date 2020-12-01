@@ -120,9 +120,10 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
     override fun confirmDelete(i: Int) {
         // get name of the database to delete
         val name = databases[i].name
+        val message = resources.getString(R.string.confirm_delete, name)
          MaterialAlertDialogBuilder(myContext)
                 .setTitle(R.string.warning)
-                .setMessage("Are you sure you want to delete database $name?")
+                .setMessage(message)
                 .setIcon(R.drawable.ic_warning)
                 .setNegativeButton(R.string.no) { _: DialogInterface, _: Int -> }
                 .setPositiveButton(R.string.yes){ _: DialogInterface, _: Int ->
@@ -168,6 +169,7 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
     /**
      * Used to display dialog saying that the error occurred.
      *
+     * @param[title] title of error dialog.
      * @param[details] details about the error.
      */
     override fun showError(title: String, details: String) {
