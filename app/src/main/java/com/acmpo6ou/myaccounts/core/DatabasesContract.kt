@@ -26,8 +26,6 @@ import java.text.FieldPosition
 
 interface DatabasesPresenterInter{
     var databases: List<Database>
-    var exportIndex: Int?
-    var view: DatabaseFragmentInter
 
     fun isDatabaseSaved(i: Int): Boolean
 

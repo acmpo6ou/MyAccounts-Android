@@ -27,15 +27,22 @@ import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.mockito.Spy
 
 class DatabasesPresenterTests {
     private lateinit var view: DatabaseFragmentInter
-    private lateinit var presenter: DatabasesPresenterInter
+    private lateinit var presenter: DatabasesPresenter
+    private lateinit var presenterSpy: DatabasesPresenter
 
     @Before
     fun setUp(){
         view = mock()
         presenter = DatabasesPresenter(view)
+    }
+
+    private fun setupPresenterSpy(){
+        presenterSpy = spy(presenter)
+        presenterSpy.databases = listOf(Database("main"))
     }
 
     @Test
@@ -58,8 +65,7 @@ class DatabasesPresenterTests {
 
     @Test
     fun `closeSelected should call closeDatabase when database is saved`(){
-        val presenterSpy = spy(presenter)
-        presenterSpy.databases = listOf(Database("main"))
+        setupPresenterSpy()
         whenever(presenterSpy.isDatabaseSaved(0)).thenReturn(true)
 
         presenterSpy.closeSelected(0)
@@ -68,8 +74,7 @@ class DatabasesPresenterTests {
 
     @Test
     fun `closeSelected should call confirmClose when database isn't saved`(){
-        val presenterSpy = spy(presenter)
-        presenterSpy.databases = listOf(Database("main"))
+        setupPresenterSpy()
         whenever(presenterSpy.isDatabaseSaved(0)).thenReturn(false)
 
         presenterSpy.closeSelected(0)

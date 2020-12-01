@@ -2,10 +2,10 @@ package com.acmpo6ou.myaccounts.core
 
 
 open class DatabasesPresenter(
-        override var view: DatabaseFragmentInter
+        private val view: DatabaseFragmentInter
 ): DatabasesPresenterInter {
     override var databases: List<Database> = listOf()
-    override var exportIndex: Int? = null
+    var exportIndex: Int? = null
 
     override fun exportSelected(i: Int) {
         exportIndex = i
