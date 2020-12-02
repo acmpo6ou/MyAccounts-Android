@@ -52,7 +52,7 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
     override lateinit var adapter: DatabasesAdapter
     override lateinit var presenter: DatabasesPresenterInter
 
-    private var databases: List<Database> = listOf() // alias
+    private val databases: List<Database>  // alias
         get() = presenter.databases
     override lateinit var myContext: Context
 
@@ -111,6 +111,19 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
         startActivityForResult(intent, EXPORT_RC)
     }
 
+    private inline fun confirmDialog(message: String, crossinline positiveAction: ()->Unit) {
+        MaterialAlertDialogBuilder(myContext)
+                .setTitle(R.string.warning)
+                .setMessage(message)
+                .setIcon(R.drawable.ic_warning)
+                .setNegativeButton(R.string.no) { _: DialogInterface, _: Int -> }
+                .setPositiveButton(R.string.yes){ _: DialogInterface, _: Int ->
+                    positiveAction()
+                }
+                .show()
+    }
+
+
     /**
      * Displays a dialog for user to confirm deletion of database.
      *
@@ -121,15 +134,7 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
         // get name of the database to delete
         val name = databases[i].name
         val message = resources.getString(R.string.confirm_delete, name)
-         MaterialAlertDialogBuilder(myContext)
-                .setTitle(R.string.warning)
-                .setMessage(message)
-                .setIcon(R.drawable.ic_warning)
-                .setNegativeButton(R.string.no) { _: DialogInterface, _: Int -> }
-                .setPositiveButton(R.string.yes){ _: DialogInterface, _: Int ->
-                    presenter.deleteDatabase(i)
-                }
-                .show()
+        confirmDialog(message) { presenter.deleteDatabase(i) }
     }
 
     /**
@@ -141,15 +146,8 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
     override fun confirmClose(i: Int) {
         // get name of the database to close
         val name = databases[i].name
-        MaterialAlertDialogBuilder(myContext)
-                .setTitle(R.string.warning)
-                .setMessage("Are you sure you want to close database $name?")
-                .setIcon(R.drawable.ic_warning)
-                .setNegativeButton(R.string.no) { _: DialogInterface, _: Int -> }
-                .setPositiveButton(R.string.yes){ _: DialogInterface, _: Int ->
-                    presenter.closeDatabase(i)
-                }
-                .show()
+        val message = resources.getString(R.string.confirm_close, name)
+        confirmDialog(message) { presenter.closeDatabase(i) }
     }
 
     override fun navigateToEdit(databaseJson: String) {
