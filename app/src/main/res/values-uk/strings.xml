@@ -27,4 +27,10 @@
     <string name="open_database">Відкрити базу данних</string>
     <string name="database_name">Ім\'я бази данних</string>
     <string name="dark_theme">Темна тема</string>
+    <string name="success_message">Операція успішна!</string>
+    <string name="warning">Увага!</string>
+    <string name="no">Ні</string>
+    <string name="yes">Так</string>
+    <string name="confirm_delete">Ви певні що хочете видалити базу данних %1$s?</string>
+    <string name="confirm_close">Ви певні що хочете закрити базу данних %1$s?</string>
 </resources>
