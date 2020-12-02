@@ -111,6 +111,13 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
         startActivityForResult(intent, EXPORT_RC)
     }
 
+    /**
+     * Used to build and display confirmation dialog.
+     *
+     * @param[message] message to describe what we asking user to confirm.
+     * @param[positiveAction] function to invoke when user confirms an action (i.e. presses
+     * `Yes` button).
+     */
     private inline fun confirmDialog(message: String, crossinline positiveAction: ()->Unit) {
         MaterialAlertDialogBuilder(myContext)
                 .setTitle(R.string.warning)
