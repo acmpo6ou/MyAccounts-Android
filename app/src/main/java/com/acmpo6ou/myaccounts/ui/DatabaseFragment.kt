@@ -48,7 +48,7 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
     val EXPORT_RC = 101
     val ACCOUNTS_RC = 200
 
-    val layoutManager = LinearLayoutManager(context)
+    private val layoutManager = LinearLayoutManager(context)
     override lateinit var adapter: DatabasesAdapter
     override lateinit var presenter: DatabasesPresenterInter
 

@@ -95,6 +95,7 @@ class DatabaseFragmentInstrumentation {
     private val successMessage = context.resources.getString(R.string.success_message)
     private val warningTitle = context.resources.getString(R.string.warning)
     private val confirmDeleteMsg = context.resources.getString(R.string.confirm_delete)
+    private val confirmCloseMsg = context.resources.getString(R.string.confirm_close)
 
     @Before
     fun setUp(){
@@ -314,17 +315,24 @@ class DatabaseFragmentInstrumentation {
     }
 
     @Test
-    fun `confirmClose should create dialog with appropriate message`(){
+    fun `confirmClose should create dialog with appropriate message and title`(){
         // create dialog
         databaseScenario.onFragment {
             it.confirmClose(0)
         }
 
         val dialog = ShadowAlertDialog.getLatestDialog() as AlertDialog
+        val title = dialog.findViewById<TextView>(R.id.alertTitle)
         val message = dialog.findViewById<TextView>(android.R.id.message)
+
+        assertEquals(
+                "confirmClose created dialog with incorrect title!",
+                warningTitle,
+                title?.text
+        )
         assertEquals(
                 "confirmClose created dialog with incorrect message!",
-                "Are you sure you want to close database main?",
+                String.format(confirmCloseMsg, "main"),
                 message?.text
         )
     }
