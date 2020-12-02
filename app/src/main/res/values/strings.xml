@@ -84,12 +84,12 @@
     <string name="no_changelog_yet">No changelog yet</string>
     <string name="download">Download</string>
     <string name="later">Later</string>
-    <string name="dots_menu">⋮</string>
+    <string name="dots_menu" translatable="false">⋮</string>
     <string name="success_message">Operation successful!</string>
     <string name="error">Error!</string>
     <string name="warning">Warning!</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
-    <string name="confirm_delete">Are you sure you want to close database %1$s?</string>
+    <string name="confirm_delete">Are you sure you want to delete database %1$s?</string>
     <string name="confirm_close">Are you sure you want to close database %1$s?</string>
 </resources>
