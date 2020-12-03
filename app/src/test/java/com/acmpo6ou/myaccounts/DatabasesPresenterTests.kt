@@ -19,29 +19,28 @@
 
 package com.acmpo6ou.myaccounts
 
-import com.acmpo6ou.myaccounts.core.*
-import com.nhaarman.mockitokotlin2.*
+import com.acmpo6ou.myaccounts.core.Database
+import com.acmpo6ou.myaccounts.core.DatabaseFragmentInter
+import com.acmpo6ou.myaccounts.core.DatabasesModelInter
+import com.acmpo6ou.myaccounts.core.DatabasesPresenter
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.spy
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyMap
-import org.mockito.Spy
 
 class DatabasesPresenterTests {
     private lateinit var view: DatabaseFragmentInter
     private lateinit var presenter: DatabasesPresenter
-    private lateinit var presenterSpy: DatabasesPresenter
 
     @Before
     fun setUp(){
         view = mock()
         presenter = DatabasesPresenter(view)
         presenter.databases = listOf(Database("main"))
-    }
-
-    private fun setupPresenterSpy(){
-        presenterSpy = spy(presenter)
-        presenterSpy.databases = listOf(Database("main"))
     }
 
     @Test
@@ -64,7 +63,9 @@ class DatabasesPresenterTests {
 
     @Test
     fun `closeSelected should call closeDatabase when database is saved`(){
-        setupPresenterSpy()
+        // mock isDatabaseSaved to return true that will mean that database is saved
+        // so presenter should call closeDatabase in this condition
+        val presenterSpy = spy(presenter)
         whenever(presenterSpy.isDatabaseSaved(0)).thenReturn(true)
 
         presenterSpy.closeSelected(0)
@@ -73,7 +74,9 @@ class DatabasesPresenterTests {
 
     @Test
     fun `closeSelected should call confirmClose when database isn't saved`(){
-        setupPresenterSpy()
+        // mock isDatabaseSaved to return false that will mean that database is saved
+        // so presenter should call confirmClose in this condition
+        val presenterSpy = spy(presenter)
         whenever(presenterSpy.isDatabaseSaved(0)).thenReturn(false)
 
         presenterSpy.closeSelected(0)
@@ -82,8 +85,9 @@ class DatabasesPresenterTests {
 
     @Test
     fun `editSelected should call navigateToEdit passing through serialized database`(){
+        // mock model.dumps() to return fake serialized string
         val expectedJson = "serialized database string"
-        val model: DatabasesModelInter = spy()
+        val model: DatabasesModelInter = mock()
         whenever(model.dumps(anyMap())).thenReturn(expectedJson)
         presenter.model = model
 
