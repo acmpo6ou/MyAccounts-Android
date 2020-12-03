@@ -53,5 +53,6 @@
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
         android:text="@string/dots_menu"
-        android:textAppearance="?android:textAppearanceLarge" />
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textStyle="bold" />
 </LinearLayout>
