@@ -35,7 +35,9 @@ open class DatabasesPresenter(
     }
 
     override fun editSelected(i: Int) {
-
+        val database = databases[i]
+        val databaseJson = model.dumps(database.data)
+        view.navigateToEdit(databaseJson)
     }
 
     override fun closeDatabase(i: Int) {
