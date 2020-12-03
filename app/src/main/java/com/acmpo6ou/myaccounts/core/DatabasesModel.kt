@@ -83,7 +83,8 @@ data class Database(val name: String,
  *
  * @param[SRC_DIR] path to directory that contains databases, default path is Internal Storage.
  */
-class DatabasesModel(private val SRC_DIR: String = "/storage/emulated/0/"){
+class DatabasesModel(private val SRC_DIR: String = "/storage/emulated/0/")
+    :DatabasesModelInter{
 
     /**
      * This method generates purely random salt for encryption.
@@ -137,7 +138,7 @@ class DatabasesModel(private val SRC_DIR: String = "/storage/emulated/0/"){
      * @return when [data] is empty returns empty string, when [data] is not empty –
      * serialized json string.
      */
-    fun dumps(data: Map<String, Account>): String{
+    override fun dumps(data: Map<String, Account>): String{
         var json = ""
         if (data.isNotEmpty()){
             json = Json.encodeToString(data)

@@ -19,14 +19,12 @@
 
 package com.acmpo6ou.myaccounts
 
-import com.acmpo6ou.myaccounts.core.Database
-import com.acmpo6ou.myaccounts.core.DatabaseFragmentInter
-import com.acmpo6ou.myaccounts.core.DatabasesPresenter
-import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
+import com.acmpo6ou.myaccounts.core.*
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.mockito.ArgumentMatchers.anyMap
 import org.mockito.Spy
 
 class DatabasesPresenterTests {
@@ -38,6 +36,7 @@ class DatabasesPresenterTests {
     fun setUp(){
         view = mock()
         presenter = DatabasesPresenter(view)
+        presenter.databases = listOf(Database("main"))
     }
 
     private fun setupPresenterSpy(){
@@ -79,5 +78,16 @@ class DatabasesPresenterTests {
 
         presenterSpy.closeSelected(0)
         verify(view).confirmClose(0)
+    }
+
+    @Test
+    fun `editSelected should call navigateToEdit passing through serialized database`(){
+        val expectedJson = "serialized database string"
+        val model: DatabasesModelInter = spy()
+        whenever(model.dumps(anyMap())).thenReturn(expectedJson)
+        presenter.model = model
+
+        presenter.editSelected(0)
+        verify(view).navigateToEdit(expectedJson)
     }
 }

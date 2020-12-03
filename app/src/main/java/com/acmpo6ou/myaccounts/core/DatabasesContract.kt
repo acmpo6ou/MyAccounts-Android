@@ -58,3 +58,7 @@ interface DatabaseFragmentInter{
     fun startDatabase(databaseJson: String)
     fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?)
 }
+
+interface DatabasesModelInter{
+    fun dumps(data: Map<String, Account>): String
+}
