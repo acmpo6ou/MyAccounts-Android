@@ -23,6 +23,7 @@ import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabaseFragmentInter
 import com.acmpo6ou.myaccounts.core.DatabasesModelInter
 import com.acmpo6ou.myaccounts.core.DatabasesPresenter
+import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
@@ -35,6 +36,7 @@ import org.mockito.ArgumentMatchers.anyMap
 class DatabasesPresenterTests {
     private lateinit var view: DatabaseFragmentInter
     private lateinit var presenter: DatabasesPresenter
+    private val faker = Faker()
 
     @Before
     fun setUp(){
@@ -86,7 +88,7 @@ class DatabasesPresenterTests {
     @Test
     fun `editSelected should call navigateToEdit passing through serialized database`(){
         // mock model.dumps() to return fake serialized string
-        val expectedJson = "serialized database string"
+        val expectedJson = faker.lorem().sentence()
         val model: DatabasesModelInter = mock()
         whenever(model.dumps(anyMap())).thenReturn(expectedJson)
         presenter.model = model
