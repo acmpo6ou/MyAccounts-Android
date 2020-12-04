@@ -28,14 +28,14 @@
     android:focusable="true">
 
     <ImageView
-        android:id="@+id/databaseLock"
+        android:id="@+id/itemIcon"
         android:layout_width="40dp"
         android:layout_height="match_parent"
         android:layout_marginStart="16dp"
         app:srcCompat="@drawable/ic_locked" />
 
     <TextView
-        android:id="@+id/databaseItemName"
+        android:id="@+id/itemName"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/text_margin"

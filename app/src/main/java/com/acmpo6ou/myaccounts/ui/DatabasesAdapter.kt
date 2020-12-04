@@ -46,7 +46,7 @@ class DatabasesAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.fragment_database, parent, false)
+            .inflate(R.layout.list_item, parent, false)
         return ViewHolder(view)
     }
 
@@ -95,8 +95,8 @@ class DatabasesAdapter(
         var menu: TextView
 
         init{
-            lockImage = view.findViewById(R.id.databaseLock)
-            databaseName = view.findViewById(R.id.databaseItemName)
+            lockImage = view.findViewById(R.id.itemIcon)
+            databaseName = view.findViewById(R.id.itemName)
             menu = view.findViewById(R.id.dots_menu)
 
             // when click is performed on database item we should display open database form

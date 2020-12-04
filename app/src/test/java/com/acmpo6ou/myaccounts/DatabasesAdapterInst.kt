@@ -25,14 +25,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
-import androidx.navigation.Navigation
-import androidx.navigation.testing.TestNavHostController
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.core.app.ApplicationProvider
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
-import com.acmpo6ou.myaccounts.ui.DatabasesAdapter
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
@@ -41,7 +37,6 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.LooperMode
 import org.junit.Assert.*
 import org.robolectric.shadows.ShadowPopupMenu
-import org.w3c.dom.Text
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
@@ -92,7 +87,7 @@ class DatabasesAdapterInst {
 
     @Test
     fun `database item should have appropriate name`(){
-        val databaseName = itemLayout?.findViewById<TextView>(R.id.databaseItemName)
+        val databaseName = itemLayout?.findViewById<TextView>(R.id.itemName)
         assertEquals(
                 "item in databases list has incorrect name!",
                 "main",
@@ -103,7 +98,7 @@ class DatabasesAdapterInst {
     @Test
     fun `database item should have locked icon when isOpen of Database is false`(){
         // the first database in the list above doesn't have password set hence isOpen is false
-        val itemLock = itemLayout?.findViewById<ImageView>(R.id.databaseLock)
+        val itemLock = itemLayout?.findViewById<ImageView>(R.id.itemIcon)
         assertEquals(
     "database item has incorrect lock icon when isOpen of Database is false!",
             R.drawable.ic_locked,
@@ -114,7 +109,7 @@ class DatabasesAdapterInst {
     @Test
     fun `database item should have opened icon when isOpen of Database is true`(){
         // the second database in the list above does have password set hence isOpen is true
-        val itemLock = itemLayout2?.findViewById<ImageView>(R.id.databaseLock)
+        val itemLock = itemLayout2?.findViewById<ImageView>(R.id.itemIcon)
         assertEquals(
                 "database item has incorrect lock icon when isOpen of Database is true!",
                 R.drawable.ic_opened,
