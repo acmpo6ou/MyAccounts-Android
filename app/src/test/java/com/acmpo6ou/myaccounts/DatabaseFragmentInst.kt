@@ -36,6 +36,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
+import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert.assertEquals
@@ -54,6 +55,7 @@ import org.robolectric.shadows.ShadowAlertDialog
 class DatabaseFragmentInstrumentation {
     lateinit var databaseScenario: FragmentScenario<DatabaseFragment>
     private lateinit var navController: NavController
+    private val faker = Faker()
 
     // get string resources
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -69,9 +71,7 @@ class DatabaseFragmentInstrumentation {
             themeResId = R.style.Theme_MyAccounts_NoActionBar)
 
         // mock presenter with fake databases
-        val databases = listOf(
-                Database("main")
-        )
+        val databases = listOf(Database("main"))
         val presenter = mock<DatabasesPresenterInter>()
         whenever(presenter.databases).thenReturn(databases)
         databaseScenario.onFragment {
@@ -169,7 +169,7 @@ class DatabaseFragmentInstrumentation {
     @Test
     fun `startDatabase should start appropriate intent`(){
         // serialized database string that wil be passed with intent
-        val databaseString = "serialized database string"
+        val databaseString = faker.lorem().sentence()
 
         // create expected intent
         var expectedIntent = Intent()

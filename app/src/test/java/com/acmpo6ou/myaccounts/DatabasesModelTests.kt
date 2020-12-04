@@ -19,21 +19,28 @@
 
 package com.acmpo6ou.myaccounts
 
-import com.acmpo6ou.myaccounts.core.*
+import com.acmpo6ou.myaccounts.core.Account
+import com.acmpo6ou.myaccounts.core.Database
+import com.acmpo6ou.myaccounts.core.DatabasesModel
+import com.github.javafaker.Faker
+import com.macasaet.fernet.StringValidator
+import com.macasaet.fernet.Token
+import com.macasaet.fernet.Validator
 import org.junit.Assert.*
-import org.junit.*
+import org.junit.Before
+import org.junit.Test
 import java.io.File
-
-import com.macasaet.fernet.*
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.TemporalAmount
 
 class DatabasesTests {
+    private val faker = Faker()
+
     @Test
     fun `Database class should have isOpen property set to false when password is null`(){
         // we didn't  pass the password so it will be null by default
-        val database = Database("Some name")
+        val database = Database(faker.name().toString())
 
         // if password is null then database is closed
         assertFalse(
@@ -45,7 +52,7 @@ class DatabasesTests {
     @Test
     fun `Database class should have isOpen property set to true when password is NOT null`(){
         // we passed the password, so it is not null
-        val database = Database("Some name", "Some password")
+        val database = Database(faker.name().toString(), "Some password")
 
         // when password is not null database is opened
         assertTrue(
@@ -56,6 +63,8 @@ class DatabasesTests {
 }
 
 class DatabasesModelTests {
+    private val faker = Faker()
+
     // this is where DatabasesModel will create delete and edit databases during testing
     // /dev/shm/ is a fake in-memory file system
     private val accountsDir = "/dev/shm/accounts/"
@@ -213,8 +222,8 @@ class DatabasesModelTests {
 
         // create database
         val database = Database(
-                "somedata",
-                "some password",
+                faker.name().toString(),
+                faker.lorem().sentence(),
                 salt,
                 dataMap
         )

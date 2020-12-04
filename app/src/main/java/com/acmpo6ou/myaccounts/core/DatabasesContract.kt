@@ -22,7 +22,6 @@ package com.acmpo6ou.myaccounts.core
 import android.content.Context
 import android.content.Intent
 import com.acmpo6ou.myaccounts.ui.DatabasesAdapter
-import java.text.FieldPosition
 
 interface DatabasesPresenterInter{
     var databases: List<Database>
