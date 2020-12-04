@@ -21,10 +21,7 @@ package com.acmpo6ou.myaccounts
 
 import com.acmpo6ou.myaccounts.core.*
 import com.github.javafaker.Faker
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -69,7 +66,7 @@ class DatabasesPresenterTests {
         // mock isDatabaseSaved to return true that will mean that database is saved
         // so presenter should call closeDatabase in this condition
         val presenterSpy = spy(presenter)
-        whenever(presenterSpy.isDatabaseSaved(0)).thenReturn(true)
+        doReturn(true).`when`(presenterSpy).isDatabaseSaved(0)
 
         presenterSpy.closeSelected(0)
         verify(presenterSpy).closeDatabase(0)
@@ -80,7 +77,7 @@ class DatabasesPresenterTests {
         // mock isDatabaseSaved to return false that will mean that database is saved
         // so presenter should call confirmClose in this condition
         val presenterSpy = spy(presenter)
-        whenever(presenterSpy.isDatabaseSaved(0)).thenReturn(false)
+        doReturn(false).`when`(presenterSpy).isDatabaseSaved(0)
 
         presenterSpy.closeSelected(0)
         verify(view).confirmClose(0)
@@ -99,7 +96,8 @@ class DatabasesPresenterTests {
     }
 
     @Test
-    fun `isDatabaseSaved should return false when actual database isn't different from the one on disk`(){
+    fun `isDatabaseSaved should return false when database is different from the one on disk`(){
+        // here database on disk is different then database in memory
         val model: DatabasesModelInter = mock()
         val diskDatabase = Database(
             "test",
@@ -111,5 +109,20 @@ class DatabasesPresenterTests {
         presenter.model = model
 
         assertFalse(presenter.isDatabaseSaved(1))
+    }
+
+    @Test
+    fun `isDatabaseSaved should return true when database isn't different from the one on disk`(){
+        // here database on disk is exactly the same as database in memory
+        val model: DatabasesModelInter = mock()
+        val diskDatabase = Database(
+                "test",
+                "123",
+                salt,
+                mapOf())
+        whenever(model.openDatabase(presenter.databases[1])).thenReturn(diskDatabase)
+        presenter.model = model
+
+        assertTrue(presenter.isDatabaseSaved(1))
     }
 }
