@@ -78,6 +78,15 @@ open class DatabasesPresenter(
 
     }
 
+    /**
+     * Checks whether given database is saved i.e. the database data that is on the disk
+     * is same as the data that is in memory.
+     *
+     * This method is needed when we want to close database, using isDatabaseSaved we
+     * can determine whether it's better to show confirmation dialog about
+     * unsaved data to user or not.
+     * @param[i] index of database we want to check.
+     */
     override fun isDatabaseSaved(i: Int): Boolean{
         val actualDatabase = databases[i]
         val diskDatabase = model.openDatabase(actualDatabase)
