@@ -247,7 +247,7 @@ class DatabasesModel(private val SRC_DIR: String = "/storage/emulated/0/")
      * @return same Database instance but with `data` property filled with deserialized
      * database map.
      */
-    fun openDatabase(database: Database): Database {
+    override fun openDatabase(database: Database): Database {
         val jsonStr = File("$SRC_DIR/${database.name}.db").readText()
         val data = decryptDatabase(jsonStr, database.password!!, database.salt!!)
         database.data = data

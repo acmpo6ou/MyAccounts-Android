@@ -61,4 +61,5 @@ interface DatabaseFragmentInter{
 
 interface DatabasesModelInter{
     fun dumps(data: Map<String, Account>): String
+    fun openDatabase(database: Database): Database
 }

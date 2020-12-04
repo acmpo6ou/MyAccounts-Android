@@ -79,6 +79,8 @@ open class DatabasesPresenter(
     }
 
     override fun isDatabaseSaved(i: Int): Boolean{
-        return false
+        val actualDatabase = databases[i]
+        val diskDatabase = model.openDatabase(actualDatabase)
+        return actualDatabase.data == diskDatabase.data
     }
 }

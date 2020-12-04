@@ -19,16 +19,13 @@
 
 package com.acmpo6ou.myaccounts
 
-import com.acmpo6ou.myaccounts.core.Database
-import com.acmpo6ou.myaccounts.core.DatabaseFragmentInter
-import com.acmpo6ou.myaccounts.core.DatabasesModelInter
-import com.acmpo6ou.myaccounts.core.DatabasesPresenter
+import com.acmpo6ou.myaccounts.core.*
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import org.junit.Assert.assertEquals
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyMap
@@ -37,12 +34,16 @@ class DatabasesPresenterTests {
     private lateinit var view: DatabaseFragmentInter
     private lateinit var presenter: DatabasesPresenter
     private val faker = Faker()
+    private val salt = "0123456789abcdef".toByteArray()
 
     @Before
     fun setUp(){
         view = mock()
         presenter = DatabasesPresenter(view)
-        presenter.databases = listOf(Database("main"))
+        presenter.databases = listOf(
+                Database("main"),
+                Database("test", "123", salt, mapOf())
+        )
     }
 
     @Test
@@ -95,5 +96,20 @@ class DatabasesPresenterTests {
 
         presenter.editSelected(0)
         verify(view).navigateToEdit(expectedJson)
+    }
+
+    @Test
+    fun `isDatabaseSaved should return false when actual database isn't different from the one on disk`(){
+        val model: DatabasesModelInter = mock()
+        val diskDatabase = Database(
+            "test",
+            "123",
+            salt,
+            getDatabaseMap()
+        )
+        whenever(model.openDatabase(presenter.databases[1])).thenReturn(diskDatabase)
+        presenter.model = model
+
+        assertFalse(presenter.isDatabaseSaved(1))
     }
 }
