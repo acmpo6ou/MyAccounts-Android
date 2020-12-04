@@ -165,24 +165,6 @@ class DatabasesModelTests {
         val token = Token.generate(key, data)
         return token.serialise()
     }
-
-    /**
-     * Helper function that creates simple database map used in tests.
-     *
-     * @return created database map.
-     */
-    private fun getDatabaseMap(): Map<String, Account> {
-        val account = Account(
-                account="gmail",
-                name="Tom",
-                email="tom@gmail.com",
-                password="123",
-                date="01.01.1990",
-                comment="My gmail account.",
-        )
-        return mapOf("gmail" to account)
-    }
-
     @Test
     fun `dumps should return empty string when passed empty map`(){
         val dumpStr = model.dumps(mapOf())

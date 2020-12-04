@@ -22,6 +22,7 @@ package com.acmpo6ou.myaccounts
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.acmpo6ou.myaccounts.core.Account
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.SnackbarContentLayout
 
@@ -55,5 +56,23 @@ private fun View.findSnackbarLayout(): Snackbar.SnackbarLayout? {
         if (possibleSnackbarLayout != null) return possibleSnackbarLayout
     }
     return null
+}
+
+
+/**
+ * Helper function that creates simple database map used in tests.
+ *
+ * @return created database map.
+ */
+fun getDatabaseMap(): Map<String, Account> {
+    val account = Account(
+            account="gmail",
+            name="Tom",
+            email="tom@gmail.com",
+            password="123",
+            date="01.01.1990",
+            comment="My gmail account.",
+    )
+    return mapOf("gmail" to account)
 }
 
