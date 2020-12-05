@@ -19,7 +19,10 @@
 
 package com.acmpo6ou.myaccounts
 
-import com.acmpo6ou.myaccounts.core.*
+import com.acmpo6ou.myaccounts.core.Database
+import com.acmpo6ou.myaccounts.core.DatabaseFragmentInter
+import com.acmpo6ou.myaccounts.core.DatabasesModelInter
+import com.acmpo6ou.myaccounts.core.DatabasesPresenter
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.*
@@ -124,5 +127,17 @@ class DatabasesPresenterTests {
         presenter.model = model
 
         assertTrue(presenter.isDatabaseSaved(1))
+    }
+
+    @Test
+    fun `closeDatabase should reset database password`(){
+        presenter.closeDatabase(1)
+        assertEquals(null, presenter.databases[1].password)
+    }
+
+    @Test
+    fun `closeDatabase should call notifyChanged`(){
+        presenter.closeDatabase(1)
+        verify(view).notifyChanged(1)
     }
 }

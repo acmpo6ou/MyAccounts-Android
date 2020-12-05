@@ -56,6 +56,8 @@ interface DatabaseFragmentInter{
 
     fun startDatabase(databaseJson: String)
     fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?)
+
+    fun notifyChanged(i: Int)
 }
 
 interface DatabasesModelInter{

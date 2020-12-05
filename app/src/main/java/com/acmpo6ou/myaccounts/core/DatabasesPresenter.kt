@@ -71,7 +71,8 @@ open class DatabasesPresenter(
     }
 
     override fun closeDatabase(i: Int) {
-
+        databases[i].password = null
+        view.notifyChanged(i)
     }
 
     override fun openDatabase(i: Int) {
