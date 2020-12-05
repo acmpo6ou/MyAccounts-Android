@@ -27,6 +27,7 @@ open class DatabasesPresenter(
             val name = databases[it].name
             model.exportDatabase(name, location)
         }
+        view.showSuccess()
     }
 
     /**

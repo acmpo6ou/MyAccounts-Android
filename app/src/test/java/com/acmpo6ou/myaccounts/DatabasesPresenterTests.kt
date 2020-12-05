@@ -146,4 +146,14 @@ class DatabasesPresenterTests {
 
         verify(model).exportDatabase("test", location)
     }
+
+    @Test
+    fun `exportDatabase should call showSuccess when there are no errors`(){
+        // there will be no exceptions thrown
+        val location = faker.file().fileName()
+        presenter.exportIndex = 1
+        presenter.exportDatabase(location)
+
+        verify(view).showSuccess()
+    }
 }
