@@ -32,6 +32,7 @@ import org.mockito.ArgumentMatchers.anyMap
 
 class DatabasesPresenterTests {
     private lateinit var view: DatabaseFragmentInter
+    private lateinit var model: DatabasesModelInter
     private lateinit var presenter: DatabasesPresenter
     private val faker = Faker()
     private val salt = "0123456789abcdef".toByteArray()
@@ -39,7 +40,9 @@ class DatabasesPresenterTests {
     @Before
     fun setUp(){
         view = mock()
+        model = mock()
         presenter = DatabasesPresenter(view)
+        presenter.model = model
         presenter.databases = listOf(
                 Database("main"),
                 Database("test", "123", salt, mapOf())
@@ -90,9 +93,7 @@ class DatabasesPresenterTests {
     fun `editSelected should call navigateToEdit passing through serialized database`(){
         // mock model.dumps() to return fake serialized string
         val expectedJson = faker.lorem().sentence()
-        val model: DatabasesModelInter = mock()
         whenever(model.dumps(anyMap())).thenReturn(expectedJson)
-        presenter.model = model
 
         presenter.editSelected(0)
         verify(view).navigateToEdit(expectedJson)
@@ -101,7 +102,6 @@ class DatabasesPresenterTests {
     @Test
     fun `isDatabaseSaved should return false when database is different from the one on disk`(){
         // here database on disk is different then database in memory
-        val model: DatabasesModelInter = mock()
         val diskDatabase = Database(
             "test",
             "123",
@@ -109,7 +109,6 @@ class DatabasesPresenterTests {
             getDatabaseMap()
         )
         whenever(model.openDatabase(presenter.databases[1])).thenReturn(diskDatabase)
-        presenter.model = model
 
         assertFalse(presenter.isDatabaseSaved(1))
     }
@@ -117,14 +116,12 @@ class DatabasesPresenterTests {
     @Test
     fun `isDatabaseSaved should return true when database isn't different from the one on disk`(){
         // here database on disk is exactly the same as database in memory
-        val model: DatabasesModelInter = mock()
         val diskDatabase = Database(
                 "test",
                 "123",
                 salt,
                 mapOf())
         whenever(model.openDatabase(presenter.databases[1])).thenReturn(diskDatabase)
-        presenter.model = model
 
         assertTrue(presenter.isDatabaseSaved(1))
     }
@@ -139,5 +136,14 @@ class DatabasesPresenterTests {
     fun `closeDatabase should call notifyChanged`(){
         presenter.closeDatabase(1)
         verify(view).notifyChanged(1)
+    }
+
+    @Test
+    fun `exportDatabase should call model exportDatabase passing name and location`(){
+        val location = faker.file().fileName()
+        presenter.exportIndex = 1
+        presenter.exportDatabase(location)
+
+        verify(model).exportDatabase("test", location)
     }
 }

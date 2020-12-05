@@ -23,7 +23,10 @@ open class DatabasesPresenter(
     }
 
     override fun exportDatabase(location: String) {
-
+        exportIndex?.let{
+            val name = databases[it].name
+            model.exportDatabase(name, location)
+        }
     }
 
     /**

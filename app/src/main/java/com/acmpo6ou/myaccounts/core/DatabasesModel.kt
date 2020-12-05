@@ -20,20 +20,24 @@
 package com.acmpo6ou.myaccounts.core
 
 import android.annotation.SuppressLint
-
-import kotlinx.serialization.*
-import kotlinx.serialization.json.Json
-
-import java.util.*
 import android.util.Base64.DEFAULT
-import java.time.*
-import java.time.temporal.TemporalAmount
-
-import com.macasaet.fernet.*
+import com.macasaet.fernet.Key
+import com.macasaet.fernet.StringValidator
+import com.macasaet.fernet.Token
+import com.macasaet.fernet.Validator
 import kotlinx.serialization.Serializable
-import org.kamranzafar.jtar.*
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import org.kamranzafar.jtar.TarEntry
+import org.kamranzafar.jtar.TarInputStream
+import org.kamranzafar.jtar.TarOutputStream
 import java.io.*
 import java.security.SecureRandom
+import java.time.Duration
+import java.time.Instant
+import java.time.temporal.TemporalAmount
+import java.util.*
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 
@@ -301,7 +305,7 @@ class DatabasesModel(private val SRC_DIR: String = "/storage/emulated/0/")
      * @param[name] name of the database to export.
      * @param[destination] path to folder where we want to export database.
      */
-    fun exportDatabase(name: String, destination: String) {
+    override fun exportDatabase(name: String, destination: String) {
         // create tar file
         val tarFile = FileOutputStream("$destination$name.tar")
         val outStream = TarOutputStream(BufferedOutputStream(tarFile))
