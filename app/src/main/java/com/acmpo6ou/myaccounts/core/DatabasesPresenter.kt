@@ -1,6 +1,7 @@
 package com.acmpo6ou.myaccounts.core
 
 import com.acmpo6ou.myaccounts.R
+import java.io.IOException
 
 
 open class DatabasesPresenter(
@@ -36,6 +37,9 @@ open class DatabasesPresenter(
         }
         catch (e: NoSuchFileException){
             errorDetails = resources.getString(R.string.export_no_such_file_details)
+        }
+        catch (e: IOException){
+            errorDetails = resources.getString(R.string.io_error)
         }
 
         if(errorDetails.isNotEmpty()){

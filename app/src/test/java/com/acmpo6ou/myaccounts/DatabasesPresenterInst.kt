@@ -23,27 +23,47 @@ import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers
+import org.mockito.ArgumentMatchers.anyString
 import org.robolectric.RobolectricTestRunner
 import java.io.File
+import java.io.IOException
 
 @RunWith(RobolectricTestRunner::class)
 class DatabasesPresenterInst:DatabasesPresenterTest() {
     // get string resources
     val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
-    val exportErrorTitle = context.resources.getString(R.string.export_error_title)
-    val exportNoSuchFileDetails = context.resources.getString(R.string.export_no_such_file_details)
+    val resources = context.resources
+    val exportErrorTitle = resources.getString(R.string.export_error_title)
+    val exportNoSuchFileDetails = resources.getString(R.string.export_no_such_file_details)
+    val ioError = resources.getString(R.string.io_error)
+
+    @Before
+    fun setup(){
+        whenever(view.myContext).thenReturn(context)
+    }
 
     @Test
     fun `exportDatabase should handle NoSuchFileException`(){
-        whenever(model.exportDatabase(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
+        whenever(model.exportDatabase(anyString(), anyString()))
                 .thenAnswer{
                     throw NoSuchFileException(File(""))
                 }
         callExportDatabase()
 
         verify(view).showError(exportErrorTitle, exportNoSuchFileDetails)
+    }
+
+    @Test
+    fun `exportDatabase should handle IOException`(){
+        whenever(model.exportDatabase(anyString(), anyString()))
+                .thenAnswer{
+                    throw IOException()
+                }
+        callExportDatabase()
+
+        verify(view).showError(exportErrorTitle, ioError)
     }
 }

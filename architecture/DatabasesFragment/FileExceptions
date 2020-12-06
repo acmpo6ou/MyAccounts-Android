@@ -1,6 +1,6 @@
 AccessDeniedException
 "Access denied!"
-"You don't have permissions to extract/write file in that location."
+"You don't have permissions to write file in that location."
 
 FileAlreadyExistsException
 "File already exists!"

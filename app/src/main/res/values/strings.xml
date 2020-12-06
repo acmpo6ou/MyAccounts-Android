@@ -93,4 +93,5 @@
     <string name="confirm_close">Are you sure you want to close database %1$s?</string>
     <string name="export_error_title">Error exporting database</string>
     <string name="export_no_such_file_details">Every database must have .db and .bin files, it seems that database that you want to export doesn\'t have them.</string>
+    <string name="io_error">The reason is any i/o related error such as disk is low on space.</string>
 </resources>
