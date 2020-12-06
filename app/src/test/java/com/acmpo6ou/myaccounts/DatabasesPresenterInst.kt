@@ -66,4 +66,16 @@ class DatabasesPresenterInst:DatabasesPresenterTest() {
 
         verify(view).showError(exportErrorTitle, ioError)
     }
+
+    @Test
+    fun `exportDatabase should handle any other exception`(){
+        val details = faker.lorem().sentence()
+        whenever(model.exportDatabase(anyString(), anyString()))
+                .thenAnswer{
+                    throw Exception(details)
+                }
+        callExportDatabase()
+
+        verify(view).showError(exportErrorTitle, details)
+    }
 }

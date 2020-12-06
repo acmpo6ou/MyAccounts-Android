@@ -52,6 +52,9 @@ open class DatabasesPresenter(
         catch (e: IOException){
             errorDetails = resources.getString(R.string.io_error)
         }
+        catch (e: Exception){
+            errorDetails = e.message.toString()
+        }
 
         // if there are any errors errorDetails will be filled with appropriate details string
         // if so, display error dialog
