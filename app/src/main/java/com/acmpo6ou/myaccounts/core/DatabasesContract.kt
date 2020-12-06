@@ -44,7 +44,7 @@ interface DatabasesPresenterInter{
 interface DatabaseFragmentInter{
     val presenter: DatabasesPresenterInter
     val adapter: DatabasesAdapter
-    val myContext: Context
+    var myContext: Context
 
     fun exportDialog(i: Int)
     fun confirmDelete(i: Int)

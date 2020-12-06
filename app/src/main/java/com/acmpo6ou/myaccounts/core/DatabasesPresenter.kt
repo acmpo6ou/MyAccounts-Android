@@ -1,5 +1,7 @@
 package com.acmpo6ou.myaccounts.core
 
+import com.acmpo6ou.myaccounts.R
+
 
 open class DatabasesPresenter(
         private val view: DatabaseFragmentInter,
@@ -23,11 +25,23 @@ open class DatabasesPresenter(
     }
 
     override fun exportDatabase(location: String) {
-        exportIndex?.let{
-            val name = databases[it].name
-            model.exportDatabase(name, location)
+        val resources = view.myContext?.resources
+        var errorDetails = ""
+        try {
+            exportIndex?.let {
+                val name = databases[it].name
+                model.exportDatabase(name, location)
+            }
+            view.showSuccess()
         }
-        view.showSuccess()
+        catch (e: NoSuchFileException){
+            errorDetails = resources.getString(R.string.export_no_such_file_details)
+        }
+
+        if(errorDetails.isNotEmpty()){
+            val errorTitle = resources.getString(R.string.export_error_title)
+            view.showError(errorTitle, errorDetails)
+        }
     }
 
     /**
