@@ -74,6 +74,11 @@ open class DatabasesPresenter(
         view.confirmDelete(i)
     }
 
+    /**
+     * Calls model.deleteDatabase() in try-catch block handling all errors.
+     *
+     * @param[i] database index.
+     */
     override fun deleteDatabase(i: Int) {
         try {
             model.deleteDatabase(databases[i].name)
@@ -118,6 +123,11 @@ open class DatabasesPresenter(
         view.navigateToEdit(databaseJson)
     }
 
+    /**
+     * Used to reset database password and in this way 'closing' it.
+     *
+     * @param[i] - database index.
+     */
     override fun closeDatabase(i: Int) {
         databases[i].password = null
         view.notifyChanged(i)
