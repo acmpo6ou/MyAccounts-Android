@@ -53,7 +53,7 @@ open class DatabasesPresenter(
             errorDetails = resources.getString(R.string.io_error)
         }
         catch (e: Exception){
-            errorDetails = e.message.toString()
+            errorDetails = "${e.javaClass.name} ${e.message}"
         }
 
         // if there are any errors errorDetails will be filled with appropriate details string
@@ -82,7 +82,7 @@ open class DatabasesPresenter(
         catch (e: Exception){
             val errorTitle = view.myContext.resources
                     .getString(R.string.delete_error_title)
-            val errorDetails = e.javaClass.toString()+" " + e.message.toString()
+            val errorDetails = "${e.javaClass.name} ${e.message}"
             view.showError(errorTitle, errorDetails)
         }
     }

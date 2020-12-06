@@ -71,25 +71,27 @@ class DatabasesPresenterInst:DatabasesPresenterTest() {
 
     @Test
     fun `exportDatabase should handle any other exception`(){
-        val details = faker.lorem().sentence()
+        val msg = faker.lorem().sentence()
+        val expectedDetails = "java.lang.Exception $msg"
         whenever(model.exportDatabase(anyString(), anyString()))
                 .thenAnswer{
-                    throw Exception(details)
+                    throw Exception(msg)
                 }
         callExportDatabase()
 
-        verify(view).showError(exportErrorTitle, details)
+        verify(view).showError(exportErrorTitle, expectedDetails)
     }
 
     @Test
     fun `deleteDatabase should handle any exception`(){
-        val details = faker.lorem().sentence()
+        val msg = faker.lorem().sentence()
+        val expectedDetails = "java.lang.Exception $msg"
         whenever(model.deleteDatabase(anyString()))
                 .thenAnswer{
-                    throw Exception(details)
+                    throw Exception(msg)
                 }
         presenter.deleteDatabase(0)
 
-        verify(view).showError(deleteErrorTitle, details)
+        verify(view).showError(deleteErrorTitle, expectedDetails)
     }
 }
