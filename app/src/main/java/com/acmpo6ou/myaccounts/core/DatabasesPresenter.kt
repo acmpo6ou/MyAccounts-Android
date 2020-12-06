@@ -25,16 +25,27 @@ open class DatabasesPresenter(
         view.exportDialog(i)
     }
 
+    /**
+     * Used to export database to user defined location.
+     *
+     * Calls model.exportDatabase() in try-catch block handling all errors. When error
+     * occurred calls view.showError() passing through appropriate error details to display
+     * dialog about error.
+     */
     override fun exportDatabase(location: String) {
         val resources = view.myContext?.resources
         var errorDetails = ""
+
         try {
+            // export database
             exportIndex?.let {
                 val name = databases[it].name
                 model.exportDatabase(name, location)
             }
+            // if there are no errors display snackbar about success
             view.showSuccess()
         }
+        // handle all possible errors
         catch (e: NoSuchFileException){
             errorDetails = resources.getString(R.string.export_no_such_file_details)
         }
@@ -42,6 +53,8 @@ open class DatabasesPresenter(
             errorDetails = resources.getString(R.string.io_error)
         }
 
+        // if there are any errors errorDetails will be filled with appropriate details string
+        // if so, display error dialog
         if(errorDetails.isNotEmpty()){
             val errorTitle = resources.getString(R.string.export_error_title)
             view.showError(errorTitle, errorDetails)
