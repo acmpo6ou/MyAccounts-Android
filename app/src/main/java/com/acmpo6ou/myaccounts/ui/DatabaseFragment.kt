@@ -222,6 +222,10 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
 
     }
 
+    override fun notifyRemoved(i: Int) {
+
+    }
+
     companion object {
         @JvmStatic
         fun newInstance() = DatabaseFragment()

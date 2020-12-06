@@ -77,6 +77,7 @@ open class DatabasesPresenter(
     override fun deleteDatabase(i: Int) {
         try {
             model.deleteDatabase(databases[i].name)
+            view.notifyRemoved(i)
             view.showSuccess()
         }
         catch (e: Exception){

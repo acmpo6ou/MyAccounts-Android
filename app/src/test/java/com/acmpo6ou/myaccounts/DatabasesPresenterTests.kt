@@ -172,4 +172,10 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
         presenter.deleteDatabase(0)
         verify(view).showSuccess()
     }
+
+    @Test
+    fun `deleteDatabase should call notifyRemoved`(){
+        presenter.deleteDatabase(0)
+        verify(view).notifyRemoved(0)
+    }
 }
