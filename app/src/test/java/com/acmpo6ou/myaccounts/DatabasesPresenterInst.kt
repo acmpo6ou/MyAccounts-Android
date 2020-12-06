@@ -37,6 +37,8 @@ class DatabasesPresenterInst:DatabasesPresenterTest() {
     val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     val resources = context.resources
     val exportErrorTitle = resources.getString(R.string.export_error_title)
+    val deleteErrorTitle = resources.getString(R.string.delete_error_title)
+
     val exportNoSuchFileDetails = resources.getString(R.string.export_no_such_file_details)
     val ioError = resources.getString(R.string.io_error)
 
@@ -77,5 +79,17 @@ class DatabasesPresenterInst:DatabasesPresenterTest() {
         callExportDatabase()
 
         verify(view).showError(exportErrorTitle, details)
+    }
+
+    @Test
+    fun `deleteDatabase should handle any exception`(){
+        val details = faker.lorem().sentence()
+        whenever(model.deleteDatabase(anyString()))
+                .thenAnswer{
+                    throw Exception(details)
+                }
+        presenter.deleteDatabase(0)
+
+        verify(view).showError(deleteErrorTitle, details)
     }
 }

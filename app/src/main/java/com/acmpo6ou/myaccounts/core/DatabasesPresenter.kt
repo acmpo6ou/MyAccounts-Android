@@ -79,8 +79,11 @@ open class DatabasesPresenter(
             model.deleteDatabase(databases[i].name)
             view.showSuccess()
         }
-        catch (e: NoSuchFileException){
-            view.showSuccess()
+        catch (e: Exception){
+            val errorTitle = view.myContext.resources
+                    .getString(R.string.delete_error_title)
+            val errorDetails = e.javaClass.toString()+" " + e.message.toString()
+            view.showError(errorTitle, errorDetails)
         }
     }
 
