@@ -138,7 +138,15 @@ open class DatabasesPresenter(
      */
     override fun isDatabaseSaved(i: Int): Boolean{
         val actualDatabase = databases[i]
-        val diskDatabase = model.openDatabase(actualDatabase)
+        val diskDatabase: Database?
+        try {
+            diskDatabase = model.openDatabase(actualDatabase)
+        }
+        catch (e: NoSuchFileException){
+            // if database on disk doesn't exist then it definitely
+            // differs from the one in memory
+            return false
+        }
         return actualDatabase.data == diskDatabase.data
     }
 }

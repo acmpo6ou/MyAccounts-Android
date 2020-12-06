@@ -29,6 +29,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyMap
+import java.io.File
 
 open class DatabasesPresenterTest{
     lateinit var view: DatabaseFragmentInter
@@ -177,5 +178,13 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
     fun `deleteDatabase should call notifyRemoved`(){
         presenter.deleteDatabase(0)
         verify(view).notifyRemoved(0)
+    }
+
+    @Test
+    fun `isDatabaseSaved should return false when NoSuchFileException occurred`(){
+        whenever(model.openDatabase(presenter.databases[1])).thenAnswer{
+            throw NoSuchFileException(File(""))
+        }
+        assertFalse(presenter.isDatabaseSaved(1))
     }
 }
