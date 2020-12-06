@@ -75,7 +75,13 @@ open class DatabasesPresenter(
     }
 
     override fun deleteDatabase(i: Int) {
-
+        try {
+            model.deleteDatabase(databases[i].name)
+            view.showSuccess()
+        }
+        catch (e: NoSuchFileException){
+            view.showSuccess()
+        }
     }
 
     /**

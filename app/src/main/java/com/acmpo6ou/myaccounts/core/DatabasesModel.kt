@@ -206,7 +206,7 @@ class DatabasesModel(private val SRC_DIR: String = "/storage/emulated/0/")
      *
      * @param[name] name of database to delete.
      */
-    fun deleteDatabase(name: String){
+    override fun deleteDatabase(name: String){
         val binFile = File("$SRC_DIR/$name.bin")
         binFile.delete()
 

@@ -29,6 +29,8 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyMap
+import org.mockito.ArgumentMatchers.anyString
+import java.io.File
 
 open class DatabasesPresenterTest{
     lateinit var view: DatabaseFragmentInter
@@ -158,6 +160,30 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
     @Test
     fun `exportDatabase should call showSuccess when there are no errors`(){
         callExportDatabase()
+        verify(view).showSuccess()
+    }
+
+    @Test
+    fun `deleteDatabase should call model deleteDatabase passing name`(){
+        presenter.deleteDatabase(0)
+        verify(model).deleteDatabase("main")
+    }
+
+    @Test
+    fun `deleteDatabase should call showSuccess when there are no errors`(){
+        presenter.deleteDatabase(0)
+        verify(view).showSuccess()
+    }
+
+    @Test
+    fun `deleteDatabase should handle NoSuchFileException`(){
+        whenever(model.deleteDatabase(anyString()))
+                .thenAnswer{
+                    throw NoSuchFileException(File(""))
+                }
+        presenter.deleteDatabase(0)
+
+        // if there are no database files to delete then operation is successful
         verify(view).showSuccess()
     }
 }
