@@ -30,17 +30,20 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyMap
 
-class DatabasesPresenterTests {
-    private lateinit var view: DatabaseFragmentInter
-    private lateinit var model: DatabasesModelInter
-    private lateinit var presenter: DatabasesPresenter
-    private val faker = Faker()
-    private val salt = "0123456789abcdef".toByteArray()
+open class DatabasesPresenterTest{
+    lateinit var view: DatabaseFragmentInter
+    lateinit var model: DatabasesModelInter
+    lateinit var presenter: DatabasesPresenter
+
+    lateinit var location: String
+    val faker = Faker()
+    val salt = "0123456789abcdef".toByteArray()
 
     @Before
     fun setUp(){
         view = mock()
         model = mock()
+
         presenter = DatabasesPresenter(view)
         presenter.model = model
         presenter.databases = listOf(
@@ -49,6 +52,14 @@ class DatabasesPresenterTests {
         )
     }
 
+    fun callExportDatabase(){
+        location = faker.file().fileName()
+        presenter.exportIndex = 1
+        presenter.exportDatabase(location)
+    }
+}
+
+class DatabasesPresenterTests: DatabasesPresenterTest() {
     @Test
     fun `exportSelected should call exportDialog`(){
         presenter.exportSelected(0)
@@ -140,20 +151,13 @@ class DatabasesPresenterTests {
 
     @Test
     fun `exportDatabase should call model exportDatabase passing name and location`(){
-        val location = faker.file().fileName()
-        presenter.exportIndex = 1
-        presenter.exportDatabase(location)
-
+        callExportDatabase()
         verify(model).exportDatabase("test", location)
     }
 
     @Test
     fun `exportDatabase should call showSuccess when there are no errors`(){
-        // there will be no exceptions thrown
-        val location = faker.file().fileName()
-        presenter.exportIndex = 1
-        presenter.exportDatabase(location)
-
+        callExportDatabase()
         verify(view).showSuccess()
     }
 }
