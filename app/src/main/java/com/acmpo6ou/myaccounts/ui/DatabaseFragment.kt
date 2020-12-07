@@ -48,7 +48,6 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
     val EXPORT_RC = 101
     val ACCOUNTS_RC = 200
 
-    private val layoutManager = LinearLayoutManager(context)
     override lateinit var adapter: DatabasesAdapter
     override lateinit var presenter: DatabasesPresenterInter
 
@@ -89,7 +88,7 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
         }
 
         // initializing recycler itself
-        databasesList.layoutManager = layoutManager
+        databasesList.layoutManager = LinearLayoutManager(myContext)
         databasesList.adapter = adapter
 
     }
