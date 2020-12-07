@@ -133,6 +133,12 @@ open class DatabasesPresenter(
         view.notifyChanged(i)
     }
 
+    /**
+     * Called when user selects item in database list.
+     *
+     * If selected database is closed should navigate to OpenDatabaseFragment, if it
+     * is open - call view.startDatabase passing through serialised database string.
+     */
     override fun openDatabase(i: Int) {
         if(databases[i].isOpen){
             val databaseJson = model.dumps(databases[i].data)
