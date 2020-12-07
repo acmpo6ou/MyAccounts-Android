@@ -157,7 +157,7 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
         confirmDialog(message) { presenter.closeDatabase(i) }
     }
 
-    override fun navigateToEdit(databaseJson: String) {
+    override fun navigateToEdit(i: Int) {
         view?.findNavController()?.navigate(R.id.actionEditDatabase)
     }
 

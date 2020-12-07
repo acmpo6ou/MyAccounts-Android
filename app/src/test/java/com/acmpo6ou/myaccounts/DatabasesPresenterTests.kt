@@ -103,13 +103,9 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
     }
 
     @Test
-    fun `editSelected should call navigateToEdit passing through serialized database`(){
-        // mock model.dumps() to return fake serialized string
-        val expectedJson = faker.lorem().sentence()
-        whenever(model.dumps(anyMap())).thenReturn(expectedJson)
-
+    fun `editSelected should call navigateToEdit passing through database index`(){
         presenter.editSelected(0)
-        verify(view).navigateToEdit(expectedJson)
+        verify(view).navigateToEdit(0)
     }
 
     @Test

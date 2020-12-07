@@ -112,7 +112,7 @@ class DatabaseFragmentInstrumentation {
         setUpNavController()
         databaseScenario.onFragment {
             // call navigateToEdit
-            it.navigateToEdit("")
+            it.navigateToEdit(0)
         }
 
         // verify that we navigated to edit database

@@ -118,9 +118,7 @@ open class DatabasesPresenter(
      * @param[i] index of database we want to edit.
      */
     override fun editSelected(i: Int) {
-        val database = databases[i]
-        val databaseJson = model.dumps(database.data)
-        view.navigateToEdit(databaseJson)
+        view.navigateToEdit(i)
     }
 
     /**

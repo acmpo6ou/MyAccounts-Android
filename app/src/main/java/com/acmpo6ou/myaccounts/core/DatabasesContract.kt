@@ -49,7 +49,7 @@ interface DatabaseFragmentInter{
     fun exportDialog(i: Int)
     fun confirmDelete(i: Int)
     fun confirmClose(i: Int)
-    fun navigateToEdit(databaseJson: String)
+    fun navigateToEdit(i: Int)
     fun navigateToOpen(i: Int)
 
     fun showSuccess()
