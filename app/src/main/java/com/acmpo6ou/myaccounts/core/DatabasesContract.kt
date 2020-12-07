@@ -50,6 +50,7 @@ interface DatabaseFragmentInter{
     fun confirmDelete(i: Int)
     fun confirmClose(i: Int)
     fun navigateToEdit(databaseJson: String)
+    fun navigateToOpen(i: Int)
 
     fun showSuccess()
     fun showError(title: String, details: String)

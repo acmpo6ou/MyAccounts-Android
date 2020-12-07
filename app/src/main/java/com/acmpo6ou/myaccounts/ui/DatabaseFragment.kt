@@ -161,6 +161,10 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
         view?.findNavController()?.navigate(R.id.actionEditDatabase)
     }
 
+    override fun navigateToOpen(i: Int) {
+
+    }
+
     /**
      * Used to display a snackbar with success message.
      */

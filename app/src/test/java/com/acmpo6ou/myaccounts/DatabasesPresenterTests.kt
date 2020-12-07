@@ -29,6 +29,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyMap
+import org.mockito.ArgumentMatchers.anyString
 import java.io.File
 
 open class DatabasesPresenterTest{
@@ -187,4 +188,29 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
         }
         assertFalse(presenter.isDatabaseSaved(1))
     }
+
+    @Test
+    fun `openDatabase should navigate to OpenDatabaseFragment if database is closed`(){
+        // first database is closed
+        presenter.openDatabase(0)
+        verify(view).navigateToOpen(0)
+
+        // startDatabase should not be called
+        verify(view, never()).startDatabase(anyString())
+    }
+
+    @Test
+    fun `openDatabase should call startDatabase passing database json if database is opened`(){
+        // mock model.dumps() to return fake serialized string
+        val expectedJson = faker.lorem().sentence()
+        whenever(model.dumps(anyMap())).thenReturn(expectedJson)
+
+        // second database is opened
+        presenter.openDatabase(1)
+        verify(view).startDatabase(expectedJson)
+
+        // navigateToOpen should not be called
+        verify(view, never()).navigateToOpen(1)
+    }
+
 }
