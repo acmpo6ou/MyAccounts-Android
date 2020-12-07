@@ -1,6 +1,7 @@
 package com.acmpo6ou.myaccounts.core
 
 import com.acmpo6ou.myaccounts.R
+import java.io.FileNotFoundException
 import java.io.IOException
 
 
@@ -46,8 +47,8 @@ open class DatabasesPresenter(
             view.showSuccess()
         }
         // handle all possible errors
-        catch (e: NoSuchFileException){
-            errorDetails = resources.getString(R.string.export_no_such_file_details)
+        catch (e: FileNotFoundException){
+            errorDetails = resources.getString(R.string.export_file_not_found_details)
         }
         catch (e: IOException){
             errorDetails = resources.getString(R.string.io_error)
@@ -162,7 +163,7 @@ open class DatabasesPresenter(
         try {
             diskDatabase = model.openDatabase(actualDatabase)
         }
-        catch (e: NoSuchFileException){
+        catch (e: FileNotFoundException){
             // if database on disk doesn't exist then it definitely
             // differs from the one in memory
             return false

@@ -28,7 +28,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyString
 import org.robolectric.RobolectricTestRunner
-import java.io.File
+import java.io.FileNotFoundException
 import java.io.IOException
 
 @RunWith(RobolectricTestRunner::class)
@@ -39,7 +39,7 @@ class DatabasesPresenterInst:DatabasesPresenterTest() {
     val exportErrorTitle = resources.getString(R.string.export_error_title)
     val deleteErrorTitle = resources.getString(R.string.delete_error_title)
 
-    val exportNoSuchFileDetails = resources.getString(R.string.export_no_such_file_details)
+    val exportFileNotFoundDetails = resources.getString(R.string.export_file_not_found_details)
     val ioError = resources.getString(R.string.io_error)
 
     @Before
@@ -48,14 +48,14 @@ class DatabasesPresenterInst:DatabasesPresenterTest() {
     }
 
     @Test
-    fun `exportDatabase should handle NoSuchFileException`(){
+    fun `exportDatabase should handle FileNotFoundException`(){
         whenever(model.exportDatabase(anyString(), anyString()))
                 .thenAnswer{
-                    throw NoSuchFileException(File(""))
+                    throw FileNotFoundException("")
                 }
         callExportDatabase()
 
-        verify(view).showError(exportErrorTitle, exportNoSuchFileDetails)
+        verify(view).showError(exportErrorTitle, exportFileNotFoundDetails)
     }
 
     @Test

@@ -30,7 +30,7 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyMap
 import org.mockito.ArgumentMatchers.anyString
-import java.io.File
+import java.io.FileNotFoundException
 
 open class DatabasesPresenterTest{
     lateinit var view: DatabaseFragmentInter
@@ -178,9 +178,9 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
     }
 
     @Test
-    fun `isDatabaseSaved should return false when NoSuchFileException occurred`(){
+    fun `isDatabaseSaved should return false when FileNotFoundException occurred`(){
         whenever(model.openDatabase(presenter.databases[1])).thenAnswer{
-            throw NoSuchFileException(File(""))
+            throw FileNotFoundException("")
         }
         assertFalse(presenter.isDatabaseSaved(1))
     }
