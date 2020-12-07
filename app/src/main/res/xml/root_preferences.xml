@@ -32,11 +32,6 @@
         app:useSimpleSummaryProvider="true" />
     <SwitchPreference
         android:defaultValue="true"
-        android:icon="@drawable/ic_theme"
-        android:key="dark_theme"
-        android:title="@string/dark_theme" />
-    <SwitchPreference
-        android:defaultValue="true"
         android:icon="@drawable/ic_fingerprint"
         android:key="fingerprint"
         android:summary="@string/fingerprint_summary"
