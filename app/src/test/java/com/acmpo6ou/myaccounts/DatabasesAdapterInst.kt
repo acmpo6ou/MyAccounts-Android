@@ -29,13 +29,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.LooperMode
-import org.junit.Assert.*
 import org.robolectric.shadows.ShadowPopupMenu
 
 @RunWith(RobolectricTestRunner::class)
@@ -54,7 +57,7 @@ class DatabasesAdapterInst {
                 themeResId = R.style.Theme_MyAccounts_NoActionBar)
 
         // mock the list of databases for test
-        val databases = listOf(
+        val databases = mutableListOf(
                 Database("main"), // locked
                 Database("test", password = "123") // opened
         )

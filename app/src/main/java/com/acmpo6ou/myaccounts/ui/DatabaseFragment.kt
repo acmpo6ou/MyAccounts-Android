@@ -68,7 +68,7 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
         presenter = DatabasesPresenter(this)
 
         // add some databases for testing
-        presenter.databases = listOf(
+        presenter.databases = mutableListOf(
                 Database("main"), // locked
                 Database("test", password = "123") // opened
         )
@@ -222,11 +222,13 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
     }
 
     override fun notifyChanged(i: Int) {
-
+        adapter.notifyItemChanged(i)
+        adapter.notifyItemRangeChanged(i, 1)
     }
 
     override fun notifyRemoved(i: Int) {
-
+        adapter.notifyItemRemoved(i)
+        adapter.notifyItemRangeRemoved(i, 1)
     }
 
     companion object {

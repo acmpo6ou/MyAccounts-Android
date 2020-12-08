@@ -24,7 +24,7 @@ import android.content.Intent
 import com.acmpo6ou.myaccounts.ui.DatabasesAdapter
 
 interface DatabasesPresenterInter{
-    var databases: List<Database>
+    var databases: MutableList<Database>
 
     fun isDatabaseSaved(i: Int): Boolean
 

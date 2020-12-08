@@ -9,7 +9,7 @@ open class DatabasesPresenter(
         private val view: DatabaseFragmentInter,
 ): DatabasesPresenterInter {
     var model: DatabasesModelInter = DatabasesModel()
-    override var databases: List<Database> = listOf()
+    override var databases: MutableList<Database> = mutableListOf()
     var exportIndex: Int? = null
 
     /**
@@ -83,6 +83,7 @@ open class DatabasesPresenter(
     override fun deleteDatabase(i: Int) {
         try {
             model.deleteDatabase(databases[i].name)
+            databases.removeAt(i)
             view.notifyRemoved(i)
             view.showSuccess()
         }

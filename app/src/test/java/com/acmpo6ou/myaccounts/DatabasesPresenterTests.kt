@@ -48,7 +48,7 @@ open class DatabasesPresenterTest{
 
         presenter = DatabasesPresenter(view)
         presenter.model = model
-        presenter.databases = listOf(
+        presenter.databases = mutableListOf(
                 Database("main"),
                 Database("test", "123", salt, mapOf())
         )
@@ -169,6 +169,13 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
     fun `deleteDatabase should call showSuccess when there are no errors`(){
         presenter.deleteDatabase(0)
         verify(view).showSuccess()
+    }
+
+    @Test
+    fun `deleteDatabase should remove database from list`(){
+        presenter.deleteDatabase(0)
+        // first database should no longer be `main`
+        assertEquals("test", presenter.databases[0].name)
     }
 
     @Test

@@ -71,7 +71,7 @@ class DatabaseFragmentInstrumentation {
             themeResId = R.style.Theme_MyAccounts_NoActionBar)
 
         // mock presenter with fake databases
-        val databases = listOf(Database("main"))
+        val databases = mutableListOf(Database("main"))
         val presenter = mock<DatabasesPresenterInter>()
         whenever(presenter.databases).thenReturn(databases)
         databaseScenario.onFragment {

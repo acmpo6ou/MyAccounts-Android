@@ -10,7 +10,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -27,7 +30,7 @@ class DatabaseFragmentInst {
                 themeResId = R.style.Theme_MyAccounts_NoActionBar)
 
         // mock presenter with fake databases
-        val databases = listOf(
+        val databases = mutableListOf(
                 Database("main")
         )
         presenter = mock()
