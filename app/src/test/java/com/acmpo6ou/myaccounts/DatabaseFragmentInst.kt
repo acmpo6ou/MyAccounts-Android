@@ -24,6 +24,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Looper.getMainLooper
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.testing.FragmentScenario
@@ -31,9 +32,11 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.core.Database
+import com.acmpo6ou.myaccounts.core.DatabasesPresenter
 import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
 import com.github.javafaker.Faker
@@ -300,5 +303,31 @@ class DatabaseFragmentInstrumentation {
                 String.format(confirmCloseMsg, "main"),
                 message?.text
         )
+    }
+
+    @Test
+    fun `when closing database lock icon should change`(){
+        // list of databases for test
+        val databases = mutableListOf(
+                Database("main"), // locked
+                Database("test", password = "123") // opened
+        )
+        databaseScenario.onFragment {
+            // set real presenter and call closeDatabase
+            val presenter  = DatabasesPresenter(it)
+            presenter.databases = databases
+            it.presenter = presenter
+            presenter.closeDatabase(1)
+
+            // find recycler, measure and lay it out, so that later we can obtain its items
+            val recycler: RecyclerView? = it.view?.findViewById(R.id.databasesList)
+            recycler?.measure(0, 0)
+            recycler?.layout(0, 0, 100, 10000)
+
+            // check that lock icon changed to locked
+            val itemLayout = recycler?.getChildAt(1)
+            val lockImg = itemLayout?.findViewById<ImageView>(R.id.itemIcon)
+            assertEquals(R.drawable.ic_locked, lockImg?.tag)
+        }
     }
 }
