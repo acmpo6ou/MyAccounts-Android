@@ -314,7 +314,7 @@ class DatabaseFragmentInstrumentation {
         )
         databaseScenario.onFragment {
             // set real presenter and call closeDatabase
-            val presenter  = DatabasesPresenter(it)
+            val presenter = DatabasesPresenter(it)
             presenter.databases = databases
             it.presenter = presenter
             presenter.closeDatabase(1)
@@ -328,6 +328,32 @@ class DatabaseFragmentInstrumentation {
             val itemLayout = recycler?.getChildAt(1)
             val lockImg = itemLayout?.findViewById<ImageView>(R.id.itemIcon)
             assertEquals(R.drawable.ic_locked, lockImg?.tag)
+        }
+    }
+
+    @Test
+    fun `when deleting database it should disappear from recycler`(){
+        // list of databases for test
+        val databases = mutableListOf(
+                Database("main"), // locked
+                Database("test", password = "123") // opened
+        )
+        databaseScenario.onFragment {
+            // set real presenter and call closeDatabase
+            val presenter = DatabasesPresenter(it)
+            presenter.databases = databases
+            it.presenter = presenter
+            presenter.deleteDatabase(0)
+
+            // find recycler, measure and lay it out, so that later we can obtain its items
+            val recycler: RecyclerView? = it.view?.findViewById(R.id.databasesList)
+            recycler?.measure(0, 0)
+            recycler?.layout(0, 0, 100, 10000)
+
+            // check that the first database is `test` as `main` was deleted
+            val itemLayout = recycler?.getChildAt(0)
+            val databaseName = itemLayout?.findViewById<TextView>(R.id.itemName)
+            assertEquals("test", databaseName?.text)
         }
     }
 }
