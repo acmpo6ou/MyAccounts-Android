@@ -221,11 +221,21 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
         }
     }
 
+    /**
+     * This method rerenders list of databases after any database have changed.
+     *
+     * @param[i] index of database that have changed.
+     */
     override fun notifyChanged(i: Int) {
         adapter.notifyItemChanged(i)
         adapter.notifyItemRangeChanged(i, 1)
     }
 
+    /**
+     * This method rerenders list of databases after any database have been deleted.
+     *
+     * @param[i] index of database that have been deleted.
+     */
     override fun notifyRemoved(i: Int) {
         adapter.notifyItemRemoved(i)
         adapter.notifyItemRangeRemoved(i, 1)
