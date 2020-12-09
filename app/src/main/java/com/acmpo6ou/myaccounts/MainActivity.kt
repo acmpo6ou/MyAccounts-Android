@@ -22,6 +22,7 @@ package com.acmpo6ou.myaccounts
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -29,6 +30,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -53,5 +55,15 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    override fun onBackPressed() {
+        // to close navigation drawer when Back button is pressed
+        if(drawer_layout.isDrawerOpen(GravityCompat.START)){
+            drawer_layout.closeDrawer(GravityCompat.START)
+        }
+        else{
+            super.onBackPressed()
+        }
     }
 }
