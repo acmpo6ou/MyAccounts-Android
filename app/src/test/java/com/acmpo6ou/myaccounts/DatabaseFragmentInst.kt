@@ -305,24 +305,43 @@ class DatabaseFragmentInstrumentation {
         )
     }
 
-    @Test
-    fun `when closing database lock icon should change`(){
+    /**
+     * This method is used in tests to setup real (non mocked) DatabasesPresenter to test
+     * how does DatabasesPresenter and DatabaseFragment integrated.
+     *
+     * @param[fragment] DatabaseFragment for which we will setup DatabasesPresenter.
+     */
+    private fun setupRealPresenter(fragment: DatabaseFragment){
         // list of databases for test
         val databases = mutableListOf(
                 Database("main"), // locked
                 Database("test", password = "123") // opened
         )
-        databaseScenario.onFragment {
-            // set real presenter and call closeDatabase
-            val presenter = DatabasesPresenter(it)
-            presenter.databases = databases
-            it.presenter = presenter
-            presenter.closeDatabase(1)
+        // set real presenter and call closeDatabase
+        val presenter = DatabasesPresenter(fragment)
+        presenter.databases = databases
+        fragment.presenter = presenter
+    }
 
-            // find recycler, measure and lay it out, so that later we can obtain its items
-            val recycler: RecyclerView? = it.view?.findViewById(R.id.databasesList)
-            recycler?.measure(0, 0)
-            recycler?.layout(0, 0, 100, 10000)
+    /**
+     * This method is used in tests to measure and lay out the recyclerview.
+     *
+     * @param[fragment] DatabaseFragment for which we will setup DatabasesPresenter.
+     */
+    private fun setupRecycler(fragment: DatabaseFragment): RecyclerView? {
+        // find recycler, measure and lay it out, so that later we can obtain its items
+        val recycler: RecyclerView? = fragment.view?.findViewById(R.id.databasesList)
+        recycler?.measure(0, 0)
+        recycler?.layout(0, 0, 100, 10000)
+        return recycler
+    }
+
+    @Test
+    fun `when closing database lock icon should change`(){
+        databaseScenario.onFragment {
+            setupRealPresenter(it)
+            it.presenter.closeDatabase(1)
+            val recycler = setupRecycler(it)
 
             // check that lock icon changed to locked
             val itemLayout = recycler?.getChildAt(1)
@@ -333,22 +352,10 @@ class DatabaseFragmentInstrumentation {
 
     @Test
     fun `when deleting database it should disappear from recycler`(){
-        // list of databases for test
-        val databases = mutableListOf(
-                Database("main"), // locked
-                Database("test", password = "123") // opened
-        )
         databaseScenario.onFragment {
-            // set real presenter and call closeDatabase
-            val presenter = DatabasesPresenter(it)
-            presenter.databases = databases
-            it.presenter = presenter
-            presenter.deleteDatabase(0)
-
-            // find recycler, measure and lay it out, so that later we can obtain its items
-            val recycler: RecyclerView? = it.view?.findViewById(R.id.databasesList)
-            recycler?.measure(0, 0)
-            recycler?.layout(0, 0, 100, 10000)
+            setupRealPresenter(it)
+            it.presenter.deleteDatabase(0)
+            val recycler = setupRecycler(it)
 
             // check that the first database is `test` as `main` was deleted
             val itemLayout = recycler?.getChildAt(0)
