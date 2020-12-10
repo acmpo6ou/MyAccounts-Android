@@ -156,8 +156,14 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
         confirmDialog(message) { presenter.closeDatabase(i) }
     }
 
+    /**
+     * Navigates to EditDatabaseFragment passing database index.
+     *
+     * @param[i] index of database we want to edit.
+     */
     override fun navigateToEdit(i: Int) {
-        view?.findNavController()?.navigate(R.id.actionEditDatabase)
+        val action = DatabaseFragmentDirections.actionEditDatabase(i)
+        view?.findNavController()?.navigate(action)
     }
 
     override fun navigateToOpen(i: Int) {

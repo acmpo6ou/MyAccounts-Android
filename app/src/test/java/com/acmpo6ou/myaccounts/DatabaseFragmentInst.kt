@@ -39,8 +39,10 @@ import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesPresenter
 import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
+import com.acmpo6ou.myaccounts.ui.DatabaseFragmentDirections
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -95,6 +97,19 @@ class DatabaseFragmentInstrumentation {
     }
 
     @Test
+    fun `navigateToEdit should pass appropriate database index`(){
+        databaseScenario.onFragment {
+            // mock navigation controller and call navigateToEdit
+            navController = mock()
+            Navigation.setViewNavController(it.requireView(), navController)
+            it.navigateToEdit(0)
+
+            val expectedAction = DatabaseFragmentDirections.actionEditDatabase(0)
+            verify(navController).navigate(expectedAction)
+        }
+    }
+
+    @Test
     fun `+ FAB must navigate to CreateDatabaseFragment`() {
         setUpNavController()
         // Verify that performing a click changes the NavController’s state
@@ -124,12 +139,6 @@ class DatabaseFragmentInstrumentation {
                 navController.currentDestination?.id,
                 R.id.editDatabaseFragment
         )
-    }
-
-    @Test
-    fun `navigateToEdit should pass database json string to EditDatabaseFragment`(){
-        setUpNavController()
-
     }
 
     @Test
