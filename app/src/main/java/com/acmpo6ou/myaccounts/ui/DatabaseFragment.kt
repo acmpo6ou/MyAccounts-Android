@@ -84,7 +84,7 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // when clicking on (+) FAB navigate to CreateDatabaseFragment
         addDatabase.setOnClickListener{
-            view.findNavController().navigate(R.id.createDatabaseFragment)
+            view.findNavController().navigate(R.id.actionCreateDatabase)
         }
 
         // initializing recycler itself
