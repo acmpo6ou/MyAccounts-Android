@@ -42,16 +42,4 @@
         android:key="block_screen_capture"
         android:summary="@string/block_screen_capture_summary"
         android:title="@string/block_screen_capture" />
-    <PreferenceCategory android:title="@string/main_database">
-
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="main_database_feature"
-            android:summary="@string/main_database_summary"
-            android:title="@string/main_database_feature" />
-        <ListPreference
-            android:key="main_database"
-            android:title="@string/main_database"
-            app:useSimpleSummaryProvider="true" />
-    </PreferenceCategory>
 </PreferenceScreen>
