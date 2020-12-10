@@ -37,10 +37,18 @@
             app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/actionEditDatabase"
-            app:destination="@id/editDatabaseFragment" />
+            app:destination="@id/editDatabaseFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/actionOpenDatabase"
-            app:destination="@id/openDatabaseFragment" />
+            app:destination="@id/openDatabaseFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/createDatabaseFragment"
