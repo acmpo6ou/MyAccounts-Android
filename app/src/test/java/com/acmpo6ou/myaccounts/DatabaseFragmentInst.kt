@@ -96,15 +96,31 @@ class DatabaseFragmentInstrumentation {
         }
     }
 
+    private fun mockNavController(fragment: DatabaseFragment){
+        navController = mock()
+        Navigation.setViewNavController(fragment.requireView(), navController)
+    }
+
     @Test
     fun `navigateToEdit should pass appropriate database index`(){
         databaseScenario.onFragment {
             // mock navigation controller and call navigateToEdit
-            navController = mock()
-            Navigation.setViewNavController(it.requireView(), navController)
+            mockNavController(it)
             it.navigateToEdit(0)
 
             val expectedAction = DatabaseFragmentDirections.actionEditDatabase(0)
+            verify(navController).navigate(expectedAction)
+        }
+    }
+
+    @Test
+    fun `navigateToOpen should pass appropriate database index`(){
+        databaseScenario.onFragment {
+            // mock navigation controller and call navigateToOpen
+            mockNavController(it)
+            it.navigateToOpen(0)
+
+            val expectedAction = DatabaseFragmentDirections.actionOpenDatabase(0)
             verify(navController).navigate(expectedAction)
         }
     }

@@ -166,8 +166,14 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
         view?.findNavController()?.navigate(action)
     }
 
+    /**
+     * Navigates to OpenDatabaseFragment passing database index.
+     *
+     * @param[i] index of database we want to open.
+     */
     override fun navigateToOpen(i: Int) {
-
+        val action = DatabaseFragmentDirections.actionOpenDatabase(i)
+        view?.findNavController()?.navigate(action)
     }
 
     /**

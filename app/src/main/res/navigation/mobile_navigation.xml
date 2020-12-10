@@ -39,7 +39,7 @@
             android:id="@+id/actionEditDatabase"
             app:destination="@id/editDatabaseFragment" />
         <action
-            android:id="@+id/action_databaseFragment_to_openDatabaseFragment"
+            android:id="@+id/actionOpenDatabase"
             app:destination="@id/openDatabaseFragment" />
     </fragment>
     <fragment
