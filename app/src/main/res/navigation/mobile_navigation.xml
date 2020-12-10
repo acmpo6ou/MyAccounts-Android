@@ -53,8 +53,8 @@
         android:label="EditDatabaseFragment"
         tools:layout="@layout/create_edit_database_fragment" >
         <argument
-            android:name="databaseJson"
-            app:argType="string" />
+            android:name="databaseIndex"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/openDatabaseFragment"
@@ -62,7 +62,7 @@
         android:label="open_database_fragment"
         tools:layout="@layout/open_database_fragment" >
         <argument
-            android:name="databaseJson"
-            app:argType="string" />
+            android:name="databaseIndex"
+            app:argType="integer" />
     </fragment>
 </navigation>
