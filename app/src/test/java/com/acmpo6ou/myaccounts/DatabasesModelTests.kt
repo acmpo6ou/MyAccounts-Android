@@ -27,6 +27,8 @@ import com.github.javafaker.Faker
 import com.macasaet.fernet.StringValidator
 import com.macasaet.fernet.Token
 import com.macasaet.fernet.Validator
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -553,7 +555,9 @@ class DatabasesModelTests {
                 getDatabaseMap(),
         )
         val actualJson = dumpDatabase(database)
-        val expectedDatabase = ""
-        assertEquals(expectedDatabase, actualJson)
+        val expectedDatabaseJson =
+            "{\"name\":\"${database.name}\",\"password\":\"${database.password}\"" +
+            ",\"salt\":${Json.encodeToString(salt)},\"data\":$jsonDatabase}"
+        assertEquals(expectedDatabaseJson, actualJson)
     }
 }

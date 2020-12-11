@@ -26,6 +26,7 @@ import com.macasaet.fernet.StringValidator
 import com.macasaet.fernet.Token
 import com.macasaet.fernet.Validator
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -72,10 +73,12 @@ data class Account(
  * @property isOpen dynamically returns whether database is open or not, the database is
  * considered open when [password] is not null.
  */
+@Serializable
 data class Database(val name: String,
                     var password: String? = null,
                     val salt: ByteArray? = null,
                     var data: Map<String, Account> = emptyMap()){
+    @Transient
     var isOpen: Boolean = false
         get() = password != null
         private set
@@ -377,7 +380,7 @@ class DatabasesModel(private val SRC_DIR: String = "/storage/emulated/0/")
 }
 
 fun dumpDatabase(database: Database): String{
-    return "1"
+    return Json.encodeToString(database)
 }
 
 fun loadDatabase(databaseJson: String): Database{
