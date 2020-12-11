@@ -19,10 +19,7 @@
 
 package com.acmpo6ou.myaccounts
 
-import com.acmpo6ou.myaccounts.core.Account
-import com.acmpo6ou.myaccounts.core.Database
-import com.acmpo6ou.myaccounts.core.DatabasesModel
-import com.acmpo6ou.myaccounts.core.dumpDatabase
+import com.acmpo6ou.myaccounts.core.*
 import com.github.javafaker.Faker
 import com.macasaet.fernet.StringValidator
 import com.macasaet.fernet.Token
@@ -559,5 +556,21 @@ class DatabasesModelTests {
             "{\"name\":\"${database.name}\",\"password\":\"${database.password}\"" +
             ",\"salt\":${Json.encodeToString(salt)},\"data\":$jsonDatabase}"
         assertEquals(expectedDatabaseJson, actualJson)
+    }
+
+    @Test
+    fun `loadDatabase should deserialize given database json string`(){
+        val database = Database(
+                faker.name().toString(),
+                faker.lorem().sentence(),
+                salt,
+                getDatabaseMap(),
+        )
+        val databaseJson =
+                "{\"name\":\"${database.name}\",\"password\":\"${database.password}\"" +
+                        ",\"salt\":${Json.encodeToString(salt)},\"data\":$jsonDatabase}"
+
+        val actualDatabase = loadDatabase(databaseJson)
+        assertEquals(database.toString(), actualDatabase.toString())
     }
 }

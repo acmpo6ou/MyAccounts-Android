@@ -384,5 +384,5 @@ fun dumpDatabase(database: Database): String{
 }
 
 fun loadDatabase(databaseJson: String): Database{
-    return Database("")
+    return Json.decodeFromString(databaseJson)
 }
