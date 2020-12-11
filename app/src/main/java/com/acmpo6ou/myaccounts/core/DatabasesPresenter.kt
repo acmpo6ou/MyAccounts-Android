@@ -141,8 +141,10 @@ open class DatabasesPresenter(
      */
     override fun openDatabase(i: Int) {
         if(databases[i].isOpen){
+            // set database index property as it will be needed to later save database
             val database = databases[i].copy()
             database.index = i
+
             val databaseJson = model.dumpDatabase(database)
             view.startDatabase(databaseJson)
         }
