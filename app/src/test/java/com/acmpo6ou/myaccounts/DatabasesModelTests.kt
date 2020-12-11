@@ -545,33 +545,30 @@ class DatabasesModelTests {
         )
     }
 
+    private lateinit var database: Database
+    private lateinit var databaseJson: String
+    fun setupDatabaseAndJson(){
+        database = Database(
+            faker.name().toString(),
+            faker.lorem().sentence(),
+            salt,
+            getDatabaseMap(),
+            1
+        )
+        databaseJson =
+            "{\"name\":\"${database.name}\",\"password\":\"${database.password}\"" +
+            ",\"salt\":${Json.encodeToString(salt)},\"data\":$jsonDatabase,\"index\":1}"
+    }
     @Test
     fun `dumpDatabase should serialize given Database`(){
-        val database = Database(
-                faker.name().toString(),
-                faker.lorem().sentence(),
-                salt,
-                getDatabaseMap(),
-        )
+        setupDatabaseAndJson()
         val actualJson = model.dumpDatabase(database)
-        val expectedDatabaseJson =
-            "{\"name\":\"${database.name}\",\"password\":\"${database.password}\"" +
-            ",\"salt\":${Json.encodeToString(salt)},\"data\":$jsonDatabase}"
-        assertEquals(expectedDatabaseJson, actualJson)
+        assertEquals(databaseJson, actualJson)
     }
 
     @Test
     fun `loadDatabase should deserialize given database json string`(){
-        val database = Database(
-                faker.name().toString(),
-                faker.lorem().sentence(),
-                salt,
-                getDatabaseMap(),
-        )
-        val databaseJson =
-                "{\"name\":\"${database.name}\",\"password\":\"${database.password}\"" +
-                        ",\"salt\":${Json.encodeToString(salt)},\"data\":$jsonDatabase}"
-
+        setupDatabaseAndJson()
         val actualDatabase = model.loadDatabase(databaseJson)
         assertEquals(database.toString(), actualDatabase.toString())
     }
