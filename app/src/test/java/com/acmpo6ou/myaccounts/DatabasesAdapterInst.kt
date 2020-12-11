@@ -29,10 +29,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -133,6 +130,20 @@ class DatabasesAdapterInst {
         verify(presenter).closeSelected(1)
     }
 
+
+    @Test
+    fun `clicking on 'Close' should not call closeSelected when database isn't open`(){
+        // click on 3 dots to display popup menu
+        val dotsMenu = itemLayout?.findViewById<TextView>(R.id.dots_menu)
+        dotsMenu?.performClick()
+
+        // find the popup menu and click on `Close` item
+        val menu = ShadowPopupMenu.getLatestPopupMenu().menu
+        menu.performIdentifierAction(R.id.close_database_item, FLAG_ALWAYS_PERFORM_CLOSE)
+
+        verify(presenter, never()).closeSelected(0)
+    }
+
     @Test
     fun `clicking on 'Delete' should call deleteSelected`(){
         // click on 3 dots to display popup menu
@@ -171,5 +182,18 @@ class DatabasesAdapterInst {
 
         // verify that we called the appropriate method
         verify(presenter).editSelected(1)
+    }
+
+    @Test
+    fun `clicking on 'Edit' should not call editSelected when database isn't open`(){
+        // click on 3 dots to display popup menu
+        val dotsMenu = itemLayout?.findViewById<TextView>(R.id.dots_menu)
+        dotsMenu?.performClick()
+
+        // find the popup menu and click on `Edit` item
+        val menu = ShadowPopupMenu.getLatestPopupMenu().menu
+        menu.performIdentifierAction(R.id.edit_database_item, FLAG_ALWAYS_PERFORM_CLOSE)
+
+        verify(presenter, never()).editSelected(0)
     }
 }

@@ -19,13 +19,13 @@
 
 package com.acmpo6ou.myaccounts.ui
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabaseFragmentInter
@@ -70,6 +70,12 @@ class DatabasesAdapter(
         holder.menu.setOnClickListener { it ->
             val popup = PopupMenu(view.myContext, it)
             popup.inflate(R.menu.database_item_menu)
+
+            if(!database.isOpen){
+                popup.menu.findItem(R.id.edit_database_item).isEnabled = false
+                popup.menu.findItem(R.id.close_database_item).isEnabled = false
+            }
+
             popup.setOnMenuItemClickListener {
                 when(it.itemId){
                     R.id.close_database_item -> presenter.closeSelected(position)
