@@ -71,6 +71,7 @@ class DatabasesAdapter(
             val popup = PopupMenu(view.myContext, it)
             popup.inflate(R.menu.database_item_menu)
 
+            // if database isn't open then we can't edit or close it
             if(!database.isOpen){
                 popup.menu.findItem(R.id.edit_database_item).isEnabled = false
                 popup.menu.findItem(R.id.close_database_item).isEnabled = false
