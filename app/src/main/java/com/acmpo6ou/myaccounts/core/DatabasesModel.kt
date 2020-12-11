@@ -377,12 +377,12 @@ class DatabasesModel(private val SRC_DIR: String = "/storage/emulated/0/")
         }
         inputStream.close()
     }
-}
 
-fun dumpDatabase(database: Database): String{
-    return Json.encodeToString(database)
-}
+    fun dumpDatabase(database: Database): String{
+        return Json.encodeToString(database)
+    }
 
-fun loadDatabase(databaseJson: String): Database{
-    return Json.decodeFromString(databaseJson)
+    fun loadDatabase(databaseJson: String): Database{
+        return Json.decodeFromString(databaseJson)
+    }
 }

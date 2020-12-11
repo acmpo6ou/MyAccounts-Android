@@ -19,7 +19,9 @@
 
 package com.acmpo6ou.myaccounts
 
-import com.acmpo6ou.myaccounts.core.*
+import com.acmpo6ou.myaccounts.core.Account
+import com.acmpo6ou.myaccounts.core.Database
+import com.acmpo6ou.myaccounts.core.DatabasesModel
 import com.github.javafaker.Faker
 import com.macasaet.fernet.StringValidator
 import com.macasaet.fernet.Token
@@ -551,7 +553,7 @@ class DatabasesModelTests {
                 salt,
                 getDatabaseMap(),
         )
-        val actualJson = dumpDatabase(database)
+        val actualJson = model.dumpDatabase(database)
         val expectedDatabaseJson =
             "{\"name\":\"${database.name}\",\"password\":\"${database.password}\"" +
             ",\"salt\":${Json.encodeToString(salt)},\"data\":$jsonDatabase}"
@@ -570,7 +572,7 @@ class DatabasesModelTests {
                 "{\"name\":\"${database.name}\",\"password\":\"${database.password}\"" +
                         ",\"salt\":${Json.encodeToString(salt)},\"data\":$jsonDatabase}"
 
-        val actualDatabase = loadDatabase(databaseJson)
+        val actualDatabase = model.loadDatabase(databaseJson)
         assertEquals(database.toString(), actualDatabase.toString())
     }
 }
