@@ -22,6 +22,7 @@ package com.acmpo6ou.myaccounts
 import com.acmpo6ou.myaccounts.core.Account
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesModel
+import com.acmpo6ou.myaccounts.core.dumpDatabase
 import com.github.javafaker.Faker
 import com.macasaet.fernet.StringValidator
 import com.macasaet.fernet.Token
@@ -541,5 +542,18 @@ class DatabasesModelTests {
                 "src", // the only directory must be `src`
                 filesList.first()
         )
+    }
+
+    @Test
+    fun `dumpDatabase should serialize given Database`(){
+        val database = Database(
+                faker.name().toString(),
+                faker.lorem().sentence(),
+                salt,
+                getDatabaseMap(),
+        )
+        val actualJson = dumpDatabase(database)
+        val expectedDatabase = ""
+        assertEquals(expectedDatabase, actualJson)
     }
 }
