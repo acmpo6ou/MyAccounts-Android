@@ -379,10 +379,23 @@ class DatabasesModel(private val SRC_DIR: String = "/storage/emulated/0/")
         inputStream.close()
     }
 
+    // NOTE: 2 next methods are needed because of testable architecture, even though
+    // they both contain only one line of code
+    /**
+     * Used to serialise Database instance.
+     *
+     * @param[database] Database instance to serialise.
+     */
     fun dumpDatabase(database: Database): String{
         return Json.encodeToString(database)
     }
 
+
+    /**
+     * Used to deserialise database json string to Database instance.
+     *
+     * @param[databaseJson] database json string to deserialise.
+     */
     fun loadDatabase(databaseJson: String): Database{
         return Json.decodeFromString(databaseJson)
     }
