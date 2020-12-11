@@ -68,4 +68,7 @@ interface DatabasesModelInter{
     fun openDatabase(database: Database): Database
     fun exportDatabase(name: String, destination: String)
     fun deleteDatabase(name: String)
+
+    fun loadDatabase(databaseJson: String): Database
+    fun dumpDatabase(database: Database): String
 }

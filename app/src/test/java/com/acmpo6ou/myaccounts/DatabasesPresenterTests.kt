@@ -28,7 +28,6 @@ import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import org.mockito.ArgumentMatchers.anyMap
 import org.mockito.ArgumentMatchers.anyString
 import java.io.FileNotFoundException
 
@@ -204,9 +203,12 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
 
     @Test
     fun `openDatabase should call startDatabase passing database json if database is opened`(){
-        // mock model.dumps() to return fake serialized string
+        // mock model.dumpDatabase() to return fake serialized string
         val expectedJson = faker.lorem().sentence()
-        whenever(model.dumps(anyMap())).thenReturn(expectedJson)
+        val expectedDatabase = presenter.databases[1].copy()
+        expectedDatabase.index = 1
+        println(expectedDatabase)
+        whenever(model.dumpDatabase(any())).thenReturn(expectedJson)
 
         // second database is opened
         presenter.openDatabase(1)
@@ -216,4 +218,14 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
         verify(view, never()).navigateToOpen(1)
     }
 
+    @Test
+    fun `openDatabase should call dumpDatabase passing database with index property set`(){
+        // mock model.dumpDatabase() to return fake serialized string
+        val expectedDatabase = presenter.databases[1].copy()
+        expectedDatabase.index = 1
+
+        // second database is opened
+        presenter.openDatabase(1)
+        verify(model).dumpDatabase(expectedDatabase)
+    }
 }

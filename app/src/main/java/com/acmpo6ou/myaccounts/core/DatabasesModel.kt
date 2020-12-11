@@ -386,7 +386,7 @@ class DatabasesModel(private val SRC_DIR: String = "/storage/emulated/0/")
      *
      * @param[database] Database instance to serialise.
      */
-    fun dumpDatabase(database: Database): String{
+    override fun dumpDatabase(database: Database): String{
         return Json.encodeToString(database)
     }
 
@@ -396,7 +396,7 @@ class DatabasesModel(private val SRC_DIR: String = "/storage/emulated/0/")
      *
      * @param[databaseJson] database json string to deserialise.
      */
-    fun loadDatabase(databaseJson: String): Database{
+    override fun loadDatabase(databaseJson: String): Database{
         return Json.decodeFromString(databaseJson)
     }
 }

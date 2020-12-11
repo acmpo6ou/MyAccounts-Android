@@ -141,7 +141,9 @@ open class DatabasesPresenter(
      */
     override fun openDatabase(i: Int) {
         if(databases[i].isOpen){
-            val databaseJson = model.dumps(databases[i].data)
+            val database = databases[i].copy()
+            database.index = i
+            val databaseJson = model.dumpDatabase(database)
             view.startDatabase(databaseJson)
         }
         else {
