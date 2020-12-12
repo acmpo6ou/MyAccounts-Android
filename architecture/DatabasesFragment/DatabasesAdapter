@@ -25,9 +25,3 @@ Edit:   calls presenter.editSelected(i)
 Close:  calls presenter.closeDatabase(i) 
 
 * getItemCount - returns size of databases property
-
-* removeItem(name) - removes database by specified name
-0. searches for database by its name in `databases` property
-1. removes database from `databases` property
-2. notifyItemRemoved(index: Int)
-3. notifyItemRangeRemoved(startPosition: Int, itemCount: Int)

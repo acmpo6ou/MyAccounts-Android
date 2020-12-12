@@ -2,7 +2,6 @@ onCreate:
 * EXPORT_RC - request code used when exporting database
 
 * presenter - DatabasesPresenter
-* layoutManager - layout manager for DatabasesRecycler
 * adapter - DatabasesAdapter for DatabasesRecycler
 
 1. initializes DatabasesRecycler with corresponding LinearLayoutManager and
