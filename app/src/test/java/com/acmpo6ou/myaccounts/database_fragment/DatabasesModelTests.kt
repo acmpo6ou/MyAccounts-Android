@@ -17,11 +17,12 @@
  *
  */
 
-package com.acmpo6ou.myaccounts
+package com.acmpo6ou.myaccounts.database_fragment
 
 import com.acmpo6ou.myaccounts.core.Account
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesModel
+import com.acmpo6ou.myaccounts.getDatabaseMap
 import com.github.javafaker.Faker
 import com.macasaet.fernet.StringValidator
 import com.macasaet.fernet.Token

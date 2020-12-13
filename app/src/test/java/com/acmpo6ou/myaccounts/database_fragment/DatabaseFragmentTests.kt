@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts
+package com.acmpo6ou.myaccounts.database_fragment
 
 import android.app.Activity
 import android.content.Intent

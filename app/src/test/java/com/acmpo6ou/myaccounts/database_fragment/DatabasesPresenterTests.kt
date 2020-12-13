@@ -17,12 +17,13 @@
  *
  */
 
-package com.acmpo6ou.myaccounts
+package com.acmpo6ou.myaccounts.database_fragment
 
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabaseFragmentInter
 import com.acmpo6ou.myaccounts.core.DatabasesModelInter
 import com.acmpo6ou.myaccounts.core.DatabasesPresenter
+import com.acmpo6ou.myaccounts.getDatabaseMap
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.*

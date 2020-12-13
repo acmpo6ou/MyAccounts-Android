@@ -17,10 +17,11 @@
  *
  */
 
-package com.acmpo6ou.myaccounts
+package com.acmpo6ou.myaccounts.database_fragment
 
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
+import com.acmpo6ou.myaccounts.R
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
@@ -32,7 +33,7 @@ import java.io.FileNotFoundException
 import java.io.IOException
 
 @RunWith(RobolectricTestRunner::class)
-class DatabasesPresenterInst:DatabasesPresenterTest() {
+class DatabasesPresenterInst: DatabasesPresenterTest() {
     // get string resources
     val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     val resources = context.resources

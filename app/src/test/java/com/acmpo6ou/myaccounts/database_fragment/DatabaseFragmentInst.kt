@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts
+package com.acmpo6ou.myaccounts.database_fragment
 
 import android.app.Dialog
 import android.content.Context
@@ -35,9 +35,12 @@ import androidx.navigation.testing.TestNavHostController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
+import com.acmpo6ou.myaccounts.AccountsActivity
+import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesPresenter
 import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
+import com.acmpo6ou.myaccounts.findSnackbarTextView
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
 import com.acmpo6ou.myaccounts.ui.DatabaseFragmentDirections
 import com.github.javafaker.Faker
@@ -137,7 +140,7 @@ class DatabaseFragmentInstrumentation {
         assertEquals(
             "(+) FAB on DatabaseFragment doesn't navigate to CreateDatabaseFragment!",
             navController.currentDestination?.id,
-            R.id.createDatabaseFragment
+                R.id.createDatabaseFragment
         )
     }
 

@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts
+package com.acmpo6ou.myaccounts.database_fragment
 
 import android.view.Menu.FLAG_ALWAYS_PERFORM_CLOSE
 import android.view.View
@@ -26,6 +26,7 @@ import android.widget.TextView
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.recyclerview.widget.RecyclerView
+import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
@@ -101,7 +102,7 @@ class DatabasesAdapterInst {
         val itemLock = itemLayout?.findViewById<ImageView>(R.id.itemIcon)
         assertEquals(
     "database item has incorrect lock icon when isOpen of Database is false!",
-            R.drawable.ic_locked,
+                R.drawable.ic_locked,
             itemLock?.tag,
         )
     }
