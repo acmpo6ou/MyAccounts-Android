@@ -8,6 +8,7 @@ setNavigationItemSelectedListener on navigation view
 * override onNavigationItemSelected(item: MenuItem)
 using when(item.itemId) check the id and call appropriate MainPresenter method:
 `Import database` - presenter.importSelected()
+`Check for updates` - presenter.checkUpdatesSelected()
 else -> true
 
 * importDialog - displays dialog to chose database tar file to import
@@ -20,3 +21,5 @@ else -> true
 - if resultCode is Activity.RESULT_OK i.e. user did chose tar file to import - proceed
 - call presenter.checkTarFile(location)
 where location is data retrieved from uri resultData
+
+* noUpdates - displays a snackbar with message `No updates available.`
