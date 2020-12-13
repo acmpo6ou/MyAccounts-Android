@@ -66,4 +66,6 @@ class MainActivity : AppCompatActivity() {
             super.onBackPressed()
         }
     }
+
+    fun noUpdates(){}
 }

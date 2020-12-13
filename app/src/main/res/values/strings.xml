@@ -95,4 +95,5 @@
     <string name="export_file_not_found_details">Every database must have .db and .bin files, it seems that database that you want to export doesn\'t have them.</string>
     <string name="io_error">The reason is any i/o related error such as disk is low on space.</string>
     <string name="delete_error_title">Error deleting database</string>
+    <string name="no_updates">No updates available.</string>
 </resources>
