@@ -25,7 +25,7 @@ android {
 
     defaultConfig {
         applicationId "com.acmpo6ou.myaccounts"
-        minSdkVersion 24
+        minSdkVersion 25
         targetSdkVersion 29
         versionCode 1
         versionName "0.1.0"
