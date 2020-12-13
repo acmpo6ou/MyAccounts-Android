@@ -23,6 +23,7 @@ import android.content.Context
 import android.os.Looper
 import android.view.View
 import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
@@ -46,7 +47,7 @@ class MainActivityInst {
 
     @Before
     fun setup(){
-        mainScenario = launchActivity<MainActivity>()
+        mainScenario = launch(MainActivity::class.java)
     }
     @Test
     fun `showSuccess should display snackbar`(){
