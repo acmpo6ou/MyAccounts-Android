@@ -23,4 +23,8 @@ class MainPresenter: MainPresenterInter {
     override fun importSelected() {
 
     }
+
+    override fun checkUpdatesSelected() {
+
+    }
 }

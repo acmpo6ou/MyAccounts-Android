@@ -24,19 +24,36 @@ import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MainPresenterInter
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import org.junit.Before
 import org.junit.Test
 import org.robolectric.fakes.RoboMenuItem
 
 class MainActivityTests {
+    private lateinit var activity: MainActivity
+    private lateinit var presenter: MainPresenterInter
+
+    @Before
+    fun setup(){
+        activity = MainActivity()
+
+        // mock presenter
+        presenter = mock()
+        activity.presenter = presenter
+    }
+
     @Test
     fun `import database should call presenter importSelected`(){
-        val activity = MainActivity()
-        val presenter: MainPresenterInter = mock()
-        activity.presenter = presenter
-
         // simulate selecting `Import database` in navigation drawer layout
         activity.onNavigationItemSelected(RoboMenuItem(R.id.import_database))
 
         verify(presenter).importSelected()
+    }
+
+    @Test
+    fun `check for updates should call presenter checkUpdatesSelected`(){
+        // simulate selecting `Check for updates` in navigation drawer layout
+        activity.onNavigationItemSelected(RoboMenuItem(R.id.check_for_updates))
+
+        verify(presenter).checkUpdatesSelected()
     }
 }

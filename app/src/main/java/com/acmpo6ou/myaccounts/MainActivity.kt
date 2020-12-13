@@ -68,6 +68,7 @@ class MainActivity : AppCompatActivity(),
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         presenter.importSelected()
+        presenter.checkUpdatesSelected()
         return true
     }
 
