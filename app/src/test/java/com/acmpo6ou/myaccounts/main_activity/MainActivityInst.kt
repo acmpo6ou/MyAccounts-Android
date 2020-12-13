@@ -49,8 +49,9 @@ class MainActivityInst {
     fun setup(){
         mainScenario = launch(MainActivity::class.java)
     }
+
     @Test
-    fun `showSuccess should display snackbar`(){
+    fun `noUpdates should display snackbar`(){
         mainScenario.onActivity {
             // call noUpdates and get the snackbar
             it.noUpdates()
@@ -72,5 +73,4 @@ class MainActivityInst {
             )
         }
     }
-
 }

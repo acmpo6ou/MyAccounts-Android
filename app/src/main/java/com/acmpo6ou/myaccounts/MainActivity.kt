@@ -30,7 +30,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_database_list.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -67,5 +69,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun noUpdates(){}
+    fun noUpdates(){
+        Snackbar.make(
+            databaseCoordinator,
+            R.string.no_updates,
+            Snackbar.LENGTH_LONG
+        ).show()
+    }
 }
