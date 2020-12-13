@@ -27,4 +27,16 @@ class MainPresenter: MainPresenterInter {
     override fun checkUpdatesSelected() {
 
     }
+
+    override fun navigateToChangelog() {
+
+    }
+
+    override fun navigateToSettings() {
+
+    }
+
+    override fun navigateToAbout() {
+
+    }
 }

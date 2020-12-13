@@ -69,7 +69,8 @@ class MainActivity : AppCompatActivity(),
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.import_database -> presenter.importSelected()
-            else -> presenter.checkUpdatesSelected()
+            R.id.check_for_updates -> presenter.checkUpdatesSelected()
+            else -> presenter.navigateToChangelog()
         }
         return true
     }

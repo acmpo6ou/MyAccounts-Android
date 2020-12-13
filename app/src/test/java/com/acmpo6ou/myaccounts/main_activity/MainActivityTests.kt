@@ -51,6 +51,7 @@ class MainActivityTests {
 
         // all other methods should not be called
         verify(presenter, never()).checkUpdatesSelected()
+        verify(presenter, never()).navigateToChangelog()
     }
 
     @Test
@@ -62,5 +63,18 @@ class MainActivityTests {
 
         // all other methods should not be called
         verify(presenter, never()).importSelected()
+        verify(presenter, never()).navigateToChangelog()
+    }
+
+    @Test
+    fun `changelog should call presenter navigateToChangelog`(){
+        // simulate selecting `Changelog` in navigation drawer layout
+        activity.onNavigationItemSelected(RoboMenuItem(R.id.changelog))
+
+        verify(presenter).navigateToChangelog()
+
+        // all other methods should not be called
+        verify(presenter, never()).importSelected()
+        verify(presenter, never()).checkUpdatesSelected()
     }
 }
