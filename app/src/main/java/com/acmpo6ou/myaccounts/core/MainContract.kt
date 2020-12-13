@@ -19,4 +19,6 @@
 
 package com.acmpo6ou.myaccounts.core
 
-
+interface MainPresenterInter{
+    fun importSelected()
+}
