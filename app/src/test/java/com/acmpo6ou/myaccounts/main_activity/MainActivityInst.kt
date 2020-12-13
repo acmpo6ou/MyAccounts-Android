@@ -27,10 +27,7 @@ import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.MainPresenterInter
 import com.acmpo6ou.myaccounts.findSnackbarTextView
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -38,7 +35,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows
 import org.robolectric.annotation.LooperMode
-import org.robolectric.fakes.RoboMenuItem
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
@@ -75,17 +71,6 @@ class MainActivityInst {
                     noUpdatesMsg,
                     snackbar?.text
             )
-        }
-    }
-
-    @Test
-    fun `import database should call presenter importSelected`(){
-        mainScenario.onActivity {
-            // simulate selecting `Import database` in navigation drawer layout
-            val presenter: MainPresenterInter = mock()
-            it.onNavigationItemSelected(RoboMenuItem(R.id.import_database))
-
-            verify(presenter).importSelected()
         }
     }
 }

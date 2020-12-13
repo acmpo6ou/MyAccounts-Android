@@ -19,5 +19,8 @@
 
 package com.acmpo6ou.myaccounts.core
 
-class MainPresenter {
+class MainPresenter: MainPresenterInter {
+    override fun importSelected() {
+
+    }
 }
