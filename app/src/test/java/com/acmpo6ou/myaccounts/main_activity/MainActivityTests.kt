@@ -23,6 +23,7 @@ import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MainPresenterInter
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
@@ -47,6 +48,9 @@ class MainActivityTests {
         activity.onNavigationItemSelected(RoboMenuItem(R.id.import_database))
 
         verify(presenter).importSelected()
+
+        // all other methods should not be called
+        verify(presenter, never()).checkUpdatesSelected()
     }
 
     @Test
@@ -55,5 +59,8 @@ class MainActivityTests {
         activity.onNavigationItemSelected(RoboMenuItem(R.id.check_for_updates))
 
         verify(presenter).checkUpdatesSelected()
+
+        // all other methods should not be called
+        verify(presenter, never()).importSelected()
     }
 }
