@@ -4,6 +4,9 @@ init
 fixSrcFolder()
 autocheckForUpdates()
 
+* fixSrcFolder - checks whether SRC_DIR (/storage/emulated/0/) does exists
+if it's not, create it
+
 * importSelected - call view.importDialog
 
 * checkTarFile(location) - checks given database tar file on validity
