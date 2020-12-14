@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.main_activity
 
 import android.content.Context
+import android.content.Intent
 import android.os.Looper
 import android.view.View
 import androidx.test.core.app.ActivityScenario
@@ -33,6 +34,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows
 import org.robolectric.annotation.LooperMode
 
@@ -72,5 +74,34 @@ class MainActivityInst {
                     snackbar?.text
             )
         }
+    }
+
+    @Test
+    fun `importDialog should start appropriate intent`(){
+        // create expected intent
+        val expectedIntent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+        expectedIntent.addCategory(Intent.CATEGORY_OPENABLE)
+        expectedIntent.type = "application/x-tar"
+
+        // call importDialog
+        mainScenario.onActivity { it.importDialog() }
+
+        // check all intent properties
+        val actual: Intent = Shadows.shadowOf(RuntimeEnvironment.application).nextStartedActivity
+        Assert.assertEquals(
+                "importDialog: incorrect intent action!",
+                expectedIntent.action,
+                actual.action
+        )
+        Assert.assertEquals(
+                "importDialog: incorrect intent category!",
+                expectedIntent.categories,
+                actual.categories
+        )
+        Assert.assertEquals(
+                "importDialog: incorrect intent type!",
+                expectedIntent.type,
+                actual.type
+        )
     }
 }
