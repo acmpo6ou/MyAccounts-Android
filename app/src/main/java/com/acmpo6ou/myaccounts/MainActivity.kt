@@ -71,6 +71,8 @@ class MainActivity : AppCompatActivity(),
             R.id.import_database -> presenter.importSelected()
             R.id.check_for_updates -> presenter.checkUpdatesSelected()
             R.id.changelog -> presenter.navigateToChangelog()
+            R.id.settings -> presenter.navigateToSettings()
+            R.id.about -> presenter.navigateToAbout()
         }
         return true
     }

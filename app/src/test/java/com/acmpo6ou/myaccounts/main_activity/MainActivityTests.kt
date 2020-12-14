@@ -43,7 +43,7 @@ class MainActivityTests {
     }
 
     @Test
-    fun `import database should call presenter importSelected`(){
+    fun `'Import database' should call presenter importSelected`(){
         // simulate selecting `Import database` in navigation drawer layout
         activity.onNavigationItemSelected(RoboMenuItem(R.id.import_database))
 
@@ -54,7 +54,7 @@ class MainActivityTests {
     }
 
     @Test
-    fun `check for updates should call presenter checkUpdatesSelected`(){
+    fun `'Check for updates' should call presenter checkUpdatesSelected`(){
         // simulate selecting `Check for updates` in navigation drawer layout
         activity.onNavigationItemSelected(RoboMenuItem(R.id.check_for_updates))
 
@@ -65,11 +65,33 @@ class MainActivityTests {
     }
 
     @Test
-    fun `changelog should call presenter navigateToChangelog`(){
+    fun `'Changelog' should call presenter navigateToChangelog`(){
         // simulate selecting `Changelog` in navigation drawer layout
         activity.onNavigationItemSelected(RoboMenuItem(R.id.changelog))
 
         verify(presenter).navigateToChangelog()
+
+        // all other methods should not be called
+        verifyNoMoreInteractions(presenter)
+    }
+
+    @Test
+    fun `'Settings' should call presenter navigateToSettings`(){
+        // simulate selecting `Settings` in navigation drawer layout
+        activity.onNavigationItemSelected(RoboMenuItem(R.id.settings))
+
+        verify(presenter).navigateToSettings()
+
+        // all other methods should not be called
+        verifyNoMoreInteractions(presenter)
+    }
+
+    @Test
+    fun `'About' should call presenter navigateToAbout`(){
+        // simulate selecting `About` in navigation drawer layout
+        activity.onNavigationItemSelected(RoboMenuItem(R.id.about))
+
+        verify(presenter).navigateToAbout()
 
         // all other methods should not be called
         verifyNoMoreInteractions(presenter)
