@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity(),
         when(item.itemId) {
             R.id.import_database -> presenter.importSelected()
             R.id.check_for_updates -> presenter.checkUpdatesSelected()
-            else -> presenter.navigateToChangelog()
+            R.id.changelog -> presenter.navigateToChangelog()
         }
         return true
     }

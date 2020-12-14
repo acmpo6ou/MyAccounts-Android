@@ -23,8 +23,8 @@ import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MainPresenterInter
 import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import org.junit.Before
 import org.junit.Test
 import org.robolectric.fakes.RoboMenuItem
@@ -50,8 +50,7 @@ class MainActivityTests {
         verify(presenter).importSelected()
 
         // all other methods should not be called
-        verify(presenter, never()).checkUpdatesSelected()
-        verify(presenter, never()).navigateToChangelog()
+        verifyNoMoreInteractions(presenter)
     }
 
     @Test
@@ -62,8 +61,7 @@ class MainActivityTests {
         verify(presenter).checkUpdatesSelected()
 
         // all other methods should not be called
-        verify(presenter, never()).importSelected()
-        verify(presenter, never()).navigateToChangelog()
+        verifyNoMoreInteractions(presenter)
     }
 
     @Test
@@ -74,7 +72,6 @@ class MainActivityTests {
         verify(presenter).navigateToChangelog()
 
         // all other methods should not be called
-        verify(presenter, never()).importSelected()
-        verify(presenter, never()).checkUpdatesSelected()
+        verifyNoMoreInteractions(presenter)
     }
 }
