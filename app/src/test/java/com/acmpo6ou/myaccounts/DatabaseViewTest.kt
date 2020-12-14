@@ -27,8 +27,9 @@ import com.nhaarman.mockitokotlin2.whenever
 
 open class DatabaseViewTest {
     lateinit var intent: Intent
-    private val faker = Faker()
+    val faker = Faker()
     val location: String = faker.file().fileName()
+    val OTHER_RC = faker.number().digit().toInt()
 
     fun mockIntent(){
         intent = mock()

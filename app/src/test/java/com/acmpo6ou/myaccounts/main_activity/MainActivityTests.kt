@@ -25,6 +25,7 @@ import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MainPresenterInter
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import org.junit.Before
@@ -104,8 +105,24 @@ class MainActivityTests: DatabaseViewTest() {
     fun `onActivityResult should call checkTarFile when code is IMPORT_RC`(){
         // call onActivityResult passing import request code, result ok and intent with
         // location where to import database
-        activity.onActivityResult(activity.IMPORT_RQ, Activity.RESULT_OK, intent)
+        activity.onActivityResult(activity.IMPORT_RC, Activity.RESULT_OK, intent)
 
         verify(presenter).checkTarFile(location)
+    }
+
+    @Test
+    fun `onActivityResult should not call checkTarFile when code is other than EXPORT_RC`(){
+        // call onActivityResult passing other request code, result ok and intent
+        activity.onActivityResult(OTHER_RC, Activity.RESULT_OK, intent)
+
+        verify(presenter, never()).checkTarFile(location)
+    }
+
+    @Test
+    fun `onActivityResult should not call checkTarFile when result code is canceled`(){
+        // call onActivityResult passing other request code, result canceled and intent
+        activity.onActivityResult(activity.IMPORT_RC, Activity.RESULT_CANCELED, intent)
+
+        verify(presenter, never()).checkTarFile(location)
     }
 }

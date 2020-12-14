@@ -56,7 +56,7 @@ class DatabaseFragmentTests: DatabaseViewTest() {
     @Test
     fun `onActivityResult should not call exportDatabase when code is other than EXPORT_RC`(){
         // call onActivityResult passing other request code, result ok and intent
-        fragment.onActivityResult(100, Activity.RESULT_OK, intent)
+        fragment.onActivityResult(OTHER_RC, Activity.RESULT_OK, intent)
 
         verify(presenter, never()).exportDatabase(location)
     }

@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
@@ -41,7 +42,7 @@ import kotlinx.android.synthetic.main.fragment_database_list.*
 class MainActivity : AppCompatActivity(),
         NavigationView.OnNavigationItemSelectedListener {
 
-    val IMPORT_RQ = 202
+    val IMPORT_RC = 202
     private lateinit var appBarConfiguration: AppBarConfiguration
     lateinit var presenter: MainPresenterInter
 
@@ -99,6 +100,13 @@ class MainActivity : AppCompatActivity(),
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?){
         super.onActivityResult(requestCode, resultCode, resultData)
+        // if activity was canceled don't do anything
+        if (resultCode != Activity.RESULT_OK){
+            return
+        }
 
+        when(requestCode) {
+            IMPORT_RC -> presenter.checkTarFile(resultData?.data.toString())
+        }
     }
 }
