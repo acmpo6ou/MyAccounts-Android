@@ -104,9 +104,11 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
     override fun exportDialog(i: Int) {
         val name = databases[i].name
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.type = "application/x-tar"
-        intent.putExtra(Intent.EXTRA_TITLE, "$name.tar")
+        intent.apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "application/x-tar"
+            putExtra(Intent.EXTRA_TITLE, "$name.tar")
+        }
         startActivityForResult(intent, EXPORT_RC)
     }
 
