@@ -19,6 +19,8 @@
 
 package com.acmpo6ou.myaccounts.main_activity
 
+import android.app.Activity
+import com.acmpo6ou.myaccounts.DatabaseViewTest
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MainPresenterInter
@@ -29,7 +31,7 @@ import org.junit.Before
 import org.junit.Test
 import org.robolectric.fakes.RoboMenuItem
 
-class MainActivityTests {
+class MainActivityTests: DatabaseViewTest() {
     private lateinit var activity: MainActivity
     private lateinit var presenter: MainPresenterInter
 
@@ -37,8 +39,9 @@ class MainActivityTests {
     fun setup(){
         activity = MainActivity()
 
-        // mock presenter
+        // mock presenter and intent
         presenter = mock()
+        mockIntent()
         activity.presenter = presenter
     }
 
@@ -95,5 +98,14 @@ class MainActivityTests {
 
         // all other methods should not be called
         verifyNoMoreInteractions(presenter)
+    }
+
+    @Test
+    fun `onActivityResult should call checkTarFile when code is IMPORT_RC`(){
+        // call onActivityResult passing import request code, result ok and intent with
+        // location where to import database
+        activity.onActivityResult(activity.IMPORT_RQ, Activity.RESULT_OK, intent)
+
+        verify(presenter).checkTarFile(location)
     }
 }

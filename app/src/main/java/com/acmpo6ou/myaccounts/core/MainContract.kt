@@ -22,7 +22,10 @@ package com.acmpo6ou.myaccounts.core
 interface MainPresenterInter{
     fun importSelected()
     fun checkUpdatesSelected()
+
     fun navigateToChangelog()
     fun navigateToSettings()
     fun navigateToAbout()
+
+    fun checkTarFile(location: String)
 }

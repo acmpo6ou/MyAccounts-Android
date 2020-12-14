@@ -39,4 +39,8 @@ class MainPresenter: MainPresenterInter {
     override fun navigateToAbout() {
 
     }
+
+    override fun checkTarFile(location: String) {
+
+    }
 }

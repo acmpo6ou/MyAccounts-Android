@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -40,6 +41,7 @@ import kotlinx.android.synthetic.main.fragment_database_list.*
 class MainActivity : AppCompatActivity(),
         NavigationView.OnNavigationItemSelectedListener {
 
+    val IMPORT_RQ = 202
     private lateinit var appBarConfiguration: AppBarConfiguration
     lateinit var presenter: MainPresenterInter
 
@@ -93,5 +95,10 @@ class MainActivity : AppCompatActivity(),
             R.string.no_updates,
             Snackbar.LENGTH_LONG
         ).show()
+    }
+
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?){
+        super.onActivityResult(requestCode, resultCode, resultData)
+
     }
 }
