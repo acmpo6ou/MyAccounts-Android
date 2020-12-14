@@ -213,13 +213,6 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
         startActivity(intent)
     }
 
-    /**
-     * Handles various dialog results.
-     *
-     * @param[requestCode] the code of operation being handled.
-     * @param[resultCode] represents whether the operation was actually performed or canceled.
-     * @param[data] data needed for operation handling.
-     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         // if activity was canceled don't do anything
