@@ -20,26 +20,24 @@
 package com.acmpo6ou.myaccounts.database_fragment
 
 import android.app.Activity
-import android.content.Intent
-import android.net.Uri
-import com.acmpo6ou.myaccounts.core.*
+import com.acmpo6ou.myaccounts.DatabaseViewTest
+import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
-import com.nhaarman.mockitokotlin2.*
-import org.junit.*
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
+import org.junit.Before
+import org.junit.Test
 
-class DatabaseFragmentTests {
+class DatabaseFragmentTests: DatabaseViewTest() {
     lateinit var fragment: DatabaseFragment
-    lateinit var intent: Intent
     lateinit var presenter: DatabasesPresenterInter
 
     @Before
     fun setUp(){
         // mock presenter and intent with uri
         presenter = mock()
-        intent = mock()
-        val uri = mock<Uri>()
-        whenever(uri.toString()).thenReturn("location")
-        whenever(intent.data).thenReturn(uri)
+        mockIntent()
 
         // setup fragment with mocked adapter and presenter
         fragment = DatabaseFragment()
@@ -52,7 +50,7 @@ class DatabaseFragmentTests {
         // location where to export database
         fragment.onActivityResult(fragment.EXPORT_RC, Activity.RESULT_OK, intent)
 
-        verify(presenter).exportDatabase(eq("location"))
+        verify(presenter).exportDatabase(location)
     }
 
     @Test
@@ -60,7 +58,7 @@ class DatabaseFragmentTests {
         // call onActivityResult passing other request code, result ok and intent
         fragment.onActivityResult(100, Activity.RESULT_OK, intent)
 
-        verify(presenter, never()).exportDatabase(eq("location"))
+        verify(presenter, never()).exportDatabase(location)
     }
 
     @Test
@@ -68,6 +66,6 @@ class DatabaseFragmentTests {
         // call onActivityResult passing other request code, result canceled and intent
         fragment.onActivityResult(fragment.EXPORT_RC, Activity.RESULT_CANCELED, intent)
 
-        verify(presenter, never()).exportDatabase(eq("location"))
+        verify(presenter, never()).exportDatabase(location)
     }
 }
