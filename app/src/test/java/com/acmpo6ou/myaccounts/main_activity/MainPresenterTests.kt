@@ -17,19 +17,28 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.core
+package com.acmpo6ou.myaccounts.main_activity
 
-interface MainPresenterInter{
-    fun importSelected()
-    fun checkUpdatesSelected()
+import com.acmpo6ou.myaccounts.core.MainActivityInter
+import com.acmpo6ou.myaccounts.core.MainPresenter
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import org.junit.Before
+import org.junit.Test
 
-    fun navigateToChangelog()
-    fun navigateToSettings()
-    fun navigateToAbout()
+class MainPresenterTests {
+    lateinit var presenter: MainPresenter
+    lateinit var view: MainActivityInter
 
-    fun checkTarFile(location: String)
-}
+    @Before
+    fun setup(){
+        view = mock()
+        presenter = MainPresenter(view)
+    }
 
-interface MainActivityInter{
-    fun importDialog()
+    @Test
+    fun `importSelected should call view importDialog`(){
+        presenter.importSelected()
+        verify(view).importDialog()
+    }
 }

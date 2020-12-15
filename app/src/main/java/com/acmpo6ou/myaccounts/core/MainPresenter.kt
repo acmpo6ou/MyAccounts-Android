@@ -19,9 +19,23 @@
 
 package com.acmpo6ou.myaccounts.core
 
-class MainPresenter: MainPresenterInter {
-    override fun importSelected() {
+open class MainPresenter(
+        var view: MainActivityInter
+): MainPresenterInter {
 
+    init{
+        fixSrcFolder()
+        autocheckForUpdates()
+    }
+
+    private fun autocheckForUpdates() {
+
+    }
+
+    private fun fixSrcFolder(){}
+
+    override fun importSelected() {
+        view.importDialog()
     }
 
     override fun checkUpdatesSelected() {

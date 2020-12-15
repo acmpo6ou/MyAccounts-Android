@@ -31,6 +31,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.acmpo6ou.myaccounts.core.MainActivityInter
 import com.acmpo6ou.myaccounts.core.MainPresenter
 import com.acmpo6ou.myaccounts.core.MainPresenterInter
 import com.google.android.material.navigation.NavigationView
@@ -39,7 +40,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_database_list.*
 
 class MainActivity : AppCompatActivity(),
-        NavigationView.OnNavigationItemSelectedListener {
+        NavigationView.OnNavigationItemSelectedListener, MainActivityInter {
 
     val IMPORT_RC = 202
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -49,7 +50,7 @@ class MainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        presenter = MainPresenter()
+        presenter = MainPresenter(this)
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -114,7 +115,7 @@ class MainActivity : AppCompatActivity(),
      * Starts intent with import request code. Shows dialog to chose location using Storage
      * Access framework.
      */
-    fun importDialog() {
+    override fun importDialog() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         intent.apply {
             addCategory(Intent.CATEGORY_OPENABLE)
