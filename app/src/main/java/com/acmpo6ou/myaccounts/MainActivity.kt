@@ -109,7 +109,11 @@ class MainActivity : AppCompatActivity(),
     }
 
     fun importDialog() {
-        val intent = Intent()
-        startActivityForResult(intent, 12321)
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+        intent.apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "application/x-tar"
+        }
+        startActivityForResult(intent, IMPORT_RC)
     }
 }
