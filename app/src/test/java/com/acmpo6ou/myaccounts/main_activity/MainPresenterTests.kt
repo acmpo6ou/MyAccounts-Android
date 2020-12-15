@@ -21,24 +21,45 @@ package com.acmpo6ou.myaccounts.main_activity
 
 import com.acmpo6ou.myaccounts.core.MainActivityInter
 import com.acmpo6ou.myaccounts.core.MainPresenter
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
 
 class MainPresenterTests {
     lateinit var presenter: MainPresenter
+    lateinit var spyPresenter: MainPresenter
     lateinit var view: MainActivityInter
 
     @Before
     fun setup(){
         view = mock()
         presenter = MainPresenter(view)
+        spyPresenter = spy(presenter)
     }
 
     @Test
     fun `importSelected should call view importDialog`(){
         presenter.importSelected()
         verify(view).importDialog()
+    }
+
+    @Test
+    fun `checkUpdatesSelected should call view noUpdates when checkForUpdates returns false`(){
+        doReturn(false).`when`(spyPresenter).checkForUpdates()
+        spyPresenter.checkUpdatesSelected()
+
+        // verify that only noUpdates was called and not startUpdatesActivity
+        verify(view).noUpdates()
+        verify(view, never()).startUpdatesActivity()
+    }
+
+    @Test
+    fun `checkUpdatesSelected should call view startUpdatesActivity when checkForUpdates returns true`(){
+        doReturn(true).`when`(spyPresenter).checkForUpdates()
+        spyPresenter.checkUpdatesSelected()
+
+        // verify that only startUpdatesActivity was called and not noUpdates
+        verify(view).startUpdatesActivity()
+        verify(view, never()).noUpdates()
     }
 }

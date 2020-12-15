@@ -89,12 +89,16 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    fun noUpdates(){
+    override fun noUpdates(){
         Snackbar.make(
             databaseCoordinator,
             R.string.no_updates,
             Snackbar.LENGTH_LONG
         ).show()
+    }
+
+    override fun startUpdatesActivity() {
+
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?){

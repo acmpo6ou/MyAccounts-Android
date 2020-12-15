@@ -39,7 +39,12 @@ open class MainPresenter(
     }
 
     override fun checkUpdatesSelected() {
-
+        if(checkForUpdates()) {
+            view.startUpdatesActivity()
+        }
+        else{
+            view.noUpdates()
+        }
     }
 
     override fun navigateToChangelog() {
@@ -56,5 +61,9 @@ open class MainPresenter(
 
     override fun checkTarFile(location: String) {
 
+    }
+
+    override fun checkForUpdates(): Boolean{
+        return false
     }
 }

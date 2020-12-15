@@ -28,8 +28,11 @@ interface MainPresenterInter{
     fun navigateToAbout()
 
     fun checkTarFile(location: String)
+    fun checkForUpdates(): Boolean
 }
 
 interface MainActivityInter{
     fun importDialog()
+    fun noUpdates()
+    fun startUpdatesActivity()
 }
