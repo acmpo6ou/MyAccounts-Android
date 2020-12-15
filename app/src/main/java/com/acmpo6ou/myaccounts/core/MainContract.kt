@@ -29,6 +29,7 @@ interface MainPresenterInter{
 
     fun checkTarFile(location: String)
     fun checkForUpdates(): Boolean
+    fun isTimeToUpdate(): Boolean
 }
 
 interface MainActivityInter{

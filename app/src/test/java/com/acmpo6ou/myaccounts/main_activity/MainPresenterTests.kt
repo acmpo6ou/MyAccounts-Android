@@ -62,4 +62,18 @@ class MainPresenterTests {
         verify(view).startUpdatesActivity()
         verify(view, never()).noUpdates()
     }
+
+    @Test
+    fun `autocheckForUpdates should call checkUpdatesSelected`(){
+        doReturn(true).whenever(spyPresenter).isTimeToUpdate()
+        spyPresenter.autocheckForUpdates()
+        verify(spyPresenter).checkUpdatesSelected()
+    }
+
+    @Test
+    fun `autocheckForUpdates should not call checkUpdatesSelected`(){
+        doReturn(false).whenever(spyPresenter).isTimeToUpdate()
+        spyPresenter.autocheckForUpdates()
+        verify(spyPresenter, never()).checkUpdatesSelected()
+    }
 }

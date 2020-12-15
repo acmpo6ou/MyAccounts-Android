@@ -28,8 +28,10 @@ open class MainPresenter(
         autocheckForUpdates()
     }
 
-    private fun autocheckForUpdates() {
-
+    fun autocheckForUpdates() {
+        if(isTimeToUpdate()) {
+            checkUpdatesSelected()
+        }
     }
 
     private fun fixSrcFolder(){}
@@ -64,6 +66,10 @@ open class MainPresenter(
     }
 
     override fun checkForUpdates(): Boolean{
+        return false
+    }
+
+    override fun isTimeToUpdate(): Boolean {
         return false
     }
 }
