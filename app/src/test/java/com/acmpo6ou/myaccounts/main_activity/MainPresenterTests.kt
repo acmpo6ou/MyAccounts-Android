@@ -44,7 +44,7 @@ class MainPresenterTests {
     }
 
     @Test
-    fun `checkUpdatesSelected should call view noUpdates when checkForUpdates returns false`(){
+    fun `checkUpdatesSelected should call noUpdates`(){
         doReturn(false).`when`(spyPresenter).checkForUpdates()
         spyPresenter.checkUpdatesSelected()
 
@@ -54,7 +54,7 @@ class MainPresenterTests {
     }
 
     @Test
-    fun `checkUpdatesSelected should call view startUpdatesActivity when checkForUpdates returns true`(){
+    fun `checkUpdatesSelected should call startUpdatesActivity`(){
         doReturn(true).`when`(spyPresenter).checkForUpdates()
         spyPresenter.checkUpdatesSelected()
 
