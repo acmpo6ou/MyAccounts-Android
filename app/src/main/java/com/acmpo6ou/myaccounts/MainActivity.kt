@@ -108,6 +108,12 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
+    /**
+     * Used to display import dialog where user can chose database that he wants to import.
+     *
+     * Starts intent with import request code. Shows dialog to chose location using Storage
+     * Access framework.
+     */
     fun importDialog() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         intent.apply {
