@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity(),
             R.id.settings -> presenter.navigateToSettings()
             R.id.about -> presenter.navigateToAbout()
         }
-        return true
+        return false
     }
 
     override fun onBackPressed() {
