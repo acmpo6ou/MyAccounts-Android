@@ -22,6 +22,7 @@ package com.acmpo6ou.myaccounts.core
 open class MainPresenter(
         var view: MainActivityInter
 ): MainPresenterInter {
+    var model: MainModelInter = MainModel()
 
     init{
         fixSrcFolder()

@@ -34,6 +34,12 @@ interface MainPresenterInter{
 
 interface MainActivityInter{
     fun importDialog()
-    fun noUpdates()
     fun startUpdatesActivity()
+
+    fun noUpdates()
+    fun showError(title: String, details: String)
+}
+
+interface MainModelInter{
+    fun countFiles(location: String): Int
 }

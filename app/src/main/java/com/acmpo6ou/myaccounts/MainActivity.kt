@@ -96,6 +96,10 @@ class MainActivity : AppCompatActivity(),
         ).show()
     }
 
+    override fun showError(title: String, details: String) {
+
+    }
+
     override fun startUpdatesActivity() {
 
     }

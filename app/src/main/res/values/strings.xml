@@ -96,4 +96,6 @@
     <string name="io_error">The reason is any i/o related error such as disk is low on space.</string>
     <string name="delete_error_title">Error deleting database</string>
     <string name="no_updates">No updates available.</string>
+    <string name="import_error_title">Error importing tar file</string>
+    <string name="import_2_files">Your tar file should contain exactly 2 files in it: .db and .bin</string>
 </resources>

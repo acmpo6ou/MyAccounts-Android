@@ -19,5 +19,8 @@
 
 package com.acmpo6ou.myaccounts.core
 
-class MainModel {
+class MainModel: MainModelInter {
+    override fun countFiles(location: String): Int {
+        return 0
+    }
 }
