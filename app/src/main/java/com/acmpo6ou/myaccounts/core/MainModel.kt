@@ -20,6 +20,12 @@
 package com.acmpo6ou.myaccounts.core
 
 class MainModel: MainModelInter {
+    /**
+     * This method counts number of files that present in given tar file.
+     *
+     * @param[location] path to tar file.
+     * @return number of counted files in tar file.
+     */
     override fun countFiles(location: String): Int {
         return 0
     }
