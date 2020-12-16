@@ -24,7 +24,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -37,6 +36,7 @@ import com.acmpo6ou.myaccounts.core.MainPresenterInter
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_database_list.*
 
 class MainActivity : AppCompatActivity(),
@@ -52,9 +52,7 @@ class MainActivity : AppCompatActivity(),
 
         presenter = MainPresenter(this)
 
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-
         val navController = findNavController(R.id.nav_host_fragment)
 
         appBarConfiguration = AppBarConfiguration(navController.graph, drawer_layout)
@@ -76,6 +74,7 @@ class MainActivity : AppCompatActivity(),
             R.id.settings -> presenter.navigateToSettings()
             R.id.about -> presenter.navigateToAbout()
         }
+        drawer_layout.closeDrawer(GravityCompat.START)
         return false
     }
 
