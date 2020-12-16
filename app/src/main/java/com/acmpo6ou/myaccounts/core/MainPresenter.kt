@@ -19,28 +19,40 @@
 
 package com.acmpo6ou.myaccounts.core
 
-open class MainPresenter(
-        var view: MainActivityInter
-): MainPresenterInter {
+open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
     var model: MainModelInter = MainModel()
 
     init{
+        // This methods are called on app startup
         fixSrcFolder()
         autocheckForUpdates()
     }
 
+    /**
+     * This method is called on app startup, it checks for updates if it's time to.
+     */
     fun autocheckForUpdates() {
         if(isTimeToUpdate()) {
             checkUpdatesSelected()
         }
     }
 
+    /**
+     * This method is called on app startup, if src folder doesn't exist method will create it.
+     * Usually src folder is ` /storage/emulated/0/MyAccounts/src`.
+     */
     private fun fixSrcFolder(){}
 
+    /**
+     * This method is called when user clicks `Import database` in navigation drawer.
+     */
     override fun importSelected() {
         view.importDialog()
     }
 
+    /**
+     * This method is called when user clicks `Check for updates` in navigation drawer.
+     */
     override fun checkUpdatesSelected() {
         if(checkForUpdates()) {
             view.startUpdatesActivity()
@@ -50,18 +62,33 @@ open class MainPresenter(
         }
     }
 
+    /**
+     * This method is called when user clicks `Changelog` in navigation drawer.
+     */
     override fun navigateToChangelog() {
 
     }
 
+    /**
+     * This method is called when user clicks `Settings` in navigation drawer.
+     */
     override fun navigateToSettings() {
 
     }
 
+    /**
+     * This method is called when user clicks `About` in navigation drawer.
+     */
     override fun navigateToAbout() {
 
     }
 
+    /**
+     * This method checks given tar file on validity.
+     *
+     * It checks whether the tar file has appropriate files, does it have appropriate
+     * number of them and so on.
+     */
     override fun checkTarFile(location: String) {
 
     }
@@ -70,6 +97,12 @@ open class MainPresenter(
         return false
     }
 
+    /**
+     * This method checks whether it's time to check for updates.
+     * Application should check for updates only once a day.
+     *
+     * @return boolean value indicating whether it is time to check for updates.
+     */
     override fun isTimeToUpdate(): Boolean {
         return false
     }
