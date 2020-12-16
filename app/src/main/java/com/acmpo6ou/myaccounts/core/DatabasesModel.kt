@@ -43,7 +43,7 @@ import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 
 /**
- * Class that represents Account, it stores all account data such
+ * Represents Account, it stores all account data such
  * as name, password, email, etc.
  *
  * @param[account] account name.
@@ -64,12 +64,15 @@ data class Account(
 )
 
 /**
- * Class that represents database of Accounts.
+ * Represents database of Accounts.
  *
  * @param[name] name of the database.
  * @param[password] password of the database.
  * @param[data] map of account names to corresponding Account instances.
  * @param[salt] salt of the database.
+ * @param[index] Databases are stored in a list, [index] is the index of the given Database.
+ * It is used to be able to pass Database index between activities back and forth while not
+ * loosing index.
  * @property isOpen dynamically returns whether database is open or not, the database is
  * considered open when [password] is not null.
  */
@@ -89,9 +92,10 @@ data class Database(val name: String,
  * Class that contains various functions related to database operations such as encrypting,
  * decrypting, deleting and creating databases.
  *
- * @param[SRC_DIR] path to directory that contains databases, default path is Internal Storage.
+ * @param[SRC_DIR] path to directory that contains databases.
+ * Default is /storage/emulated/0/MyAccounts/src/
  */
-class DatabasesModel(private val SRC_DIR: String = "/storage/emulated/0/")
+class DatabasesModel(private val SRC_DIR: String)
     :DatabasesModelInter{
 
     /**
