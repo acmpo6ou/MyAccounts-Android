@@ -50,13 +50,16 @@ class MainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // setup presenter and appbar
         presenter = MainPresenter(this)
-
         setSupportActionBar(toolbar)
-        val navController = findNavController(R.id.nav_host_fragment)
 
+        // setup navigation controller
+        val navController = findNavController(R.id.nav_host_fragment)
         appBarConfiguration = AppBarConfiguration(navController.graph, drawer_layout)
         setupActionBarWithNavController(navController, appBarConfiguration)
+
+        // setup navigation view
         nav_view.setupWithNavController(navController)
         nav_view.setNavigationItemSelectedListener(this)
     }
@@ -74,12 +77,14 @@ class MainActivity : AppCompatActivity(),
             R.id.settings -> presenter.navigateToSettings()
             R.id.about -> presenter.navigateToAbout()
         }
+
+        // close drawer when any item is selected
         drawer_layout.closeDrawer(GravityCompat.START)
         return false
     }
 
     override fun onBackPressed() {
-        // to close navigation drawer when Back button is pressed
+        // close navigation drawer when Back button is pressed and if it is opened
         if(drawer_layout.isDrawerOpen(GravityCompat.START)){
             drawer_layout.closeDrawer(GravityCompat.START)
         }
@@ -88,6 +93,9 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
+    /**
+     * Displays snackbar to tell user that there are no updates available.
+     */
     override fun noUpdates(){
         Snackbar.make(
             databaseCoordinator,
