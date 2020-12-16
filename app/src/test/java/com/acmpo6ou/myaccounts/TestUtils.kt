@@ -77,6 +77,19 @@ fun getDatabaseMap(): Map<String, Account> {
     return mapOf("gmail" to account)
 }
 
+/**
+ * Helper function that generates random Int in specified range, but excluding number
+ * that is specified in parameter [exception].
+ *
+ * Example:
+ * >>> randomIntExcept(2)
+ * will generate any number between 0 and 20 except 2.
+ *
+ * @param[exception] number to exclude from generation.
+ * @param[start] left bound of number range.
+ * @param[end] right bound of number range.
+ * @return generated random number.
+ */
 fun randomIntExcept(exception: Int, start: Int=0, end: Int=20): Int{
     val faker = Faker()
     var res: Int
