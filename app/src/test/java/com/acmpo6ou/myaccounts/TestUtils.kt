@@ -23,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.acmpo6ou.myaccounts.core.Account
+import com.github.javafaker.Faker
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.SnackbarContentLayout
 
@@ -74,5 +75,17 @@ fun getDatabaseMap(): Map<String, Account> {
             comment="My gmail account.",
     )
     return mapOf("gmail" to account)
+}
+
+fun randomIntExcept(exception: Int, start: Int=0, end: Int=20): Int{
+    val faker = Faker()
+    var res: Int
+    while (true) {
+        res = faker.number().numberBetween(start, end)
+        if(res == exception){
+            continue
+        }
+    }
+    return res
 }
 
