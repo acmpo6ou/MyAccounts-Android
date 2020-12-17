@@ -31,9 +31,10 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.kamranzafar.jtar.TarEntry
-import org.kamranzafar.jtar.TarInputStream
 import org.kamranzafar.jtar.TarOutputStream
-import java.io.*
+import java.io.BufferedOutputStream
+import java.io.File
+import java.io.FileOutputStream
 import java.security.SecureRandom
 import java.time.Duration
 import java.time.Instant
@@ -69,7 +70,7 @@ data class Account(
  * @param[name] name of the database.
  * @param[password] password of the database.
  * @param[data] map of account names to corresponding Account instances.
- * @param[salt] salt of the database.
+ * @param[salt] 16 purely random bits needed for encryption and decryption of database.
  * @param[index] Databases are stored in a list, [index] is the index of the given Database.
  * It is used to be able to pass Database index between activities back and forth while not
  * loosing index.
@@ -95,8 +96,7 @@ data class Database(val name: String,
  * @param[SRC_DIR] path to directory that contains databases.
  * Default is /storage/emulated/0/MyAccounts/src/
  */
-class DatabasesModel(private val SRC_DIR: String)
-    :DatabasesModelInter{
+class DatabasesModel(private val SRC_DIR: String): DatabasesModelInter{
 
     /**
      * This method generates purely random salt for encryption.
@@ -225,12 +225,12 @@ class DatabasesModel(private val SRC_DIR: String)
     /**
      * Used to decrypt and deserialize encrypted json string to a database map.
      *
-     * @param[string] encrypted json string to decrypt.
+     * @param[jsonString] encrypted json string to decrypt.
      * @param[password] password for decryption.
      * @param[salt] salt for decryption.
      * @return decrypted database map.
      */
-    fun decryptDatabase(string: String, password: String, salt: ByteArray):
+    fun decryptDatabase(jsonString: String, password: String, salt: ByteArray):
             Map<String, Account> {
         // get key and validator
         val key = deriveKey(password, salt)
@@ -243,7 +243,7 @@ class DatabasesModel(private val SRC_DIR: String)
         }
 
         // decrypt and deserialize string
-        val token = Token.fromString(string)
+        val token = Token.fromString(jsonString)
         val decrypted = token.validateAndDecrypt(key, validator)
         return loads(decrypted)
     }
@@ -272,7 +272,7 @@ class DatabasesModel(private val SRC_DIR: String)
      * with a new one.
      *
      * @param[oldName] name of the old database that is to be replaced.
-     * @param[database] new database to be created, replacing the old one.
+     * @param[database] new Database to be created, replacing the old one.
      */
     fun saveDatabase(oldName: String, database: Database){
         deleteDatabase(oldName)
@@ -334,61 +334,13 @@ class DatabasesModel(private val SRC_DIR: String)
         outStream.close()
     }
 
-    /**
-     * Used to import database from given tar archive.
-     *
-     * Extracts .db and .bin files from given tar archive to `src` directory.
-     * @param[tarFile] path to tar archive that contains database files we need to extract.
-     */
-    fun importDatabase(tarFile: String) {
-        // destination is actually should be the `src` folder but because of the way files
-        // are stored in tar file we extract them in the parent directory of `src`
-        // for more details see exportDatabase() documentation
-        val destFolder = "$SRC_DIR/../"
-
-        // open tar file
-        val inputStream = TarInputStream(
-                BufferedInputStream(FileInputStream(tarFile))
-        )
-
-        // get first file from tar
-        var entry: TarEntry? = inputStream.nextEntry
-
-        // extract database files from tar archive
-        while (entry != null) {
-            // extract only .db and .bin files, skip all other such as tar headers
-            if(!(
-                entry.name.endsWith(".db") ||
-                entry.name.endsWith(".bin")
-            )){
-                entry = inputStream.nextEntry
-                continue
-            }
-
-            // create file we want to extract
-            val outStream = FileOutputStream("$destFolder${entry.name}")
-            val dest = BufferedOutputStream(outStream)
-
-            // write data into previously created file
-            val size = entry.size.toInt()
-            val data = ByteArray(size)
-            inputStream.read(data)
-            dest.write(data)
-
-            // flush buffers and proceed to next file
-            dest.flush()
-            dest.close()
-            entry = inputStream.nextEntry
-        }
-        inputStream.close()
-    }
-
     // NOTE: 2 next methods are needed because of testable architecture, even though
     // they both contain only one line of code
     /**
      * Used to serialise Database instance.
      *
      * @param[database] Database instance to serialise.
+     * @return serialised json string.
      */
     override fun dumpDatabase(database: Database): String{
         return Json.encodeToString(database)
@@ -399,6 +351,7 @@ class DatabasesModel(private val SRC_DIR: String)
      * Used to deserialise database json string to Database instance.
      *
      * @param[databaseJson] database json string to deserialise.
+     * @return deserialised Database instance.
      */
     override fun loadDatabase(databaseJson: String): Database{
         return Json.decodeFromString(databaseJson)
