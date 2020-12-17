@@ -20,16 +20,16 @@
 package com.acmpo6ou.myaccounts
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import androidx.appcompat.app.AppCompatActivity
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        // here we show splash screen for 1s
+        // here we show splash screen then launch MainActivity
         Handler().postDelayed(
                 {
                     val i = Intent(this, MainActivity::class.java)
