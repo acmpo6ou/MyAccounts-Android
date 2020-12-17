@@ -5,11 +5,13 @@ import java.io.FileNotFoundException
 import java.io.IOException
 
 
-open class DatabasesPresenter(
-        private val view: DatabaseFragmentInter,
-): DatabasesPresenterInter {
-    var model: DatabasesModelInter = DatabasesModel()
-    override var databases: MutableList<Database> = mutableListOf()
+/**
+ * Contains various methods for business logic of DatabaseFragment.
+ */
+open class DatabasesPresenter(private val view: DatabaseFragmentInter)
+    : DatabasesPresenterInter {
+    var model: DatabasesModelInter = DatabasesModel(view.SRC_DIR)
+    override var databases: MutableList<Database> = model.getDatabases()
     var exportIndex: Int? = null
 
     /**
@@ -32,6 +34,7 @@ open class DatabasesPresenter(
      * Calls model.exportDatabase() in try-catch block handling all errors. When error
      * occurred calls view.showError() passing through appropriate error details to display
      * dialog about error.
+     * If there are no errors - displays snackbar with success message.
      */
     override fun exportDatabase(location: String) {
         val resources = view.myContext?.resources

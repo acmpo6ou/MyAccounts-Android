@@ -42,6 +42,7 @@ interface DatabasesPresenterInter{
 }
 
 interface DatabaseFragmentInter{
+    val SRC_DIR: String
     val presenter: DatabasesPresenterInter
     val adapter: DatabasesAdapter
     var myContext: Context
@@ -64,6 +65,7 @@ interface DatabaseFragmentInter{
 
 interface DatabasesModelInter{
     fun dumps(data: Map<String, Account>): String
+    fun getDatabases(): MutableList<Database>
 
     fun openDatabase(database: Database): Database
     fun exportDatabase(name: String, destination: String)
