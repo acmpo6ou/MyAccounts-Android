@@ -19,8 +19,11 @@
 
 package com.acmpo6ou.myaccounts.core
 
+/**
+ * Contains various methods for business logic of MainActivity.
+ */
 open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
-    var model: MainModelInter = MainModel()
+    var model: MainModelInter = MainModel(view.SRC_DIR)
 
     init{
         // This methods are called on app startup

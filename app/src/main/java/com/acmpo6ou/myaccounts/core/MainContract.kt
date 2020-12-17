@@ -33,6 +33,7 @@ interface MainPresenterInter{
 }
 
 interface MainActivityInter{
+    val SRC_DIR: String
     fun importDialog()
     fun startUpdatesActivity()
 
