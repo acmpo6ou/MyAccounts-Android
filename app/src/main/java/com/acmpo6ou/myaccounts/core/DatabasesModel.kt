@@ -284,7 +284,7 @@ class DatabasesModel(private val SRC_DIR: String): DatabasesModelInter{
      *
      * @return list of databases that are found in src directory.
      */
-    fun getDatabases(): List<Database> {
+    override fun getDatabases(): MutableList<Database> {
         val databases = mutableListOf<Database>()
         // src folder where all database files are stored
         val src = File(SRC_DIR)

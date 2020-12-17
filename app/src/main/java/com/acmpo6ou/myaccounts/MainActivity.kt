@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity(),
         NavigationView.OnNavigationItemSelectedListener, MainActivityInter {
 
     val IMPORT_RC = 202
+    override val SRC_DIR = ""
     private lateinit var appBarConfiguration: AppBarConfiguration
     lateinit var presenter: MainPresenterInter
 

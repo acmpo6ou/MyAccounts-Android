@@ -45,6 +45,7 @@ import kotlinx.android.synthetic.main.fragment_database_list.*
  */
 class DatabaseFragment: Fragment(), DatabaseFragmentInter {
 
+    override val SRC_DIR = ""
     val EXPORT_RC = 101
     val ACCOUNTS_RC = 200
 

@@ -20,15 +20,14 @@
 package com.acmpo6ou.myaccounts.ui
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.dummy.DummyContent
 
 /**
  * A fragment representing a list of Items.
@@ -58,7 +57,6 @@ class AccountsFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = DisplayAccountRecyclerViewAdapter(DummyContent.ITEMS)
             }
         }
         return view
