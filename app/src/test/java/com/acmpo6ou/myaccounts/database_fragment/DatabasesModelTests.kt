@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.database_fragment
 
+import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.core.Account
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesModel
@@ -65,16 +66,10 @@ class DatabasesTests {
     }
 }
 
-class DatabasesModelTests {
+class DatabasesModelTests: ModelTest() {
     private val faker = Faker()
 
-    // this is where DatabasesModel will create delete and edit databases during testing
-    // /dev/shm/ is a fake in-memory file system
-    private val accountsDir = "/dev/shm/accounts/"
-    private val SRC_DIR = "$accountsDir/src/"
-
     lateinit var model: DatabasesModel
-    lateinit var salt: ByteArray
     private val jsonDatabase =
             "{\"gmail\":{\"account\":\"gmail\",\"name\":\"Tom\",\"email\":"+
             "\"tom@gmail.com\",\"password\":\"123\",\"date\":\"01.01.1990\","+
@@ -103,7 +98,6 @@ class DatabasesModelTests {
     @Before
     fun setUp(){
         model = DatabasesModel(SRC_DIR)
-        salt = "0123456789abcdef".toByteArray() // 16 bytes of salt
     }
 
     /**
@@ -496,59 +490,9 @@ class DatabasesModelTests {
         )
     }
 
-    @Test
-    fun `importDatabase should extract given tar file to src folder`(){
-        // import database
-        model.importDatabase("sampledata/tar/main.tar")
-
-        // check that all database files are imported correctly
-        val expectedBin = String(salt)
-        val expectedDb = String(
-                File("sampledata/src/main.db").readBytes()
-        )
-
-        val actualBin = String(
-                File("$SRC_DIR/main.bin").readBytes()
-        )
-        val actualDb = String(
-                File("$SRC_DIR/main.db").readBytes()
-        )
-
-        assertEquals(
-                "importDatabase incorrectly imported .db file!",
-                expectedDb,
-                actualDb
-        )
-        assertEquals(
-                "importDatabase incorrectly imported .bin file!",
-                expectedBin,
-                actualBin
-        )
-    }
-
-    @Test
-    fun `importDatabase should extract database files only from given tar file`(){
-        model.importDatabase("sampledata/tar/main.tar")
-
-        // there is no other files in parent of `src` folder
-        val srcParent = File(accountsDir)
-        val filesList = srcParent.list()
-
-        assertEquals(
-                "importDatabase must extract only .db and .bin files from given tar!",
-                1, // there must be only one directory – `src`
-                filesList.size
-        )
-        assertEquals(
-                "importDatabase must extract only .db and .bin files from given tar!",
-                "src", // the only directory must be `src`
-                filesList.first()
-        )
-    }
-
     private lateinit var database: Database
     private lateinit var databaseJson: String
-    fun setupDatabaseAndJson(){
+    private fun setupDatabaseAndJson(){
         database = Database(
             faker.name().toString(),
             faker.lorem().sentence(),
