@@ -78,24 +78,21 @@ class DatabaseFragmentInstrumentation {
         databaseScenario = launchFragmentInContainer<DatabaseFragment>(
             themeResId = R.style.Theme_MyAccounts_NoActionBar)
 
-        // mock presenter with fake databases
+        // mock presenter with fake database
         val databases = mutableListOf(Database("main"))
         val presenter = mock<DatabasesPresenterInter>()
         whenever(presenter.databases).thenReturn(databases)
-        databaseScenario.onFragment {
-            it.presenter = presenter
-        }
+        databaseScenario.onFragment { it.presenter = presenter }
     }
 
     private fun setUpNavController() {
         // Create a TestNavHostController
-        navController = TestNavHostController(
-                ApplicationProvider.getApplicationContext())
+        navController = TestNavHostController(ApplicationProvider.getApplicationContext())
         navController.setGraph(R.navigation.mobile_navigation)
 
-        databaseScenario.onFragment { fragment ->
+        databaseScenario.onFragment {
             // Set the NavController property on the fragment
-            Navigation.setViewNavController(fragment.requireView(), navController)
+            Navigation.setViewNavController(it.requireView(), navController)
         }
     }
 
@@ -140,7 +137,7 @@ class DatabaseFragmentInstrumentation {
         assertEquals(
             "(+) FAB on DatabaseFragment doesn't navigate to CreateDatabaseFragment!",
             navController.currentDestination?.id,
-                R.id.createDatabaseFragment
+            R.id.createDatabaseFragment
         )
     }
 
