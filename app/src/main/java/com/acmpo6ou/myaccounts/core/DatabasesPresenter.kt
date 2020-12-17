@@ -101,7 +101,7 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
     /**
      * Called when user selects `Close` in database item popup menu.
      *
-     * Using isDatabaseSaved checks whether database we want to close is saved, if it is –
+     * Checks whether database we want to close is saved, if it is –
      * calls closeDatabase to close the database, if it's not – calls confirmClose to ask
      * user for confirmation.
      * @param[i] index of database we want to close.
@@ -118,8 +118,7 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
     /**
      * Called when user selects `Edit` in database item popup menu.
      *
-     * Using navigateToEdit navigates to EditDatabaseFragment passing through serialised
-     * database string.
+     * Using navigateToEdit navigates to EditDatabaseFragment passing through database index.
      * @param[i] index of database we want to edit.
      */
     override fun editSelected(i: Int) {
@@ -127,7 +126,7 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
     }
 
     /**
-     * Used to reset database password and in this way 'closing' it.
+     * Used to reset database password in this way 'closing' it.
      *
      * @param[i] - database index.
      */
