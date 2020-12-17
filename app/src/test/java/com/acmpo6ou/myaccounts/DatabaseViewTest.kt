@@ -25,12 +25,20 @@ import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 
+/**
+ * Super class test for DatabaseFragmentInst and MainActivityInst.
+ *
+ * Contains some helper methods and properties.
+ */
 open class DatabaseViewTest {
     lateinit var intent: Intent
     val faker = Faker()
     val location: String = faker.file().fileName()
     val OTHER_RC = faker.number().digit().toInt()
 
+    /**
+     * Helper function to mock intent, so that it would contain uri with random string.
+     */
     fun mockIntent(){
         intent = mock()
         val uri = mock<Uri>()
