@@ -41,8 +41,7 @@ import kotlinx.android.synthetic.main.fragment_database_list.*
  * A fragment representing a list of Databases.
  */
 class DatabaseFragment: Fragment(), DatabaseFragmentInter {
-
-    override val SRC_DIR = ""
+    override lateinit var ACCOUNTS_DIR: String
     val EXPORT_RC = 101
 
     override lateinit var adapter: DatabasesAdapter
@@ -56,6 +55,7 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
         super.onAttach(context)
         // saving context to use it later
         myContext = context
+        ACCOUNTS_DIR = context.resources.getString(R.string.accounts_dir)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

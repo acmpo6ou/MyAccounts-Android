@@ -93,10 +93,12 @@ data class Database(val name: String,
  * Class that contains various functions related to database operations such as encrypting,
  * decrypting, deleting and creating databases.
  *
- * @param[SRC_DIR] path to directory that contains databases.
- * Default is /storage/emulated/0/MyAccounts/src/
+ * @param[ACCOUNTS_DIR] path to directory that contains src folder.
+ * Default is /storage/emulated/0/MyAccounts/
  */
-class DatabasesModel(private val SRC_DIR: String): DatabasesModelInter{
+class DatabasesModel(private val ACCOUNTS_DIR: String): DatabasesModelInter{
+    // path to directory that contains databases
+    private val SRC_DIR = "$ACCOUNTS_DIR/src/"
 
     /**
      * This method generates purely random salt for encryption.

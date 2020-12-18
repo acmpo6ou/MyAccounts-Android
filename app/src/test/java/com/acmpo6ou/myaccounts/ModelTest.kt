@@ -25,6 +25,5 @@ open class ModelTest {
     // this is where model will create delete and edit databases during testing
     // /dev/shm/ is a fake in-memory file system
     val accountsDir = "/dev/shm/accounts/"
-    val SRC_DIR = "$accountsDir/src/"
-
+    val SRC_DIR = "${accountsDir}src/"
 }

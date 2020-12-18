@@ -44,6 +44,7 @@ open class DatabasesPresenterTest{
     @Before
     fun setUp(){
         view = mock()
+        whenever(view.ACCOUNTS_DIR).thenReturn("")
         model = mock()
 
         presenter = DatabasesPresenter(view)

@@ -43,7 +43,8 @@ class MainActivity : AppCompatActivity(),
         NavigationView.OnNavigationItemSelectedListener, MainActivityInter {
 
     val IMPORT_RC = 202
-    override val SRC_DIR = ""
+    override val ACCOUNTS_DIR = resources.getString(R.string.accounts_dir)
+
     private lateinit var appBarConfiguration: AppBarConfiguration
     lateinit var presenter: MainPresenterInter
 

@@ -69,7 +69,7 @@ class DatabasesTests {
 class DatabasesModelTests: ModelTest() {
     private val faker = Faker()
 
-    lateinit var model: DatabasesModel
+    var model = DatabasesModel(accountsDir)
     private val jsonDatabase =
             "{\"gmail\":{\"account\":\"gmail\",\"name\":\"Tom\",\"email\":"+
             "\"tom@gmail.com\",\"password\":\"123\",\"date\":\"01.01.1990\","+
@@ -93,11 +93,6 @@ class DatabasesModelTests: ModelTest() {
 
         // then we create accounts folder and src inside it
         srcFolder.mkdirs()
-    }
-
-    @Before
-    fun setUp(){
-        model = DatabasesModel(SRC_DIR)
     }
 
     /**

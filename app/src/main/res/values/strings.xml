@@ -98,4 +98,5 @@
     <string name="no_updates">No updates available.</string>
     <string name="import_error_title">Error importing tar file</string>
     <string name="import_2_files">Your tar file should contain exactly 2 files in it: .db and .bin</string>
+    <string name="accounts_dir">/storage/emulated/0/MyAccounts/</string>
 </resources>

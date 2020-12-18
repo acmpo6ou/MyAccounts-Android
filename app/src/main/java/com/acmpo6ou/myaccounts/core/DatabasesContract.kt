@@ -42,7 +42,7 @@ interface DatabasesPresenterInter{
 }
 
 interface DatabaseFragmentInter{
-    val SRC_DIR: String
+    val ACCOUNTS_DIR: String
     val presenter: DatabasesPresenterInter
     val adapter: DatabasesAdapter
     var myContext: Context
