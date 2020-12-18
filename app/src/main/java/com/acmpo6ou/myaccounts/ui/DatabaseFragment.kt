@@ -32,10 +32,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.Database
-import com.acmpo6ou.myaccounts.core.DatabaseFragmentInter
-import com.acmpo6ou.myaccounts.core.DatabasesPresenter
-import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
+import com.acmpo6ou.myaccounts.core.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_database_list.*
@@ -194,12 +191,7 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
      * @param[details] details about the error.
      */
     override fun showError(title: String, details: String) {
-        MaterialAlertDialogBuilder(myContext)
-                .setTitle(title)
-                .setIcon(R.drawable.ic_error)
-                .setNeutralButton("Ok"){ _: DialogInterface, _: Int -> }
-                .setMessage(details)
-                .show()
+        errorDialog(myContext, title, details)
     }
 
     /**
