@@ -95,8 +95,8 @@ fun randomIntExcept(exception: Int, start: Int=0, end: Int=20): Int{
     var res: Int
     while (true) {
         res = faker.number().numberBetween(start, end)
-        if(res == exception){
-            continue
+        if(res != exception){
+            break
         }
     }
     return res

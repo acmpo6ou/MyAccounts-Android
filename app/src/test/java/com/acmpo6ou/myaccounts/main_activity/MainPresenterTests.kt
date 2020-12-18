@@ -33,6 +33,8 @@ class MainPresenterTests {
     @Before
     fun setup(){
         view = mock()
+        whenever(view.ACCOUNTS_DIR).thenReturn("")
+
         presenter = MainPresenter(view)
         spyPresenter = spy(presenter)
     }
