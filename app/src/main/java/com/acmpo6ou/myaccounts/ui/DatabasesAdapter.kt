@@ -35,9 +35,8 @@ import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 /**
  * [RecyclerView.Adapter] that can display a [Database].
  */
-class DatabasesAdapter(
-        val view: DatabaseFragmentInter
-) : RecyclerView.Adapter<DatabasesAdapter.ViewHolder>() {
+class DatabasesAdapter(val view: DatabaseFragmentInter)
+    : RecyclerView.Adapter<DatabasesAdapter.ViewHolder>() {
 
     val presenter: DatabasesPresenterInter
         get() = view.presenter // alias

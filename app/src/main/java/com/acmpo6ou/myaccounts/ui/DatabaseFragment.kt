@@ -47,7 +47,6 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
 
     override val SRC_DIR = ""
     val EXPORT_RC = 101
-    val ACCOUNTS_RC = 200
 
     override lateinit var adapter: DatabasesAdapter
     override lateinit var presenter: DatabasesPresenterInter
@@ -88,10 +87,9 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
             view.findNavController().navigate(R.id.actionCreateDatabase)
         }
 
-        // initializing recycler itself
+        // initializing recycler
         databasesList.layoutManager = LinearLayoutManager(myContext)
         databasesList.adapter = adapter
-
     }
 
     /**
@@ -100,7 +98,7 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
      * Starts intent with export request code. Shows dialog to chose location using Storage
      * Access framework.
      * @param[i] index of database we want to export, used to get database name that will be
-     * used as default in export dialog.
+     * default in export dialog.
      */
     override fun exportDialog(i: Int) {
         val name = databases[i].name
