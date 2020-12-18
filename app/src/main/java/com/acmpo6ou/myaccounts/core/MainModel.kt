@@ -30,10 +30,10 @@ import java.io.FileOutputStream
  * Contains various methods for working with database tar files. Methods for importing
  * database, counting files in database tar file etc.
  *
- * @param[SRC_DIR] path to directory that contains databases.
- * Default is /storage/emulated/0/MyAccounts/src/
+ * @param[ACCOUNTS_DIR] path to directory that contains src folder.
+ * Default is /storage/emulated/0/MyAccounts/
  */
-class MainModel(private val SRC_DIR: String): MainModelInter {
+class MainModel(private val ACCOUNTS_DIR: String): MainModelInter {
     /**
      * This method counts number of files that present in given tar file.
      *
@@ -51,11 +51,6 @@ class MainModel(private val SRC_DIR: String): MainModelInter {
      * @param[tarFile] path to tar archive that contains database files we need to extract.
      */
     fun importDatabase(tarFile: String) {
-        // destination is actually should be the `src` folder but because of the way files
-        // are stored in tar file we extract them in the parent directory of `src`
-        // for more details see DatabasesModel.exportDatabase() documentation
-        val destFolder = "$SRC_DIR/../"
-
         // open tar file
         val inputStream = TarInputStream(
                 BufferedInputStream(FileInputStream(tarFile))
@@ -76,7 +71,7 @@ class MainModel(private val SRC_DIR: String): MainModelInter {
             }
 
             // create file we want to extract
-            val outStream = FileOutputStream("$destFolder${entry.name}")
+            val outStream = FileOutputStream("$ACCOUNTS_DIR${entry.name}")
             val dest = BufferedOutputStream(outStream)
 
             // write data into previously created file
