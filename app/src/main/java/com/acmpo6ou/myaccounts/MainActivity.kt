@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity(),
         NavigationView.OnNavigationItemSelectedListener, MainActivityInter {
 
     val IMPORT_RC = 202
-    override val ACCOUNTS_DIR = resources.getString(R.string.accounts_dir)
+    override lateinit var ACCOUNTS_DIR: String
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     lateinit var presenter: MainPresenterInter
@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        ACCOUNTS_DIR = resources.getString(R.string.accounts_dir)
 
         // setup presenter and appbar
         presenter = MainPresenter(this)
