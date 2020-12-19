@@ -29,11 +29,13 @@ import com.acmpo6ou.myaccounts.core.MainPresenter
 import com.acmpo6ou.myaccounts.randomIntExcept
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers.anyString
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -145,5 +147,22 @@ class MainPresenterInst {
         presenter.checkTarFile(location)
         val importBinSizeMsg = resources.getString(R.string.import_db_size, sizesList[1])
         verify(view).showError(importErrorTitle, importBinSizeMsg)
+    }
+
+    @Test
+    fun `checkTarFile should call importDatabase if there are no errors`(){
+        // mock model to return correct file sizes, count and names
+        val filesList = mutableListOf("main", "main")
+        val sizesList = mutableListOf(
+                16, // size of bin file should be exactly 16
+                100 // size of db file should be not less then 100
+        )
+
+        whenever(model.getNames(location)).thenReturn(filesList)
+        whenever(model.countFiles(location)).thenReturn(2)
+        whenever(model.getSizes(location)).thenReturn(sizesList)
+
+        presenter.checkTarFile(location)
+        verify(view, never()).showError(anyString(), anyString())
     }
 }

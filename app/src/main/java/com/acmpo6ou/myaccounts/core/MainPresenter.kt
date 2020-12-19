@@ -118,12 +118,19 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
         else if(fileSizes[1] < 100){
             errorDetails = resources.getString(R.string.import_db_size, fileSizes[1])
         }
+        else{
+//            importDatabase("")
+        }
 
         // if there are any errors display error dialog
         if(errorDetails.isNotEmpty()){
             val errorTitle = resources.getString(R.string.import_error_title)
             view.showError(errorTitle, errorDetails)
         }
+    }
+
+    fun importDatabase(location: String){
+
     }
 
     override fun checkForUpdates(): Boolean{
