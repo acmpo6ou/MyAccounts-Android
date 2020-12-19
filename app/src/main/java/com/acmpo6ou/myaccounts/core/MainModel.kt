@@ -44,6 +44,10 @@ class MainModel(private val ACCOUNTS_DIR: String): MainModelInter {
         return 0
     }
 
+    override fun getNames(location: String): MutableList<String> {
+        TODO("Not yet implemented")
+    }
+
     /**
      * Used to import database from given tar archive.
      *
