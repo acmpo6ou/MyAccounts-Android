@@ -95,25 +95,31 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
      * number of them and so on.
      */
     override fun checkTarFile(location: String) {
+        // get everything we need (file names and sizes etc.)
         val resources = view.myContext?.resources
         var errorDetails = ""
         val fileNames = model.getNames(location)
         val fileSizes = model.getSizes(location)
 
+        // check that there are only 2 files
         if(model.countFiles(location) != 2) {
             errorDetails = resources.getString(R.string.import_2_files)
         }
+        // check that files have the same name
         else if(fileNames[0] != fileNames[1]){
             errorDetails = resources.getString(
                     R.string.import_diff_names, fileNames[0], fileNames[1])
         }
+        // check that .bin file has exactly 16 bytes of salt in it
         else if(fileSizes[0] != 16){
             errorDetails = resources.getString(R.string.import_bin_size, fileSizes[0])
         }
+        // check that .db file has at least 100 bytes in it
         else if(fileSizes[1] < 100){
             errorDetails = resources.getString(R.string.import_db_size, fileSizes[1])
         }
 
+        // if there are any errors display error dialog
         if(errorDetails.isNotEmpty()){
             val errorTitle = resources.getString(R.string.import_error_title)
             view.showError(errorTitle, errorDetails)
