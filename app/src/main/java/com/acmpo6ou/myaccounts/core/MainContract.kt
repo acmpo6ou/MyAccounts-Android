@@ -48,4 +48,5 @@ interface MainActivityInter{
 interface MainModelInter{
     fun countFiles(location: String): Int
     fun getNames(location: String): MutableList<String>
+    fun getSizes(location: String): MutableList<Int>
 }

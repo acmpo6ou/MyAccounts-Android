@@ -98,6 +98,7 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
         val resources = view.myContext?.resources
         var errorDetails = ""
         val fileNames = model.getNames(location)
+        val fileSizes = model.getSizes(location)
 
         if(model.countFiles(location) != 2) {
             errorDetails = resources.getString(R.string.import_2_files)
@@ -105,6 +106,12 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
         else if(fileNames[0] != fileNames[1]){
             errorDetails = resources.getString(
                     R.string.import_diff_names, fileNames[0], fileNames[1])
+        }
+        else if(fileSizes[0] != 16){
+            errorDetails = resources.getString(R.string.import_bin_size, fileSizes[0])
+        }
+        else if(fileSizes[1] < 100){
+            errorDetails = resources.getString(R.string.import_db_size, fileSizes[1])
         }
 
         if(errorDetails.isNotEmpty()){

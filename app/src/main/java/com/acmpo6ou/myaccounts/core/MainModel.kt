@@ -48,6 +48,10 @@ class MainModel(private val ACCOUNTS_DIR: String): MainModelInter {
         TODO("Not yet implemented")
     }
 
+    override fun getSizes(location: String): MutableList<Int> {
+        TODO("Not yet implemented")
+    }
+
     /**
      * Used to import database from given tar archive.
      *
