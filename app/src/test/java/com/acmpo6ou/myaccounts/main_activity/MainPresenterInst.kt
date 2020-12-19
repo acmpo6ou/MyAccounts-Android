@@ -74,14 +74,17 @@ class MainPresenterInst {
 
     @Test
     fun `checkTarFile should check names of files`(){
-        // mock model to return fake names
-        val dbName = faker.name().name()
-        val binName = faker.name().name()
-        whenever(model.getNames(location)).thenReturn(mutableListOf(binName, dbName))
-        val importDifferentNamesMsg = resources.getString(
-                R.string.import_diff_names, binName, dbName)
+        // mock model to return fake names and correct files count
+        val filesList = mutableListOf(
+                faker.name().name(),
+                faker.name().name(),
+        )
+        whenever(model.getNames(location)).thenReturn(filesList)
+        whenever(model.countFiles(location)).thenReturn(2)
 
         presenter.checkTarFile(location)
+        val importDifferentNamesMsg = resources.getString(
+                R.string.import_diff_names, filesList[0], filesList[1])
         verify(view).showError(importErrorTitle, importDifferentNamesMsg)
     }
 }

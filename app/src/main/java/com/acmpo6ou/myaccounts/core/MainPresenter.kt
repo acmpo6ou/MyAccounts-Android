@@ -96,9 +96,11 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
      */
     override fun checkTarFile(location: String) {
         val resources = view.myContext?.resources
-        val errorTitle = resources.getString(R.string.import_error_title)
-        val errorDetails = resources.getString(R.string.import_2_files)
-        view.showError(errorTitle, errorDetails)
+        if(model.countFiles(location) != 2) {
+            val errorTitle = resources.getString(R.string.import_error_title)
+            val errorDetails = resources.getString(R.string.import_2_files)
+            view.showError(errorTitle, errorDetails)
+        }
     }
 
     override fun checkForUpdates(): Boolean{
