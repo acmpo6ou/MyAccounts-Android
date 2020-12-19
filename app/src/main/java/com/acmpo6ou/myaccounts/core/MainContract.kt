@@ -19,6 +19,8 @@
 
 package com.acmpo6ou.myaccounts.core
 
+import android.content.Context
+
 interface MainPresenterInter{
     fun importSelected()
     fun checkUpdatesSelected()
@@ -34,6 +36,8 @@ interface MainPresenterInter{
 
 interface MainActivityInter{
     val ACCOUNTS_DIR: String
+    val myContext: Context
+
     fun importDialog()
     fun startUpdatesActivity()
 

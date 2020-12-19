@@ -54,6 +54,7 @@ class MainPresenterInst {
     @Before
     fun setup(){
         view = mock()
+        whenever(view.myContext).thenReturn(context)
         whenever(view.ACCOUNTS_DIR).thenReturn("")
         model = mock()
 

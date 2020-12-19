@@ -19,6 +19,8 @@
 
 package com.acmpo6ou.myaccounts.core
 
+import com.acmpo6ou.myaccounts.R
+
 /**
  * Contains various methods for business logic of MainActivity.
  */
@@ -93,7 +95,10 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
      * number of them and so on.
      */
     override fun checkTarFile(location: String) {
-
+        val resources = view.myContext?.resources
+        val errorTitle = resources.getString(R.string.import_error_title)
+        val errorDetails = resources.getString(R.string.import_2_files)
+        view.showError(errorTitle, errorDetails)
     }
 
     override fun checkForUpdates(): Boolean{

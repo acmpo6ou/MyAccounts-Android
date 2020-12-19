@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
@@ -44,6 +45,7 @@ class MainActivity : AppCompatActivity(),
 
     val IMPORT_RC = 202
     override lateinit var ACCOUNTS_DIR: String
+    override lateinit var myContext: Context
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     lateinit var presenter: MainPresenterInter
@@ -52,6 +54,7 @@ class MainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         ACCOUNTS_DIR = resources.getString(R.string.accounts_dir)
+        myContext = applicationContext
 
         // setup presenter and appbar
         presenter = MainPresenter(this)
