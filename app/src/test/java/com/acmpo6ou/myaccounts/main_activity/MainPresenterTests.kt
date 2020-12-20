@@ -20,15 +20,20 @@
 package com.acmpo6ou.myaccounts.main_activity
 
 import com.acmpo6ou.myaccounts.core.MainActivityInter
+import com.acmpo6ou.myaccounts.core.MainModelInter
 import com.acmpo6ou.myaccounts.core.MainPresenter
+import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
+import org.mockito.ArgumentMatchers
+import org.mockito.Mockito.spy
 
 class MainPresenterTests {
     lateinit var presenter: MainPresenter
     lateinit var spyPresenter: MainPresenter
     lateinit var view: MainActivityInter
+    private val faker = Faker()
 
     @Before
     fun setup(){
@@ -77,5 +82,27 @@ class MainPresenterTests {
         doReturn(false).whenever(spyPresenter).isTimeToUpdate()
         spyPresenter.autocheckForUpdates()
         verify(spyPresenter, never()).checkUpdatesSelected()
+    }
+
+    @Test
+    fun `checkTarFile should call importDatabase if there are no errors`(){
+        // mock model to return correct file sizes, count and names
+        val model: MainModelInter = mock()
+        val location = faker.file().fileName()
+        spyPresenter.model = model
+
+        val filesList = mutableListOf("main", "main")
+        val sizesList = mutableListOf(
+                16, // size of bin file should be exactly 16
+                100 // size of db file should be not less then 100
+        )
+
+        whenever(model.getNames(location)).thenReturn(filesList)
+        whenever(model.countFiles(location)).thenReturn(2)
+        whenever(model.getSizes(location)).thenReturn(sizesList)
+
+        spyPresenter.checkTarFile(location)
+        verify(spyPresenter).importDatabase(location)
+        verify(view, never()).showError(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())
     }
 }

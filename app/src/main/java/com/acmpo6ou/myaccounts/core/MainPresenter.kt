@@ -119,7 +119,7 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
             errorDetails = resources.getString(R.string.import_db_size, fileSizes[1])
         }
         else{
-//            importDatabase("")
+            importDatabase(location)
         }
 
         // if there are any errors display error dialog
@@ -129,7 +129,7 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
         }
     }
 
-    fun importDatabase(location: String){
+    open fun importDatabase(location: String){
 
     }
 
