@@ -102,26 +102,6 @@ class MainPresenterInst {
         whenever(model.getNames(location)).thenReturn(filesList)
         whenever(model.countFiles(location)).thenReturn(2)
         whenever(model.getSizes(location)).thenReturn(sizesList)
-
-    @Test
-    fun `checkTarFile should check bin file size`(){
-        // mock model to return fake sizes, correct files count and file names
-        val filesList = mutableListOf("main", "main")
-        val sizesList = mutableListOf(
-                // size of bin file should be exactly 16
-                randomIntExcept(16, 0, 200),
-                // size of db file should be not less then 100
-                faker.number().numberBetween(0, 90)
-        )
-
-        whenever(model.getNames(location)).thenReturn(filesList)
-        whenever(model.countFiles(location)).thenReturn(2)
-        whenever(model.getSizes(location)).thenReturn(sizesList)
-
-        presenter.checkTarFile(location)
-        val importBinSizeMsg = resources.getString(R.string.import_bin_size, sizesList[0])
-        verify(view).showError(importErrorTitle, importBinSizeMsg)
-    }
         presenter.checkTarFile(location)
         val importBinSizeMsg = resources.getString(R.string.import_bin_size, sizesList[0])
         verify(view).showError(importErrorTitle, importBinSizeMsg)
