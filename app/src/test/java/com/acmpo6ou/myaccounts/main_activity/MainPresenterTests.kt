@@ -112,4 +112,16 @@ class MainPresenterTests {
         presenter.navigateToChangelog()
         verify(view).navigateTo(R.id.actionChangelog)
     }
+
+    @Test
+    fun `navigateToSettings should call navigateTo`(){
+        presenter.navigateToSettings()
+        verify(view).navigateTo(R.id.actionSettings)
+    }
+
+    @Test
+    fun `navigateToAbout should call navigateTo`(){
+        presenter.navigateToAbout()
+        verify(view).navigateTo(R.id.actionAbout)
+    }
 }
