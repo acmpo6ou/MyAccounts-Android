@@ -22,7 +22,7 @@ package com.acmpo6ou.myaccounts.main_activity
 import android.app.Activity
 import com.acmpo6ou.myaccounts.DatabaseViewTest
 import com.acmpo6ou.myaccounts.MainActivity
-import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.R.id.*
 import com.acmpo6ou.myaccounts.core.MainPresenterInter
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
@@ -46,15 +46,19 @@ class MainActivityTests: DatabaseViewTest() {
         activity.presenter = presenter
     }
 
-    // NOTE: following 5 tests are using try-catch to avoid NullPointerException
-    // that occurs because of kotlin synthetic properties
+    fun selectItem(id: Int){
+        // here we using try-catch to avoid NullPointerException
+        // that occurs because of kotlin synthetic properties
+        try {
+            activity.onNavigationItemSelected(RoboMenuItem(id))
+        }
+        catch (e: NullPointerException){}
+    }
+
     @Test
     fun `'Import database' should call presenter importSelected`(){
         // simulate selecting `Import database` in navigation drawer layout
-        try {
-            activity.onNavigationItemSelected(RoboMenuItem(R.id.import_database))
-        }
-        catch (e: NullPointerException){}
+        selectItem(import_database)
 
         verify(presenter).importSelected()
 
@@ -65,10 +69,7 @@ class MainActivityTests: DatabaseViewTest() {
     @Test
     fun `'Check for updates' should call presenter checkUpdatesSelected`(){
         // simulate selecting `Check for updates` in navigation drawer layout
-        try {
-            activity.onNavigationItemSelected(RoboMenuItem(R.id.check_for_updates))
-        }
-        catch (e: NullPointerException){}
+        selectItem(check_for_updates)
 
         verify(presenter).checkUpdatesSelected()
 
@@ -79,10 +80,7 @@ class MainActivityTests: DatabaseViewTest() {
     @Test
     fun `'Changelog' should call presenter navigateToChangelog`(){
         // simulate selecting `Changelog` in navigation drawer layout
-        try {
-            activity.onNavigationItemSelected(RoboMenuItem(R.id.changelog))
-        }
-        catch (e: NullPointerException){}
+        selectItem(changelog)
 
         verify(presenter).navigateToChangelog()
 
@@ -92,11 +90,7 @@ class MainActivityTests: DatabaseViewTest() {
 
     @Test
     fun `'Settings' should call presenter navigateToSettings`(){
-        // simulate selecting `Settings` in navigation drawer layout
-        try {
-            activity.onNavigationItemSelected(RoboMenuItem(R.id.settings))
-        }
-        catch (e: NullPointerException){}
+        selectItem(settings)
 
         verify(presenter).navigateToSettings()
 
@@ -107,10 +101,7 @@ class MainActivityTests: DatabaseViewTest() {
     @Test
     fun `'About' should call presenter navigateToAbout`(){
         // simulate selecting `About` in navigation drawer layout
-        try {
-            activity.onNavigationItemSelected(RoboMenuItem(R.id.about))
-        }
-        catch (e: NullPointerException){}
+        selectItem(about)
 
         verify(presenter).navigateToAbout()
 
