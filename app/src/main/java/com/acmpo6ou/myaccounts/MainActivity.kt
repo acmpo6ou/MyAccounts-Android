@@ -35,6 +35,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.acmpo6ou.myaccounts.core.MainActivityInter
 import com.acmpo6ou.myaccounts.core.MainPresenter
 import com.acmpo6ou.myaccounts.core.MainPresenterInter
+import com.acmpo6ou.myaccounts.core.errorDialog
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
@@ -112,7 +113,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun showError(title: String, details: String) {
-
+        errorDialog(myContext, title, details)
     }
 
     /**

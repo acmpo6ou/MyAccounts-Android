@@ -19,10 +19,12 @@
 
 package com.acmpo6ou.myaccounts.main_activity
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Looper
 import android.view.View
+import android.widget.TextView
 import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ActivityScenario
@@ -41,6 +43,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows
 import org.robolectric.annotation.LooperMode
+import org.robolectric.shadows.ShadowAlertDialog
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
@@ -54,6 +57,9 @@ class MainActivityInst {
     @Before
     fun setup(){
         mainScenario = launch(MainActivity::class.java)
+        mainScenario.onActivity {
+            it.myContext.setTheme(R.style.Theme_MyAccounts_NoActionBar)
+        }
     }
 
     @Test
@@ -124,4 +130,29 @@ class MainActivityInst {
                 R.id.changelogFragment
         )
     }
+
+    @Test
+    fun `showError should create dialog with appropriate title and message`(){
+        val expectedTitle = "Error occurred!"
+        val expectedMsg = "Error details."
+        mainScenario.onActivity {
+            it.showError(expectedTitle, expectedMsg)
+        }
+
+        val dialog: Dialog? = ShadowAlertDialog.getLatestDialog()
+        val title = dialog?.findViewById<TextView>(R.id.alertTitle)
+        val message = dialog?.findViewById<TextView>(android.R.id.message)
+
+        assertEquals(
+                "showError created dialog with incorrect title!",
+                expectedTitle,
+                title?.text,
+        )
+        assertEquals(
+                "showError created dialog with incorrect message!",
+                expectedMsg,
+                message?.text,
+        )
+    }
+
 }
