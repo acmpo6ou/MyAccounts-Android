@@ -25,6 +25,7 @@ import com.acmpo6ou.myaccounts.core.MainModelInter
 import com.acmpo6ou.myaccounts.core.MainPresenter
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.*
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers
@@ -135,5 +136,10 @@ class MainPresenterTests {
         if(accountsFolder.exists()){
             accountsFolder.deleteRecursively()
         }
+
+        presenter.fixSrcFolder()
+        // the src folder should be created
+        val srcDir = File("$accountsDir/src")
+        assertTrue(srcDir.exists())
     }
 }
