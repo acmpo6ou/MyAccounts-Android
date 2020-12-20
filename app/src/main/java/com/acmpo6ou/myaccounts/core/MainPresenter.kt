@@ -118,6 +118,7 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
         else if(fileSizes[1] < 100){
             errorDetails = resources.getString(R.string.import_db_size, fileSizes[1])
         }
+        // if there are no errors - call importDatabase
         else{
             importDatabase(location)
         }
