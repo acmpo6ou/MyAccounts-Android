@@ -29,17 +29,19 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.spy
+import java.io.File
 
 class MainPresenterTests {
     lateinit var presenter: MainPresenter
     lateinit var spyPresenter: MainPresenter
     lateinit var view: MainActivityInter
     private val faker = Faker()
+    private val accountsDir = "/dev/shm/accounts"
 
     @Before
     fun setup(){
         view = mock()
-        whenever(view.ACCOUNTS_DIR).thenReturn("")
+        whenever(view.ACCOUNTS_DIR).thenReturn(accountsDir)
 
         presenter = MainPresenter(view)
         spyPresenter = spy(presenter)
@@ -123,5 +125,15 @@ class MainPresenterTests {
     fun `navigateToAbout should call navigateTo`(){
         presenter.navigateToAbout()
         verify(view).navigateTo(R.id.actionAbout)
+    }
+
+    @Test
+    fun `fixSrcFolder should create SRC_DIR if it doesn't exist`(){
+        // here we delete accounts folder if it already exists to ensure that it will
+        // be empty as is needed for our tests
+        val accountsFolder = File(accountsDir)
+        if(accountsFolder.exists()){
+            accountsFolder.deleteRecursively()
+        }
     }
 }
