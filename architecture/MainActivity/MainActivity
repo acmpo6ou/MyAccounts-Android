@@ -23,3 +23,5 @@ all others - presenter.navigateTo...
 where location is data retrieved from uri resultData
 
 * noUpdates - displays a snackbar with message `No updates available.`
+
+* navigateTo(id) - navigates to given destination

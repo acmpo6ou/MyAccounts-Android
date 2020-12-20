@@ -23,13 +23,17 @@ import android.content.Context
 import android.content.Intent
 import android.os.Looper
 import android.view.View
+import androidx.navigation.Navigation
+import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ActivityScenario.launch
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.findSnackbarTextView
 import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -88,20 +92,36 @@ class MainActivityInst {
 
         // check all intent properties
         val actual: Intent = Shadows.shadowOf(RuntimeEnvironment.application).nextStartedActivity
-        Assert.assertEquals(
+        assertEquals(
                 "importDialog: incorrect intent action!",
                 expectedIntent.action,
                 actual.action
         )
-        Assert.assertEquals(
+        assertEquals(
                 "importDialog: incorrect intent category!",
                 expectedIntent.categories,
                 actual.categories
         )
-        Assert.assertEquals(
+        assertEquals(
                 "importDialog: incorrect intent type!",
                 expectedIntent.type,
                 actual.type
+        )
+    }
+
+    @Test
+    fun `navigateTo should navigate to given destination`(){
+        // Create a TestNavHostController
+        val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
+        navController.setGraph(R.navigation.mobile_navigation)
+        mainScenario.onActivity {
+            val view: View = it.findViewById(android.R.id.content)
+            Navigation.setViewNavController(view.rootView, navController)
+            it.navigateTo(R.id.actionChangelog)
+        }
+        assertEquals(
+                navController.currentDestination?.id,
+                R.id.changelogFragment
         )
     }
 }

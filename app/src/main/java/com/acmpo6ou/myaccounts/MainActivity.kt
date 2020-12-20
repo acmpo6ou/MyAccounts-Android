@@ -24,6 +24,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.navigation.findNavController
@@ -114,8 +115,14 @@ class MainActivity : AppCompatActivity(),
 
     }
 
+    /**
+     * Navigates to given destination.
+     *
+     * @param[id] id of destination action.
+     */
     override fun navigateTo(id: Int) {
-
+        val view = findViewById<View>(android.R.id.content)
+        view.rootView.findNavController().navigate(id)
     }
 
     override fun startUpdatesActivity() {
