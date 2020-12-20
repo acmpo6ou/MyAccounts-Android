@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.core
 
 import com.acmpo6ou.myaccounts.R
+import java.io.IOException
 
 /**
  * Contains various methods for business logic of MainActivity.
@@ -132,14 +133,22 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
 
     open fun importDatabase(location: String){
         val resources = view.myContext?.resources
-//        try {
-//            model.importDatabase(location)
-//        }
-//        catch (e: IOException){
+        var errorDetails = ""
+
+        try {
+            model.importDatabase(location)
+        }
+        catch (e: FileAlreadyExistsException){
+            errorDetails = resources.getString(R.string.import_exists)
+        }
+        catch (e: IOException){
+            errorDetails = resources.getString(R.string.io_error)
+        }
+
+        if(errorDetails.isNotEmpty()){
             val errorTitle = resources.getString(R.string.import_error_title)
-            val errorDetails = resources.getString(R.string.io_error)
             view.showError(errorTitle, errorDetails)
-//        }
+        }
     }
 
     override fun checkForUpdates(): Boolean{
