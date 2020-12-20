@@ -114,6 +114,10 @@ class MainActivity : AppCompatActivity(),
 
     }
 
+    override fun navigateTo(id: Int) {
+
+    }
+
     override fun startUpdatesActivity() {
 
     }

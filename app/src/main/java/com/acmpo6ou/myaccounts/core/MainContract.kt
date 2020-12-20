@@ -43,6 +43,8 @@ interface MainActivityInter{
 
     fun noUpdates()
     fun showError(title: String, details: String)
+
+    fun navigateTo(id: Int)
 }
 
 interface MainModelInter{

@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.main_activity
 
+import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MainActivityInter
 import com.acmpo6ou.myaccounts.core.MainModelInter
 import com.acmpo6ou.myaccounts.core.MainPresenter
@@ -104,5 +105,11 @@ class MainPresenterTests {
         spyPresenter.checkTarFile(location)
         verify(spyPresenter).importDatabase(location)
         verify(view, never()).showError(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())
+    }
+
+    @Test
+    fun `navigateToChangelog should call navigateTo`(){
+        presenter.navigateToChangelog()
+        verify(view).navigateTo(R.id.actionChangelog)
     }
 }
