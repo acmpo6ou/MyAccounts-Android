@@ -150,4 +150,16 @@ class MainPresenterInst {
 
         verify(view).showError(importErrorTitle, importExistsMsg)
     }
+
+    @Test
+    fun `importDatabase should handle any other Exception`(){
+        val msg = faker.lorem().sentence()
+        val expectedDetails = "java.lang.Exception $msg"
+        whenever(model.importDatabase(location)).thenAnswer{
+            throw Exception(msg)
+        }
+        presenter.importDatabase(location)
+
+        verify(view).showError(importErrorTitle, expectedDetails)
+    }
 }

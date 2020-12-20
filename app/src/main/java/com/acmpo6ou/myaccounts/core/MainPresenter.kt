@@ -144,6 +144,9 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
         catch (e: IOException){
             errorDetails = resources.getString(R.string.io_error)
         }
+        catch (e: Exception){
+            errorDetails = "${e.javaClass.name} ${e.message}"
+        }
 
         if(errorDetails.isNotEmpty()){
             val errorTitle = resources.getString(R.string.import_error_title)
