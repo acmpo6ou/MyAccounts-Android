@@ -249,18 +249,6 @@ class DatabaseFragmentInstrumentation {
     }
 
     @Test
-    fun `showError should display error dialog`(){
-        databaseScenario.onFragment {
-            it.showError("Error occurred!", "Error details.")
-        }
-        val dialog: Dialog? = ShadowAlertDialog.getLatestDialog()
-        assertTrue(
-                "showError doesn't display dialog!",
-                dialog != null
-        )
-    }
-
-    @Test
     fun `showError should create dialog with appropriate title and message`(){
         val expectedTitle = "Error occurred!"
         val expectedMsg = "Error details."
