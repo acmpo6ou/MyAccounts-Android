@@ -131,7 +131,15 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
     }
 
     open fun importDatabase(location: String){
-
+        val resources = view.myContext?.resources
+//        try {
+//            model.importDatabase(location)
+//        }
+//        catch (e: IOException){
+            val errorTitle = resources.getString(R.string.import_error_title)
+            val errorDetails = resources.getString(R.string.io_error)
+            view.showError(errorTitle, errorDetails)
+//        }
     }
 
     override fun checkForUpdates(): Boolean{

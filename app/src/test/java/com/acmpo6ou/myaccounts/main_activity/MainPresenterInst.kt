@@ -35,6 +35,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import java.io.IOException
 
 @RunWith(RobolectricTestRunner::class)
 class MainPresenterInst {
@@ -50,6 +51,7 @@ class MainPresenterInst {
     private val resources: Resources = context.resources
     private val importErrorTitle = resources.getString(R.string.import_error_title)
     private val import2FilesMsg = resources.getString(R.string.import_2_files)
+    val ioError = resources.getString(R.string.io_error)
 
     @Before
     fun setup(){
@@ -125,5 +127,20 @@ class MainPresenterInst {
         presenter.checkTarFile(location)
         val importBinSizeMsg = resources.getString(R.string.import_db_size, sizesList[1])
         verify(view).showError(importErrorTitle, importBinSizeMsg)
+    }
+
+    @Test
+    fun `importDatabase should handle IOException`(){
+        whenever(model.importDatabase(location)).thenAnswer{
+            throw IOException()
+        }
+        presenter.importDatabase(location)
+
+        verify(view).showError(importErrorTitle, ioError)
+    }
+
+    @Test
+    fun `importDatabase should handle FileAlreadyExistsException`(){
+
     }
 }

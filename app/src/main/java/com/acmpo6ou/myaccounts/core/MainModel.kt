@@ -58,7 +58,7 @@ class MainModel(private val ACCOUNTS_DIR: String): MainModelInter {
      * Extracts .db and .bin files from given tar archive to `src` directory.
      * @param[tarFile] path to tar archive that contains database files we need to extract.
      */
-    fun importDatabase(tarFile: String) {
+    override fun importDatabase(tarFile: String) {
         // open tar file
         val inputStream = TarInputStream(
                 BufferedInputStream(FileInputStream(tarFile))
