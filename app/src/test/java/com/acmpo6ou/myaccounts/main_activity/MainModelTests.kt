@@ -21,7 +21,6 @@ package com.acmpo6ou.myaccounts.main_activity
 
 import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.core.MainModel
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.io.File
@@ -48,12 +47,12 @@ class MainModelTests: ModelTest(){
                 File("$SRC_DIR/main.db").readBytes()
         )
 
-        Assert.assertEquals(
+        assertEquals(
                 "importDatabase incorrectly imported .db file!",
                 expectedDb,
                 actualDb
         )
-        Assert.assertEquals(
+        assertEquals(
                 "importDatabase incorrectly imported .bin file!",
                 expectedBin,
                 actualBin
@@ -68,12 +67,12 @@ class MainModelTests: ModelTest(){
         val srcParent = File(accountsDir)
         val filesList = srcParent.list()
 
-        Assert.assertEquals(
+        assertEquals(
                 "importDatabase must extract only .db and .bin files from given tar!",
                 1, // there must be only one directory – `src`
                 filesList.size
         )
-        Assert.assertEquals(
+        assertEquals(
                 "importDatabase must extract only .db and .bin files from given tar!",
                 "src", // the only directory must be `src`
                 filesList.first()

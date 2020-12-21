@@ -19,6 +19,9 @@
 
 package com.acmpo6ou.myaccounts
 
+import org.junit.Before
+import java.io.File
+
 open class ModelTest {
     var salt = "0123456789abcdef".toByteArray() // 16 bytes of salt
 
@@ -26,4 +29,24 @@ open class ModelTest {
     // /dev/shm/ is a fake in-memory file system
     val accountsDir = "/dev/shm/accounts/"
     val SRC_DIR = "${accountsDir}src/"
+
+    /**
+     * This method creates empty src folder in a fake file system, it ensures that
+     * directory will be empty.
+     */
+    @Before
+    fun setUpScrFolder(){
+        val srcFolder = File(SRC_DIR)
+        val accountsFolder = File(accountsDir)
+
+        // here we delete accounts folder if it already exists to ensure that it will
+        // be empty as is needed for our tests
+        if(accountsFolder.exists()){
+            accountsFolder.deleteRecursively()
+        }
+
+        // then we create accounts folder and src inside it
+        srcFolder.mkdirs()
+    }
+
 }

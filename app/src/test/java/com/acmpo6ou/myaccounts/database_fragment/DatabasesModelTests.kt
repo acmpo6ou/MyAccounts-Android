@@ -31,7 +31,6 @@ import com.macasaet.fernet.Validator
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.junit.Assert.*
-import org.junit.Before
 import org.junit.Test
 import java.io.File
 import java.time.Duration
@@ -74,26 +73,6 @@ class DatabasesModelTests: ModelTest() {
             "{\"gmail\":{\"account\":\"gmail\",\"name\":\"Tom\",\"email\":"+
             "\"tom@gmail.com\",\"password\":\"123\",\"date\":\"01.01.1990\","+
             "\"comment\":\"My gmail account.\"}}"
-
-
-    /**
-     * This method creates empty src folder in a fake file system, it ensures that
-     * directory will be empty.
-     */
-    @Before
-    fun setUpScrFolder(){
-        val srcFolder = File(SRC_DIR)
-        val accountsFolder = File(accountsDir)
-
-        // here we delete accounts folder if it already exists to ensure that it will
-        // be empty as is needed for our tests
-        if(accountsFolder.exists()){
-            accountsFolder.deleteRecursively()
-        }
-
-        // then we create accounts folder and src inside it
-        srcFolder.mkdirs()
-    }
 
     /**
      * This is a helper method that will copy our test  databases from sampledata folder to
