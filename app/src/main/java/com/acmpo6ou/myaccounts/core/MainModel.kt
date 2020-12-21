@@ -41,7 +41,7 @@ class MainModel(private val ACCOUNTS_DIR: String): MainModelInter {
      * @return number of counted files in tar file.
      */
     override fun countFiles(location: String): Int {
-        return 0
+        return getNames(location).size
     }
 
     /**
