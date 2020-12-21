@@ -24,10 +24,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -122,8 +122,8 @@ class MainActivity : AppCompatActivity(),
      * @param[id] id of destination action.
      */
     override fun navigateTo(id: Int) {
-        val view = findViewById<View>(android.R.id.content)
-        view.rootView.findNavController().navigate(id)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navHostFragment.navController.navigate(id)
     }
 
     override fun startUpdatesActivity() {
