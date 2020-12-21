@@ -84,6 +84,12 @@ class MainModel(private val ACCOUNTS_DIR: String): MainModelInter {
         return list
     }
 
+    /**
+     * This method returns file sizes of given tar file.
+     *
+     * @param[location] path to tar file.
+     * @return list of file sizes.
+     */
     override fun getSizes(location: String): MutableList<Int> {
         val list = mutableListOf<Int>()
         // open tar file
