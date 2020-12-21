@@ -26,6 +26,9 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -70,6 +73,18 @@ class MainActivity : AppCompatActivity(),
         // setup navigation view
         nav_view.setupWithNavController(navController)
         nav_view.setNavigationItemSelectedListener(this)
+
+        // unlock drawer layout when we navigate back from AboutFragment, SettingsFragment etc
+        navController.addOnDestinationChangedListener{ navController: NavController, navDestination: NavDestination, bundle: Bundle? ->
+            val destinations = listOf(
+                    R.id.settingsFragment,
+                    R.id.changelogFragment,
+                    R.id.aboutFragment,
+            )
+            if(navDestination.id !in destinations){
+                drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -124,6 +139,10 @@ class MainActivity : AppCompatActivity(),
     override fun navigateTo(id: Int) {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navHostFragment.navController.navigate(id)
+
+        // drawer should be locked because we can't navigate from AboutFragment,
+        // SettingsFragment etc. to anywere
+        drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
     }
 
     override fun startUpdatesActivity() {
