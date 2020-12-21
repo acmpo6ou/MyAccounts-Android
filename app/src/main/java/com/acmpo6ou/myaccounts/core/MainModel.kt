@@ -44,6 +44,12 @@ class MainModel(private val ACCOUNTS_DIR: String): MainModelInter {
         return 0
     }
 
+    /**
+     * This method returns a list of names of files from tar file.
+     *
+     * @param[location] path to tar file.
+     * @return list of file names from tar file.
+     */
     override fun getNames(location: String): MutableList<String> {
         val list = mutableListOf<String>()
         // open tar file
@@ -61,10 +67,12 @@ class MainModel(private val ACCOUNTS_DIR: String): MainModelInter {
                 name.startsWith("src/") &&
                 (name.endsWith(".db") || name.endsWith(".bin"))
             ) {
+                // this needs to be removed from file name
                 val srcRe = Regex("^src/")
                 val binRe = Regex("\\.db$")
                 val dbRe = Regex("\\.bin$")
 
+                // clean file name from extension and `src` folder
                 name = srcRe.replace(name, "")
                 name = binRe.replace(name, "")
                 name = dbRe.replace(name, "")
