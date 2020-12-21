@@ -19,9 +19,11 @@
 
 package com.acmpo6ou.myaccounts
 
+import android.Manifest.permission
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -75,7 +77,7 @@ class MainActivity : AppCompatActivity(),
         nav_view.setNavigationItemSelectedListener(this)
 
         // unlock drawer layout when we navigate back from AboutFragment, SettingsFragment etc
-        navController.addOnDestinationChangedListener{ navController: NavController, navDestination: NavDestination, bundle: Bundle? ->
+        navController.addOnDestinationChangedListener{ _: NavController, navDestination: NavDestination, _: Bundle? ->
             val destinations = listOf(
                     R.id.settingsFragment,
                     R.id.changelogFragment,
@@ -84,6 +86,16 @@ class MainActivity : AppCompatActivity(),
             if(navDestination.id !in destinations){
                 drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             }
+        }
+
+        // check permissions
+        checkPermissions()
+    }
+
+    private fun checkPermissions() {
+        val isGranted = checkCallingOrSelfPermission(permission.WRITE_EXTERNAL_STORAGE)
+        if(isGranted != PackageManager.PERMISSION_GRANTED){
+            requestPermissions(arrayOf(permission.WRITE_EXTERNAL_STORAGE), 300)
         }
     }
 
