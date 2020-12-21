@@ -32,14 +32,13 @@
         app:useSimpleSummaryProvider="true" />
     <SwitchPreference
         android:defaultValue="true"
-        android:icon="@drawable/ic_fingerprint"
-        android:key="fingerprint"
-        android:summary="@string/fingerprint_summary"
-        android:title="@string/fingerprint_unlock" />
-    <SwitchPreference
-        android:defaultValue="true"
         android:icon="@drawable/ic_security"
         android:key="block_screen_capture"
         android:summary="@string/block_screen_capture_summary"
         android:title="@string/block_screen_capture" />
+    <ListPreference
+        android:key="main_database"
+        android:title="@string/main_database"
+        android:icon="@drawable/ic_main_database"
+        app:useSimpleSummaryProvider="true" />
 </PreferenceScreen>
