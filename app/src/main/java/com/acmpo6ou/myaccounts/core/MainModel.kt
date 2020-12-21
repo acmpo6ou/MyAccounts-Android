@@ -45,7 +45,35 @@ class MainModel(private val ACCOUNTS_DIR: String): MainModelInter {
     }
 
     override fun getNames(location: String): MutableList<String> {
-        TODO("Not yet implemented")
+        val list = mutableListOf<String>()
+        // open tar file
+        val inputStream = TarInputStream(
+                BufferedInputStream(FileInputStream(location))
+        )
+
+        // get first file from tar
+        var entry: TarEntry? = inputStream.nextEntry
+
+        while (entry != null){
+            var name = entry.name
+            // skip all other files such as tar headers
+            if (
+                name.startsWith("src/") &&
+                (name.endsWith(".db") || name.endsWith(".bin"))
+            ) {
+                val srcRe = Regex("^src/")
+                val binRe = Regex("\\.db$")
+                val dbRe = Regex("\\.bin$")
+
+                name = srcRe.replace(name, "")
+                name = binRe.replace(name, "")
+                name = dbRe.replace(name, "")
+                list.add(name)
+            }
+            entry = inputStream.nextEntry
+        }
+        inputStream.close()
+        return list
     }
 
     override fun getSizes(location: String): MutableList<Int> {

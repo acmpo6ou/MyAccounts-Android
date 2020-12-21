@@ -22,11 +22,13 @@ package com.acmpo6ou.myaccounts.main_activity
 import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.core.MainModel
 import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.io.File
 
 class MainModelTests: ModelTest(){
     private var model = MainModel(accountsDir)
+    private val location = "sampledata/tar/main.tar"
 
     @Test
     fun `importDatabase should extract given tar file to src folder`(){
@@ -78,4 +80,16 @@ class MainModelTests: ModelTest(){
         )
     }
 
+    @Test
+    fun `countFiles should return number of files in tar file`(){
+        val count = model.countFiles(location)
+        assertEquals(2, count)
+    }
+
+    @Test
+    fun `getNames should return list of names`(){
+        val expectedList = mutableListOf("main", "main")
+        val actualList = model.getNames(location)
+        assertEquals(expectedList, actualList)
+    }
 }
