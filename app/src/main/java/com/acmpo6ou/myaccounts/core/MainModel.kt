@@ -85,7 +85,28 @@ class MainModel(private val ACCOUNTS_DIR: String): MainModelInter {
     }
 
     override fun getSizes(location: String): MutableList<Int> {
-        TODO("Not yet implemented")
+        val list = mutableListOf<Int>()
+        // open tar file
+        val inputStream = TarInputStream(
+                BufferedInputStream(FileInputStream(location))
+        )
+
+        // get first file from tar
+        var entry: TarEntry? = inputStream.nextEntry
+
+        while (entry != null) {
+            var name = entry.name
+            // skip all other files such as tar headers
+            if (
+                    name.startsWith("src/") &&
+                    (name.endsWith(".db") || name.endsWith(".bin"))
+            ) {
+                list.add(entry.size.toInt())
+            }
+            entry = inputStream.nextEntry
+        }
+        inputStream.close()
+        return list
     }
 
     /**

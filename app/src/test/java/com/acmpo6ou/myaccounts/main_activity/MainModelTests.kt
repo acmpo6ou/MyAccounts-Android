@@ -92,4 +92,11 @@ class MainModelTests: ModelTest(){
         val actualList = model.getNames(location)
         assertEquals(expectedList, actualList)
     }
+
+    @Test
+    fun `getSizes should return list of file sizes`(){
+        val expectedList = mutableListOf(268, 16) // sizes of .bin and .db files
+        val actualList = model.getSizes(location)
+        assertEquals(expectedList, actualList)
+    }
 }
