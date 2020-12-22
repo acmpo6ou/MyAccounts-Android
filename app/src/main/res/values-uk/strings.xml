@@ -33,4 +33,15 @@
     <string name="yes">Так</string>
     <string name="confirm_delete">Ви певні що хочете видалити базу данних %1$s?</string>
     <string name="confirm_close">Ви певні що хочете закрити базу данних %1$s?</string>
+    <string name="export_error_title">Помилка експорту</string>
+    <string name="export_file_not_found_details">Кожна база данних повинна мати файли .db і .bin, схоже на те що база данних яку ви намагаєтесь експортувати немає їх.</string>
+    <string name="io_error">Причина - будь-яка i/o помилка, наприклад недостатьньо місця.</string>
+    <string name="delete_error_title">Помилка під час видалення бази данних</string>
+    <string name="no_updates">Немає оновленнь.</string>
+    <string name="import_error_title">Помилка імпорту</string>
+    <string name="import_2_files">Ваш tar файл повинен мати ідеально 2 файли: .db і .bin</string>
+    <string name="import_diff_names">Tar файл повинен мати .db і .bin файли з однаковими іменами. Наприклад: main.db і main.bin. Ваші: %1$s.db %2$s.bin</string>
+    <string name="import_bin_size">"файл .bin повинен мати розмір ідеально 16 байтів, ваш: "</string>
+    <string name="import_db_size">"файл .db повинен мати розмір не менше 100 байтів, ваш: "</string>
+    <string name="import_exists">База данних з таким іменем вже існує.</string>
 </resources>
