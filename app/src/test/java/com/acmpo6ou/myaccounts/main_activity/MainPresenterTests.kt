@@ -19,11 +19,13 @@
 
 package com.acmpo6ou.myaccounts.main_activity
 
+import android.content.ContentResolver
+import android.content.Context
+import android.net.Uri
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MainActivityInter
 import com.acmpo6ou.myaccounts.core.MainModelInter
 import com.acmpo6ou.myaccounts.core.MainPresenter
-import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -36,13 +38,18 @@ class MainPresenterTests {
     lateinit var presenter: MainPresenter
     lateinit var spyPresenter: MainPresenter
     lateinit var view: MainActivityInter
-    private val faker = Faker()
+
     private val accountsDir = "/dev/shm/accounts"
 
     @Before
     fun setup(){
         view = mock()
         whenever(view.ACCOUNTS_DIR).thenReturn(accountsDir)
+
+        val context: Context = mock()
+        val resolver: ContentResolver = mock()
+        whenever(context.contentResolver).thenReturn(resolver)
+        whenever(view.myContext).thenReturn(context)
 
         presenter = MainPresenter(view)
         spyPresenter = spy(presenter)
@@ -92,7 +99,7 @@ class MainPresenterTests {
     fun `checkTarFile should call importDatabase if there are no errors`(){
         // mock model to return correct file sizes, count and names
         val model: MainModelInter = mock()
-        val location = faker.file().fileName()
+        val locationUri: Uri = mock()
         spyPresenter.model = model
 
         val filesList = mutableListOf("main", "main")
@@ -101,12 +108,12 @@ class MainPresenterTests {
                 100 // size of db file should be not less then 100
         )
 
-        whenever(model.getNames(location)).thenReturn(filesList)
-        whenever(model.countFiles(location)).thenReturn(2)
-        whenever(model.getSizes(location)).thenReturn(sizesList)
+        whenever(model.getNames(locationUri)).thenReturn(filesList)
+        whenever(model.countFiles(locationUri)).thenReturn(2)
+        whenever(model.getSizes(locationUri)).thenReturn(sizesList)
 
-        spyPresenter.checkTarFile(location)
-        verify(spyPresenter).importDatabase(location)
+        spyPresenter.checkTarFile(locationUri)
+        verify(spyPresenter).importDatabase(locationUri)
         verify(view, never()).showError(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())
     }
 
