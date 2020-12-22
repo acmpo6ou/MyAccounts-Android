@@ -19,11 +19,22 @@
 
 package com.acmpo6ou.myaccounts
 
+import android.content.ContentResolver
+import android.net.Uri
+import android.os.ParcelFileDescriptor
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import java.io.File
+import java.io.FileOutputStream
 
 open class ModelTest {
     var salt = "0123456789abcdef".toByteArray() // 16 bytes of salt
+
+    val contentResolver: ContentResolver = mock()
+    val locationUri: Uri = mock()
+    private val descriptor: ParcelFileDescriptor = mock()
+    private val location = "sampledata/tar/main.tar"
 
     // this is where model will create delete and edit databases during testing
     // /dev/shm/ is a fake in-memory file system
@@ -49,4 +60,10 @@ open class ModelTest {
         srcFolder.mkdirs()
     }
 
+    @Before
+    fun setupResolver(){
+        val fos = FileOutputStream(File(location))
+        whenever(descriptor.fileDescriptor).thenReturn(fos.fd)
+        whenever(contentResolver.openFileDescriptor(locationUri, "r")).thenReturn(descriptor)
+    }
 }

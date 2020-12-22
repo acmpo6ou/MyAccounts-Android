@@ -46,7 +46,7 @@ class MainActivityTests: DatabaseViewTest() {
         activity.presenter = presenter
     }
 
-    fun selectItem(id: Int){
+    private fun selectItem(id: Int){
         // here we using try-catch to avoid NullPointerException
         // that occurs because of kotlin synthetic properties
         try {
@@ -115,7 +115,7 @@ class MainActivityTests: DatabaseViewTest() {
         // location where to import database
         activity.onActivityResult(activity.IMPORT_RC, Activity.RESULT_OK, intent)
 
-        verify(presenter).checkTarFile(location)
+        verify(presenter).checkTarFile(locationUri)
     }
 
     @Test
@@ -123,7 +123,7 @@ class MainActivityTests: DatabaseViewTest() {
         // call onActivityResult passing other request code, result ok and intent
         activity.onActivityResult(OTHER_RC, Activity.RESULT_OK, intent)
 
-        verify(presenter, never()).checkTarFile(location)
+        verify(presenter, never()).checkTarFile(locationUri)
     }
 
     @Test
@@ -131,6 +131,6 @@ class MainActivityTests: DatabaseViewTest() {
         // call onActivityResult passing other request code, result canceled and intent
         activity.onActivityResult(activity.IMPORT_RC, Activity.RESULT_CANCELED, intent)
 
-        verify(presenter, never()).checkTarFile(location)
+        verify(presenter, never()).checkTarFile(locationUri)
     }
 }

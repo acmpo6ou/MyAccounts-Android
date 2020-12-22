@@ -26,13 +26,12 @@ import org.junit.Test
 import java.io.File
 
 class MainModelTests: ModelTest(){
-    private var model = MainModel(accountsDir)
-    private val location = "sampledata/tar/main.tar"
+    private var model = MainModel(accountsDir, contentResolver)
 
     @Test
     fun `importDatabase should extract given tar file to src folder`(){
         // import database
-        model.importDatabase("sampledata/tar/main.tar")
+        model.importDatabase(locationUri)
 
         // check that all database files are imported correctly
         val expectedBin = String(salt)
@@ -61,7 +60,7 @@ class MainModelTests: ModelTest(){
 
     @Test
     fun `importDatabase should extract database files only from given tar file`(){
-        model.importDatabase("sampledata/tar/main.tar")
+        model.importDatabase(locationUri)
 
         // there is no other files in parent of `src` folder
         val srcParent = File(accountsDir)
@@ -81,21 +80,21 @@ class MainModelTests: ModelTest(){
 
     @Test
     fun `countFiles should return number of files in tar file`(){
-        val count = model.countFiles(location)
+        val count = model.countFiles(locationUri)
         assertEquals(2, count)
     }
 
     @Test
     fun `getNames should return list of names`(){
         val expectedList = mutableListOf("main", "main")
-        val actualList = model.getNames(location)
+        val actualList = model.getNames(locationUri)
         assertEquals(expectedList, actualList)
     }
 
     @Test
     fun `getSizes should return list of file sizes`(){
         val expectedList = mutableListOf(268, 16) // sizes of .bin and .db files
-        val actualList = model.getSizes(location)
+        val actualList = model.getSizes(locationUri)
         assertEquals(expectedList, actualList)
     }
 }

@@ -34,6 +34,7 @@ open class DatabaseViewTest {
     lateinit var intent: Intent
     val faker = Faker()
     val location: String = faker.file().fileName()
+    lateinit var locationUri: Uri
     val OTHER_RC = faker.number().digit().toInt()
 
     /**
@@ -41,8 +42,7 @@ open class DatabaseViewTest {
      */
     fun mockIntent(){
         intent = mock()
-        val uri = mock<Uri>()
-        whenever(uri.toString()).thenReturn(location)
-        whenever(intent.data).thenReturn(uri)
+        locationUri = mock()
+        whenever(intent.data).thenReturn(locationUri)
     }
 }
