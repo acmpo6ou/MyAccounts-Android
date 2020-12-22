@@ -98,17 +98,18 @@ class MainPresenterInst {
         // mock model to return fake sizes, correct files count and file names
         val filesList = mutableListOf("main", "main")
         val sizesList = mutableListOf(
-                // size of bin file should be exactly 16
-                randomIntExcept(16, 0, 200),
                 // size of db file should be not less then 100
                 100,
+                // size of bin file should be exactly 16
+                randomIntExcept(16, 0, 200),
         )
 
         whenever(model.getNames(locationUri)).thenReturn(filesList)
         whenever(model.countFiles(locationUri)).thenReturn(2)
         whenever(model.getSizes(locationUri)).thenReturn(sizesList)
+
         presenter.checkTarFile(locationUri)
-        val importBinSizeMsg = resources.getString(R.string.import_bin_size, sizesList[0])
+        val importBinSizeMsg = resources.getString(R.string.import_bin_size, sizesList[1])
         verify(view).showError(importErrorTitle, importBinSizeMsg)
     }
 
@@ -117,10 +118,10 @@ class MainPresenterInst {
         // mock model to return fake sizes, correct files count and file names
         val filesList = mutableListOf("main", "main")
         val sizesList = mutableListOf(
+                // size of db file should be not less then 100
+                faker.number().numberBetween(0, 90),
                 // size of bin file should be exactly 16
                 16,
-                // size of db file should be not less then 100
-                faker.number().numberBetween(0, 90)
         )
 
         whenever(model.getNames(locationUri)).thenReturn(filesList)
@@ -128,7 +129,7 @@ class MainPresenterInst {
         whenever(model.getSizes(locationUri)).thenReturn(sizesList)
 
         presenter.checkTarFile(locationUri)
-        val importBinSizeMsg = resources.getString(R.string.import_db_size, sizesList[1])
+        val importBinSizeMsg = resources.getString(R.string.import_db_size, sizesList[0])
         verify(view).showError(importErrorTitle, importBinSizeMsg)
     }
 

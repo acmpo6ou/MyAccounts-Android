@@ -120,12 +120,12 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
                     R.string.import_diff_names, fileNames[0], fileNames[1])
         }
         // check that .bin file has exactly 16 bytes of salt in it
-        else if(fileSizes[0] != 16){
-            errorDetails = resources.getString(R.string.import_bin_size, fileSizes[0])
+        else if(fileSizes[1] != 16){
+            errorDetails = resources.getString(R.string.import_bin_size, fileSizes[1])
         }
         // check that .db file has at least 100 bytes in it
-        else if(fileSizes[1] < 100){
-            errorDetails = resources.getString(R.string.import_db_size, fileSizes[1])
+        else if(fileSizes[0] < 100){
+            errorDetails = resources.getString(R.string.import_db_size, fileSizes[0])
         }
         // if there are no errors - call importDatabase
         else{
