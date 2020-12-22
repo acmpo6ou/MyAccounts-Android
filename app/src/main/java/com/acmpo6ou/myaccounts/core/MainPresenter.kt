@@ -101,6 +101,7 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
      *
      * It checks whether the tar file has appropriate files, does it have appropriate
      * number of them and so on.
+     * @param[location] uri containing tar file that we need to check.
      */
     override fun checkTarFile(location: Uri) {
         // get everything we need (file names and sizes etc.)

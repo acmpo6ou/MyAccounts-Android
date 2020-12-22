@@ -40,7 +40,7 @@ class MainModel(private val ACCOUNTS_DIR: String,
     /**
      * This method counts number of files that present in given tar file.
      *
-     * @param[location] path to tar file.
+     * @param[location] uri containing tar file.
      * @return number of counted files in tar file.
      */
     override fun countFiles(location: Uri): Int {
@@ -50,11 +50,13 @@ class MainModel(private val ACCOUNTS_DIR: String,
     /**
      * This method returns a list of names of files from tar file.
      *
-     * @param[locationUri] path to tar file.
+     * @param[locationUri] uri containing tar file.
      * @return list of file names from tar file.
      */
     override fun getNames(locationUri: Uri): MutableList<String> {
         val list = mutableListOf<String>()
+
+        // get tar file
         val descriptor = contentResolver.openFileDescriptor(locationUri, "r")
         val location = FileInputStream(descriptor?.fileDescriptor)
 
@@ -93,11 +95,13 @@ class MainModel(private val ACCOUNTS_DIR: String,
     /**
      * This method returns file sizes of given tar file.
      *
-     * @param[locationUri] path to tar file.
+     * @param[locationUri] uri containing tar file.
      * @return list of file sizes.
      */
     override fun getSizes(locationUri: Uri): MutableList<Int> {
         val list = mutableListOf<Int>()
+
+        // get tar file
         val descriptor = contentResolver.openFileDescriptor(locationUri, "r")
         val location = FileInputStream(descriptor?.fileDescriptor)
 
@@ -110,7 +114,7 @@ class MainModel(private val ACCOUNTS_DIR: String,
         var entry: TarEntry? = inputStream.nextEntry
 
         while (entry != null) {
-            var name = entry.name
+            val name = entry.name
             // skip all other files such as tar headers
             if (
                     name.startsWith("src/") &&
@@ -128,9 +132,11 @@ class MainModel(private val ACCOUNTS_DIR: String,
      * Used to import database from given tar archive.
      *
      * Extracts .db and .bin files from given tar archive to `src` directory.
-     * @param[locationUri] path to tar archive that contains database files we need to extract.
+     * @param[locationUri] uri containing tar archive that contains database files
+     * we need to extract.
      */
     override fun importDatabase(locationUri: Uri) {
+        // get tar file
         val descriptor = contentResolver.openFileDescriptor(locationUri, "r")
         val location = FileInputStream(descriptor?.fileDescriptor)
 
