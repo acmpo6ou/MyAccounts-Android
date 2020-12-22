@@ -19,6 +19,8 @@
 
 package com.acmpo6ou.myaccounts.core
 
+import android.content.ContentResolver
+import android.net.Uri
 import org.kamranzafar.jtar.TarEntry
 import org.kamranzafar.jtar.TarInputStream
 import java.io.BufferedInputStream
@@ -33,28 +35,32 @@ import java.io.FileOutputStream
  * @param[ACCOUNTS_DIR] path to directory that contains src folder.
  * Default is /storage/emulated/0/MyAccounts/
  */
-class MainModel(private val ACCOUNTS_DIR: String): MainModelInter {
+class MainModel(private val ACCOUNTS_DIR: String,
+                private val contentResolver: ContentResolver): MainModelInter {
     /**
      * This method counts number of files that present in given tar file.
      *
      * @param[location] path to tar file.
      * @return number of counted files in tar file.
      */
-    override fun countFiles(location: String): Int {
+    override fun countFiles(location: Uri): Int {
         return getNames(location).size
     }
 
     /**
      * This method returns a list of names of files from tar file.
      *
-     * @param[location] path to tar file.
+     * @param[locationUri] path to tar file.
      * @return list of file names from tar file.
      */
-    override fun getNames(location: String): MutableList<String> {
+    override fun getNames(locationUri: Uri): MutableList<String> {
         val list = mutableListOf<String>()
+        val descriptor = contentResolver.openFileDescriptor(locationUri, "r")
+        val location = FileInputStream(descriptor?.fileDescriptor)
+
         // open tar file
         val inputStream = TarInputStream(
-                BufferedInputStream(FileInputStream(location))
+                BufferedInputStream(location)
         )
 
         // get first file from tar
@@ -87,14 +93,17 @@ class MainModel(private val ACCOUNTS_DIR: String): MainModelInter {
     /**
      * This method returns file sizes of given tar file.
      *
-     * @param[location] path to tar file.
+     * @param[locationUri] path to tar file.
      * @return list of file sizes.
      */
-    override fun getSizes(location: String): MutableList<Int> {
+    override fun getSizes(locationUri: Uri): MutableList<Int> {
         val list = mutableListOf<Int>()
+        val descriptor = contentResolver.openFileDescriptor(locationUri, "r")
+        val location = FileInputStream(descriptor?.fileDescriptor)
+
         // open tar file
         val inputStream = TarInputStream(
-                BufferedInputStream(FileInputStream(location))
+                BufferedInputStream(location)
         )
 
         // get first file from tar
@@ -119,12 +128,15 @@ class MainModel(private val ACCOUNTS_DIR: String): MainModelInter {
      * Used to import database from given tar archive.
      *
      * Extracts .db and .bin files from given tar archive to `src` directory.
-     * @param[tarFile] path to tar archive that contains database files we need to extract.
+     * @param[locationUri] path to tar archive that contains database files we need to extract.
      */
-    override fun importDatabase(tarFile: String) {
+    override fun importDatabase(locationUri: Uri) {
+        val descriptor = contentResolver.openFileDescriptor(locationUri, "r")
+        val location = FileInputStream(descriptor?.fileDescriptor)
+
         // open tar file
         val inputStream = TarInputStream(
-                BufferedInputStream(FileInputStream(tarFile))
+                BufferedInputStream(location)
         )
 
         // get first file from tar

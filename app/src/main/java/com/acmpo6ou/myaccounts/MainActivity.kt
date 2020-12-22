@@ -60,8 +60,9 @@ class MainActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         ACCOUNTS_DIR = resources.getString(R.string.accounts_dir)
-        myContext = applicationContext
+        myContext = this
 
         // setup presenter and appbar
         presenter = MainPresenter(this)
@@ -168,8 +169,9 @@ class MainActivity : AppCompatActivity(),
             return
         }
 
-        when(requestCode) {
-            IMPORT_RC -> presenter.checkTarFile(resultData?.data.toString())
+        if(requestCode == IMPORT_RC) {
+            val locationUri = resultData?.data!!
+            presenter.checkTarFile(locationUri)
         }
     }
 

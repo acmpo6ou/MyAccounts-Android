@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.core
 
 import android.content.Context
+import android.net.Uri
 
 interface MainPresenterInter{
     fun importSelected()
@@ -29,7 +30,7 @@ interface MainPresenterInter{
     fun navigateToSettings()
     fun navigateToAbout()
 
-    fun checkTarFile(location: String)
+    fun checkTarFile(location: Uri)
     fun checkForUpdates(): Boolean
     fun isTimeToUpdate(): Boolean
 }
@@ -48,8 +49,8 @@ interface MainActivityInter{
 }
 
 interface MainModelInter{
-    fun countFiles(location: String): Int
-    fun getNames(location: String): MutableList<String>
-    fun getSizes(location: String): MutableList<Int>
-    fun importDatabase(tarFile: String)
+    fun countFiles(location: Uri): Int
+    fun getNames(location: Uri): MutableList<String>
+    fun getSizes(location: Uri): MutableList<Int>
+    fun importDatabase(tarFile: Uri)
 }

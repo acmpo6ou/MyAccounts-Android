@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.core
 
+import android.net.Uri
 import com.acmpo6ou.myaccounts.R
 import java.io.File
 import java.io.IOException
@@ -27,7 +28,7 @@ import java.io.IOException
  * Contains various methods for business logic of MainActivity.
  */
 open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
-    var model: MainModelInter = MainModel(view.ACCOUNTS_DIR)
+    var model: MainModelInter = MainModel(view.ACCOUNTS_DIR, view.myContext.contentResolver)
 
     init{
         // This methods are called on app startup
@@ -101,7 +102,7 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
      * It checks whether the tar file has appropriate files, does it have appropriate
      * number of them and so on.
      */
-    override fun checkTarFile(location: String) {
+    override fun checkTarFile(location: Uri) {
         // get everything we need (file names and sizes etc.)
         val resources = view.myContext?.resources
         var errorDetails = ""
@@ -137,7 +138,7 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
         }
     }
 
-    open fun importDatabase(location: String){
+    open fun importDatabase(location: Uri){
         val resources = view.myContext?.resources
         var errorDetails = ""
 
