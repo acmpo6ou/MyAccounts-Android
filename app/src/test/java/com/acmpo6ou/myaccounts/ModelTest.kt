@@ -26,7 +26,7 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import java.io.File
-import java.io.FileOutputStream
+import java.io.FileInputStream
 
 open class ModelTest {
     var salt = "0123456789abcdef".toByteArray() // 16 bytes of salt
@@ -62,8 +62,9 @@ open class ModelTest {
 
     @Before
     fun setupResolver(){
-        val fos = FileOutputStream(File(location))
-        whenever(descriptor.fileDescriptor).thenReturn(fos.fd)
+        // to simulate the Android Storage Access Framework
+        val fis = FileInputStream(File(location))
+        whenever(descriptor.fileDescriptor).thenReturn(fis.fd)
         whenever(contentResolver.openFileDescriptor(locationUri, "r")).thenReturn(descriptor)
     }
 }

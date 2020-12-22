@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts.main_activity
 
 import android.content.Context
 import android.content.res.Resources
+import android.net.Uri
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MainActivityInter
@@ -45,7 +46,7 @@ class MainPresenterInst {
     private lateinit var view: MainActivityInter
 
     private val faker = Faker()
-    private val location: String = faker.file().fileName()
+    private val locationUri: Uri = mock()
 
     // get string resources
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -70,8 +71,8 @@ class MainPresenterInst {
     fun `checkTarFile should check number of files in tar file`(){
         // correct tar file would have 2 files
         // here we return anything but 2 as is needed for test
-        whenever(model.countFiles(location)).thenReturn(randomIntExcept(2))
-        presenter.checkTarFile(location)
+        whenever(model.countFiles(locationUri)).thenReturn(randomIntExcept(2))
+        presenter.checkTarFile(locationUri)
 
         verify(view).showError(importErrorTitle, import2FilesMsg)
     }
@@ -83,10 +84,10 @@ class MainPresenterInst {
                 faker.name().name(),
                 faker.name().name(),
         )
-        whenever(model.getNames(location)).thenReturn(filesList)
-        whenever(model.countFiles(location)).thenReturn(2)
+        whenever(model.getNames(locationUri)).thenReturn(filesList)
+        whenever(model.countFiles(locationUri)).thenReturn(2)
 
-        presenter.checkTarFile(location)
+        presenter.checkTarFile(locationUri)
         val importDifferentNamesMsg = resources.getString(
                 R.string.import_diff_names, filesList[0], filesList[1])
         verify(view).showError(importErrorTitle, importDifferentNamesMsg)
@@ -103,10 +104,10 @@ class MainPresenterInst {
                 100,
         )
 
-        whenever(model.getNames(location)).thenReturn(filesList)
-        whenever(model.countFiles(location)).thenReturn(2)
-        whenever(model.getSizes(location)).thenReturn(sizesList)
-        presenter.checkTarFile(location)
+        whenever(model.getNames(locationUri)).thenReturn(filesList)
+        whenever(model.countFiles(locationUri)).thenReturn(2)
+        whenever(model.getSizes(locationUri)).thenReturn(sizesList)
+        presenter.checkTarFile(locationUri)
         val importBinSizeMsg = resources.getString(R.string.import_bin_size, sizesList[0])
         verify(view).showError(importErrorTitle, importBinSizeMsg)
     }
@@ -122,31 +123,31 @@ class MainPresenterInst {
                 faker.number().numberBetween(0, 90)
         )
 
-        whenever(model.getNames(location)).thenReturn(filesList)
-        whenever(model.countFiles(location)).thenReturn(2)
-        whenever(model.getSizes(location)).thenReturn(sizesList)
+        whenever(model.getNames(locationUri)).thenReturn(filesList)
+        whenever(model.countFiles(locationUri)).thenReturn(2)
+        whenever(model.getSizes(locationUri)).thenReturn(sizesList)
 
-        presenter.checkTarFile(location)
+        presenter.checkTarFile(locationUri)
         val importBinSizeMsg = resources.getString(R.string.import_db_size, sizesList[1])
         verify(view).showError(importErrorTitle, importBinSizeMsg)
     }
 
     @Test
     fun `importDatabase should handle IOException`(){
-        whenever(model.importDatabase(location)).thenAnswer{
+        whenever(model.importDatabase(locationUri)).thenAnswer{
             throw IOException()
         }
-        presenter.importDatabase(location)
+        presenter.importDatabase(locationUri)
 
         verify(view).showError(importErrorTitle, ioError)
     }
 
     @Test
     fun `importDatabase should handle FileAlreadyExistsException`(){
-        whenever(model.importDatabase(location)).thenAnswer{
+        whenever(model.importDatabase(locationUri)).thenAnswer{
             throw FileAlreadyExistsException(File(""))
         }
-        presenter.importDatabase(location)
+        presenter.importDatabase(locationUri)
 
         verify(view).showError(importErrorTitle, importExistsMsg)
     }
@@ -155,10 +156,10 @@ class MainPresenterInst {
     fun `importDatabase should handle any other Exception`(){
         val msg = faker.lorem().sentence()
         val expectedDetails = "java.lang.Exception $msg"
-        whenever(model.importDatabase(location)).thenAnswer{
+        whenever(model.importDatabase(locationUri)).thenAnswer{
             throw Exception(msg)
         }
-        presenter.importDatabase(location)
+        presenter.importDatabase(locationUri)
 
         verify(view).showError(importErrorTitle, expectedDetails)
     }
