@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.database_fragment
 
+import android.net.Uri
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabaseFragmentInter
 import com.acmpo6ou.myaccounts.core.DatabasesModelInter
@@ -37,7 +38,7 @@ open class DatabasesPresenterTest{
     lateinit var model: DatabasesModelInter
     lateinit var presenter: DatabasesPresenter
 
-    lateinit var location: String
+    var locationUri: Uri = mock()
     val faker = Faker()
     val salt = "0123456789abcdef".toByteArray()
 
@@ -56,9 +57,8 @@ open class DatabasesPresenterTest{
     }
 
     fun callExportDatabase(){
-        location = faker.file().fileName()
         presenter.exportIndex = 1
-        presenter.exportDatabase(location)
+        presenter.exportDatabase(locationUri)
     }
 }
 
@@ -151,7 +151,7 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
     @Test
     fun `exportDatabase should call model exportDatabase passing name and location`(){
         callExportDatabase()
-        verify(model).exportDatabase("test", location)
+        verify(model).exportDatabase("test", locationUri)
     }
 
     @Test

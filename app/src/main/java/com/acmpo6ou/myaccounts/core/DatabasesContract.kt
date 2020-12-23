@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts.core
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import com.acmpo6ou.myaccounts.ui.DatabasesAdapter
 
 interface DatabasesPresenterInter{
@@ -29,7 +30,7 @@ interface DatabasesPresenterInter{
     fun isDatabaseSaved(i: Int): Boolean
 
     fun exportSelected(i: Int)
-    fun exportDatabase(location: String)
+    fun exportDatabase(locationUri: Uri)
 
     fun deleteSelected(i: Int)
     fun deleteDatabase(i: Int)
@@ -68,7 +69,7 @@ interface DatabasesModelInter{
     fun getDatabases(): MutableList<Database>
 
     fun openDatabase(database: Database): Database
-    fun exportDatabase(name: String, destination: String)
+    fun exportDatabase(name: String, destinationUri: Uri)
     fun deleteDatabase(name: String)
 
     fun loadDatabase(databaseJson: String): Database

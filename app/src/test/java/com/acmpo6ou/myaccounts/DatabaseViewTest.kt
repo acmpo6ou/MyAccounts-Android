@@ -33,7 +33,6 @@ import com.nhaarman.mockitokotlin2.whenever
 open class DatabaseViewTest {
     lateinit var intent: Intent
     val faker = Faker()
-    val location: String = faker.file().fileName()
     lateinit var locationUri: Uri
     val OTHER_RC = faker.number().digit().toInt()
 

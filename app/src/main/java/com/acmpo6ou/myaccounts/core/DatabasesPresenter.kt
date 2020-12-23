@@ -1,5 +1,6 @@
 package com.acmpo6ou.myaccounts.core
 
+import android.net.Uri
 import com.acmpo6ou.myaccounts.R
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -36,7 +37,7 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
      * dialog about error.
      * If there are no errors - displays snackbar with success message.
      */
-    override fun exportDatabase(location: String) {
+    override fun exportDatabase(locationUri: Uri) {
         val resources = view.myContext?.resources
         var errorDetails = ""
 
@@ -44,7 +45,7 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
             // export database
             exportIndex?.let {
                 val name = databases[it].name
-                model.exportDatabase(name, location)
+                model.exportDatabase(name, locationUri)
             }
             // if there are no errors display snackbar about success
             view.showSuccess()

@@ -50,7 +50,7 @@ class DatabaseFragmentTests: DatabaseViewTest() {
         // location where to export database
         fragment.onActivityResult(fragment.EXPORT_RC, Activity.RESULT_OK, intent)
 
-        verify(presenter).exportDatabase(location)
+        verify(presenter).exportDatabase(locationUri)
     }
 
     @Test
@@ -58,7 +58,7 @@ class DatabaseFragmentTests: DatabaseViewTest() {
         // call onActivityResult passing other request code, result ok and intent
         fragment.onActivityResult(OTHER_RC, Activity.RESULT_OK, intent)
 
-        verify(presenter, never()).exportDatabase(location)
+        verify(presenter, never()).exportDatabase(locationUri)
     }
 
     @Test
@@ -66,6 +66,6 @@ class DatabaseFragmentTests: DatabaseViewTest() {
         // call onActivityResult passing other request code, result canceled and intent
         fragment.onActivityResult(fragment.EXPORT_RC, Activity.RESULT_CANCELED, intent)
 
-        verify(presenter, never()).exportDatabase(location)
+        verify(presenter, never()).exportDatabase(locationUri)
     }
 }

@@ -22,6 +22,7 @@ package com.acmpo6ou.myaccounts.database_fragment
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
@@ -50,7 +51,7 @@ class DatabasesPresenterInst: DatabasesPresenterTest() {
 
     @Test
     fun `exportDatabase should handle FileNotFoundException`(){
-        whenever(model.exportDatabase(anyString(), anyString()))
+        whenever(model.exportDatabase(anyString(), eq(locationUri)))
                 .thenAnswer{
                     throw FileNotFoundException("")
                 }
@@ -61,7 +62,7 @@ class DatabasesPresenterInst: DatabasesPresenterTest() {
 
     @Test
     fun `exportDatabase should handle IOException`(){
-        whenever(model.exportDatabase(anyString(), anyString()))
+        whenever(model.exportDatabase(anyString(), eq(locationUri)))
                 .thenAnswer{
                     throw IOException()
                 }
@@ -74,7 +75,7 @@ class DatabasesPresenterInst: DatabasesPresenterTest() {
     fun `exportDatabase should handle any other exception`(){
         val msg = faker.lorem().sentence()
         val expectedDetails = "java.lang.Exception $msg"
-        whenever(model.exportDatabase(anyString(), anyString()))
+        whenever(model.exportDatabase(anyString(), eq(locationUri)))
                 .thenAnswer{
                     throw Exception(msg)
                 }

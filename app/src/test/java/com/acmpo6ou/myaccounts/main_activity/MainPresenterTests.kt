@@ -112,6 +112,7 @@ class MainPresenterTests {
         whenever(model.countFiles(locationUri)).thenReturn(2)
         whenever(model.getSizes(locationUri)).thenReturn(sizesList)
 
+        doNothing().`when`(spyPresenter).importDatabase(locationUri)
         spyPresenter.checkTarFile(locationUri)
         verify(spyPresenter).importDatabase(locationUri)
         verify(view, never()).showError(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())

@@ -31,6 +31,7 @@ import com.macasaet.fernet.Validator
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.junit.Assert.*
+import org.junit.Before
 import org.junit.Test
 import java.io.File
 import java.time.Duration
@@ -73,6 +74,11 @@ class DatabasesModelTests: ModelTest() {
             "{\"gmail\":{\"account\":\"gmail\",\"name\":\"Tom\",\"email\":"+
             "\"tom@gmail.com\",\"password\":\"123\",\"date\":\"01.01.1990\","+
             "\"comment\":\"My gmail account.\"}}"
+
+    @Before
+    fun setup(){
+        setupOutputResolver()
+    }
 
     /**
      * This is a helper method that simply creates empty database.
@@ -409,12 +415,11 @@ class DatabasesModelTests: ModelTest() {
         copyDatabase("main")
 
         // export database `main` to the fake file system
-        val destination = accountsDir
-        model.exportDatabase("main", destination)
+        model.exportDatabase("main", locationUri)
 
         // check that database tar file was exported properly
         val exportedTar = String(
-                File("$destination/main.tar").readBytes()
+                File("$accountsDir/main.tar").readBytes()
         )
         val expectedDb = String(
                 File("$SRC_DIR/main.db").readBytes()

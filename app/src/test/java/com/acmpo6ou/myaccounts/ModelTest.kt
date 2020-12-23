@@ -27,19 +27,22 @@ import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import java.io.File
 import java.io.FileInputStream
+import java.io.FileOutputStream
 
 open class ModelTest {
     var salt = "0123456789abcdef".toByteArray() // 16 bytes of salt
-
-    val contentResolver: ContentResolver = mock()
-    val locationUri: Uri = mock()
-    private val descriptor: ParcelFileDescriptor = mock()
-    private val location = "sampledata/tar/main.tar"
 
     // this is where model will create delete and edit databases during testing
     // /dev/shm/ is a fake in-memory file system
     val accountsDir = "/dev/shm/accounts/"
     val SRC_DIR = "${accountsDir}src/"
+
+    val contentResolver: ContentResolver = mock()
+    val locationUri: Uri = mock()
+    val destinationUri: Uri = mock()
+    private val descriptor: ParcelFileDescriptor = mock()
+    private val destination = "$SRC_DIR/main.tar"
+    private val location = "sampledata/tar/main.tar"
 
     /**
      * This method creates empty src folder in a fake file system, it ensures that
@@ -60,8 +63,14 @@ open class ModelTest {
         srcFolder.mkdirs()
     }
 
-    @Before
-    fun setupResolver(){
+    fun setupOutputResolver(){
+        // to simulate the Android Storage Access Framework
+        val fos = FileOutputStream(File(destination))
+        whenever(descriptor.fileDescriptor).thenReturn(fos.fd)
+        whenever(contentResolver.openFileDescriptor(destinationUri, "w")).thenReturn(descriptor)
+    }
+
+    fun setupInputResolver(){
         // to simulate the Android Storage Access Framework
         val fis = FileInputStream(File(location))
         whenever(descriptor.fileDescriptor).thenReturn(fis.fd)

@@ -215,9 +215,8 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
             return
         }
 
-        when(requestCode) {
-            // if the result is from export database dialog call appropriate method
-            EXPORT_RC -> presenter.exportDatabase(data?.data.toString())
+        if(requestCode == EXPORT_RC) {
+            presenter.exportDatabase(data?.data!!)
         }
     }
 

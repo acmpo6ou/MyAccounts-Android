@@ -22,11 +22,17 @@ package com.acmpo6ou.myaccounts.main_activity
 import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.core.MainModel
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 import java.io.File
 
 class MainModelTests: ModelTest(){
     private var model = MainModel(accountsDir, contentResolver)
+
+    @Before
+    fun setup(){
+        setupInputResolver()
+    }
 
     @Test
     fun `importDatabase should extract given tar file to src folder`(){

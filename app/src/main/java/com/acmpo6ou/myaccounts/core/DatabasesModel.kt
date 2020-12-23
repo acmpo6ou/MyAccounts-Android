@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.core
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.util.Base64.DEFAULT
 import com.macasaet.fernet.Key
 import com.macasaet.fernet.StringValidator
@@ -314,7 +315,8 @@ class DatabasesModel(private val ACCOUNTS_DIR: String): DatabasesModelInter{
      * @param[name] name of the database to export.
      * @param[destination] path to folder where we want to export database.
      */
-    override fun exportDatabase(name: String, destination: String) {
+    override fun exportDatabase(name: String, destinationUri: Uri) {
+        val destination = ""
         // create tar file
         val tarFile = FileOutputStream("$destination$name.tar")
         val outStream = TarOutputStream(BufferedOutputStream(tarFile))
