@@ -47,7 +47,6 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
 
     /**
      * This method is called on app startup, if src folder doesn't exist method will create it.
-     * Usually src folder is ` /storage/emulated/0/MyAccounts/src`.
      */
     fun fixSrcFolder(){
         val srcDir = File(view.ACCOUNTS_DIR + "/src")

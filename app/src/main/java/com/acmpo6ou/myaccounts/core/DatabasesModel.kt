@@ -94,7 +94,6 @@ data class Database(val name: String,
  * decrypting, deleting and creating databases.
  *
  * @param[ACCOUNTS_DIR] path to directory that contains src folder.
- * Default is /storage/emulated/0/MyAccounts/
  */
 class DatabasesModel(private val ACCOUNTS_DIR: String): DatabasesModelInter{
     // path to directory that contains databases

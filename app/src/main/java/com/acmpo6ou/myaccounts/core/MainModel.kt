@@ -33,7 +33,6 @@ import java.io.FileOutputStream
  * database, counting files in database tar file etc.
  *
  * @param[ACCOUNTS_DIR] path to directory that contains src folder.
- * Default is /storage/emulated/0/MyAccounts/
  */
 class MainModel(private val ACCOUNTS_DIR: String,
                 private val contentResolver: ContentResolver): MainModelInter {
