@@ -55,7 +55,7 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
         super.onAttach(context)
         // saving context to use it later
         myContext = context
-        ACCOUNTS_DIR = context.resources.getString(R.string.accounts_dir)
+        ACCOUNTS_DIR = context.getExternalFilesDir(null)!!.path + "/"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

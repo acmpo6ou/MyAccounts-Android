@@ -41,7 +41,7 @@
     <string name="import_error_title">Помилка імпорту</string>
     <string name="import_2_files">Ваш tar файл повинен мати ідеально 2 файли: .db і .bin</string>
     <string name="import_diff_names">Tar файл повинен мати .db і .bin файли з однаковими іменами. Наприклад: main.db і main.bin. Ваші: %1$s.db %2$s.bin</string>
-    <string name="import_bin_size">"файл .bin повинен мати розмір ідеально 16 байтів, ваш: "</string>
-    <string name="import_db_size">"файл .db повинен мати розмір не менше 100 байтів, ваш: "</string>
+    <string name="import_bin_size">"файл .bin повинен мати розмір ідеально 16 байтів, ваш: %1$d"</string>
+    <string name="import_db_size">"файл .db повинен мати розмір не менше 100 байтів, ваш: %1$d"</string>
     <string name="import_exists">База данних з таким іменем вже існує.</string>
 </resources>

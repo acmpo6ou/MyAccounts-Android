@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        ACCOUNTS_DIR = resources.getString(R.string.accounts_dir)
+        ACCOUNTS_DIR = getExternalFilesDir(null)!!.path + "/"
         myContext = this
 
         // setup presenter and appbar
