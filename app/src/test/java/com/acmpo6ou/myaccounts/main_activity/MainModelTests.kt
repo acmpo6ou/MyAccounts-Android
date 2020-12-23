@@ -59,6 +59,19 @@ class MainModelTests: ModelTest(){
     }
 
     @Test
+    fun `importDatabase should throw FileAlreadyExistsException if database already exists`(){
+        copyDatabase("main")
+        try {
+            model.importDatabase(locationUri)
+            // if model won't throw an exception we will reach this code and test will fail
+            assert(false)
+        }
+        catch (e: FileAlreadyExistsException){
+            // everything is okay - test should pass
+        }
+    }
+
+    @Test
     fun `importDatabase should extract database files only from given tar file`(){
         model.importDatabase(locationUri)
 

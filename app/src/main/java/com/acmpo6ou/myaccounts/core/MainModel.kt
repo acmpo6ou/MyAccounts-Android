@@ -23,10 +23,7 @@ import android.content.ContentResolver
 import android.net.Uri
 import org.kamranzafar.jtar.TarEntry
 import org.kamranzafar.jtar.TarInputStream
-import java.io.BufferedInputStream
-import java.io.BufferedOutputStream
-import java.io.FileInputStream
-import java.io.FileOutputStream
+import java.io.*
 
 /**
  * Contains various methods for working with database tar files. Methods for importing
@@ -156,6 +153,12 @@ class MainModel(private val ACCOUNTS_DIR: String,
             )){
                 entry = inputStream.nextEntry
                 continue
+            }
+
+            // check if the file with such name already exist
+            val file = File("$ACCOUNTS_DIR${entry.name}")
+            if(file.exists()){
+                throw FileAlreadyExistsException(file)
             }
 
             // create file we want to extract
