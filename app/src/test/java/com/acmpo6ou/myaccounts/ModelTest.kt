@@ -41,7 +41,7 @@ open class ModelTest {
     val locationUri: Uri = mock()
     val destinationUri: Uri = mock()
     private val descriptor: ParcelFileDescriptor = mock()
-    private val destination = "$SRC_DIR/main.tar"
+    private val destination = "$accountsDir/main.tar"
     private val location = "sampledata/tar/main.tar"
 
     /**
