@@ -181,7 +181,9 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
         Snackbar.make(
             databaseCoordinator,
             R.string.success_message,
-            Snackbar.LENGTH_LONG).show()
+            Snackbar.LENGTH_LONG)
+                .setAction("HIDE"){}
+                .show()
     }
 
     /**

@@ -137,7 +137,9 @@ class MainActivity : AppCompatActivity(),
             databaseCoordinator,
             R.string.no_updates,
             Snackbar.LENGTH_LONG
-        ).show()
+        )
+            .setAction("HIDE"){}
+            .show()
     }
 
     override fun showError(title: String, details: String) {
