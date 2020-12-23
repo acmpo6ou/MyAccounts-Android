@@ -75,26 +75,6 @@ class DatabasesModelTests: ModelTest() {
             "\"comment\":\"My gmail account.\"}}"
 
     /**
-     * This is a helper method that will copy our test  databases from sampledata folder to
-     * the fake file system.
-     *
-     * @param[name] name of the database that we want to copy to the fake file system
-     */
-    private fun copyDatabase(name: String ="database"){
-        // this are were we want to copy database .bin and .db files
-        val binDestination = File("$SRC_DIR$name.bin")
-        val dbDestination = File("$SRC_DIR$name.db")
-
-        // this are the database files that we want to copy
-        val binFile = File("sampledata/src/$name.bin")
-        val dbFile = File("sampledata/src/$name.db")
-
-        // here we copy database files to the fake file system
-        binFile.copyTo(binDestination)
-        dbFile.copyTo(dbDestination)
-    }
-
-    /**
      * This is a helper method that simply creates empty database.
      *
      * It creates database with name `main` and password `123`.
