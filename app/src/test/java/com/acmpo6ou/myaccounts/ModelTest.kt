@@ -67,6 +67,7 @@ open class ModelTest {
         // to simulate the Android Storage Access Framework
         val fos = FileOutputStream(File(destination))
         whenever(descriptor.fileDescriptor).thenReturn(fos.fd)
+        println(descriptor.fileDescriptor)
         whenever(contentResolver.openFileDescriptor(destinationUri, "w")).thenReturn(descriptor)
     }
 

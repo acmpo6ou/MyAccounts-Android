@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.core
 
 import android.annotation.SuppressLint
+import android.content.ContentResolver
 import android.net.Uri
 import android.util.Base64.DEFAULT
 import com.macasaet.fernet.Key
@@ -96,7 +97,8 @@ data class Database(val name: String,
  *
  * @param[ACCOUNTS_DIR] path to directory that contains src folder.
  */
-class DatabasesModel(private val ACCOUNTS_DIR: String): DatabasesModelInter{
+class DatabasesModel(private val ACCOUNTS_DIR: String,
+                     private val contentResolver: ContentResolver): DatabasesModelInter{
     // path to directory that contains databases
     private val SRC_DIR = "$ACCOUNTS_DIR/src/"
 
@@ -316,10 +318,12 @@ class DatabasesModel(private val ACCOUNTS_DIR: String): DatabasesModelInter{
      * @param[destination] path to folder where we want to export database.
      */
     override fun exportDatabase(name: String, destinationUri: Uri) {
-        val destination = ""
+        // get tar file
+        val descriptor = contentResolver.openFileDescriptor(destinationUri, "w")
+        val destination = FileOutputStream(descriptor?.fileDescriptor)
+
         // create tar file
-        val tarFile = FileOutputStream("$destination$name.tar")
-        val outStream = TarOutputStream(BufferedOutputStream(tarFile))
+        val outStream = TarOutputStream(BufferedOutputStream(destination))
 
         // salt and database files to compress to a tar file
         val dbFiles = listOf(

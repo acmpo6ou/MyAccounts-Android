@@ -11,7 +11,7 @@ import java.io.IOException
  */
 open class DatabasesPresenter(private val view: DatabaseFragmentInter)
     : DatabasesPresenterInter {
-    var model: DatabasesModelInter = DatabasesModel(view.ACCOUNTS_DIR)
+    var model: DatabasesModelInter = DatabasesModel(view.ACCOUNTS_DIR, view.myContext.contentResolver)
     override var databases: MutableList<Database> = model.getDatabases()
     var exportIndex: Int? = null
 
