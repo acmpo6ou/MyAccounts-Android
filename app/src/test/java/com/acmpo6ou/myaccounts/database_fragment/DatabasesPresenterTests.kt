@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.database_fragment
 
 import android.content.ContentResolver
+import android.content.Context
 import android.net.Uri
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabaseFragmentInter
@@ -44,13 +45,7 @@ open class DatabasesPresenterTest{
     val faker = Faker()
     val salt = "0123456789abcdef".toByteArray()
 
-    @Before
-    fun setUp(){
-        view = mock()
-        whenever(view.ACCOUNTS_DIR).thenReturn("")
-        whenever(view.myContext.contentResolver).thenReturn(contextResolver)
-        model = mock()
-
+    fun setupPresenter(){
         presenter = DatabasesPresenter(view)
         presenter.model = model
         presenter.databases = mutableListOf(
@@ -66,6 +61,19 @@ open class DatabasesPresenterTest{
 }
 
 class DatabasesPresenterTests: DatabasesPresenterTest() {
+    private val context: Context = mock()
+
+    @Before
+    fun setup(){
+        view = mock()
+        whenever(view.ACCOUNTS_DIR).thenReturn("")
+        whenever(context.contentResolver).thenReturn(contextResolver)
+        whenever(view.myContext).thenReturn(context)
+
+        model = mock()
+        setupPresenter()
+    }
+
     @Test
     fun `exportSelected should call exportDialog`(){
         presenter.exportSelected(0)
