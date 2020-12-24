@@ -25,6 +25,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.DrawerActions
 import androidx.test.espresso.contrib.DrawerMatchers.isClosed
+import androidx.test.espresso.contrib.NavigationViewActions
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -51,6 +52,21 @@ class MainActivityFunc {
 
         // Drawer should be closed after pressing back button
         device.pressBack()
+        onView(withId(R.id.drawer_layout))
+                .check(matches(isClosed(Gravity.LEFT)))
+    }
+
+    @Test
+    fun selecting_item_should_close_nav_drawer(){
+        onView(withId(R.id.drawer_layout))
+                .check(matches(isClosed(Gravity.LEFT))) // Drawer should be closed.
+                .perform(DrawerActions.open())
+
+        // select `Check for updates` in navigation drawer
+        onView(withId(R.id.nav_view))
+                .perform(NavigationViewActions.navigateTo(R.id.check_for_updates))
+
+        // drawer should be autoclosed
         onView(withId(R.id.drawer_layout))
                 .check(matches(isClosed(Gravity.LEFT)))
     }
