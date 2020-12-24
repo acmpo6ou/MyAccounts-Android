@@ -24,8 +24,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -46,6 +51,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_database_list.*
+
 
 class MainActivity : AppCompatActivity(),
         NavigationView.OnNavigationItemSelectedListener, MainActivityInter {
@@ -134,9 +140,9 @@ class MainActivity : AppCompatActivity(),
      */
     override fun noUpdates(){
         Snackbar.make(
-            databaseCoordinator,
-            R.string.no_updates,
-            Snackbar.LENGTH_LONG
+                databaseCoordinator,
+                R.string.no_updates,
+                Snackbar.LENGTH_LONG
         )
             .setAction("HIDE"){}
             .show()
@@ -190,5 +196,35 @@ class MainActivity : AppCompatActivity(),
             type = "application/x-tar"
         }
         startActivityForResult(intent, IMPORT_RC)
+    }
+
+    /**
+     * This method will automatically hide the keyboard when any TextView is losing focus.
+     *
+     * Note: this method is completely copied from StackOverflow.
+     */
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            /**
+             * It gets into the above IF-BLOCK if anywhere the screen is touched.
+             */
+            val v: View? = currentFocus
+            if (v is EditText) {
+                /**
+                 * Now, it gets into the above IF-BLOCK if an EditText is already in focus, and you tap somewhere else
+                 * to take the focus away from that particular EditText. It could have 2 cases after tapping:
+                 * 1. No EditText has focus
+                 * 2. Focus is just shifted to the other EditText
+                 */
+                val outRect = Rect()
+                v.getGlobalVisibleRect(outRect)
+                if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
+                    v.clearFocus()
+                    val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0)
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event)
     }
 }
