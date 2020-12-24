@@ -4,7 +4,6 @@ import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.acmpo6ou.myaccounts.core.Database
@@ -47,7 +46,7 @@ class DatabaseFragmentInst {
             it.confirmDelete(0)
         }
         // wait for dialog to appear
-        onView(isRoot()).perform(waitForView(android.R.id.button1, 5000))
+        Thread.sleep(1000)
 
         // chose Yes
         onView(withId(android.R.id.button1)).perform(click())
@@ -63,7 +62,7 @@ class DatabaseFragmentInst {
             it.confirmDelete(0)
         }
         // wait for dialog to appear
-        onView(isRoot()).perform(waitForView(android.R.id.button2, 5000))
+        Thread.sleep(1000)
 
         // chose No
         onView(withId(android.R.id.button2)).perform(click())
@@ -79,7 +78,7 @@ class DatabaseFragmentInst {
             it.confirmClose(0)
         }
         // wait for dialog to appear
-        onView(isRoot()).perform(waitForView(android.R.id.button1, 5000))
+        Thread.sleep(1000)
 
         // chose Yes
         onView(withId(android.R.id.button1)).perform(click())
@@ -95,7 +94,7 @@ class DatabaseFragmentInst {
             it.confirmClose(0)
         }
         // wait for dialog to appear
-        onView(isRoot()).perform(waitForView(android.R.id.button2, 5000))
+        Thread.sleep(1000)
 
         // chose No
         onView(withId(android.R.id.button2)).perform(click())
