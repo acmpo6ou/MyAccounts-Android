@@ -155,6 +155,7 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
             errorDetails = "${e.javaClass.name} ${e.message}"
         }
 
+        // if there are any errors display error dialog
         if(errorDetails.isNotEmpty()){
             val errorTitle = resources.getString(R.string.import_error_title)
             view.showError(errorTitle, errorDetails)
