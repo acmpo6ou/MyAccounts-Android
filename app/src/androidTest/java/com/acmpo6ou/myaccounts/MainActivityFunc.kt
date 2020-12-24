@@ -27,6 +27,8 @@ import androidx.test.espresso.contrib.DrawerActions
 import androidx.test.espresso.contrib.DrawerMatchers.isClosed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,6 +36,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class MainActivityFunc {
     lateinit var mainScenario: ActivityScenario<MainActivity>
+    val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
     @Before
     fun setup() {
@@ -45,6 +48,10 @@ class MainActivityFunc {
         onView(withId(R.id.drawer_layout))
                 .check(matches(isClosed(Gravity.LEFT))) // Drawer should be closed.
                 .perform(DrawerActions.open())
-        Thread.sleep(5000)
+
+        // Drawer should be closed after pressing back button
+        device.pressBack()
+        onView(withId(R.id.drawer_layout))
+                .check(matches(isClosed(Gravity.LEFT)))
     }
 }
