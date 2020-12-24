@@ -36,6 +36,7 @@ import org.kamranzafar.jtar.TarEntry
 import org.kamranzafar.jtar.TarOutputStream
 import java.io.BufferedOutputStream
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.security.SecureRandom
 import java.time.Duration
@@ -333,6 +334,11 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
 
         // each file is added to tar file
         for(f in dbFiles){
+            // check if .db or .bin file exists
+            if(!f.exists()){
+                throw FileNotFoundException(f.name)
+            }
+
             val entry = TarEntry(f, "src/${f.name}")
             outStream.putNextEntry(entry)
             outStream.write(f.readBytes())

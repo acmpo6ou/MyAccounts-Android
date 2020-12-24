@@ -33,6 +33,7 @@ import kotlinx.serialization.json.Json
 import org.junit.Assert.*
 import org.junit.Test
 import java.io.File
+import java.io.FileNotFoundException
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.TemporalAmount
@@ -442,6 +443,21 @@ class DatabasesModelTests: ModelTest() {
                 "exportDatabase incorrect export: content of .bin file is incorrect!",
                 expectedBin in exportedTar
         )
+    }
+
+    @Test
+    fun `exportDatabase should throw FileNotFoundException if there are no db or bin files`(){
+        setupOutputResolver()
+        // there is no database named `testing` so we can't export it, because there are no
+        // testing.db and testing.bin files
+        try {
+            model.exportDatabase("testing", destinationUri)
+            // if there is no exception thrown the test will fail
+            assert(false)
+        }
+        catch (e: FileNotFoundException){
+            // if this exception were thrown its okay, test should pass
+        }
     }
 
     private lateinit var database: Database
