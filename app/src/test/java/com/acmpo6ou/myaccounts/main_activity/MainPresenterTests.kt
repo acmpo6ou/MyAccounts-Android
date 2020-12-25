@@ -170,4 +170,14 @@ class MainPresenterTests {
         presenter.importDatabase(locationUri)
         assertTrue(Database("main") in presenter.databases)
     }
+
+    @Test
+    fun `importDatabase should call notifyChanged`(){
+        mockCorrectModel()
+        doReturn("main").whenever(model).importDatabase(locationUri)
+        presenter.model = model
+
+        presenter.importDatabase(locationUri)
+        verify(view).notifyChanged(0)
+    }
 }

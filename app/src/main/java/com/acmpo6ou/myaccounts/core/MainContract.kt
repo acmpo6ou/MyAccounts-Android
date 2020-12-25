@@ -49,6 +49,7 @@ interface MainActivityInter{
     fun showError(title: String, details: String)
 
     fun navigateTo(id: Int)
+    fun notifyChanged(i: Int)
 }
 
 interface MainModelInter{

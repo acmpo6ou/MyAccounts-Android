@@ -46,6 +46,7 @@ import com.acmpo6ou.myaccounts.core.MainActivityInter
 import com.acmpo6ou.myaccounts.core.MainPresenter
 import com.acmpo6ou.myaccounts.core.MainPresenterInter
 import com.acmpo6ou.myaccounts.core.errorDialog
+import com.acmpo6ou.myaccounts.ui.DatabaseFragment
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
@@ -228,5 +229,11 @@ class MainActivity : AppCompatActivity(),
             }
         }
         return super.dispatchTouchEvent(event)
+    }
+
+    override fun notifyChanged(i: Int){
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
+        val databaseFragment = navHostFragment?.childFragmentManager?.fragments?.get(0) as DatabaseFragment
+        databaseFragment.notifyChanged(i)
     }
 }
