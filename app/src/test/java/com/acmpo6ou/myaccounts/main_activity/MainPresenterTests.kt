@@ -23,6 +23,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.MainActivityInter
 import com.acmpo6ou.myaccounts.core.MainModelInter
 import com.acmpo6ou.myaccounts.core.MainPresenter
@@ -38,6 +39,8 @@ class MainPresenterTests {
     lateinit var presenter: MainPresenter
     lateinit var spyPresenter: MainPresenter
     lateinit var view: MainActivityInter
+    private lateinit var model: MainModelInter
+    private lateinit var locationUri: Uri
 
     private val accountsDir = "/dev/shm/accounts"
 
@@ -53,6 +56,23 @@ class MainPresenterTests {
 
         presenter = MainPresenter(view)
         spyPresenter = spy(presenter)
+    }
+
+    fun mockCorrectModel(){
+        // mock model to return correct file sizes, count and names
+        model = mock()
+        locationUri = mock()
+        spyPresenter.model = model
+
+        val filesList = mutableListOf("main", "main")
+        val sizesList = mutableListOf(
+                100, // size of db file should be not less then 100
+                16, // size of bin file should be exactly 16
+        )
+
+        whenever(model.getNames(locationUri)).thenReturn(filesList)
+        whenever(model.countFiles(locationUri)).thenReturn(2)
+        whenever(model.getSizes(locationUri)).thenReturn(sizesList)
     }
 
     @Test
@@ -97,22 +117,9 @@ class MainPresenterTests {
 
     @Test
     fun `checkTarFile should call importDatabase if there are no errors`(){
-        // mock model to return correct file sizes, count and names
-        val model: MainModelInter = mock()
-        val locationUri: Uri = mock()
-        spyPresenter.model = model
-
-        val filesList = mutableListOf("main", "main")
-        val sizesList = mutableListOf(
-                100, // size of db file should be not less then 100
-                16, // size of bin file should be exactly 16
-        )
-
-        whenever(model.getNames(locationUri)).thenReturn(filesList)
-        whenever(model.countFiles(locationUri)).thenReturn(2)
-        whenever(model.getSizes(locationUri)).thenReturn(sizesList)
-
+        mockCorrectModel()
         doNothing().`when`(spyPresenter).importDatabase(locationUri)
+
         spyPresenter.checkTarFile(locationUri)
         verify(spyPresenter).importDatabase(locationUri)
         verify(view, never()).showError(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())
@@ -149,5 +156,14 @@ class MainPresenterTests {
         // the src folder should be created
         val srcDir = File("$accountsDir/src")
         assertTrue(srcDir.exists())
+    }
+
+    @Test
+    fun `importDatabase should add imported database to the list`(){
+        mockCorrectModel()
+        whenever(model.importDatabase(locationUri)).thenReturn("main")
+
+        presenter.importDatabase(locationUri)
+        assertTrue(Database("main") in presenter.databases)
     }
 }

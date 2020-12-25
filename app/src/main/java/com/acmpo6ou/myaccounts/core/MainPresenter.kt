@@ -30,6 +30,13 @@ import java.io.IOException
 open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
     var model: MainModelInter = MainModel(view.ACCOUNTS_DIR, view.myContext.contentResolver)
 
+    var databases: MutableList<Database>
+        get() = view.app.databases
+        set(value) {
+            view.app.databases = value
+        }
+
+
     init{
         // This methods are called on app startup
         fixSrcFolder()

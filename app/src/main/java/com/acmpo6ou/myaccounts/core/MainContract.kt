@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts.core
 
 import android.content.Context
 import android.net.Uri
+import com.acmpo6ou.myaccounts.MyApp
 
 interface MainPresenterInter{
     fun importSelected()
@@ -37,7 +38,9 @@ interface MainPresenterInter{
 
 interface MainActivityInter{
     val ACCOUNTS_DIR: String
+
     val myContext: Context
+    var app: MyApp
 
     fun importDialog()
     fun startUpdatesActivity()
