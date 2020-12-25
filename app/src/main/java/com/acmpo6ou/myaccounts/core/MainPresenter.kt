@@ -145,16 +145,24 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
         }
     }
 
+    /**
+     * This method calls model.importDatabase() handling all errors.
+     *
+     * After importing database adds it to the list which then sorts and notifies about changes.
+     * If there are any errors during this process it displays error dialog.
+     */
     open fun importDatabase(location: Uri){
         val resources = view.myContext?.resources
         var errorDetails = ""
 
         try {
+            // add Database and sort the databases list
             val name = model.importDatabase(location)
             val db = Database(name)
             databases.add(db)
             databases.sortBy { it.name }
 
+            // notify about changes in the list
             val i = databases.indexOf(db)
             view.notifyChanged(i)
         }

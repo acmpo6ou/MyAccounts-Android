@@ -231,6 +231,11 @@ class MainActivity : AppCompatActivity(),
         return super.dispatchTouchEvent(event)
     }
 
+    /**
+     * This method calls notifyChanged on DatabaseFragment to rerender the list.
+     *
+     * @param[i] index of Database that were added to databases list.
+     */
     override fun notifyChanged(i: Int){
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
         val databaseFragment = navHostFragment?.childFragmentManager?.fragments?.get(0) as DatabaseFragment
