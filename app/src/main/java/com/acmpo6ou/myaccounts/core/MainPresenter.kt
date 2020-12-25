@@ -150,7 +150,9 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
         var errorDetails = ""
 
         try {
-            model.importDatabase(location)
+            val name = model.importDatabase(location)
+            databases.add(Database(name))
+            databases.sortBy { it.name }
         }
         catch (e: FileAlreadyExistsException){
             errorDetails = resources.getString(R.string.import_exists)

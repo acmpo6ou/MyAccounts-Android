@@ -22,6 +22,7 @@ package com.acmpo6ou.myaccounts.main_activity
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.MainActivityInter
@@ -41,6 +42,7 @@ class MainPresenterTests {
     lateinit var view: MainActivityInter
     private lateinit var model: MainModelInter
     private lateinit var locationUri: Uri
+    val app = MyApp()
 
     private val accountsDir = "/dev/shm/accounts"
 
@@ -48,6 +50,7 @@ class MainPresenterTests {
     fun setup(){
         view = mock()
         whenever(view.ACCOUNTS_DIR).thenReturn(accountsDir)
+        whenever(view.app).thenReturn(app)
 
         val context: Context = mock()
         val resolver: ContentResolver = mock()
@@ -58,11 +61,10 @@ class MainPresenterTests {
         spyPresenter = spy(presenter)
     }
 
-    fun mockCorrectModel(){
+    private fun mockCorrectModel(){
         // mock model to return correct file sizes, count and names
         model = mock()
         locationUri = mock()
-        spyPresenter.model = model
 
         val filesList = mutableListOf("main", "main")
         val sizesList = mutableListOf(
@@ -118,6 +120,7 @@ class MainPresenterTests {
     @Test
     fun `checkTarFile should call importDatabase if there are no errors`(){
         mockCorrectModel()
+        spyPresenter.model = model
         doNothing().`when`(spyPresenter).importDatabase(locationUri)
 
         spyPresenter.checkTarFile(locationUri)
@@ -161,7 +164,8 @@ class MainPresenterTests {
     @Test
     fun `importDatabase should add imported database to the list`(){
         mockCorrectModel()
-        whenever(model.importDatabase(locationUri)).thenReturn("main")
+        doReturn("main").whenever(model).importDatabase(locationUri)
+        presenter.model = model
 
         presenter.importDatabase(locationUri)
         assertTrue(Database("main") in presenter.databases)

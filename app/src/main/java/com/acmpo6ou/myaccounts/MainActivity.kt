@@ -59,6 +59,7 @@ class MainActivity : AppCompatActivity(),
     val IMPORT_RC = 202
     override lateinit var ACCOUNTS_DIR: String
     override lateinit var myContext: Context
+    override lateinit var app: MyApp
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     lateinit var presenter: MainPresenterInter
@@ -69,6 +70,7 @@ class MainActivity : AppCompatActivity(),
 
         ACCOUNTS_DIR = getExternalFilesDir(null)!!.path + "/"
         myContext = this
+        app = applicationContext as MyApp
 
         // setup presenter and appbar
         presenter = MainPresenter(this)
