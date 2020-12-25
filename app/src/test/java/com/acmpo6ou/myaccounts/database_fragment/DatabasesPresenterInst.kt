@@ -23,7 +23,6 @@ import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
 import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
@@ -47,11 +46,7 @@ class DatabasesPresenterInst: DatabasesPresenterTest() {
 
     @Before
     fun setup(){
-        view = mock()
-        whenever(view.ACCOUNTS_DIR).thenReturn("")
         whenever(view.myContext).thenReturn(context)
-
-        model = mock()
         setupPresenter()
     }
 

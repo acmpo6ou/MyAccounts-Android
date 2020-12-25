@@ -1,7 +1,6 @@
 package com.acmpo6ou.myaccounts.core
 
 import android.net.Uri
-import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -13,13 +12,13 @@ import java.io.IOException
 open class DatabasesPresenter(private val view: DatabaseFragmentInter)
     : DatabasesPresenterInter {
     var model: DatabasesModelInter = DatabasesModel(view.ACCOUNTS_DIR, view.myContext.contentResolver)
-    val app = view.myContext.applicationContext as MyApp
-    override var databases: MutableList<Database>
-        get() = app.databases
-        set(value) {
-            app.databases = value
-        }
     var exportIndex: Int? = null
+
+    override var databases: MutableList<Database>
+        get() = view.app.databases
+        set(value) {
+            view.app.databases = value
+        }
 
     init {
         databases = model.getDatabases()

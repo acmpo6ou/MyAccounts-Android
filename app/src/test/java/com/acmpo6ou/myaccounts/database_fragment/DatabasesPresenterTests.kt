@@ -22,6 +22,7 @@ package com.acmpo6ou.myaccounts.database_fragment
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabaseFragmentInter
 import com.acmpo6ou.myaccounts.core.DatabasesModelInter
@@ -39,6 +40,7 @@ open class DatabasesPresenterTest{
     lateinit var view: DatabaseFragmentInter
     lateinit var model: DatabasesModelInter
     lateinit var presenter: DatabasesPresenter
+    val app = MyApp()
 
     var locationUri: Uri = mock()
     val contextResolver: ContentResolver = mock()
@@ -46,6 +48,7 @@ open class DatabasesPresenterTest{
     val salt = "0123456789abcdef".toByteArray()
 
     fun setupPresenter(){
+        model = mock()
         presenter = DatabasesPresenter(view)
         presenter.model = model
         presenter.databases = mutableListOf(
@@ -58,6 +61,13 @@ open class DatabasesPresenterTest{
         presenter.exportIndex = 1
         presenter.exportDatabase(locationUri)
     }
+
+    @Before
+    fun setUp(){
+        view = mock()
+        whenever(view.ACCOUNTS_DIR).thenReturn("")
+        whenever(view.app).thenReturn(app)
+    }
 }
 
 class DatabasesPresenterTests: DatabasesPresenterTest() {
@@ -65,12 +75,8 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
 
     @Before
     fun setup(){
-        view = mock()
-        whenever(view.ACCOUNTS_DIR).thenReturn("")
         whenever(context.contentResolver).thenReturn(contextResolver)
         whenever(view.myContext).thenReturn(context)
-
-        model = mock()
         setupPresenter()
     }
 
