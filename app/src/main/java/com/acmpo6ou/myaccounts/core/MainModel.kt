@@ -33,6 +33,19 @@ import java.io.*
  */
 class MainModel(private val ACCOUNTS_DIR: String,
                 private val contentResolver: ContentResolver): MainModelInter {
+
+    private fun cleanName(databaseName: String): String {
+        // this needs to be removed from file name
+        val srcRe = Regex("^src/")
+        val binRe = Regex("\\.db$")
+        val dbRe = Regex("\\.bin$")
+
+        // clean file name from extension and `src` folder
+        var name = srcRe.replace(databaseName, "")
+        name = binRe.replace(name, "")
+        name = dbRe.replace(name, "")
+        return name
+    }
     /**
      * This method counts number of files that present in given tar file.
      *
@@ -71,15 +84,7 @@ class MainModel(private val ACCOUNTS_DIR: String,
                 name.startsWith("src/") &&
                 (name.endsWith(".db") || name.endsWith(".bin"))
             ) {
-                // this needs to be removed from file name
-                val srcRe = Regex("^src/")
-                val binRe = Regex("\\.db$")
-                val dbRe = Regex("\\.bin$")
-
-                // clean file name from extension and `src` folder
-                name = srcRe.replace(name, "")
-                name = binRe.replace(name, "")
-                name = dbRe.replace(name, "")
+                name = cleanName(name)
                 list.add(name)
             }
             entry = inputStream.nextEntry
@@ -130,8 +135,9 @@ class MainModel(private val ACCOUNTS_DIR: String,
      * Extracts .db and .bin files from given tar archive to `src` directory.
      * @param[locationUri] uri containing tar archive that contains database files
      * we need to extract.
+     * @return name of imported database that is later used by presenter.
      */
-    override fun importDatabase(locationUri: Uri) {
+    override fun importDatabase(locationUri: Uri): String {
         // get tar file
         val descriptor = contentResolver.openFileDescriptor(locationUri, "r")
         val location = FileInputStream(descriptor?.fileDescriptor)
@@ -143,6 +149,7 @@ class MainModel(private val ACCOUNTS_DIR: String,
 
         // get first file from tar
         var entry: TarEntry? = inputStream.nextEntry
+        var name = ""
 
         // extract database files from tar archive
         while (entry != null) {
@@ -161,6 +168,8 @@ class MainModel(private val ACCOUNTS_DIR: String,
                 throw FileAlreadyExistsException(file)
             }
 
+            name = cleanName(entry.name)
+
             // create file we want to extract
             val outStream = FileOutputStream("$ACCOUNTS_DIR${entry.name}")
             val dest = BufferedOutputStream(outStream)
@@ -177,5 +186,6 @@ class MainModel(private val ACCOUNTS_DIR: String,
             entry = inputStream.nextEntry
         }
         inputStream.close()
+        return name
     }
 }

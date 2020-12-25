@@ -65,6 +65,12 @@ class MainModelTests: ModelTest(){
     }
 
     @Test
+    fun `importDatabase should return name of imported database`(){
+        val name = model.importDatabase(locationUri)
+        assertEquals("main", name)
+    }
+
+    @Test
     fun `importDatabase should throw FileAlreadyExistsException if database already exists`(){
         copyDatabase("main")
         try {

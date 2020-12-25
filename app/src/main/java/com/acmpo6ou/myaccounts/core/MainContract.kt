@@ -52,5 +52,5 @@ interface MainModelInter{
     fun countFiles(location: Uri): Int
     fun getNames(locationUri: Uri): MutableList<String>
     fun getSizes(locationUri: Uri): MutableList<Int>
-    fun importDatabase(locationUri: Uri)
+    fun importDatabase(locationUri: Uri): String
 }
