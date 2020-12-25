@@ -196,8 +196,8 @@ class DatabaseFragmentInstrumentation {
 
     @Test
     fun `startDatabase should start appropriate intent`(){
-        // serialized database string that wil be passed with intent
-        val databaseString = faker.lorem().sentence()
+        // database index that wil be passed with intent
+        val index = faker.number().randomDigit()
 
         // create expected intent
         var expectedIntent = Intent()
@@ -205,16 +205,15 @@ class DatabaseFragmentInstrumentation {
         // call startDatabase
         databaseScenario.onFragment {
             expectedIntent = Intent(it.myContext, AccountsActivity::class.java)
-            expectedIntent.putExtra("database", databaseString)
+            expectedIntent.putExtra("databaseIndex", index)
 
-            it.startDatabase(databaseString)
+            it.startDatabase(index)
         }
 
         // check that appropriate intent was started
         val actual: Intent = shadowOf(RuntimeEnvironment.application).nextStartedActivity
 
         assertEquals(
-                "startDatabase has started intent with incorrect serialized string!",
                 expectedIntent.getStringExtra("database"),
                 actual.getStringExtra("database"),
         )

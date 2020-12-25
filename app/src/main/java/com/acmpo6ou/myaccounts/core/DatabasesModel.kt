@@ -28,7 +28,6 @@ import com.macasaet.fernet.StringValidator
 import com.macasaet.fernet.Token
 import com.macasaet.fernet.Validator
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -74,19 +73,13 @@ data class Account(
  * @param[password] password of the database.
  * @param[data] map of account names to corresponding Account instances.
  * @param[salt] 16 purely random bits needed for encryption and decryption of database.
- * @param[index] Databases are stored in a list, [index] is the index of the given Database.
- * It is used to be able to pass Database index between activities back and forth while not
- * loosing index.
  * @property isOpen dynamically returns whether database is open or not, the database is
  * considered open when [password] is not null.
  */
-@Serializable
 data class Database(val name: String,
                     var password: String? = null,
                     val salt: ByteArray? = null,
-                    var data: Map<String, Account> = emptyMap(),
-                    var index: Int? = null){
-    @Transient
+                    var data: Map<String, Account> = emptyMap()){
     var isOpen: Boolean = false
         get() = password != null
         private set
@@ -345,28 +338,5 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
         }
         outStream.flush()
         outStream.close()
-    }
-
-    // NOTE: 2 next methods are needed because of testable architecture, even though
-    // they both contain only one line of code
-    /**
-     * Used to serialise Database instance.
-     *
-     * @param[database] Database instance to serialise.
-     * @return serialised json string.
-     */
-    override fun dumpDatabase(database: Database): String{
-        return Json.encodeToString(database)
-    }
-
-
-    /**
-     * Used to deserialise database json string to Database instance.
-     *
-     * @param[databaseJson] database json string to deserialise.
-     * @return deserialised Database instance.
-     */
-    override fun loadDatabase(databaseJson: String): Database{
-        return Json.decodeFromString(databaseJson)
     }
 }

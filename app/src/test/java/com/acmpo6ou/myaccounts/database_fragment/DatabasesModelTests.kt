@@ -28,8 +28,6 @@ import com.github.javafaker.Faker
 import com.macasaet.fernet.StringValidator
 import com.macasaet.fernet.Token
 import com.macasaet.fernet.Validator
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import org.junit.Assert.*
 import org.junit.Test
 import java.io.File
@@ -458,33 +456,5 @@ class DatabasesModelTests: ModelTest() {
         catch (e: FileNotFoundException){
             // if this exception were thrown its okay, test should pass
         }
-    }
-
-    private lateinit var database: Database
-    private lateinit var databaseJson: String
-    private fun setupDatabaseAndJson(){
-        database = Database(
-            faker.name().toString(),
-            faker.lorem().sentence(),
-            salt,
-            getDatabaseMap(),
-            1
-        )
-        databaseJson =
-            "{\"name\":\"${database.name}\",\"password\":\"${database.password}\"" +
-            ",\"salt\":${Json.encodeToString(salt)},\"data\":$jsonDatabase,\"index\":1}"
-    }
-    @Test
-    fun `dumpDatabase should serialize given Database`(){
-        setupDatabaseAndJson()
-        val actualJson = model.dumpDatabase(database)
-        assertEquals(databaseJson, actualJson)
-    }
-
-    @Test
-    fun `loadDatabase should deserialize given database json string`(){
-        setupDatabaseAndJson()
-        val actualDatabase = model.loadDatabase(databaseJson)
-        assertEquals(database.toString(), actualDatabase.toString())
     }
 }

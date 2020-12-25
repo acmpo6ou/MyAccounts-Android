@@ -149,16 +149,11 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
      * Called when user selects item in database list.
      *
      * If selected database is closed should navigate to OpenDatabaseFragment, if it
-     * is open - call view.startDatabase passing through serialised database string.
+     * is open - call view.startDatabase passing through database index.
      */
     override fun openDatabase(i: Int) {
         if(databases[i].isOpen){
-            // set database index property as it will be needed to later save database
-            val database = databases[i].copy()
-            database.index = i
-
-            val databaseJson = model.dumpDatabase(database)
-            view.startDatabase(databaseJson)
+            view.startDatabase(i)
         }
         else {
             view.navigateToOpen(i)

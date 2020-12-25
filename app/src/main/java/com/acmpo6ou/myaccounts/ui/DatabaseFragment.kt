@@ -207,12 +207,11 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
     /**
      * Used to start AccountsActivity for given database.
      *
-     * @param[databaseJson] a serialized json string representing database for which
-     * we want to start AccountsActivity.
+     * @param[index] index of database for which we want to start AccountsActivity.
      */
-    override fun startDatabase(databaseJson: String) {
+    override fun startDatabase(index: Int) {
         val intent = Intent(myContext, AccountsActivity::class.java)
-        intent.putExtra("database", databaseJson)
+        intent.putExtra("databaseIndex", index)
         startActivity(intent)
     }
 

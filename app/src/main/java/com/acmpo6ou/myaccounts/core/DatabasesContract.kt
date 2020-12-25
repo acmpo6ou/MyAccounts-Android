@@ -60,7 +60,7 @@ interface DatabaseFragmentInter{
     fun showSuccess()
     fun showError(title: String, details: String)
 
-    fun startDatabase(databaseJson: String)
+    fun startDatabase(index: Int)
     fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?)
 
     fun notifyChanged(i: Int)
@@ -74,7 +74,4 @@ interface DatabasesModelInter{
     fun openDatabase(database: Database): Database
     fun exportDatabase(name: String, destinationUri: Uri)
     fun deleteDatabase(name: String)
-
-    fun loadDatabase(databaseJson: String): Database
-    fun dumpDatabase(database: Database): String
 }
