@@ -31,6 +31,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.acmpo6ou.myaccounts.AccountsActivity
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -47,14 +48,21 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
     override lateinit var adapter: DatabasesAdapter
     override lateinit var presenter: DatabasesPresenterInter
 
-    private val databases: List<Database>  // alias
-        get() = presenter.databases
+    var databases: MutableList<Database>
+        get() = app.databases
+        set(value){
+            app.databases = value
+        }
+
     override lateinit var myContext: Context
+    override lateinit var app: MyApp
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         // saving context to use it later
         myContext = context
+        app = context.applicationContext as MyApp
+        databases = app.databases
         ACCOUNTS_DIR = context.getExternalFilesDir(null)!!.path + "/"
     }
 
@@ -65,7 +73,7 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
         presenter = DatabasesPresenter(this)
 
         // add some databases for testing
-        presenter.databases = mutableListOf(
+        databases = mutableListOf(
                 Database("main"), // locked
                 Database("test", password = "123") // opened
         )
