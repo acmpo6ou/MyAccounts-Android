@@ -104,8 +104,8 @@ class MainPresenterTests {
 
         val filesList = mutableListOf("main", "main")
         val sizesList = mutableListOf(
+                100, // size of db file should be not less then 100
                 16, // size of bin file should be exactly 16
-                100 // size of db file should be not less then 100
         )
 
         whenever(model.getNames(locationUri)).thenReturn(filesList)
