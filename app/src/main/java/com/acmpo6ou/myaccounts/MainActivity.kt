@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity(),
         myContext = this
         app = applicationContext as MyApp
 
-        // setup presenter and appbar
+        // setup presenter and action bar
         presenter = MainPresenter(this)
         setSupportActionBar(toolbar)
 
@@ -103,6 +103,9 @@ class MainActivity : AppCompatActivity(),
 
         // set app version in navigation header
         setAppVersion()
+
+        // set action bar title
+        supportActionBar?.title = resources.getString(R.string.title)
     }
 
     /**
