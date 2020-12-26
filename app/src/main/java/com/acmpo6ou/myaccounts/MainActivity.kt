@@ -86,15 +86,14 @@ class MainActivity : AppCompatActivity(),
         nav_view.setupWithNavController(navController)
         nav_view.setNavigationItemSelectedListener(this)
 
-        // unlock drawer layout when we navigate back from AboutFragment, SettingsFragment etc
+        // navigation drawer should be unlocked only on DatabaseFragment and locked
+        // everywhere else
         navController.addOnDestinationChangedListener{ _: NavController, navDestination: NavDestination, _: Bundle? ->
-            val destinations = listOf(
-                    R.id.settingsFragment,
-                    R.id.changelogFragment,
-                    R.id.aboutFragment,
-            )
-            if(navDestination.id !in destinations){
+            if(navDestination.id == R.id.databaseFragment){
                 drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            }
+            else{
+                drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             }
         }
 
@@ -163,10 +162,6 @@ class MainActivity : AppCompatActivity(),
     override fun navigateTo(id: Int) {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navHostFragment.navController.navigate(id)
-
-        // drawer should be locked because we can't navigate from AboutFragment,
-        // SettingsFragment etc. to anywere
-        drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
     }
 
     override fun startUpdatesActivity() {
