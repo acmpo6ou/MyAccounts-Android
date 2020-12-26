@@ -26,7 +26,7 @@
     <fragment
         android:id="@+id/databaseFragment"
         android:name="com.acmpo6ou.myaccounts.ui.DatabaseFragment"
-        android:label="fragment_database_list"
+        android:label="MyAccounts"
         tools:layout="@layout/fragment_database_list" >
         <action
             android:id="@+id/actionCreateDatabase"
@@ -74,12 +74,12 @@
     <fragment
         android:id="@+id/createDatabaseFragment"
         android:name="com.acmpo6ou.myaccounts.ui.CreateDatabaseFragment"
-        android:label="create_edit_database_fragment"
+        android:label="Create database"
         tools:layout="@layout/create_edit_database_fragment" />
     <fragment
         android:id="@+id/editDatabaseFragment"
         android:name="com.acmpo6ou.myaccounts.ui.EditDatabaseFragment"
-        android:label="EditDatabaseFragment"
+        android:label="Edit database"
         tools:layout="@layout/create_edit_database_fragment" >
         <argument
             android:name="databaseIndex"
@@ -88,7 +88,6 @@
     <fragment
         android:id="@+id/openDatabaseFragment"
         android:name="com.acmpo6ou.myaccounts.ui.OpenDatabaseFragment"
-        android:label="open_database_fragment"
         tools:layout="@layout/open_database_fragment" >
         <argument
             android:name="databaseIndex"
@@ -97,15 +96,15 @@
     <fragment
         android:id="@+id/changelogFragment"
         android:name="com.acmpo6ou.myaccounts.ui.ChangelogFragment"
-        android:label="fragment_changelog"
+        android:label="Changelog"
         tools:layout="@layout/fragment_changelog" />
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.acmpo6ou.myaccounts.ui.SettingsFragment"
-        android:label="SettingsFragment" />
+        android:label="Settings" />
     <fragment
         android:id="@+id/aboutFragment"
         android:name="com.acmpo6ou.myaccounts.ui.AboutFragment"
-        android:label="fragment_about"
+        android:label="About"
         tools:layout="@layout/fragment_about" />
 </navigation>

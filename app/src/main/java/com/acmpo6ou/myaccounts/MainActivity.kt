@@ -103,9 +103,6 @@ class MainActivity : AppCompatActivity(),
 
         // set app version in navigation header
         setAppVersion()
-
-        // set action bar title
-        supportActionBar?.title = resources.getString(R.string.title)
     }
 
     /**
