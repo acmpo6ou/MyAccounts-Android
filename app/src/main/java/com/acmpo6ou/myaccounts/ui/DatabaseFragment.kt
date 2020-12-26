@@ -77,6 +77,7 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
                 Database("main"), // locked
                 Database("test", password = "123") // opened
         )
+        checkListPlaceholder()
     }
 
     override fun onCreateView(
@@ -235,6 +236,7 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
     override fun notifyChanged(i: Int) {
         adapter.notifyItemChanged(i)
         adapter.notifyItemRangeChanged(i, 1)
+        checkListPlaceholder()
     }
 
     /**
@@ -245,8 +247,16 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
     override fun notifyRemoved(i: Int) {
         adapter.notifyItemRemoved(i)
         adapter.notifyItemRangeRemoved(i, 1)
+        checkListPlaceholder()
     }
 
+    /**
+     * This method decides whether to show recycler view placeholder (tip that is shown when
+     * recycler is empty).
+     *
+     * If there are items in the list it hides placeholder, if there aren't it displays
+     * the placeholder.
+     */
     fun checkListPlaceholder(){
         if (databases.size == 0) {
             databasesList.visibility = View.GONE
