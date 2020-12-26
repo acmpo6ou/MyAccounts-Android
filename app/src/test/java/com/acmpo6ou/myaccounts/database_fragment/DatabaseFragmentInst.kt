@@ -394,6 +394,7 @@ class DatabaseFragmentInstrumentation {
     @Test
     fun `checkListPlaceholder should display placeholder when list has no items`(){
         databaseScenario.onFragment {
+            it.databases = mutableListOf()
             it.checkListPlaceholder()
 
             // placeholder should be invisible
