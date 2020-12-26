@@ -77,7 +77,6 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
                 Database("main"), // locked
                 Database("test", password = "123") // opened
         )
-        checkListPlaceholder()
     }
 
     override fun onCreateView(
@@ -88,6 +87,7 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        checkListPlaceholder()
         // when clicking on (+) FAB navigate to CreateDatabaseFragment
         addDatabase.setOnClickListener{
             view.findNavController().navigate(R.id.actionCreateDatabase)
