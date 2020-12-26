@@ -82,6 +82,7 @@ dependencies {
     testImplementation 'androidx.navigation:navigation-testing:2.3.2'
     testImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     testImplementation 'com.github.javafaker:javafaker:0.18'
+    testImplementation 'androidx.arch.core:core-testing:2.1.0'
 
     androidTestImplementation 'com.github.javafaker:javafaker:0.18'
     androidTestImplementation 'androidx.navigation:navigation-testing:2.3.2'
