@@ -248,7 +248,8 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
     }
 
     fun checkListPlaceholder(){
-
+        databasesList.visibility = View.GONE
+        no_databases.visibility = View.VISIBLE
     }
 
     companion object {

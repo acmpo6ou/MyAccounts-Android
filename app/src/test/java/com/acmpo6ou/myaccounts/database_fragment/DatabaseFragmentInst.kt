@@ -390,4 +390,19 @@ class DatabaseFragmentInstrumentation {
             assertEquals(View.VISIBLE, list?.visibility)
         }
     }
+
+    @Test
+    fun `checkListPlaceholder should display placeholder when list has no items`(){
+        databaseScenario.onFragment {
+            it.checkListPlaceholder()
+
+            // placeholder should be invisible
+            val placeholder = it.view?.findViewById<TextView>(R.id.no_databases)
+            assertEquals(View.VISIBLE, placeholder?.visibility)
+
+            // while the list should be visible
+            val list = it.view?.findViewById<RecyclerView>(R.id.databasesList)
+            assertEquals(View.GONE, list?.visibility)
+        }
+    }
 }
