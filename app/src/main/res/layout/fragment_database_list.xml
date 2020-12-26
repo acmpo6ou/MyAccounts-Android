@@ -32,6 +32,14 @@
         app:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/list_item" />
 
+    <TextView
+        android:id="@+id/no_databases"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="@string/no_databases" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addDatabase"
         android:layout_width="wrap_content"

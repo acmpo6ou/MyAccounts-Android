@@ -104,4 +104,5 @@
     <string name="import_db_size">.db file must have size of at least 100 bytes, yours: %1$d</string>
     <string name="import_exists">Database with such name already exists.</string>
     <string name="title" translatable="false">MyAccounts</string>
+    <string name="no_databases">No databases yet. To create one press the + button.</string>
 </resources>

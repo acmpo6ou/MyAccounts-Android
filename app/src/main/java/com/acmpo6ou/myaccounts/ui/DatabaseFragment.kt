@@ -247,6 +247,10 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
         adapter.notifyItemRangeRemoved(i, 1)
     }
 
+    fun checkListPlaceholder(){
+
+    }
+
     companion object {
         @JvmStatic
         fun newInstance() = DatabaseFragment()
