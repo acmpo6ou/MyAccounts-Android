@@ -31,6 +31,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -99,6 +100,19 @@ class MainActivity : AppCompatActivity(),
 
         // check permissions
         checkPermissions()
+
+        // set app version in navigation header
+        setAppVersion()
+    }
+
+    /**
+     * This method obtains version name and sets it in navigation header.
+     */
+    private fun setAppVersion() {
+        val version = BuildConfig.VERSION_NAME
+        val header = nav_view.getHeaderView(0)
+        val versionString = header.findViewById<TextView>(R.id.versionString)
+        versionString.text = version
     }
 
     private fun checkPermissions() {
