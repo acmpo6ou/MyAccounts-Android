@@ -97,13 +97,13 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         checkListPlaceholder()
         // when clicking on (+) FAB navigate to CreateDatabaseFragment
-        b.addDatabase?.setOnClickListener{
+        b.addDatabase.setOnClickListener{
             view.findNavController().navigate(R.id.actionCreateDatabase)
         }
 
         // initializing recycler
-        b.databasesList?.layoutManager = LinearLayoutManager(myContext)
-        b.databasesList?.adapter = adapter
+        b.databasesList.layoutManager = LinearLayoutManager(myContext)
+        b.databasesList.adapter = adapter
     }
 
     /**

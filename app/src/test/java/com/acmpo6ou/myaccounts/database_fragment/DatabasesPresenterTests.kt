@@ -184,12 +184,6 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
     }
 
     @Test
-    fun `deleteDatabase should call showSuccess when there are no errors`(){
-        presenter.deleteDatabase(0)
-        verify(view).showSuccess()
-    }
-
-    @Test
     fun `deleteDatabase should remove database from list`(){
         presenter.deleteDatabase(0)
         // first database should no longer be `main`

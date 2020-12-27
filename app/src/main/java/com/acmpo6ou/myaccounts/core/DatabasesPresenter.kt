@@ -98,7 +98,6 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
             model.deleteDatabase(databases[i].name)
             databases.removeAt(i)
             view.notifyRemoved(i)
-            view.showSuccess()
         }
         catch (e: Exception){
             val errorTitle = view.myContext.resources
