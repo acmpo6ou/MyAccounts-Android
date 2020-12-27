@@ -50,6 +50,7 @@ import com.acmpo6ou.myaccounts.core.errorDialog
 import com.acmpo6ou.myaccounts.databinding.ActivityMainBinding
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 
 
 class MainActivity : AppCompatActivity(),
@@ -155,13 +156,18 @@ class MainActivity : AppCompatActivity(),
      * Displays snackbar to tell user that there are no updates available.
      */
     override fun noUpdates(){
-//        Snackbar.make(
-//                databaseBinding.databaseCoordinator,
-//                R.string.no_updates,
-//                Snackbar.LENGTH_LONG
-//        )
-//            .setAction("HIDE"){}
-//            .show()
+        // get view binding of DatabaseFragment
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
+        val databaseFragment = navHostFragment?.childFragmentManager?.fragments?.get(0) as DatabaseFragment
+        val databaseBinding = databaseFragment.b
+
+        Snackbar.make(
+                databaseBinding.databaseCoordinator,
+                R.string.no_updates,
+                Snackbar.LENGTH_LONG
+        )
+            .setAction("HIDE"){}
+            .show()
     }
 
     override fun showError(title: String, details: String) {
