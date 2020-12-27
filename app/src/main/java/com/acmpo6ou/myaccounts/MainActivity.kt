@@ -48,11 +48,8 @@ import com.acmpo6ou.myaccounts.core.MainPresenter
 import com.acmpo6ou.myaccounts.core.MainPresenterInter
 import com.acmpo6ou.myaccounts.core.errorDialog
 import com.acmpo6ou.myaccounts.databinding.ActivityMainBinding
-import com.acmpo6ou.myaccounts.databinding.AppBarMainBinding
-import com.acmpo6ou.myaccounts.databinding.FragmentDatabaseListBinding
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.snackbar.Snackbar
 
 
 class MainActivity : AppCompatActivity(),
@@ -63,19 +60,15 @@ class MainActivity : AppCompatActivity(),
     override lateinit var myContext: Context
     override lateinit var app: MyApp
 
-    lateinit var mainBinding: ActivityMainBinding
-    lateinit var appBarBinding: AppBarMainBinding
-    lateinit var databaseBinding: FragmentDatabaseListBinding
+    lateinit var b: ActivityMainBinding
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     lateinit var presenter: MainPresenterInter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mainBinding = ActivityMainBinding.inflate(layoutInflater)
-        appBarBinding = AppBarMainBinding.inflate(layoutInflater)
-        databaseBinding = FragmentDatabaseListBinding.inflate(layoutInflater)
-        setContentView(mainBinding.root)
+        b = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(b.root)
 
         ACCOUNTS_DIR = getExternalFilesDir(null)!!.path + "/"
         myContext = this
@@ -83,25 +76,25 @@ class MainActivity : AppCompatActivity(),
 
         // setup presenter and action bar
         presenter = MainPresenter(this)
-        setSupportActionBar(appBarBinding.toolbar)
+        setSupportActionBar(b.appbar.toolbar)
 
         // setup navigation controller
         val navController = findNavController(R.id.nav_host_fragment)
-        appBarConfiguration = AppBarConfiguration(navController.graph, mainBinding.drawerLayout)
+        appBarConfiguration = AppBarConfiguration(navController.graph, b.drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         // setup navigation view
-        mainBinding.navView.setupWithNavController(navController)
-        mainBinding.navView.setNavigationItemSelectedListener(this)
+        b.navView.setupWithNavController(navController)
+        b.navView.setNavigationItemSelectedListener(this)
 
         // navigation drawer should be unlocked only on DatabaseFragment and locked
         // everywhere else
         navController.addOnDestinationChangedListener{ _: NavController, navDestination: NavDestination, _: Bundle? ->
             if(navDestination.id == R.id.databaseFragment){
-                mainBinding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                b.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             }
             else{
-                mainBinding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                b.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             }
         }
 
@@ -117,7 +110,7 @@ class MainActivity : AppCompatActivity(),
      */
     private fun setAppVersion() {
         val version = BuildConfig.VERSION_NAME
-        val header = mainBinding.navView.getHeaderView(0)
+        val header = b.navView.getHeaderView(0)
         val versionString = header.findViewById<TextView>(R.id.versionString)
         versionString.text = version
     }
@@ -144,14 +137,14 @@ class MainActivity : AppCompatActivity(),
         }
 
         // close drawer when any item is selected
-        mainBinding.drawerLayout.closeDrawer(GravityCompat.START)
+        b.drawerLayout.closeDrawer(GravityCompat.START)
         return false
     }
 
     override fun onBackPressed() {
         // close navigation drawer when Back button is pressed and if it is opened
-        if(mainBinding.drawerLayout.isDrawerOpen(GravityCompat.START)){
-            mainBinding.drawerLayout.closeDrawer(GravityCompat.START)
+        if(b.drawerLayout.isDrawerOpen(GravityCompat.START)){
+            b.drawerLayout.closeDrawer(GravityCompat.START)
         }
         else{
             super.onBackPressed()
@@ -162,13 +155,13 @@ class MainActivity : AppCompatActivity(),
      * Displays snackbar to tell user that there are no updates available.
      */
     override fun noUpdates(){
-        Snackbar.make(
-                databaseBinding.databaseCoordinator,
-                R.string.no_updates,
-                Snackbar.LENGTH_LONG
-        )
-            .setAction("HIDE"){}
-            .show()
+//        Snackbar.make(
+//                databaseBinding.databaseCoordinator,
+//                R.string.no_updates,
+//                Snackbar.LENGTH_LONG
+//        )
+//            .setAction("HIDE"){}
+//            .show()
     }
 
     override fun showError(title: String, details: String) {
