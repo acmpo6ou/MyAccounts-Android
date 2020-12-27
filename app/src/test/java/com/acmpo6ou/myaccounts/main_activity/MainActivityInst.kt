@@ -31,8 +31,8 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.findSnackbarTextView
-import org.junit.Assert
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -70,12 +70,12 @@ class MainActivityInst {
             val snackbar = v.rootView.findSnackbarTextView()
 
             // check that snackbar was displayed
-            Assert.assertTrue(
+            assertTrue(
                     "No snackbar is displayed when call to noUpdates is made!",
                     snackbar != null)
 
             // check the snackbar's message
-            Assert.assertEquals(
+            assertEquals(
                     "noUpdates snackbar has incorrect message!",
                     noUpdatesMsg,
                     snackbar?.text
