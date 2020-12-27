@@ -31,6 +31,13 @@ class OpenDatabaseViewModel : ViewModel() {
 
     fun getTitle() = title
 
+    /**
+     * This method is called by fragment to initialize ViewModel.
+     *
+     * Saves [app] and [databaseIndex]. Sets title for app bar.
+     * @param[app] application instance used to access databases list.
+     * @param[databaseIndex] index of database that we want to open.
+     */
     fun setDatabase(app: MyApp, databaseIndex: Int) {
         this.app = app
         this.databaseIndex = databaseIndex
@@ -38,5 +45,4 @@ class OpenDatabaseViewModel : ViewModel() {
         val name = app.databases[databaseIndex].name
         title.value = "Open $name"
     }
-    // TODO: Implement the ViewModel
 }
