@@ -47,12 +47,12 @@ class MainActivityTests: DatabaseViewTest() {
     }
 
     private fun selectItem(id: Int){
-        // here we using try-catch to avoid NullPointerException
-        // that occurs because of kotlin synthetic properties
+        // here we using try-catch to avoid UninitializedPropertyAccessException
+        // that occurs because of view bindings
         try {
             activity.onNavigationItemSelected(RoboMenuItem(id))
         }
-        catch (e: NullPointerException){}
+        catch (e: UninitializedPropertyAccessException){}
     }
 
     @Test
