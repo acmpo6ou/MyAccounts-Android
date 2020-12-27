@@ -34,9 +34,9 @@ import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.*
+import com.acmpo6ou.myaccounts.databinding.FragmentDatabaseListBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_database_list.*
 
 /**
  * A fragment representing a list of Databases.
@@ -45,6 +45,7 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
     override lateinit var ACCOUNTS_DIR: String
     val EXPORT_RC = 101
 
+    lateinit var b: FragmentDatabaseListBinding
     override lateinit var adapter: DatabasesAdapter
     override lateinit var presenter: DatabasesPresenterInter
 
@@ -81,21 +82,21 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_database_list, container, false)
+        savedInstanceState: Bundle?): View? {
+        b = FragmentDatabaseListBinding.inflate(layoutInflater)
+        return b.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         checkListPlaceholder()
         // when clicking on (+) FAB navigate to CreateDatabaseFragment
-        addDatabase.setOnClickListener{
+        b.addDatabase.setOnClickListener{
             view.findNavController().navigate(R.id.actionCreateDatabase)
         }
 
         // initializing recycler
-        databasesList.layoutManager = LinearLayoutManager(myContext)
-        databasesList.adapter = adapter
+        b.databasesList.layoutManager = LinearLayoutManager(myContext)
+        b.databasesList.adapter = adapter
     }
 
     /**
@@ -188,7 +189,7 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
      */
     override fun showSuccess() {
         Snackbar.make(
-            databaseCoordinator,
+            b.databaseCoordinator,
             R.string.success_message,
             Snackbar.LENGTH_LONG)
                 .setAction("HIDE"){}
@@ -259,12 +260,12 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
      */
     fun checkListPlaceholder(){
         if (databases.size == 0) {
-            databasesList.visibility = View.GONE
-            no_databases.visibility = View.VISIBLE
+            b.databasesList.visibility = View.GONE
+            b.noDatabases.visibility = View.VISIBLE
         }
         else{
-            databasesList.visibility = View.VISIBLE
-            no_databases.visibility = View.GONE
+            b.databasesList.visibility = View.VISIBLE
+            b.noDatabases.visibility = View.GONE
         }
     }
 
