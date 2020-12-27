@@ -20,9 +20,29 @@
 package com.acmpo6ou.myaccounts.open_database
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.core.Database
+import com.acmpo6ou.myaccounts.ui.OpenDatabaseViewModel
+import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Rule
+import org.junit.Test
 
 class OpenDatabaseViewModelTests {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
+
+    private val model = OpenDatabaseViewModel()
+    val app = MyApp()
+
+    @Before
+    fun setup(){
+        app.databases = mutableListOf(Database("main"))
+    }
+
+    @Test
+    fun `setDatabase should set title`(){
+        model.setDatabase(app, 0)
+        assertEquals("Open main", model.getTitle().value)
+    }
 }

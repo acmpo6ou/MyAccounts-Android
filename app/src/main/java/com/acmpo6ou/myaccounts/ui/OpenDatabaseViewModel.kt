@@ -19,8 +19,24 @@
 
 package com.acmpo6ou.myaccounts.ui
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.acmpo6ou.myaccounts.MyApp
 
 class OpenDatabaseViewModel : ViewModel() {
+    private var databaseIndex: Int = 0
+    lateinit var app: MyApp
+
+    private val title = MutableLiveData<String>()
+
+    fun getTitle() = title
+
+    fun setDatabase(app: MyApp, databaseIndex: Int) {
+        this.app = app
+        this.databaseIndex = databaseIndex
+
+        val name = app.databases[databaseIndex].name
+        title.value = "Open $name"
+    }
     // TODO: Implement the ViewModel
 }
