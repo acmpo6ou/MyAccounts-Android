@@ -22,13 +22,9 @@ package com.acmpo6ou.myaccounts.core
 import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.net.Uri
-import android.util.Base64.DEFAULT
 import com.macasaet.fernet.Key
-import com.macasaet.fernet.StringValidator
 import com.macasaet.fernet.Token
-import com.macasaet.fernet.Validator
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.kamranzafar.jtar.TarEntry
@@ -38,12 +34,7 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.security.SecureRandom
-import java.time.Duration
-import java.time.Instant
-import java.time.temporal.TemporalAmount
 import java.util.*
-import javax.crypto.SecretKeyFactory
-import javax.crypto.spec.PBEKeySpec
 
 /**
  * Represents Account, it stores all account data such
@@ -117,28 +108,7 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
      */
     @SuppressLint("NewApi")
     fun deriveKey(password: String, salt: ByteArray): Key {
-        val iterations = 100000
-        val derivedKeyLength = 256
-        val spec = PBEKeySpec(password.toCharArray(), salt, iterations, derivedKeyLength)
-        val secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
-        val key = secretKeyFactory.generateSecret(spec).encoded
-
-        // there are some differences in API versions:
-        // Base64 from java.util is supported only from API 26 but we can use it in tests
-        // without mocking
-        // there is also Base64 from android.util which supported by all versions but
-        // doesn't work in tests
-        var strKey: String
-        try{
-            // our min sdk version is 25, so here we first try to use Base64 from java.utils
-            // (this will work for android 8 or later and also during testing)
-            strKey = Base64.getUrlEncoder().encodeToString(key)
-        }catch (e: Error){
-            // however it will not work on android 7, so here we use Base64 from android.util
-            println(e.stackTraceToString())
-            strKey = android.util.Base64.encodeToString(key, DEFAULT)
-        }
-        return Key(strKey)
+        return deriveKeyUtil(password, salt)
     }
 
     /**
@@ -164,11 +134,7 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
      * deserialized database map.
      */
     fun loads(jsonStr: String): Map<String, Account>{
-        var map = mapOf<String, Account>()
-        if (jsonStr.isNotEmpty()){
-            map = Json.decodeFromString(jsonStr)
-        }
-        return map
+        return loadsUtil(jsonStr)
     }
 
     /**
@@ -230,20 +196,7 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
      */
     fun decryptDatabase(jsonString: String, password: String, salt: ByteArray):
             Map<String, Account> {
-        // get key and validator
-        val key = deriveKey(password, salt)
-        val validator: Validator<String> = object : StringValidator {
-            // this checks whether our encrypted json string is expired or not
-            // in our app we don't care about expiration so we return Instant.MAX.epochSecond
-            override fun getTimeToLive(): TemporalAmount {
-                return Duration.ofSeconds(Instant.MAX.epochSecond)
-            }
-        }
-
-        // decrypt and deserialize string
-        val token = Token.fromString(jsonString)
-        val decrypted = token.validateAndDecrypt(key, validator)
-        return loads(decrypted)
+        return decryptDatabaseUtil(jsonString, password, salt)
     }
 
     /**
@@ -258,10 +211,7 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
      * database map.
      */
     override fun openDatabase(database: Database): Database {
-        val jsonStr = File("$SRC_DIR/${database.name}.db").readText()
-        val data = decryptDatabase(jsonStr, database.password!!, database.salt!!)
-        database.data = data
-        return database
+        return openDatabaseUtil(database, SRC_DIR)
     }
 
     /**

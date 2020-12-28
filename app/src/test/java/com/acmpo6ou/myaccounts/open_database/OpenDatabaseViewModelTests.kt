@@ -45,4 +45,9 @@ class OpenDatabaseViewModelTests {
         model.setDatabase(app, 0)
         assertEquals("Open main", model.getTitle().value)
     }
+
+    @Test
+    fun `verifyPassword should set incorrectPassword to true if there are errors`(){
+
+    }
 }
