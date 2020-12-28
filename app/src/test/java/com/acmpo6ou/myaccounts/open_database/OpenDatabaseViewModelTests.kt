@@ -58,7 +58,7 @@ class OpenDatabaseViewModelTests {
 
     @Test
     fun `verifyPassword should set incorrectPassword to true if there is TokenValidation error`(){
-        spyModel.SRC_DIR = ""
+        spyModel.setDatabase(app, 0, SRC_DIR)
         doAnswer{
             throw TokenValidationException("")
         }.whenever(spyModel).openDatabase(app.databases[0])

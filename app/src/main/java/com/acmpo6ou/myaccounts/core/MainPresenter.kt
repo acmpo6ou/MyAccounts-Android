@@ -36,7 +36,6 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
             view.app.databases = value
         }
 
-
     init{
         // This methods are called on app startup
         fixSrcFolder()

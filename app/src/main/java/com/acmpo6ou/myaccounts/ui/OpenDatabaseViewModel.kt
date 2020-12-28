@@ -24,14 +24,21 @@ import androidx.lifecycle.ViewModel
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.openDatabaseUtil
+import com.macasaet.fernet.TokenValidationException
 
 open class OpenDatabaseViewModel : ViewModel() {
     private var databaseIndex: Int = 0
     lateinit var app: MyApp
     lateinit var SRC_DIR: String
 
+    var databases: MutableList<Database>
+        get() = app.databases
+        set(value) {
+            app.databases = value
+        }
+
     private val title = MutableLiveData<String>()
-    private val incorrectPassword = MutableLiveData<Boolean>()
+    private val incorrectPassword = MutableLiveData(false)
 
     fun getTitle() = title
     fun getIncorrectPassword() = incorrectPassword
@@ -49,12 +56,17 @@ open class OpenDatabaseViewModel : ViewModel() {
         this.SRC_DIR = SRC_DIR
         this.databaseIndex = databaseIndex
 
-        val name = app.databases[databaseIndex].name
+        val name = databases[databaseIndex].name
         title.value = "Open $name"
     }
 
     fun verifyPassword(password: String){
-
+        try {
+            openDatabase(databases[databaseIndex])
+        }
+        catch (e: TokenValidationException){
+            incorrectPassword.value = true
+        }
     }
 
     /**
