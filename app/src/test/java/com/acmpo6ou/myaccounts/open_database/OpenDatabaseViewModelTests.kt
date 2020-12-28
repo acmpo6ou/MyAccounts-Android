@@ -53,7 +53,7 @@ class OpenDatabaseViewModelTests {
     @Test
     fun `setDatabase should set title`(){
         model.setDatabase(app, 0, SRC_DIR)
-        assertEquals("Open main", model.getTitle().value)
+        assertEquals("Open main", model.getTitle())
     }
 
     @Test
@@ -64,6 +64,19 @@ class OpenDatabaseViewModelTests {
         }.whenever(spyModel).openDatabase(app.databases[0])
 
         spyModel.verifyPassword(faker.lorem().sentence())
-        assertTrue(spyModel.getIncorrectPassword().value!!)
+        assertTrue(spyModel.isIncorrectPassword())
+    }
+
+    @Test
+    fun `verifyPassword should set corrupted to true if there is deserialization error`(){
+        spyModel.setDatabase(app, 0, SRC_DIR)
+        doAnswer{
+            // here we throw Exception instead of JsonDecodingException because
+            // JsonDecodingException is private
+            throw Exception("JsonDecodingException")
+        }.whenever(spyModel).openDatabase(app.databases[0])
+
+        spyModel.verifyPassword(faker.lorem().sentence())
+        assertTrue(spyModel.isCorrupted())
     }
 }

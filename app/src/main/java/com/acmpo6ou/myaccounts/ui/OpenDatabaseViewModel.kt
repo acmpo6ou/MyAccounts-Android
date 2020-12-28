@@ -39,9 +39,11 @@ open class OpenDatabaseViewModel : ViewModel() {
 
     private val title = MutableLiveData<String>()
     private val incorrectPassword = MutableLiveData(false)
+    private val corrupted = MutableLiveData(false)
 
-    fun getTitle() = title
-    fun getIncorrectPassword() = incorrectPassword
+    fun getTitle() = title.value!!
+    fun isIncorrectPassword() = incorrectPassword.value!!
+    fun isCorrupted() = corrupted.value!!
 
     /**
      * This method is called by fragment to initialize ViewModel.
@@ -65,6 +67,10 @@ open class OpenDatabaseViewModel : ViewModel() {
      *
      * If there is TokenValidationException then set incorrectPassword to true, this will
      * lead to error message displaying near the password field.
+     *
+     * If there is JsonDecodingException then set corrupted to true, this will lead to
+     * displaying error dialog saying that the database is corrupted.
+     * @param[password] password for the database.
      */
     fun verifyPassword(password: String){
         try {
@@ -72,6 +78,14 @@ open class OpenDatabaseViewModel : ViewModel() {
         }
         catch (e: TokenValidationException){
             incorrectPassword.value = true
+        }
+        catch (e: Exception){
+            // here we catch Exception because JsonDecodingException is private
+            // then we verify that this is the JsonDecodingException by looking at error
+            // message
+            if ("JsonDecodingException" in e.toString()){
+                corrupted.value = true
+            }
         }
     }
 
