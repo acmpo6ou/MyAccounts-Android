@@ -69,7 +69,7 @@ data class Account(
  */
 data class Database(val name: String,
                     var password: String? = null,
-                    val salt: ByteArray? = null,
+                    var salt: ByteArray? = null,
                     var data: Map<String, Account> = emptyMap()){
     var isOpen: Boolean = false
         get() = password != null

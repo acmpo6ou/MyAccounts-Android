@@ -25,6 +25,7 @@ import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.openDatabaseUtil
 import com.macasaet.fernet.TokenValidationException
+import java.io.File
 
 open class OpenDatabaseViewModel : ViewModel() {
     private var databaseIndex: Int = 0
@@ -72,9 +73,20 @@ open class OpenDatabaseViewModel : ViewModel() {
      * displaying error dialog saying that the database is corrupted.
      * @param[password] password for the database.
      */
-    fun verifyPassword(password: String){
+    fun verifyPassword(password: String) {
         try {
-            openDatabase(databases[databaseIndex])
+            var database = databases[databaseIndex].copy()
+            // get salt
+            val bin = File("$SRC_DIR/${database.name}.bin").readText()
+            val salt = bin.toByteArray()
+
+            // set password and salt
+            database.password = password
+            database.salt = salt
+
+            // save deserialized database
+            database = openDatabase(database)
+            databases[databaseIndex] = database
         }
         catch (e: TokenValidationException){
             incorrectPassword.value = true

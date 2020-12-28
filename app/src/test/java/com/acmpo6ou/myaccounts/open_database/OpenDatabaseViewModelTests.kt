@@ -25,9 +25,7 @@ import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.ui.OpenDatabaseViewModel
 import com.github.javafaker.Faker
 import com.macasaet.fernet.TokenValidationException
-import com.nhaarman.mockitokotlin2.doAnswer
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -42,7 +40,8 @@ class OpenDatabaseViewModelTests {
     private val spyModel = spy(model)
     private val faker = Faker()
 
-    val SRC_DIR = ""
+    val SRC_DIR = "sampledata/src/"
+    val salt = "0123456789abcdef".toByteArray()
     val app = MyApp()
 
     @Before
@@ -78,5 +77,18 @@ class OpenDatabaseViewModelTests {
 
         spyModel.verifyPassword(faker.lorem().sentence())
         assertTrue(spyModel.isCorrupted())
+    }
+
+    @Test
+    fun `verifyPassword should save deserialized Database to list`(){
+        spyModel.setDatabase(app, 0, SRC_DIR)
+        val expectedDatabase = Database("main", "main", salt, mapOf())
+        val database = app.databases[0].copy()
+        database.password = "main"
+        database.salt = salt
+        doReturn(expectedDatabase).whenever(spyModel).openDatabase(eq(database))
+
+        spyModel.verifyPassword("main")
+        assertEquals(expectedDatabase, app.databases[0])
     }
 }
