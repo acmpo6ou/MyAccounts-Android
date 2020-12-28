@@ -88,4 +88,10 @@ class OpenDatabaseViewModelTests {
         spyModel.verifyPassword("123")
         assertEquals(expectedDatabase.toString(), app.databases[0].toString())
     }
+
+    @Test
+    fun `verifyPassword should set isOpened to true after successful deserialization`(){
+        spyModel.verifyPassword("123")
+        assertTrue(spyModel.isOpened())
+    }
 }

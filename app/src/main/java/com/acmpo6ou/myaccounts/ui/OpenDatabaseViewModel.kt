@@ -41,10 +41,12 @@ open class OpenDatabaseViewModel : ViewModel() {
     private val title = MutableLiveData<String>()
     private val incorrectPassword = MutableLiveData(false)
     private val corrupted = MutableLiveData(false)
+    private val opened = MutableLiveData(false)
 
     fun getTitle() = title.value!!
     fun isIncorrectPassword() = incorrectPassword.value!!
     fun isCorrupted() = corrupted.value!!
+    fun isOpened() = opened.value!!
 
     /**
      * This method is called by fragment to initialize ViewModel.
@@ -87,6 +89,10 @@ open class OpenDatabaseViewModel : ViewModel() {
             // save deserialized database
             database = openDatabase(database)
             databases[databaseIndex] = database
+
+            // set opened to true to notify fragment about successful
+            // database deserialization
+            opened.value = true
         }
         catch (e: TokenValidationException){
             incorrectPassword.value = true
