@@ -22,10 +22,13 @@ package com.acmpo6ou.myaccounts.open_database
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.Database
+import com.acmpo6ou.myaccounts.getDatabaseMap
 import com.acmpo6ou.myaccounts.ui.OpenDatabaseViewModel
 import com.github.javafaker.Faker
 import com.macasaet.fernet.TokenValidationException
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.doAnswer
+import com.nhaarman.mockitokotlin2.spy
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -82,13 +85,9 @@ class OpenDatabaseViewModelTests {
     @Test
     fun `verifyPassword should save deserialized Database to list`(){
         spyModel.setDatabase(app, 0, SRC_DIR)
-        val expectedDatabase = Database("main", "main", salt, mapOf())
-        val database = app.databases[0].copy()
-        database.password = "main"
-        database.salt = salt
-        doReturn(expectedDatabase).whenever(spyModel).openDatabase(eq(database))
+        val expectedDatabase = Database("main", "123", salt, getDatabaseMap())
 
-        spyModel.verifyPassword("main")
-        assertEquals(expectedDatabase, app.databases[0])
+        spyModel.verifyPassword("123")
+        assertEquals(expectedDatabase.toString(), app.databases[0].toString())
     }
 }
