@@ -44,12 +44,13 @@ class OpenDatabaseViewModelTests {
     private val faker = Faker()
 
     val SRC_DIR = "sampledata/src/"
-    val salt = "0123456789abcdef".toByteArray()
+    private val salt = "0123456789abcdef".toByteArray()
     val app = MyApp()
 
     @Before
     fun setup(){
         app.databases = mutableListOf(Database("main"))
+        spyModel.setDatabase(app, 0, SRC_DIR)
     }
 
     @Test
@@ -60,7 +61,6 @@ class OpenDatabaseViewModelTests {
 
     @Test
     fun `verifyPassword should set incorrectPassword to true if there is TokenValidation error`(){
-        spyModel.setDatabase(app, 0, SRC_DIR)
         doAnswer{
             throw TokenValidationException("")
         }.whenever(spyModel).openDatabase(app.databases[0])
@@ -71,7 +71,6 @@ class OpenDatabaseViewModelTests {
 
     @Test
     fun `verifyPassword should set corrupted to true if there is deserialization error`(){
-        spyModel.setDatabase(app, 0, SRC_DIR)
         doAnswer{
             // here we throw Exception instead of JsonDecodingException because
             // JsonDecodingException is private
@@ -84,7 +83,6 @@ class OpenDatabaseViewModelTests {
 
     @Test
     fun `verifyPassword should save deserialized Database to list`(){
-        spyModel.setDatabase(app, 0, SRC_DIR)
         val expectedDatabase = Database("main", "123", salt, getDatabaseMap())
 
         spyModel.verifyPassword("123")
