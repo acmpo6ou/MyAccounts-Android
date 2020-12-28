@@ -22,15 +22,19 @@ package com.acmpo6ou.myaccounts.ui
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.core.Database
+import com.acmpo6ou.myaccounts.core.openDatabaseUtil
 
-class OpenDatabaseViewModel : ViewModel() {
+open class OpenDatabaseViewModel : ViewModel() {
     private var databaseIndex: Int = 0
     lateinit var app: MyApp
     lateinit var SRC_DIR: String
 
     private val title = MutableLiveData<String>()
+    private val incorrectPassword = MutableLiveData<Boolean>()
 
     fun getTitle() = title
+    fun getIncorrectPassword() = incorrectPassword
 
     /**
      * This method is called by fragment to initialize ViewModel.
@@ -47,5 +51,24 @@ class OpenDatabaseViewModel : ViewModel() {
 
         val name = app.databases[databaseIndex].name
         title.value = "Open $name"
+    }
+
+    fun verifyPassword(password: String){
+
+    }
+
+    /**
+     * Used to open databases by given Database instance.
+     *
+     * In particular opening database means reading content of corresponding .db file,
+     * decrypting and deserializing it, then assigning deserialized database map to `data`
+     * property of given Database.
+     *
+     * @param[database] Database instance with password, name and salt to open database.
+     * @return same Database instance but with `data` property filled with deserialized
+     * database map.
+     */
+    open fun openDatabase(database: Database): Database {
+        return openDatabaseUtil(database, SRC_DIR)
     }
 }

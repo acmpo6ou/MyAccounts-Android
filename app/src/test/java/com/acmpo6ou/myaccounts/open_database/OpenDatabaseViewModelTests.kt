@@ -23,7 +23,13 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.ui.OpenDatabaseViewModel
+import com.github.javafaker.Faker
+import com.macasaet.fernet.TokenValidationException
+import com.nhaarman.mockitokotlin2.doAnswer
+import com.nhaarman.mockitokotlin2.spy
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -33,6 +39,9 @@ class OpenDatabaseViewModelTests {
     val taskExecutorRule = InstantTaskExecutorRule()
 
     private val model = OpenDatabaseViewModel()
+    private val spyModel = spy(model)
+    private val faker = Faker()
+
     val SRC_DIR = ""
     val app = MyApp()
 
@@ -48,7 +57,13 @@ class OpenDatabaseViewModelTests {
     }
 
     @Test
-    fun `verifyPassword should set incorrectPassword to true if there are errors`(){
+    fun `verifyPassword should set incorrectPassword to true if there is TokenValidation error`(){
+        spyModel.SRC_DIR = ""
+        doAnswer{
+            throw TokenValidationException("")
+        }.whenever(spyModel).openDatabase(app.databases[0])
 
+        spyModel.verifyPassword(faker.lorem().sentence())
+        assertTrue(spyModel.getIncorrectPassword().value!!)
     }
 }
