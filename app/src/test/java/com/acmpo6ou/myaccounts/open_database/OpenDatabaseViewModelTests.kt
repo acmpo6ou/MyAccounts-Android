@@ -26,6 +26,7 @@ import com.acmpo6ou.myaccounts.getDatabaseMap
 import com.acmpo6ou.myaccounts.ui.OpenDatabaseViewModel
 import com.github.javafaker.Faker
 import com.macasaet.fernet.TokenValidationException
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.whenever
@@ -75,7 +76,7 @@ class OpenDatabaseViewModelTests {
             // here we throw Exception instead of JsonDecodingException because
             // JsonDecodingException is private
             throw Exception("JsonDecodingException")
-        }.whenever(spyModel).openDatabase(app.databases[0])
+        }.whenever(spyModel).openDatabase(any())
 
         spyModel.verifyPassword(faker.lorem().sentence())
         assertTrue(spyModel.isCorrupted())
