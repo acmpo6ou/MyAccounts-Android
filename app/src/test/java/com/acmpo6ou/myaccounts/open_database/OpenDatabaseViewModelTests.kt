@@ -33,6 +33,7 @@ class OpenDatabaseViewModelTests {
     val taskExecutorRule = InstantTaskExecutorRule()
 
     private val model = OpenDatabaseViewModel()
+    val SRC_DIR = ""
     val app = MyApp()
 
     @Before
@@ -42,7 +43,7 @@ class OpenDatabaseViewModelTests {
 
     @Test
     fun `setDatabase should set title`(){
-        model.setDatabase(app, 0)
+        model.setDatabase(app, 0, SRC_DIR)
         assertEquals("Open main", model.getTitle().value)
     }
 

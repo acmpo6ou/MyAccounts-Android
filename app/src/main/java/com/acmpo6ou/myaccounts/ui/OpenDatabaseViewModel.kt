@@ -26,6 +26,7 @@ import com.acmpo6ou.myaccounts.MyApp
 class OpenDatabaseViewModel : ViewModel() {
     private var databaseIndex: Int = 0
     lateinit var app: MyApp
+    lateinit var SRC_DIR: String
 
     private val title = MutableLiveData<String>()
 
@@ -34,12 +35,14 @@ class OpenDatabaseViewModel : ViewModel() {
     /**
      * This method is called by fragment to initialize ViewModel.
      *
-     * Saves [app] and [databaseIndex]. Sets title for app bar.
+     * Saves [app], [SRC_DIR] and [databaseIndex]. Sets title for app bar.
      * @param[app] application instance used to access databases list.
      * @param[databaseIndex] index of database that we want to open.
+     * @param[SRC_DIR] path to src directory that contains databases.
      */
-    fun setDatabase(app: MyApp, databaseIndex: Int) {
+    fun setDatabase(app: MyApp, databaseIndex: Int, SRC_DIR: String) {
         this.app = app
+        this.SRC_DIR = SRC_DIR
         this.databaseIndex = databaseIndex
 
         val name = app.databases[databaseIndex].name
