@@ -60,6 +60,12 @@ open class OpenDatabaseViewModel : ViewModel() {
         title.value = "Open $name"
     }
 
+    /**
+     * Tries to open database using given password handling all errors.
+     *
+     * If there is TokenValidationException then set incorrectPassword to true, this will
+     * lead to error message displaying near the password field.
+     */
     fun verifyPassword(password: String){
         try {
             openDatabase(databases[databaseIndex])
