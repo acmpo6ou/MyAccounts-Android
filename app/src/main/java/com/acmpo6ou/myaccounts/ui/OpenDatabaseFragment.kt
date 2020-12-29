@@ -63,6 +63,9 @@ class OpenDatabaseFragment : Fragment() {
         initModel()
     }
 
+    /**
+     * This method initializes view model providing all needed resources.
+     */
     fun initModel() {
         val SRC_DIR = myContext.getExternalFilesDir(null)?.path + "/src"
         val OPEN_DB = myContext.resources.getString(R.string.open_db)
