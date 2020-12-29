@@ -28,6 +28,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.databinding.OpenDatabaseFragmentBinding
 
 class OpenDatabaseFragment : Fragment() {
 
@@ -39,6 +40,8 @@ class OpenDatabaseFragment : Fragment() {
     lateinit var args: OpenDatabaseFragmentArgs
     lateinit var myContext: Context
     lateinit var app: MyApp
+    var binding: OpenDatabaseFragmentBinding? = null
+    val b: OpenDatabaseFragmentBinding get() = binding!!
 
     override fun onStart(){
         super.onStart()
@@ -50,11 +53,15 @@ class OpenDatabaseFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.open_database_fragment, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?): View? {
+        binding = OpenDatabaseFragmentBinding.inflate(layoutInflater, container, false)
+        return b.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
