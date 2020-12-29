@@ -45,19 +45,20 @@ class OpenDatabaseViewModelTests {
     private val faker = Faker()
 
     val SRC_DIR = "sampledata/src/"
+    val OPEN_DB = faker.lorem().sentence()
     private val salt = "0123456789abcdef".toByteArray()
     val app = MyApp()
 
     @Before
     fun setup(){
         app.databases = mutableListOf(Database("main"))
-        spyModel.setDatabase(app, 0, SRC_DIR)
+        spyModel.setDatabase(app, 0, SRC_DIR, OPEN_DB)
     }
 
     @Test
     fun `setDatabase should set title`(){
-        model.setDatabase(app, 0, SRC_DIR)
-        assertEquals("Open main", model.getTitle())
+        model.setDatabase(app, 0, SRC_DIR, OPEN_DB)
+        assertEquals("$OPEN_DB main", model.getTitle())
     }
 
     @Test

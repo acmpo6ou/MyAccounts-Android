@@ -31,6 +31,7 @@ open class OpenDatabaseViewModel : ViewModel() {
     private var databaseIndex: Int = 0
     lateinit var app: MyApp
     lateinit var SRC_DIR: String
+    lateinit var OPEN_DB: String
 
     var databases: MutableList<Database>
         get() = app.databases
@@ -55,14 +56,17 @@ open class OpenDatabaseViewModel : ViewModel() {
      * @param[app] application instance used to access databases list.
      * @param[databaseIndex] index of database that we want to open.
      * @param[SRC_DIR] path to src directory that contains databases.
+     * @param[OPEN_DB] string resource used to construct app bar title. Usually something
+     * like `Open `.
      */
-    fun setDatabase(app: MyApp, databaseIndex: Int, SRC_DIR: String) {
+    fun setDatabase(app: MyApp, databaseIndex: Int, SRC_DIR: String, OPEN_DB: String) {
         this.app = app
         this.SRC_DIR = SRC_DIR
+        this.OPEN_DB = OPEN_DB
         this.databaseIndex = databaseIndex
 
         val name = databases[databaseIndex].name
-        title.value = "Open $name"
+        title.value = "$OPEN_DB $name"
     }
 
     /**
