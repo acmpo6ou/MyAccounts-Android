@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.open_database
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import com.acmpo6ou.myaccounts.R
@@ -28,6 +29,7 @@ import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -36,6 +38,9 @@ import org.robolectric.annotation.LooperMode
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 class OpenDatabaseFragmentInst {
+    @get:Rule
+    val taskExecutorRule = InstantTaskExecutorRule()
+
     lateinit var openScenario: FragmentScenario<OpenDatabaseFragment>
     private var model: OpenDatabaseViewModel = mock()
     private val faker = Faker()
@@ -59,4 +64,5 @@ class OpenDatabaseFragmentInst {
             verify(model).verifyPassword(txt)
         }
     }
+
 }

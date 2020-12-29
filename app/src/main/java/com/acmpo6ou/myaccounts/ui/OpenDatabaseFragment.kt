@@ -25,6 +25,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
@@ -42,6 +43,10 @@ class OpenDatabaseFragment : Fragment() {
     lateinit var app: MyApp
     var binding: OpenDatabaseFragmentBinding? = null
     val b: OpenDatabaseFragmentBinding get() = binding!!
+
+    val titleObserver = Observer<String>{
+        activity?.actionBar?.title = it
+    }
 
     override fun onStart(){
         super.onStart()
@@ -76,6 +81,8 @@ class OpenDatabaseFragment : Fragment() {
         b.openDatabase.setOnClickListener{
             viewModel.verifyPassword(b.databasePassword.text.toString())
         }
+
+        viewModel.title.observe(viewLifecycleOwner, titleObserver)
     }
 
     /**

@@ -39,10 +39,10 @@ open class OpenDatabaseViewModel : ViewModel() {
             app.databases = value
         }
 
-    private val title = MutableLiveData<String>()
-    private val incorrectPassword = MutableLiveData(false)
-    private val corrupted = MutableLiveData(false)
-    private val opened = MutableLiveData(false)
+    val title = MutableLiveData<String>()
+    val incorrectPassword = MutableLiveData(false)
+    val corrupted = MutableLiveData(false)
+    val opened = MutableLiveData(false)
 
     fun getTitle() = title.value!!
     fun isIncorrectPassword() = incorrectPassword.value!!
