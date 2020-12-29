@@ -53,7 +53,7 @@ class OpenDatabaseFragmentTests {
         whenever(args.databaseIndex).thenReturn(0)
         whenever(filesDir.path).thenReturn(SRC_DIR)
         whenever(context.getExternalFilesDir(null)).thenReturn(filesDir)
-        doNothing().whenever(model).initialize(any(), anyInt(), anyString(), anyString())
+        doNothing().whenever(model).initialize(app, 0, "$SRC_DIR/src", OPEN_DB)
 
         // mock string resources
         val res: Resources = mock()
@@ -69,6 +69,6 @@ class OpenDatabaseFragmentTests {
     @Test
     fun `initModel should initialize view model`(){
         fragment.initModel()
-        verify(model).initialize(app, 0, SRC_DIR, OPEN_DB)
+        verify(model).initialize(app, 0, "$SRC_DIR/src", OPEN_DB)
     }
 }

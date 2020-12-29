@@ -64,7 +64,9 @@ class OpenDatabaseFragment : Fragment() {
     }
 
     fun initModel() {
-
+        val SRC_DIR = myContext.getExternalFilesDir(null)?.path + "/src"
+        val OPEN_DB = myContext.resources.getString(R.string.open_db)
+        viewModel.initialize(app, args.databaseIndex, SRC_DIR, OPEN_DB)
     }
 
 }
