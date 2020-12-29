@@ -59,7 +59,7 @@ open class OpenDatabaseViewModel : ViewModel() {
      * @param[OPEN_DB] string resource used to construct app bar title. Usually something
      * like `Open `.
      */
-    fun setDatabase(app: MyApp, databaseIndex: Int, SRC_DIR: String, OPEN_DB: String) {
+    fun initialize(app: MyApp, databaseIndex: Int, SRC_DIR: String, OPEN_DB: String) {
         this.app = app
         this.SRC_DIR = SRC_DIR
         this.OPEN_DB = OPEN_DB

@@ -52,12 +52,12 @@ class OpenDatabaseViewModelTests {
     @Before
     fun setup(){
         app.databases = mutableListOf(Database("main"))
-        spyModel.setDatabase(app, 0, SRC_DIR, OPEN_DB)
+        spyModel.initialize(app, 0, SRC_DIR, OPEN_DB)
     }
 
     @Test
-    fun `setDatabase should set title`(){
-        model.setDatabase(app, 0, SRC_DIR, OPEN_DB)
+    fun `initialize should set title`(){
+        model.initialize(app, 0, SRC_DIR, OPEN_DB)
         assertEquals("$OPEN_DB main", model.getTitle())
     }
 
