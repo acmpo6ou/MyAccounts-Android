@@ -33,6 +33,7 @@
 
     <string name="password">Password</string>
     <string name="open_database">Open Database</string>
+    <string name="open_db">Open</string>
 
     <string name="database_name">Database name</string>
     <string name="database_name_tip">Only latin symbols, numbers and .()-_  are supported</string>

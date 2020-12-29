@@ -19,12 +19,14 @@
 
 package com.acmpo6ou.myaccounts.ui
 
-import androidx.lifecycle.ViewModelProvider
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 
 class OpenDatabaseFragment : Fragment() {
@@ -33,7 +35,20 @@ class OpenDatabaseFragment : Fragment() {
         fun newInstance() = OpenDatabaseFragment()
     }
 
-    private lateinit var viewModel: OpenDatabaseViewModel
+    lateinit var viewModel: OpenDatabaseViewModel
+    lateinit var args: OpenDatabaseFragmentArgs
+    lateinit var myContext: Context
+    lateinit var app: MyApp
+
+    override fun onStart(){
+        super.onStart()
+        // save arguments and context
+        myContext = requireContext()
+        app = context?.applicationContext as MyApp
+        arguments?.let {
+            args = OpenDatabaseFragmentArgs.fromBundle(it)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +60,11 @@ class OpenDatabaseFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(OpenDatabaseViewModel::class.java)
-        // TODO: Use the ViewModel
+        initModel()
+    }
+
+    fun initModel() {
+
     }
 
 }
