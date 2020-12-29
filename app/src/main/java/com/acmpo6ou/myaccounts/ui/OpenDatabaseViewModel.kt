@@ -79,7 +79,7 @@ open class OpenDatabaseViewModel : ViewModel() {
      * displaying error dialog saying that the database is corrupted.
      * @param[password] password for the database.
      */
-    fun verifyPassword(password: String) {
+    open fun verifyPassword(password: String) {
         try {
             var database = databases[databaseIndex].copy()
             // get salt

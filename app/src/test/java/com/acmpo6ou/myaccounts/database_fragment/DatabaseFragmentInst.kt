@@ -75,8 +75,7 @@ class DatabaseFragmentInstrumentation {
     @Before
     fun setUp(){
         // Create a graphical FragmentScenario for the DatabaseFragment
-        databaseScenario = launchFragmentInContainer<DatabaseFragment>(
-            themeResId = R.style.Theme_MyAccounts_NoActionBar)
+        databaseScenario = launchFragmentInContainer(themeResId=R.style.Theme_MyAccounts_NoActionBar)
 
         // mock presenter with fake database
         val databases = mutableListOf(Database("main"))

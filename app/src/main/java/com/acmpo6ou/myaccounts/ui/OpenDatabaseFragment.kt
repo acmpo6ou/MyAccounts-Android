@@ -37,7 +37,7 @@ class OpenDatabaseFragment : Fragment() {
     }
 
     lateinit var viewModel: OpenDatabaseViewModel
-    lateinit var args: OpenDatabaseFragmentArgs
+    var args: OpenDatabaseFragmentArgs? = null
     lateinit var myContext: Context
     lateinit var app: MyApp
     var binding: OpenDatabaseFragmentBinding? = null
@@ -46,11 +46,15 @@ class OpenDatabaseFragment : Fragment() {
     override fun onStart(){
         super.onStart()
         // save arguments and context
-        myContext = requireContext()
-        app = context?.applicationContext as MyApp
         arguments?.let {
             args = OpenDatabaseFragmentArgs.fromBundle(it)
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        myContext = requireContext()
+        app = context?.applicationContext as MyApp
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -76,7 +80,9 @@ class OpenDatabaseFragment : Fragment() {
     fun initModel() {
         val SRC_DIR = myContext.getExternalFilesDir(null)?.path + "/src"
         val OPEN_DB = myContext.resources.getString(R.string.open_db)
-        viewModel.initialize(app, args.databaseIndex, SRC_DIR, OPEN_DB)
+        args?.let{
+            viewModel.initialize(app, it.databaseIndex, SRC_DIR, OPEN_DB)
+        }
     }
 
 }
