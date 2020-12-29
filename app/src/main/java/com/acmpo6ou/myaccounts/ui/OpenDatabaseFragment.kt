@@ -72,6 +72,10 @@ class OpenDatabaseFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(OpenDatabaseViewModel::class.java)
         initModel()
+
+        b.openDatabase.setOnClickListener{
+            viewModel.verifyPassword(b.databasePassword.text.toString())
+        }
     }
 
     /**
