@@ -96,6 +96,7 @@ open class OpenDatabaseViewModel : ViewModel() {
 
             // set opened to true to notify fragment about successful
             // database deserialization
+            incorrectPassword.value = false
             opened.value = true
         }
         catch (e: TokenValidationException){
