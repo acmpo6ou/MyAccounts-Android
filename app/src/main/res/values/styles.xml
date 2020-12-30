@@ -24,4 +24,9 @@
         <item name="android:lines">1</item>
         <item name="android:singleLine">true</item>
     </style>
+    <style name="passwordField" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeErrorColor">@color/red</item>
+        <item name="errorTextColor">@color/red</item>
+        <item name="errorIconTint">@color/red</item>
+    </style>
 </resources>
