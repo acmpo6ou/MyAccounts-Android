@@ -54,6 +54,10 @@ class OpenDatabaseFragment : Fragment() {
         mainActivity.supportActionBar?.title = it
     }
 
+    /**
+     * This observer displays and hides error tip of password field depending on
+     * state of incorrectPassword live data value of view model.
+     */
     private val passwordObserver = Observer<Boolean>{
         if(it) {
             // display password error tip when incorrectPassword is true
