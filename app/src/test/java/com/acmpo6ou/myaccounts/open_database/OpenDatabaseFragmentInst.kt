@@ -28,6 +28,7 @@ import com.acmpo6ou.myaccounts.ui.OpenDatabaseViewModel
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -65,4 +66,19 @@ class OpenDatabaseFragmentInst {
         }
     }
 
+    @Test
+    fun `error tip should change when incorrectPassword changes`(){
+        openScenario.onFragment {
+            it.viewModel = OpenDatabaseViewModel()
+            val errorMsg = it.myContext.resources.getString(R.string.password_error)
+
+            // error tip should appear when incorrectPassword is true
+            it.viewModel.incorrectPassword.value = true
+            assertEquals(errorMsg, it.b.databasePassword.error)
+
+            // and disappear when incorrectPassword is false
+            it.viewModel.incorrectPassword.value = false
+            assertEquals(null, it.b.databasePassword.error)
+        }
+    }
 }
