@@ -70,6 +70,7 @@ class OpenDatabaseFragmentInst {
     fun `error tip should change when incorrectPassword changes`(){
         openScenario.onFragment {
             it.viewModel = OpenDatabaseViewModel()
+            it.initModel()
             val errorMsg = it.myContext.resources.getString(R.string.password_error)
 
             // error tip should appear when incorrectPassword is true

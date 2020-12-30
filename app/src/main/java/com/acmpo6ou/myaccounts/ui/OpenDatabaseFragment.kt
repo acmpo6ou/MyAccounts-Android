@@ -42,6 +42,7 @@ class OpenDatabaseFragment : Fragment() {
     var args: OpenDatabaseFragmentArgs? = null
     lateinit var myContext: Context
     lateinit var app: MyApp
+
     var binding: OpenDatabaseFragmentBinding? = null
     val b: OpenDatabaseFragmentBinding get() = binding!!
 
@@ -51,6 +52,18 @@ class OpenDatabaseFragment : Fragment() {
     private val titleObserver = Observer<String>{
         val mainActivity = activity as MainActivity
         mainActivity.supportActionBar?.title = it
+    }
+
+    private val passwordObserver = Observer<Boolean>{
+        if(it) {
+            // display password error tip when incorrectPassword is true
+            val passwordError = myContext.resources.getString(R.string.password_error)
+            b.databasePassword.error = passwordError
+        }
+        else{
+            // clear password error tip when incorrectPassword is false
+            b.databasePassword.error = null
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -77,7 +90,6 @@ class OpenDatabaseFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(OpenDatabaseViewModel::class.java)
-        viewModel.title.observe(viewLifecycleOwner, titleObserver)
         initModel()
 
         b.openDatabase.setOnClickListener{
@@ -89,6 +101,10 @@ class OpenDatabaseFragment : Fragment() {
      * This method initializes view model providing all needed resources.
      */
     fun initModel() {
+        // init observers
+        viewModel.title.observe(viewLifecycleOwner, titleObserver)
+        viewModel.incorrectPassword.observe(viewLifecycleOwner, passwordObserver)
+
         val SRC_DIR = myContext.getExternalFilesDir(null)?.path + "/src"
         val OPEN_DB = myContext.resources.getString(R.string.open_db)
         args?.let{
