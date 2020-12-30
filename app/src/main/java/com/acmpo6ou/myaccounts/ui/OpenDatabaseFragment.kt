@@ -62,11 +62,11 @@ class OpenDatabaseFragment : Fragment() {
         if(it) {
             // display password error tip when incorrectPassword is true
             val passwordError = myContext.resources.getString(R.string.password_error)
-            b.databasePassword.error = passwordError
+            b.parentPassword.error = passwordError
         }
         else{
             // clear password error tip when incorrectPassword is false
-            b.databasePassword.error = null
+            b.parentPassword.error = null
         }
     }
 

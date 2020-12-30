@@ -28,7 +28,7 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlinedTextField"
+        android:id="@+id/parentPassword"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -60,5 +60,5 @@
         android:text="@string/open_database"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/outlinedTextField" />
+        app:layout_constraintTop_toBottomOf="@+id/parentPassword" />
 </androidx.constraintlayout.widget.ConstraintLayout>
