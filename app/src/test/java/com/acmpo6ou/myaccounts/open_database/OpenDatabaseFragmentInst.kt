@@ -19,15 +19,20 @@
 
 package com.acmpo6ou.myaccounts.open_database
 
+import android.app.Dialog
+import android.widget.TextView
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.ui.OpenDatabaseFragment
+import com.acmpo6ou.myaccounts.ui.OpenDatabaseFragmentArgs
 import com.acmpo6ou.myaccounts.ui.OpenDatabaseViewModel
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -35,6 +40,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.LooperMode
+import org.robolectric.shadows.ShadowAlertDialog
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
@@ -44,20 +50,27 @@ class OpenDatabaseFragmentInst {
 
     lateinit var openScenario: FragmentScenario<OpenDatabaseFragment>
     private var model: OpenDatabaseViewModel = mock()
+    private val args: OpenDatabaseFragmentArgs = mock()
     private val faker = Faker()
 
     @Before
     fun setUp() {
         // Create a graphical FragmentScenario for the fragment
         openScenario = launchFragmentInContainer(themeResId=R.style.Theme_MyAccounts_NoActionBar)
+    }
+
+    private fun setupDatabase(){
         openScenario.onFragment {
-            it.viewModel = model
+            it.app.databases = mutableListOf(Database("main"))
+            whenever(args.databaseIndex).thenReturn(0)
+            it.args = args
         }
     }
 
     @Test
     fun `'Open database' button should call verifyPassword`(){
         openScenario.onFragment {
+            it.viewModel = model
             val txt = faker.lorem().sentence()
             it.b.databasePassword.setText(txt)
 
@@ -69,8 +82,6 @@ class OpenDatabaseFragmentInst {
     @Test
     fun `error tip should change when incorrectPassword changes`(){
         openScenario.onFragment {
-            it.viewModel = OpenDatabaseViewModel()
-            it.initModel()
             val errorMsg = it.myContext.resources.getString(R.string.password_error)
 
             // error tip should appear when incorrectPassword is true
@@ -80,6 +91,23 @@ class OpenDatabaseFragmentInst {
             // and disappear when incorrectPassword is false
             it.viewModel.incorrectPassword.value = false
             assertEquals(null, it.b.parentPassword.error)
+        }
+    }
+
+    @Test
+    fun `should display error message when corrupted is true`(){
+        openScenario.onFragment {
+            setupDatabase()
+            val errorTitle = it.myContext.resources.getString(R.string.open_error)
+            val errorMsg = it.myContext.resources.getString(R.string.corrupted_db, "main")
+            it.viewModel.corrupted.value = true
+
+            val dialog: Dialog = ShadowAlertDialog.getLatestDialog()
+            val title = dialog.findViewById<TextView>(R.id.alertTitle)
+            val message = dialog.findViewById<TextView>(android.R.id.message)
+
+            assertEquals(errorTitle, title.text)
+            assertEquals(errorMsg, message.text)
         }
     }
 }

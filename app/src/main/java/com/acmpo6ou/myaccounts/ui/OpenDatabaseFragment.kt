@@ -30,6 +30,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.core.errorDialog
 import com.acmpo6ou.myaccounts.databinding.OpenDatabaseFragmentBinding
 
 class OpenDatabaseFragment : Fragment() {
@@ -70,6 +71,17 @@ class OpenDatabaseFragment : Fragment() {
         }
     }
 
+    private val corruptedObserver = Observer<Boolean> {
+        if(it){
+            val index = args!!.databaseIndex
+            val dbName = app.databases[index].name
+
+            val errorTitle = myContext.resources.getString(R.string.open_error)
+            val errorMsg = myContext.resources.getString(R.string.corrupted_db, dbName)
+            errorDialog(myContext, errorTitle, errorMsg)
+        }
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         // save arguments, context and app
@@ -104,10 +116,11 @@ class OpenDatabaseFragment : Fragment() {
     /**
      * This method initializes view model providing all needed resources.
      */
-    fun initModel() {
+    private fun initModel() {
         // init observers
         viewModel.title.observe(viewLifecycleOwner, titleObserver)
         viewModel.incorrectPassword.observe(viewLifecycleOwner, passwordObserver)
+        viewModel.corrupted.observe(viewLifecycleOwner, corruptedObserver)
 
         val SRC_DIR = myContext.getExternalFilesDir(null)?.path + "/src"
         val OPEN_DB = myContext.resources.getString(R.string.open_db)
