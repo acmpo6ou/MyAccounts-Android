@@ -66,6 +66,9 @@ class MainActivityFunc {
         onView(withId(R.id.nav_view))
                 .perform(NavigationViewActions.navigateTo(R.id.check_for_updates))
 
+        // wait for navigation drawer to close
+        Thread.sleep(1000)
+
         // drawer should be autoclosed
         onView(withId(R.id.drawer_layout))
                 .check(matches(isClosed(Gravity.LEFT)))
