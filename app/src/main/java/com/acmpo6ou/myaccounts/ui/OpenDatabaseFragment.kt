@@ -71,6 +71,9 @@ class OpenDatabaseFragment : Fragment() {
         }
     }
 
+    /**
+     * This observer displays error dialog when database user tries to open is corrupted.
+     */
     private val corruptedObserver = Observer<Boolean> {
         if(it){
             val index = args!!.databaseIndex

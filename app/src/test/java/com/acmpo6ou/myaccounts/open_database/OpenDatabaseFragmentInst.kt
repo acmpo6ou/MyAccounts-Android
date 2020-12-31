@@ -59,6 +59,9 @@ class OpenDatabaseFragmentInst {
         openScenario = launchFragmentInContainer(themeResId=R.style.Theme_MyAccounts_NoActionBar)
     }
 
+    /**
+     * Helper method to initialize test database for OpenDatabaseFragment.
+     */
     private fun setupDatabase(){
         openScenario.onFragment {
             it.app.databases = mutableListOf(Database("main"))
