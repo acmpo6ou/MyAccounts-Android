@@ -75,11 +75,11 @@ class OpenDatabaseFragmentInst {
 
             // error tip should appear when incorrectPassword is true
             it.viewModel.incorrectPassword.value = true
-            assertEquals(errorMsg, it.b.databasePassword.error)
+            assertEquals(errorMsg, it.b.parentPassword.error)
 
             // and disappear when incorrectPassword is false
             it.viewModel.incorrectPassword.value = false
-            assertEquals(null, it.b.databasePassword.error)
+            assertEquals(null, it.b.parentPassword.error)
         }
     }
 }
