@@ -107,6 +107,7 @@ open class OpenDatabaseViewModel : ViewModel() {
             // then we verify that this is the JsonDecodingException by looking at error
             // message
             if ("JsonDecodingException" in e.toString()){
+                incorrectPassword.value = false
                 corrupted.value = true
             }
         }
