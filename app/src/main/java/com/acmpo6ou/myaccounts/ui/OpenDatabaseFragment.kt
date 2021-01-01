@@ -86,6 +86,9 @@ class OpenDatabaseFragment : Fragment() {
         }
     }
 
+    /**
+     * This observer starts AccountsActivity when corresponding Database is opened.
+     */
     private val openedObserver = Observer<Boolean> {
         if(it){
             startDatabase(args!!.databaseIndex)
