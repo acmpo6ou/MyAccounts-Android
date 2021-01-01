@@ -31,6 +31,7 @@ import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.errorDialog
+import com.acmpo6ou.myaccounts.core.startDatabaseUtil
 import com.acmpo6ou.myaccounts.databinding.OpenDatabaseFragmentBinding
 
 class OpenDatabaseFragment : Fragment() {
@@ -85,6 +86,12 @@ class OpenDatabaseFragment : Fragment() {
         }
     }
 
+    private val openedObserver = Observer<Boolean> {
+        if(it){
+            startDatabase(args!!.databaseIndex)
+        }
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         // save arguments, context and app
@@ -124,6 +131,7 @@ class OpenDatabaseFragment : Fragment() {
         viewModel.title.observe(viewLifecycleOwner, titleObserver)
         viewModel.incorrectPassword.observe(viewLifecycleOwner, passwordObserver)
         viewModel.corrupted.observe(viewLifecycleOwner, corruptedObserver)
+        viewModel.opened.observe(viewLifecycleOwner, openedObserver)
 
         val SRC_DIR = myContext.getExternalFilesDir(null)?.path + "/src"
         val OPEN_DB = myContext.resources.getString(R.string.open_db)
@@ -132,4 +140,12 @@ class OpenDatabaseFragment : Fragment() {
         }
     }
 
+    /**
+     * Used to start AccountsActivity for given database.
+     *
+     * @param[index] index of database for which we want to start AccountsActivity.
+     */
+    fun startDatabase(index: Int) {
+        startDatabaseUtil(index, this)
+    }
 }
