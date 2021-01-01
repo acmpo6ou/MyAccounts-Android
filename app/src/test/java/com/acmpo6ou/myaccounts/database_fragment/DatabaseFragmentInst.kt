@@ -213,8 +213,8 @@ class DatabaseFragmentInstrumentation {
         val actual: Intent = shadowOf(RuntimeEnvironment.application).nextStartedActivity
 
         assertEquals(
-                expectedIntent.getStringExtra("database"),
-                actual.getStringExtra("database"),
+                expectedIntent.getStringExtra("databaseIndex"),
+                actual.getStringExtra("databaseIndex"),
         )
         assertEquals(
                 "startDatabase should start AccountsActivity!",
