@@ -30,7 +30,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.*
@@ -219,9 +218,7 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
      * @param[index] index of database for which we want to start AccountsActivity.
      */
     override fun startDatabase(index: Int) {
-        val intent = Intent(myContext, AccountsActivity::class.java)
-        intent.putExtra("databaseIndex", index)
-        startActivity(intent)
+        startDatabaseUtil(index, this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
