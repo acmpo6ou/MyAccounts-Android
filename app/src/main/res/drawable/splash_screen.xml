@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (c) 2020. Kolvakh Bohdan
+  ~ Copyright (c) 2021. Kolvakh Bohdan
   ~ This file is part of MyAccounts.
   ~
   ~ MyAccounts is free software: you can redistribute it and/or modify
@@ -17,17 +17,15 @@
   ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   ~
   -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-<resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="green">#1ED760</color>
-    <color name="blue">#1E60D7</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="red">#D6241E</color>
-    <color name="gray">#444</color>
-</resources>
+    <item
+        android:drawable="@color/gray"/>
+
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/icon"/>
+    </item>
+
+</layer-list>

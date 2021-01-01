@@ -67,6 +67,7 @@ class MainActivity : AppCompatActivity(),
     lateinit var presenter: MainPresenterInter
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.Theme_MyAccounts_NoActionBar)
         super.onCreate(savedInstanceState)
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)

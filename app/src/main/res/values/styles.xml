@@ -29,4 +29,7 @@
         <item name="errorTextColor">@color/red</item>
         <item name="errorIconTint">@color/red</item>
     </style>
+    <style name="splashScreenTheme" parent="@style/Theme.MyAccounts.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+    </style>
 </resources>
