@@ -57,6 +57,8 @@ data class Account(
         val comment: String,
 )
 
+typealias DbMap = Map<String, Account>
+
 /**
  * Represents database of Accounts.
  *
@@ -70,7 +72,7 @@ data class Account(
 data class Database(val name: String,
                     var password: String? = null,
                     var salt: ByteArray? = null,
-                    var data: Map<String, Account> = emptyMap()){
+                    var data: DbMap = emptyMap()){
     var isOpen: Boolean = false
         get() = password != null
         private set
@@ -118,7 +120,7 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
      * @return when [data] is empty returns empty string, when [data] is not empty –
      * serialized json string.
      */
-    override fun dumps(data: Map<String, Account>): String{
+    override fun dumps(data: DbMap): String{
         var json = ""
         if (data.isNotEmpty()){
             json = Json.encodeToString(data)
@@ -133,7 +135,7 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
      * @return when [jsonStr] is empty returns empty map, when it's not empty –
      * deserialized database map.
      */
-    fun loads(jsonStr: String): Map<String, Account>{
+    fun loads(jsonStr: String): DbMap{
         return loadsUtil(jsonStr)
     }
 
@@ -195,7 +197,7 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
      * @return decrypted database map.
      */
     fun decryptDatabase(jsonString: String, password: String, salt: ByteArray):
-            Map<String, Account> {
+            DbMap {
         return decryptDatabaseUtil(jsonString, password, salt)
     }
 

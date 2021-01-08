@@ -68,7 +68,7 @@ interface DatabaseFragmentInter{
 }
 
 interface DatabasesModelInter{
-    fun dumps(data: Map<String, Account>): String
+    fun dumps(data: DbMap): String
     fun getDatabases(): MutableList<Database>
 
     fun openDatabase(database: Database): Database

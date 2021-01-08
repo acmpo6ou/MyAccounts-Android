@@ -65,7 +65,7 @@ private fun View.findSnackbarLayout(): Snackbar.SnackbarLayout? {
  *
  * @return created database map.
  */
-fun getDatabaseMap(): Map<String, Account> {
+fun getDatabaseMap(): DbMap {
     val account = Account(
             account="gmail",
             name="Tom",

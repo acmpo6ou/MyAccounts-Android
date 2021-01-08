@@ -84,7 +84,7 @@ fun openDatabaseUtil(database: Database, SRC_DIR: String): Database {
  * @return decrypted database map.
  */
 fun decryptDatabaseUtil(jsonString: String, password: String, salt: ByteArray):
-        Map<String, Account> {
+        DbMap {
     // get key and validator
     val key = deriveKeyUtil(password, salt)
     val validator: Validator<String> = object : StringValidator {
@@ -141,7 +141,7 @@ fun deriveKeyUtil(password: String, salt: ByteArray): Key {
  * @return when [jsonStr] is empty returns empty map, when it's not empty –
  * deserialized database map.
  */
-fun loadsUtil(jsonStr: String): Map<String, Account>{
+fun loadsUtil(jsonStr: String): DbMap{
     var map = mapOf<String, Account>()
     if (jsonStr.isNotEmpty()){
         map = Json.decodeFromString(jsonStr)

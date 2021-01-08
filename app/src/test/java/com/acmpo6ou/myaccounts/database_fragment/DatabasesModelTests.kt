@@ -118,7 +118,7 @@ class DatabasesModelTests: ModelTest() {
      * @param[salt] salt for encryption.
      * @return encrypted json string of database map.
      */
-    private fun encryptStr(map: Map<String, Account>, password: String, salt: ByteArray): String{
+    private fun encryptStr(map: DbMap, password: String, salt: ByteArray): String{
         val key = model.deriveKey(password, salt)
         val data = model.dumps(map)
         val token = Token.generate(key, data)
