@@ -50,8 +50,12 @@ class MainActivityFunc {
                 .check(matches(isClosed(Gravity.LEFT))) // Drawer should be closed.
                 .perform(DrawerActions.open())
 
-        // Drawer should be closed after pressing back button
         device.pressBack()
+
+        // wait for navigation drawer to close
+        Thread.sleep(1000)
+
+        // Drawer should be closed after pressing back button
         onView(withId(R.id.drawer_layout))
                 .check(matches(isClosed(Gravity.LEFT)))
     }
