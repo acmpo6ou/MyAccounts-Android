@@ -101,6 +101,7 @@ open class OpenDatabaseViewModel : ViewModel() {
         }
         catch (e: TokenValidationException){
             incorrectPassword.value = true
+            e.printStackTrace()
         }
         catch (e: Exception){
             // here we catch Exception because JsonDecodingException is private
@@ -110,6 +111,7 @@ open class OpenDatabaseViewModel : ViewModel() {
                 incorrectPassword.value = false
                 corrupted.value = true
             }
+            e.printStackTrace()
         }
     }
 

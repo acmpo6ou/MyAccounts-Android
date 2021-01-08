@@ -62,12 +62,15 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
         // handle all possible errors
         catch (e: FileNotFoundException){
             errorDetails = resources.getString(R.string.export_file_not_found_details)
+            e.printStackTrace()
         }
         catch (e: IOException){
             errorDetails = resources.getString(R.string.io_error)
+            e.printStackTrace()
         }
         catch (e: Exception){
             errorDetails = "${e.javaClass.name} ${e.message}"
+            e.printStackTrace()
         }
 
         // if there are any errors errorDetails will be filled with appropriate details string
@@ -104,6 +107,7 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
                     .getString(R.string.delete_error_title)
             val errorDetails = "${e.javaClass.name} ${e.message}"
             view.showError(errorTitle, errorDetails)
+            e.printStackTrace()
         }
     }
 
@@ -177,6 +181,7 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
         catch (e: FileNotFoundException){
             // if database on disk doesn't exist then it definitely
             // differs from the one in memory
+            e.printStackTrace()
             return false
         }
         return actualDatabase.data == diskDatabase.data

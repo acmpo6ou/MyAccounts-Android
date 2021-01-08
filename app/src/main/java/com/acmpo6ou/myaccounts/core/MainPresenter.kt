@@ -167,12 +167,15 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
         }
         catch (e: FileAlreadyExistsException){
             errorDetails = resources.getString(R.string.import_exists)
+            e.printStackTrace()
         }
         catch (e: IOException){
             errorDetails = resources.getString(R.string.io_error)
+            e.printStackTrace()
         }
         catch (e: Exception){
             errorDetails = "${e.javaClass.name} ${e.message}"
+            e.printStackTrace()
         }
 
         // if there are any errors display error dialog
