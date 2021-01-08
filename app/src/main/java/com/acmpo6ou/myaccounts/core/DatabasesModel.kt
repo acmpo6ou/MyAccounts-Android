@@ -19,7 +19,6 @@
 
 package com.acmpo6ou.myaccounts.core
 
-import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.net.Uri
 import com.macasaet.fernet.Key
@@ -108,7 +107,6 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
      * @param[salt] salt for key.
      * @return created fernet key.
      */
-    @SuppressLint("NewApi")
     fun deriveKey(password: String, salt: ByteArray): Key {
         return deriveKeyUtil(password, salt)
     }

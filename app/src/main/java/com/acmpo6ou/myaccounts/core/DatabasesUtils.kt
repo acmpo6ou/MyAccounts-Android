@@ -19,11 +19,9 @@
 
 package com.acmpo6ou.myaccounts.core
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.util.Base64
 import androidx.fragment.app.Fragment
 import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.R
@@ -108,29 +106,15 @@ fun decryptDatabaseUtil(jsonString: String, password: String, salt: ByteArray):
  * @param[salt] salt for key.
  * @return created fernet key.
  */
-@SuppressLint("NewApi")
 fun deriveKeyUtil(password: String, salt: ByteArray): Key {
     val iterations = 100000
     val derivedKeyLength = 256
+
     val spec = PBEKeySpec(password.toCharArray(), salt, iterations, derivedKeyLength)
     val secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
-    val key = secretKeyFactory.generateSecret(spec).encoded
 
-    // there are some differences in API versions:
-    // Base64 from java.util is supported only from API 26 but we can use it in tests
-    // without mocking
-    // there is also Base64 from android.util which supported by all versions but
-    // doesn't work in tests
-    var strKey: String
-    try{
-        // our min sdk version is 25, so here we first try to use Base64 from java.utils
-        // (this will work for android 8 or later and also during testing)
-        strKey = java.util.Base64.getUrlEncoder().encodeToString(key)
-    }catch (e: Error){
-        // however it will not work on android 7, so here we use Base64 from android.util
-        println(e.stackTraceToString())
-        strKey = android.util.Base64.encodeToString(key, Base64.DEFAULT)
-    }
+    val key = secretKeyFactory.generateSecret(spec).encoded
+    val strKey = java.util.Base64.getUrlEncoder().encodeToString(key)
     return Key(strKey)
 }
 
