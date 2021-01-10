@@ -18,11 +18,14 @@
   -->
 
 <resources>
+    <!--  Settings  -->
     <string-array name="languages">
+        <item>System default</item>
         <item>English</item>
         <item>Українська</item>
     </string-array>
     <string-array name="lang_values">
+        <item>Default</item>
         <item>En</item>
         <item>Ua</item>
     </string-array>
