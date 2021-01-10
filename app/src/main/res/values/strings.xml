@@ -61,17 +61,10 @@
     </string>
     <!-- Preference Titles -->
     <string name="language">Language</string>
-    <string name="fingerprint_summary">Use your fingerprint to open databases without typing password</string>
-    <string name="fingerprint_unlock">Fingerprint unlock</string>
-    <string name="dark_theme">Dark theme</string>
     <string name="block_screen_capture">Block screen capture</string>
     <string name="block_screen_capture_summary">To avoid sensitive info leak</string>
-    <string name="main_database_feature">Main database feature</string>
-    <string name="main_database_summary">Main database will be automatically selected at app startup</string>
-    <string name="main_database">Main database</string>
     <string name="title_activity_accounts" translatable="false">AccountsActivity</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="account_">Account:</string>
     <string name="username_">Username:</string>
     <string name="e_mail_">E-mail:</string>
@@ -104,7 +97,6 @@
     <string name="import_bin_size">.bin file must have size of exactly 16 bytes, yours: %1$d</string>
     <string name="import_db_size">.db file must have size of at least 100 bytes, yours: %1$d</string>
     <string name="import_exists">Database with such name already exists.</string>
-    <string name="title" translatable="false">MyAccounts</string>
     <string name="no_databases">No databases yet.\n To create one press the + button.</string>
     <string name="password_error">Incorrect password</string>
     <string name="corrupted_db">The %1$s database is probably corrupted.</string>
