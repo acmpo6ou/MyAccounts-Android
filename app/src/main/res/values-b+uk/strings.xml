@@ -39,13 +39,8 @@
     <string name="credits">Кредити</string>
     <!-- Preference Titles -->
     <string name="language">Мова</string>
-    <string name="fingerprint_summary">Використовуйте відбиток пальця замість пароля для відкриття баз данних</string>
-    <string name="fingerprint_unlock">Розблокування відбитком пальця</string>
     <string name="block_screen_capture">Блокувати захоплення екрану</string>
     <string name="block_screen_capture_summary">Щоб уникнути витоку конфіденційної інформації</string>
-    <string name="main_database_feature">Функція головної бази данних</string>
-    <string name="main_database_summary">Головна база данних буде автоматично вибрана при запуску програми</string>
-    <string name="main_database">Головна база данних</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="account_">Акаунт:</string>

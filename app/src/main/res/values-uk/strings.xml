@@ -26,7 +26,6 @@
     <string name="password">Пароль</string>
     <string name="open_database">Відкрити базу данних</string>
     <string name="database_name">Ім\'я бази данних</string>
-    <string name="dark_theme">Темна тема</string>
     <string name="success_message">Операція успішна!</string>
     <string name="warning">Увага!</string>
     <string name="no">Ні</string>
@@ -44,4 +43,9 @@
     <string name="import_bin_size">"файл .bin повинен мати розмір ідеально 16 байтів, ваш: %1$d"</string>
     <string name="import_db_size">"файл .db повинен мати розмір не менше 100 байтів, ваш: %1$d"</string>
     <string name="import_exists">База данних з таким іменем вже існує.</string>
+    <string name="no_databases">Немає баз данних. Аби створити натисніть +</string>
+    <string name="password_error">Неправильний пароль</string>
+    <string name="corrupted_db">База данних %1$s скоріш за все пошкоджена.</string>
+    <string name="open_error">Помилка відкриття бази данних</string>
+    <string name="open_db">Відкрити</string>
 </resources>
