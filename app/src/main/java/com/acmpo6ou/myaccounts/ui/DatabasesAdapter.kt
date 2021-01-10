@@ -19,12 +19,15 @@
 
 package com.acmpo6ou.myaccounts.ui
 
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.Database
@@ -69,6 +72,14 @@ class DatabasesAdapter(val view: DatabaseFragmentInter)
         holder.menu.setOnClickListener { it ->
             val popup = PopupMenu(view.myContext, it)
             popup.inflate(R.menu.database_item_menu)
+
+            // set color of `Delete` item to red
+            popup.menu.findItem(R.id.delete_database_item).let {
+                val spanStr = SpannableString(it.title)
+                val redColor = ContextCompat.getColor(view.myContext, R.color.red)
+                spanStr.setSpan(ForegroundColorSpan(redColor), 0, it.title.length, 0)
+                it.title = spanStr
+            }
 
             // if database isn't open then we can't edit or close it
             if(!database.isOpen){
