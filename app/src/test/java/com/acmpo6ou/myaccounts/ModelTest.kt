@@ -22,6 +22,7 @@ package com.acmpo6ou.myaccounts
 import android.content.ContentResolver
 import android.net.Uri
 import android.os.ParcelFileDescriptor
+import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
@@ -30,7 +31,14 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 
 open class ModelTest {
+    val faker = Faker()
+
+    val password = "123"
     var salt = "0123456789abcdef".toByteArray() // 16 bytes of salt
+    val jsonDatabase =
+            "{\"gmail\":{\"account\":\"gmail\",\"name\":\"Tom\",\"email\":"+
+            "\"tom@gmail.com\",\"password\":\"123\",\"date\":\"01.01.1990\","+
+            "\"comment\":\"My gmail account.\"}}"
 
     // this is where model will create delete and edit databases during testing
     // /dev/shm/ is a fake in-memory file system

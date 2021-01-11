@@ -22,7 +22,6 @@ package com.acmpo6ou.myaccounts.database_fragment
 import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesModel
-import com.acmpo6ou.myaccounts.core.DbMap
 import com.acmpo6ou.myaccounts.getDatabaseMap
 import com.github.javafaker.Faker
 import com.macasaet.fernet.StringValidator
@@ -65,13 +64,7 @@ class DatabasesTests {
 }
 
 class DatabasesModelTests: ModelTest() {
-    private val faker = Faker()
-
     var model = DatabasesModel(accountsDir, contentResolver)
-    private val jsonDatabase =
-            "{\"gmail\":{\"account\":\"gmail\",\"name\":\"Tom\",\"email\":"+
-            "\"tom@gmail.com\",\"password\":\"123\",\"date\":\"01.01.1990\","+
-            "\"comment\":\"My gmail account.\"}}"
 
     /**
      * This is a helper method that simply creates empty database.
@@ -110,61 +103,6 @@ class DatabasesModelTests: ModelTest() {
         return token.validateAndDecrypt(key, validator)
     }
 
-    /**
-     * This helper method encrypts given map using [password] and [salt].
-     *
-     * @param[map] database map to encrypt.
-     * @param[password] password for encryption.
-     * @param[salt] salt for encryption.
-     * @return encrypted json string of database map.
-     */
-    private fun encryptStr(map: DbMap, password: String, salt: ByteArray): String{
-        val key = model.deriveKey(password, salt)
-        val data = model.dumps(map)
-        val token = Token.generate(key, data)
-        return token.serialise()
-    }
-    @Test
-    fun `dumps should return empty string when passed empty map`(){
-        val dumpStr = model.dumps(mapOf())
-        assertTrue(dumpStr.isEmpty())
-    }
-
-    @Test
-    fun `dumps should return serialized string when passed non empty map`(){
-        // create database with account that we will serialize
-        val database = getDatabaseMap()
-
-        // serialize database and check resulting json string
-        val dumpStr = model.dumps(database)
-        val expectedStr = jsonDatabase
-        assertEquals(
-                "Incorrect serialization! dumps method",
-                expectedStr,
-                dumpStr
-        )
-    }
-
-    @Test
-    fun `loads should return empty map when passed empty string`(){
-        val loadMap = model.loads("")
-        assertTrue(loadMap.isEmpty())
-    }
-
-    @Test
-    fun `loads should return non empty map when passed non empty string`(){
-        // load database map from json string
-        val map = model.loads(jsonDatabase)
-
-        // get database map that we expect
-        val expectedMap = getDatabaseMap()
-
-        assertEquals(
-                "Incorrect deserialization! loads method",
-                expectedMap,
-                map,
-        )
-    }
     @Test
     fun `encryptDatabase should return encrypted json string when given Database`(){
         // get database map
@@ -250,50 +188,6 @@ class DatabasesModelTests: ModelTest() {
         )
     }
 
-    @Test
-    fun `decryptDatabase should return decrypted and deserialized map given string`(){
-        // encrypt database so we can check how decryptDatabase will decrypt it
-        val expectedMap = getDatabaseMap()
-        val encryptedJson = encryptStr(
-                expectedMap,
-                "123",
-                salt
-        )
-
-        val map = model.decryptDatabase(encryptedJson, "123", salt)
-        assertEquals(
-                "Incorrect decryption! decryptDatabase method",
-                expectedMap,
-                map
-        )
-    }
-
-    @Test
-    fun `openDatabase should return Database instance with non empty data property`(){
-        // here we copy `main` database to the fake file system so that we can open it later
-        copyDatabase("main")
-
-        // create corresponding Database instance
-        val db = Database(
-                "main",
-                "123",
-                salt
-        )
-
-        val actualDatabase = model.openDatabase(db)
-        val expectedDatabase = Database(
-                "main",
-                "123",
-                salt,
-                getDatabaseMap()
-        )
-
-        assertEquals(
-                "openDatabase returns incorrect database!",
-                expectedDatabase,
-                actualDatabase
-        )
-    }
 
     /**
      * Helper method used by saveDatabase test to create old database and to call saveDatabase

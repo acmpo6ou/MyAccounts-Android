@@ -24,8 +24,6 @@ import android.net.Uri
 import com.macasaet.fernet.Key
 import com.macasaet.fernet.Token
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import org.kamranzafar.jtar.TarEntry
 import org.kamranzafar.jtar.TarOutputStream
 import java.io.BufferedOutputStream
@@ -33,7 +31,6 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.security.SecureRandom
-import java.util.*
 
 /**
  * Represents Account, it stores all account data such
@@ -119,22 +116,7 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
      * serialized json string.
      */
     override fun dumps(data: DbMap): String{
-        var json = ""
-        if (data.isNotEmpty()){
-            json = Json.encodeToString(data)
-        }
-        return json
-    }
-
-    /**
-     * Used to deserialize json string to database map.
-     *
-     * @param[jsonStr] json string to deserialize.
-     * @return when [jsonStr] is empty returns empty map, when it's not empty –
-     * deserialized database map.
-     */
-    fun loads(jsonStr: String): DbMap{
-        return loadsUtil(jsonStr)
+        return dumpsUtil(data)
     }
 
     /**
@@ -184,19 +166,6 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
 
         val dbFile = File("$SRC_DIR/$name.db")
         dbFile.delete()
-    }
-
-    /**
-     * Used to decrypt and deserialize encrypted json string to a database map.
-     *
-     * @param[jsonString] encrypted json string to decrypt.
-     * @param[password] password for decryption.
-     * @param[salt] salt for decryption.
-     * @return decrypted database map.
-     */
-    fun decryptDatabase(jsonString: String, password: String, salt: ByteArray):
-            DbMap {
-        return decryptDatabaseUtil(jsonString, password, salt)
     }
 
     /**
@@ -259,7 +228,7 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
      * ├── main.bin – salt file.
      * └── main.db  – encrypted database file.
      * @param[name] name of the database to export.
-     * @param[destination] path to folder where we want to export database.
+     * @param[destinationUri] uri with path to folder where we want to export database.
      */
     override fun exportDatabase(name: String, destinationUri: Uri) {
         // get tar file
