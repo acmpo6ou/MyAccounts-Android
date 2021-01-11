@@ -17,9 +17,11 @@
  *
  */
 
-package com.acmpo6ou.myaccounts
+package com.acmpo6ou.myaccounts.database_utils
 
+import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.core.*
+import com.acmpo6ou.myaccounts.getDatabaseMap
 import com.macasaet.fernet.Token
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
