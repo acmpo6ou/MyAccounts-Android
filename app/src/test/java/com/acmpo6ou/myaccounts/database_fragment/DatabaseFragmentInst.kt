@@ -35,7 +35,6 @@ import androidx.navigation.testing.TestNavHostController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
-import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesPresenter
@@ -43,7 +42,6 @@ import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.findSnackbarTextView
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
 import com.acmpo6ou.myaccounts.ui.DatabaseFragmentDirections
-import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -63,7 +61,6 @@ import org.robolectric.shadows.ShadowAlertDialog
 class DatabaseFragmentInstrumentation {
     lateinit var databaseScenario: FragmentScenario<DatabaseFragment>
     private lateinit var navController: NavController
-    private val faker = Faker()
 
     // get string resources
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -193,35 +190,6 @@ class DatabaseFragmentInstrumentation {
         )
     }
 
-    @Test
-    fun `startDatabase should start appropriate intent`(){
-        // database index that wil be passed with intent
-        val index = faker.number().randomDigit()
-
-        // create expected intent
-        var expectedIntent = Intent()
-
-        // call startDatabase
-        databaseScenario.onFragment {
-            expectedIntent = Intent(it.myContext, AccountsActivity::class.java)
-            expectedIntent.putExtra("databaseIndex", index)
-
-            it.startDatabase(index)
-        }
-
-        // check that appropriate intent was started
-        val actual: Intent = shadowOf(RuntimeEnvironment.application).nextStartedActivity
-
-        assertEquals(
-                expectedIntent.getStringExtra("databaseIndex"),
-                actual.getStringExtra("databaseIndex"),
-        )
-        assertEquals(
-                "startDatabase should start AccountsActivity!",
-                expectedIntent.component?.className,
-                actual.component?.className,
-        )
-    }
 
     @Test
     fun `showSuccess should display snackbar`(){
