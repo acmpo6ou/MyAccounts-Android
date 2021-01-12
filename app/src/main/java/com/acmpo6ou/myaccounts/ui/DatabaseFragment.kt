@@ -208,18 +208,14 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
      * @param[title] title of error dialog.
      * @param[details] details about the error.
      */
-    override fun showError(title: String, details: String) {
-        errorDialog(myContext, title, details)
-    }
+    override fun showError(title: String, details: String) = errorDialog(myContext, title, details)
 
     /**
      * Used to start AccountsActivity for given database.
      *
      * @param[index] index of database for which we want to start AccountsActivity.
      */
-    override fun startDatabase(index: Int) {
-        startDatabaseUtil(index, this)
-    }
+    override fun startDatabase(index: Int) = startDatabaseUtil(index, this)
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

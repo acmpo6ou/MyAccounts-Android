@@ -148,7 +148,5 @@ class OpenDatabaseFragment : Fragment() {
      *
      * @param[index] index of database for which we want to start AccountsActivity.
      */
-    fun startDatabase(index: Int) {
-        startDatabaseUtil(index, this)
-    }
+    fun startDatabase(index: Int) = startDatabaseUtil(index, this)
 }

@@ -104,9 +104,7 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
      * @param[salt] salt for key.
      * @return created fernet key.
      */
-    fun deriveKey(password: String, salt: ByteArray): Key {
-        return deriveKeyUtil(password, salt)
-    }
+    fun deriveKey(password: String, salt: ByteArray): Key = deriveKeyUtil(password, salt)
 
     /**
      * Method used to serialize database map to json string.
@@ -115,9 +113,7 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
      * @return when [data] is empty returns empty string, when [data] is not empty –
      * serialized json string.
      */
-    override fun dumps(data: DbMap): String{
-        return dumpsUtil(data)
-    }
+    override fun dumps(data: DbMap): String = dumpsUtil(data)
 
     /**
      * This method is for database serialization and encryption.

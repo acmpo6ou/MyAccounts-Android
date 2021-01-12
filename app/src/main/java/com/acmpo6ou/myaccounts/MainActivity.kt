@@ -171,9 +171,7 @@ class MainActivity : AppCompatActivity(),
             .show()
     }
 
-    override fun showError(title: String, details: String) {
-        errorDialog(myContext, title, details)
-    }
+    override fun showError(title: String, details: String) = errorDialog(myContext, title, details)
 
     /**
      * Navigates to given destination.
