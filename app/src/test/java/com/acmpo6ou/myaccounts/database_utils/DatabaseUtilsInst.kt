@@ -19,11 +19,14 @@
 
 package com.acmpo6ou.myaccounts.database_utils
 
+import android.app.Dialog
 import android.content.Intent
+import android.widget.TextView
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.core.errorDialog
 import com.acmpo6ou.myaccounts.core.startDatabaseUtil
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
 import com.github.javafaker.Faker
@@ -35,6 +38,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows
 import org.robolectric.annotation.LooperMode
+import org.robolectric.shadows.ShadowAlertDialog
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
@@ -71,5 +75,24 @@ class DatabaseUtilsInst {
                 expectedIntent.component?.className,
                 actual.component?.className,
         )
+    }
+
+    @Test
+    fun `errorDialog should create dialog with appropriate title and message`(){
+        val expectedTitle = faker.lorem().sentence()
+        val expectedMsg = faker.lorem().sentence()
+
+        scenario.onFragment {
+            errorDialog(it.myContext, expectedTitle, expectedMsg)
+        }
+
+        val dialog: Dialog = ShadowAlertDialog.getLatestDialog()
+        val title = dialog.findViewById<TextView>(R.id.alertTitle)
+        val message = dialog.findViewById<TextView>(android.R.id.message)
+
+        assertEquals("errorDialog created dialog with incorrect title!",
+                expectedTitle, title.text)
+        assertEquals("errorDialog created dialog with incorrect message!",
+                expectedMsg, message.text)
     }
 }

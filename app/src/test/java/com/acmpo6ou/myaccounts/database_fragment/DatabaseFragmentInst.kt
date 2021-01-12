@@ -19,7 +19,6 @@
 
 package com.acmpo6ou.myaccounts.database_fragment
 
-import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Looper.getMainLooper
@@ -212,30 +211,6 @@ class DatabaseFragmentInstrumentation {
                     snackbar?.text
             )
         }
-    }
-
-    @Test
-    fun `showError should create dialog with appropriate title and message`(){
-        val expectedTitle = "Error occurred!"
-        val expectedMsg = "Error details."
-        databaseScenario.onFragment {
-            it.showError(expectedTitle, expectedMsg)
-        }
-
-        val dialog: Dialog? = ShadowAlertDialog.getLatestDialog()
-        val title = dialog?.findViewById<TextView>(R.id.alertTitle)
-        val message = dialog?.findViewById<TextView>(android.R.id.message)
-
-        assertEquals(
-                "showError created dialog with incorrect title!",
-                expectedTitle,
-                title?.text,
-        )
-        assertEquals(
-                "showError created dialog with incorrect message!",
-                expectedMsg,
-                message?.text,
-        )
     }
 
     @Test
