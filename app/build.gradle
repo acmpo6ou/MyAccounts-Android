@@ -94,6 +94,12 @@ dependencies {
     implementation 'org.kamranzafar:jtar:2.3'
     kapt 'androidx.databinding:databinding-compiler-common:4.1.1'
 
+    // Coroutines
+    final def coroutines_ver = "1.3.7"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_ver"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_ver"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_ver"
+
     testImplementation 'junit:junit:4.13.1'
     testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0'
     testImplementation 'org.robolectric:robolectric:4.4'
