@@ -27,12 +27,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.errorDialog
 import com.acmpo6ou.myaccounts.core.startDatabaseUtil
 import com.acmpo6ou.myaccounts.databinding.OpenDatabaseFragmentBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class OpenDatabaseFragment : Fragment() {
 
@@ -122,7 +125,9 @@ class OpenDatabaseFragment : Fragment() {
         initModel()
 
         b.openDatabase.setOnClickListener{
-            viewModel.verifyPassword(b.databasePassword.text.toString())
+            viewModel.viewModelScope.launch(Dispatchers.Main) {
+                viewModel.verifyPassword(b.databasePassword.text.toString())
+            }
         }
     }
 

@@ -94,8 +94,7 @@ fun openDatabaseUtil(database: Database, SRC_DIR: String): Database {
  * @param[salt] salt for decryption.
  * @return decrypted database map.
  */
-fun decryptDatabaseUtil(jsonString: String, password: String, salt: ByteArray):
-        DbMap {
+fun decryptDatabaseUtil(jsonString: String, password: String, salt: ByteArray): DbMap {
     // get key and validator
     val key = deriveKeyUtil(password, salt)
     val validator: Validator<String> = object : StringValidator {

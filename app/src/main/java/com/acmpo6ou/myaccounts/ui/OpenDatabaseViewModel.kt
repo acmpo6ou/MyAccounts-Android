@@ -21,10 +21,13 @@ package com.acmpo6ou.myaccounts.ui
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.openDatabaseUtil
 import com.macasaet.fernet.TokenValidationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import java.io.File
 
 open class OpenDatabaseViewModel : ViewModel() {
@@ -79,7 +82,7 @@ open class OpenDatabaseViewModel : ViewModel() {
      * displaying error dialog saying that the database is corrupted.
      * @param[password] password for the database.
      */
-    open fun verifyPassword(password: String) {
+    open suspend fun verifyPassword(password: String) {
         try {
             var database = databases[databaseIndex].copy()
             // get salt
@@ -91,7 +94,7 @@ open class OpenDatabaseViewModel : ViewModel() {
             database.salt = salt
 
             // save deserialized database
-            database = openDatabase(database)
+            database = openDatabase(database).await()
             databases[databaseIndex] = database
 
             // set opened to true to notify fragment about successful
@@ -126,7 +129,8 @@ open class OpenDatabaseViewModel : ViewModel() {
      * @return same Database instance but with `data` property filled with deserialized
      * database map.
      */
-    open fun openDatabase(database: Database): Database {
-        return openDatabaseUtil(database, SRC_DIR)
+    open fun openDatabase(database: Database) =
+    viewModelScope.async(Dispatchers.Default) {
+        openDatabaseUtil(database, SRC_DIR)
     }
 }
