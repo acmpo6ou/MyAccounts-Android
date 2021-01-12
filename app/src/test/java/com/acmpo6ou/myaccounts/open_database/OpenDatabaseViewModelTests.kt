@@ -30,6 +30,8 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.whenever
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -52,6 +54,7 @@ class OpenDatabaseViewModelTests {
     @Before
     fun setup(){
         app.databases = mutableListOf(Database("main"))
+        spyModel.defaultDispatcher = Dispatchers.Unconfined
         spyModel.initialize(app, 0, SRC_DIR, OPEN_DB)
     }
 
@@ -67,7 +70,9 @@ class OpenDatabaseViewModelTests {
             throw TokenValidationException("")
         }.whenever(spyModel).openDatabase(app.databases[0])
 
-        spyModel.verifyPassword(faker.lorem().sentence())
+        runBlocking {
+            spyModel.verifyPassword(faker.lorem().sentence())
+        }
         assertTrue(spyModel.isIncorrectPassword())
     }
 
@@ -79,7 +84,9 @@ class OpenDatabaseViewModelTests {
             throw Exception("JsonDecodingException")
         }.whenever(spyModel).openDatabase(any())
 
-        spyModel.verifyPassword(faker.lorem().sentence())
+        runBlocking {
+            spyModel.verifyPassword(faker.lorem().sentence())
+        }
         assertTrue(spyModel.isCorrupted())
     }
 
@@ -87,13 +94,17 @@ class OpenDatabaseViewModelTests {
     fun `verifyPassword should save deserialized Database to list`(){
         val expectedDatabase = Database("main", "123", salt, getDatabaseMap())
 
-        spyModel.verifyPassword("123")
+        runBlocking {
+            spyModel.verifyPassword("123")
+        }
         assertEquals(expectedDatabase.toString(), app.databases[0].toString())
     }
 
     @Test
     fun `verifyPassword should set isOpened to true after successful deserialization`(){
-        spyModel.verifyPassword("123")
+        runBlocking {
+            spyModel.verifyPassword("123")
+        }
         assertTrue(spyModel.isOpened())
     }
 }

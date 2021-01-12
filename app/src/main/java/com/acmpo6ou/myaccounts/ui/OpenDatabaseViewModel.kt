@@ -36,6 +36,8 @@ open class OpenDatabaseViewModel : ViewModel() {
     lateinit var SRC_DIR: String
     lateinit var OPEN_DB: String
 
+    var defaultDispatcher = Dispatchers.Default
+
     var databases: MutableList<Database>
         get() = app.databases
         set(value) {
@@ -130,7 +132,7 @@ open class OpenDatabaseViewModel : ViewModel() {
      * database map.
      */
     open fun openDatabase(database: Database) =
-    viewModelScope.async(Dispatchers.Default) {
+    viewModelScope.async(defaultDispatcher) {
         openDatabaseUtil(database, SRC_DIR)
     }
 }

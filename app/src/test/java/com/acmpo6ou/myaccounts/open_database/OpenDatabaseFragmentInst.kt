@@ -33,8 +33,12 @@ import com.acmpo6ou.myaccounts.ui.OpenDatabaseFragmentArgs
 import com.acmpo6ou.myaccounts.ui.OpenDatabaseViewModel
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -48,12 +52,13 @@ import org.robolectric.shadows.ShadowAlertDialog
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
+@ExperimentalCoroutinesApi
 class OpenDatabaseFragmentInst {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 
     lateinit var openScenario: FragmentScenario<OpenDatabaseFragment>
-    private var model: OpenDatabaseViewModel = mock()
+    private var model: OpenDatabaseViewModel = spy()
     private val args: OpenDatabaseFragmentArgs = mock()
     private val faker = Faker()
 
@@ -61,6 +66,10 @@ class OpenDatabaseFragmentInst {
     fun setUp() {
         // Create a graphical FragmentScenario for the fragment
         openScenario = launchFragmentInContainer(themeResId=R.style.Theme_MyAccounts_NoActionBar)
+        model.defaultDispatcher = Dispatchers.Unconfined
+        openScenario.onFragment {
+            it.uiDispatcher = Dispatchers.Unconfined
+        }
     }
 
     /**
@@ -82,7 +91,9 @@ class OpenDatabaseFragmentInst {
             it.b.databasePassword.setText(txt)
 
             it.b.openDatabase.performClick()
-            verify(model).verifyPassword(txt)
+            runBlocking {
+                verify(model).verifyPassword(txt)
+            }
         }
     }
 
