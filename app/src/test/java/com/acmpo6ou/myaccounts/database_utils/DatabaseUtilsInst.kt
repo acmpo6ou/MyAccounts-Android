@@ -59,18 +59,13 @@ class DatabaseUtilsInst {
         // call startDatabaseUtil
         scenario.onFragment {
             expectedIntent = Intent(it.myContext, AccountsActivity::class.java)
-            expectedIntent.putExtra("databaseIndex", index)
-
             startDatabaseUtil(index, it)
         }
 
         // check that appropriate intent was started
         val actual: Intent = Shadows.shadowOf(RuntimeEnvironment.application).nextStartedActivity
 
-        assertEquals(
-                expectedIntent.getIntExtra("databaseIndex", number.randomDigit()),
-                actual.getIntExtra("databaseIndex", number.randomDigit()),
-        )
+        assertEquals(index, actual.getIntExtra("databaseIndex", 999))
         assertEquals(
                 "startDatabase should start AccountsActivity!",
                 expectedIntent.component?.className,
