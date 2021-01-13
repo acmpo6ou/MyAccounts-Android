@@ -101,11 +101,12 @@ fun openDatabaseUtil(database: Database, SRC_DIR: String, app: MyApp): Database 
  * @return decrypted database map.
  */
 fun decryptDatabaseUtil(jsonString: String, password: String, salt: ByteArray, app: MyApp): DbMap {
-    // get key from cache if it's there, if not add the key to cache
-    // this is needed because generating cryptography key using deriveKeyUtil involves
+    // Get key from cache if it's there, if not add the key to cache.
+    // This is needed because generating cryptography key using deriveKeyUtil involves
     // 100 000 iterations which takes a long time, so the keys have to be cached and
     // generated only if they are not in the cache
     val key = app.keyCache.getOrPut(password) {deriveKeyUtil(password, salt)}
+
     val validator: Validator<String> = object : StringValidator {
         // this checks whether our encrypted json string is expired or not
         // in our app we don't care about expiration so we return Instant.MAX.epochSecond
