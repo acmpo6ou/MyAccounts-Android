@@ -127,6 +127,9 @@ open class OpenDatabaseViewModel : ViewModel() {
      * decrypting and deserializing it, then assigning deserialized database map to `data`
      * property of given Database.
      *
+     * Note: this function is asynchronous because opening a database involves generating
+     * cryptography key which takes a long time and would freeze the ui.
+     *
      * @param[database] Database instance with password, name and salt to open database.
      * @return same Database instance but with `data` property filled with deserialized
      * database map.

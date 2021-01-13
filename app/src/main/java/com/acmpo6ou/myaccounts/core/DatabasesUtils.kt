@@ -77,6 +77,9 @@ fun errorDialog(context: Context, title: String, details: String) {
  * property of given Database.
  *
  * @param[database] Database instance with password, name and salt to open database.
+ * @param[SRC_DIR] path to src directory that contains databases.
+ * @param[app] application instance containing cache of cryptography keys used to open
+ * database.
  * @return same Database instance but with `data` property filled with deserialized
  * database map.
  */
@@ -93,11 +96,15 @@ fun openDatabaseUtil(database: Database, SRC_DIR: String, app: MyApp): Database 
  * @param[jsonString] encrypted json string to decrypt.
  * @param[password] password for decryption.
  * @param[salt] salt for decryption.
+ * @param[app] application instance containing cache of cryptography keys used to open
+ * database.
  * @return decrypted database map.
  */
 fun decryptDatabaseUtil(jsonString: String, password: String, salt: ByteArray, app: MyApp): DbMap {
     // get key from cache if it's there, if not add the key to cache
-    println(app.keyCache)
+    // this is needed because generating cryptography key using deriveKeyUtil involves
+    // 100 000 iterations which takes a long time, so the keys have to be cached and
+    // generated only if they are not in the cache
     val key = app.keyCache.getOrPut(password) {deriveKeyUtil(password, salt)}
     val validator: Validator<String> = object : StringValidator {
         // this checks whether our encrypted json string is expired or not

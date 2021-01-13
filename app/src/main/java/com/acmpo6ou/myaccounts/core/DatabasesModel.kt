@@ -173,6 +173,8 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
      * property of given Database.
      *
      * @param[database] Database instance with password, name and salt to open database.
+     * @param[app] application instance containing cache of cryptography keys used to open
+     * database.
      * @return same Database instance but with `data` property filled with deserialized
      * database map.
      */

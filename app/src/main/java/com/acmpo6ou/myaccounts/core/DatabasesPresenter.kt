@@ -192,7 +192,10 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
      * @param[i] index of database we want to check.
      */
     override fun isDatabaseSaved(i: Int): Boolean{
+        // the in-memory database
         val actualDatabase = databases[i]
+
+        // database that is on the disk
         val diskDatabase: Database?
         try {
             diskDatabase = model.openDatabase(actualDatabase, view.app)
