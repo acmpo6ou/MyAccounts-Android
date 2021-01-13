@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.database_utils
 
 import com.acmpo6ou.myaccounts.ModelTest
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.*
 import com.acmpo6ou.myaccounts.getDatabaseMap
 import com.macasaet.fernet.Token
@@ -28,6 +29,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class DatabaseUtilsTests: ModelTest() {
+    val app = MyApp()
+
     /**
      * This helper method encrypts given map using [password] and [salt].
      *
@@ -62,11 +65,8 @@ class DatabaseUtilsTests: ModelTest() {
         val encryptedJson = encryptStr(expectedMap)
 
         val map = decryptDatabaseUtil(encryptedJson, password, salt, app)
-        assertEquals(
-                "Incorrect decryption! decryptDatabase method",
-                expectedMap,
-                map
-        )
+        assertEquals("Incorrect decryption! decryptDatabase method",
+                expectedMap, map)
     }
 
     @Test
