@@ -49,10 +49,11 @@ class OpenDatabaseViewModelTests {
     val SRC_DIR = "sampledata/src/"
     val OPEN_DB = faker.lorem().sentence()
     private val salt = "0123456789abcdef".toByteArray()
-    val app = MyApp()
+    lateinit var app: MyApp
 
     @Before
     fun setup(){
+        app = MyApp()
         app.databases = mutableListOf(Database("main"))
         spyModel.defaultDispatcher = Dispatchers.Unconfined
         spyModel.initialize(app, 0, SRC_DIR, OPEN_DB)
@@ -74,6 +75,18 @@ class OpenDatabaseViewModelTests {
             spyModel.verifyPassword(faker.lorem().sentence())
         }
         assertTrue(spyModel.isIncorrectPassword())
+    }
+
+    @Test
+    fun `verifyPassword should remove key from cache if password is incorrect`(){
+        doAnswer{
+            throw TokenValidationException("")
+        }.whenever(spyModel).openDatabase(app.databases[0])
+
+        runBlocking {
+            spyModel.verifyPassword(faker.lorem().sentence())
+        }
+        assertTrue(app.keyCache.isEmpty())
     }
 
     @Test

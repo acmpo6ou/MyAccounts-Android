@@ -86,7 +86,7 @@ open class OpenDatabaseViewModel : ViewModel() {
      */
     open suspend fun verifyPassword(password: String) {
         try {
-            var database = databases[databaseIndex].copy()
+            val database = databases[databaseIndex].copy()
             // get salt
             val bin = File("$SRC_DIR/${database.name}.bin").readText()
             val salt = bin.toByteArray()
@@ -96,8 +96,7 @@ open class OpenDatabaseViewModel : ViewModel() {
             database.salt = salt
 
             // save deserialized database
-            database = openDatabase(database).await()
-            databases[databaseIndex] = database
+            databases[databaseIndex] = openDatabase(database).await()
 
             // set opened to true to notify fragment about successful
             // database deserialization
@@ -107,6 +106,10 @@ open class OpenDatabaseViewModel : ViewModel() {
         catch (e: TokenValidationException){
             incorrectPassword.value = true
             e.printStackTrace()
+
+            // remove cached key to avoid memory leak, because we don't need to cache
+            // keys generated from incorrect passwords
+            app.keyCache.remove(password)
         }
         catch (e: Exception){
             // here we catch Exception because JsonDecodingException is private
