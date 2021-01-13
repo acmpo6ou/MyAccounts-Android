@@ -117,7 +117,12 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
      */
     override fun deleteDatabase(i: Int) {
         try {
+            // remove database from disk
             model.deleteDatabase(databases[i].name)
+
+            // remove cryptography key of database from cache
+            view.app.keyCache.remove(databases[i].password)
+
             databases.removeAt(i)
             view.notifyRemoved(i)
         }

@@ -23,10 +23,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import com.acmpo6ou.myaccounts.MyApp
-import com.acmpo6ou.myaccounts.core.Database
-import com.acmpo6ou.myaccounts.core.DatabaseFragmentInter
-import com.acmpo6ou.myaccounts.core.DatabasesModelInter
-import com.acmpo6ou.myaccounts.core.DatabasesPresenter
+import com.acmpo6ou.myaccounts.core.*
 import com.acmpo6ou.myaccounts.getDatabaseMap
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.*
@@ -40,7 +37,7 @@ open class DatabasesPresenterTest{
     lateinit var view: DatabaseFragmentInter
     lateinit var model: DatabasesModelInter
     lateinit var presenter: DatabasesPresenter
-    val app = MyApp()
+    lateinit var app: MyApp
 
     var locationUri: Uri = mock()
     val contextResolver: ContentResolver = mock()
@@ -64,6 +61,9 @@ open class DatabasesPresenterTest{
 
     @Before
     fun setUp(){
+        app = MyApp()
+        app.keyCache = mutableMapOf("123" to deriveKeyUtil("123", salt))
+
         view = mock()
         whenever(view.ACCOUNTS_DIR).thenReturn("")
         whenever(view.app).thenReturn(app)
@@ -194,6 +194,20 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
     fun `deleteDatabase should call notifyRemoved`(){
         presenter.deleteDatabase(0)
         verify(view).notifyRemoved(0)
+    }
+
+    @Test
+    fun `deleteDatabase should remove corresponding key from cache if it there`(){
+        // there is a key for second database (it's opened) and it has to be removed
+        presenter.deleteDatabase(1)
+        assertTrue(app.keyCache.isEmpty())
+    }
+
+    @Test
+    fun `deleteDatabase should not remove anything from cache if there is no key to remove`(){
+        // there is no key for first database (it's closed), so nothing should be removed
+        presenter.deleteDatabase(0)
+        assertEquals(1, app.keyCache.size)
     }
 
     @Test
