@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts.core
 
 import android.content.ContentResolver
 import android.net.Uri
+import com.acmpo6ou.myaccounts.MyApp
 import com.macasaet.fernet.Key
 import com.macasaet.fernet.Token
 import kotlinx.serialization.Serializable
@@ -175,8 +176,8 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
      * @return same Database instance but with `data` property filled with deserialized
      * database map.
      */
-    override fun openDatabase(database: Database): Database {
-        return openDatabaseUtil(database, SRC_DIR)
+    override fun openDatabase(database: Database, app: MyApp): Database {
+        return openDatabaseUtil(database, SRC_DIR, app)
     }
 
     /**

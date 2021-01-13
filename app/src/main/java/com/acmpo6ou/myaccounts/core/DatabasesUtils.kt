@@ -24,6 +24,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import androidx.fragment.app.Fragment
 import com.acmpo6ou.myaccounts.AccountsActivity
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.macasaet.fernet.Key
@@ -79,9 +80,9 @@ fun errorDialog(context: Context, title: String, details: String) {
  * @return same Database instance but with `data` property filled with deserialized
  * database map.
  */
-fun openDatabaseUtil(database: Database, SRC_DIR: String): Database {
+fun openDatabaseUtil(database: Database, SRC_DIR: String, app: MyApp): Database {
     val jsonStr = File("$SRC_DIR/${database.name}.db").readText()
-    val data = decryptDatabaseUtil(jsonStr, database.password!!, database.salt!!)
+    val data = decryptDatabaseUtil(jsonStr, database.password!!, database.salt!!, app)
     database.data = data
     return database
 }
@@ -94,9 +95,10 @@ fun openDatabaseUtil(database: Database, SRC_DIR: String): Database {
  * @param[salt] salt for decryption.
  * @return decrypted database map.
  */
-fun decryptDatabaseUtil(jsonString: String, password: String, salt: ByteArray): DbMap {
-    // get key and validator
-    val key = deriveKeyUtil(password, salt)
+fun decryptDatabaseUtil(jsonString: String, password: String, salt: ByteArray, app: MyApp): DbMap {
+    // get key from cache if it's there, if not add the key to cache
+    println(app.keyCache)
+    val key = app.keyCache.getOrPut(password) {deriveKeyUtil(password, salt)}
     val validator: Validator<String> = object : StringValidator {
         // this checks whether our encrypted json string is expired or not
         // in our app we don't care about expiration so we return Instant.MAX.epochSecond

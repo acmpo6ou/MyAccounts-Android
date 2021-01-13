@@ -195,7 +195,7 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
         val actualDatabase = databases[i]
         val diskDatabase: Database?
         try {
-            diskDatabase = model.openDatabase(actualDatabase)
+            diskDatabase = model.openDatabase(actualDatabase, view.app)
         }
         catch (e: FileNotFoundException){
             // if database on disk doesn't exist then it definitely

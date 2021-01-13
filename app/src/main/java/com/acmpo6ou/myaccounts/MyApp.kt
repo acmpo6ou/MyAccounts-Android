@@ -21,7 +21,9 @@ package com.acmpo6ou.myaccounts
 
 import android.app.Application
 import com.acmpo6ou.myaccounts.core.Database
+import com.macasaet.fernet.Key
 
 class MyApp: Application() {
     var databases = mutableListOf<Database>()
+    var keyCache = mutableMapOf<String, Key>()
 }

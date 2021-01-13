@@ -49,7 +49,7 @@ class DatabaseUtilsTests: ModelTest() {
         // create corresponding Database instance
         val db = Database("main", password, salt)
 
-        val actualDatabase = openDatabaseUtil(db, SRC_DIR)
+        val actualDatabase = openDatabaseUtil(db, SRC_DIR, app)
         val expectedDatabase = Database("main", password, salt, getDatabaseMap())
 
         assertEquals(expectedDatabase, actualDatabase)
@@ -61,7 +61,7 @@ class DatabaseUtilsTests: ModelTest() {
         val expectedMap = getDatabaseMap()
         val encryptedJson = encryptStr(expectedMap)
 
-        val map = decryptDatabaseUtil(encryptedJson, password, salt)
+        val map = decryptDatabaseUtil(encryptedJson, password, salt, app)
         assertEquals(
                 "Incorrect decryption! decryptDatabase method",
                 expectedMap,

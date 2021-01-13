@@ -135,7 +135,7 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
             salt,
             getDatabaseMap()
         )
-        whenever(model.openDatabase(presenter.databases[1])).thenReturn(diskDatabase)
+        whenever(model.openDatabase(presenter.databases[1], app)).thenReturn(diskDatabase)
 
         assertFalse(presenter.isDatabaseSaved(1))
     }
@@ -148,7 +148,7 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
                 "123",
                 salt,
                 mapOf())
-        whenever(model.openDatabase(presenter.databases[1])).thenReturn(diskDatabase)
+        whenever(model.openDatabase(presenter.databases[1], app)).thenReturn(diskDatabase)
 
         assertTrue(presenter.isDatabaseSaved(1))
     }
@@ -198,7 +198,7 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
 
     @Test
     fun `isDatabaseSaved should return false when FileNotFoundException occurred`(){
-        whenever(model.openDatabase(presenter.databases[1])).thenAnswer{
+        whenever(model.openDatabase(presenter.databases[1], app)).thenAnswer{
             throw FileNotFoundException("")
         }
         assertFalse(presenter.isDatabaseSaved(1))
