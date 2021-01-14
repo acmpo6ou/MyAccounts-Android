@@ -32,8 +32,7 @@ import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -119,5 +118,25 @@ class OpenDatabaseViewModelTests {
             spyModel.verifyPassword("123")
         }
         assertTrue(spyModel.isOpened())
+    }
+
+    @Test
+    fun `verifyPassword should set loading to true`(){
+        runBlocking {
+            spyModel.verifyPassword("123")
+        }
+        assertTrue(spyModel.isLoading())
+    }
+
+    @Test
+    fun `verifyPassword should set loading to false when password is incorrect`(){
+        doAnswer{
+            throw TokenValidationException("")
+        }.whenever(spyModel).openDatabase(app.databases[0])
+
+        runBlocking {
+            spyModel.verifyPassword(faker.lorem().sentence())
+        }
+        assertFalse(spyModel.isLoading())
     }
 }

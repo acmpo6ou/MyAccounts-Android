@@ -46,11 +46,13 @@ open class OpenDatabaseViewModel : ViewModel() {
 
     val title = MutableLiveData<String>()
     val incorrectPassword = MutableLiveData(false)
+    val loading = MutableLiveData(false)
     val corrupted = MutableLiveData(false)
     val opened = MutableLiveData(false)
 
     fun getTitle() = title.value!!
     fun isIncorrectPassword() = incorrectPassword.value!!
+    fun isLoading() = loading.value!!
     fun isCorrupted() = corrupted.value!!
     fun isOpened() = opened.value!!
 
@@ -86,6 +88,9 @@ open class OpenDatabaseViewModel : ViewModel() {
      */
     open suspend fun verifyPassword(password: String) {
         try {
+            // show loading because decrypting database takes time
+            loading.value = true
+
             val database = databases[databaseIndex].copy()
             // get salt
             val bin = File("$SRC_DIR/${database.name}.bin").readText()
@@ -105,6 +110,7 @@ open class OpenDatabaseViewModel : ViewModel() {
         }
         catch (e: TokenValidationException){
             incorrectPassword.value = true
+            loading.value = false
             e.printStackTrace()
 
             // remove cached key to avoid memory leak, because we don't need to cache
