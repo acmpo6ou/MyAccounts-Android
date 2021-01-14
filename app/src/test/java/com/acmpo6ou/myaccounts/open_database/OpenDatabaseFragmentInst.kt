@@ -38,7 +38,6 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -67,9 +66,6 @@ class OpenDatabaseFragmentInst {
         // Create a graphical FragmentScenario for the fragment
         openScenario = launchFragmentInContainer(themeResId=R.style.Theme_MyAccounts_NoActionBar)
         model.defaultDispatcher = Dispatchers.Unconfined
-        openScenario.onFragment {
-            it.uiDispatcher = Dispatchers.Unconfined
-        }
     }
 
     /**
@@ -84,16 +80,14 @@ class OpenDatabaseFragmentInst {
     }
 
     @Test
-    fun `'Open database' button should call verifyPassword`(){
+    fun `'Open database' button should call startPasswordCheck`(){
         openScenario.onFragment {
             it.viewModel = model
             val txt = faker.lorem().sentence()
             it.b.databasePassword.setText(txt)
 
             it.b.openDatabase.performClick()
-            runBlocking {
-                verify(model).verifyPassword(txt)
-            }
+            verify(model).startPasswordCheck(txt)
         }
     }
 

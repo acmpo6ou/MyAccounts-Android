@@ -27,16 +27,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.errorDialog
 import com.acmpo6ou.myaccounts.core.startDatabaseUtil
 import com.acmpo6ou.myaccounts.databinding.OpenDatabaseFragmentBinding
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class OpenDatabaseFragment : Fragment() {
 
@@ -48,7 +44,6 @@ class OpenDatabaseFragment : Fragment() {
     var args: OpenDatabaseFragmentArgs? = null
     lateinit var myContext: Context
     lateinit var app: MyApp
-    var uiDispatcher: CoroutineDispatcher = Dispatchers.Main
 
     var binding: OpenDatabaseFragmentBinding? = null
     val b: OpenDatabaseFragmentBinding get() = binding!!
@@ -127,9 +122,7 @@ class OpenDatabaseFragment : Fragment() {
         initModel()
 
         b.openDatabase.setOnClickListener{
-            viewModel.viewModelScope.launch(uiDispatcher) {
-                viewModel.verifyPassword(b.databasePassword.text.toString())
-            }
+            viewModel.startPasswordCheck(b.databasePassword.text.toString())
         }
     }
 

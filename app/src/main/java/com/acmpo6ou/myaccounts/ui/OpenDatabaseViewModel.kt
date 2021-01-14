@@ -26,8 +26,10 @@ import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.openDatabaseUtil
 import com.macasaet.fernet.TokenValidationException
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.io.File
 
 open class OpenDatabaseViewModel : ViewModel() {
@@ -37,6 +39,7 @@ open class OpenDatabaseViewModel : ViewModel() {
     lateinit var OPEN_DB: String
 
     var defaultDispatcher = Dispatchers.Default
+    var uiDispatcher: CoroutineDispatcher = Dispatchers.Main
 
     var databases: MutableList<Database>
         get() = app.databases
@@ -74,6 +77,12 @@ open class OpenDatabaseViewModel : ViewModel() {
 
         val name = databases[databaseIndex].name
         title.value = "$OPEN_DB $name"
+    }
+
+    open fun startPasswordCheck(password: String){
+        viewModelScope.launch(uiDispatcher) {
+            verifyPassword(password)
+        }
     }
 
     /**

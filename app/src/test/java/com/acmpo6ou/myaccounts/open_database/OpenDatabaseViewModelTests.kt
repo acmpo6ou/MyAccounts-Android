@@ -55,6 +55,7 @@ class OpenDatabaseViewModelTests {
         app = MyApp()
         app.databases = mutableListOf(Database("main"))
         spyModel.defaultDispatcher = Dispatchers.Unconfined
+        spyModel.uiDispatcher = Dispatchers.Unconfined
         spyModel.initialize(app, 0, SRC_DIR, OPEN_DB)
     }
 
