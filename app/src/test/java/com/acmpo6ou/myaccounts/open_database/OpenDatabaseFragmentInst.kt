@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts.open_database
 
 import android.app.Dialog
 import android.content.Intent
+import android.view.View
 import android.widget.TextView
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.testing.FragmentScenario
@@ -120,6 +121,24 @@ class OpenDatabaseFragmentInst {
 
             assertEquals(errorTitle, title.text)
             assertEquals(errorMsg, message.text)
+        }
+    }
+
+    @Test
+    fun `should display or hide progress bar depending on loading of view model`(){
+        openScenario.onFragment {
+            val greenColor = it.myContext.getColor(R.color.green)
+            val whiteColor = it.myContext.getColor(R.color.white)
+
+            // when loading true progress bar should be displayed and button text - hidden
+            it.viewModel.loading.value = true
+            assertEquals(View.VISIBLE, it.b.progressLoading.visibility)
+            assertEquals(greenColor, it.b.openDatabase.textColors.defaultColor)
+
+            // when loading false progress bar should be hidden and button text - displayed
+            it.viewModel.loading.value = false
+            assertEquals(View.GONE, it.b.progressLoading.visibility)
+            assertEquals(whiteColor, it.b.openDatabase.textColors.defaultColor)
         }
     }
 

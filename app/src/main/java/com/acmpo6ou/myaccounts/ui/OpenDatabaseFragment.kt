@@ -95,6 +95,19 @@ class OpenDatabaseFragment : Fragment() {
         }
     }
 
+    private val loadingObserver = Observer<Boolean> {
+        if(it) {
+            val greenColor = myContext.getColor(R.color.green)
+            b.progressLoading.visibility = View.VISIBLE
+            b.openDatabase.setTextColor(greenColor)
+        }
+        else{
+            val whiteColor = myContext.getColor(R.color.white)
+            b.progressLoading.visibility = View.GONE
+            b.openDatabase.setTextColor(whiteColor)
+        }
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         // save arguments, context and app
@@ -131,10 +144,15 @@ class OpenDatabaseFragment : Fragment() {
      */
     private fun initModel() {
         // init observers
-        viewModel.title.observe(viewLifecycleOwner, titleObserver)
-        viewModel.incorrectPassword.observe(viewLifecycleOwner, passwordObserver)
-        viewModel.corrupted.observe(viewLifecycleOwner, corruptedObserver)
-        viewModel.opened.observe(viewLifecycleOwner, openedObserver)
+        viewModel.apply {
+            viewLifecycleOwner.let {
+                title.observe(it, titleObserver)
+                incorrectPassword.observe(it, passwordObserver)
+                corrupted.observe(it, corruptedObserver)
+                opened.observe(it, openedObserver)
+                loading.observe(it, loadingObserver)
+            }
+        }
 
         val SRC_DIR = myContext.getExternalFilesDir(null)?.path + "/src"
         val OPEN_DB = myContext.resources.getString(R.string.open_db)
