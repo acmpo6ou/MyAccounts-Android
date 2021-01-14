@@ -154,6 +154,12 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
     }
 
     @Test
+    fun `closeDatabase should remove cryptography key from cache`(){
+        presenter.closeDatabase(1)
+        assertTrue(app.keyCache.isEmpty())
+    }
+
+    @Test
     fun `closeDatabase should reset database password`(){
         presenter.closeDatabase(1)
         assertEquals(null, presenter.databases[1].password)

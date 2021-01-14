@@ -164,10 +164,12 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
 
     /**
      * Used to reset database password in this way 'closing' it.
+     * It also removes cryptography key of database from cache.
      *
      * @param[i] - database index.
      */
     override fun closeDatabase(i: Int) {
+        view.app.keyCache.remove(databases[i].password)
         databases[i].password = null
         view.notifyChanged(i)
     }
