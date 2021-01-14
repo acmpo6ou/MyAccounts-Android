@@ -95,6 +95,10 @@ class OpenDatabaseFragment : Fragment() {
         }
     }
 
+    /**
+     * This observer hides/displays loading progress bar of `Open database` button
+     * depending on loading live data of view model.
+     */
     private val loadingObserver = Observer<Boolean> {
         if(it) {
             val greenColor = myContext.getColor(R.color.green)
