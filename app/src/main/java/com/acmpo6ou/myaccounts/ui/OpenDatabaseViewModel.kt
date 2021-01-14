@@ -26,10 +26,7 @@ import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.openDatabaseUtil
 import com.macasaet.fernet.TokenValidationException
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.io.File
 
 open class OpenDatabaseViewModel : ViewModel() {
@@ -40,6 +37,7 @@ open class OpenDatabaseViewModel : ViewModel() {
 
     var defaultDispatcher = Dispatchers.Default
     var uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    var passwordJob: Job? = null
 
     var databases: MutableList<Database>
         get() = app.databases
@@ -80,8 +78,10 @@ open class OpenDatabaseViewModel : ViewModel() {
     }
 
     open fun startPasswordCheck(password: String){
-        viewModelScope.launch(uiDispatcher) {
-            verifyPassword(password)
+        if(passwordJob == null || !passwordJob!!.isActive) {
+            passwordJob = viewModelScope.launch(uiDispatcher) {
+                verifyPassword(password)
+            }
         }
     }
 
