@@ -24,9 +24,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
@@ -121,7 +123,7 @@ class OpenDatabaseFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View? {
+        savedInstanceState: Bundle?): View {
         binding = OpenDatabaseFragmentBinding.inflate(layoutInflater, container, false)
         return b.root
     }
@@ -168,5 +170,10 @@ class OpenDatabaseFragment : Fragment() {
      *
      * @param[index] index of database for which we want to start AccountsActivity.
      */
-    fun startDatabase(index: Int) = startDatabaseUtil(index, this)
+    fun startDatabase(index: Int) {
+        startDatabaseUtil(index, this)
+        // navigate back to DatabaseFragment
+        val mainActivity = myContext as AppCompatActivity
+        mainActivity.findNavController(R.id.nav_host_fragment).navigateUp()
+    }
 }
