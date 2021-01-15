@@ -54,8 +54,7 @@ class DatabaseUtilsInst {
     @Test
     fun `startDatabaseUtil should start appropriate intent`(){
         // database index that wil be passed with intent
-        val number = faker.number()
-        val index = number.randomDigit()
+        val index = faker.number().randomDigit()
 
         // create expected intent
         var expectedIntent = Intent()
@@ -67,14 +66,13 @@ class DatabaseUtilsInst {
         }
 
         // check that appropriate intent was started
-        val actual: Intent = Shadows.shadowOf(RuntimeEnvironment.application).nextStartedActivity
+        val actual: Intent =
+                Shadows.shadowOf(RuntimeEnvironment.application).nextStartedActivity
 
         assertEquals(index, actual.getIntExtra("databaseIndex", 999))
-        assertEquals(
-                "startDatabase should start AccountsActivity!",
+        assertEquals("startDatabase should start AccountsActivity!",
                 expectedIntent.component?.className,
-                actual.component?.className,
-        )
+                actual.component?.className)
     }
 
     @Test
