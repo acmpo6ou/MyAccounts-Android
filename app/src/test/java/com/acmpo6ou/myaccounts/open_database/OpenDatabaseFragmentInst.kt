@@ -31,11 +31,10 @@ import com.acmpo6ou.myaccounts.ui.OpenDatabaseFragment
 import com.acmpo6ou.myaccounts.ui.OpenDatabaseFragmentArgs
 import com.acmpo6ou.myaccounts.ui.OpenDatabaseViewModel
 import com.github.javafaker.Faker
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.*
 import org.junit.Before
@@ -55,14 +54,13 @@ class OpenDatabaseFragmentInst {
 
     lateinit var openScenario: FragmentScenario<OpenDatabaseFragment>
     private var model: OpenDatabaseViewModel = spy()
-    private val args: OpenDatabaseFragmentArgs = mock()
+    private val args: OpenDatabaseFragmentArgs = mock{ on{databaseIndex} doReturn 0 }
     private val faker = Faker()
 
     @Before
     fun setUp() {
         // Create a graphical FragmentScenario for the fragment
         openScenario = launchFragmentInContainer(themeResId=R.style.Theme_MyAccounts_NoActionBar)
-        model.defaultDispatcher = Dispatchers.Unconfined
     }
 
     /**
@@ -71,7 +69,6 @@ class OpenDatabaseFragmentInst {
     private fun setupDatabase(){
         openScenario.onFragment {
             it.app.databases = mutableListOf(Database("main"))
-            whenever(args.databaseIndex).thenReturn(0)
             it.args = args
         }
     }
@@ -121,9 +118,9 @@ class OpenDatabaseFragmentInst {
     }
 
     @Test
-    fun `should display or hide progress bar depending on loading of view model`(){
+    fun `should display or hide progress bar depending on 'loading' of view model`(){
         openScenario.onFragment {
-            // when loading true progress bar should be displayed and button - disabled
+            // when loading is true progress bar should be displayed and button - disabled
             it.viewModel.loading.value = true
             assertEquals(View.VISIBLE, it.b.progressLoading.visibility)
             assertFalse(it.b.openDatabase.isEnabled)
