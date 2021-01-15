@@ -20,13 +20,11 @@
 package com.acmpo6ou.myaccounts.open_database
 
 import android.app.Dialog
-import android.content.Intent
 import android.view.View
 import android.widget.TextView
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
-import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.ui.OpenDatabaseFragment
@@ -45,8 +43,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
-import org.robolectric.Shadows
 import org.robolectric.annotation.LooperMode
 import org.robolectric.shadows.ShadowAlertDialog
 
@@ -137,31 +133,5 @@ class OpenDatabaseFragmentInst {
             assertEquals(View.GONE, it.b.progressLoading.visibility)
             assertTrue(it.b.openDatabase.isEnabled)
         }
-    }
-
-    @Test
-    fun `startDatabase should start AccountsActivity when opened is true`(){
-        var expectedIntent = Intent()
-        openScenario.onFragment {
-            setupDatabase()
-            it.viewModel.opened.value = true
-
-            expectedIntent = Intent(it.myContext, AccountsActivity::class.java)
-            expectedIntent.putExtra("databaseIndex", 0)
-
-            it.startDatabase(0)
-        }
-
-        // check that appropriate intent was started
-        val actual: Intent =
-                Shadows.shadowOf(RuntimeEnvironment.application).nextStartedActivity
-        assertEquals(
-                expectedIntent.getStringExtra("databaseIndex"),
-                actual.getStringExtra("databaseIndex"),
-        )
-        assertEquals(
-                expectedIntent.component?.className,
-                actual.component?.className,
-        )
     }
 }
