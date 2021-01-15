@@ -49,6 +49,7 @@ open class ModelTest {
     val locationUri: Uri = mock()
     val destinationUri: Uri = mock()
     private val descriptor: ParcelFileDescriptor = mock()
+
     private val destination = "$accountsDir/main.tar"
     private val location = "sampledata/tar/main.tar"
 
@@ -75,7 +76,6 @@ open class ModelTest {
         // to simulate the Android Storage Access Framework
         val fos = FileOutputStream(File(destination))
         whenever(descriptor.fileDescriptor).thenReturn(fos.fd)
-        println(descriptor.fileDescriptor)
         whenever(contentResolver.openFileDescriptor(destinationUri, "w")).thenReturn(descriptor)
     }
 
@@ -101,9 +101,7 @@ open class ModelTest {
         val binFile = File("sampledata/src/$name.bin")
         val dbFile = File("sampledata/src/$name.db")
 
-        // here we copy database files to the fake file system
         binFile.copyTo(binDestination)
         dbFile.copyTo(dbDestination)
     }
-
 }
