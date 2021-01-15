@@ -73,6 +73,7 @@ open class OpenDatabaseViewModel : ViewModel() {
         this.OPEN_DB = OPEN_DB
         this.databaseIndex = databaseIndex
 
+        // set app bar title
         val name = databases[databaseIndex].name
         title.value = "$OPEN_DB $name"
     }
@@ -80,7 +81,7 @@ open class OpenDatabaseViewModel : ViewModel() {
     /**
      * This method launches verifyPassword coroutine only if it wasn't already launched and
      * password is not empty.
-     * @param[password] parameter needed by verifyPassword coroutine.
+     * @param[password] password needed by verifyPassword coroutine.
      */
     open fun startPasswordCheck(password: String){
         if((passwordJob == null || !passwordJob!!.isActive) &&
@@ -120,8 +121,8 @@ open class OpenDatabaseViewModel : ViewModel() {
 
             // set opened to true to notify fragment about successful
             // database deserialization
-            incorrectPassword.value = false
             opened.value = true
+            incorrectPassword.value = false
         }
         catch (e: TokenValidationException){
             incorrectPassword.value = true
