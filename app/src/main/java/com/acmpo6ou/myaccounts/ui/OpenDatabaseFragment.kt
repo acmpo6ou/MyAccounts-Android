@@ -101,14 +101,12 @@ class OpenDatabaseFragment : Fragment() {
      */
     private val loadingObserver = Observer<Boolean> {
         if(it) {
-            val greenColor = myContext.getColor(R.color.green)
             b.progressLoading.visibility = View.VISIBLE
-            b.openDatabase.setTextColor(greenColor)
+            b.openDatabase.isEnabled = false
         }
         else{
-            val whiteColor = myContext.getColor(R.color.white)
             b.progressLoading.visibility = View.GONE
-            b.openDatabase.setTextColor(whiteColor)
+            b.openDatabase.isEnabled = true
         }
     }
 

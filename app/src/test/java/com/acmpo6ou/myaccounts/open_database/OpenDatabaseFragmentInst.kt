@@ -39,7 +39,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.junit.Assert.assertEquals
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -127,18 +127,15 @@ class OpenDatabaseFragmentInst {
     @Test
     fun `should display or hide progress bar depending on loading of view model`(){
         openScenario.onFragment {
-            val greenColor = it.myContext.getColor(R.color.green)
-            val whiteColor = it.myContext.getColor(R.color.white)
-
-            // when loading true progress bar should be displayed and button text - hidden
+            // when loading true progress bar should be displayed and button - disabled
             it.viewModel.loading.value = true
             assertEquals(View.VISIBLE, it.b.progressLoading.visibility)
-            assertEquals(greenColor, it.b.openDatabase.textColors.defaultColor)
+            assertFalse(it.b.openDatabase.isEnabled)
 
-            // when loading false progress bar should be hidden and button text - displayed
+            // when loading false progress bar should be hidden and button - enabled
             it.viewModel.loading.value = false
             assertEquals(View.GONE, it.b.progressLoading.visibility)
-            assertEquals(whiteColor, it.b.openDatabase.textColors.defaultColor)
+            assertTrue(it.b.openDatabase.isEnabled)
         }
     }
 
