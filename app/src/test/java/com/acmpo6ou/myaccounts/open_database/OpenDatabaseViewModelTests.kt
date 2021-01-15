@@ -155,6 +155,15 @@ class OpenDatabaseViewModelTests {
     }
 
     @Test
+    fun `startPasswordCheck should not start verifyPassword if password is empty`(){
+        spyModel.startPasswordCheck("")
+
+        runBlocking {
+            verify(spyModel, never()).verifyPassword("")
+        }
+    }
+
+    @Test
     fun `startPasswordCheck should start verifyPassword if passwordJob isn't active`(){
         // mock passwordJob
         val mockJob = mock<Job>{ on {isActive} doReturn false }

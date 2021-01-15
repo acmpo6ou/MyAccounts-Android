@@ -78,11 +78,13 @@ open class OpenDatabaseViewModel : ViewModel() {
     }
 
     /**
-     * This method launches verifyPassword coroutine only if it wasn't already launched.
+     * This method launches verifyPassword coroutine only if it wasn't already launched and
+     * password is not empty.
      * @param[password] parameter needed by verifyPassword coroutine.
      */
     open fun startPasswordCheck(password: String){
-        if(passwordJob == null || !passwordJob!!.isActive) {
+        if((passwordJob == null || !passwordJob!!.isActive) &&
+            password.isNotEmpty()) {
             passwordJob = viewModelScope.launch(uiDispatcher) {
                 verifyPassword(password)
             }
