@@ -31,11 +31,9 @@ import com.google.android.material.snackbar.SnackbarContentLayout
 
 // This two extensions used to find a snackbar during tests
 /**
- * @return a TextView if a snackbar is shown anywhere in the view hierarchy.
- *
  * NOTE: calling Snackbar.make() does not create a snackbar. Only calling #show() will create it.
- *
  * If the textView is not-null you can check its text.
+ * @return a TextView if a snackbar is shown anywhere in the view hierarchy.
  */
 fun View.findSnackbarTextView(): TextView? {
     val possibleSnackbarContentLayout = findSnackbarLayout()?.getChildAt(0) as? SnackbarContentLayout
@@ -63,7 +61,6 @@ private fun View.findSnackbarLayout(): Snackbar.SnackbarLayout? {
 
 /**
  * Helper function that creates simple database map used in tests.
- *
  * @return created database map.
  */
 fun getDatabaseMap(): DbMap {
