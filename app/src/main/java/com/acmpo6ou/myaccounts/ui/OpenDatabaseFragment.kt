@@ -51,7 +51,7 @@ class OpenDatabaseFragment : Fragment() {
     val b: OpenDatabaseFragmentBinding get() = binding!!
 
     /**
-     * This observer sets app bar title to something like `Open <database name>`.
+     * This observer sets app bar title to `Open <database name>`.
      */
     private val titleObserver = Observer<String>{
         val mainActivity = activity as MainActivity
@@ -75,7 +75,7 @@ class OpenDatabaseFragment : Fragment() {
     }
 
     /**
-     * This observer displays error dialog when database user tries to open is corrupted.
+     * This observer displays error dialog when user tries to open corrupted database.
      */
     private val corruptedObserver = Observer<Boolean> {
         if(it){
@@ -99,7 +99,7 @@ class OpenDatabaseFragment : Fragment() {
 
     /**
      * This observer hides/displays loading progress bar of `Open database` button
-     * depending on loading live data of view model.
+     * depending on `loading` live data of view model.
      */
     private val loadingObserver = Observer<Boolean> {
         if(it) {
@@ -114,6 +114,7 @@ class OpenDatabaseFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+
         // save arguments, context and app
         myContext = requireContext()
         app = context.applicationContext as MyApp
@@ -172,6 +173,7 @@ class OpenDatabaseFragment : Fragment() {
      */
     fun startDatabase(index: Int) {
         startDatabaseUtil(index, this)
+
         // navigate back to DatabaseFragment
         val mainActivity = myContext as AppCompatActivity
         mainActivity.findNavController(R.id.nav_host_fragment).navigateUp()
