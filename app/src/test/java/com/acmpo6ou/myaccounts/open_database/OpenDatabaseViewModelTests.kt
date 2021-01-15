@@ -28,7 +28,6 @@ import com.github.javafaker.Faker
 import com.macasaet.fernet.TokenValidationException
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Before
@@ -40,7 +39,7 @@ class OpenDatabaseViewModelTests {
     val taskExecutorRule = InstantTaskExecutorRule()
 
     private val model = OpenDatabaseViewModel()
-    private var spyModel = spy(model)
+    private lateinit var spyModel: OpenDatabaseViewModel
     private val faker = Faker()
     private val password = "123"
 
@@ -53,10 +52,12 @@ class OpenDatabaseViewModelTests {
     fun setup(){
         app = MyApp()
         app.databases = mutableListOf(Database("main"))
+
+        // init spyModel
         spyModel = spy(model)
+        spyModel.initialize(app, 0, SRC_DIR, OPEN_DB)
         spyModel.defaultDispatcher = Dispatchers.Unconfined
         spyModel.uiDispatcher = Dispatchers.Unconfined
-        spyModel.initialize(app, 0, SRC_DIR, OPEN_DB)
     }
 
     @Test
@@ -143,10 +144,7 @@ class OpenDatabaseViewModelTests {
 
     @Test
     fun `startPasswordCheck should not start verifyPassword if passwordJob already active`(){
-        // mock passwordJob
-        val mockJob = mock<Job>{ on {isActive} doReturn true }
-        spyModel.passwordJob = mockJob
-
+        spyModel.passwordJob = mock { on {isActive} doReturn true }
         spyModel.startPasswordCheck(password)
 
         runBlocking {
@@ -165,11 +163,9 @@ class OpenDatabaseViewModelTests {
 
     @Test
     fun `startPasswordCheck should start verifyPassword if passwordJob isn't active`(){
-        // mock passwordJob
-        val mockJob = mock<Job>{ on {isActive} doReturn false }
-        spyModel.passwordJob = mockJob
-
+        spyModel.passwordJob = mock { on {isActive} doReturn false }
         spyModel.startPasswordCheck(password)
+
         runBlocking {
             verify(spyModel).verifyPassword(password)
         }
@@ -178,6 +174,7 @@ class OpenDatabaseViewModelTests {
     @Test
     fun `startPasswordCheck should start verifyPassword if passwordJob is null`(){
         spyModel.startPasswordCheck(password)
+
         runBlocking {
             verify(spyModel).verifyPassword(password)
         }
