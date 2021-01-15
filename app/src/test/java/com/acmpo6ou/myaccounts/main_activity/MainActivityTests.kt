@@ -39,10 +39,7 @@ class MainActivityTests: DatabaseViewTest() {
     @Before
     fun setup(){
         activity = MainActivity()
-
-        // mock presenter and intent
         presenter = mock()
-        mockIntent()
         activity.presenter = presenter
     }
 

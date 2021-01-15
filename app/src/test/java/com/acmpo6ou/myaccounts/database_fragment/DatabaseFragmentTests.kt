@@ -35,11 +35,7 @@ class DatabaseFragmentTests: DatabaseViewTest() {
 
     @Before
     fun setUp(){
-        // mock presenter and intent with uri
         presenter = mock()
-        mockIntent()
-
-        // setup fragment with mocked adapter and presenter
         fragment = DatabaseFragment()
         fragment.presenter = presenter
     }

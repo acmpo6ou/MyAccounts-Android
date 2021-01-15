@@ -22,8 +22,8 @@ package com.acmpo6ou.myaccounts
 import android.content.Intent
 import android.net.Uri
 import com.github.javafaker.Faker
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
 
 /**
  * Super class test for DatabaseFragmentInst and MainActivityInst.
@@ -31,17 +31,9 @@ import com.nhaarman.mockitokotlin2.whenever
  * Contains some helper methods and properties.
  */
 open class DatabaseViewTest {
-    lateinit var intent: Intent
-    val faker = Faker()
-    lateinit var locationUri: Uri
-    val OTHER_RC = faker.number().digit().toInt()
+    var locationUri: Uri = mock()
+    var intent: Intent = mock{on{data} doReturn locationUri}
 
-    /**
-     * Helper function to mock intent, so that it would contain uri with random string.
-     */
-    fun mockIntent(){
-        intent = mock()
-        locationUri = mock()
-        whenever(intent.data).thenReturn(locationUri)
-    }
+    val faker = Faker()
+    val OTHER_RC = faker.number().digit().toInt()
 }
