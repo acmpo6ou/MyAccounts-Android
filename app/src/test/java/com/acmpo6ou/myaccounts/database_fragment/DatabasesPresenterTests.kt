@@ -50,8 +50,7 @@ open class DatabasesPresenterTest{
         presenter.model = model
         presenter.databases = mutableListOf(
                 Database("main"),
-                Database("test", "123", salt, mapOf())
-        )
+                Database("test", "123", salt, mapOf()))
     }
 
     fun callExportDatabase(){
@@ -64,9 +63,10 @@ open class DatabasesPresenterTest{
         app = MyApp()
         app.keyCache = mutableMapOf("123" to deriveKeyUtil("123", salt))
 
-        view = mock()
-        whenever(view.ACCOUNTS_DIR).thenReturn("")
-        whenever(view.app).thenReturn(app)
+        view = mock{
+            on{ACCOUNTS_DIR} doReturn ""
+            on{app} doReturn DatabasesPresenterTest@app
+        }
     }
 }
 
@@ -111,7 +111,7 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
 
     @Test
     fun `closeSelected should call confirmClose when database isn't saved`(){
-        // mock isDatabaseSaved to return false that will mean that database is saved
+        // mock isDatabaseSaved to return false that will mean that database isn't saved
         // so presenter should call confirmClose in this condition
         val presenterSpy = spy(presenter)
         doReturn(false).`when`(presenterSpy).isDatabaseSaved(0)
@@ -127,28 +127,21 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
     }
 
     @Test
-    fun `isDatabaseSaved should return false when database is different from the one on disk`(){
-        // here database on disk is different then database in memory
-        val diskDatabase = Database(
-            "test",
-            "123",
-            salt,
-            getDatabaseMap()
-        )
-        whenever(model.openDatabase(presenter.databases[1], app)).thenReturn(diskDatabase)
+    fun `isDatabaseSaved should return false`(){
+        // here database on disk is different then in-memory database
+        val diskDatabase = Database("test", "123", salt, getDatabaseMap())
+        whenever(model.openDatabase(presenter.databases[1], app))
+                .thenReturn(diskDatabase)
 
         assertFalse(presenter.isDatabaseSaved(1))
     }
 
     @Test
-    fun `isDatabaseSaved should return true when database isn't different from the one on disk`(){
+    fun `isDatabaseSaved should return true`(){
         // here database on disk is exactly the same as database in memory
-        val diskDatabase = Database(
-                "test",
-                "123",
-                salt,
-                mapOf())
-        whenever(model.openDatabase(presenter.databases[1], app)).thenReturn(diskDatabase)
+        val diskDatabase = Database("test", "123", salt, mapOf())
+        whenever(model.openDatabase(presenter.databases[1], app))
+                .thenReturn(diskDatabase)
 
         assertTrue(presenter.isDatabaseSaved(1))
     }
@@ -218,9 +211,10 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
 
     @Test
     fun `isDatabaseSaved should return false when FileNotFoundException occurred`(){
-        whenever(model.openDatabase(presenter.databases[1], app)).thenAnswer{
-            throw FileNotFoundException("")
-        }
+        whenever(model.openDatabase(presenter.databases[1], app))
+                .thenAnswer{
+                    throw FileNotFoundException("")
+                }
         assertFalse(presenter.isDatabaseSaved(1))
     }
 

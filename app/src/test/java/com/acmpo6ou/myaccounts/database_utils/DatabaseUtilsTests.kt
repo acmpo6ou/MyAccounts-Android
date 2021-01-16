@@ -60,7 +60,7 @@ class DatabaseUtilsTests: ModelTest() {
 
     @Test
     fun `decryptDatabaseUtil should return decrypted and deserialized map given string`(){
-        // encrypt database so we can check how decryptDatabase will decrypt it
+        // encrypt database
         val expectedMap = getDatabaseMap()
         val encryptedJson = encryptStr(expectedMap)
 
@@ -93,9 +93,7 @@ class DatabaseUtilsTests: ModelTest() {
 
     @Test
     fun `loadsUtil should return non empty map when passed non empty string`(){
-        // load database map from json string
         val map = loadsUtil(jsonDatabase)
-
         val expectedMap = getDatabaseMap()
         assertEquals(expectedMap, map)
     }

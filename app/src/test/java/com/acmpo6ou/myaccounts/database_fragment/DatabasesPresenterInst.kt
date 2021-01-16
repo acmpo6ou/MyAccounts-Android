@@ -38,9 +38,9 @@ class DatabasesPresenterInst: DatabasesPresenterTest() {
     // get string resources
     val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     val resources = context.resources
+
     val exportErrorTitle = resources.getString(R.string.export_error_title)
     val deleteErrorTitle = resources.getString(R.string.delete_error_title)
-
     val exportFileNotFoundDetails = resources.getString(R.string.export_file_not_found_details)
     val ioError = resources.getString(R.string.io_error)
 
@@ -76,6 +76,7 @@ class DatabasesPresenterInst: DatabasesPresenterTest() {
     fun `exportDatabase should handle any other exception`(){
         val msg = faker.lorem().sentence()
         val expectedDetails = "java.lang.Exception $msg"
+
         whenever(model.exportDatabase(anyString(), eq(locationUri)))
                 .thenAnswer{
                     throw Exception(msg)
@@ -89,6 +90,7 @@ class DatabasesPresenterInst: DatabasesPresenterTest() {
     fun `deleteDatabase should handle any exception`(){
         val msg = faker.lorem().sentence()
         val expectedDetails = "java.lang.Exception $msg"
+
         whenever(model.deleteDatabase(anyString()))
                 .thenAnswer{
                     throw Exception(msg)
