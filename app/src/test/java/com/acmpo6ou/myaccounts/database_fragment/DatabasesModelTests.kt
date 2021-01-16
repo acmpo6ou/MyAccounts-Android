@@ -39,27 +39,23 @@ class DatabasesTests {
     private val faker = Faker()
 
     @Test
-    fun `Database class should have isOpen property set to false when password is null`(){
+    fun `Database should have isOpen property set to false when password is null`(){
         // we didn't  pass the password so it will be null by default
         val database = Database(faker.name().toString())
 
-        // if password is null then database is closed
-        assertFalse(
-                "Password of Database is null but isOpen is not false!",
-                database.isOpen,
-        )
+        // if password is null then database should be closed
+        assertFalse("Password of Database is null but isOpen is true!",
+                database.isOpen)
     }
 
     @Test
-    fun `Database class should have isOpen property set to true when password is NOT null`(){
+    fun `Database should have isOpen property set to true when password is NOT null`(){
         // we passed the password, so it is not null
-        val database = Database(faker.name().toString(), "Some password")
+        val database = Database(faker.name().toString(), faker.lorem().sentence())
 
-        // when password is not null database is opened
-        assertTrue(
-                "Password of Database is NOT null but isOpen is false!",
-                database.isOpen,
-        )
+        // when password is not null database should be opened
+        assertTrue("Password of Database is NOT null but isOpen is false!",
+                database.isOpen)
     }
 }
 
@@ -73,12 +69,7 @@ class DatabasesModelTests: ModelTest() {
      * Also it uses createDatabase method of DatabasesModel class for this.
      */
     private fun createEmptyDatabase(){
-        // instantiate empty database with name, password and salt
-        val database = Database(
-                "main",
-                "123",
-                salt
-        )
+        val database = Database("main", "123", salt)
         model.createDatabase(database)
     }
 
@@ -104,17 +95,13 @@ class DatabasesModelTests: ModelTest() {
     }
 
     @Test
-    fun `encryptDatabase should return encrypted json string when given Database`(){
-        // get database map
+    fun `encryptDatabase should return encrypted json string from Database`(){
         val dataMap = getDatabaseMap()
 
-        // create database
         val database = Database(
                 faker.name().toString(),
                 faker.lorem().sentence(),
-                salt,
-                dataMap
-        )
+                salt, dataMap)
 
         // get encrypted json string
         val jsonStr = model.encryptDatabase(database)
@@ -123,11 +110,8 @@ class DatabasesModelTests: ModelTest() {
         // to check if it were encrypted correctly
         val data = decryptStr(jsonStr, database.password!!, database.salt!!)
 
-        assertEquals(
-                "encryptDatabase has returned incorrectly encrypted json string!",
-                jsonDatabase,
-                data
-        )
+        assertEquals("encryptDatabase has returned incorrectly encrypted json string!",
+                jsonDatabase, data)
     }
 
     @Test
@@ -137,22 +121,13 @@ class DatabasesModelTests: ModelTest() {
         // this is a salt file that createDatabase should create for us
         val actualBin = File("$SRC_DIR/main.bin").readBytes()
 
-        assertEquals(
-                "createDatabase created incorrect salt file!",
-                String(salt),
-                String(actualBin)
-        )
+        assertEquals("createDatabase created incorrect salt file!",
+                String(salt), String(actualBin))
     }
 
     @Test
-    fun `createDatabase should create database file given Database instance`(){
-        // create database using createDatabase
-        val database = Database(
-                "main",
-                "123",
-                salt,
-                getDatabaseMap()
-        )
+    fun `createDatabase should create db file given Database instance`(){
+        val database = Database("main", "123", salt, getDatabaseMap())
         model.createDatabase(database)
 
         // this is a .db file that createDatabase should create for us
@@ -160,11 +135,8 @@ class DatabasesModelTests: ModelTest() {
 
         // here we decrypt data saved to .db file to check that it was encrypted correctly
         val data = decryptStr(String(actualDb), "123", salt)
-        assertEquals(
-                "createDatabase creates incorrectly encrypted database!",
-                jsonDatabase,
-                data
-        )
+        assertEquals("createDatabase creates incorrectly encrypted database!",
+                jsonDatabase, data)
     }
 
     @Test
@@ -178,37 +150,25 @@ class DatabasesModelTests: ModelTest() {
         val binFile = File("$SRC_DIR/main.bin")
         val dbFile = File("$SRC_DIR/main.db")
 
-        assertFalse(
-                "deleteDatabase doesn't delete .bin file",
-                binFile.exists()
-        )
-        assertFalse(
-                "deleteDatabase doesn't delete .db file",
-                dbFile.exists()
-        )
+        assertFalse("deleteDatabase doesn't delete .bin file",
+                binFile.exists())
+        assertFalse("deleteDatabase doesn't delete .db file",
+                dbFile.exists())
     }
 
 
     /**
-     * Helper method used by saveDatabase test to create old database and to call saveDatabase
-     * passing through new database.
+     * Helper method used by saveDatabase test to create old database and to call
+     * saveDatabase passing through new database.
      */
     private fun setUpSaveDatabase(){
         // this database will be deleted by saveDatabase
-        val db = Database(
-                "test",
-                "123",
-                salt
-        )
+        val db = Database("test", "123", salt)
         model.createDatabase(db)
 
         // this database will be created by saveDatabase
-        val newDb = Database(
-                "test2",
-                "321",
-                salt.reversedArray(),
-                getDatabaseMap()
-        )
+        val newDb = Database("test2", "321",
+                salt.reversedArray(), getDatabaseMap())
 
         // save newDb deleting db
         model.saveDatabase("test", newDb)
@@ -222,14 +182,10 @@ class DatabasesModelTests: ModelTest() {
         val oldDb = File("$SRC_DIR/test.db")
         val oldBin = File("$SRC_DIR/test.bin")
 
-        assertFalse(
-                ".db file of old database is not deleted by saveDatabase method!",
-                oldDb.exists()
-        )
-        assertFalse(
-                ".bin file of old database is not deleted by saveDatabase method!",
-                oldBin.exists()
-        )
+        assertFalse(".db file of old database is not deleted by saveDatabase method!",
+                oldDb.exists())
+        assertFalse(".bin file of old database is not deleted by saveDatabase method!",
+                oldBin.exists())
     }
 
     @Test
@@ -239,19 +195,10 @@ class DatabasesModelTests: ModelTest() {
         // this is a .db file that saveDatabase should create for us
         val actualDb = File("$SRC_DIR/test2.db").readBytes()
 
-        // created .db file must not be empty
-        assertTrue(
-                "saveDatabase created empty .db file!",
-                actualDb.isNotEmpty()
-        )
-
         // here we decrypt data saved to .db file to check that it was encrypted correctly
         val data = decryptStr(String(actualDb), "321", salt.reversedArray())
-        assertEquals(
-                "saveDatabase creates incorrect database!",
-                jsonDatabase,
-                data
-        )
+        assertEquals("saveDatabase creates incorrect database!",
+                jsonDatabase, data)
 
     }
 
@@ -262,18 +209,9 @@ class DatabasesModelTests: ModelTest() {
         // this is a .bin file that saveDatabase should create for us
         val actualBin = File("$SRC_DIR/test2.bin").readBytes()
 
-        // created .bin file must not be empty
-        assertTrue(
-                "saveDatabase created empty .bin file!",
-                actualBin.isNotEmpty()
-        )
-
         // .bin file must have appropriate content (i.e. salt)
-        assertEquals(
-                "saveDatabase created .bin file with incorrect salt!",
-                String(salt.reversedArray()),
-                String(actualBin)
-        )
+        assertEquals("saveDatabase created .bin file with incorrect salt!",
+                String(salt.reversedArray()), String(actualBin))
     }
 
     @Test
@@ -288,13 +226,9 @@ class DatabasesModelTests: ModelTest() {
         val expectedDatabases = listOf(
                 Database("database"),
                 Database("crypt"),
-                Database("main"),
-        )
-        assertEquals(
-                "getDatabases returns incorrect list of Databases!",
-                expectedDatabases,
-                databases
-        )
+                Database("main"))
+        assertEquals("getDatabases returns incorrect list of Databases!",
+                expectedDatabases, databases)
     }
 
     @Test
@@ -307,34 +241,23 @@ class DatabasesModelTests: ModelTest() {
 
         // check that database tar file was exported properly
         val exportedTar = String(
-                File("$accountsDir/main.tar").readBytes()
-        )
+                File("$accountsDir/main.tar").readBytes())
         val expectedDb = String(
-                File("$SRC_DIR/main.db").readBytes()
-        )
+                File("$SRC_DIR/main.db").readBytes())
         val expectedBin = String(
-                File("$SRC_DIR/main.bin").readBytes()
-        )
+                File("$SRC_DIR/main.bin").readBytes())
 
         // check that files are present and they reside in `src` folder
-        assertTrue(
-                "exportDatabase incorrect export: tar file doesn't contain .db file!",
-                "src/main.db" in exportedTar
-        )
-        assertTrue(
-                "exportDatabase incorrect export: tar file doesn't contain .bin file!",
-                "src/main.bin" in exportedTar
-        )
+        assertTrue("exportDatabase incorrect export: tar file doesn't contain .db file!",
+                "src/main.db" in exportedTar)
+        assertTrue("exportDatabase incorrect export: tar file doesn't contain .bin file!",
+                "src/main.bin" in exportedTar)
 
         // check that files have appropriate content
-        assertTrue(
-                "exportDatabase incorrect export: content of .db file is incorrect!",
-                expectedDb in exportedTar
-        )
-        assertTrue(
-                "exportDatabase incorrect export: content of .bin file is incorrect!",
-                expectedBin in exportedTar
-        )
+        assertTrue("exportDatabase incorrect export: content of .db file is incorrect!",
+                expectedDb in exportedTar)
+        assertTrue("exportDatabase incorrect export: content of .bin file is incorrect!",
+                expectedBin in exportedTar)
     }
 
     @Test

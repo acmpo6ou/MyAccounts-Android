@@ -41,11 +41,10 @@ import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.findSnackbarTextView
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
 import com.acmpo6ou.myaccounts.ui.DatabaseFragmentDirections
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -71,12 +70,14 @@ class DatabaseFragmentInstrumentation {
     @Before
     fun setUp(){
         // Create a graphical FragmentScenario for the DatabaseFragment
-        databaseScenario = launchFragmentInContainer(themeResId=R.style.Theme_MyAccounts_NoActionBar)
+        databaseScenario = launchFragmentInContainer(
+                themeResId=R.style.Theme_MyAccounts_NoActionBar)
 
         // mock presenter with fake database
-        val databases = mutableListOf(Database("main"))
-        val presenter = mock<DatabasesPresenterInter>()
-        whenever(presenter.databases).thenReturn(databases)
+        val mockDatabases = mutableListOf(Database("main"))
+        val presenter = mock<DatabasesPresenterInter>{
+            on {databases} doReturn mockDatabases
+        }
         databaseScenario.onFragment { it.presenter = presenter }
     }
 
@@ -99,7 +100,6 @@ class DatabaseFragmentInstrumentation {
     @Test
     fun `navigateToEdit should pass appropriate database index`(){
         databaseScenario.onFragment {
-            // mock navigation controller and call navigateToEdit
             mockNavController(it)
             it.navigateToEdit(0)
 
@@ -111,7 +111,6 @@ class DatabaseFragmentInstrumentation {
     @Test
     fun `navigateToOpen should pass appropriate database index`(){
         databaseScenario.onFragment {
-            // mock navigation controller and call navigateToOpen
             mockNavController(it)
             it.navigateToOpen(0)
 
@@ -129,27 +128,22 @@ class DatabaseFragmentInstrumentation {
             addButton?.performClick()
         }
 
-        assertEquals(
-            "(+) FAB on DatabaseFragment doesn't navigate to CreateDatabaseFragment!",
+        assertEquals("(+) FAB on DatabaseFragment doesn't navigate to CreateDatabaseFragment!",
             navController.currentDestination?.id,
-            R.id.createDatabaseFragment
-        )
+            R.id.createDatabaseFragment)
     }
 
     @Test
     fun `navigateToEdit should navigate to EditDatabaseFragment`(){
         setUpNavController()
         databaseScenario.onFragment {
-            // call navigateToEdit
             it.navigateToEdit(0)
         }
 
         // verify that we navigated to edit database
-        assertEquals(
-                "navigateToEdit doesn't navigate to EditDatabaseFragment!",
+        assertEquals("navigateToEdit doesn't navigate to EditDatabaseFragment!",
                 navController.currentDestination?.id,
-                R.id.editDatabaseFragment
-        )
+                R.id.editDatabaseFragment)
     }
 
     @Test
@@ -180,29 +174,21 @@ class DatabaseFragmentInstrumentation {
     @Test
     fun `showSuccess should display snackbar`(){
         databaseScenario.onFragment {
-            // call showSuccess and get the snackbar
             it.showSuccess()
+
             // this is because of some Robolectric main looper problems
             shadowOf(getMainLooper()).idle()
+
             val snackbar: TextView? = it.view?.findSnackbarTextView()
 
-            // check that snackbar was displayed
-            assertTrue(
-        "No snackbar is displayed when call to DatabaseFragment.showSuccess is made!",
-        snackbar != null)
-
             // check the snackbar's message
-            assertEquals(
-                    "showSuccess snackbar has incorrect message!",
-                    successMessage,
-                    snackbar?.text
-            )
+            assertEquals("showSuccess snackbar has incorrect message!",
+                    successMessage, snackbar?.text)
         }
     }
 
     @Test
     fun `confirmDelete should create dialog with appropriate message and title`(){
-        // create dialog
         databaseScenario.onFragment {
             it.confirmDelete(0)
         }
@@ -211,21 +197,14 @@ class DatabaseFragmentInstrumentation {
         val title = dialog.findViewById<TextView>(R.id.alertTitle)
         val message = dialog.findViewById<TextView>(android.R.id.message)
 
-        assertEquals(
-                "confirmDelete created dialog with incorrect title!",
-                warningTitle,
-                title?.text
-        )
-        assertEquals(
-                "confirmDelete created dialog with incorrect message!",
-                String.format(confirmDeleteMsg, "main"),
-                message?.text
-        )
+        assertEquals("confirmDelete created dialog with incorrect title!",
+                warningTitle, title?.text)
+        assertEquals("confirmDelete created dialog with incorrect message!",
+                String.format(confirmDeleteMsg, "main"), message?.text)
     }
 
     @Test
     fun `confirmClose should create dialog with appropriate message and title`(){
-        // create dialog
         databaseScenario.onFragment {
             it.confirmClose(0)
         }
@@ -234,31 +213,23 @@ class DatabaseFragmentInstrumentation {
         val title = dialog.findViewById<TextView>(R.id.alertTitle)
         val message = dialog.findViewById<TextView>(android.R.id.message)
 
-        assertEquals(
-                "confirmClose created dialog with incorrect title!",
-                warningTitle,
-                title?.text
-        )
-        assertEquals(
-                "confirmClose created dialog with incorrect message!",
-                String.format(confirmCloseMsg, "main"),
-                message?.text
-        )
+        assertEquals("confirmClose created dialog with incorrect title!",
+                warningTitle, title?.text)
+        assertEquals("confirmClose created dialog with incorrect message!",
+                String.format(confirmCloseMsg, "main"), message?.text)
     }
 
     /**
      * This method is used in tests to setup real (non mocked) DatabasesPresenter to test
-     * how does DatabasesPresenter and DatabaseFragment integrated.
-     *
+     * how does DatabasesPresenter and DatabaseFragment are integrated.
      * @param[fragment] DatabaseFragment for which we will setup DatabasesPresenter.
      */
     private fun setupRealPresenter(fragment: DatabaseFragment){
         // list of databases for test
         val databases = mutableListOf(
                 Database("main"), // locked
-                Database("test", password = "123") // opened
-        )
-        // set real presenter and call closeDatabase
+                Database("test", "123") /* opened*/)
+
         val presenter = DatabasesPresenter(fragment)
         presenter.databases = databases
         fragment.presenter = presenter
@@ -266,14 +237,13 @@ class DatabaseFragmentInstrumentation {
 
     /**
      * This method is used in tests to measure and lay out the recyclerview.
-     *
-     * @param[fragment] DatabaseFragment for which we will setup DatabasesPresenter.
+     * @param[fragment] DatabaseFragment for which we will setup the recycler.
      */
-    private fun setupRecycler(fragment: DatabaseFragment): RecyclerView? {
+    private fun setupRecycler(fragment: DatabaseFragment): RecyclerView {
         // find recycler, measure and lay it out, so that later we can obtain its items
-        val recycler: RecyclerView? = fragment.view?.findViewById(R.id.databasesList)
-        recycler?.measure(0, 0)
-        recycler?.layout(0, 0, 100, 10000)
+        val recycler: RecyclerView = fragment.view!!.findViewById(R.id.databasesList)
+        recycler.measure(0, 0)
+        recycler.layout(0, 0, 100, 10000)
         return recycler
     }
 
@@ -285,7 +255,7 @@ class DatabaseFragmentInstrumentation {
             val recycler = setupRecycler(it)
 
             // check that lock icon changed to locked
-            val itemLayout = recycler?.getChildAt(1)
+            val itemLayout = recycler.getChildAt(1)
             val lockImg = itemLayout?.findViewById<ImageView>(R.id.itemIcon)
             assertEquals(R.drawable.ic_locked, lockImg?.tag)
         }
@@ -299,7 +269,7 @@ class DatabaseFragmentInstrumentation {
             val recycler = setupRecycler(it)
 
             // check that the first database is `test` as `main` was deleted
-            val itemLayout = recycler?.getChildAt(0)
+            val itemLayout = recycler.getChildAt(0)
             val databaseName = itemLayout?.findViewById<TextView>(R.id.itemName)
             assertEquals("test", databaseName?.text)
         }
