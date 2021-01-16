@@ -154,39 +154,26 @@ class DatabaseFragmentInstrumentation {
 
     @Test
     fun `exportDialog should start appropriate intent`(){
-        // create expected intent with default file name `main.tar` and file type `.tar`
-        val expectedIntent = Intent(Intent.ACTION_CREATE_DOCUMENT)
-        expectedIntent.addCategory(Intent.CATEGORY_OPENABLE)
-        expectedIntent.type = "application/x-tar"
-        expectedIntent.putExtra(Intent.EXTRA_TITLE, "main.tar")
+        val expectedAction = Intent.ACTION_CREATE_DOCUMENT
+        val expectedCategory = Intent.CATEGORY_OPENABLE
+        val expectedType = "application/x-tar"
+        val expectedTitle = "main.tar"
 
-        // call exportDialog
         databaseScenario.onFragment {
             it.exportDialog(0)
         }
 
         // check all intent properties
-        val actual: Intent = shadowOf(RuntimeEnvironment.application).nextStartedActivity
-        assertEquals(
-                "exportDatabase: incorrect intent action!",
-                expectedIntent.action,
-                actual.action
-        )
-        assertEquals(
-                "exportDatabase: incorrect intent category!",
-                expectedIntent.categories,
-                actual.categories
-        )
-        assertEquals(
-                "exportDatabase: incorrect intent type!",
-                expectedIntent.type,
-                actual.type
-        )
-        assertEquals(
-                "exportDatabase: incorrect intent title!",
-                expectedIntent.getStringExtra(Intent.EXTRA_TITLE),
-                actual.getStringExtra(Intent.EXTRA_TITLE)
-        )
+        val intent: Intent = shadowOf(RuntimeEnvironment.application).nextStartedActivity
+
+        assertEquals("exportDatabase: incorrect intent action!",
+                expectedAction, intent.action)
+        assertEquals("exportDatabase: incorrect intent category!",
+                expectedCategory, intent.categories.first())
+        assertEquals("exportDatabase: incorrect intent type!",
+                expectedType, intent.type)
+        assertEquals("exportDatabase: incorrect intent title!",
+                expectedTitle, intent.getStringExtra(Intent.EXTRA_TITLE))
     }
 
 

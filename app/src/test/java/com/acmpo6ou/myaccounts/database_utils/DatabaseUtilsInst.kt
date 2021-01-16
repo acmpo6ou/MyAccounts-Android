@@ -56,23 +56,18 @@ class DatabaseUtilsInst {
         // database index that wil be passed with intent
         val index = faker.number().randomDigit()
 
-        // create expected intent
-        var expectedIntent = Intent()
-
-        // call startDatabaseUtil
         scenario.onFragment {
-            expectedIntent = Intent(it.myContext, AccountsActivity::class.java)
             startDatabaseUtil(index, it)
         }
 
         // check that appropriate intent was started
-        val actual: Intent =
+        val intent: Intent =
                 Shadows.shadowOf(RuntimeEnvironment.application).nextStartedActivity
 
-        assertEquals(index, actual.getIntExtra("databaseIndex", 999))
+        assertEquals(index, intent.getIntExtra("databaseIndex", 999))
         assertEquals("startDatabase should start AccountsActivity!",
-                expectedIntent.component?.className,
-                actual.component?.className)
+                AccountsActivity::class.qualifiedName,
+                intent.component?.className)
     }
 
     @Test

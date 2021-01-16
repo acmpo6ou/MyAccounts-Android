@@ -80,21 +80,21 @@ class MainActivityInst {
 
     @Test
     fun `importDialog should start appropriate intent`(){
-        // create expected intent
-        val expectedIntent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-        expectedIntent.addCategory(Intent.CATEGORY_OPENABLE)
-        expectedIntent.type = "application/x-tar"
+        val expectedAction = Intent.ACTION_OPEN_DOCUMENT
+        val expectedCategory = Intent.CATEGORY_OPENABLE
+        val expectedType = "application/x-tar"
 
         mainScenario.onActivity { it.importDialog() }
 
         // check all intent properties
-        val actual: Intent =
+        val intent: Intent =
                 Shadows.shadowOf(RuntimeEnvironment.application).nextStartedActivity
+
         assertEquals("importDialog: incorrect intent action!",
-                expectedIntent.action, actual.action)
+                expectedAction, intent.action)
         assertEquals("importDialog: incorrect intent category!",
-                expectedIntent.categories, actual.categories)
+                expectedCategory, intent.categories.first())
         assertEquals("importDialog: incorrect intent type!",
-                expectedIntent.type, actual.type)
+                expectedType, intent.type)
     }
 }
