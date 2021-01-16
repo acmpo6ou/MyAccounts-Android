@@ -32,49 +32,50 @@ import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.mockito.ArgumentMatchers
+import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito.spy
 import java.io.File
 
 class MainPresenterTests {
     lateinit var presenter: MainPresenter
     lateinit var spyPresenter: MainPresenter
+
     lateinit var view: MainActivityInter
-    private lateinit var model: MainModelInter
-    private lateinit var locationUri: Uri
+    lateinit var model: MainModelInter
+
+    private val locationUri: Uri = mock()
     val app = MyApp()
 
     private val accountsDir = "/dev/shm/accounts"
 
     @Before
     fun setup(){
-        view = mock()
-        whenever(view.ACCOUNTS_DIR).thenReturn(accountsDir)
-        whenever(view.app).thenReturn(app)
-
-        val context: Context = mock()
         val resolver: ContentResolver = mock()
-        whenever(context.contentResolver).thenReturn(resolver)
-        whenever(view.myContext).thenReturn(context)
+        val context: Context = mock{ on{contentResolver} doReturn resolver }
+
+        view = mock{
+            on{ACCOUNTS_DIR} doReturn accountsDir
+            on{app} doReturn MainPresenterTests@app
+            on{myContext} doReturn context
+        }
 
         presenter = MainPresenter(view)
         spyPresenter = spy(presenter)
     }
 
     private fun mockCorrectModel(){
-        // mock model to return correct file sizes, count and names
-        model = mock()
-        locationUri = mock()
-
         val filesList = mutableListOf("main", "main")
         val sizesList = mutableListOf(
                 100, // size of db file should be not less then 100
                 16, // size of bin file should be exactly 16
         )
 
-        whenever(model.getNames(locationUri)).thenReturn(filesList)
-        whenever(model.countFiles(locationUri)).thenReturn(2)
-        whenever(model.getSizes(locationUri)).thenReturn(sizesList)
+        // mock model to return correct file sizes, count and names
+        model = mock{
+            on{getNames(locationUri)} doReturn filesList
+            on{countFiles(locationUri)} doReturn 2
+            on{getSizes(locationUri)} doReturn sizesList
+        }
     }
 
     @Test
@@ -84,34 +85,32 @@ class MainPresenterTests {
     }
 
     @Test
-    fun `checkUpdatesSelected should call noUpdates`(){
+    fun `checkUpdatesSelected should call noUpdates when updates aren't available`(){
         doReturn(false).`when`(spyPresenter).checkForUpdates()
         spyPresenter.checkUpdatesSelected()
 
-        // verify that only noUpdates was called and not startUpdatesActivity
         verify(view).noUpdates()
         verify(view, never()).startUpdatesActivity()
     }
 
     @Test
-    fun `checkUpdatesSelected should call startUpdatesActivity`(){
+    fun `checkUpdatesSelected should call startUpdatesActivity when updates are available`(){
         doReturn(true).`when`(spyPresenter).checkForUpdates()
         spyPresenter.checkUpdatesSelected()
 
-        // verify that only startUpdatesActivity was called and not noUpdates
         verify(view).startUpdatesActivity()
         verify(view, never()).noUpdates()
     }
 
     @Test
-    fun `autocheckForUpdates should call checkUpdatesSelected`(){
+    fun `autocheckForUpdates should call checkUpdatesSelected if it's time to autocheck`(){
         doReturn(true).whenever(spyPresenter).isTimeToUpdate()
         spyPresenter.autocheckForUpdates()
         verify(spyPresenter).checkUpdatesSelected()
     }
 
     @Test
-    fun `autocheckForUpdates should not call checkUpdatesSelected`(){
+    fun `autocheckForUpdates should not call checkUpdatesSelected if it's not time to autocheck`(){
         doReturn(false).whenever(spyPresenter).isTimeToUpdate()
         spyPresenter.autocheckForUpdates()
         verify(spyPresenter, never()).checkUpdatesSelected()
@@ -125,7 +124,7 @@ class MainPresenterTests {
 
         spyPresenter.checkTarFile(locationUri)
         verify(spyPresenter).importDatabase(locationUri)
-        verify(view, never()).showError(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())
+        verify(view, never()).showError(anyString(), anyString())
     }
 
     @Test
@@ -156,28 +155,31 @@ class MainPresenterTests {
         }
 
         presenter.fixSrcFolder()
+
         // the src folder should be created
         val srcDir = File("$accountsDir/src")
         assertTrue(srcDir.exists())
     }
 
-    @Test
-    fun `importDatabase should add imported database to the list`(){
+    /**
+     * Helper method used by next 2 tests. Simulates importing of database named `main`.
+     */
+    private fun importMainDatabase(){
         mockCorrectModel()
         doReturn("main").whenever(model).importDatabase(locationUri)
         presenter.model = model
-
         presenter.importDatabase(locationUri)
+    }
+
+    @Test
+    fun `importDatabase should add imported database to the list`(){
+        importMainDatabase()
         assertTrue(Database("main") in presenter.databases)
     }
 
     @Test
     fun `importDatabase should call notifyChanged`(){
-        mockCorrectModel()
-        doReturn("main").whenever(model).importDatabase(locationUri)
-        presenter.model = model
-
-        presenter.importDatabase(locationUri)
+        importMainDatabase()
         verify(view).notifyChanged(0)
     }
 }

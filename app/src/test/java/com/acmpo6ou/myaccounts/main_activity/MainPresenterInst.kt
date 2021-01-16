@@ -29,6 +29,7 @@ import com.acmpo6ou.myaccounts.core.MainModelInter
 import com.acmpo6ou.myaccounts.core.MainPresenter
 import com.acmpo6ou.myaccounts.randomIntExcept
 import com.github.javafaker.Faker
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -58,9 +59,10 @@ class MainPresenterInst {
 
     @Before
     fun setup(){
-        view = mock()
-        whenever(view.myContext).thenReturn(context)
-        whenever(view.ACCOUNTS_DIR).thenReturn("")
+        view = mock{
+            on{myContext} doReturn context
+            on{ACCOUNTS_DIR} doReturn ""
+        }
         model = mock()
 
         presenter = MainPresenter(view)
@@ -82,8 +84,7 @@ class MainPresenterInst {
         // mock model to return fake names and correct files count
         val filesList = mutableListOf(
                 faker.name().name(),
-                faker.name().name(),
-        )
+                faker.name().name())
         whenever(model.getNames(locationUri)).thenReturn(filesList)
         whenever(model.countFiles(locationUri)).thenReturn(2)
 
@@ -101,8 +102,7 @@ class MainPresenterInst {
                 // size of db file should be not less then 100
                 100,
                 // size of bin file should be exactly 16
-                randomIntExcept(16, 0, 200),
-        )
+                randomIntExcept(16, 0, 200))
 
         whenever(model.getNames(locationUri)).thenReturn(filesList)
         whenever(model.countFiles(locationUri)).thenReturn(2)
@@ -120,9 +120,7 @@ class MainPresenterInst {
         val sizesList = mutableListOf(
                 // size of db file should be not less then 100
                 faker.number().numberBetween(0, 90),
-                // size of bin file should be exactly 16
-                16,
-        )
+                16) // size of bin file should be exactly 16
 
         whenever(model.getNames(locationUri)).thenReturn(filesList)
         whenever(model.countFiles(locationUri)).thenReturn(2)

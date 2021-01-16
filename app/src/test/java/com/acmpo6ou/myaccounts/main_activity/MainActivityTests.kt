@@ -43,6 +43,10 @@ class MainActivityTests: DatabaseViewTest() {
         activity.presenter = presenter
     }
 
+    /**
+     * Helper method to simulate selecting an item in navigation drawer.
+     * @param[id] item id.
+     */
     private fun selectItem(id: Int){
         // here we using try-catch to avoid UninitializedPropertyAccessException
         // that occurs because of view bindings
@@ -54,9 +58,7 @@ class MainActivityTests: DatabaseViewTest() {
 
     @Test
     fun `'Import database' should call presenter importSelected`(){
-        // simulate selecting `Import database` in navigation drawer layout
         selectItem(import_database)
-
         verify(presenter).importSelected()
 
         // all other methods should not be called
@@ -65,9 +67,7 @@ class MainActivityTests: DatabaseViewTest() {
 
     @Test
     fun `'Check for updates' should call presenter checkUpdatesSelected`(){
-        // simulate selecting `Check for updates` in navigation drawer layout
         selectItem(check_for_updates)
-
         verify(presenter).checkUpdatesSelected()
 
         // all other methods should not be called
@@ -76,9 +76,7 @@ class MainActivityTests: DatabaseViewTest() {
 
     @Test
     fun `'Changelog' should call presenter navigateToChangelog`(){
-        // simulate selecting `Changelog` in navigation drawer layout
         selectItem(changelog)
-
         verify(presenter).navigateToChangelog()
 
         // all other methods should not be called
@@ -88,7 +86,6 @@ class MainActivityTests: DatabaseViewTest() {
     @Test
     fun `'Settings' should call presenter navigateToSettings`(){
         selectItem(settings)
-
         verify(presenter).navigateToSettings()
 
         // all other methods should not be called
@@ -97,9 +94,7 @@ class MainActivityTests: DatabaseViewTest() {
 
     @Test
     fun `'About' should call presenter navigateToAbout`(){
-        // simulate selecting `About` in navigation drawer layout
         selectItem(about)
-
         verify(presenter).navigateToAbout()
 
         // all other methods should not be called

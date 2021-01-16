@@ -36,32 +36,22 @@ class MainModelTests: ModelTest(){
 
     @Test
     fun `importDatabase should extract given tar file to src folder`(){
-        // import database
         model.importDatabase(locationUri)
 
         // check that all database files are imported correctly
         val expectedBin = String(salt)
         val expectedDb = String(
-                File("sampledata/src/main.db").readBytes()
-        )
+                File("sampledata/src/main.db").readBytes())
 
         val actualBin = String(
-                File("$SRC_DIR/main.bin").readBytes()
-        )
+                File("$SRC_DIR/main.bin").readBytes())
         val actualDb = String(
-                File("$SRC_DIR/main.db").readBytes()
-        )
+                File("$SRC_DIR/main.db").readBytes())
 
-        assertEquals(
-                "importDatabase incorrectly imported .db file!",
-                expectedDb,
-                actualDb
-        )
-        assertEquals(
-                "importDatabase incorrectly imported .bin file!",
-                expectedBin,
-                actualBin
-        )
+        assertEquals("importDatabase incorrectly imported .db file!",
+                expectedDb, actualDb)
+        assertEquals("importDatabase incorrectly imported .bin file!",
+                expectedBin, actualBin)
     }
 
     @Test
@@ -87,20 +77,16 @@ class MainModelTests: ModelTest(){
     fun `importDatabase should extract database files only from given tar file`(){
         model.importDatabase(locationUri)
 
-        // there is no other files in parent of `src` folder
+        // there should be no other files in parent of `src` folder
         val srcParent = File(accountsDir)
         val filesList = srcParent.list()
 
-        assertEquals(
-                "importDatabase must extract only .db and .bin files from given tar!",
+        assertEquals("importDatabase must extract only .db and .bin files from given tar!",
                 1, // there must be only one directory – `src`
-                filesList.size
-        )
-        assertEquals(
-                "importDatabase must extract only .db and .bin files from given tar!",
+                filesList.size)
+        assertEquals("importDatabase must extract only .db and .bin files from given tar!",
                 "src", // the only directory must be `src`
-                filesList.first()
-        )
+                filesList.first())
     }
 
     @Test

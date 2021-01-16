@@ -59,24 +59,22 @@ class MainActivityInst {
     @Test
     fun `noUpdates should display snackbar`(){
         mainScenario.onActivity {
-            // call noUpdates and get the snackbar
             it.noUpdates()
+
             // this is because of some Robolectric main looper problems
             Shadows.shadowOf(Looper.getMainLooper()).idle()
+
+            // get the snackbar
             val v: View = it.findViewById(android.R.id.content)
             val snackbar = v.rootView.findSnackbarTextView()
 
             // check that snackbar was displayed
-            assertTrue(
-                    "No snackbar is displayed when call to noUpdates is made!",
+            assertTrue("No snackbar is displayed when call to noUpdates is made!",
                     snackbar != null)
 
             // check the snackbar's message
-            assertEquals(
-                    "noUpdates snackbar has incorrect message!",
-                    noUpdatesMsg,
-                    snackbar?.text
-            )
+            assertEquals("noUpdates snackbar has incorrect message!",
+                        noUpdatesMsg, snackbar?.text)
         }
     }
 
@@ -87,25 +85,16 @@ class MainActivityInst {
         expectedIntent.addCategory(Intent.CATEGORY_OPENABLE)
         expectedIntent.type = "application/x-tar"
 
-        // call importDialog
         mainScenario.onActivity { it.importDialog() }
 
         // check all intent properties
-        val actual: Intent = Shadows.shadowOf(RuntimeEnvironment.application).nextStartedActivity
-        assertEquals(
-                "importDialog: incorrect intent action!",
-                expectedIntent.action,
-                actual.action
-        )
-        assertEquals(
-                "importDialog: incorrect intent category!",
-                expectedIntent.categories,
-                actual.categories
-        )
-        assertEquals(
-                "importDialog: incorrect intent type!",
-                expectedIntent.type,
-                actual.type
-        )
+        val actual: Intent =
+                Shadows.shadowOf(RuntimeEnvironment.application).nextStartedActivity
+        assertEquals("importDialog: incorrect intent action!",
+                expectedIntent.action, actual.action)
+        assertEquals("importDialog: incorrect intent category!",
+                expectedIntent.categories, actual.categories)
+        assertEquals("importDialog: incorrect intent type!",
+                expectedIntent.type, actual.type)
     }
 }
