@@ -19,13 +19,9 @@
 
 package com.acmpo6ou.myaccounts.database_fragment
 
-import android.content.ContentResolver
 import android.content.Context
-import android.net.Uri
-import com.acmpo6ou.myaccounts.MyApp
-import com.acmpo6ou.myaccounts.core.*
+import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.getDatabaseMap
-import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.*
 import org.junit.Before
@@ -33,42 +29,6 @@ import org.junit.Test
 import org.mockito.ArgumentMatchers.anyInt
 import java.io.FileNotFoundException
 
-open class DatabasesPresenterTest{
-    lateinit var view: DatabaseFragmentInter
-    lateinit var model: DatabasesModelInter
-    lateinit var presenter: DatabasesPresenter
-    lateinit var app: MyApp
-
-    var locationUri: Uri = mock()
-    val contextResolver: ContentResolver = mock()
-    val faker = Faker()
-    val salt = "0123456789abcdef".toByteArray()
-
-    fun setupPresenter(){
-        model = mock()
-        presenter = DatabasesPresenter(view)
-        presenter.model = model
-        presenter.databases = mutableListOf(
-                Database("main"),
-                Database("test", "123", salt, mapOf()))
-    }
-
-    fun callExportDatabase(){
-        presenter.exportIndex = 1
-        presenter.exportDatabase(locationUri)
-    }
-
-    @Before
-    fun setUp(){
-        app = MyApp()
-        app.keyCache = mutableMapOf("123" to deriveKeyUtil("123", salt))
-
-        view = mock{
-            on{ACCOUNTS_DIR} doReturn ""
-            on{app} doReturn DatabasesPresenterTest@app
-        }
-    }
-}
 
 class DatabasesPresenterTests: DatabasesPresenterTest() {
     private val context: Context = mock()
