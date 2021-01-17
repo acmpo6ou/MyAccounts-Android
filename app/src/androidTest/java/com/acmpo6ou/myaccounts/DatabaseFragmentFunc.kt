@@ -28,10 +28,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -47,12 +47,10 @@ class DatabaseFragmentInst {
         databaseScenario = launchFragmentInContainer<DatabaseFragment>(
                 themeResId = R.style.Theme_MyAccounts_NoActionBar)
 
-        // mock presenter with fake databases
-        val databases = mutableListOf(
-                Database("main")
-        )
-        presenter = mock()
-        whenever(presenter.databases).thenReturn(databases)
+        // mock presenter with fake database
+        val mockDatabases = mutableListOf(Database("main"))
+        presenter = mock{on{databases} doReturn mockDatabases}
+
         databaseScenario.onFragment {
             it.presenter = presenter
         }
@@ -60,7 +58,6 @@ class DatabaseFragmentInst {
 
     @Test
     fun confirmDelete_should_call_deleteDatabase_when_Yes_is_chosen_in_dialog() {
-        // create dialog and call confirmDelete
         databaseScenario.onFragment {
             it.confirmDelete(0)
         }
@@ -70,13 +67,11 @@ class DatabaseFragmentInst {
         // chose Yes
         onView(withId(android.R.id.button1)).perform(click())
 
-        // verify that method was called
         verify(presenter).deleteDatabase(0)
     }
 
     @Test
     fun confirmDelete_should_not_call_deleteDatabase_when_No_is_chosen_in_dialog() {
-        // create dialog and call confirmDelete
         databaseScenario.onFragment {
             it.confirmDelete(0)
         }
@@ -86,13 +81,11 @@ class DatabaseFragmentInst {
         // chose No
         onView(withId(android.R.id.button2)).perform(click())
 
-        // verify that method was called
         verify(presenter, never()).deleteDatabase(0)
     }
 
     @Test
     fun confirmClose_should_call_closeDatabase_when_Yes_is_chosen_in_dialog() {
-        // create dialog and call confirmClose
         databaseScenario.onFragment {
             it.confirmClose(0)
         }
@@ -102,13 +95,11 @@ class DatabaseFragmentInst {
         // chose Yes
         onView(withId(android.R.id.button1)).perform(click())
 
-        // verify that method was called
         verify(presenter).closeDatabase(0)
     }
 
     @Test
     fun confirmClose_should_not_call_closeDatabase_when_No_is_chosen_in_dialog() {
-        // create dialog and call confirmClose
         databaseScenario.onFragment {
             it.confirmClose(0)
         }
@@ -118,8 +109,6 @@ class DatabaseFragmentInst {
         // chose No
         onView(withId(android.R.id.button2)).perform(click())
 
-        // verify that method was called
         verify(presenter, never()).closeDatabase(0)
     }
-
 }
