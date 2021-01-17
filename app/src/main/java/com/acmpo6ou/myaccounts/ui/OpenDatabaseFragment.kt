@@ -31,11 +31,11 @@ import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.MyFragment
+import com.acmpo6ou.myaccounts.core.SuperFragment
 import com.acmpo6ou.myaccounts.core.errorDialog
 import com.acmpo6ou.myaccounts.databinding.OpenDatabaseFragmentBinding
 
-class OpenDatabaseFragment: MyFragment() {
+class OpenDatabaseFragment: SuperFragment() {
     companion object {
         fun newInstance() = OpenDatabaseFragment()
     }

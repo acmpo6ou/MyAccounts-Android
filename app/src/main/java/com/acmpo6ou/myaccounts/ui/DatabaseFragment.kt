@@ -39,7 +39,7 @@ import com.google.android.material.snackbar.Snackbar
 /**
  * A fragment representing a list of Databases.
  */
-class DatabaseFragment: MyFragment(), DatabaseFragmentInter {
+class DatabaseFragment: SuperFragment(), DatabaseFragmentInter {
     override lateinit var ACCOUNTS_DIR: String
     val EXPORT_RC = 101
 

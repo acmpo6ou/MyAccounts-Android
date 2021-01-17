@@ -23,7 +23,7 @@ import android.content.Intent
 import androidx.fragment.app.Fragment
 import com.acmpo6ou.myaccounts.AccountsActivity
 
-open class MyFragment: Fragment() {
+open class SuperFragment: Fragment() {
     /**
      * Used to start AccountsActivity for given database.
      * @param[index] index of database for which we want to start AccountsActivity.
