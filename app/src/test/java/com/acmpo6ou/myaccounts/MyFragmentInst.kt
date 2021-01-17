@@ -17,29 +17,27 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.database_utils
+package com.acmpo6ou.myaccounts
 
-import android.app.Dialog
-import android.widget.TextView
+import android.content.Intent
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
-import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.errorDialog
-import com.acmpo6ou.myaccounts.ui.DatabaseFragment
+import com.acmpo6ou.myaccounts.core.MyFragment
 import com.github.javafaker.Faker
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
+import org.robolectric.Shadows
 import org.robolectric.annotation.LooperMode
-import org.robolectric.shadows.ShadowAlertDialog
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
-class DatabaseUtilsInst {
+class MyFragmentInst {
     private val faker = Faker()
-    lateinit var scenario: FragmentScenario<DatabaseFragment>
+    lateinit var scenario: FragmentScenario<MyFragment>
 
     @Before
     fun setUp() {
@@ -47,21 +45,21 @@ class DatabaseUtilsInst {
     }
 
     @Test
-    fun `errorDialog should create dialog with appropriate title and message`(){
-        val expectedTitle = faker.lorem().sentence()
-        val expectedMsg = faker.lorem().sentence()
+    fun `startDatabase should start appropriate intent`(){
+        // database index that wil be passed with intent
+        val index = faker.number().randomDigit()
 
         scenario.onFragment {
-            errorDialog(it.myContext, expectedTitle, expectedMsg)
+            it.startDatabase(index)
         }
 
-        val dialog: Dialog = ShadowAlertDialog.getLatestDialog()
-        val title = dialog.findViewById<TextView>(R.id.alertTitle)
-        val message = dialog.findViewById<TextView>(android.R.id.message)
+        // check that appropriate intent was started
+        val intent: Intent =
+                Shadows.shadowOf(RuntimeEnvironment.application).nextStartedActivity
 
-        assertEquals("errorDialog created dialog with incorrect title!",
-                expectedTitle, title.text)
-        assertEquals("errorDialog created dialog with incorrect message!",
-                expectedMsg, message.text)
+        assertEquals(index, intent.getIntExtra("databaseIndex", 999))
+        assertEquals("startDatabase should start AccountsActivity!",
+                AccountsActivity::class.qualifiedName,
+                intent.component?.className)
     }
 }
