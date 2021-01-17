@@ -19,9 +19,7 @@
 
 package com.acmpo6ou.myaccounts.open_database
 
-import android.app.Dialog
 import android.view.View
-import android.widget.TextView
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
@@ -43,7 +41,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.LooperMode
-import org.robolectric.shadows.ShadowAlertDialog
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
@@ -97,23 +94,6 @@ class OpenDatabaseFragmentInst {
             // and disappear when incorrectPassword is false
             it.viewModel.incorrectPassword.value = false
             assertEquals(null, it.b.parentPassword.error)
-        }
-    }
-
-    @Test
-    fun `should display error message when corrupted is true`(){
-        openScenario.onFragment {
-            setupDatabase()
-            val errorTitle = it.myContext.resources.getString(R.string.open_error)
-            val errorMsg = it.myContext.resources.getString(R.string.corrupted_db, "main")
-            it.viewModel.corrupted.value = true
-
-            val dialog: Dialog = ShadowAlertDialog.getLatestDialog()
-            val title = dialog.findViewById<TextView>(R.id.alertTitle)
-            val message = dialog.findViewById<TextView>(android.R.id.message)
-
-            assertEquals(errorTitle, title.text)
-            assertEquals(errorMsg, message.text)
         }
     }
 

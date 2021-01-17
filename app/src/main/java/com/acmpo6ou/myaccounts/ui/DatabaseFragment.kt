@@ -29,6 +29,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.*
@@ -207,7 +208,10 @@ class DatabaseFragment: SuperFragment(), DatabaseFragmentInter {
      * @param[title] title of error dialog.
      * @param[details] details about the error.
      */
-    override fun showError(title: String, details: String) = errorDialog(myContext, title, details)
+    override fun showError(title: String, details: String) {
+        val mainActivity = activity as MainActivity
+        mainActivity.showError(title, details)
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

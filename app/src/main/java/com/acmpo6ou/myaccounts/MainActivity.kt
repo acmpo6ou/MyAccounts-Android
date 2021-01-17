@@ -22,6 +22,7 @@ package com.acmpo6ou.myaccounts
 import android.Manifest.permission
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Rect
@@ -46,9 +47,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.acmpo6ou.myaccounts.core.MainActivityInter
 import com.acmpo6ou.myaccounts.core.MainPresenter
 import com.acmpo6ou.myaccounts.core.MainPresenterInter
-import com.acmpo6ou.myaccounts.core.errorDialog
 import com.acmpo6ou.myaccounts.databinding.ActivityMainBinding
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 
@@ -173,8 +174,6 @@ class MainActivity : AppCompatActivity(),
             .show()
     }
 
-    override fun showError(title: String, details: String) = errorDialog(myContext, title, details)
-
     /**
      * Navigates to given destination.
      * @param[id] id of destination action.
@@ -257,5 +256,20 @@ class MainActivity : AppCompatActivity(),
         val databaseFragment =
                 navHostFragment?.childFragmentManager?.fragments?.get(0) as DatabaseFragment
         databaseFragment.notifyChanged(i)
+    }
+
+    /**
+     * Used to display dialog saying that the error occurred.
+     *
+     * @param[title] title of error dialog.
+     * @param[details] details about the error.
+     */
+    override fun showError(title: String, details: String) {
+        MaterialAlertDialogBuilder(this)
+                .setTitle(title)
+                .setIcon(R.drawable.ic_error)
+                .setNeutralButton("Ok"){ _: DialogInterface, _: Int -> }
+                .setMessage(details)
+                .show()
     }
 }

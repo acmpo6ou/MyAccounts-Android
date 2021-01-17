@@ -32,7 +32,6 @@ import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.SuperFragment
-import com.acmpo6ou.myaccounts.core.errorDialog
 import com.acmpo6ou.myaccounts.databinding.OpenDatabaseFragmentBinding
 
 class OpenDatabaseFragment: SuperFragment() {
@@ -45,6 +44,9 @@ class OpenDatabaseFragment: SuperFragment() {
     lateinit var myContext: Context
     lateinit var app: MyApp
 
+    val mainActivity: MainActivity
+        get() = myContext as MainActivity
+
     var binding: OpenDatabaseFragmentBinding? = null
     val b: OpenDatabaseFragmentBinding get() = binding!!
 
@@ -52,7 +54,6 @@ class OpenDatabaseFragment: SuperFragment() {
      * This observer sets app bar title to `Open <database name>`.
      */
     private val titleObserver = Observer<String>{
-        val mainActivity = activity as MainActivity
         mainActivity.supportActionBar?.title = it
     }
 
@@ -82,7 +83,7 @@ class OpenDatabaseFragment: SuperFragment() {
 
             val errorTitle = myContext.resources.getString(R.string.open_error)
             val errorMsg = myContext.resources.getString(R.string.corrupted_db, dbName)
-            errorDialog(myContext, errorTitle, errorMsg)
+            mainActivity.showError(errorTitle, errorMsg)
         }
     }
 

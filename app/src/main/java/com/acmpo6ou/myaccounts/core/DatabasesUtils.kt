@@ -19,11 +19,7 @@
 
 package com.acmpo6ou.myaccounts.core
 
-import android.content.Context
-import android.content.DialogInterface
 import com.acmpo6ou.myaccounts.MyApp
-import com.acmpo6ou.myaccounts.R
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.macasaet.fernet.Key
 import com.macasaet.fernet.StringValidator
 import com.macasaet.fernet.Token
@@ -37,22 +33,6 @@ import java.time.Instant
 import java.time.temporal.TemporalAmount
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
-
-/**
- * Used to display dialog saying that the error occurred.
- *
- * @param[context] Activity where to display the dialog.
- * @param[title] title of error dialog.
- * @param[details] details about the error.
- */
-fun errorDialog(context: Context, title: String, details: String) {
-    MaterialAlertDialogBuilder(context)
-            .setTitle(title)
-            .setIcon(R.drawable.ic_error)
-            .setNeutralButton("Ok"){ _: DialogInterface, _: Int -> }
-            .setMessage(details)
-            .show()
-}
 
 /**
  * Used to open databases by given Database instance.
