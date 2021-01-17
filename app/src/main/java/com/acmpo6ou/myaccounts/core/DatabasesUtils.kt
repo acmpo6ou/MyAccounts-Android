@@ -21,9 +21,6 @@ package com.acmpo6ou.myaccounts.core
 
 import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
-import androidx.fragment.app.Fragment
-import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -40,18 +37,6 @@ import java.time.Instant
 import java.time.temporal.TemporalAmount
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
-
-/**
- * Used to start AccountsActivity for given database.
- *
- * @param[index] index of database for which we want to start AccountsActivity.
- * @param[fragment] fragment which we use to start the activity.
- */
-fun startDatabaseUtil(index: Int, fragment: Fragment) {
-    val intent = Intent(fragment.context, AccountsActivity::class.java)
-    intent.putExtra("databaseIndex", index)
-    fragment.startActivity(intent)
-}
 
 /**
  * Used to display dialog saying that the error occurred.

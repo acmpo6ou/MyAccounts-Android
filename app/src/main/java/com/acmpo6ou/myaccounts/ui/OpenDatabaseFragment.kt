@@ -25,19 +25,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.core.MyFragment
 import com.acmpo6ou.myaccounts.core.errorDialog
-import com.acmpo6ou.myaccounts.core.startDatabaseUtil
 import com.acmpo6ou.myaccounts.databinding.OpenDatabaseFragmentBinding
 
-class OpenDatabaseFragment : Fragment() {
-
+class OpenDatabaseFragment: MyFragment() {
     companion object {
         fun newInstance() = OpenDatabaseFragment()
     }
@@ -168,11 +166,10 @@ class OpenDatabaseFragment : Fragment() {
 
     /**
      * Used to start AccountsActivity for given database.
-     *
      * @param[index] index of database for which we want to start AccountsActivity.
      */
-    fun startDatabase(index: Int) {
-        startDatabaseUtil(index, this)
+    override fun startDatabase(index: Int) {
+        super.startDatabase(index)
 
         // navigate back to DatabaseFragment
         val mainActivity = myContext as AppCompatActivity

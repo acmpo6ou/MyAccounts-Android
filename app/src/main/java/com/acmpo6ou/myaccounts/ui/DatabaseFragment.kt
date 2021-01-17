@@ -27,7 +27,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.acmpo6ou.myaccounts.MyApp
@@ -40,7 +39,7 @@ import com.google.android.material.snackbar.Snackbar
 /**
  * A fragment representing a list of Databases.
  */
-class DatabaseFragment: Fragment(), DatabaseFragmentInter {
+class DatabaseFragment: MyFragment(), DatabaseFragmentInter {
     override lateinit var ACCOUNTS_DIR: String
     val EXPORT_RC = 101
 
@@ -209,13 +208,6 @@ class DatabaseFragment: Fragment(), DatabaseFragmentInter {
      * @param[details] details about the error.
      */
     override fun showError(title: String, details: String) = errorDialog(myContext, title, details)
-
-    /**
-     * Used to start AccountsActivity for given database.
-     *
-     * @param[index] index of database for which we want to start AccountsActivity.
-     */
-    override fun startDatabase(index: Int) = startDatabaseUtil(index, this)
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
