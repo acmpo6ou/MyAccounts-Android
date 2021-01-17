@@ -44,7 +44,7 @@ class OpenDatabaseViewModelTests {
     private val password = "123"
 
     val SRC_DIR = "sampledata/src/"
-    val OPEN_DB = faker.lorem().sentence()
+    val titleStart = faker.lorem().sentence()
     private val salt = "0123456789abcdef".toByteArray()
     lateinit var app: MyApp
 
@@ -55,15 +55,15 @@ class OpenDatabaseViewModelTests {
 
         // init spyModel
         spyModel = spy(model)
-        spyModel.initialize(app, 0, SRC_DIR, OPEN_DB)
+        spyModel.initialize(app, 0, SRC_DIR, titleStart)
         spyModel.defaultDispatcher = Dispatchers.Unconfined
         spyModel.uiDispatcher = Dispatchers.Unconfined
     }
 
     @Test
     fun `initialize should set title`(){
-        model.initialize(app, 0, SRC_DIR, OPEN_DB)
-        assertEquals("$OPEN_DB main", model.getTitle())
+        model.initialize(app, 0, SRC_DIR, titleStart)
+        assertEquals("$titleStart main", model.getTitle())
     }
 
     @Test

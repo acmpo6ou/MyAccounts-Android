@@ -158,9 +158,9 @@ class OpenDatabaseFragment: MyFragment() {
         }
 
         val SRC_DIR = myContext.getExternalFilesDir(null)?.path + "/src"
-        val OPEN_DB = myContext.resources.getString(R.string.open_db)
+        val titleStart = myContext.resources.getString(R.string.open_db)
         args?.let{
-            viewModel.initialize(app, it.databaseIndex, SRC_DIR, OPEN_DB)
+            viewModel.initialize(app, it.databaseIndex, SRC_DIR, titleStart)
         }
     }
 
