@@ -17,11 +17,13 @@
  *
  */
 
-package com.acmpo6ou.myaccounts
+package com.acmpo6ou.myaccounts.database_utils
 
 import android.content.Intent
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
+import com.acmpo6ou.myaccounts.AccountsActivity
+import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MyFragment
 import com.github.javafaker.Faker
 import org.junit.Assert.assertEquals
@@ -35,7 +37,7 @@ import org.robolectric.annotation.LooperMode
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
-class MyFragmentInst {
+class SuperFragmentInst {
     private val faker = Faker()
     lateinit var scenario: FragmentScenario<MyFragment>
 
