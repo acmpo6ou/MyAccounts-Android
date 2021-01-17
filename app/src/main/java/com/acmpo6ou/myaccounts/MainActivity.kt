@@ -69,6 +69,7 @@ class MainActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_MyAccounts_NoActionBar)
         super.onCreate(savedInstanceState)
+
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
 
@@ -100,10 +101,7 @@ class MainActivity : AppCompatActivity(),
             }
         }
 
-        // check permissions
         checkPermissions()
-
-        // set app version in navigation header
         setAppVersion()
     }
 
@@ -117,6 +115,10 @@ class MainActivity : AppCompatActivity(),
         versionString.text = version
     }
 
+    /**
+     * This method checks if permission WRITE_EXTERNAL_STORAGE is granted and requests it if
+     * it's not.
+     */
     private fun checkPermissions() {
         val isGranted = checkCallingOrSelfPermission(permission.WRITE_EXTERNAL_STORAGE)
         if(isGranted != PackageManager.PERMISSION_GRANTED){
@@ -157,16 +159,16 @@ class MainActivity : AppCompatActivity(),
      * Displays snackbar to tell user that there are no updates available.
      */
     override fun noUpdates(){
-        // get view binding of DatabaseFragment
+        // get view binding of DatabaseFragment because we need to show snackbar in
+        // coordinator layout. MainActivity doesn't have one but DatabaseFragment has
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
-        val databaseFragment = navHostFragment?.childFragmentManager?.fragments?.get(0) as DatabaseFragment
+        val databaseFragment =
+                navHostFragment?.childFragmentManager?.fragments?.get(0) as DatabaseFragment
         val databaseBinding = databaseFragment.b
 
-        Snackbar.make(
-                databaseBinding.databaseCoordinator,
+        Snackbar.make(databaseBinding.databaseCoordinator,
                 R.string.no_updates,
-                Snackbar.LENGTH_LONG
-        )
+                Snackbar.LENGTH_LONG)
             .setAction("HIDE"){}
             .show()
     }
@@ -175,11 +177,11 @@ class MainActivity : AppCompatActivity(),
 
     /**
      * Navigates to given destination.
-     *
      * @param[id] id of destination action.
      */
     override fun navigateTo(id: Int) {
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navHostFragment = supportFragmentManager
+                .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navHostFragment.navController.navigate(id)
     }
 
@@ -203,8 +205,8 @@ class MainActivity : AppCompatActivity(),
     /**
      * Used to display import dialog where user can chose database that he wants to import.
      *
-     * Starts intent with import request code. Shows dialog to chose location using Storage
-     * Access framework.
+     * Starts intent with [IMPORT_RC] request code.
+     * Shows dialog to chose location using Storage Access framework.
      */
     override fun importDialog() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
@@ -217,7 +219,6 @@ class MainActivity : AppCompatActivity(),
 
     /**
      * This method will automatically hide the keyboard when any TextView is losing focus.
-     *
      * Note: this method is completely copied from StackOverflow.
      */
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
@@ -247,12 +248,14 @@ class MainActivity : AppCompatActivity(),
 
     /**
      * This method calls notifyChanged on DatabaseFragment to rerender the list.
-     *
      * @param[i] index of Database that were added to databases list.
      */
     override fun notifyChanged(i: Int){
+        // get DatabaseFragment as it contains the list of databases and is responsible
+        // for rerendering
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
-        val databaseFragment = navHostFragment?.childFragmentManager?.fragments?.get(0) as DatabaseFragment
+        val databaseFragment =
+                navHostFragment?.childFragmentManager?.fragments?.get(0) as DatabaseFragment
         databaseFragment.notifyChanged(i)
     }
 }
