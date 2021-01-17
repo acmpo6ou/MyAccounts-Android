@@ -19,8 +19,7 @@
 
 package com.acmpo6ou.myaccounts.ui
 
-import androidx.lifecycle.ViewModel
+import com.acmpo6ou.myaccounts.core.SuperViewModel
 
-class CreateDatabaseViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+class CreateDatabaseViewModel: SuperViewModel() {
 }

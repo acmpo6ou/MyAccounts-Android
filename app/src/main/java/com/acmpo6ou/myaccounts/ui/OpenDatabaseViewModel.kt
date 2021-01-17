@@ -20,63 +20,28 @@
 package com.acmpo6ou.myaccounts.ui
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.Database
+import com.acmpo6ou.myaccounts.core.SuperViewModel
 import com.acmpo6ou.myaccounts.core.openDatabaseUtil
 import com.macasaet.fernet.TokenValidationException
 import kotlinx.coroutines.*
 import java.io.File
 
-open class OpenDatabaseViewModel : ViewModel() {
-    private var databaseIndex: Int = 0
-    lateinit var app: MyApp
-    lateinit var SRC_DIR: String
-    lateinit var OPEN_DB: String
-
+open class OpenDatabaseViewModel : SuperViewModel() {
     var defaultDispatcher = Dispatchers.Default
     var uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     var passwordJob: Job? = null
 
-    var databases: MutableList<Database>
-        get() = app.databases
-        set(value) {
-            app.databases = value
-        }
-
-    val title = MutableLiveData<String>()
     val incorrectPassword = MutableLiveData(false)
     val loading = MutableLiveData(false)
     val corrupted = MutableLiveData(false)
     val opened = MutableLiveData(false)
 
-    fun getTitle() = title.value!!
     fun isIncorrectPassword() = incorrectPassword.value!!
     fun isLoading() = loading.value!!
     fun isCorrupted() = corrupted.value!!
     fun isOpened() = opened.value!!
-
-    /**
-     * This method is called by fragment to initialize ViewModel.
-     *
-     * Saves [app], [SRC_DIR] and [databaseIndex]. Sets title for app bar.
-     * @param[app] application instance used to access databases list.
-     * @param[databaseIndex] index of database that we want to open.
-     * @param[SRC_DIR] path to src directory that contains databases.
-     * @param[OPEN_DB] string resource used to construct app bar title. Usually something
-     * like `Open `.
-     */
-    open fun initialize(app: MyApp, databaseIndex: Int, SRC_DIR: String, OPEN_DB: String) {
-        this.app = app
-        this.SRC_DIR = SRC_DIR
-        this.OPEN_DB = OPEN_DB
-        this.databaseIndex = databaseIndex
-
-        // set app bar title
-        val name = databases[databaseIndex].name
-        title.value = "$OPEN_DB $name"
-    }
 
     /**
      * This method launches verifyPassword coroutine only if it wasn't already launched and
