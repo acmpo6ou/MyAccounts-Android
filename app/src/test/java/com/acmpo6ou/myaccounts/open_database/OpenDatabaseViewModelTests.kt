@@ -38,7 +38,6 @@ class OpenDatabaseViewModelTests {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 
-    private val model = OpenDatabaseViewModel()
     private lateinit var spyModel: OpenDatabaseViewModel
     private val faker = Faker()
     private val password = "123"
@@ -54,16 +53,10 @@ class OpenDatabaseViewModelTests {
         app.databases = mutableListOf(Database("main"))
 
         // init spyModel
-        spyModel = spy(model)
+        spyModel = spy()
         spyModel.initialize(app, 0, SRC_DIR, titleStart)
         spyModel.defaultDispatcher = Dispatchers.Unconfined
         spyModel.uiDispatcher = Dispatchers.Unconfined
-    }
-
-    @Test
-    fun `initialize should set title`(){
-        model.initialize(app, 0, SRC_DIR, titleStart)
-        assertEquals("$titleStart main", model.getTitle())
     }
 
     @Test
