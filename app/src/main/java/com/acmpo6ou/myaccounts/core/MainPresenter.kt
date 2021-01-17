@@ -24,9 +24,6 @@ import com.acmpo6ou.myaccounts.R
 import java.io.File
 import java.io.IOException
 
-/**
- * Contains various methods for business logic of MainActivity.
- */
 open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
     var model: MainModelInter = MainModel(view.ACCOUNTS_DIR, view.myContext.contentResolver)
 
@@ -147,7 +144,8 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
     /**
      * This method calls model.importDatabase() handling all errors.
      *
-     * After importing database adds it to the list which then sorts and notifies about changes.
+     * After importing database adds it to the list which then sorts and
+     * notifies about changes.
      * If there are any errors during this process it displays error dialog.
      */
     open fun importDatabase(location: Uri){

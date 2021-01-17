@@ -34,6 +34,11 @@ import java.io.*
 class MainModel(private val ACCOUNTS_DIR: String,
                 private val contentResolver: ContentResolver): MainModelInter {
 
+    /**
+     * This method is used to clean database name from .db or .bin extension and `src/` path.
+     * @param[databaseName] database name to clean.
+     * @return database name cleaned from `.db` `.bin` and `src/`.
+     */
     private fun cleanName(databaseName: String): String {
         // this needs to be removed from file name
         val srcRe = Regex("^src/")
@@ -46,6 +51,7 @@ class MainModel(private val ACCOUNTS_DIR: String,
         name = dbRe.replace(name, "")
         return name
     }
+
     /**
      * This method counts number of files that present in given tar file.
      *
@@ -71,14 +77,14 @@ class MainModel(private val ACCOUNTS_DIR: String,
 
         // open tar file
         val inputStream = TarInputStream(
-                BufferedInputStream(location)
-        )
+                BufferedInputStream(location))
 
         // get first file from tar
         var entry: TarEntry? = inputStream.nextEntry
 
         while (entry != null){
             var name = entry.name
+            // extract only files with .db or .bin extensions and if they start with `src/`
             // skip all other files such as tar headers
             if (
                 name.startsWith("src/") &&
@@ -108,18 +114,18 @@ class MainModel(private val ACCOUNTS_DIR: String,
 
         // open tar file
         val inputStream = TarInputStream(
-                BufferedInputStream(location)
-        )
+                BufferedInputStream(location))
 
         // get first file from tar
         var entry: TarEntry? = inputStream.nextEntry
 
         while (entry != null) {
             val name = entry.name
+            // extract only files with .db or .bin extensions and if they start with `src/`
             // skip all other files such as tar headers
             if (
-                    name.startsWith("src/") &&
-                    (name.endsWith(".db") || name.endsWith(".bin"))
+                name.startsWith("src/") &&
+                (name.endsWith(".db") || name.endsWith(".bin"))
             ) {
                 list.add(entry.size.toInt())
             }
@@ -144,8 +150,7 @@ class MainModel(private val ACCOUNTS_DIR: String,
 
         // open tar file
         val inputStream = TarInputStream(
-                BufferedInputStream(location)
-        )
+                BufferedInputStream(location))
 
         // get first file from tar
         var entry: TarEntry? = inputStream.nextEntry
