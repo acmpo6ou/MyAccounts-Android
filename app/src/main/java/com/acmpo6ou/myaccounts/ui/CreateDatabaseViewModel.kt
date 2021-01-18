@@ -22,4 +22,16 @@ package com.acmpo6ou.myaccounts.ui
 import com.acmpo6ou.myaccounts.core.SuperViewModel
 
 class CreateDatabaseViewModel: SuperViewModel() {
+    /**
+     * This method removes all unsupported characters from given name.
+     *
+     * Supported characters are lower and upper ASCII letters, digits and .-_()
+     * @param[name] name to clean.
+     * @return cleaned from unsupported characters name.
+     */
+    fun fixName(name: String): String{
+        val supported = (('A'..'Z') + ('a'..'z') + ('0'..'9'))
+                .joinToString("") + ".-_()"
+        return name.filter { it in supported }
+    }
 }
