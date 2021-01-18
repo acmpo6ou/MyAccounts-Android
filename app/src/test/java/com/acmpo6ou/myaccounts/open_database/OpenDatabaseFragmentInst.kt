@@ -89,11 +89,11 @@ class OpenDatabaseFragmentInst {
             val errorMsg = it.myContext.resources.getString(R.string.password_error)
 
             // error tip should appear when incorrectPassword is true
-            it.viewModel.incorrectPassword.value = true
+            it.viewModel._incorrectPassword.value = true
             assertEquals(errorMsg, it.b.parentPassword.error)
 
             // and disappear when incorrectPassword is false
-            it.viewModel.incorrectPassword.value = false
+            it.viewModel._incorrectPassword.value = false
             assertEquals(null, it.b.parentPassword.error)
         }
     }
@@ -107,7 +107,7 @@ class OpenDatabaseFragmentInst {
 
             val errorTitle = it.myContext.resources.getString(R.string.open_error)
             val errorMsg = it.myContext.resources.getString(R.string.corrupted_db, "main")
-            it.viewModel.corrupted.value = true
+            it.viewModel._corrupted.value = true
 
             verify(mainActivity).showError(errorTitle, errorMsg)
         }
@@ -117,12 +117,12 @@ class OpenDatabaseFragmentInst {
     fun `should display or hide progress bar depending on 'loading' of view model`(){
         openScenario.onFragment {
             // when loading is true progress bar should be displayed and button - disabled
-            it.viewModel.loading.value = true
+            it.viewModel._loading.value = true
             assertEquals(View.VISIBLE, it.b.progressLoading.visibility)
             assertFalse(it.b.openDatabase.isEnabled)
 
             // when loading false progress bar should be hidden and button - enabled
-            it.viewModel.loading.value = false
+            it.viewModel._loading.value = false
             assertEquals(View.GONE, it.b.progressLoading.visibility)
             assertTrue(it.b.openDatabase.isEnabled)
         }

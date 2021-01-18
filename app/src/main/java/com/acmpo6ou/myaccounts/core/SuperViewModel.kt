@@ -36,8 +36,10 @@ open class SuperViewModel: ViewModel() {
         }
 
     // app bar title
-    val title = MutableLiveData<String>()
-    fun getTitle() = title.value!!
+    val _title = MutableLiveData<String>()
+    var title: String
+        get() = _title.value!!
+        set(value) {_title.value = value}
 
     /**
      * This method is called by fragment to initialize ViewModel.
@@ -56,6 +58,6 @@ open class SuperViewModel: ViewModel() {
 
         // set app bar title
         val name = databases[databaseIndex].name
-        title.value = "$titleStart $name"
+        title = "$titleStart $name"
     }
 }

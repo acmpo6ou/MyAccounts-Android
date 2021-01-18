@@ -33,15 +33,15 @@ open class OpenDatabaseViewModel : SuperViewModel() {
     var uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     var passwordJob: Job? = null
 
-    val incorrectPassword = MutableLiveData(false)
-    val loading = MutableLiveData(false)
-    val corrupted = MutableLiveData(false)
-    val opened = MutableLiveData(false)
+    val _incorrectPassword = MutableLiveData(false)
+    val _loading = MutableLiveData(false)
+    val _corrupted = MutableLiveData(false)
+    val _opened = MutableLiveData(false)
 
-    fun isIncorrectPassword() = incorrectPassword.value!!
-    fun isLoading() = loading.value!!
-    fun isCorrupted() = corrupted.value!!
-    fun isOpened() = opened.value!!
+    val incorrectPassword get() = _incorrectPassword.value!!
+    val loading get() = _loading.value!!
+    val corrupted get() = _corrupted.value!!
+    val opened get() = _opened.value!!
 
     /**
      * This method launches verifyPassword coroutine only if it wasn't already launched and
@@ -70,7 +70,7 @@ open class OpenDatabaseViewModel : SuperViewModel() {
     open suspend fun verifyPassword(password: String) {
         try {
             // show loading because decrypting database takes time
-            loading.value = true
+            _loading.value = true
 
             val database = databases[databaseIndex].copy()
             // get salt
@@ -86,12 +86,12 @@ open class OpenDatabaseViewModel : SuperViewModel() {
 
             // set opened to true to notify fragment about successful
             // database deserialization
-            opened.value = true
-            incorrectPassword.value = false
+            _opened.value = true
+            _incorrectPassword.value = false
         }
         catch (e: TokenValidationException){
-            incorrectPassword.value = true
-            loading.value = false
+            _incorrectPassword.value = true
+            _loading.value = false
             e.printStackTrace()
 
             // remove cached key to avoid memory leak, because we don't need to cache
@@ -103,8 +103,8 @@ open class OpenDatabaseViewModel : SuperViewModel() {
             // then we verify that this is the JsonDecodingException by looking at error
             // message
             if ("JsonDecodingException" in e.toString()){
-                incorrectPassword.value = false
-                corrupted.value = true
+                _incorrectPassword.value = false
+                _corrupted.value = true
             }
             e.printStackTrace()
         }

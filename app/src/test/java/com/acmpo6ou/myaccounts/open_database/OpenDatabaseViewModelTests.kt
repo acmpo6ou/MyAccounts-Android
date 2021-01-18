@@ -68,7 +68,7 @@ class OpenDatabaseViewModelTests {
         runBlocking {
             spyModel.verifyPassword(faker.lorem().sentence())
         }
-        assertTrue(spyModel.isIncorrectPassword())
+        assertTrue(spyModel.incorrectPassword)
     }
 
     @Test
@@ -94,7 +94,7 @@ class OpenDatabaseViewModelTests {
         runBlocking {
             spyModel.verifyPassword(faker.lorem().sentence())
         }
-        assertTrue(spyModel.isCorrupted())
+        assertTrue(spyModel.corrupted)
     }
 
     @Test
@@ -112,7 +112,7 @@ class OpenDatabaseViewModelTests {
         runBlocking {
             spyModel.verifyPassword(password)
         }
-        assertTrue(spyModel.isOpened())
+        assertTrue(spyModel.opened)
     }
 
     @Test
@@ -120,7 +120,7 @@ class OpenDatabaseViewModelTests {
         runBlocking {
             spyModel.verifyPassword(password)
         }
-        assertTrue(spyModel.isLoading())
+        assertTrue(spyModel.loading)
     }
 
     @Test
@@ -132,7 +132,7 @@ class OpenDatabaseViewModelTests {
         runBlocking {
             spyModel.verifyPassword(faker.lorem().sentence())
         }
-        assertFalse(spyModel.isLoading())
+        assertFalse(spyModel.loading)
     }
 
     @Test
