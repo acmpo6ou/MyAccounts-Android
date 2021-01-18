@@ -31,6 +31,7 @@ import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.core.MainActivityInter
 import com.acmpo6ou.myaccounts.core.SuperFragment
 import com.acmpo6ou.myaccounts.databinding.OpenDatabaseFragmentBinding
 
@@ -44,8 +45,7 @@ class OpenDatabaseFragment: SuperFragment() {
     lateinit var myContext: Context
     lateinit var app: MyApp
 
-    val mainActivity: MainActivity
-        get() = myContext as MainActivity
+    lateinit var mainActivity: MainActivityInter
 
     var binding: OpenDatabaseFragmentBinding? = null
     val b: OpenDatabaseFragmentBinding get() = binding!!
@@ -54,7 +54,7 @@ class OpenDatabaseFragment: SuperFragment() {
      * This observer sets app bar title to `Open <database name>`.
      */
     private val titleObserver = Observer<String>{
-        mainActivity.supportActionBar?.title = it
+        (mainActivity as MainActivity).supportActionBar?.title = it
     }
 
     /**
@@ -116,6 +116,7 @@ class OpenDatabaseFragment: SuperFragment() {
 
         // save arguments, context and app
         myContext = requireContext()
+        mainActivity = myContext as MainActivityInter
         app = context.applicationContext as MyApp
         arguments?.let {
             args = OpenDatabaseFragmentArgs.fromBundle(it)
