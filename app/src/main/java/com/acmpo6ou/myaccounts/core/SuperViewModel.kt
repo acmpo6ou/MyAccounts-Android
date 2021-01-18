@@ -46,7 +46,7 @@ open class SuperViewModel: ViewModel() {
      *
      * Saves [app], [SRC_DIR] and [databaseIndex]. Sets title for app bar.
      * @param[app] application instance used to access databases list.
-     * @param[databaseIndex] index of database that we want to open.
+     * @param[databaseIndex] index of database on which operations are performed.
      * @param[SRC_DIR] path to src directory that contains databases.
      * @param[titleStart] string resource used to construct app bar title.
      */
