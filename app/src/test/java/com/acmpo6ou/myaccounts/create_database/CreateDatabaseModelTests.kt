@@ -21,7 +21,8 @@ package com.acmpo6ou.myaccounts.create_database
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.ui.CreateDatabaseViewModel
-import org.junit.Assert.assertEquals
+import com.github.javafaker.Faker
+import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
 
@@ -30,10 +31,22 @@ class CreateDatabaseModelTests {
     val taskExecutorRule = InstantTaskExecutorRule()
 
     val model = CreateDatabaseViewModel()
+    val faker = Faker()
 
     @Test
     fun `fixName should remove all unsupported characters`(){
         val name = model.fixName("This is (test)/.\\-_-")
         assertEquals("Thisis(test).-_-", name)
+    }
+
+    @Test
+    fun `validateName should change emptyNameErr`(){
+        // if name isn't empty emptyNameErr should be false
+        model.validateName(faker.lorem().sentence())
+        assertFalse(model.emptyNameErr)
+
+        // if name is empty emptyNameErr should be true
+        model.validateName("")
+        assertTrue(model.emptyNameErr)
     }
 }

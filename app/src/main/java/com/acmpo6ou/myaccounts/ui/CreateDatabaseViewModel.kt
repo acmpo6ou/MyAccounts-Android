@@ -19,9 +19,15 @@
 
 package com.acmpo6ou.myaccounts.ui
 
+import androidx.lifecycle.MutableLiveData
 import com.acmpo6ou.myaccounts.core.SuperViewModel
 
 class CreateDatabaseViewModel: SuperViewModel() {
+    val _emptyNameErr = MutableLiveData(true)
+
+    var emptyNameErr: Boolean
+        get() = _emptyNameErr.value!!
+        set(value) {_emptyNameErr.value = value}
     /**
      * This method removes all unsupported characters from given name.
      *
@@ -33,5 +39,9 @@ class CreateDatabaseViewModel: SuperViewModel() {
         val supported = (('A'..'Z') + ('a'..'z') + ('0'..'9'))
                 .joinToString("") + ".-_()"
         return name.filter { it in supported }
+    }
+
+    fun validateName(name: String){
+        emptyNameErr = name.isEmpty()
     }
 }
