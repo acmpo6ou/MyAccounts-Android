@@ -151,7 +151,7 @@ class OpenDatabaseFragment: SuperFragment() {
         // init observers
         viewModel.apply {
             viewLifecycleOwner.let {
-                title.observe(it, titleObserver)
+                _title.observe(it, titleObserver)
                 _incorrectPassword.observe(it, passwordObserver)
                 _corrupted.observe(it, corruptedObserver)
                 _opened.observe(it, openedObserver)

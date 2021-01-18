@@ -41,7 +41,7 @@ class SuperViewModelTests {
         val app = MyApp()
         app.databases = mutableListOf(Database("main"))
 
-        model.initialize(app, 0, "", titleStart)
-        Assert.assertEquals("$titleStart main", model.getTitle())
+        model.initialize(app, 0, titleStart, "")
+        Assert.assertEquals("$titleStart main", model.title)
     }
 }
