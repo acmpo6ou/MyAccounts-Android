@@ -79,4 +79,29 @@ class CreateDatabaseModelTests {
         model.validateName("m/a/i/n/") // will become `main` when cleaned by fixName
         assertTrue(model.existsNameErr)
     }
+
+    @Test
+    fun `validatePasswords should change diffPassErr`(){
+        val pass1 = faker.lorem().sentence()
+        val pass2 = faker.lorem().sentence()
+
+        // if passwords are different - diffPassErr = true
+        model.validatePasswords(pass1, pass2)
+        assertTrue(model.diffPassErr)
+
+        // if passwords are same - diffPassErr = false
+        model.validatePasswords(pass1, pass1)
+        assertFalse(model.diffPassErr)
+    }
+
+    @Test
+    fun `validatePasswords should change emptyPassErr`(){
+        // if password is empty - emptyPassErr = true
+        model.validatePasswords("", "")
+        assertTrue(model.emptyPassErr)
+
+        // if password isn't empty - emptyPassErr = false
+        model.validatePasswords(faker.lorem().sentence(), faker.lorem().sentence())
+        assertFalse(model.emptyPassErr)
+    }
 }

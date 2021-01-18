@@ -27,12 +27,24 @@ class CreateDatabaseViewModel: SuperViewModel() {
     val _emptyNameErr = MutableLiveData(true)
     val _existsNameErr = MutableLiveData(false)
 
+    val _diffPassErr = MutableLiveData(false)
+    val _emptyPassErr = MutableLiveData(false)
+
     var emptyNameErr: Boolean
         get() = _emptyNameErr.value!!
         set(value) {_emptyNameErr.value = value}
     var existsNameErr: Boolean
         get() = _existsNameErr.value!!
         set(value) {_existsNameErr.value = value}
+
+    var diffPassErr: Boolean
+        get() = _diffPassErr.value!!
+        set(value) {_diffPassErr.value = value}
+
+    var emptyPassErr: Boolean
+        get() = _emptyPassErr.value!!
+        set(value) {_emptyPassErr.value = value}
+
     /**
      * This method removes all unsupported characters from given name.
      *
@@ -58,5 +70,18 @@ class CreateDatabaseViewModel: SuperViewModel() {
         val cleanedName = fixName(name)
         emptyNameErr = cleanedName.isEmpty()
         existsNameErr = Database(cleanedName) in databases
+    }
+
+    /**
+     * This method validates given passwords.
+     *
+     * If passwords don't match [diffPassErr] is true.
+     * If passwords are empty [emptyPassErr] is true.
+     * @param[pass1] first password.
+     * @param[pass2] second password.
+     */
+    fun validatePasswords(pass1: String, pass2: String){
+        diffPassErr = pass1 != pass2
+        emptyPassErr = pass1.isEmpty()
     }
 }
