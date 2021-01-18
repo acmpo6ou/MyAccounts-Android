@@ -25,7 +25,6 @@ import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.Database
-import com.acmpo6ou.myaccounts.core.MainActivityInter
 import com.acmpo6ou.myaccounts.ui.OpenDatabaseFragment
 import com.acmpo6ou.myaccounts.ui.OpenDatabaseFragmentArgs
 import com.acmpo6ou.myaccounts.ui.OpenDatabaseViewModel
@@ -95,21 +94,6 @@ class OpenDatabaseFragmentInst {
             // and disappear when incorrectPassword is false
             it.viewModel._incorrectPassword.value = false
             assertEquals(null, it.b.parentPassword.error)
-        }
-    }
-
-    @Test
-    fun `should display error message when corrupted is true`() {
-        openScenario.onFragment {
-            val mainActivity = mock<MainActivityInter>()
-            it.mainActivity = mainActivity
-            setupDatabase()
-
-            val errorTitle = it.myContext.resources.getString(R.string.open_error)
-            val errorMsg = it.myContext.resources.getString(R.string.corrupted_db, "main")
-            it.viewModel._corrupted.value = true
-
-            verify(mainActivity).showError(errorTitle, errorMsg)
         }
     }
 

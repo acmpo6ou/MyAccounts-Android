@@ -43,7 +43,7 @@ class CreateDatabaseModelTests {
         val app = MyApp()
         app.databases = mutableListOf(Database("main"))
 
-        model.initialize(app, titleStart, SRC_DIR, 0)
+        model.initialize(app, 0, titleStart, SRC_DIR)
     }
 
     @Test

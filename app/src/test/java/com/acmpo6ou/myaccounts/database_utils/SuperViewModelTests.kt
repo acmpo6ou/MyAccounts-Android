@@ -22,9 +22,9 @@ package com.acmpo6ou.myaccounts.database_utils
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.Database
-import com.acmpo6ou.myaccounts.ui.OpenDatabaseViewModel
+import com.acmpo6ou.myaccounts.core.SuperViewModel
 import com.github.javafaker.Faker
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 
@@ -32,7 +32,7 @@ class SuperViewModelTests {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 
-    private val model = OpenDatabaseViewModel()
+    private val model = SuperViewModel()
     private val faker = Faker()
 
     @Test
@@ -41,7 +41,7 @@ class SuperViewModelTests {
         val app = MyApp()
         app.databases = mutableListOf(Database("main"))
 
-        model.initialize(app, 0, titleStart, "")
-        Assert.assertEquals("$titleStart main", model.title)
+        model.initialize(app, 0, "", titleStart)
+        assertEquals("$titleStart main", model.title)
     }
 }
