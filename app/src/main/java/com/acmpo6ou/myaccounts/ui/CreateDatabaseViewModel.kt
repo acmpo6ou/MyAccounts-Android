@@ -20,14 +20,19 @@
 package com.acmpo6ou.myaccounts.ui
 
 import androidx.lifecycle.MutableLiveData
+import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.SuperViewModel
 
 class CreateDatabaseViewModel: SuperViewModel() {
     val _emptyNameErr = MutableLiveData(true)
+    val _existsNameErr = MutableLiveData(false)
 
     var emptyNameErr: Boolean
         get() = _emptyNameErr.value!!
         set(value) {_emptyNameErr.value = value}
+    var existsNameErr: Boolean
+        get() = _existsNameErr.value!!
+        set(value) {_existsNameErr.value = value}
     /**
      * This method removes all unsupported characters from given name.
      *
@@ -41,7 +46,17 @@ class CreateDatabaseViewModel: SuperViewModel() {
         return name.filter { it in supported }
     }
 
+    /**
+     * This method validates given name, checks whether it's not empty and if database
+     * with such name already exists.
+     *
+     * If name is empty [emptyNameErr] is set to true.
+     * If database with such name already exists [existsNameErr] is set to true.
+     * @param[name] name to validate.
+     */
     fun validateName(name: String){
-        emptyNameErr = name.isEmpty()
+        val cleanedName = fixName(name)
+        emptyNameErr = cleanedName.isEmpty()
+        existsNameErr = Database(cleanedName) in databases
     }
 }
