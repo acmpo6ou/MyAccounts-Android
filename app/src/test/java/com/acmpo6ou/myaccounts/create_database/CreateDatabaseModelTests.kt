@@ -135,4 +135,10 @@ class CreateDatabaseModelTests {
         spyModel.createPressed(name, password)
         assertEquals(spyModel.errorMsg, expectedDetails)
     }
+
+    @Test
+    fun `createPressed should add created Database to the list`(){
+        spyModel.createPressed(name, password)
+        assertTrue(db in model.databases)
+    }
 }

@@ -102,9 +102,14 @@ open class CreateDatabaseViewModel: SuperViewModel() {
 
     fun createPressed(name: String, password: String){
         try {
+            // create database
             val salt = generateSalt()
             val database = Database(name, password, salt)
             createDatabase(database)
+
+            // add it to the list, sort the list and notify about changes
+            databases.add(database)
+            databases.sortBy { it.name }
         }
         catch (e: Exception){
             errorMsg = "${e.javaClass.name} ${e.message}"
