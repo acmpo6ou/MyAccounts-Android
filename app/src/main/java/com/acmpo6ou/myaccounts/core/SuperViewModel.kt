@@ -51,18 +51,23 @@ open class SuperViewModel: ViewModel() {
      *
      * Saves [app], [SRC_DIR] and [databaseIndex]. Sets title for app bar.
      * @param[app] application instance used to access databases list.
-     * @param[databaseIndex] index of database on which operations are performed.
      * @param[SRC_DIR] path to src directory that contains databases.
      * @param[titleStart] string resource used to construct app bar title.
+     * @param[databaseIndex] index of database on which operations are performed.
+     * Note not all ViewModels need [databaseIndex] property, example is
+     * CreateDatabaseViewModel.
      */
-    open fun initialize(app: MyApp, databaseIndex: Int, SRC_DIR: String, titleStart: String) {
+    open fun initialize(app: MyApp, titleStart: String, SRC_DIR: String,
+                        databaseIndex: Int? = null) {
         this.app = app
         this.SRC_DIR = SRC_DIR
         this.titleStart = titleStart
-        this.databaseIndex = databaseIndex
 
-        // set app bar title
-        val name = databases[databaseIndex].name
-        title = "$titleStart $name"
+        // set app bar title if databaseIndex is passed
+        databaseIndex?.let {
+            this.databaseIndex = it
+            val name = databases[it].name
+            title = "$titleStart $name"
+        }
     }
 }

@@ -54,7 +54,7 @@ class OpenDatabaseViewModelTests {
 
         // init spyModel
         spyModel = spy()
-        spyModel.initialize(app, 0, SRC_DIR, titleStart)
+        spyModel.initialize(app, titleStart, SRC_DIR, 0)
         spyModel.defaultDispatcher = Dispatchers.Unconfined
         spyModel.uiDispatcher = Dispatchers.Unconfined
     }
