@@ -100,3 +100,5 @@ fun randomIntExcept(exception: Int, start: Int=0, end: Int=20): Int{
     return res
 }
 
+// shortcut
+fun Faker.str(): String = this.lorem().sentence()
