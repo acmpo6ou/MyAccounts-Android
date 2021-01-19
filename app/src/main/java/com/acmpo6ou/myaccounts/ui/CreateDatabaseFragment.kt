@@ -19,31 +19,65 @@
 
 package com.acmpo6ou.myaccounts.ui
 
-import androidx.lifecycle.ViewModelProvider
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.acmpo6ou.myaccounts.R
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
 
 class CreateDatabaseFragment : Fragment() {
-
     companion object {
         fun newInstance() = CreateDatabaseFragment()
     }
 
-    private lateinit var viewModel: CreateDatabaseViewModel
+    lateinit var viewModel: CreateDatabaseViewModel
+    lateinit var app: MyApp
+    lateinit var myContext: Context
+
+    var binding: CreateEditDatabaseFragmentBinding? = null
+    val b: CreateEditDatabaseFragmentBinding get() = binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.create_edit_database_fragment, container, false)
+                              savedInstanceState: Bundle?): View {
+        binding = CreateEditDatabaseFragmentBinding.inflate(layoutInflater, container, false)
+        return b.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        // save context and app
+        myContext = requireContext()
+        app = context.applicationContext as MyApp
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(CreateDatabaseViewModel::class.java)
-        // TODO: Use the ViewModel
+        initModel()
     }
 
+
+    /**
+     * This method initializes view model providing all needed resources.
+     */
+    private fun initModel() {
+        // init observers
+        viewModel.apply {
+            viewLifecycleOwner.let {
+            }
+        }
+
+        val SRC_DIR = myContext.getExternalFilesDir(null)?.path + "/src"
+        viewModel.initialize(app, SRC_DIR)
+    }
 }
