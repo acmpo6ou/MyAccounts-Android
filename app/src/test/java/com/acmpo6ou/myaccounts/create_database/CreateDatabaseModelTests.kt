@@ -51,7 +51,7 @@ class CreateDatabaseModelTests {
         val app = MyApp()
         app.databases = mutableListOf(Database("main"))
 
-        model.initialize(app, SRC_DIR, titleStart)
+        model.initialize(app, titleStart, SRC_DIR)
         spyModel = spy(model){
             on{generateSalt()} doReturn salt
         }

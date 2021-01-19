@@ -57,14 +57,14 @@ open class SuperViewModel: ViewModel() {
      * Note not all ViewModels need [databaseIndex] property, example is
      * CreateDatabaseViewModel.
      */
-    open fun initialize(app: MyApp, titleStart: String, SRC_DIR: String,
+    open fun initialize(app: MyApp, SRC_DIR: String, titleStart: String? = null,
                         databaseIndex: Int? = null) {
         this.app = app
         this.SRC_DIR = SRC_DIR
-        this.titleStart = titleStart
 
         // set app bar title if databaseIndex is passed
         databaseIndex?.let {
+            this.titleStart = titleStart!!
             this.databaseIndex = it
             val name = databases[it].name
             title = "$titleStart $name"

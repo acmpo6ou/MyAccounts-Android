@@ -24,13 +24,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.ui.OpenDatabaseFragment
-import com.acmpo6ou.myaccounts.ui.OpenDatabaseFragmentArgs
 import com.acmpo6ou.myaccounts.ui.OpenDatabaseViewModel
 import com.github.javafaker.Faker
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -51,7 +47,6 @@ class OpenDatabaseFragmentInst {
 
     lateinit var openScenario: FragmentScenario<OpenDatabaseFragment>
     private var model: OpenDatabaseViewModel = spy()
-    private val args: OpenDatabaseFragmentArgs = mock{ on{databaseIndex} doReturn 0 }
     private val faker = Faker()
 
     @Before
