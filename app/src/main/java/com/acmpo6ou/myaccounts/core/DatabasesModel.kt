@@ -29,7 +29,6 @@ import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
-import java.security.SecureRandom
 
 /**
  * Represents Account, it stores all account data such
@@ -83,18 +82,6 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
                      private val contentResolver: ContentResolver): DatabasesModelInter{
     // path to directory that contains databases
     private val SRC_DIR = "$ACCOUNTS_DIR/src/"
-
-    /**
-     * This method generates purely random salt for encryption.
-     *
-     * @return salt for encryption.
-     */
-    fun generateSalt(): ByteArray {
-        val random = SecureRandom()
-        val salt = ByteArray(16)
-        random.nextBytes(salt)
-        return salt
-    }
 
     /**
      * This method deletes .db and .bin files of database given its name.
