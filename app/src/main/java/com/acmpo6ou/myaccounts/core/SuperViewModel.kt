@@ -41,6 +41,11 @@ open class SuperViewModel: ViewModel() {
         get() = _title.value!!
         set(value) {_title.value = value}
 
+    val errorMsg_ = MutableLiveData<String>()
+    var errorMsg: String
+        get() = errorMsg_.value!!
+        set(value) {errorMsg_.value = value}
+
     /**
      * This method is called by fragment to initialize ViewModel.
      *

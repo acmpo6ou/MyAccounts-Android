@@ -133,5 +133,6 @@ class CreateDatabaseModelTests {
                 }
 
         spyModel.createPressed(name, password)
+        assertEquals(spyModel.errorMsg, expectedDetails)
     }
 }

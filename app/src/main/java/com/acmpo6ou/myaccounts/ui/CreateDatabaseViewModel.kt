@@ -101,8 +101,14 @@ open class CreateDatabaseViewModel: SuperViewModel() {
     open fun createDatabase(database: Database) = createDatabaseUtil(database, SRC_DIR)
 
     fun createPressed(name: String, password: String){
-        val salt = generateSalt()
-        val database = Database(name, password, salt)
-        createDatabase(database)
+        try {
+            val salt = generateSalt()
+            val database = Database(name, password, salt)
+            createDatabase(database)
+        }
+        catch (e: Exception){
+            errorMsg = "${e.javaClass.name} ${e.message}"
+            e.printStackTrace()
+        }
     }
 }
