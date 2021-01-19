@@ -22,28 +22,30 @@ package com.acmpo6ou.myaccounts.ui
 import androidx.lifecycle.MutableLiveData
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.SuperViewModel
+import com.acmpo6ou.myaccounts.core.createDatabaseUtil
+import java.security.SecureRandom
 
-class CreateDatabaseViewModel: SuperViewModel() {
-    val _emptyNameErr = MutableLiveData(true)
-    val _existsNameErr = MutableLiveData(false)
+open class CreateDatabaseViewModel: SuperViewModel() {
+    val emptyNameErr_ = MutableLiveData(true)
+    val existsNameErr_ = MutableLiveData(false)
 
-    val _diffPassErr = MutableLiveData(false)
-    val _emptyPassErr = MutableLiveData(false)
+    val diffPassErr_ = MutableLiveData(false)
+    val emptyPassErr_ = MutableLiveData(false)
 
     var emptyNameErr: Boolean
-        get() = _emptyNameErr.value!!
-        set(value) {_emptyNameErr.value = value}
+        get() = emptyNameErr_.value!!
+        set(value) {emptyNameErr_.value = value}
     var existsNameErr: Boolean
-        get() = _existsNameErr.value!!
-        set(value) {_existsNameErr.value = value}
+        get() = existsNameErr_.value!!
+        set(value) {existsNameErr_.value = value}
 
     var diffPassErr: Boolean
-        get() = _diffPassErr.value!!
-        set(value) {_diffPassErr.value = value}
+        get() = diffPassErr_.value!!
+        set(value) {diffPassErr_.value = value}
 
     var emptyPassErr: Boolean
-        get() = _emptyPassErr.value!!
-        set(value) {_emptyPassErr.value = value}
+        get() = emptyPassErr_.value!!
+        set(value) {emptyPassErr_.value = value}
 
     /**
      * This method removes all unsupported characters from given name.
@@ -83,5 +85,24 @@ class CreateDatabaseViewModel: SuperViewModel() {
     fun validatePasswords(pass1: String, pass2: String){
         diffPassErr = pass1 != pass2
         emptyPassErr = pass1.isEmpty()
+    }
+
+    /**
+     * This method generates purely random salt for encryption.
+     * @return salt for encryption.
+     */
+    open fun generateSalt(): ByteArray {
+        val random = SecureRandom()
+        val salt = ByteArray(16)
+        random.nextBytes(salt)
+        return salt
+    }
+
+    open fun createDatabase(database: Database) = createDatabaseUtil(database, SRC_DIR)
+
+    fun createPressed(name: String, password: String){
+        val salt = generateSalt()
+        val database = Database(name, password, salt)
+        createDatabase(database)
     }
 }
