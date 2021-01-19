@@ -24,9 +24,7 @@ import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.ui.CreateDatabaseViewModel
 import com.github.javafaker.Faker
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
@@ -40,7 +38,11 @@ class CreateDatabaseModelTests {
     lateinit var spyModel: CreateDatabaseViewModel
 
     val faker = Faker()
+    private val name = faker.lorem().sentence()
+    private val password = faker.lorem().sentence()
     private val salt = "1234567890abcdef".toByteArray()
+    private val db = Database(name, password, salt)
+
     val SRC_DIR = "sampledata/src/"
     val titleStart = faker.lorem().sentence()
 
@@ -50,7 +52,10 @@ class CreateDatabaseModelTests {
         app.databases = mutableListOf(Database("main"))
 
         model.initialize(app, 0, titleStart, SRC_DIR)
-        spyModel = spy(model)
+        spyModel = spy(model){
+            on{generateSalt()} doReturn salt
+        }
+        doNothing().whenever(spyModel).createDatabase(any())
     }
 
     @Test
@@ -114,26 +119,19 @@ class CreateDatabaseModelTests {
 
     @Test
     fun `createPressed should call createDatabase`(){
-        val name = faker.lorem().sentence()
-        val password = faker.lorem().sentence()
-
-        whenever(spyModel.generateSalt()).thenReturn(salt)
-        val db = Database(name, password, salt)
-
         spyModel.createPressed(name, password)
         verify(spyModel).createDatabase(db)
     }
 
     @Test
     fun `createPressed should handle any error`(){
-
         val msg = faker.lorem().sentence()
         val expectedDetails = "java.lang.Exception $msg"
-//        whenever(spyModel.createDatabase())
-//                .doAnswer{
-//                    throw Exception(msg)
-//                }
+        whenever(spyModel.createDatabase(db))
+                .doAnswer{
+                    throw Exception(msg)
+                }
 
-        spyModel.createPressed(faker.lorem().sentence(), faker.lorem().sentence())
+        spyModel.createPressed(name, password)
     }
 }
