@@ -22,8 +22,6 @@ package com.acmpo6ou.myaccounts.core
 import android.content.ContentResolver
 import android.net.Uri
 import com.acmpo6ou.myaccounts.MyApp
-import com.macasaet.fernet.Key
-import com.macasaet.fernet.Token
 import kotlinx.serialization.Serializable
 import org.kamranzafar.jtar.TarEntry
 import org.kamranzafar.jtar.TarOutputStream
@@ -99,60 +97,6 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
     }
 
     /**
-     * This method creates fernet key given password and salt.
-     *
-     * @param[password] key password.
-     * @param[salt] salt for key.
-     * @return created fernet key.
-     */
-    fun deriveKey(password: String, salt: ByteArray): Key = deriveKeyUtil(password, salt)
-
-    /**
-     * Method used to serialize database map to json string.
-     *
-     * @param[data] map to serialize.
-     * @return when [data] is empty returns empty string, when [data] is not empty –
-     * serialized json string.
-     */
-    override fun dumps(data: DbMap): String = dumpsUtil(data)
-
-    /**
-     * This method is for database serialization and encryption.
-     *
-     * @param[database] Database instance to encrypt.
-     * @return encrypted json string.
-     */
-    fun encryptDatabase(database: Database): String{
-        val key = deriveKey(database.password!!, database.salt!!)
-        val data = dumps(database.data)
-        val token = Token.generate(key, data)
-        return token.serialise()
-    }
-
-    /**
-     * Creates .db and .bin files for database given Database instance.
-     *
-     * @param[database] Database instance from which database name, password and salt are
-     * extracted for database files creation.
-     */
-    fun createDatabase(database: Database) {
-        val name = database.name
-
-        // create salt file
-        val saltFile = File("$SRC_DIR$name.bin")
-        saltFile.createNewFile()
-        saltFile.writeBytes(database.salt!!)
-
-        // create database file
-        val databaseFile = File("$SRC_DIR$name.db")
-        databaseFile.createNewFile()
-
-        // encrypt and write database to .db file
-        val token = encryptDatabase(database)
-        databaseFile.writeText(token)
-    }
-
-    /**
      * This method deletes .db and .bin files of database given its name.
      *
      * @param[name] name of database to delete.
@@ -181,6 +125,14 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
     override fun openDatabase(database: Database, app: MyApp): Database {
         return openDatabaseUtil(database, SRC_DIR, app)
     }
+
+    /**
+     * Creates .db and .bin files for database given Database instance.
+     *
+     * @param[database] Database instance from which database name, password and salt are
+     * extracted for database files creation.
+     */
+    fun createDatabase(database: Database) = createDatabaseUtil(database, SRC_DIR)
 
     /**
      * This method simply deletes old database (which is determined by [oldName]) and

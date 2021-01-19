@@ -22,6 +22,7 @@ package com.acmpo6ou.myaccounts.database_fragment
 import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesModel
+import com.acmpo6ou.myaccounts.core.deriveKeyUtil
 import com.acmpo6ou.myaccounts.getDatabaseMap
 import com.github.javafaker.Faker
 import com.macasaet.fernet.StringValidator
@@ -63,17 +64,6 @@ class DatabasesModelTests: ModelTest() {
     var model = DatabasesModel(accountsDir, contentResolver)
 
     /**
-     * This is a helper method that simply creates empty database.
-     *
-     * It creates database with name `main` and password `123`.
-     * Also it uses createDatabase method of DatabasesModel class for this.
-     */
-    private fun createEmptyDatabase(){
-        val database = Database("main", "123", salt)
-        model.createDatabase(database)
-    }
-
-    /**
      * This method decrypts given string.
      *
      * @param[string] string to decrypt.
@@ -82,7 +72,7 @@ class DatabasesModelTests: ModelTest() {
      * @return decrypted string.
      */
     private fun decryptStr(string: String, password: String, salt: ByteArray): String{
-        val key = model.deriveKey(password, salt)
+        val key = deriveKeyUtil(password, salt)
         val validator: Validator<String> = object : StringValidator {
             // this checks whether our encrypted json string is expired or not
             // in our app we don't care about expiration so we return Instant.MAX.epochSecond
@@ -95,54 +85,10 @@ class DatabasesModelTests: ModelTest() {
     }
 
     @Test
-    fun `encryptDatabase should return encrypted json string from Database`(){
-        val dataMap = getDatabaseMap()
-
-        val database = Database(
-                faker.name().toString(),
-                faker.lorem().sentence(),
-                salt, dataMap)
-
-        // get encrypted json string
-        val jsonStr = model.encryptDatabase(database)
-
-        // here we decrypt the json string using salt and password we defined earlier
-        // to check if it were encrypted correctly
-        val data = decryptStr(jsonStr, database.password!!, database.salt!!)
-
-        assertEquals("encryptDatabase has returned incorrectly encrypted json string!",
-                jsonDatabase, data)
-    }
-
-    @Test
-    fun `createDatabase should create salt file given Database instance`(){
-        createEmptyDatabase()
-
-        // this is a salt file that createDatabase should create for us
-        val actualBin = File("$SRC_DIR/main.bin").readBytes()
-
-        assertEquals("createDatabase created incorrect salt file!",
-                String(salt), String(actualBin))
-    }
-
-    @Test
-    fun `createDatabase should create db file given Database instance`(){
-        val database = Database("main", "123", salt, getDatabaseMap())
-        model.createDatabase(database)
-
-        // this is a .db file that createDatabase should create for us
-        val actualDb = File("$SRC_DIR/main.db").readBytes()
-
-        // here we decrypt data saved to .db file to check that it was encrypted correctly
-        val data = decryptStr(String(actualDb), "123", salt)
-        assertEquals("createDatabase creates incorrectly encrypted database!",
-                jsonDatabase, data)
-    }
-
-    @Test
     fun `deleteDatabase removes db and bin files from disk`(){
         // create empty database so that we can delete it using deleteDatabase
-        createEmptyDatabase()
+        val database = Database("main", "123", salt)
+        model.createDatabase(database)
 
         model.deleteDatabase("main")
 
@@ -155,7 +101,6 @@ class DatabasesModelTests: ModelTest() {
         assertFalse("deleteDatabase doesn't delete .db file",
                 dbFile.exists())
     }
-
 
     /**
      * Helper method used by saveDatabase test to create old database and to call
@@ -199,7 +144,6 @@ class DatabasesModelTests: ModelTest() {
         val data = decryptStr(String(actualDb), "321", salt.reversedArray())
         assertEquals("saveDatabase creates incorrect database!",
                 jsonDatabase, data)
-
     }
 
     @Test

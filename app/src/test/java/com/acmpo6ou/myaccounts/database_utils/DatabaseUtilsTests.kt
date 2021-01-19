@@ -23,10 +23,16 @@ import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.*
 import com.acmpo6ou.myaccounts.getDatabaseMap
+import com.macasaet.fernet.StringValidator
 import com.macasaet.fernet.Token
+import com.macasaet.fernet.Validator
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.io.File
+import java.time.Duration
+import java.time.Instant
+import java.time.temporal.TemporalAmount
 
 class DatabaseUtilsTests: ModelTest() {
     var app = MyApp()
@@ -42,6 +48,27 @@ class DatabaseUtilsTests: ModelTest() {
         val data = dumpsUtil(map)
         val token = Token.generate(key, data)
         return token.serialise()
+    }
+
+    /**
+     * This method decrypts given string.
+     *
+     * @param[string] string to decrypt.
+     * @param[password] password for decryption.
+     * @param[salt] salt for decryption.
+     * @return decrypted string.
+     */
+    private fun decryptStr(string: String, password: String, salt: ByteArray): String{
+        val key = deriveKeyUtil(password, salt)
+        val validator: Validator<String> = object : StringValidator {
+            // this checks whether our encrypted json string is expired or not
+            // in our app we don't care about expiration so we return Instant.MAX.epochSecond
+            override fun getTimeToLive(): TemporalAmount {
+                return Duration.ofSeconds(Instant.MAX.epochSecond)
+            }
+        }
+        val token = Token.fromString(string)
+        return token.validateAndDecrypt(key, validator)
     }
 
     @Test
@@ -114,5 +141,51 @@ class DatabaseUtilsTests: ModelTest() {
         val expectedStr = jsonDatabase
 
         assertEquals(expectedStr, dumpStr)
+    }
+
+    @Test
+    fun `encryptDatabaseUtil should return encrypted json string from Database`(){
+        val dataMap = getDatabaseMap()
+
+        val database = Database(
+                faker.name().toString(),
+                faker.lorem().sentence(),
+                salt, dataMap)
+
+        // get encrypted json string
+        val jsonStr = encryptDatabaseUtil(database)
+
+        // here we decrypt the json string using salt and password we defined earlier
+        // to check if it were encrypted correctly
+        val data = decryptStr(jsonStr, database.password!!, database.salt!!)
+
+        assertEquals("encryptDatabase has returned incorrectly encrypted json string!",
+                jsonDatabase, data)
+    }
+
+    @Test
+    fun `createDatabase should create db file given Database instance`(){
+        val database = Database("main", "123", salt, getDatabaseMap())
+        createDatabaseUtil(database, SRC_DIR)
+
+        // this is a .db file that createDatabase should create for us
+        val actualDb = File("$SRC_DIR/main.db").readBytes()
+
+        // here we decrypt data saved to .db file to check that it was encrypted correctly
+        val data = decryptStr(String(actualDb), "123", salt)
+        assertEquals("createDatabase creates incorrectly encrypted database!",
+                jsonDatabase, data)
+    }
+
+    @Test
+    fun `createDatabase should create salt file given Database instance`(){
+        val database = Database("main", "123", salt)
+        createDatabaseUtil(database, SRC_DIR)
+
+        // this is a salt file that createDatabase should create for us
+        val actualBin = File("$SRC_DIR/main.bin").readBytes()
+
+        assertEquals("createDatabase created incorrect salt file!",
+                String(salt), String(actualBin))
     }
 }

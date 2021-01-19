@@ -134,3 +134,39 @@ fun dumpsUtil(data: DbMap): String{
     }
     return json
 }
+
+/**
+ * Creates .db and .bin files for database given Database instance.
+ *
+ * @param[database] Database instance from which database name, password and salt are
+ * extracted for database files creation.
+ */
+fun createDatabaseUtil(database: Database, SRC_DIR: String) {
+    val name = database.name
+
+    // create salt file
+    val saltFile = File("$SRC_DIR$name.bin")
+    saltFile.createNewFile()
+    saltFile.writeBytes(database.salt!!)
+
+    // create database file
+    val databaseFile = File("$SRC_DIR$name.db")
+    databaseFile.createNewFile()
+
+    // encrypt and write database to .db file
+    val token = encryptDatabaseUtil(database)
+    databaseFile.writeText(token)
+}
+
+/**
+ * This method is for database serialization and encryption.
+ *
+ * @param[database] Database instance to encrypt.
+ * @return encrypted json string.
+ */
+fun encryptDatabaseUtil(database: Database): String{
+    val key = deriveKeyUtil(database.password!!, database.salt!!)
+    val data = dumpsUtil(database.data)
+    val token = Token.generate(key, data)
+    return token.serialise()
+}
