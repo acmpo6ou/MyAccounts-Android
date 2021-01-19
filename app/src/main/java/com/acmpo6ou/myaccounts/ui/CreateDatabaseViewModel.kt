@@ -47,6 +47,11 @@ open class CreateDatabaseViewModel: SuperViewModel() {
         get() = emptyPassErr_.value!!
         set(value) {emptyPassErr_.value = value}
 
+    val createdIndex_ = MutableLiveData<Int>()
+    var createdIndex: Int
+        get() = createdIndex_.value!!
+        set(value) {createdIndex_.value = value}
+
     /**
      * This method removes all unsupported characters from given name.
      *
@@ -100,6 +105,14 @@ open class CreateDatabaseViewModel: SuperViewModel() {
 
     open fun createDatabase(database: Database) = createDatabaseUtil(database, SRC_DIR)
 
+    /**
+     * This method creates database using [createDatabase] and given [name] and [password].
+     *
+     * Once the database is created it is added to the list.
+     * If any error occurred it sets errorMsg to error message.
+     * @param[name] name for the database.
+     * @param[password] password for the database.
+     */
     fun createPressed(name: String, password: String){
         try {
             // create database
@@ -107,9 +120,10 @@ open class CreateDatabaseViewModel: SuperViewModel() {
             val database = Database(name, password, salt)
             createDatabase(database)
 
-            // add it to the list, sort the list and notify about changes
+            // add it to the list, sort the list and notify about creation
             databases.add(database)
             databases.sortBy { it.name }
+            createdIndex = databases.indexOf(database)
         }
         catch (e: Exception){
             errorMsg = "${e.javaClass.name} ${e.message}"

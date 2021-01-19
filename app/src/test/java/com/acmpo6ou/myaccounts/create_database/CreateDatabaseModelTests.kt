@@ -139,6 +139,13 @@ class CreateDatabaseModelTests {
     @Test
     fun `createPressed should add created Database to the list`(){
         spyModel.createPressed(name, password)
-        assertTrue(db in model.databases)
+        assertTrue(db in spyModel.databases)
+    }
+
+    @Test
+    fun `createPressed should set createdIndex`(){
+        spyModel.createPressed(name, password)
+        val index = spyModel.databases.indexOf(db)
+        assertEquals(index, spyModel.createdIndex)
     }
 }
