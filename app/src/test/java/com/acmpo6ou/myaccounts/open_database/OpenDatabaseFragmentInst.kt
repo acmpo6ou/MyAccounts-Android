@@ -60,16 +60,6 @@ class OpenDatabaseFragmentInst {
         openScenario = launchFragmentInContainer(themeResId=R.style.Theme_MyAccounts_NoActionBar)
     }
 
-    /**
-     * Helper method to initialize test database for OpenDatabaseFragment.
-     */
-    private fun setupDatabase(){
-        openScenario.onFragment {
-            it.app.databases = mutableListOf(Database("main"))
-            it.args = args
-        }
-    }
-
     @Test
     fun `'Open database' button should call startPasswordCheck`(){
         openScenario.onFragment {
