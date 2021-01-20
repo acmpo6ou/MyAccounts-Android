@@ -22,6 +22,7 @@ package com.acmpo6ou.myaccounts.create_database
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.str
@@ -30,6 +31,7 @@ import com.acmpo6ou.myaccounts.ui.CreateDatabaseViewModel
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -46,6 +48,7 @@ class CreateDatabaseFragmentInst {
     lateinit var createScenario: FragmentScenario<CreateDatabaseFragment>
     lateinit var spyModel: CreateDatabaseViewModel
 
+    val context = InstrumentationRegistry.getInstrumentation().targetContext
     val faker = Faker()
     val name = faker.str()
 
@@ -65,6 +68,16 @@ class CreateDatabaseFragmentInst {
         createScenario.onFragment {
             it.b.databaseName.setText(name)
             verify(spyModel).validateName(name)
+        }
+    }
+
+    @Test
+    fun `if emptyNameErr is true should display error`(){
+        val emptyName = context.resources.getString(R.string.empty_name)
+        spyModel.emptyNameErr = true
+
+        createScenario.onFragment {
+            assertEquals(emptyName, it.b.parentName)
         }
     }
 }
