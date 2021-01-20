@@ -106,4 +106,27 @@ class CreateDatabaseFragmentInst {
             verify(spyModel).validatePasswords(str, str)
         }
     }
+
+    @Test
+    fun `should hide or display error tip according to emptyPassErr and diffPassErr`(){
+        val emptyPassword = context.resources.getString(R.string.empty_password)
+        val diffPasswords = context.resources.getString(R.string.diff_passwords)
+
+        createScenario.onFragment {
+            // password fields are empty
+            it.viewModel.emptyPassErr = true
+            it.viewModel.diffPassErr = false
+            assertEquals(emptyPassword, it.b.parentPassword.error)
+
+            // passwords do not match
+            it.viewModel.emptyPassErr = false
+            it.viewModel.diffPassErr = true
+            assertEquals(diffPasswords, it.b.parentPassword.error)
+
+            // everything is okay
+            it.viewModel.emptyPassErr = false
+            it.viewModel.diffPassErr = false
+            assertEquals(null, it.b.parentPassword.error)
+        }
+    }
 }

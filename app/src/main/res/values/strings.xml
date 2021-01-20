@@ -103,4 +103,6 @@
     <string name="open_error">Error opening database</string>
     <string name="empty_name">Please, provide a name</string>
     <string name="db_exists">Database with such name already exists</string>
+    <string name="empty_password">Please, provide a password</string>
+    <string name="diff_passwords">Passwords do not match!</string>
 </resources>
