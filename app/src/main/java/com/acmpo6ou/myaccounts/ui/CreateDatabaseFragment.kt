@@ -30,7 +30,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.acmpo6ou.myaccounts.MyApp
-import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
 
 class CreateDatabaseFragment : Fragment() {
@@ -42,14 +41,8 @@ class CreateDatabaseFragment : Fragment() {
     lateinit var app: MyApp
     lateinit var myContext: Context
 
-    private val nameErrorObserver = Observer<Boolean>{
-        if(it){
-            val msg = myContext.resources.getString(R.string.empty_name)
-            b.parentName.error = msg
-        }
-        else{
-            b.parentName.error = null
-        }
+    private val nameErrorObserver = Observer<String?> {
+        b.parentName.error = it
     }
 
     var binding: CreateEditDatabaseFragmentBinding? = null
@@ -99,7 +92,7 @@ class CreateDatabaseFragment : Fragment() {
         // init observers
         viewModel.apply {
             viewLifecycleOwner.let {
-                emptyNameErr_.observe(it, nameErrorObserver)
+                nameErrors.observe(it, nameErrorObserver)
             }
         }
 
