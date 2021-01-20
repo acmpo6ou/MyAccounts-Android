@@ -19,11 +19,27 @@
 
 package com.acmpo6ou.myaccounts.ui
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.SuperViewModel
 import com.acmpo6ou.myaccounts.core.createDatabaseUtil
 import java.security.SecureRandom
+
+fun <T, K, R> LiveData<T>.combineWith(
+        liveData: LiveData<K>,
+        block: (T?, K?) -> R
+): LiveData<R> {
+    val result = MediatorLiveData<R>()
+    result.addSource(this) {
+        result.value = block(this.value, liveData.value)
+    }
+    result.addSource(liveData) {
+        result.value = block(this.value, liveData.value)
+    }
+    return result
+}
 
 open class CreateDatabaseViewModel: SuperViewModel() {
     val emptyNameErr_ = MutableLiveData(true)
