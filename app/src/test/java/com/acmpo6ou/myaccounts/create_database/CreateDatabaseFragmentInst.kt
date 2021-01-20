@@ -71,24 +71,23 @@ class CreateDatabaseFragmentInst {
     }
 
     @Test
-    fun `should hide or display error tip according to emptyNameErr`(){
+    fun `should hide or display error tip according to emptyNameErr and existsNameErr`(){
         val emptyName = context.resources.getString(R.string.empty_name)
+        val nameExists = context.resources.getString(R.string.db_exists)
+
         createScenario.onFragment {
+            // name field is empty
             it.viewModel.emptyNameErr = true
+            it.viewModel.existsNameErr = false
             assertEquals(emptyName, it.b.parentName.error)
 
+            // name field contains name that is already taken
             it.viewModel.emptyNameErr = false
-            assertEquals(null, it.b.parentName.error)
-        }
-    }
-
-    @Test
-    fun `should hide or display error tip according to existsNameErr`(){
-        val nameExists = context.resources.getString(R.string.db_exists)
-        createScenario.onFragment {
             it.viewModel.existsNameErr = true
             assertEquals(nameExists, it.b.parentName.error)
 
+            // name field is filled and contains name that isn't taken
+            it.viewModel.emptyNameErr = false
             it.viewModel.existsNameErr = false
             assertEquals(null, it.b.parentName.error)
         }
