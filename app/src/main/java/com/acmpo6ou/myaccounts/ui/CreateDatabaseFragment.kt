@@ -72,7 +72,7 @@ class CreateDatabaseFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(CreateDatabaseViewModel::class.java)
         initModel()
 
-        // when database name is change validate it using model to display error in case
+        // when database name is changed validate it using model to display error in case
         // such name already exists or the name is empty
         b.databaseName.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable) {}
@@ -82,8 +82,29 @@ class CreateDatabaseFragment : Fragment() {
                 viewModel.validateName(s.toString())
             }
         })
-    }
 
+        // text changed listeners for password fields to validate them and display error
+        // in case of problems
+        b.databasePassword.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s:CharSequence, start:Int,
+                                       before:Int, count:Int) {
+                viewModel.validatePasswords(b.databasePassword.text.toString(),
+                                            b.databaseRepeatPassword.text.toString())
+            }
+        })
+
+        b.databaseRepeatPassword.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s:CharSequence, start:Int,
+                                       before:Int, count:Int) {
+                viewModel.validatePasswords(b.databasePassword.text.toString(),
+                                            b.databaseRepeatPassword.text.toString())
+            }
+        })
+    }
 
     /**
      * This method initializes view model providing all needed resources.
