@@ -23,6 +23,7 @@ import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.*
 import com.acmpo6ou.myaccounts.getDatabaseMap
+import com.acmpo6ou.myaccounts.str
 import com.macasaet.fernet.StringValidator
 import com.macasaet.fernet.Token
 import com.macasaet.fernet.Validator
@@ -148,8 +149,8 @@ class DatabaseUtilsTests: ModelTest() {
         val dataMap = getDatabaseMap()
 
         val database = Database(
-                faker.name().toString(),
-                faker.lorem().sentence(),
+                faker.name().name(),
+                faker.str(),
                 salt, dataMap)
 
         // get encrypted json string

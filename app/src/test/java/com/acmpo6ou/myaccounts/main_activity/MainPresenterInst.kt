@@ -28,6 +28,7 @@ import com.acmpo6ou.myaccounts.core.MainActivityInter
 import com.acmpo6ou.myaccounts.core.MainModelInter
 import com.acmpo6ou.myaccounts.core.MainPresenter
 import com.acmpo6ou.myaccounts.randomIntExcept
+import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
@@ -153,7 +154,7 @@ class MainPresenterInst {
 
     @Test
     fun `importDatabase should handle any other Exception`(){
-        val msg = faker.lorem().sentence()
+        val msg = faker.str()
         val expectedDetails = "java.lang.Exception $msg"
         whenever(model.importDatabase(locationUri)).thenAnswer{
             throw Exception(msg)

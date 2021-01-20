@@ -24,6 +24,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.str
 import com.acmpo6ou.myaccounts.ui.OpenDatabaseFragment
 import com.acmpo6ou.myaccounts.ui.OpenDatabaseViewModel
 import com.github.javafaker.Faker
@@ -59,7 +60,7 @@ class OpenDatabaseFragmentInst {
     fun `'Open database' button should call startPasswordCheck`(){
         openScenario.onFragment {
             it.viewModel = model
-            val txt = faker.lorem().sentence()
+            val txt = faker.str()
             it.b.databasePassword.setText(txt)
 
             it.b.openDatabase.performClick()

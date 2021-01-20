@@ -22,6 +22,7 @@ package com.acmpo6ou.myaccounts.database_fragment
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.str
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -74,7 +75,7 @@ class DatabasesPresenterInst: DatabasesPresenterTest() {
 
     @Test
     fun `exportDatabase should handle any other exception`(){
-        val msg = faker.lorem().sentence()
+        val msg = faker.str()
         val expectedDetails = "java.lang.Exception $msg"
 
         whenever(model.exportDatabase(anyString(), eq(locationUri)))
@@ -88,7 +89,7 @@ class DatabasesPresenterInst: DatabasesPresenterTest() {
 
     @Test
     fun `deleteDatabase should handle any exception`(){
-        val msg = faker.lorem().sentence()
+        val msg = faker.str()
         val expectedDetails = "java.lang.Exception $msg"
 
         whenever(model.deleteDatabase(anyString()))

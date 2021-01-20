@@ -23,10 +23,12 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.getDatabaseMap
+import com.acmpo6ou.myaccounts.str
 import com.acmpo6ou.myaccounts.ui.OpenDatabaseViewModel
 import com.github.javafaker.Faker
 import com.macasaet.fernet.TokenValidationException
 import com.nhaarman.mockitokotlin2.*
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
@@ -43,7 +45,7 @@ class OpenDatabaseViewModelTests {
     private val password = "123"
 
     val SRC_DIR = "sampledata/src/"
-    val titleStart = faker.lorem().sentence()
+    val titleStart = faker.str()
     private val salt = "0123456789abcdef".toByteArray()
     lateinit var app: MyApp
 
@@ -66,7 +68,7 @@ class OpenDatabaseViewModelTests {
         }.whenever(spyModel).openDatabase(app.databases[0])
 
         runBlocking {
-            spyModel.verifyPassword(faker.lorem().sentence())
+            spyModel.verifyPassword(faker.str())
         }
         assertTrue(spyModel.incorrectPassword)
     }
@@ -78,7 +80,7 @@ class OpenDatabaseViewModelTests {
         }.whenever(spyModel).openDatabase(app.databases[0])
 
         runBlocking {
-            spyModel.verifyPassword(faker.lorem().sentence())
+            spyModel.verifyPassword(faker.str())
         }
         assertTrue(app.keyCache.isEmpty())
     }
@@ -92,7 +94,7 @@ class OpenDatabaseViewModelTests {
         }.whenever(spyModel).openDatabase(any())
 
         runBlocking {
-            spyModel.verifyPassword(faker.lorem().sentence())
+            spyModel.verifyPassword(faker.str())
         }
         assertTrue(spyModel.corrupted)
     }
@@ -130,7 +132,7 @@ class OpenDatabaseViewModelTests {
         }.whenever(spyModel).openDatabase(app.databases[0])
 
         runBlocking {
-            spyModel.verifyPassword(faker.lorem().sentence())
+            spyModel.verifyPassword(faker.str())
         }
         assertFalse(spyModel.loading)
     }
@@ -171,5 +173,24 @@ class OpenDatabaseViewModelTests {
         runBlocking {
             verify(spyModel).verifyPassword(password)
         }
+    }
+
+    @Test
+    fun `verifyPassword should handle any error`(){
+        val msg = faker.str()
+        val expectedDetails = "java.lang.Exception $msg"
+
+        val deferredMock = mock<Deferred<Database>>()
+        runBlocking {
+            doAnswer { throw Exception(msg) }.whenever(deferredMock).await()
+        }
+
+        whenever(spyModel.openDatabase(app.databases[0]))
+                .doReturn(deferredMock)
+
+        runBlocking {
+            spyModel.verifyPassword(password)
+        }
+        assertEquals(spyModel.errorMsg, expectedDetails)
     }
 }

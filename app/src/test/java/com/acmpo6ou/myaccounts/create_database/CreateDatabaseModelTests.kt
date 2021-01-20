@@ -22,6 +22,7 @@ package com.acmpo6ou.myaccounts.create_database
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.Database
+import com.acmpo6ou.myaccounts.str
 import com.acmpo6ou.myaccounts.ui.CreateDatabaseViewModel
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.*
@@ -38,13 +39,13 @@ class CreateDatabaseModelTests {
     lateinit var spyModel: CreateDatabaseViewModel
 
     val faker = Faker()
-    private val name = faker.lorem().sentence()
-    private val password = faker.lorem().sentence()
+    private val name = faker.str()
+    private val password = faker.str()
     private val salt = "1234567890abcdef".toByteArray()
     private val db = Database(name, password, salt)
 
     val SRC_DIR = "sampledata/src/"
-    val titleStart = faker.lorem().sentence()
+    val titleStart = faker.str()
 
     @Before
     fun setup(){
@@ -67,7 +68,7 @@ class CreateDatabaseModelTests {
     @Test
     fun `validateName should change emptyNameErr`(){
         // if name isn't empty emptyNameErr should be false
-        model.validateName(faker.lorem().sentence())
+        model.validateName(faker.str())
         assertFalse(model.emptyNameErr)
 
         // if name is empty emptyNameErr should be true
@@ -94,8 +95,8 @@ class CreateDatabaseModelTests {
 
     @Test
     fun `validatePasswords should change diffPassErr`(){
-        val pass1 = faker.lorem().sentence()
-        val pass2 = faker.lorem().sentence()
+        val pass1 = faker.str()
+        val pass2 = faker.str()
 
         // if passwords are different - diffPassErr = true
         model.validatePasswords(pass1, pass2)
@@ -113,7 +114,7 @@ class CreateDatabaseModelTests {
         assertTrue(model.emptyPassErr)
 
         // if password isn't empty - emptyPassErr = false
-        model.validatePasswords(faker.lorem().sentence(), faker.lorem().sentence())
+        model.validatePasswords(faker.str(), faker.str())
         assertFalse(model.emptyPassErr)
     }
 
@@ -125,7 +126,7 @@ class CreateDatabaseModelTests {
 
     @Test
     fun `createPressed should handle any error`(){
-        val msg = faker.lorem().sentence()
+        val msg = faker.str()
         val expectedDetails = "java.lang.Exception $msg"
         whenever(spyModel.createDatabase(db))
                 .doAnswer{

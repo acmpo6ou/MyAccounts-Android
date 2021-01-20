@@ -47,7 +47,7 @@ class CreateDatabaseFragmentInst {
     lateinit var spyModel: CreateDatabaseViewModel
 
     val faker = Faker()
-    val name = faker.lorem().sentence()
+    val name = faker.str()
 
     @Before
     fun setup() {

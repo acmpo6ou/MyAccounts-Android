@@ -31,6 +31,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.findSnackbarTextView
+import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -105,8 +106,8 @@ class MainActivityInst {
 
     @Test
     fun `showError should create dialog with appropriate title and message`(){
-        val expectedTitle = faker.lorem().sentence()
-        val expectedMsg = faker.lorem().sentence()
+        val expectedTitle = faker.str()
+        val expectedMsg = faker.str()
 
         mainScenario.onActivity {
             it.showError(expectedTitle, expectedMsg)

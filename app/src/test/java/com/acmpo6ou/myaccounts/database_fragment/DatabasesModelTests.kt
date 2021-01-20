@@ -24,6 +24,7 @@ import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesModel
 import com.acmpo6ou.myaccounts.core.deriveKeyUtil
 import com.acmpo6ou.myaccounts.getDatabaseMap
+import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
 import com.macasaet.fernet.StringValidator
 import com.macasaet.fernet.Token
@@ -52,7 +53,7 @@ class DatabasesTests {
     @Test
     fun `Database should have isOpen property set to true when password is NOT null`(){
         // we passed the password, so it is not null
-        val database = Database(faker.name().toString(), faker.lorem().sentence())
+        val database = Database(faker.name().toString(), faker.str())
 
         // when password is not null database should be opened
         assertTrue("Password of Database is NOT null but isOpen is false!",

@@ -23,6 +23,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.SuperViewModel
+import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -37,7 +38,7 @@ class SuperViewModelTests {
 
     @Test
     fun `initialize should set title`(){
-        val titleStart = faker.lorem().sentence()
+        val titleStart = faker.str()
         val app = MyApp()
         app.databases = mutableListOf(Database("main"))
 
