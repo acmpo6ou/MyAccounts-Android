@@ -72,12 +72,14 @@ class CreateDatabaseFragmentInst {
     }
 
     @Test
-    fun `if emptyNameErr is true should display error`(){
+    fun `should hide or display error tip according to emptyNameErr`(){
         val emptyName = context.resources.getString(R.string.empty_name)
-        spyModel.emptyNameErr = true
-
         createScenario.onFragment {
-            assertEquals(emptyName, it.b.parentName)
+            it.viewModel.emptyNameErr = true
+            assertEquals(emptyName, it.b.parentName.error)
+
+            it.viewModel.emptyNameErr = false
+            assertEquals(null, it.b.parentName.error)
         }
     }
 }
