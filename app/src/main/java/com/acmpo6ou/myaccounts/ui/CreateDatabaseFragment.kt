@@ -21,6 +21,8 @@ package com.acmpo6ou.myaccounts.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,6 +66,17 @@ class CreateDatabaseFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(CreateDatabaseViewModel::class.java)
         initModel()
+
+        // when database name is change validate it using model to display error in case
+        // such name already exists or the name is empty
+        b.databaseName.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s:CharSequence, start:Int,
+                                       before:Int, count:Int) {
+                viewModel.validateName(s.toString())
+            }
+        })
     }
 
 
