@@ -28,7 +28,6 @@ import com.acmpo6ou.myaccounts.ui.OpenDatabaseViewModel
 import com.github.javafaker.Faker
 import com.macasaet.fernet.TokenValidationException
 import com.nhaarman.mockitokotlin2.*
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
@@ -173,24 +172,5 @@ class OpenDatabaseViewModelTests {
         runBlocking {
             verify(spyModel).verifyPassword(password)
         }
-    }
-
-    @Test
-    fun `verifyPassword should handle any error`(){
-        val msg = faker.str()
-        val expectedDetails = "java.lang.Exception $msg"
-
-        val deferredMock = mock<Deferred<Database>>()
-        runBlocking {
-            doAnswer { throw Exception(msg) }.whenever(deferredMock).await()
-        }
-
-        whenever(spyModel.openDatabase(app.databases[0]))
-                .doReturn(deferredMock)
-
-        runBlocking {
-            spyModel.verifyPassword(password)
-        }
-        assertEquals(spyModel.errorMsg, expectedDetails)
     }
 }
