@@ -54,18 +54,17 @@ class CreateDatabaseFragmentInst {
 
     @Before
     fun setup() {
+        spyModel = spy()
+        spyModel.initialize(MyApp(), faker.str())
+
         // Create a graphical FragmentScenario for the fragment
         createScenario = launchFragmentInContainer(themeResId= R.style.Theme_MyAccounts_NoActionBar)
-        createScenario.onFragment {
-            spyModel = spy()
-            spyModel.initialize(MyApp(), faker.str())
-            it.viewModel = spyModel
-        }
     }
 
     @Test
     fun `should call validateName when text in databaseName changes`(){
         createScenario.onFragment {
+            it.viewModel = spyModel
             it.b.databaseName.setText(name)
             verify(spyModel).validateName(name)
         }
@@ -79,6 +78,18 @@ class CreateDatabaseFragmentInst {
             assertEquals(emptyName, it.b.parentName.error)
 
             it.viewModel.emptyNameErr = false
+            assertEquals(null, it.b.parentName.error)
+        }
+    }
+
+    @Test
+    fun `should hide or display error tip according to existsNameErr`(){
+        val nameExists = context.resources.getString(R.string.db_exists)
+        createScenario.onFragment {
+            it.viewModel.existsNameErr = true
+            assertEquals(nameExists, it.b.parentName.error)
+
+            it.viewModel.existsNameErr = false
             assertEquals(null, it.b.parentName.error)
         }
     }
