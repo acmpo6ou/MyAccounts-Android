@@ -22,24 +22,11 @@ package com.acmpo6ou.myaccounts.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.SuperViewModel
 import com.acmpo6ou.myaccounts.core.createDatabaseUtil
 import java.security.SecureRandom
-
-fun <T, K, R> LiveData<T>.combineWith(
-        liveData: LiveData<K>,
-        block: (T?, K?) -> R
-): LiveData<R> {
-    val result = MediatorLiveData<R>()
-    result.addSource(this) {
-        result.value = block(this.value, liveData.value)
-    }
-    result.addSource(liveData) {
-        result.value = block(this.value, liveData.value)
-    }
-    return result
-}
 
 open class CreateDatabaseViewModel: SuperViewModel() {
     val emptyNameErr_ = MutableLiveData(true)
@@ -67,6 +54,24 @@ open class CreateDatabaseViewModel: SuperViewModel() {
     var createdIndex: Int
         get() = createdIndex_.value!!
         set(value) {createdIndex_.value = value}
+
+    /**
+     * This LiveData value provides error message according
+     * to emptyNameErr_ and existsNameErr_ live data values.
+     */
+    val nameErrors = emptyNameErr_.combineWith(existsNameErr_) {
+        empty: Boolean?, exists: Boolean? ->
+
+        var msg: String? = null
+        if(empty!!){
+            msg = app.resources.getString(R.string.empty_name)
+        }
+        else if(exists!!){
+            msg = app.resources.getString(R.string.db_exists)
+        }
+        return@combineWith msg
+    }
+
 
     /**
      * This method removes all unsupported characters from given name.
@@ -146,4 +151,18 @@ open class CreateDatabaseViewModel: SuperViewModel() {
             e.printStackTrace()
         }
     }
+}
+
+fun <T, K, R> LiveData<T>.combineWith(
+        liveData: LiveData<K>,
+        block: (T?, K?) -> R
+): LiveData<R> {
+    val result = MediatorLiveData<R>()
+    result.addSource(this) {
+        result.value = block(this.value, liveData.value)
+    }
+    result.addSource(liveData) {
+        result.value = block(this.value, liveData.value)
+    }
+    return result
 }
