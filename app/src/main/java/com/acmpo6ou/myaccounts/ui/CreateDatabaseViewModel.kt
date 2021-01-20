@@ -108,7 +108,7 @@ open class CreateDatabaseViewModel: SuperViewModel() {
      * @param[pass1] first password.
      * @param[pass2] second password.
      */
-    fun validatePasswords(pass1: String, pass2: String){
+    open fun validatePasswords(pass1: String, pass2: String){
         diffPassErr = pass1 != pass2
         emptyPassErr = pass1.isEmpty()
     }

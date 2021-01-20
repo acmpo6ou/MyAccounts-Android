@@ -92,4 +92,18 @@ class CreateDatabaseFragmentInst {
             assertEquals(null, it.b.parentName.error)
         }
     }
+
+    @Test
+    fun `should call validatePasswords when password in either password fields changes`(){
+        createScenario.onFragment {
+            it.viewModel = spyModel
+            val str = faker.str()
+
+            it.b.databasePassword.setText(str)
+            verify(spyModel).validatePasswords(str, "")
+
+            it.b.databaseRepeatPassword.setText(str)
+            verify(spyModel).validatePasswords(str, str)
+        }
+    }
 }
