@@ -72,6 +72,23 @@ open class CreateDatabaseViewModel: SuperViewModel() {
         return@combineWith msg
     }
 
+    /**
+     * This LiveData value provides error message according
+     * to emptyPassErr_ and diffPassErr_ live data values.
+     */
+    val passwordErrors = emptyPassErr_.combineWith(diffPassErr_) {
+        empty: Boolean?, different: Boolean? ->
+
+        var msg: String? = null
+        if(empty!!){
+            msg = app.resources.getString(R.string.empty_password)
+        }
+        else if(different!!){
+            msg = app.resources.getString(R.string.diff_passwords)
+        }
+        return@combineWith msg
+    }
+
 
     /**
      * This method removes all unsupported characters from given name.
