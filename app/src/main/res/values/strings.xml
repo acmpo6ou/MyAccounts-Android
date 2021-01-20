@@ -101,4 +101,5 @@
     <string name="password_error">Incorrect password</string>
     <string name="corrupted_db">The %1$s database is probably corrupted.</string>
     <string name="open_error">Error opening database</string>
+    <string name="empty_name">Please, provide a name</string>
 </resources>
