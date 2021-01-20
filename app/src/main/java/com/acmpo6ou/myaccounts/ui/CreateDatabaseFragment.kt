@@ -45,6 +45,10 @@ class CreateDatabaseFragment : Fragment() {
         b.parentName.error = it
     }
 
+    private val passwordErrorObserver = Observer<String?> {
+        b.parentPassword.error = it
+    }
+
     var binding: CreateEditDatabaseFragmentBinding? = null
     val b: CreateEditDatabaseFragmentBinding get() = binding!!
 
@@ -114,6 +118,7 @@ class CreateDatabaseFragment : Fragment() {
         viewModel.apply {
             viewLifecycleOwner.let {
                 nameErrors.observe(it, nameErrorObserver)
+                passwordErrors.observe(it, passwordErrorObserver)
             }
         }
 
