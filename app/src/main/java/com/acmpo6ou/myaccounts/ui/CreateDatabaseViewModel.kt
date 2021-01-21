@@ -89,6 +89,14 @@ open class CreateDatabaseViewModel: SuperViewModel() {
         return@combineWith msg
     }
 
+    /**
+     * This LiveData property used to decide whether `Create` button should be enabled
+     * or not. If there are any errors it should be disabled, if there are no errors - enabled.
+     */
+    val createEnabled = nameErrors.combineWith(passwordErrors) {
+            nameErr: String?, passwordErr: String? ->
+        nameErr == null && passwordErr == null
+    }
 
     /**
      * This method removes all unsupported characters from given name.
