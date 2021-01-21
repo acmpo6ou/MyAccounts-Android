@@ -32,8 +32,8 @@ open class CreateDatabaseViewModel: SuperViewModel() {
     val emptyNameErr_ = MutableLiveData(true)
     val existsNameErr_ = MutableLiveData(false)
 
+    val emptyPassErr_ = MutableLiveData(true)
     val diffPassErr_ = MutableLiveData(false)
-    val emptyPassErr_ = MutableLiveData(false)
 
     var emptyNameErr: Boolean
         get() = emptyNameErr_.value!!
