@@ -29,8 +29,7 @@ import com.acmpo6ou.myaccounts.str
 import com.acmpo6ou.myaccounts.ui.CreateDatabaseFragment
 import com.acmpo6ou.myaccounts.ui.CreateDatabaseViewModel
 import com.github.javafaker.Faker
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
@@ -155,6 +154,22 @@ class CreateDatabaseFragmentInst {
             it.viewModel.emptyPassErr = true
             it.viewModel.diffPassErr = false
             assertFalse(createButton.isEnabled)
+        }
+    }
+
+    @Test
+    fun `press on databaseCreate should call createPressed`(){
+        createScenario.onFragment {
+            doNothing().whenever(spyModel).createDatabase(any())
+            it.viewModel = spyModel
+            val pass = faker.str()
+
+            it.b.databaseName.setText(name)
+            it.b.databasePassword.setText(pass)
+            it.b.databaseRepeatPassword.setText(pass)
+
+            it.b.databaseCreate.performClick()
+            verify(spyModel).createPressed(name, pass)
         }
     }
 }
