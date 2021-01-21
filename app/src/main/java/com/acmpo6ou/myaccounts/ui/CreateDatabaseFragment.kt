@@ -28,8 +28,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
-import com.acmpo6ou.myaccounts.core.MainActivityInter
 import com.acmpo6ou.myaccounts.core.ViewModelFragment
 import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
 
@@ -41,7 +41,7 @@ class CreateDatabaseFragment : ViewModelFragment() {
     override lateinit var viewModel: CreateDatabaseViewModel
     lateinit var app: MyApp
     lateinit var myContext: Context
-    override lateinit var mainActivity: MainActivityInter
+    override val mainActivity get() = myContext as MainActivity
 
     private val nameErrorObserver = Observer<String?> {
         b.parentName.error = it
@@ -69,12 +69,15 @@ class CreateDatabaseFragment : ViewModelFragment() {
         binding = null
     }
 
+    override fun onStart() {
+        super.onStart()
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
         // save context and app
         myContext = requireContext()
-        mainActivity = myContext as MainActivityInter
         app = context.applicationContext as MyApp
     }
 
