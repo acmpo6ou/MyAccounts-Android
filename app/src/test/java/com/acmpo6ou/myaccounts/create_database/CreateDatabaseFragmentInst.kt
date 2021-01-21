@@ -31,7 +31,7 @@ import com.acmpo6ou.myaccounts.ui.CreateDatabaseViewModel
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.Assert.assertEquals
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -127,6 +127,34 @@ class CreateDatabaseFragmentInst {
             it.viewModel.emptyPassErr = false
             it.viewModel.diffPassErr = false
             assertEquals(null, it.b.parentPassword.error)
+        }
+    }
+
+    @Test
+    fun `databaseCreate should change according to nameErrors and passwordErrors`(){
+        createScenario.onFragment {
+            val createButton = it.b.databaseCreate
+
+            // there are no errors
+            it.viewModel.emptyNameErr = false
+            it.viewModel.existsNameErr = false
+            it.viewModel.emptyPassErr = false
+            it.viewModel.diffPassErr = false
+            assertTrue(createButton.isEnabled)
+
+            // there is a name error
+            it.viewModel.emptyNameErr = true
+            it.viewModel.existsNameErr = false
+            it.viewModel.emptyPassErr = false
+            it.viewModel.diffPassErr = false
+            assertFalse(createButton.isEnabled)
+
+            // there is a password error
+            it.viewModel.emptyNameErr = false
+            it.viewModel.existsNameErr = false
+            it.viewModel.emptyPassErr = true
+            it.viewModel.diffPassErr = false
+            assertFalse(createButton.isEnabled)
         }
     }
 }
