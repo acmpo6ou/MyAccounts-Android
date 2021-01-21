@@ -112,6 +112,12 @@ class CreateDatabaseFragment : Fragment() {
                                             b.databaseRepeatPassword.text.toString())
             }
         })
+
+        // call createPressed when clicking on `Create` button
+        b.databaseCreate.setOnClickListener {
+            viewModel.createPressed(b.databaseName.text.toString(),
+                                    b.databasePassword.text.toString())
+        }
     }
 
     /**
