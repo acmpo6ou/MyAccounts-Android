@@ -31,20 +31,20 @@ import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.SuperFragment
+import com.acmpo6ou.myaccounts.core.ViewModelFragment
 import com.acmpo6ou.myaccounts.databinding.OpenDatabaseFragmentBinding
 
-class OpenDatabaseFragment: SuperFragment() {
+class OpenDatabaseFragment: ViewModelFragment() {
     companion object {
         fun newInstance() = OpenDatabaseFragment()
     }
 
-    lateinit var viewModel: OpenDatabaseViewModel
+    override lateinit var viewModel: OpenDatabaseViewModel
     var args: OpenDatabaseFragmentArgs? = null
     lateinit var myContext: Context
     lateinit var app: MyApp
 
-    private val mainActivity get() = myContext as MainActivity
+    override val mainActivity get() = myContext as MainActivity
 
     var binding: OpenDatabaseFragmentBinding? = null
     val b: OpenDatabaseFragmentBinding get() = binding!!
@@ -145,7 +145,8 @@ class OpenDatabaseFragment: SuperFragment() {
     /**
      * This method initializes view model providing all needed resources.
      */
-    private fun initModel() {
+    override fun initModel() {
+        super.initModel()
         // init observers
         viewModel.apply {
             viewLifecycleOwner.let {

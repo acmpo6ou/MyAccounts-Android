@@ -26,20 +26,22 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.core.MainActivityInter
+import com.acmpo6ou.myaccounts.core.ViewModelFragment
 import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
 
-class CreateDatabaseFragment : Fragment() {
+class CreateDatabaseFragment : ViewModelFragment() {
     companion object {
         fun newInstance() = CreateDatabaseFragment()
     }
 
-    lateinit var viewModel: CreateDatabaseViewModel
+    override lateinit var viewModel: CreateDatabaseViewModel
     lateinit var app: MyApp
     lateinit var myContext: Context
+    override lateinit var mainActivity: MainActivityInter
 
     private val nameErrorObserver = Observer<String?> {
         b.parentName.error = it
@@ -72,6 +74,7 @@ class CreateDatabaseFragment : Fragment() {
 
         // save context and app
         myContext = requireContext()
+        mainActivity = myContext as MainActivityInter
         app = context.applicationContext as MyApp
     }
 
@@ -123,7 +126,8 @@ class CreateDatabaseFragment : Fragment() {
     /**
      * This method initializes view model providing all needed resources.
      */
-    private fun initModel() {
+    override fun initModel() {
+        super.initModel()
         // init observers
         viewModel.apply {
             viewLifecycleOwner.let {
