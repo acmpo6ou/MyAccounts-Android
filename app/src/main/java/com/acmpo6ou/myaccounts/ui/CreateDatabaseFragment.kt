@@ -49,6 +49,10 @@ class CreateDatabaseFragment : Fragment() {
         b.parentPassword.error = it
     }
 
+    private val createEnabledObserver = Observer<Boolean> {
+        b.databaseCreate.isEnabled = it
+    }
+
     var binding: CreateEditDatabaseFragmentBinding? = null
     val b: CreateEditDatabaseFragmentBinding get() = binding!!
 
@@ -119,6 +123,7 @@ class CreateDatabaseFragment : Fragment() {
             viewLifecycleOwner.let {
                 nameErrors.observe(it, nameErrorObserver)
                 passwordErrors.observe(it, passwordErrorObserver)
+                createEnabled.observe(it, createEnabledObserver)
             }
         }
 
