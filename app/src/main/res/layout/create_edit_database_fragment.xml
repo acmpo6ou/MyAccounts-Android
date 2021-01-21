@@ -29,7 +29,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/parentName"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/errorField"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/database_name"
@@ -49,7 +49,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/parentPassword"
-        style="@style/passwordField"
+        style="@style/errorField"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -72,7 +72,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/parentRepeatPassword"
-        style="@style/passwordField"
+        style="@style/errorField"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
