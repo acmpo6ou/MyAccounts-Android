@@ -155,12 +155,12 @@ class MainPresenterInst {
     @Test
     fun `importDatabase should handle any other Exception`(){
         val msg = faker.str()
-        val expectedDetails = "java.lang.Exception $msg"
+        val exception = Exception(msg)
         whenever(model.importDatabase(locationUri)).thenAnswer{
-            throw Exception(msg)
+            throw exception
         }
         presenter.importDatabase(locationUri)
 
-        verify(view).showError(importErrorTitle, expectedDetails)
+        verify(view).showError(importErrorTitle, exception.toString())
     }
 }

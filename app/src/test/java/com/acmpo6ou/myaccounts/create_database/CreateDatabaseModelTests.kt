@@ -127,14 +127,14 @@ class CreateDatabaseModelTests {
     @Test
     fun `createPressed should handle any error`(){
         val msg = faker.str()
-        val expectedDetails = "java.lang.Exception $msg"
+        val exception = Exception(msg)
         whenever(spyModel.createDatabase(db))
                 .doAnswer{
-                    throw Exception(msg)
+                    throw exception
                 }
 
         spyModel.createPressed(name, password)
-        assertEquals(spyModel.errorMsg, expectedDetails)
+        assertEquals(exception.toString(), spyModel.errorMsg)
     }
 
     @Test

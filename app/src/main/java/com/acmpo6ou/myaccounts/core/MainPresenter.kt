@@ -172,7 +172,7 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
             e.printStackTrace()
         }
         catch (e: Exception){
-            errorDetails = "${e.javaClass.name} ${e.message}"
+            errorDetails = e.toString()
             e.printStackTrace()
         }
 

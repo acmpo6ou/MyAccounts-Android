@@ -88,7 +88,7 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
             e.printStackTrace()
         }
         catch (e: Exception){
-            errorDetails = "${e.javaClass.name} ${e.message}"
+            errorDetails = e.toString()
             e.printStackTrace()
         }
 
@@ -129,7 +129,7 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
         catch (e: Exception){
             val errorTitle = view.myContext.resources
                     .getString(R.string.delete_error_title)
-            val errorDetails = "${e.javaClass.name} ${e.message}"
+            val errorDetails = e.toString()
             view.showError(errorTitle, errorDetails)
             e.printStackTrace()
         }

@@ -76,28 +76,28 @@ class DatabasesPresenterInst: DatabasesPresenterTest() {
     @Test
     fun `exportDatabase should handle any other exception`(){
         val msg = faker.str()
-        val expectedDetails = "java.lang.Exception $msg"
+        val exception = Exception(msg)
 
         whenever(model.exportDatabase(anyString(), eq(locationUri)))
                 .thenAnswer{
-                    throw Exception(msg)
+                    throw exception
                 }
         callExportDatabase()
 
-        verify(view).showError(exportErrorTitle, expectedDetails)
+        verify(view).showError(exportErrorTitle, exception.toString())
     }
 
     @Test
     fun `deleteDatabase should handle any exception`(){
         val msg = faker.str()
-        val expectedDetails = "java.lang.Exception $msg"
+        val exception = Exception(msg)
 
         whenever(model.deleteDatabase(anyString()))
                 .thenAnswer{
-                    throw Exception(msg)
+                    throw exception
                 }
         presenter.deleteDatabase(0)
 
-        verify(view).showError(deleteErrorTitle, expectedDetails)
+        verify(view).showError(deleteErrorTitle, exception.toString())
     }
 }

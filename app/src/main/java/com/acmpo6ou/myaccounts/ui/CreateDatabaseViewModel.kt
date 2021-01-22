@@ -172,7 +172,7 @@ open class CreateDatabaseViewModel: SuperViewModel() {
             createdIndex = databases.indexOf(database)
         }
         catch (e: Exception){
-            errorMsg = "${e.javaClass.name} ${e.message}"
+            errorMsg = e.toString()
             e.printStackTrace()
         }
     }
