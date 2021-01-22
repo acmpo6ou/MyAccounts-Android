@@ -34,14 +34,13 @@ import androidx.navigation.testing.TestNavHostController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesPresenter
-import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.findSnackbarTextView
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
 import com.acmpo6ou.myaccounts.ui.DatabaseFragmentDirections
-import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.assertEquals
@@ -74,11 +73,9 @@ class DatabaseFragmentInstrumentation {
                 themeResId=R.style.Theme_MyAccounts_NoActionBar)
 
         // mock presenter with fake database
-        val mockDatabases = mutableListOf(Database("main"))
-        val presenter = mock<DatabasesPresenterInter>{
-            on {databases} doReturn mockDatabases
-        }
-        databaseScenario.onFragment { it.presenter = presenter }
+        val app = MyApp()
+        app.databases = mutableListOf(Database("main"))
+        databaseScenario.onFragment { it.app = app }
     }
 
     private fun setUpNavController() {
