@@ -26,6 +26,7 @@ import com.acmpo6ou.myaccounts.str
 import com.acmpo6ou.myaccounts.ui.CreateDatabaseViewModel
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Before
@@ -57,7 +58,8 @@ class CreateDatabaseModelTests {
         spyModel = spy(model){
             on{generateSalt()} doReturn salt
         }
-        doNothing().whenever(spyModel).createDatabase(any())
+        spyModel.uiDispatcher = Dispatchers.Unconfined
+        spyModel.defaultDispatcher = Dispatchers.Unconfined
     }
 
     @Test
@@ -120,24 +122,24 @@ class CreateDatabaseModelTests {
     }
 
     @Test
-    fun `startCreating should call createDatabase`(){
+    fun `startCreating should call createDatabaseAsync`(){
         runBlocking {
-            spyModel.startCreating(name, password)
+            spyModel.createDatabase(name, password)
         }
-        verify(spyModel).createDatabase(db)
+        verify(spyModel).createDatabaseAsync(db)
     }
 
     @Test
     fun `startCreating should handle any error`(){
         val msg = faker.str()
         val exception = Exception(msg)
-        whenever(spyModel.createDatabase(db))
+        whenever(spyModel.createDatabaseAsync(db))
                 .doAnswer{
                     throw exception
                 }
 
         runBlocking {
-            spyModel.startCreating(name, password)
+            spyModel.createDatabase(name, password)
         }
         assertEquals(exception.toString(), spyModel.errorMsg)
     }
@@ -145,7 +147,7 @@ class CreateDatabaseModelTests {
     @Test
     fun `startCreating should add created Database to the list`(){
         runBlocking {
-            spyModel.startCreating(name, password)
+            spyModel.createDatabase(name, password)
         }
         assertTrue(db in spyModel.databases)
     }
@@ -153,7 +155,7 @@ class CreateDatabaseModelTests {
     @Test
     fun `startCreating should set createdIndex`(){
         runBlocking {
-            spyModel.startCreating(name, password)
+            spyModel.createDatabase(name, password)
         }
         val index = spyModel.databases.indexOf(db)
         assertEquals(index, spyModel.createdIndex)
@@ -161,23 +163,21 @@ class CreateDatabaseModelTests {
 
     @Test
     fun `createPressed should not call startCreating if coroutineJob is active`(){
-        doNothing().whenever(spyModel).createDatabase(any())
         spyModel.coroutineJob = mock { on {isActive} doReturn true }
         spyModel.createPressed(name, password)
 
         runBlocking {
-            verify(spyModel, never()).startCreating(name, password)
+            verify(spyModel, never()).createDatabase(name, password)
         }
     }
 
     @Test
     fun `createPressed should call startCreating if coroutineJob isn't active`(){
-        doNothing().whenever(spyModel).createDatabase(any())
         spyModel.coroutineJob = mock { on {isActive} doReturn false }
         spyModel.createPressed(name, password)
 
         runBlocking {
-            verify(spyModel).startCreating(name, password)
+            verify(spyModel).createDatabase(name, password)
         }
     }
 }
