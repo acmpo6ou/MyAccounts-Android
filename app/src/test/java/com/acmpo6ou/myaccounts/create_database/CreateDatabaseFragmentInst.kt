@@ -166,7 +166,7 @@ class CreateDatabaseFragmentInst {
         createScenario.onFragment {
             val pass = faker.str()
             runBlocking {
-                doNothing().whenever(spyModel).startCreating(name, pass)
+                doNothing().whenever(spyModel).createDatabase(name, pass)
             }
             it.viewModel = spyModel
 

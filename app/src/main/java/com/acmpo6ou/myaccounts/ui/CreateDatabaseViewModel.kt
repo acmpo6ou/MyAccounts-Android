@@ -22,10 +22,13 @@ package com.acmpo6ou.myaccounts.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.SuperViewModel
 import com.acmpo6ou.myaccounts.core.createDatabaseUtil
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.security.SecureRandom
 
 open class CreateDatabaseViewModel: SuperViewModel() {
@@ -149,22 +152,25 @@ open class CreateDatabaseViewModel: SuperViewModel() {
         return salt
     }
 
-    open fun createDatabase(database: Database) = createDatabaseUtil(database, SRC_DIR)
+    open fun createDatabaseAsync(database: Database) =
+        viewModelScope.async(defaultDispatcher){
+            createDatabaseUtil(database, SRC_DIR)
+        }
 
     /**
-     * This method creates database using [createDatabase] and given [name] and [password].
+     * This method creates database using [createDatabaseAsync] and given [name] and [password].
      *
      * Once the database is created it is added to the list.
      * If any error occurred it sets errorMsg to error message.
      * @param[name] name for the database.
      * @param[password] password for the database.
      */
-    open suspend fun startCreating(name: String, password: String){
+    open suspend fun createDatabase(name: String, password: String){
         try {
             // create database
             val salt = generateSalt()
             val database = Database(name, password, salt)
-            createDatabase(database)
+            createDatabaseAsync(database).await()
 
             // add it to the list, sort the list and notify about creation
             databases.add(database)
@@ -178,7 +184,11 @@ open class CreateDatabaseViewModel: SuperViewModel() {
     }
 
     open fun createPressed(name: String, password: String){
-        
+        if(!coroutineJob!!.isActive){
+            coroutineJob = viewModelScope.launch(uiDispatcher) {
+                createDatabase(name, password)
+            }
+        }
     }
 }
 
