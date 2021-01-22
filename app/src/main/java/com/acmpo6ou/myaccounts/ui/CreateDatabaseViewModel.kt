@@ -48,7 +48,6 @@ open class CreateDatabaseViewModel: SuperViewModel() {
     var diffPassErr: Boolean
         get() = diffPassErr_.value!!
         set(value) {diffPassErr_.value = value}
-
     var emptyPassErr: Boolean
         get() = emptyPassErr_.value!!
         set(value) {emptyPassErr_.value = value}
@@ -59,7 +58,7 @@ open class CreateDatabaseViewModel: SuperViewModel() {
         set(value) {createdIndex_.value = value}
 
     /**
-     * This LiveData value provides error message according
+     * This LiveData property provides error message according
      * to emptyNameErr_ and existsNameErr_ live data values.
      */
     val nameErrors = emptyNameErr_.combineWith(existsNameErr_) {
@@ -76,7 +75,7 @@ open class CreateDatabaseViewModel: SuperViewModel() {
     }
 
     /**
-     * This LiveData value provides error message according
+     * This LiveData property provides error message according
      * to emptyPassErr_ and diffPassErr_ live data values.
      */
     val passwordErrors = emptyPassErr_.combineWith(diffPassErr_) {
@@ -115,7 +114,7 @@ open class CreateDatabaseViewModel: SuperViewModel() {
     }
 
     /**
-     * This method validates given name, checks whether it's not empty and if database
+     * This method validates given name, checks whether it's not empty and whether database
      * with such name already exists.
      *
      * If name is empty [emptyNameErr] is set to true.
@@ -183,6 +182,10 @@ open class CreateDatabaseViewModel: SuperViewModel() {
         }
     }
 
+    /**
+     * Called when user presses `Create` button.
+     * Launches createDatabase only if it's not already launched.
+     */
     open fun createPressed(name: String, password: String){
         if(coroutineJob == null || !coroutineJob!!.isActive){
             coroutineJob = viewModelScope.launch(uiDispatcher) {
@@ -192,10 +195,13 @@ open class CreateDatabaseViewModel: SuperViewModel() {
     }
 }
 
+/**
+ * Helper extension function to combine 2 LiveData properties into one.
+ * Note: it's completely copied from StackOverflow.
+ */
 fun <T, K, R> LiveData<T>.combineWith(
         liveData: LiveData<K>,
-        block: (T?, K?) -> R
-): LiveData<R> {
+        block: (T?, K?) -> R): LiveData<R> {
     val result = MediatorLiveData<R>()
     result.addSource(this) {
         result.value = block(this.value, liveData.value)

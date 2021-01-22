@@ -50,9 +50,7 @@ class CreateDatabaseModelTests: ModelTest() {
         app.databases = mutableListOf(Database("main"))
 
         model.initialize(app, SRC_DIR)
-        spyModel = spy(model){
-            on{generateSalt()} doReturn salt
-        }
+        spyModel = spy(model){ on{generateSalt()} doReturn salt }
         spyModel.uiDispatcher = Dispatchers.Unconfined
         spyModel.defaultDispatcher = Dispatchers.Unconfined
     }
@@ -117,7 +115,7 @@ class CreateDatabaseModelTests: ModelTest() {
     }
 
     @Test
-    fun `startCreating should call createDatabaseAsync`(){
+    fun `createDatabase should call createDatabaseAsync`(){
         runBlocking {
             spyModel.createDatabase(name, password)
         }
@@ -125,7 +123,7 @@ class CreateDatabaseModelTests: ModelTest() {
     }
 
     @Test
-    fun `startCreating should handle any error`(){
+    fun `createDatabase should handle any error`(){
         val msg = faker.str()
         val exception = Exception(msg)
         whenever(spyModel.createDatabaseAsync(db))
@@ -140,7 +138,7 @@ class CreateDatabaseModelTests: ModelTest() {
     }
 
     @Test
-    fun `startCreating should add created Database to the list`(){
+    fun `createDatabase should add created Database to the list`(){
         runBlocking {
             spyModel.createDatabase(name, password)
         }
@@ -148,7 +146,7 @@ class CreateDatabaseModelTests: ModelTest() {
     }
 
     @Test
-    fun `startCreating should set createdIndex`(){
+    fun `createDatabase should set createdIndex`(){
         runBlocking {
             spyModel.createDatabase(name, password)
         }
@@ -157,7 +155,7 @@ class CreateDatabaseModelTests: ModelTest() {
     }
 
     @Test
-    fun `createPressed should not call startCreating if coroutineJob is active`(){
+    fun `createPressed should not call createDatabase if coroutineJob is active`(){
         spyModel.coroutineJob = mock { on {isActive} doReturn true }
         spyModel.createPressed(name, password)
 
@@ -167,7 +165,7 @@ class CreateDatabaseModelTests: ModelTest() {
     }
 
     @Test
-    fun `createPressed should call startCreating if coroutineJob isn't active`(){
+    fun `createPressed should call createDatabase if coroutineJob isn't active`(){
         spyModel.coroutineJob = mock { on {isActive} doReturn false }
         spyModel.createPressed(name, password)
 
@@ -177,7 +175,7 @@ class CreateDatabaseModelTests: ModelTest() {
     }
 
     @Test
-    fun `createPressed should call startCreating if coroutineJob is null`(){
+    fun `createPressed should call createDatabase if coroutineJob is null`(){
         spyModel.createPressed(name, password)
 
         runBlocking {
