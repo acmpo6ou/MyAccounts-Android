@@ -177,14 +177,14 @@ class OpenDatabaseViewModelTests {
     @Test
     fun `verifyPassword should handle any error`(){
         val msg = faker.str()
-        val expectedDetails = "java.lang.Exception $msg"
+        val exception = Exception(msg)
         doAnswer{
-            throw Exception(msg)
+            throw exception
         }.whenever(spyModel).openDatabase(any())
 
         runBlocking {
             spyModel.verifyPassword(password)
         }
-        assertEquals(expectedDetails, spyModel.errorMsg)
+        assertEquals(exception.toString(), spyModel.errorMsg)
     }
 }

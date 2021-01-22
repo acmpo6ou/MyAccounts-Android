@@ -106,6 +106,9 @@ open class OpenDatabaseViewModel : SuperViewModel() {
                 _incorrectPassword.value = false
                 _corrupted.value = true
             }
+            else{
+                errorMsg = e.toString()
+            }
             e.printStackTrace()
         }
     }
