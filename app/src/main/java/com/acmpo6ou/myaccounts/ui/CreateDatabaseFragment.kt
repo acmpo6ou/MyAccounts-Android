@@ -69,10 +69,6 @@ class CreateDatabaseFragment : ViewModelFragment() {
         binding = null
     }
 
-    override fun onStart() {
-        super.onStart()
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
