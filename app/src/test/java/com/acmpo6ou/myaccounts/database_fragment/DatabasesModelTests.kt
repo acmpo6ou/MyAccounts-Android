@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.database_fragment
 
 import com.acmpo6ou.myaccounts.ModelTest
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesModel
 import com.acmpo6ou.myaccounts.core.deriveKeyUtil
@@ -89,7 +90,7 @@ class DatabasesModelTests: ModelTest() {
     fun `deleteDatabase removes db and bin files from disk`(){
         // create empty database so that we can delete it using deleteDatabase
         val database = Database("main", "123", salt)
-        model.createDatabase(database)
+        model.createDatabase(database, MyApp())
 
         model.deleteDatabase("main")
 
@@ -110,14 +111,14 @@ class DatabasesModelTests: ModelTest() {
     private fun setUpSaveDatabase(){
         // this database will be deleted by saveDatabase
         val db = Database("test", "123", salt)
-        model.createDatabase(db)
+        model.createDatabase(db, MyApp())
 
         // this database will be created by saveDatabase
         val newDb = Database("test2", "321",
                 salt.reversedArray(), getDatabaseMap())
 
         // save newDb deleting db
-        model.saveDatabase("test", newDb)
+        model.saveDatabase("test", newDb, MyApp())
     }
 
     @Test

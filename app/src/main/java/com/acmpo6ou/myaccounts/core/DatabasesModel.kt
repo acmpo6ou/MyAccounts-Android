@@ -119,7 +119,8 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
      * @param[database] Database instance from which database name, password and salt are
      * extracted for database files creation.
      */
-    fun createDatabase(database: Database) = createDatabaseUtil(database, SRC_DIR)
+    fun createDatabase(database: Database, app: MyApp) =
+            createDatabaseUtil(database, SRC_DIR, app)
 
     /**
      * This method simply deletes old database (which is determined by [oldName]) and
@@ -129,9 +130,9 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
      * @param[oldName] name of the old database that is to be replaced.
      * @param[database] new Database to be created, replacing the old one.
      */
-    fun saveDatabase(oldName: String, database: Database){
+    fun saveDatabase(oldName: String, database: Database, app: MyApp){
         deleteDatabase(oldName)
-        createDatabase(database)
+        createDatabase(database, app)
     }
 
     /**

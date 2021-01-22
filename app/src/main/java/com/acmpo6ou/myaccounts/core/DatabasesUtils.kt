@@ -35,24 +35,52 @@ import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 
 /**
- * Used to open databases by given Database instance.
+ * Used to deserialize json string to database map.
  *
- * In particular opening database means reading content of corresponding .db file,
- * decrypting and deserializing it, then assigning deserialized database map to `data`
- * property of given Database.
- *
- * @param[database] Database instance with password, name and salt to open database.
- * @param[SRC_DIR] path to src directory that contains databases.
- * @param[app] application instance containing cache of cryptography keys used to open
- * database.
- * @return same Database instance but with `data` property filled with deserialized
- * database map.
+ * @param[jsonStr] json string to deserialize.
+ * @return when [jsonStr] is empty returns empty map, when it's not empty –
+ * deserialized database map.
  */
-fun openDatabaseUtil(database: Database, SRC_DIR: String, app: MyApp): Database {
-    val jsonStr = File("$SRC_DIR/${database.name}.db").readText()
-    val data = decryptDatabaseUtil(jsonStr, database.password!!, database.salt!!, app)
-    database.data = data
-    return database
+fun loadsUtil(jsonStr: String): DbMap{
+    var map = mapOf<String, Account>()
+    if (jsonStr.isNotEmpty()){
+        map = Json.decodeFromString(jsonStr)
+    }
+    return map
+}
+
+/**
+ * Method used to serialize database map to json string.
+ *
+ * @param[data] map to serialize.
+ * @return when [data] is empty returns empty string, when [data] is not empty –
+ * serialized json string.
+ */
+fun dumpsUtil(data: DbMap): String{
+    var json = ""
+    if (data.isNotEmpty()){
+        json = Json.encodeToString(data)
+    }
+    return json
+}
+
+/**
+ * This method creates fernet key given password and salt.
+ *
+ * @param[password] key password.
+ * @param[salt] salt for key.
+ * @return created fernet key.
+ */
+fun deriveKeyUtil(password: String, salt: ByteArray): Key {
+    val iterations = 100000
+    val derivedKeyLength = 256
+
+    val spec = PBEKeySpec(password.toCharArray(), salt, iterations, derivedKeyLength)
+    val secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
+
+    val key = secretKeyFactory.generateSecret(spec).encoded
+    val strKey = java.util.Base64.getUrlEncoder().encodeToString(key)
+    return Key(strKey)
 }
 
 /**
@@ -87,61 +115,47 @@ fun decryptDatabaseUtil(jsonString: String, password: String, salt: ByteArray, a
 }
 
 /**
- * This method creates fernet key given password and salt.
+ * This method is for database serialization and encryption.
  *
- * @param[password] key password.
- * @param[salt] salt for key.
- * @return created fernet key.
+ * @param[db] Database instance to encrypt.
+ * @return encrypted json string.
  */
-fun deriveKeyUtil(password: String, salt: ByteArray): Key {
-    val iterations = 100000
-    val derivedKeyLength = 256
-
-    val spec = PBEKeySpec(password.toCharArray(), salt, iterations, derivedKeyLength)
-    val secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
-
-    val key = secretKeyFactory.generateSecret(spec).encoded
-    val strKey = java.util.Base64.getUrlEncoder().encodeToString(key)
-    return Key(strKey)
+fun encryptDatabaseUtil(db: Database, app: MyApp): String{
+    val key = app.keyCache.getOrPut(db.password!!) {deriveKeyUtil(db.password!!, db.salt!!)}
+    val data = dumpsUtil(db.data)
+    val token = Token.generate(key, data)
+    return token.serialise()
 }
 
 /**
- * Used to deserialize json string to database map.
+ * Used to open databases by given Database instance.
  *
- * @param[jsonStr] json string to deserialize.
- * @return when [jsonStr] is empty returns empty map, when it's not empty –
- * deserialized database map.
- */
-fun loadsUtil(jsonStr: String): DbMap{
-    var map = mapOf<String, Account>()
-    if (jsonStr.isNotEmpty()){
-        map = Json.decodeFromString(jsonStr)
-    }
-    return map
-}
-
-/**
- * Method used to serialize database map to json string.
+ * In particular opening database means reading content of corresponding .db file,
+ * decrypting and deserializing it, then assigning deserialized database map to `data`
+ * property of given Database.
  *
- * @param[data] map to serialize.
- * @return when [data] is empty returns empty string, when [data] is not empty –
- * serialized json string.
+ * @param[database] Database instance with password, name and salt to open database.
+ * @param[SRC_DIR] path to src directory that contains databases.
+ * @param[app] application instance containing cache of cryptography keys used to open
+ * database.
+ * @return same Database instance but with `data` property filled with deserialized
+ * database map.
  */
-fun dumpsUtil(data: DbMap): String{
-    var json = ""
-    if (data.isNotEmpty()){
-        json = Json.encodeToString(data)
-    }
-    return json
+fun openDatabaseUtil(database: Database, SRC_DIR: String, app: MyApp): Database {
+    val jsonStr = File("$SRC_DIR/${database.name}.db").readText()
+    val data = decryptDatabaseUtil(jsonStr, database.password!!, database.salt!!, app)
+    database.data = data
+    return database
 }
 
 /**
  * Creates .db and .bin files for database given Database instance.
  *
  * @param[database] Database instance from which database name, password and salt are
+ * @param[SRC_DIR] path to src directory that contains databases.
  * extracted for database files creation.
  */
-fun createDatabaseUtil(database: Database, SRC_DIR: String) {
+fun createDatabaseUtil(database: Database, SRC_DIR: String, app: MyApp) {
     val name = database.name
 
     // create salt file
@@ -154,19 +168,6 @@ fun createDatabaseUtil(database: Database, SRC_DIR: String) {
     databaseFile.createNewFile()
 
     // encrypt and write database to .db file
-    val token = encryptDatabaseUtil(database)
+    val token = encryptDatabaseUtil(database, app)
     databaseFile.writeText(token)
-}
-
-/**
- * This method is for database serialization and encryption.
- *
- * @param[database] Database instance to encrypt.
- * @return encrypted json string.
- */
-fun encryptDatabaseUtil(database: Database): String{
-    val key = deriveKeyUtil(database.password!!, database.salt!!)
-    val data = dumpsUtil(database.data)
-    val token = Token.generate(key, data)
-    return token.serialise()
 }

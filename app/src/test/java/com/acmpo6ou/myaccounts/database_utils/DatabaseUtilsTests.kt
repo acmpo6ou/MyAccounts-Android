@@ -119,7 +119,7 @@ class DatabaseUtilsTests: ModelTest() {
         app = MyApp()
 
         val database = Database(faker.name().name(), password, salt, getDatabaseMap())
-        encryptDatabaseUtil(database)
+        encryptDatabaseUtil(database, app)
 
         // check that key was cached
         val expectedKey = deriveKeyUtil(password, salt)
@@ -167,7 +167,7 @@ class DatabaseUtilsTests: ModelTest() {
                 salt, dataMap)
 
         // get encrypted json string
-        val jsonStr = encryptDatabaseUtil(database)
+        val jsonStr = encryptDatabaseUtil(database, app)
 
         // here we decrypt the json string using salt and password we defined earlier
         // to check if it were encrypted correctly
@@ -180,7 +180,7 @@ class DatabaseUtilsTests: ModelTest() {
     @Test
     fun `createDatabaseUtil should create db file given Database instance`(){
         val database = Database("main", "123", salt, getDatabaseMap())
-        createDatabaseUtil(database, SRC_DIR)
+        createDatabaseUtil(database, SRC_DIR, app)
 
         // this is a .db file that createDatabase should create for us
         val actualDb = File("$SRC_DIR/main.db").readBytes()
@@ -194,7 +194,7 @@ class DatabaseUtilsTests: ModelTest() {
     @Test
     fun `createDatabaseUtil should create salt file given Database instance`(){
         val database = Database("main", "123", salt)
-        createDatabaseUtil(database, SRC_DIR)
+        createDatabaseUtil(database, SRC_DIR, app)
 
         // this is a salt file that createDatabase should create for us
         val actualBin = File("$SRC_DIR/main.bin").readBytes()

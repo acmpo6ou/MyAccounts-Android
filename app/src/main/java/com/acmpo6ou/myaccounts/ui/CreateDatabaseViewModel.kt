@@ -153,7 +153,7 @@ open class CreateDatabaseViewModel: SuperViewModel() {
 
     open fun createDatabaseAsync(database: Database) =
         viewModelScope.async(defaultDispatcher){
-            createDatabaseUtil(database, SRC_DIR)
+            createDatabaseUtil(database, SRC_DIR, app)
         }
 
     /**
