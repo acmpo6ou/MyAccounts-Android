@@ -184,7 +184,7 @@ open class CreateDatabaseViewModel: SuperViewModel() {
     }
 
     open fun createPressed(name: String, password: String){
-        if(!coroutineJob!!.isActive){
+        if(coroutineJob == null || !coroutineJob!!.isActive){
             coroutineJob = viewModelScope.launch(uiDispatcher) {
                 createDatabase(name, password)
             }
