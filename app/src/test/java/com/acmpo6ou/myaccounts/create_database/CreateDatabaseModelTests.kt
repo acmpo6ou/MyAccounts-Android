@@ -180,4 +180,13 @@ class CreateDatabaseModelTests {
             verify(spyModel).createDatabase(name, password)
         }
     }
+
+    @Test
+    fun `createPressed should call startCreating if coroutineJob is null`(){
+        spyModel.createPressed(name, password)
+
+        runBlocking {
+            verify(spyModel).createDatabase(name, password)
+        }
+    }
 }
