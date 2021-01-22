@@ -159,7 +159,7 @@ open class CreateDatabaseViewModel: SuperViewModel() {
      * @param[name] name for the database.
      * @param[password] password for the database.
      */
-    open fun createPressed(name: String, password: String){
+    open suspend fun startCreating(name: String, password: String){
         try {
             // create database
             val salt = generateSalt()
@@ -175,6 +175,10 @@ open class CreateDatabaseViewModel: SuperViewModel() {
             errorMsg = e.toString()
             e.printStackTrace()
         }
+    }
+
+    open fun createPressed(name: String, password: String){
+        
     }
 }
 
