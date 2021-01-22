@@ -145,12 +145,12 @@ fun createDatabaseUtil(database: Database, SRC_DIR: String) {
     val name = database.name
 
     // create salt file
-    val saltFile = File("$SRC_DIR$name.bin")
+    val saltFile = File("$SRC_DIR/$name.bin")
     saltFile.createNewFile()
     saltFile.writeBytes(database.salt!!)
 
     // create database file
-    val databaseFile = File("$SRC_DIR$name.db")
+    val databaseFile = File("$SRC_DIR/$name.db")
     databaseFile.createNewFile()
 
     // encrypt and write database to .db file
