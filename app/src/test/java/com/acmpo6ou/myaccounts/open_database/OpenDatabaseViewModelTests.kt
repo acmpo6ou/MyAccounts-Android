@@ -138,7 +138,7 @@ class OpenDatabaseViewModelTests {
 
     @Test
     fun `startPasswordCheck should not start verifyPassword if passwordJob already active`(){
-        spyModel.passwordJob = mock { on {isActive} doReturn true }
+        spyModel.coroutineJob = mock { on {isActive} doReturn true }
         spyModel.startPasswordCheck(password)
 
         runBlocking {
@@ -157,7 +157,7 @@ class OpenDatabaseViewModelTests {
 
     @Test
     fun `startPasswordCheck should start verifyPassword if passwordJob isn't active`(){
-        spyModel.passwordJob = mock { on {isActive} doReturn false }
+        spyModel.coroutineJob = mock { on {isActive} doReturn false }
         spyModel.startPasswordCheck(password)
 
         runBlocking {

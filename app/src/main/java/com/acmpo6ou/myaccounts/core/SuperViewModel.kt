@@ -22,8 +22,15 @@ package com.acmpo6ou.myaccounts.core
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.acmpo6ou.myaccounts.MyApp
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 
 open class SuperViewModel: ViewModel() {
+    var defaultDispatcher = Dispatchers.Default
+    var uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    var coroutineJob: Job? = null
+
     var databaseIndex: Int = 0
     lateinit var app: MyApp
     lateinit var SRC_DIR: String
