@@ -72,12 +72,6 @@ class DatabaseFragment: SuperFragment(), DatabaseFragmentInter {
         // initializing recycler's adapter and presenter
         adapter = DatabasesAdapter(this)
         presenter = DatabasesPresenter(this)
-
-        // add some databases for testing
-        databases = mutableListOf(
-                Database("main"), // locked
-                Database("test", password = "123") // opened
-        )
     }
 
     override fun onCreateView(
