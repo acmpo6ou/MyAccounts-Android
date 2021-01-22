@@ -26,6 +26,7 @@ import com.acmpo6ou.myaccounts.str
 import com.acmpo6ou.myaccounts.ui.CreateDatabaseViewModel
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.*
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
@@ -119,13 +120,15 @@ class CreateDatabaseModelTests {
     }
 
     @Test
-    fun `createPressed should call createDatabase`(){
-        spyModel.createPressed(name, password)
+    fun `startCreating should call createDatabase`(){
+        runBlocking {
+            spyModel.startCreating(name, password)
+        }
         verify(spyModel).createDatabase(db)
     }
 
     @Test
-    fun `createPressed should handle any error`(){
+    fun `startCreating should handle any error`(){
         val msg = faker.str()
         val exception = Exception(msg)
         whenever(spyModel.createDatabase(db))
@@ -133,20 +136,48 @@ class CreateDatabaseModelTests {
                     throw exception
                 }
 
-        spyModel.createPressed(name, password)
+        runBlocking {
+            spyModel.startCreating(name, password)
+        }
         assertEquals(exception.toString(), spyModel.errorMsg)
     }
 
     @Test
-    fun `createPressed should add created Database to the list`(){
-        spyModel.createPressed(name, password)
+    fun `startCreating should add created Database to the list`(){
+        runBlocking {
+            spyModel.startCreating(name, password)
+        }
         assertTrue(db in spyModel.databases)
     }
 
     @Test
-    fun `createPressed should set createdIndex`(){
-        spyModel.createPressed(name, password)
+    fun `startCreating should set createdIndex`(){
+        runBlocking {
+            spyModel.startCreating(name, password)
+        }
         val index = spyModel.databases.indexOf(db)
         assertEquals(index, spyModel.createdIndex)
+    }
+
+    @Test
+    fun `createPressed should not call startCreating if coroutineJob is active`(){
+        doNothing().whenever(spyModel).createDatabase(any())
+        spyModel.coroutineJob = mock { on {isActive} doReturn true }
+        spyModel.createPressed(name, password)
+
+        runBlocking {
+            verify(spyModel, never()).startCreating(name, password)
+        }
+    }
+
+    @Test
+    fun `createPressed should call startCreating if coroutineJob isn't active`(){
+        doNothing().whenever(spyModel).createDatabase(any())
+        spyModel.coroutineJob = mock { on {isActive} doReturn false }
+        spyModel.createPressed(name, password)
+
+        runBlocking {
+            verify(spyModel).startCreating(name, password)
+        }
     }
 }

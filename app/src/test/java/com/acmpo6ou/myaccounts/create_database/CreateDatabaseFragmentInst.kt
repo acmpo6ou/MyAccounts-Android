@@ -33,6 +33,7 @@ import com.nhaarman.mockitokotlin2.doNothing
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
@@ -164,7 +165,9 @@ class CreateDatabaseFragmentInst {
     fun `press on databaseCreate should call createPressed`(){
         createScenario.onFragment {
             val pass = faker.str()
-            doNothing().whenever(spyModel).startCreating(name, pass)
+            runBlocking {
+                doNothing().whenever(spyModel).startCreating(name, pass)
+            }
             it.viewModel = spyModel
 
             it.b.databaseName.setText(name)
