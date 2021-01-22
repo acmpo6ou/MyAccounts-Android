@@ -26,6 +26,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 
+/**
+ * Super class for all view models.
+ */
 open class SuperViewModel: ViewModel() {
     var defaultDispatcher = Dispatchers.Default
     var uiDispatcher: CoroutineDispatcher = Dispatchers.Main
@@ -61,7 +64,7 @@ open class SuperViewModel: ViewModel() {
      * @param[SRC_DIR] path to src directory that contains databases.
      * @param[titleStart] string resource used to construct app bar title.
      * @param[databaseIndex] index of database on which operations are performed.
-     * Note not all ViewModels need [databaseIndex] property, example is
+     * Note not all ViewModels need [databaseIndex] and [titleStart] properties, example is
      * CreateDatabaseViewModel.
      */
     open fun initialize(app: MyApp, SRC_DIR: String, titleStart: String? = null,
@@ -69,7 +72,7 @@ open class SuperViewModel: ViewModel() {
         this.app = app
         this.SRC_DIR = SRC_DIR
 
-        // set app bar title if databaseIndex is passed
+        // set app bar title if databaseIndex and titleStart are passed
         databaseIndex?.let {
             this.titleStart = titleStart!!
             this.databaseIndex = it

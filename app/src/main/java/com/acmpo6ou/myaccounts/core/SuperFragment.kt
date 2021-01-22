@@ -23,6 +23,9 @@ import android.content.Intent
 import androidx.fragment.app.Fragment
 import com.acmpo6ou.myaccounts.AccountsActivity
 
+/**
+ * Super class for all fragments.
+ */
 open class SuperFragment: Fragment() {
     /**
      * Used to start AccountsActivity for given database.

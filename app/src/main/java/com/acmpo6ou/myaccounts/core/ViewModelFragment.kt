@@ -22,10 +22,16 @@ package com.acmpo6ou.myaccounts.core
 import androidx.lifecycle.Observer
 import com.acmpo6ou.myaccounts.R
 
+/**
+ * Super class for all fragments that use view models.
+ */
 abstract class ViewModelFragment: SuperFragment() {
     abstract val viewModel: SuperViewModel
     abstract val mainActivity: MainActivityInter
 
+    /**
+     * Observer to display error dialog when errorMsg of ViewModel changes.
+     */
     private val errorObserver = Observer<String>{
         val errorTitle = mainActivity.myContext.resources.getString(R.string.error_title)
         mainActivity.showError(errorTitle, it)
@@ -34,5 +40,4 @@ abstract class ViewModelFragment: SuperFragment() {
     open fun initModel(){
         viewModel.errorMsg_.observe(viewLifecycleOwner, errorObserver)
     }
-
 }

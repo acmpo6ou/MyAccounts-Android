@@ -165,7 +165,7 @@ class DatabaseUtilsTests: ModelTest() {
     }
 
     @Test
-    fun `createDatabase should create db file given Database instance`(){
+    fun `createDatabaseUtil should create db file given Database instance`(){
         val database = Database("main", "123", salt, getDatabaseMap())
         createDatabaseUtil(database, SRC_DIR)
 
@@ -174,19 +174,19 @@ class DatabaseUtilsTests: ModelTest() {
 
         // here we decrypt data saved to .db file to check that it was encrypted correctly
         val data = decryptStr(String(actualDb), "123", salt)
-        assertEquals("createDatabase creates incorrectly encrypted database!",
+        assertEquals("createDatabaseUtil creates incorrectly encrypted database!",
                 jsonDatabase, data)
     }
 
     @Test
-    fun `createDatabase should create salt file given Database instance`(){
+    fun `createDatabaseUtil should create salt file given Database instance`(){
         val database = Database("main", "123", salt)
         createDatabaseUtil(database, SRC_DIR)
 
         // this is a salt file that createDatabase should create for us
         val actualBin = File("$SRC_DIR/main.bin").readBytes()
 
-        assertEquals("createDatabase created incorrect salt file!",
+        assertEquals("createDatabaseUtil created incorrect salt file!",
                 String(salt), String(actualBin))
     }
 }
