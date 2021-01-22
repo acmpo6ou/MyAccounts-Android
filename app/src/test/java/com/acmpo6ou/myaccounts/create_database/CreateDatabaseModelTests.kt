@@ -20,11 +20,11 @@
 package com.acmpo6ou.myaccounts.create_database
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.str
 import com.acmpo6ou.myaccounts.ui.CreateDatabaseViewModel
-import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -33,28 +33,23 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class CreateDatabaseModelTests {
+class CreateDatabaseModelTests: ModelTest() {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 
     val model = CreateDatabaseViewModel()
     lateinit var spyModel: CreateDatabaseViewModel
 
-    val faker = Faker()
     private val name = faker.str()
-    private val password = faker.str()
-    private val salt = "1234567890abcdef".toByteArray()
+    override val password = faker.str()
     private val db = Database(name, password, salt)
-
-    val SRC_DIR = "sampledata/src/"
-    val titleStart = faker.str()
 
     @Before
     fun setup(){
         val app = MyApp()
         app.databases = mutableListOf(Database("main"))
 
-        model.initialize(app, titleStart, SRC_DIR)
+        model.initialize(app, SRC_DIR)
         spyModel = spy(model){
             on{generateSalt()} doReturn salt
         }

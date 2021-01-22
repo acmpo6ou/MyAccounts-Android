@@ -33,7 +33,7 @@ import java.io.FileOutputStream
 open class ModelTest {
     val faker = Faker()
 
-    val password = "123"
+    open val password = "123"
     var salt = "0123456789abcdef".toByteArray() // 16 bytes of salt
     val jsonDatabase =
             "{\"gmail\":{\"account\":\"gmail\",\"name\":\"Tom\",\"email\":"+
