@@ -69,8 +69,7 @@ open class OpenDatabaseViewModel : SuperViewModel() {
 
             val database = databases[databaseIndex].copy()
             // get salt
-            val bin = File("$SRC_DIR/${database.name}.bin").readText()
-            val salt = bin.toByteArray()
+            val salt = File("$SRC_DIR/${database.name}.bin").readBytes()
 
             // set password and salt
             database.password = password
