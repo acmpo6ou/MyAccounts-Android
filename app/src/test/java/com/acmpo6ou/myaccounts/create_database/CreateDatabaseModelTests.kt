@@ -151,8 +151,7 @@ class CreateDatabaseModelTests: ModelTest() {
         runBlocking {
             spyModel.createDatabase(name, password)
         }
-        val index = spyModel.databases.indexOf(db)
-        assertEquals(index, spyModel.created)
+        assertTrue(spyModel.created)
     }
 
     @Test

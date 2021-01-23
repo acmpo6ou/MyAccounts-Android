@@ -52,8 +52,8 @@ open class CreateDatabaseViewModel: SuperViewModel() {
         get() = emptyPassErr_.value!!
         set(value) {emptyPassErr_.value = value}
 
-    val created_ = MutableLiveData<Int>()
-    var created: Int
+    val created_ = MutableLiveData<Boolean>()
+    var created
         get() = created_.value!!
         set(value) {created_.value = value}
 
@@ -177,7 +177,7 @@ open class CreateDatabaseViewModel: SuperViewModel() {
             // add it to the list, sort the list and notify about creation
             databases.add(database)
             databases.sortBy { it.name }
-            created = databases.indexOf(database)
+            created = true
         }
         catch (e: Exception){
             // notify about error and hide loading progress bar
