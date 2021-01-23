@@ -186,5 +186,6 @@ class OpenDatabaseViewModelTests {
             spyModel.verifyPassword(password)
         }
         assertEquals(exception.toString(), spyModel.errorMsg)
+        assertFalse(spyModel.loading)
     }
 }

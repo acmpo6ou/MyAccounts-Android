@@ -135,6 +135,7 @@ class CreateDatabaseModelTests: ModelTest() {
             spyModel.createDatabase(name, password)
         }
         assertEquals(exception.toString(), spyModel.errorMsg)
+        assertFalse(spyModel.loading)
     }
 
     @Test
