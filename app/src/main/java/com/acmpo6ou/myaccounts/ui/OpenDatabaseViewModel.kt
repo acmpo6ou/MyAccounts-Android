@@ -31,12 +31,10 @@ import java.io.File
 
 open class OpenDatabaseViewModel : SuperViewModel() {
     val _incorrectPassword = MutableLiveData(false)
-    val _loading = MutableLiveData(false)
     val _corrupted = MutableLiveData(false)
     val _opened = MutableLiveData(false)
 
     val incorrectPassword get() = _incorrectPassword.value!!
-    val loading get() = _loading.value!!
     val corrupted get() = _corrupted.value!!
     val opened get() = _opened.value!!
 
@@ -104,7 +102,9 @@ open class OpenDatabaseViewModel : SuperViewModel() {
                 _corrupted.value = true
             }
             else{
+                // notify about error and hide loading progress bar
                 errorMsg = e.toString()
+                loading = false
             }
             e.printStackTrace()
         }

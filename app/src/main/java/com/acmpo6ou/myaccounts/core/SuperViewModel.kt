@@ -51,6 +51,11 @@ open class SuperViewModel: ViewModel() {
         get() = _title.value!!
         set(value) {_title.value = value}
 
+    val _loading = MutableLiveData(false)
+    var loading
+        get() = _loading.value!!
+        set(value) {_loading.value = value}
+
     val errorMsg_ = MutableLiveData<String>()
     var errorMsg: String
         get() = errorMsg_.value!!
