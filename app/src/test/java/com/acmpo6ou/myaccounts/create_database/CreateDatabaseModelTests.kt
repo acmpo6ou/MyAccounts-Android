@@ -147,12 +147,12 @@ class CreateDatabaseModelTests: ModelTest() {
     }
 
     @Test
-    fun `createDatabase should set createdIndex`(){
+    fun `createDatabase should set created`(){
         runBlocking {
             spyModel.createDatabase(name, password)
         }
         val index = spyModel.databases.indexOf(db)
-        assertEquals(index, spyModel.createdIndex)
+        assertEquals(index, spyModel.created)
     }
 
     @Test

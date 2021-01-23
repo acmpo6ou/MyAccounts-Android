@@ -52,10 +52,10 @@ open class CreateDatabaseViewModel: SuperViewModel() {
         get() = emptyPassErr_.value!!
         set(value) {emptyPassErr_.value = value}
 
-    val createdIndex_ = MutableLiveData<Int>()
-    var createdIndex: Int
-        get() = createdIndex_.value!!
-        set(value) {createdIndex_.value = value}
+    val created_ = MutableLiveData<Int>()
+    var created: Int
+        get() = created_.value!!
+        set(value) {created_.value = value}
 
     /**
      * This LiveData property provides error message according
@@ -177,7 +177,7 @@ open class CreateDatabaseViewModel: SuperViewModel() {
             // add it to the list, sort the list and notify about creation
             databases.add(database)
             databases.sortBy { it.name }
-            createdIndex = databases.indexOf(database)
+            created = databases.indexOf(database)
         }
         catch (e: Exception){
             // notify about error and hide loading progress bar
