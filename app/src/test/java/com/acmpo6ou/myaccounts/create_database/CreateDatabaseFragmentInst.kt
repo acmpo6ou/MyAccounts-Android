@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.create_database
 
+import android.view.View
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
@@ -33,7 +34,6 @@ import com.nhaarman.mockitokotlin2.doNothing
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
@@ -165,9 +165,7 @@ class CreateDatabaseFragmentInst {
     fun `press on databaseCreate should call createPressed`(){
         createScenario.onFragment {
             val pass = faker.str()
-            runBlocking {
-                doNothing().whenever(spyModel).createDatabase(name, pass)
-            }
+            doNothing().whenever(spyModel).createPressed(name, pass)
             it.viewModel = spyModel
 
             it.b.databaseName.setText(name)
@@ -176,6 +174,21 @@ class CreateDatabaseFragmentInst {
 
             it.b.databaseCreate.performClick()
             verify(spyModel).createPressed(name, pass)
+        }
+    }
+
+    @Test
+    fun `should display or hide progress bar depending on 'loading' of view model`(){
+        createScenario.onFragment {
+            // when loading is true progress bar should be displayed and button - disabled
+            it.viewModel._loading.value = true
+            assertEquals(View.VISIBLE, it.b.progressLoading.visibility)
+            assertFalse(it.b.databaseCreate.isEnabled)
+
+            // when loading false progress bar should be hidden and button - enabled
+            it.viewModel._loading.value = false
+            assertEquals(View.GONE, it.b.progressLoading.visibility)
+            assertTrue(it.b.databaseCreate.isEnabled)
         }
     }
 }
