@@ -55,6 +55,21 @@ class CreateDatabaseFragment : ViewModelFragment() {
         b.databaseCreate.isEnabled = it
     }
 
+    /**
+     * This observer hides/displays loading progress bar of `Create` button
+     * depending on `loading` live data of view model.
+     */
+    private val loadingObserver = Observer<Boolean> {
+        if(it) {
+            b.progressLoading.visibility = View.VISIBLE
+            b.databaseCreate.isEnabled = false
+        }
+        else{
+            b.progressLoading.visibility = View.GONE
+            b.databaseCreate.isEnabled = true
+        }
+    }
+
     var binding: CreateEditDatabaseFragmentBinding? = null
     val b: CreateEditDatabaseFragmentBinding get() = binding!!
 
@@ -133,6 +148,7 @@ class CreateDatabaseFragment : ViewModelFragment() {
                 nameErrors.observe(it, nameErrorObserver)
                 passwordErrors.observe(it, passwordErrorObserver)
                 createEnabled.observe(it, createEnabledObserver)
+                _loading.observe(it, loadingObserver)
             }
         }
 
