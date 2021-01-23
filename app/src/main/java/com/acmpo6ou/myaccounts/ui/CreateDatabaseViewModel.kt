@@ -166,6 +166,9 @@ open class CreateDatabaseViewModel: SuperViewModel() {
      */
     open suspend fun createDatabase(name: String, password: String){
         try {
+            // display loading progress bar
+            loading = true
+
             // create database
             val salt = generateSalt()
             val database = Database(name, password, salt)
@@ -177,7 +180,9 @@ open class CreateDatabaseViewModel: SuperViewModel() {
             createdIndex = databases.indexOf(database)
         }
         catch (e: Exception){
+            // notify about error and hide loading progress bar
             errorMsg = e.toString()
+            loading = false
             e.printStackTrace()
         }
     }

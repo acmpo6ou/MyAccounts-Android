@@ -156,6 +156,14 @@ class CreateDatabaseModelTests: ModelTest() {
     }
 
     @Test
+    fun `createDatabase should set loading to true`(){
+        runBlocking {
+            spyModel.createDatabase(name, password)
+        }
+        assertTrue(spyModel.loading)
+    }
+
+    @Test
     fun `createPressed should not call createDatabase if coroutineJob is active`(){
         spyModel.coroutineJob = mock { on {isActive} doReturn true }
         spyModel.createPressed(name, password)
