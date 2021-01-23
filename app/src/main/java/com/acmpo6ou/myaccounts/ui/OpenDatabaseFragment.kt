@@ -24,7 +24,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -173,7 +172,6 @@ class OpenDatabaseFragment: ViewModelFragment() {
         super.startDatabase(index)
 
         // navigate back to DatabaseFragment
-        val mainActivity = myContext as AppCompatActivity
         mainActivity.findNavController(R.id.nav_host_fragment).navigateUp()
     }
 }
