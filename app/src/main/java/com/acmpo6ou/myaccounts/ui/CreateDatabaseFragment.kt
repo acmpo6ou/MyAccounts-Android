@@ -28,8 +28,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.ViewModelFragment
 import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
 
@@ -68,6 +70,14 @@ class CreateDatabaseFragment : ViewModelFragment() {
             b.progressLoading.visibility = View.GONE
             b.databaseCreate.isEnabled = true
         }
+    }
+
+    /**
+     * This observer invoked when database is successfully created.
+     * It navigates back to the DatabaseFragment.
+     */
+    val createdObserver = Observer<Boolean>{
+        mainActivity.findNavController(R.id.nav_host_fragment).navigateUp()
     }
 
     var binding: CreateEditDatabaseFragmentBinding? = null
@@ -149,6 +159,7 @@ class CreateDatabaseFragment : ViewModelFragment() {
                 passwordErrors.observe(it, passwordErrorObserver)
                 createEnabled.observe(it, createEnabledObserver)
                 _loading.observe(it, loadingObserver)
+                created_.observe(it, createdObserver)
             }
         }
 
