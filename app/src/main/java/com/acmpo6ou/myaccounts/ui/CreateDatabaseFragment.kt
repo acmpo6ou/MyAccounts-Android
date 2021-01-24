@@ -32,6 +32,7 @@ import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.core.GeneratePassword
 import com.acmpo6ou.myaccounts.core.ViewModelFragment
 import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
 
@@ -139,6 +140,10 @@ class CreateDatabaseFragment : ViewModelFragment() {
                                             b.databaseRepeatPassword.text.toString())
             }
         })
+
+        b.databaseGenerate.setOnClickListener {
+            GeneratePassword(mainActivity, b.databasePassword, b.databaseRepeatPassword)
+        }
 
         // call createPressed when clicking on `Create` button
         b.databaseCreate.setOnClickListener {

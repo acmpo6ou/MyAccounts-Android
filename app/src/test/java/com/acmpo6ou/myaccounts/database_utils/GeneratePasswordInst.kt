@@ -108,4 +108,9 @@ class GeneratePasswordInst {
         // check passwords
         assertEquals(text1, text2)
     }
+
+    @Test
+    fun `should not set password if no character check boxes selected`(){
+
+    }
 }
