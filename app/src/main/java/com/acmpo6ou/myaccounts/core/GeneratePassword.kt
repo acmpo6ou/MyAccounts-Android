@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts.core
 
 import android.app.Dialog
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.NumberPicker
 import androidx.appcompat.app.AppCompatActivity
 import com.acmpo6ou.myaccounts.R
@@ -31,6 +32,12 @@ open class GeneratePassword(activity: AppCompatActivity,
     val dialog: Dialog = Dialog(activity)
     val generateButton: Button
     val length: NumberPicker
+
+    val digitsBox: CheckBox
+    val lowerBox: CheckBox
+    val upperBox: CheckBox
+    val punctBox: CheckBox
+    val checkBoxes: List<CheckBox>
 
     val digits = ('0'..'9').joinToString("")
     val lower = ('a'..'z').joinToString("")
@@ -43,11 +50,28 @@ open class GeneratePassword(activity: AppCompatActivity,
         generateButton = dialog.findViewById(R.id.generateButton)
         length = dialog.findViewById(R.id.passwordLength)
 
+        // check boxes
+        digitsBox = dialog.findViewById(R.id.numbersBox)
+        lowerBox = dialog.findViewById(R.id.lowerLettersBox)
+        upperBox = dialog.findViewById(R.id.upperLettersBox)
+        punctBox = dialog.findViewById(R.id.punctBox)
+        checkBoxes = listOf(digitsBox, lowerBox, upperBox, punctBox)
+
         dialog.setTitle("Generate password")
         length.value = 16 // set default length
 
         generateButton.setOnClickListener {
-            val password = genPass(length.value, allChars)
+            // get all selected checkboxes
+            val chars = mutableListOf<String>()
+            for (box in checkBoxes){
+                // add characters of corresponding check box if it is checked
+                if (box.isChecked){
+                    val index = checkBoxes.indexOf(box)
+                    chars.add(allChars[index])
+                }
+            }
+
+            val password = genPass(length.value, chars)
             pass1.setText(password)
         }
         dialog.show()

@@ -23,11 +23,15 @@ import androidx.test.core.app.ActivityScenario
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.GeneratePassword
+import com.acmpo6ou.myaccounts.core.hasoneof
 import com.google.android.material.textfield.TextInputEditText
 import com.nhaarman.mockitokotlin2.argThat
+import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import junit.framework.TestCase.assertTrue
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -61,6 +65,25 @@ class GeneratePasswordInst {
 
             dialog.generateButton.performClick()
             verify(pass1).setText(argThat<String> { length == 16 })
+        }
+    }
+
+    @Test
+    fun `click on generateButton should generate password using correct characters`(){
+        scenario.onActivity {
+            // password should contain only upper letters and digits
+            dialog.lowerBox.isChecked = false
+            dialog.punctBox.isChecked = false
+
+            dialog.generateButton.performClick()
+            argumentCaptor<String>{
+                verify(pass1).setText(capture())
+
+                assertTrue(firstValue hasoneof dialog.digits)
+                assertTrue(firstValue hasoneof dialog.upper)
+                assertFalse(firstValue hasoneof dialog.lower)
+                assertFalse(firstValue hasoneof dialog.punctuation)
+            }
         }
     }
 }
