@@ -23,10 +23,10 @@ import android.app.Dialog
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
-import android.widget.NumberPicker
 import androidx.appcompat.app.AppCompatActivity
 import com.acmpo6ou.myaccounts.R
 import com.google.android.material.textfield.TextInputEditText
+import com.shawnlin.numberpicker.NumberPicker
 
 open class GeneratePassword(activity: AppCompatActivity,
                        pass1: TextInputEditText, pass2: TextInputEditText) {
@@ -60,15 +60,10 @@ open class GeneratePassword(activity: AppCompatActivity,
         punctBox = dialog.findViewById(R.id.punctBox)
         checkBoxes = listOf(digitsBox, lowerBox, upperBox, punctBox)
 
-        dialog.setTitle("Generate password")
-
         // set width and height
         val width = (activity.resources.displayMetrics.widthPixels * 0.90).toInt()
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
         dialog.window?.setLayout(width, height)
-
-        length.value = 16 // set default length
-        length.minValue = 8
 
         generateButton.setOnClickListener {
             // get all selected checkboxes
