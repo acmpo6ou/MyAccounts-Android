@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.core
 
 import android.app.Dialog
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.NumberPicker
@@ -60,6 +61,12 @@ open class GeneratePassword(activity: AppCompatActivity,
         checkBoxes = listOf(digitsBox, lowerBox, upperBox, punctBox)
 
         dialog.setTitle("Generate password")
+
+        // set width and height
+        val width = (activity.resources.displayMetrics.widthPixels * 0.90).toInt()
+        val height = ViewGroup.LayoutParams.WRAP_CONTENT
+        dialog.window?.setLayout(width, height)
+
         length.value = 16 // set default length
         length.minValue = 8
 
