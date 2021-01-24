@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.core
 
 import android.app.Dialog
+import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.NumberPicker
@@ -61,6 +62,7 @@ open class GeneratePassword(activity: AppCompatActivity,
 
         dialog.setTitle("Generate password")
         length.value = 16 // set default length
+        length.minValue = 8
 
         generateButton.setOnClickListener {
             // get all selected checkboxes
@@ -77,6 +79,8 @@ open class GeneratePassword(activity: AppCompatActivity,
             val password = genPass(length.value, chars)
             pass1.setText(password)
             pass2.setText(password)
+
+            dialog.dismiss()
         }
         cancelButton.setOnClickListener {
             dialog.dismiss()
