@@ -22,8 +22,7 @@ package com.acmpo6ou.myaccounts.database_utils
 import com.acmpo6ou.myaccounts.core.GeneratePassword
 import com.acmpo6ou.myaccounts.core.hasoneof
 import com.nhaarman.mockitokotlin2.mock
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Test
 
 class GeneratePasswordTests {
@@ -31,10 +30,16 @@ class GeneratePasswordTests {
 
     @Test
     fun `genPass should generate password from passed characters only`(){
-        val password = dialog.genPass(16, listOf(dialog.digits))
+        val password = dialog.genPass(16, listOf(dialog.digits, dialog.lower))
         assertTrue(password hasoneof dialog.digits)
-        assertFalse(password hasoneof dialog.lower)
+        assertTrue(password hasoneof dialog.lower)
         assertFalse(password hasoneof dialog.upper)
         assertFalse(password hasoneof dialog.punctuation)
+    }
+
+    @Test
+    fun `genPass should generate password of specified length`(){
+        val password = dialog.genPass(16, dialog.allChars)
+        assertEquals(16, password.length)
     }
 }
