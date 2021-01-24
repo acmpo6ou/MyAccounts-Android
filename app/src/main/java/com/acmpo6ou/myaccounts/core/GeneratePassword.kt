@@ -20,7 +20,6 @@
 package com.acmpo6ou.myaccounts.core
 
 import android.app.Dialog
-import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.NumberPicker
@@ -73,6 +72,12 @@ open class GeneratePassword(activity: AppCompatActivity,
                     val index = checkBoxes.indexOf(box)
                     chars.add(allChars[index])
                 }
+            }
+
+            // do not proceed if no checkboxes are checked
+            if(chars.isEmpty()){
+                dialog.dismiss()
+                return@setOnClickListener
             }
 
             // generate password and set it on password fields

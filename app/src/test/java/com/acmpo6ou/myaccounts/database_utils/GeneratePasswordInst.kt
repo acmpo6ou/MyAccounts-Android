@@ -25,16 +25,14 @@ import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.GeneratePassword
 import com.acmpo6ou.myaccounts.core.hasoneof
 import com.google.android.material.textfield.TextInputEditText
-import com.nhaarman.mockitokotlin2.argThat
-import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
 import junit.framework.TestCase.assertTrue
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers.anyString
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.LooperMode
 
@@ -111,6 +109,14 @@ class GeneratePasswordInst {
 
     @Test
     fun `should not set password if no character check boxes selected`(){
+        // all checkboxes are unchecked
+        dialog.lowerBox.isChecked = false
+        dialog.upperBox.isChecked = false
+        dialog.digitsBox.isChecked = false
+        dialog.punctBox.isChecked = false
 
+        dialog.generateButton.performClick()
+        verify(pass1, never()).setText(anyString())
+        verify(pass2, never()).setText(anyString())
     }
 }
