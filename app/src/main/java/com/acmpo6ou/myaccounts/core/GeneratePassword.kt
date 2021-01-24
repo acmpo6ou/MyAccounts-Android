@@ -20,12 +20,18 @@
 package com.acmpo6ou.myaccounts.core
 
 import android.app.Dialog
+import android.widget.Button
+import android.widget.NumberPicker
 import androidx.appcompat.app.AppCompatActivity
 import com.acmpo6ou.myaccounts.R
 import com.google.android.material.textfield.TextInputEditText
 
-class GeneratePassword(activity: AppCompatActivity,
+open class GeneratePassword(activity: AppCompatActivity,
                        pass1: TextInputEditText, pass2: TextInputEditText) {
+    val dialog: Dialog = Dialog(activity)
+    val generateButton: Button
+    val length: NumberPicker
+
     val digits = ('0'..'9').joinToString("")
     val lower = ('a'..'z').joinToString("")
     val upper = lower.toUpperCase()
@@ -33,9 +39,18 @@ class GeneratePassword(activity: AppCompatActivity,
     val allChars = listOf(digits, lower, upper, punctuation)
 
     init{
-        val dialog = Dialog(activity)
-        dialog.setTitle("Generate password")
         dialog.setContentView(R.layout.generate_password)
+        generateButton = dialog.findViewById(R.id.generateButton)
+        length = dialog.findViewById(R.id.passwordLength)
+
+        dialog.setTitle("Generate password")
+        length.value = 16 // set default length
+
+        generateButton.setOnClickListener {
+            val password = genPass(length.value, allChars)
+            pass1.setText(password)
+        }
+        dialog.show()
     }
 
     /**
@@ -45,7 +60,7 @@ class GeneratePassword(activity: AppCompatActivity,
      * @param[chars] [List] of [String] of characters from which password will be generated.
      * @return generated random password.
      */
-    fun genPass(len: Int, chars: List<String>): String {
+    open fun genPass(len: Int, chars: List<String>): String {
         // here we generate the password using [len] parameter and strings
         // that are passed to genPass and packed to [chars]
         val password =  (1..len)
