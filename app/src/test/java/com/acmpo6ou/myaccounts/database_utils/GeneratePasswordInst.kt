@@ -86,4 +86,26 @@ class GeneratePasswordInst {
             }
         }
     }
+
+    @Test
+    fun `generated password should be set on password fields`(){
+        // passwords from both fields
+        var text1 = ""
+        var text2 = ""
+
+        dialog.generateButton.performClick()
+
+        // get passwords from fields
+        argumentCaptor<String>{
+            verify(pass1).setText(capture())
+            text1 = firstValue
+        }
+        argumentCaptor<String>{
+            verify(pass2).setText(capture())
+            text2 = firstValue
+        }
+
+        // check passwords
+        assertEquals(text1, text2)
+    }
 }

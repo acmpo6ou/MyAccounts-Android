@@ -71,8 +71,10 @@ open class GeneratePassword(activity: AppCompatActivity,
                 }
             }
 
+            // generate password and set it on password fields
             val password = genPass(length.value, chars)
             pass1.setText(password)
+            pass2.setText(password)
         }
         dialog.show()
     }
