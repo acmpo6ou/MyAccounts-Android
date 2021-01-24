@@ -31,6 +31,7 @@ open class GeneratePassword(activity: AppCompatActivity,
                        pass1: TextInputEditText, pass2: TextInputEditText) {
     val dialog: Dialog = Dialog(activity)
     val generateButton: Button
+    val cancelButton: Button
     val length: NumberPicker
 
     val digitsBox: CheckBox
@@ -48,6 +49,7 @@ open class GeneratePassword(activity: AppCompatActivity,
     init{
         dialog.setContentView(R.layout.generate_password)
         generateButton = dialog.findViewById(R.id.generateButton)
+        cancelButton = dialog.findViewById(R.id.cancelButton)
         length = dialog.findViewById(R.id.passwordLength)
 
         // check boxes
@@ -76,6 +78,10 @@ open class GeneratePassword(activity: AppCompatActivity,
             pass1.setText(password)
             pass2.setText(password)
         }
+        cancelButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
         dialog.show()
     }
 
