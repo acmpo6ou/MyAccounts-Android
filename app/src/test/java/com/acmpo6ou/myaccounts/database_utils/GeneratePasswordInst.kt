@@ -23,7 +23,10 @@ import androidx.test.core.app.ActivityScenario
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.GeneratePassword
-import com.nhaarman.mockitokotlin2.*
+import com.google.android.material.textfield.TextInputEditText
+import com.nhaarman.mockitokotlin2.argThat
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -38,25 +41,26 @@ class GeneratePasswordInst {
     lateinit var scenario: ActivityScenario<MainActivity>
     lateinit var dialog: GeneratePassword
 
+    val pass1: TextInputEditText = mock()
+    val pass2: TextInputEditText = mock()
+
     @Before
     fun setup(){
         scenario = ActivityScenario.launch(MainActivity::class.java)
         scenario.onActivity {
             it.myContext.setTheme(R.style.Theme_MyAccounts_NoActionBar)
-            val d = GeneratePassword(it, mock(), mock())
-            dialog = spy(d)
-
+            dialog = GeneratePassword(it, pass1, pass2)
         }
     }
 
     @Test
-    fun `click on generateButton should call genPass passing correct length`(){
+    fun `click on generateButton should generate password of correct length`(){
         scenario.onActivity {
             // default length should be 16
             assertEquals(16, dialog.length.value)
 
             dialog.generateButton.performClick()
-            verify(dialog).genPass(eq(16), any())
+            verify(pass1).setText(argThat<String> { length == 16 })
         }
     }
 }
