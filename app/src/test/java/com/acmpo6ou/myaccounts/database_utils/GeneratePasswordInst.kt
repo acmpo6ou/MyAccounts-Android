@@ -27,6 +27,7 @@ import com.acmpo6ou.myaccounts.core.hasoneof
 import com.google.android.material.textfield.TextInputEditText
 import com.nhaarman.mockitokotlin2.*
 import junit.framework.TestCase.assertTrue
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Before
@@ -118,5 +119,20 @@ class GeneratePasswordInst {
         dialog.generateButton.performClick()
         verify(pass1, never()).setText(anyString())
         verify(pass2, never()).setText(anyString())
+    }
+
+    @Test
+    fun `genPass should generate password from passed characters only`(){
+        val password = dialog.genPass(16, listOf(dialog.digits, dialog.lower))
+        Assert.assertTrue(password hasoneof dialog.digits)
+        Assert.assertTrue(password hasoneof dialog.lower)
+        assertFalse(password hasoneof dialog.upper)
+        assertFalse(password hasoneof dialog.punctuation)
+    }
+
+    @Test
+    fun `genPass should generate password of specified length`(){
+        val password = dialog.genPass(16, dialog.allChars)
+        assertEquals(16, password.length)
     }
 }
