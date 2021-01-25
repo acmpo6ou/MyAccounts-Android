@@ -110,20 +110,6 @@ abstract class CreateEditViewModel: SuperViewModel() {
     }
 
     /**
-     * This method validates given name, checks whether it's not empty and whether database
-     * with such name already exists.
-     *
-     * If name is empty [emptyNameErr] is set to true.
-     * If database with such name already exists [existsNameErr] is set to true.
-     * @param[name] name to validate.
-     */
-    open fun validateName(name: String){
-        val cleanedName = fixName(name)
-        emptyNameErr = cleanedName.isEmpty()
-        existsNameErr = Database(cleanedName) in databases
-    }
-
-    /**
      * This method validates given passwords.
      *
      * If passwords don't match [diffPassErr] is true.
