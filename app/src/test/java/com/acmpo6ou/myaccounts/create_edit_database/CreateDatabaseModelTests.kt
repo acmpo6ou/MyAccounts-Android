@@ -84,49 +84,49 @@ class CreateDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `createDatabase should call createDatabaseAsync`(){
+    fun `apply should call createDatabase`(){
         runBlocking {
-            spyModel.createDatabase(name, password)
+            spyModel.apply(name, password)
         }
-        verify(spyModel).createDatabaseAsync(db)
+        verify(spyModel).createDatabase(db)
     }
 
     @Test
-    fun `createDatabase should handle any error`(){
+    fun `apply should handle any error`(){
         val msg = faker.str()
         val exception = Exception(msg)
-        whenever(spyModel.createDatabaseAsync(db))
+        whenever(spyModel.createDatabase(db))
                 .doAnswer{
                     throw exception
                 }
 
         runBlocking {
-            spyModel.createDatabase(name, password)
+            spyModel.apply(name, password)
         }
         assertEquals(exception.toString(), spyModel.errorMsg)
         assertFalse(spyModel.loading)
     }
 
     @Test
-    fun `createDatabase should add created Database to the list`(){
+    fun `apply should add created Database to the list`(){
         runBlocking {
-            spyModel.createDatabase(name, password)
+            spyModel.apply(name, password)
         }
         assertTrue(db in spyModel.databases)
     }
 
     @Test
-    fun `createDatabase should set created`(){
+    fun `apply should set created`(){
         runBlocking {
-            spyModel.createDatabase(name, password)
+            spyModel.apply(name, password)
         }
         assertTrue(spyModel.created)
     }
 
     @Test
-    fun `createDatabase should set loading to true`(){
+    fun `apply should set loading to true`(){
         runBlocking {
-            spyModel.createDatabase(name, password)
+            spyModel.apply(name, password)
         }
         assertTrue(spyModel.loading)
     }

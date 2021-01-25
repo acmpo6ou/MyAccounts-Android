@@ -26,20 +26,20 @@ import com.acmpo6ou.myaccounts.core.createDatabaseUtil
 import kotlinx.coroutines.async
 
 open class CreateDatabaseViewModel : CreateEditViewModel() {
-    open fun createDatabaseAsync(database: Database) =
+    open fun createDatabase(database: Database) =
         viewModelScope.async(defaultDispatcher){
             createDatabaseUtil(database, SRC_DIR, app)
         }
 
     /**
-     * This method creates database using [createDatabaseAsync] and given [name] and [password].
+     * This method creates database using [createDatabase] and given [name] and [password].
      *
      * Once the database is created it is added to the list.
      * If any error occurred it sets errorMsg to error message.
      * @param[name] name for the database.
      * @param[password] password for the database.
      */
-    override suspend fun createDatabase(name: String, password: String){
+    override suspend fun apply(name: String, password: String){
         try {
             // display loading progress bar
             loading = true
@@ -47,7 +47,7 @@ open class CreateDatabaseViewModel : CreateEditViewModel() {
             // create database
             val salt = generateSalt()
             val database = Database(name, password, salt)
-            createDatabaseAsync(database).await()
+            createDatabase(database).await()
 
             // add it to the list, sort the list and notify about creation
             databases.add(database)

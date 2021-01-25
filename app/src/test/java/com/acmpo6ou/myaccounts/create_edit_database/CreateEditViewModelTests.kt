@@ -28,14 +28,14 @@ import com.acmpo6ou.myaccounts.str
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 // CreateDatabaseViewModel class is abstract and we can't instantiate it for tests
 open class TestModel : CreateEditViewModel(){
-    override suspend fun createDatabase(name: String, password: String) {
+    override suspend fun apply(name: String, password: String) {
 
     }
 }
@@ -64,7 +64,7 @@ class CreateEditViewModelTests : ModelTest() {
     @Test
     fun `fixName should remove all unsupported characters`(){
         val name = model.fixName("This is (test)/.\\-_-")
-        Assert.assertEquals("Thisis(test).-_-", name)
+        assertEquals("Thisis(test).-_-", name)
     }
 
     @Test
@@ -74,50 +74,50 @@ class CreateEditViewModelTests : ModelTest() {
 
         // if passwords are different - diffPassErr = true
         model.validatePasswords(pass1, pass2)
-        Assert.assertTrue(model.diffPassErr)
+        assertTrue(model.diffPassErr)
 
         // if passwords are same - diffPassErr = false
         model.validatePasswords(pass1, pass1)
-        Assert.assertFalse(model.diffPassErr)
+        assertFalse(model.diffPassErr)
     }
 
     @Test
     fun `validatePasswords should change emptyPassErr`(){
         // if password is empty - emptyPassErr = true
         model.validatePasswords("", "")
-        Assert.assertTrue(model.emptyPassErr)
+        assertTrue(model.emptyPassErr)
 
         // if password isn't empty - emptyPassErr = false
         model.validatePasswords(faker.str(), faker.str())
-        Assert.assertFalse(model.emptyPassErr)
+        assertFalse(model.emptyPassErr)
     }
 
     @Test
-    fun `createPressed should not call createDatabase if coroutineJob is active`(){
+    fun `applyPressed should not call apply if coroutineJob is active`(){
         spyModel.coroutineJob = mock { on {isActive} doReturn true }
-        spyModel.createPressed(name, password)
+        spyModel.applyPressed(name, password)
 
         runBlocking {
-            verify(spyModel, never()).createDatabase(name, password)
+            verify(spyModel, never()).apply(name, password)
         }
     }
 
     @Test
-    fun `createPressed should call createDatabase if coroutineJob isn't active`(){
+    fun `applyPressed should call apply if coroutineJob isn't active`(){
         spyModel.coroutineJob = mock { on {isActive} doReturn false }
-        spyModel.createPressed(name, password)
+        spyModel.applyPressed(name, password)
 
         runBlocking {
-            verify(spyModel).createDatabase(name, password)
+            verify(spyModel).apply(name, password)
         }
     }
 
     @Test
-    fun `createPressed should call createDatabase if coroutineJob is null`(){
-        spyModel.createPressed(name, password)
+    fun `applyPressed should call apply if coroutineJob is null`(){
+        spyModel.applyPressed(name, password)
 
         runBlocking {
-            verify(spyModel).createDatabase(name, password)
+            verify(spyModel).apply(name, password)
         }
     }
 }

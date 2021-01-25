@@ -135,17 +135,17 @@ abstract class CreateEditViewModel: SuperViewModel() {
 
     /**
      * Called when user presses `Create` button.
-     * Launches createDatabase only if it's not already launched.
+     * Launches apply only if it's not already launched.
      */
-    open fun createPressed(name: String, password: String){
+    open fun applyPressed(name: String, password: String){
         if(coroutineJob == null || !coroutineJob!!.isActive){
             coroutineJob = viewModelScope.launch(uiDispatcher) {
-                createDatabase(name, password)
+                apply(name, password)
             }
         }
     }
 
-    abstract suspend fun createDatabase(name: String, password: String)
+    abstract suspend fun apply(name: String, password: String)
 }
 
 /**

@@ -134,9 +134,9 @@ class CreateDatabaseFragmentInst {
     }
 
     @Test
-    fun `databaseCreate should change according to nameErrors and passwordErrors`(){
+    fun `applyButton should change according to nameErrors and passwordErrors`(){
         createScenario.onFragment {
-            val createButton = it.b.databaseCreate
+            val createButton = it.b.applyButton
 
             // there are no errors
             it.viewModel.emptyNameErr = false
@@ -162,18 +162,18 @@ class CreateDatabaseFragmentInst {
     }
 
     @Test
-    fun `press on databaseCreate should call createPressed`(){
+    fun `press on applyButton should call applyPressed`(){
         createScenario.onFragment {
             val pass = faker.str()
-            doNothing().whenever(spyModel).createPressed(name, pass)
+            doNothing().whenever(spyModel).applyPressed(name, pass)
             it.viewModel = spyModel
 
             it.b.databaseName.setText(name)
             it.b.databasePassword.setText(pass)
             it.b.databaseRepeatPassword.setText(pass)
 
-            it.b.databaseCreate.performClick()
-            verify(spyModel).createPressed(name, pass)
+            it.b.applyButton.performClick()
+            verify(spyModel).applyPressed(name, pass)
         }
     }
 
@@ -183,12 +183,12 @@ class CreateDatabaseFragmentInst {
             // when loading is true progress bar should be displayed and button - disabled
             it.viewModel._loading.value = true
             assertEquals(View.VISIBLE, it.b.progressLoading.visibility)
-            assertFalse(it.b.databaseCreate.isEnabled)
+            assertFalse(it.b.applyButton.isEnabled)
 
             // when loading false progress bar should be hidden and button - enabled
             it.viewModel._loading.value = false
             assertEquals(View.GONE, it.b.progressLoading.visibility)
-            assertTrue(it.b.databaseCreate.isEnabled)
+            assertTrue(it.b.applyButton.isEnabled)
         }
     }
 }

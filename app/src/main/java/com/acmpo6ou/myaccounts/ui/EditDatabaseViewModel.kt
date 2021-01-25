@@ -22,7 +22,7 @@ package com.acmpo6ou.myaccounts.ui
 import com.acmpo6ou.myaccounts.core.CreateEditViewModel
 
 class EditDatabaseViewModel : CreateEditViewModel() {
-    override suspend fun createDatabase(name: String, password: String) {
+    override suspend fun apply(name: String, password: String) {
         TODO("Not yet implemented")
     }
 }

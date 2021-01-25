@@ -114,7 +114,7 @@
         app:layout_constraintTop_toBottomOf="@+id/parentRepeatPassword">
 
         <Button
-            android:id="@+id/databaseCreate"
+            android:id="@+id/applyButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:enabled="false"
@@ -132,10 +132,10 @@
             android:indeterminateTint="@color/white"
             android:indeterminateTintMode="src_in"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/databaseCreate"
-            app:layout_constraintEnd_toEndOf="@+id/databaseCreate"
-            app:layout_constraintStart_toStartOf="@+id/databaseCreate"
-            app:layout_constraintTop_toTopOf="@+id/databaseCreate" />
+            app:layout_constraintBottom_toBottomOf="@+id/applyButton"
+            app:layout_constraintEnd_toEndOf="@+id/applyButton"
+            app:layout_constraintStart_toStartOf="@+id/applyButton"
+            app:layout_constraintTop_toTopOf="@+id/applyButton" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

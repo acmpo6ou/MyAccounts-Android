@@ -55,7 +55,7 @@ class CreateDatabaseFragment : ViewModelFragment() {
     }
 
     private val createEnabledObserver = Observer<Boolean> {
-        b.databaseCreate.isEnabled = it
+        b.applyButton.isEnabled = it
     }
 
     /**
@@ -65,11 +65,11 @@ class CreateDatabaseFragment : ViewModelFragment() {
     private val loadingObserver = Observer<Boolean> {
         if(it) {
             b.progressLoading.visibility = View.VISIBLE
-            b.databaseCreate.isEnabled = false
+            b.applyButton.isEnabled = false
         }
         else{
             b.progressLoading.visibility = View.GONE
-            b.databaseCreate.isEnabled = true
+            b.applyButton.isEnabled = true
         }
     }
 
@@ -145,9 +145,9 @@ class CreateDatabaseFragment : ViewModelFragment() {
             GeneratePassword(mainActivity, b.databasePassword, b.databaseRepeatPassword)
         }
 
-        // call createPressed when clicking on `Create` button
-        b.databaseCreate.setOnClickListener {
-            viewModel.createPressed(b.databaseName.text.toString(),
+        // call applyPressed when clicking on `Create` button
+        b.applyButton.setOnClickListener {
+            viewModel.applyPressed(b.databaseName.text.toString(),
                                     b.databasePassword.text.toString())
         }
     }
