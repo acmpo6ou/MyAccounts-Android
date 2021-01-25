@@ -70,7 +70,7 @@ open class CreateDatabaseViewModel : CreateEditViewModel() {
      * If database with such name already exists [existsNameErr] is set to true.
      * @param[name] name to validate.
      */
-    open fun validateName(name: String){
+    override fun validateName(name: String){
         val cleanedName = fixName(name)
         emptyNameErr = cleanedName.isEmpty()
         existsNameErr = Database(cleanedName) in databases

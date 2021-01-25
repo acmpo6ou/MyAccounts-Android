@@ -38,6 +38,10 @@ open class TestModel : CreateEditViewModel(){
     override suspend fun apply(name: String, password: String) {
 
     }
+
+    override fun validateName(name: String) {
+
+    }
 }
 
 class CreateEditViewModelTests : ModelTest() {

@@ -25,4 +25,8 @@ class EditDatabaseViewModel : CreateEditViewModel() {
     override suspend fun apply(name: String, password: String) {
         TODO("Not yet implemented")
     }
+
+    override fun validateName(name: String) {
+        TODO("Not yet implemented")
+    }
 }
