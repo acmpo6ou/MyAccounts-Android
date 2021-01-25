@@ -56,12 +56,6 @@ class CreateDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `fixName should remove all unsupported characters`(){
-        val name = model.fixName("This is (test)/.\\-_-")
-        assertEquals("Thisis(test).-_-", name)
-    }
-
-    @Test
     fun `validateName should change emptyNameErr`(){
         // if name isn't empty emptyNameErr should be false
         model.validateName(faker.str())
@@ -87,31 +81,6 @@ class CreateDatabaseModelTests : ModelTest() {
         // same should happen even if name contains unsupported characters
         model.validateName("m/a/i/n/") // will become `main` when cleaned by fixName
         assertTrue(model.existsNameErr)
-    }
-
-    @Test
-    fun `validatePasswords should change diffPassErr`(){
-        val pass1 = faker.str()
-        val pass2 = faker.str()
-
-        // if passwords are different - diffPassErr = true
-        model.validatePasswords(pass1, pass2)
-        assertTrue(model.diffPassErr)
-
-        // if passwords are same - diffPassErr = false
-        model.validatePasswords(pass1, pass1)
-        assertFalse(model.diffPassErr)
-    }
-
-    @Test
-    fun `validatePasswords should change emptyPassErr`(){
-        // if password is empty - emptyPassErr = true
-        model.validatePasswords("", "")
-        assertTrue(model.emptyPassErr)
-
-        // if password isn't empty - emptyPassErr = false
-        model.validatePasswords(faker.str(), faker.str())
-        assertFalse(model.emptyPassErr)
     }
 
     @Test
@@ -160,34 +129,5 @@ class CreateDatabaseModelTests : ModelTest() {
             spyModel.createDatabase(name, password)
         }
         assertTrue(spyModel.loading)
-    }
-
-    @Test
-    fun `createPressed should not call createDatabase if coroutineJob is active`(){
-        spyModel.coroutineJob = mock { on {isActive} doReturn true }
-        spyModel.createPressed(name, password)
-
-        runBlocking {
-            verify(spyModel, never()).createDatabase(name, password)
-        }
-    }
-
-    @Test
-    fun `createPressed should call createDatabase if coroutineJob isn't active`(){
-        spyModel.coroutineJob = mock { on {isActive} doReturn false }
-        spyModel.createPressed(name, password)
-
-        runBlocking {
-            verify(spyModel).createDatabase(name, password)
-        }
-    }
-
-    @Test
-    fun `createPressed should call createDatabase if coroutineJob is null`(){
-        spyModel.createPressed(name, password)
-
-        runBlocking {
-            verify(spyModel).createDatabase(name, password)
-        }
     }
 }

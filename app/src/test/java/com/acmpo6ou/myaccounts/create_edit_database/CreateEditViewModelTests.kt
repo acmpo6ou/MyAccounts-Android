@@ -25,14 +25,16 @@ import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.CreateEditViewModel
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.str
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.spy
+import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
+import org.junit.Test
 
 // CreateDatabaseViewModel class is abstract and we can't instantiate it for tests
-class TestModel : CreateEditViewModel(){
+open class TestModel : CreateEditViewModel(){
     override suspend fun createDatabase(name: String, password: String) {
 
     }
@@ -47,7 +49,6 @@ class CreateEditViewModelTests : ModelTest() {
 
     private val name = faker.str()
     override val password = faker.str()
-    private val db = Database(name, password, salt)
 
     @Before
     fun setup(){
@@ -58,5 +59,65 @@ class CreateEditViewModelTests : ModelTest() {
         spyModel = spy(model){ on{generateSalt()} doReturn salt }
         spyModel.uiDispatcher = Dispatchers.Unconfined
         spyModel.defaultDispatcher = Dispatchers.Unconfined
+    }
+
+    @Test
+    fun `fixName should remove all unsupported characters`(){
+        val name = model.fixName("This is (test)/.\\-_-")
+        Assert.assertEquals("Thisis(test).-_-", name)
+    }
+
+    @Test
+    fun `validatePasswords should change diffPassErr`(){
+        val pass1 = faker.str()
+        val pass2 = faker.str()
+
+        // if passwords are different - diffPassErr = true
+        model.validatePasswords(pass1, pass2)
+        Assert.assertTrue(model.diffPassErr)
+
+        // if passwords are same - diffPassErr = false
+        model.validatePasswords(pass1, pass1)
+        Assert.assertFalse(model.diffPassErr)
+    }
+
+    @Test
+    fun `validatePasswords should change emptyPassErr`(){
+        // if password is empty - emptyPassErr = true
+        model.validatePasswords("", "")
+        Assert.assertTrue(model.emptyPassErr)
+
+        // if password isn't empty - emptyPassErr = false
+        model.validatePasswords(faker.str(), faker.str())
+        Assert.assertFalse(model.emptyPassErr)
+    }
+
+    @Test
+    fun `createPressed should not call createDatabase if coroutineJob is active`(){
+        spyModel.coroutineJob = mock { on {isActive} doReturn true }
+        spyModel.createPressed(name, password)
+
+        runBlocking {
+            verify(spyModel, never()).createDatabase(name, password)
+        }
+    }
+
+    @Test
+    fun `createPressed should call createDatabase if coroutineJob isn't active`(){
+        spyModel.coroutineJob = mock { on {isActive} doReturn false }
+        spyModel.createPressed(name, password)
+
+        runBlocking {
+            verify(spyModel).createDatabase(name, password)
+        }
+    }
+
+    @Test
+    fun `createPressed should call createDatabase if coroutineJob is null`(){
+        spyModel.createPressed(name, password)
+
+        runBlocking {
+            verify(spyModel).createDatabase(name, password)
+        }
     }
 }
