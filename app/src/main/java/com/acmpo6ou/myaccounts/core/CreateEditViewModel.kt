@@ -146,6 +146,7 @@ abstract class CreateEditViewModel: SuperViewModel() {
     }
 
     abstract suspend fun apply(name: String, password: String)
+    abstract fun validateName(name: String)
 }
 
 /**
