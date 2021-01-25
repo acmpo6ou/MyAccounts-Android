@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.create_database
+package com.acmpo6ou.myaccounts.create_edit_database
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.ModelTest
@@ -33,7 +33,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class CreateDatabaseModelTests: ModelTest() {
+class CreateDatabaseModelTests : ModelTest() {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 

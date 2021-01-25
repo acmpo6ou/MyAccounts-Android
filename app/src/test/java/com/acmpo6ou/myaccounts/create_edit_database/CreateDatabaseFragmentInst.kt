@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.create_database
+package com.acmpo6ou.myaccounts.create_edit_database
 
 import android.view.View
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
