@@ -162,9 +162,9 @@ class CreateDatabaseFragment : ViewModelFragment() {
             viewLifecycleOwner.let {
                 nameErrors.observe(it, nameErrorObserver)
                 passwordErrors.observe(it, passwordErrorObserver)
-                createEnabled.observe(it, createEnabledObserver)
                 _loading.observe(it, loadingObserver)
                 created_.observe(it, createdObserver)
+                createEnabled.observe(it, createEnabledObserver)
             }
         }
 
