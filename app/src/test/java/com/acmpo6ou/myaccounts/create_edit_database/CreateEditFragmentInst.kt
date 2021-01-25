@@ -26,9 +26,9 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.core.CreateEditFragment
+import com.acmpo6ou.myaccounts.core.CreateEditViewModel
 import com.acmpo6ou.myaccounts.str
-import com.acmpo6ou.myaccounts.ui.CreateDatabaseFragment
-import com.acmpo6ou.myaccounts.ui.CreateDatabaseViewModel
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.doNothing
 import com.nhaarman.mockitokotlin2.spy
@@ -42,34 +42,39 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.LooperMode
 
+// this is because CreateEditFragment is abstract
+class TestFragment : CreateEditFragment(){
+    override var viewModel: CreateEditViewModel = spy()
+}
+
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
-class CreateDatabaseFragmentInst {
+class CreateEditFragmentInst {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 
-    lateinit var createScenario: FragmentScenario<CreateDatabaseFragment>
-    lateinit var spyModel: CreateDatabaseViewModel
-
+    lateinit var scenario: FragmentScenario<TestFragment>
     val context = InstrumentationRegistry.getInstrumentation().targetContext
+    val app = context.applicationContext as MyApp
     val faker = Faker()
     val name = faker.str()
 
     @Before
     fun setup() {
-        spyModel = spy()
-        spyModel.initialize(MyApp(), faker.str())
-
         // Create a graphical FragmentScenario for the fragment
-        createScenario = launchFragmentInContainer(themeResId= R.style.Theme_MyAccounts_NoActionBar)
+        scenario = launchFragmentInContainer(themeResId= R.style.Theme_MyAccounts_NoActionBar)
+        scenario.onFragment {
+            it.viewModel.initialize(app, faker.str())
+            it.initModel()
+            it.initForm()
+        }
     }
 
     @Test
     fun `should call validateName when text in databaseName changes`(){
-        createScenario.onFragment {
-            it.viewModel = spyModel
+        scenario.onFragment {
             it.b.databaseName.setText(name)
-            verify(spyModel).validateName(name)
+            verify(it.viewModel).validateName(name)
         }
     }
 
@@ -78,7 +83,7 @@ class CreateDatabaseFragmentInst {
         val emptyName = context.resources.getString(R.string.empty_name)
         val nameExists = context.resources.getString(R.string.db_exists)
 
-        createScenario.onFragment {
+        scenario.onFragment {
             // name field is empty
             it.viewModel.emptyNameErr = true
             it.viewModel.existsNameErr = false
@@ -98,15 +103,14 @@ class CreateDatabaseFragmentInst {
 
     @Test
     fun `should call validatePasswords when password in either password fields changes`(){
-        createScenario.onFragment {
-            it.viewModel = spyModel
+        scenario.onFragment {
             val str = faker.str()
 
             it.b.databasePassword.setText(str)
-            verify(spyModel).validatePasswords(str, "")
+            verify(it.viewModel).validatePasswords(str, "")
 
             it.b.databaseRepeatPassword.setText(str)
-            verify(spyModel).validatePasswords(str, str)
+            verify(it.viewModel).validatePasswords(str, str)
         }
     }
 
@@ -115,7 +119,7 @@ class CreateDatabaseFragmentInst {
         val emptyPassword = context.resources.getString(R.string.empty_password)
         val diffPasswords = context.resources.getString(R.string.diff_passwords)
 
-        createScenario.onFragment {
+        scenario.onFragment {
             // password fields are empty
             it.viewModel.emptyPassErr = true
             it.viewModel.diffPassErr = false
@@ -135,7 +139,7 @@ class CreateDatabaseFragmentInst {
 
     @Test
     fun `applyButton should change according to nameErrors and passwordErrors`(){
-        createScenario.onFragment {
+        scenario.onFragment {
             val createButton = it.b.applyButton
 
             // there are no errors
@@ -163,23 +167,22 @@ class CreateDatabaseFragmentInst {
 
     @Test
     fun `press on applyButton should call applyPressed`(){
-        createScenario.onFragment {
+        scenario.onFragment {
             val pass = faker.str()
-            doNothing().whenever(spyModel).applyPressed(name, pass)
-            it.viewModel = spyModel
+            doNothing().whenever(it.viewModel).applyPressed(name, pass)
 
             it.b.databaseName.setText(name)
             it.b.databasePassword.setText(pass)
             it.b.databaseRepeatPassword.setText(pass)
 
             it.b.applyButton.performClick()
-            verify(spyModel).applyPressed(name, pass)
+            verify(it.viewModel).applyPressed(name, pass)
         }
     }
 
     @Test
     fun `should display or hide progress bar depending on 'loading' of view model`(){
-        createScenario.onFragment {
+        scenario.onFragment {
             // when loading is true progress bar should be displayed and button - disabled
             it.viewModel._loading.value = true
             assertEquals(View.VISIBLE, it.b.progressLoading.visibility)

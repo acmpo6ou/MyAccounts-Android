@@ -27,7 +27,7 @@ import com.macasaet.fernet.Key
  * Application instance, used to store data that needs to be shared by different
  * activities or fragments.
  */
-class MyApp: Application() {
+open class MyApp: Application() {
     // list of Databases that is used almost by every fragment and activity
     var databases = mutableListOf<Database>()
 
