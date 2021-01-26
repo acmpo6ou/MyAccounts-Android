@@ -110,7 +110,7 @@ class EditDatabaseModelTests : ModelTest() {
         runBlocking {
             spyModel.apply(name, password)
         }
-        assertTrue(spyModel.created)
+        assertTrue(spyModel.finished)
     }
 
     @Test

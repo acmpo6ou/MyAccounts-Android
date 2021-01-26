@@ -47,7 +47,7 @@ abstract class CreateEditFragment : ViewModelFragment() {
         b.parentPassword.error = it
     }
 
-    val createEnabledObserver = Observer<Boolean> {
+    val applyEnabledObserver = Observer<Boolean> {
         b.applyButton.isEnabled = it
     }
 
@@ -70,7 +70,7 @@ abstract class CreateEditFragment : ViewModelFragment() {
      * This observer invoked when database is successfully created.
      * It navigates back to the DatabaseFragment.
      */
-    private val createdObserver = Observer<Boolean>{
+    private val finishedObserver = Observer<Boolean>{
         mainActivity.findNavController(R.id.nav_host_fragment).navigateUp()
     }
 
@@ -155,8 +155,8 @@ abstract class CreateEditFragment : ViewModelFragment() {
                 nameErrors.observe(it, nameErrorObserver)
                 passwordErrors.observe(it, passwordErrorObserver)
                 _loading.observe(it, loadingObserver)
-                created_.observe(it, createdObserver)
-                createEnabled.observe(it, createEnabledObserver)
+                _finished.observe(it, finishedObserver)
+                applyEnabled.observe(it, applyEnabledObserver)
             }
         }
 

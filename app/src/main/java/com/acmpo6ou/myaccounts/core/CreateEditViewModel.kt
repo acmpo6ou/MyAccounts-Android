@@ -48,10 +48,10 @@ abstract class CreateEditViewModel: SuperViewModel() {
         get() = emptyPassErr_.value!!
         set(value) {emptyPassErr_.value = value}
 
-    val created_ = MutableLiveData<Boolean>()
-    var created
-        get() = created_.value!!
-        set(value) {created_.value = value}
+    val _finished = MutableLiveData<Boolean>()
+    var finished
+        get() = _finished.value!!
+        set(value) {_finished.value = value}
 
     /**
      * This LiveData property provides error message according
@@ -91,7 +91,7 @@ abstract class CreateEditViewModel: SuperViewModel() {
      * This LiveData property used to decide whether `Create` button should be enabled
      * or not. If there are any errors it should be disabled, if there are no errors - enabled.
      */
-    val createEnabled = nameErrors.combineWith(passwordErrors) {
+    val applyEnabled = nameErrors.combineWith(passwordErrors) {
         nameErr: String?, passwordErr: String? ->
         nameErr == null && passwordErr == null
     }

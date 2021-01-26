@@ -88,11 +88,11 @@ class CreateDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `apply should set created`(){
+    fun `apply should set finished to true`(){
         runBlocking {
             spyModel.apply(name, password)
         }
-        assertTrue(spyModel.created)
+        assertTrue(spyModel.finished)
     }
 
     @Test

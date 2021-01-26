@@ -140,28 +140,28 @@ class CreateEditFragmentInst {
     @Test
     fun `applyButton should change according to nameErrors and passwordErrors`(){
         scenario.onFragment {
-            val createButton = it.b.applyButton
+            val applyButton = it.b.applyButton
 
             // there are no errors
             it.viewModel.emptyNameErr = false
             it.viewModel.existsNameErr = false
             it.viewModel.emptyPassErr = false
             it.viewModel.diffPassErr = false
-            assertTrue(createButton.isEnabled)
+            assertTrue(applyButton.isEnabled)
 
             // there is a name error
             it.viewModel.emptyNameErr = true
             it.viewModel.existsNameErr = false
             it.viewModel.emptyPassErr = false
             it.viewModel.diffPassErr = false
-            assertFalse(createButton.isEnabled)
+            assertFalse(applyButton.isEnabled)
 
             // there is a password error
             it.viewModel.emptyNameErr = false
             it.viewModel.existsNameErr = false
             it.viewModel.emptyPassErr = true
             it.viewModel.diffPassErr = false
-            assertFalse(createButton.isEnabled)
+            assertFalse(applyButton.isEnabled)
         }
     }
 

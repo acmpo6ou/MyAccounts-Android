@@ -52,7 +52,7 @@ open class CreateDatabaseViewModel : CreateEditViewModel() {
             // add it to the list, sort the list and notify about creation
             databases.add(database)
             databases.sortBy { it.name }
-            created = true
+            finished = true
         }
         catch (e: Exception){
             // notify about error and hide loading progress bar
