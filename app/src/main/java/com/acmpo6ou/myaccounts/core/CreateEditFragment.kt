@@ -99,7 +99,7 @@ abstract class CreateEditFragment : ViewModelFragment() {
     /**
      * This method used to initialize all fields and buttons of the create_edit_database form.
      */
-    fun initForm(){
+    open fun initForm(){
         // when database name is changed validate it using model to display error in case
         // such name already exists or the name is empty
         b.databaseName.addTextChangedListener(object: TextWatcher {

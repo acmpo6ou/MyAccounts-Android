@@ -29,12 +29,23 @@ class EditDatabaseFragment : CreateEditFragment() {
         fun newInstance() = EditDatabaseFragment()
     }
     override lateinit var viewModel: EditDatabaseViewModel
+    var args: EditDatabaseFragmentArgs? = null
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(EditDatabaseViewModel::class.java)
         initModel()
         initForm()
+    }
+
+    override fun initForm() {
+        super.initForm()
+        args?.let {
+            val database = app.databases[it.databaseIndex]
+            b.databaseName.setText(database.name)
+            b.databasePassword.setText(database.password)
+            b.databaseRepeatPassword.setText(database.password)
+        }
     }
 
     /**
@@ -44,8 +55,11 @@ class EditDatabaseFragment : CreateEditFragment() {
         super.initModel()
         val SRC_DIR = myContext.getExternalFilesDir(null)?.path + "/src"
         val titleStart = myContext.resources.getString(R.string.edit_db)
-        val args = EditDatabaseFragmentArgs.fromBundle(requireArguments())
-        val databaseIndex = args.databaseIndex
-        viewModel.initialize(app, SRC_DIR, titleStart, databaseIndex)
+
+        arguments?.let{
+            args = EditDatabaseFragmentArgs.fromBundle(it)
+            val databaseIndex = args!!.databaseIndex
+            viewModel.initialize(app, SRC_DIR, titleStart, databaseIndex)
+        }
     }
 }
