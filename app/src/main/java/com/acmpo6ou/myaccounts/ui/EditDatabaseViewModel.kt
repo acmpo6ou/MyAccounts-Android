@@ -27,7 +27,7 @@ import com.acmpo6ou.myaccounts.core.createDatabaseUtil
 import com.acmpo6ou.myaccounts.core.deleteDatabaseUtil
 import kotlinx.coroutines.async
 
-class EditDatabaseViewModel : CreateEditViewModel() {
+open class EditDatabaseViewModel : CreateEditViewModel() {
     /**
      * This method simply deletes old database (which is determined by [oldName]) and
      * creates new one using [database], to more specifically say: it replaces old database
