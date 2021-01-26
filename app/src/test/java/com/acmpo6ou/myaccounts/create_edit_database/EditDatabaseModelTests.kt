@@ -31,8 +31,7 @@ import com.acmpo6ou.myaccounts.ui.EditDatabaseViewModel
 import com.macasaet.fernet.StringValidator
 import com.macasaet.fernet.Token
 import com.macasaet.fernet.Validator
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.spy
+import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
@@ -50,15 +49,17 @@ class EditDatabaseModelTests : ModelTest() {
 
     val model = EditDatabaseViewModel()
     lateinit var spyModel: EditDatabaseViewModel
+    lateinit var app: MyApp
 
+    private val oldName = "main"
     private val name = faker.str()
     override val password = faker.str()
     private val db = Database(name, password, salt)
 
     @Before
     fun setup(){
-        val app = MyApp()
-        app.databases = mutableListOf(Database("main"))
+        app = MyApp()
+        app.databases = mutableListOf(Database(oldName))
 
         model.initialize(app, SRC_DIR, faker.str(), 0)
         spyModel = spy(model){ on{generateSalt()} doReturn salt }
@@ -69,26 +70,26 @@ class EditDatabaseModelTests : ModelTest() {
     @Test
     fun `existsNameErr should be false when Database with such name exists but it's being edited`(){
         // database `test` already exists but it's being edited, so that doesn't count
-        model.validateName("main")
+        model.validateName(oldName)
         assertFalse(model.existsNameErr)
     }
 
     @Test
-    fun `apply should call createDatabase`(){
+    fun `apply should call saveDatabase`(){
         runBlocking {
             spyModel.apply(name, password)
         }
-//        verify(spyModel).saveDatabase(db)
+        verify(spyModel).saveDatabase(oldName, db, app)
     }
 
     @Test
     fun `apply should handle any error`(){
         val msg = faker.str()
         val exception = Exception(msg)
-//        whenever(spyModel.saveDatabase(db))
-//                .doAnswer{
-//                    throw exception
-//                }
+        whenever(spyModel.saveDatabase(oldName, db, app))
+                .doAnswer{
+                    throw exception
+                }
 
         runBlocking {
             spyModel.apply(name, password)
@@ -98,15 +99,16 @@ class EditDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `apply should add created Database to the list`(){
+    fun `apply should replace old Database with created one`(){
         runBlocking {
             spyModel.apply(name, password)
         }
+        assertFalse(Database(oldName) in spyModel.databases)
         assertTrue(db in spyModel.databases)
     }
 
     @Test
-    fun `apply should set created`(){
+    fun `apply should set finished`(){
         runBlocking {
             spyModel.apply(name, password)
         }
