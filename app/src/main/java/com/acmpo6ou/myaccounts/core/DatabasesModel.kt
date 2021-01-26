@@ -88,13 +88,7 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
      *
      * @param[name] name of database to delete.
      */
-    override fun deleteDatabase(name: String){
-        val binFile = File("$SRC_DIR/$name.bin")
-        binFile.delete()
-
-        val dbFile = File("$SRC_DIR/$name.db")
-        dbFile.delete()
-    }
+    override fun deleteDatabase(name: String) = deleteDatabaseUtil(name, SRC_DIR)
 
     /**
      * Used to open databases by given Database instance.
@@ -121,19 +115,6 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
      */
     fun createDatabase(database: Database, app: MyApp) =
             createDatabaseUtil(database, SRC_DIR, app)
-
-    /**
-     * This method simply deletes old database (which is determined by [oldName]) and
-     * creates new one using [database], to more specifically say: it replaces old database
-     * with a new one.
-     *
-     * @param[oldName] name of the old database that is to be replaced.
-     * @param[database] new Database to be created, replacing the old one.
-     */
-    fun saveDatabase(oldName: String, database: Database, app: MyApp){
-        deleteDatabase(oldName)
-        createDatabase(database, app)
-    }
 
     /**
      * Used to get a list of Database instances – databases that reside in SRC_DIR directory.

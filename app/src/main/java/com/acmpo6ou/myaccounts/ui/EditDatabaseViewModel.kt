@@ -19,13 +19,41 @@
 
 package com.acmpo6ou.myaccounts.ui
 
+import androidx.lifecycle.viewModelScope
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.CreateEditViewModel
+import com.acmpo6ou.myaccounts.core.Database
+import com.acmpo6ou.myaccounts.core.createDatabaseUtil
+import com.acmpo6ou.myaccounts.core.deleteDatabaseUtil
+import kotlinx.coroutines.async
 
 class EditDatabaseViewModel : CreateEditViewModel() {
+    /**
+     * This method simply deletes old database (which is determined by [oldName]) and
+     * creates new one using [database], to more specifically say: it replaces old database
+     * with a new one.
+     *
+     * @param[oldName] name of the old database that is to be replaced.
+     * @param[database] new Database to be created, replacing the old one.
+     */
+    fun saveDatabase(oldName: String, database: Database, app: MyApp) =
+    viewModelScope.async (defaultDispatcher) {
+        deleteDatabaseUtil(oldName, SRC_DIR)
+        createDatabaseUtil(database, SRC_DIR, app)
+    }
+
     override suspend fun apply(name: String, password: String) {
         TODO("Not yet implemented")
     }
 
+    /**
+     * This method validates given name, checks whether it's not empty and whether database
+     * with such name already exists, but it's okay if name doesn't change through editing.
+     *
+     * If name is empty [emptyNameErr] is set to true.
+     * If database with such name already exists [existsNameErr] is set to true.
+     * @param[name] name to validate.
+     */
     override fun validateName(name: String) {
         TODO("Not yet implemented")
     }

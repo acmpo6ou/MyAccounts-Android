@@ -171,3 +171,16 @@ fun createDatabaseUtil(database: Database, SRC_DIR: String, app: MyApp) {
     val token = encryptDatabaseUtil(database, app)
     databaseFile.writeText(token)
 }
+
+/**
+ * This method deletes .db and .bin files of database given its name.
+ *
+ * @param[name] name of database to delete.
+ */
+fun deleteDatabaseUtil(name: String, SRC_DIR: String){
+    val binFile = File("$SRC_DIR/$name.bin")
+    binFile.delete()
+
+    val dbFile = File("$SRC_DIR/$name.db")
+    dbFile.delete()
+}
