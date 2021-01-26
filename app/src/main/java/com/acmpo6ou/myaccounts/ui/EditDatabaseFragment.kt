@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts.ui
 
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
+import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.CreateEditFragment
 
 class EditDatabaseFragment : CreateEditFragment() {
@@ -36,4 +37,15 @@ class EditDatabaseFragment : CreateEditFragment() {
         initForm()
     }
 
+    /**
+     * This method initializes view model providing all needed resources.
+     */
+    override fun initModel() {
+        super.initModel()
+        val SRC_DIR = myContext.getExternalFilesDir(null)?.path + "/src"
+        val titleStart = myContext.resources.getString(R.string.edit_db)
+        val args = EditDatabaseFragmentArgs.fromBundle(requireArguments())
+        val databaseIndex = args.databaseIndex
+        viewModel.initialize(app, SRC_DIR, titleStart, databaseIndex)
+    }
 }

@@ -113,4 +113,5 @@
     <string name="big_english_letters">Big english letters</string>
     <string name="small_english_letters">Small english letters</string>
     <string name="punctuation">Punctuation</string>
+    <string name="edit_db">"Edit "</string>
 </resources>
