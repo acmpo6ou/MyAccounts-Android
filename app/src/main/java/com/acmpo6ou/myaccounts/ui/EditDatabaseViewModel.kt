@@ -55,6 +55,13 @@ open class EditDatabaseViewModel : CreateEditViewModel() {
      * @param[name] name to validate.
      */
     override fun validateName(name: String) {
-        TODO("Not yet implemented")
+        // it's okay if name didn't change through editing
+        val dbName = databases[databaseIndex].name
+        if(dbName == name){
+            existsNameErr = false
+        }
+        else{
+            super.validateName(name)
+        }
     }
 }

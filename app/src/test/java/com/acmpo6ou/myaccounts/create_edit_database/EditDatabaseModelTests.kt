@@ -68,7 +68,7 @@ class EditDatabaseModelTests : ModelTest() {
 
     @Test
     fun `existsNameErr should be false when Database with such name exists but it's being edited`(){
-        // database `test` already exists but it's being edited, so it doesn't count
+        // database `test` already exists but it's being edited, so that doesn't count
         model.validateName("main")
         assertFalse(model.existsNameErr)
     }
