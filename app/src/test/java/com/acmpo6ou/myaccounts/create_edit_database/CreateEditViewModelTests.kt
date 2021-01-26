@@ -38,10 +38,6 @@ open class TestModel : CreateEditViewModel(){
     override suspend fun apply(name: String, password: String) {
 
     }
-
-    override fun validateName(name: String) {
-
-    }
 }
 
 class CreateEditViewModelTests : ModelTest() {
@@ -63,6 +59,34 @@ class CreateEditViewModelTests : ModelTest() {
         spyModel = spy(model){ on{generateSalt()} doReturn salt }
         spyModel.uiDispatcher = Dispatchers.Unconfined
         spyModel.defaultDispatcher = Dispatchers.Unconfined
+    }
+
+    @Test
+    fun `validateName should change emptyNameErr`(){
+        // if name isn't empty emptyNameErr should be false
+        model.validateName(faker.str())
+        assertFalse(model.emptyNameErr)
+
+        // if name is empty emptyNameErr should be true
+        model.validateName("")
+        assertTrue(model.emptyNameErr)
+    }
+
+    @Test
+    fun `validateName should use fixName`(){
+        val name = " \\/%$" // this name will be empty when cleaned by fixName
+        model.validateName(name)
+        assertTrue(model.emptyNameErr)
+    }
+
+    @Test
+    fun `validateName should set existsNameErr to true when Database with such name exists`(){
+        model.validateName("main")
+        assertTrue(model.existsNameErr)
+
+        // same should happen even if name contains unsupported characters
+        model.validateName("m/a/i/n/") // will become `main` when cleaned by fixName
+        assertTrue(model.existsNameErr)
     }
 
     @Test
