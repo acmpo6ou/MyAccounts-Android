@@ -36,14 +36,30 @@ open class EditDatabaseViewModel : CreateEditViewModel() {
      * @param[oldName] name of the old database that is to be replaced.
      * @param[database] new Database to be created, replacing the old one.
      */
-    fun saveDatabase(oldName: String, database: Database, app: MyApp) =
+    open fun saveDatabase(oldName: String, database: Database, app: MyApp) =
     viewModelScope.async (defaultDispatcher) {
         deleteDatabaseUtil(oldName, SRC_DIR)
         createDatabaseUtil(database, SRC_DIR, app)
     }
 
     override suspend fun apply(name: String, password: String) {
-        TODO("Not yet implemented")
+        try {
+            // display loading progress bar
+            loading = true
+
+            // save database
+            val oldDatabase = databases[databaseIndex]
+            val newDatabase = Database(name, password, oldDatabase.salt, oldDatabase.data)
+            saveDatabase(oldDatabase.name, newDatabase, app).await()
+
+            finished = true
+        }
+        catch (e: Exception){
+            // notify about error and hide loading progress bar
+            errorMsg = e.toString()
+            loading = false
+            e.printStackTrace()
+        }
     }
 
     /**
