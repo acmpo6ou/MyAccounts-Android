@@ -58,46 +58,18 @@ class EditDatabaseModelTests : ModelTest() {
     @Before
     fun setup(){
         val app = MyApp()
-        app.databases = mutableListOf(Database("main"), Database("test"))
+        app.databases = mutableListOf(Database("main"))
 
-        model.initialize(app, SRC_DIR, faker.str(), 1)
+        model.initialize(app, SRC_DIR, faker.str(), 0)
         spyModel = spy(model){ on{generateSalt()} doReturn salt }
         spyModel.uiDispatcher = Dispatchers.Unconfined
         spyModel.defaultDispatcher = Dispatchers.Unconfined
     }
 
     @Test
-    fun `validateName should change emptyNameErr`(){
-        // if name isn't empty emptyNameErr should be false
-        model.validateName(faker.str())
-        assertFalse(model.emptyNameErr)
-
-        // if name is empty emptyNameErr should be true
-        model.validateName("")
-        assertTrue(model.emptyNameErr)
-    }
-
-    @Test
-    fun `validateName should use fixName`(){
-        val name = " \\/%$" // this name will be empty when cleaned by fixName
-        model.validateName(name)
-        assertTrue(model.emptyNameErr)
-    }
-
-    @Test
-    fun `validateName should set existsNameErr to true when Database with such name exists`(){
-        model.validateName("main")
-        assertTrue(model.existsNameErr)
-
-        // same should happen even if name contains unsupported characters
-        model.validateName("m/a/i/n/") // will become `main` when cleaned by fixName
-        assertTrue(model.existsNameErr)
-    }
-
-    @Test
     fun `existsNameErr should be false when Database with such name exists but it's being edited`(){
         // database `test` already exists but it's being edited, so it doesn't count
-        model.validateName("test")
+        model.validateName("main")
         assertFalse(model.existsNameErr)
     }
 
