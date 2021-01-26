@@ -53,6 +53,7 @@ class EditDatabaseModelTests : ModelTest() {
 
     val model = EditDatabaseViewModel()
     lateinit var spyModel: EditDatabaseViewModel
+    lateinit var testModel: EditDatabaseViewModel
     lateinit var app: MyApp
 
     private val oldName = "main"
@@ -63,12 +64,22 @@ class EditDatabaseModelTests : ModelTest() {
     @Before
     fun setup(){
         app = MyApp()
-        app.databases = mutableListOf(Database(oldName))
+        app.databases = mutableListOf(Database(oldName, salt=salt))
 
         model.initialize(app, SRC_DIR, faker.str(), 0)
         spyModel = spy(model){ on{generateSalt()} doReturn salt }
         spyModel.uiDispatcher = Dispatchers.Unconfined
         spyModel.defaultDispatcher = Dispatchers.Unconfined
+
+        // inherit from EditDatabaseViewModel to override saveDatabase because it's a
+        // coroutine and can't be mocked
+        open class TestModel : EditDatabaseViewModel(){
+            override fun saveDatabase(oldName: String, database: Database, app: MyApp) =
+                    viewModelScope.async (Dispatchers.Unconfined) {
+                    }
+        }
+        testModel = TestModel()
+        testModel.initialize(app, SRC_DIR, faker.str(), 0)
     }
 
     @Test
@@ -80,6 +91,7 @@ class EditDatabaseModelTests : ModelTest() {
 
     @Test
     fun `apply should call saveDatabase`(){
+        spyModel = spy(testModel)
         runBlocking {
             spyModel.apply(name, password)
         }
@@ -114,24 +126,24 @@ class EditDatabaseModelTests : ModelTest() {
         runBlocking {
             spyModel.apply(name, password)
         }
-        assertFalse(Database(oldName) in spyModel.databases)
+        assertFalse(Database(oldName, salt=salt) in spyModel.databases)
         assertTrue(db in spyModel.databases)
     }
 
     @Test
     fun `apply should set finished`(){
         runBlocking {
-            spyModel.apply(name, password)
+            testModel.apply(name, password)
         }
-        assertTrue(spyModel.finished)
+        assertTrue(testModel.finished)
     }
 
     @Test
     fun `apply should set loading to true`(){
         runBlocking {
-            spyModel.apply(name, password)
+            testModel.apply(name, password)
         }
-        assertTrue(spyModel.loading)
+        assertTrue(testModel.loading)
     }
 
     /**
