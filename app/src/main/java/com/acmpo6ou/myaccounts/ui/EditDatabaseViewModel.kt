@@ -59,6 +59,11 @@ open class EditDatabaseViewModel : CreateEditViewModel() {
             val newDatabase = Database(name, password, oldDatabase.salt, oldDatabase.data)
             saveDatabase(oldDatabase.name, newDatabase, app).await()
 
+            // if password has change remove old cryptography key from cache
+            if(oldDatabase.password != password) {
+                app.keyCache.remove(oldDatabase.password)
+            }
+
             // add it to the list, sort the list and notify about creation
             databases[databaseIndex] = newDatabase
             databases.sortBy { it.name }

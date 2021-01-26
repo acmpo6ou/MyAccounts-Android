@@ -64,7 +64,8 @@ class EditDatabaseModelTests : ModelTest() {
     @Before
     fun setup(){
         app = MyApp()
-        app.databases = mutableListOf(Database(oldName, salt=salt))
+        app.databases = mutableListOf(Database(oldName, password, salt))
+        app.keyCache = mutableMapOf(password to deriveKeyUtil(password, salt))
 
         model.initialize(app, SRC_DIR, faker.str(), 0)
         spyModel = spy(model){ on{generateSalt()} doReturn salt }
@@ -126,8 +127,16 @@ class EditDatabaseModelTests : ModelTest() {
         runBlocking {
             spyModel.apply(name, password)
         }
-        assertFalse(Database(oldName, salt=salt) in spyModel.databases)
+        assertFalse(Database(oldName, password, salt) in spyModel.databases)
         assertTrue(db in spyModel.databases)
+    }
+
+    @Test
+    fun `apply should remove cached cryptography key if password has changed`(){
+        runBlocking {
+            spyModel.apply(name, "123") // now password is 123
+        }
+        assertFalse(deriveKeyUtil(password, salt) in app.keyCache)
     }
 
     @Test
