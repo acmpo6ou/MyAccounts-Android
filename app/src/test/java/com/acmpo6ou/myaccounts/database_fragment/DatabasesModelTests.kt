@@ -23,20 +23,12 @@ import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.DatabasesModel
-import com.acmpo6ou.myaccounts.core.deriveKeyUtil
-import com.acmpo6ou.myaccounts.getDatabaseMap
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
-import com.macasaet.fernet.StringValidator
-import com.macasaet.fernet.Token
-import com.macasaet.fernet.Validator
 import org.junit.Assert.*
 import org.junit.Test
 import java.io.File
 import java.io.FileNotFoundException
-import java.time.Duration
-import java.time.Instant
-import java.time.temporal.TemporalAmount
 
 class DatabasesTests {
     private val faker = Faker()
@@ -65,27 +57,6 @@ class DatabasesTests {
 class DatabasesModelTests: ModelTest() {
     var model = DatabasesModel(accountsDir, contentResolver)
 
-    /**
-     * This method decrypts given string.
-     *
-     * @param[string] string to decrypt.
-     * @param[password] password for decryption.
-     * @param[salt] salt for decryption.
-     * @return decrypted string.
-     */
-    private fun decryptStr(string: String, password: String, salt: ByteArray): String{
-        val key = deriveKeyUtil(password, salt)
-        val validator: Validator<String> = object : StringValidator {
-            // this checks whether our encrypted json string is expired or not
-            // in our app we don't care about expiration so we return Instant.MAX.epochSecond
-            override fun getTimeToLive(): TemporalAmount {
-                return Duration.ofSeconds(Instant.MAX.epochSecond)
-            }
-        }
-        val token = Token.fromString(string)
-        return token.validateAndDecrypt(key, validator)
-    }
-
     @Test
     fun `deleteDatabase removes db and bin files from disk`(){
         // create empty database so that we can delete it using deleteDatabase
@@ -102,62 +73,6 @@ class DatabasesModelTests: ModelTest() {
                 binFile.exists())
         assertFalse("deleteDatabase doesn't delete .db file",
                 dbFile.exists())
-    }
-
-    /**
-     * Helper method used by saveDatabase test to create old database and to call
-     * saveDatabase passing through new database.
-     */
-    private fun setUpSaveDatabase(){
-        // this database will be deleted by saveDatabase
-        val db = Database("test", "123", salt)
-        model.createDatabase(db, MyApp())
-
-        // this database will be created by saveDatabase
-        val newDb = Database("test2", "321",
-                salt.reversedArray(), getDatabaseMap())
-
-        // save newDb deleting db
-        model.saveDatabase("test", newDb, MyApp())
-    }
-
-    @Test
-    fun `saveDatabase should delete files of old database`(){
-        setUpSaveDatabase()
-
-        // check that there is no longer test.db and test.bin files
-        val oldDb = File("$SRC_DIR/test.db")
-        val oldBin = File("$SRC_DIR/test.bin")
-
-        assertFalse(".db file of old database is not deleted by saveDatabase method!",
-                oldDb.exists())
-        assertFalse(".bin file of old database is not deleted by saveDatabase method!",
-                oldBin.exists())
-    }
-
-    @Test
-    fun `saveDatabase should create new, non empty database file`(){
-        setUpSaveDatabase()
-
-        // this is a .db file that saveDatabase should create for us
-        val actualDb = File("$SRC_DIR/test2.db").readBytes()
-
-        // here we decrypt data saved to .db file to check that it was encrypted correctly
-        val data = decryptStr(String(actualDb), "321", salt.reversedArray())
-        assertEquals("saveDatabase creates incorrect database!",
-                jsonDatabase, data)
-    }
-
-    @Test
-    fun `saveDatabase should create new, non empty salt file`(){
-        setUpSaveDatabase()
-
-        // this is a .bin file that saveDatabase should create for us
-        val actualBin = File("$SRC_DIR/test2.bin").readBytes()
-
-        // .bin file must have appropriate content (i.e. salt)
-        assertEquals("saveDatabase created .bin file with incorrect salt!",
-                String(salt.reversedArray()), String(actualBin))
     }
 
     @Test
