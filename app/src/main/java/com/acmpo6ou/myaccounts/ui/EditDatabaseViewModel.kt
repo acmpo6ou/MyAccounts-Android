@@ -42,6 +42,13 @@ open class EditDatabaseViewModel : CreateEditViewModel() {
         createDatabaseUtil(database, SRC_DIR, app)
     }
 
+    /**
+     * This method saves new Database using [saveDatabase].
+     *
+     * If any error occurred it sets errorMsg to error message.
+     * @param[name] name for the database.
+     * @param[password] password for the database.
+     */
     override suspend fun apply(name: String, password: String) {
         try {
             // display loading progress bar
@@ -52,6 +59,9 @@ open class EditDatabaseViewModel : CreateEditViewModel() {
             val newDatabase = Database(name, password, oldDatabase.salt, oldDatabase.data)
             saveDatabase(oldDatabase.name, newDatabase, app).await()
 
+            // add it to the list, sort the list and notify about creation
+            databases[databaseIndex] = newDatabase
+            databases.sortBy { it.name }
             finished = true
         }
         catch (e: Exception){
