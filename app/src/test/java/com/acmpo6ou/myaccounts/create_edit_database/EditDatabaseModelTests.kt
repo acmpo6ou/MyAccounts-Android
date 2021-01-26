@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.create_edit_database
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.viewModelScope
 import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.Database
@@ -31,8 +32,11 @@ import com.acmpo6ou.myaccounts.ui.EditDatabaseViewModel
 import com.macasaet.fernet.StringValidator
 import com.macasaet.fernet.Token
 import com.macasaet.fernet.Validator
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.spy
+import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Before
@@ -86,16 +90,23 @@ class EditDatabaseModelTests : ModelTest() {
     fun `apply should handle any error`(){
         val msg = faker.str()
         val exception = Exception(msg)
-        whenever(spyModel.saveDatabase(oldName, db, app))
-                .doAnswer{
-                    throw exception
-                }
+
+        // inherit from EditDatabaseViewModel to override saveDatabase because it's a
+        // coroutine and can't be mocked
+        class TestModel : EditDatabaseViewModel(){
+            override fun saveDatabase(oldName: String, database: Database, app: MyApp) =
+                    viewModelScope.async (Dispatchers.Unconfined) {
+                        throw exception
+                    }
+        }
+        val model = TestModel()
+        model.initialize(app, SRC_DIR, faker.str(), 0)
 
         runBlocking {
-            spyModel.apply(name, password)
+            model.apply(name, password)
         }
-        assertEquals(exception.toString(), spyModel.errorMsg)
-        assertFalse(spyModel.loading)
+        assertEquals(exception.toString(), model.errorMsg)
+        assertFalse(model.loading)
     }
 
     @Test
