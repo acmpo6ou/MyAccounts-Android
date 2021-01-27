@@ -136,6 +136,7 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
                 databases.add(database)
             }
         }
+        databases.sortBy { it.name }
         return databases
     }
 
