@@ -45,8 +45,9 @@ open class CreateDatabaseViewModel : CreateEditViewModel() {
             loading = true
 
             // create database
+            val cleanedName = fixName(name)
             val salt = generateSalt()
-            val database = Database(name, password, salt)
+            val database = Database(cleanedName, password, salt)
             createDatabase(database).await()
 
             // add it to the list, sort the list and notify about creation

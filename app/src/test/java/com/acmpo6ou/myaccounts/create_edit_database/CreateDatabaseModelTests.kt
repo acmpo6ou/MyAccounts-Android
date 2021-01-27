@@ -40,7 +40,7 @@ class CreateDatabaseModelTests : ModelTest() {
     val model = CreateDatabaseViewModel()
     lateinit var spyModel: CreateDatabaseViewModel
 
-    private val name = faker.str()
+    private val name = "clean_name"
     override val password = faker.str()
     private val db = Database(name, password, salt)
 
@@ -59,6 +59,15 @@ class CreateDatabaseModelTests : ModelTest() {
     fun `apply should call createDatabase`(){
         runBlocking {
             spyModel.apply(name, password)
+        }
+        verify(spyModel).createDatabase(db)
+    }
+
+    @Test
+    fun `apply should use fixName`(){
+        runBlocking {
+            // will become `clean_name` when cleaned by fixName
+            spyModel.apply("c/lea  %\$n_name/", password)
         }
         verify(spyModel).createDatabase(db)
     }

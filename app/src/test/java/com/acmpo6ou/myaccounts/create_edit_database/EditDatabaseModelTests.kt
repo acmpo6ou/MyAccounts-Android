@@ -57,7 +57,7 @@ class EditDatabaseModelTests : ModelTest() {
     lateinit var app: MyApp
 
     private val oldName = "main"
-    private val name = faker.str()
+    private val name = "clean_name"
     override val password = faker.str()
     private val db = Database(name, password, salt)
 
@@ -103,6 +103,16 @@ class EditDatabaseModelTests : ModelTest() {
         spyModel = spy(testModel)
         runBlocking {
             spyModel.apply(name, password)
+        }
+        verify(spyModel).saveDatabase(oldName, db)
+    }
+
+    @Test
+    fun `apply should use fixName`(){
+        spyModel = spy(testModel)
+        runBlocking {
+            // will become `clean_name` when cleaned by fixName
+            spyModel.apply("c/lea  %\$n_name/", password)
         }
         verify(spyModel).saveDatabase(oldName, db)
     }

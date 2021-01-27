@@ -54,8 +54,10 @@ open class EditDatabaseViewModel : CreateEditViewModel() {
             loading = true
 
             // save database
+            val cleanedName = fixName(name)
             val oldDatabase = databases[databaseIndex]
-            val newDatabase = Database(name, password, oldDatabase.salt, oldDatabase.data)
+            val newDatabase = Database(cleanedName, password,
+                                       oldDatabase.salt, oldDatabase.data)
             saveDatabase(oldDatabase.name, newDatabase).await()
 
             // if password has change remove old cryptography key from cache
