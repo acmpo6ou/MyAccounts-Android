@@ -7,4 +7,4 @@ You can easily manage your accounts and store them safely in encrypted databases
 The interface of MyAccounts is common and easy to use.
 MyAccounts is completely free and open source project.
 
-Copyright (c) 2020 Kolvakh Bohdan
+Copyright (c) 2020 Bohdan Kolvakh
