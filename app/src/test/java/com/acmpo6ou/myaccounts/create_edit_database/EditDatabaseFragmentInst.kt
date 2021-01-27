@@ -58,16 +58,24 @@ class EditDatabaseFragmentInst {
             it.app = app
             it.initModel()
             it.args = mock{on{databaseIndex} doReturn 0}
+            it.initForm()
         }
     }
 
     @Test
     fun `initForm should fill name and password fields`(){
         scenario.onFragment {
-            it.initForm()
             assertEquals(db.name, it.b.databaseName.text.toString())
             assertEquals(db.password, it.b.databasePassword.text.toString())
             assertEquals(db.password, it.b.databaseRepeatPassword.text.toString())
+        }
+    }
+
+    @Test
+    fun `initForm should change text of apply button`(){
+        val saveText = context.resources.getString(R.string.save)
+        scenario.onFragment {
+            assertEquals(saveText, it.b.applyButton.text)
         }
     }
 }

@@ -46,6 +46,7 @@ class EditDatabaseFragment : CreateEditFragment() {
             b.databasePassword.setText(database.password)
             b.databaseRepeatPassword.setText(database.password)
         }
+        b.applyButton.text = myContext.resources.getString(R.string.save)
     }
 
     /**
