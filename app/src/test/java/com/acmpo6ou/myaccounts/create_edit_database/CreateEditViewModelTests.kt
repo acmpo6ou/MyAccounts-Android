@@ -53,7 +53,8 @@ class CreateEditViewModelTests : ModelTest() {
     @Before
     fun setup(){
         val app = MyApp()
-        app.databases = mutableListOf(Database("main"))
+        app.databases = mutableListOf(Database("main"),
+                                      Database("test", "123"))
 
         model.initialize(app, SRC_DIR)
         spyModel = spy(model){ on{generateSalt()} doReturn salt }
@@ -86,6 +87,10 @@ class CreateEditViewModelTests : ModelTest() {
 
         // same should happen even if name contains unsupported characters
         model.validateName("m/a/i/n/") // will become `main` when cleaned by fixName
+        assertTrue(model.existsNameErr)
+
+        // and even if database is opened
+        model.validateName("test") // test is opened
         assertTrue(model.existsNameErr)
     }
 
