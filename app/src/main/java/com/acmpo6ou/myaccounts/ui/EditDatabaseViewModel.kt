@@ -88,11 +88,13 @@ open class EditDatabaseViewModel : CreateEditViewModel() {
     override fun validateName(name: String) {
         // it's okay if name didn't change through editing
         val dbName = databases[databaseIndex].name
-        if(dbName == name){
+        val cleanedName = fixName(name)
+        if(dbName == cleanedName){
             existsNameErr = false
+            emptyNameErr = false
         }
         else{
-            super.validateName(name)
+            super.validateName(cleanedName)
         }
     }
 }

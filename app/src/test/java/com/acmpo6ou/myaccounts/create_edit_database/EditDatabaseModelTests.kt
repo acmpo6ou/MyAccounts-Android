@@ -84,10 +84,18 @@ class EditDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `existsNameErr should be false when Database with such name exists but it's being edited`(){
-        // database `test` already exists but it's being edited, so that doesn't count
+    fun `if name of Database didn't change through editing`(){
+        // database `main` already exists but it's being edited, so that doesn't count
         model.validateName(oldName)
         assertFalse(model.existsNameErr)
+        assertFalse(model.emptyNameErr)
+    }
+
+    @Test
+    fun `validateName should use fixName when Database name didn't change through editing`(){
+        model.validateName("m/a/i/n/") // will become `main` when cleaned by fixName
+        assertFalse(model.existsNameErr)
+        assertFalse(model.emptyNameErr)
     }
 
     @Test
