@@ -20,7 +20,6 @@
 package com.acmpo6ou.myaccounts.ui
 
 import androidx.lifecycle.viewModelScope
-import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.CreateEditViewModel
 import com.acmpo6ou.myaccounts.core.Database
 import com.acmpo6ou.myaccounts.core.createDatabaseUtil
@@ -36,7 +35,7 @@ open class EditDatabaseViewModel : CreateEditViewModel() {
      * @param[oldName] name of the old database that is to be replaced.
      * @param[database] new Database to be created, replacing the old one.
      */
-    open fun saveDatabase(oldName: String, database: Database, app: MyApp) =
+    open fun saveDatabase(oldName: String, database: Database) =
     viewModelScope.async (defaultDispatcher) {
         deleteDatabaseUtil(oldName, SRC_DIR)
         createDatabaseUtil(database, SRC_DIR, app)
@@ -57,14 +56,14 @@ open class EditDatabaseViewModel : CreateEditViewModel() {
             // save database
             val oldDatabase = databases[databaseIndex]
             val newDatabase = Database(name, password, oldDatabase.salt, oldDatabase.data)
-            saveDatabase(oldDatabase.name, newDatabase, app).await()
+            saveDatabase(oldDatabase.name, newDatabase).await()
 
             // if password has change remove old cryptography key from cache
             if(oldDatabase.password != password) {
                 app.keyCache.remove(oldDatabase.password)
             }
 
-            // add it to the list, sort the list and notify about creation
+            // add database to the list, sort the list and notify about creation
             databases[databaseIndex] = newDatabase
             databases.sortBy { it.name }
             finished = true
@@ -86,15 +85,16 @@ open class EditDatabaseViewModel : CreateEditViewModel() {
      * @param[name] name to validate.
      */
     override fun validateName(name: String) {
+        val oldName = databases[databaseIndex].name
+        val newName = fixName(name)
+
         // it's okay if name didn't change through editing
-        val dbName = databases[databaseIndex].name
-        val cleanedName = fixName(name)
-        if(dbName == cleanedName){
+        if(oldName == newName){
             existsNameErr = false
             emptyNameErr = false
         }
         else{
-            super.validateName(cleanedName)
+            super.validateName(newName)
         }
     }
 }

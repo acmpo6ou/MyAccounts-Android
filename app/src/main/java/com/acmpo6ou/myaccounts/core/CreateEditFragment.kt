@@ -97,7 +97,7 @@ abstract class CreateEditFragment : ViewModelFragment() {
     }
 
     /**
-     * This method used to initialize all fields and buttons of the create_edit_database form.
+     * Used to initialize all fields and buttons of the create_edit_database form.
      */
     open fun initForm(){
         // when database name is changed validate it using model to display error in case

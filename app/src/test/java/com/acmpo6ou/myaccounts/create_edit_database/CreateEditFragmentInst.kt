@@ -61,7 +61,6 @@ class CreateEditFragmentInst {
 
     @Before
     fun setup() {
-        // Create a graphical FragmentScenario for the fragment
         scenario = launchFragmentInContainer(themeResId= R.style.Theme_MyAccounts_NoActionBar)
         scenario.onFragment {
             it.viewModel.initialize(app, faker.str())

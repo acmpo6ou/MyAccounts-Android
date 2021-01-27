@@ -75,7 +75,7 @@ class EditDatabaseModelTests : ModelTest() {
         // inherit from EditDatabaseViewModel to override saveDatabase because it's a
         // coroutine and can't be mocked
         open class TestModel : EditDatabaseViewModel(){
-            override fun saveDatabase(oldName: String, database: Database, app: MyApp) =
+            override fun saveDatabase(oldName: String, database: Database) =
                     viewModelScope.async (Dispatchers.Unconfined) {
                     }
         }
@@ -104,7 +104,7 @@ class EditDatabaseModelTests : ModelTest() {
         runBlocking {
             spyModel.apply(name, password)
         }
-        verify(spyModel).saveDatabase(oldName, db, app)
+        verify(spyModel).saveDatabase(oldName, db)
     }
 
     @Test
@@ -115,7 +115,7 @@ class EditDatabaseModelTests : ModelTest() {
         // inherit from EditDatabaseViewModel to override saveDatabase because it's a
         // coroutine and can't be mocked
         class TestModel : EditDatabaseViewModel(){
-            override fun saveDatabase(oldName: String, database: Database, app: MyApp) =
+            override fun saveDatabase(oldName: String, database: Database) =
                     viewModelScope.async (Dispatchers.Unconfined) {
                         throw exception
                     }
@@ -135,6 +135,7 @@ class EditDatabaseModelTests : ModelTest() {
         runBlocking {
             spyModel.apply(name, password)
         }
+
         assertFalse(Database(oldName, password, salt) in spyModel.databases)
         assertTrue(db in spyModel.databases)
     }
@@ -148,7 +149,7 @@ class EditDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `apply should set finished`(){
+    fun `apply should set finished to true after successful save of database`(){
         runBlocking {
             testModel.apply(name, password)
         }
@@ -178,7 +179,7 @@ class EditDatabaseModelTests : ModelTest() {
 
         // save newDb deleting db
         runBlocking {
-            model.saveDatabase("test", newDb, MyApp()).await()
+            model.saveDatabase("test", newDb).await()
         }
     }
 

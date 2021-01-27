@@ -38,14 +38,20 @@ class EditDatabaseFragment : CreateEditFragment() {
         initForm()
     }
 
+    /**
+     * Used to initialize all fields and buttons of the create_edit_database form.
+     */
     override fun initForm() {
         super.initForm()
+        // set name and password fields to data of database being edited
         args?.let {
             val database = app.databases[it.databaseIndex]
             b.databaseName.setText(database.name)
             b.databasePassword.setText(database.password)
             b.databaseRepeatPassword.setText(database.password)
         }
+
+        // change text of apply button from `Create` to `Save`
         b.applyButton.text = myContext.resources.getString(R.string.save)
     }
 
