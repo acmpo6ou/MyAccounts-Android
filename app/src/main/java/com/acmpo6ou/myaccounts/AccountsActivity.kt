@@ -20,14 +20,15 @@
 package com.acmpo6ou.myaccounts
 
 import android.os.Bundle
-import com.google.android.material.navigation.NavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import com.acmpo6ou.myaccounts.core.loadSettings
+import com.google.android.material.navigation.NavigationView
 
 class AccountsActivity : AppCompatActivity() {
 
@@ -35,7 +36,9 @@ class AccountsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        loadSettings(this)
         setContentView(R.layout.activity_accounts)
+
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
