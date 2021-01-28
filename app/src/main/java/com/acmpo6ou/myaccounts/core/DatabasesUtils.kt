@@ -20,6 +20,8 @@
 package com.acmpo6ou.myaccounts.core
 
 import android.app.Activity
+import android.view.WindowManager
+import androidx.preference.PreferenceManager
 import com.acmpo6ou.myaccounts.MyApp
 import com.macasaet.fernet.Key
 import com.macasaet.fernet.StringValidator
@@ -200,4 +202,25 @@ fun setLocale(activity: Activity, languageCode:String) {
     val config = resources.configuration
     config.setLocale(locale)
     resources.updateConfiguration(config, resources.displayMetrics)
+}
+
+/**
+ * Loads defined by user settings such as app locale and screen capture.
+ * @param[activity] activity where to load settings.
+ */
+fun loadSettings(activity: Activity){
+    val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
+
+    // get locale preference and set locale
+    val localeCode = prefs.getString("language", "default")
+    if(localeCode != "default") {
+        setLocale(activity, localeCode!!)
+    }
+
+    // get screen capture preference and block screen capture if needed
+    val screenCapture = prefs.getBoolean("block_screen_capture", true)
+    if (screenCapture) {
+        activity.window.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
+                                 WindowManager.LayoutParams.FLAG_SECURE)
+    }
 }

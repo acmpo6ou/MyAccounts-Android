@@ -30,7 +30,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
@@ -45,11 +44,10 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.preference.PreferenceManager
 import com.acmpo6ou.myaccounts.core.MainActivityInter
 import com.acmpo6ou.myaccounts.core.MainPresenter
 import com.acmpo6ou.myaccounts.core.MainPresenterInter
-import com.acmpo6ou.myaccounts.core.setLocale
+import com.acmpo6ou.myaccounts.core.loadSettings
 import com.acmpo6ou.myaccounts.databinding.ActivityMainBinding
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -73,7 +71,7 @@ class MainActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_MyAccounts_NoActionBar)
         super.onCreate(savedInstanceState)
-        loadSettings()
+        loadSettings(this)
 
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
@@ -108,25 +106,6 @@ class MainActivity : AppCompatActivity(),
 
         checkPermissions()
         setAppVersion()
-    }
-
-    /**
-     * Loads defined by user settings such as app locale and screen capture.
-     */
-    private fun loadSettings(){
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-
-        // get locale preference and set locale
-        val localeCode = prefs.getString("language", "default")
-        if(localeCode != "default") {
-            setLocale(this, localeCode!!)
-        }
-
-        // get screen capture preference and block screen capture if needed
-        val screenCapture = prefs.getBoolean("block_screen_capture", true)
-        if (screenCapture) {
-            window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
-        }
     }
 
     /**
