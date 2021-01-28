@@ -164,7 +164,7 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
             view.notifyChanged(i)
         }
         catch (e: FileAlreadyExistsException){
-            errorDetails = resources.getString(R.string.import_exists)
+            errorDetails = resources.getString(R.string.db_exists)
             e.printStackTrace()
         }
         catch (e: IOException){

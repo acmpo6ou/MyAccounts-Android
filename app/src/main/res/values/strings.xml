@@ -19,7 +19,6 @@
 
 <resources>
     <string name="app_name" translatable="false">MyAccounts</string>
-    <string name="version_string" translatable="false">v1.0.0</string>
     <string name="settings">Settings</string>
     <string name="import_database">Import Database</string>
     <string name="check_for_updates">Check for Updates</string>
@@ -33,7 +32,7 @@
 
     <string name="password">Password</string>
     <string name="open_database">Open Database</string>
-    <string name="open_db">Open</string>
+    <string name="open_db">"Open "</string>
 
     <string name="database_name">Database name</string>
     <string name="database_name_tip">Only latin symbols, numbers and .()-_  are supported</string>
@@ -44,7 +43,7 @@
     <string name="save">Save</string>
 
     <string name="about_myaccounts">About MyAccounts</string>
-    <string name="copyright">© Bohdan Kolvakh</string>
+    <string name="copyright" translatable="false">© Bohdan Kolvakh</string>
     <string name="version">Version:</string>
     <string name="license">License</string>
     <string name="credits">Credits</string>
@@ -96,7 +95,7 @@
     <string name="import_diff_names">Tar file should contain .db and .bin files with the same names. For example: main.db and main.bin. Yours: %1$s.db %2$s.bin</string>
     <string name="import_bin_size">.bin file must have size of exactly 16 bytes, yours: %1$d</string>
     <string name="import_db_size">.db file must have size of at least 100 bytes, yours: %1$d</string>
-    <string name="import_exists">Database with such name already exists.</string>
+    <string name="db_exists">Database with such name already exists.</string>
     <string name="no_databases">No databases yet.\n To create one press the + button.</string>
 
     <string name="password_error">Incorrect password</string>
@@ -104,12 +103,11 @@
     <string name="open_error">Error opening database</string>
 
     <string name="empty_name">Please, provide a name</string>
-    <string name="db_exists">Database with such name already exists</string>
     <string name="empty_password">Please, provide a password</string>
     <string name="diff_passwords">Passwords do not match!</string>
     <string name="error_title">Error</string>
     <string name="length_">Length:</string>
-    <string name="numbers">Numbers</string>
+    <string name="numbers">Digits</string>
     <string name="big_english_letters">Big english letters</string>
     <string name="small_english_letters">Small english letters</string>
     <string name="punctuation">Punctuation</string>

@@ -55,7 +55,7 @@ class MainPresenterInst {
     private val resources: Resources = context.resources
     private val importErrorTitle = resources.getString(R.string.import_error_title)
     private val import2FilesMsg = resources.getString(R.string.import_2_files)
-    private val importExistsMsg = resources.getString(R.string.import_exists)
+    private val importExistsMsg = resources.getString(R.string.db_exists)
     private val ioError = resources.getString(R.string.io_error)
 
     @Before
