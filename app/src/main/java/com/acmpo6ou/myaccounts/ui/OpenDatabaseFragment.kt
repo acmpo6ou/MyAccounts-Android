@@ -21,9 +21,12 @@ package com.acmpo6ou.myaccounts.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -136,8 +139,19 @@ class OpenDatabaseFragment: ViewModelFragment() {
         viewModel = ViewModelProvider(this).get(OpenDatabaseViewModel::class.java)
         initModel()
 
+        // open database when `Open database` button is pressed
         b.openDatabase.setOnClickListener{
             viewModel.startPasswordCheck(b.databasePassword.text.toString())
+        }
+
+        // open database when Enter is pressed in password field
+        b.databasePassword.setOnEditorActionListener{
+            _: TextView, action: Int, keyEvent: KeyEvent? ->
+            if(keyEvent?.keyCode == KeyEvent.KEYCODE_ENTER ||
+               action == EditorInfo.IME_ACTION_DONE){
+                b.openDatabase.performClick()
+            }
+            false
         }
     }
 
