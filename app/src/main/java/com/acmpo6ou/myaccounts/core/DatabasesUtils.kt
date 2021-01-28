@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.core
 
+import android.app.Activity
 import com.acmpo6ou.myaccounts.MyApp
 import com.macasaet.fernet.Key
 import com.macasaet.fernet.StringValidator
@@ -31,6 +32,7 @@ import java.io.File
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.TemporalAmount
+import java.util.*
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 
@@ -183,4 +185,19 @@ fun deleteDatabaseUtil(name: String, SRC_DIR: String){
 
     val dbFile = File("$SRC_DIR/$name.db")
     dbFile.delete()
+}
+
+/**
+ * Helper method to change app locale.
+ * @param[activity] activity that needs to change locale.
+ * @param[languageCode] language code ot change locale such as `uk` for Ukraine.
+ */
+fun setLocale(activity: Activity, languageCode:String) {
+    val locale = Locale(languageCode)
+    Locale.setDefault(locale)
+
+    val resources = activity.resources
+    val config = resources.configuration
+    config.setLocale(locale)
+    resources.updateConfiguration(config, resources.displayMetrics)
 }

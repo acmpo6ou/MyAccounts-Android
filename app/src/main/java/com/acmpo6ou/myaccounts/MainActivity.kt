@@ -44,9 +44,11 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.preference.PreferenceManager
 import com.acmpo6ou.myaccounts.core.MainActivityInter
 import com.acmpo6ou.myaccounts.core.MainPresenter
 import com.acmpo6ou.myaccounts.core.MainPresenterInter
+import com.acmpo6ou.myaccounts.core.setLocale
 import com.acmpo6ou.myaccounts.databinding.ActivityMainBinding
 import com.acmpo6ou.myaccounts.ui.DatabaseFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -70,6 +72,14 @@ class MainActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_MyAccounts_NoActionBar)
         super.onCreate(savedInstanceState)
+
+        // get locale preference and set locale
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val localeCode = prefs.getString("language", "default")
+
+        if(localeCode != "default") {
+            setLocale(this, localeCode!!)
+        }
 
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)

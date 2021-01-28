@@ -22,7 +22,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <ListPreference
-        android:defaultValue="Default"
+        android:defaultValue="default"
         android:dialogIcon="@drawable/ic_language"
         android:entries="@array/languages"
         android:entryValues="@array/lang_values"
