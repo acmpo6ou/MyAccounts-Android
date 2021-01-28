@@ -54,7 +54,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="@string/version_string"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView5"
@@ -65,33 +64,12 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="24dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="24dp"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/updateProgressbar"
+        app:layout_constraintBottom_toTopOf="@+id/updateLater"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView5" />
-
-    <ProgressBar
-        android:id="@+id/updateProgressbar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/updateLater"
-        app:layout_constraintEnd_toStartOf="@+id/updateProgressText"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/updateProgressText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="5MB/10MB"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/downloadUpdate"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/updateProgressbar" />
 
     <Button
         android:id="@+id/downloadUpdate"
