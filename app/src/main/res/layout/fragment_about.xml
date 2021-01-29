@@ -50,7 +50,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/versionLabel"
         android:layout_width="0dp"
         android:layout_height="33dp"
         android:layout_marginTop="68dp"
