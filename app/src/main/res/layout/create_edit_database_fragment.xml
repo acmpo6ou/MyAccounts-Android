@@ -55,8 +55,6 @@
         android:layout_marginTop="16dp"
         android:hint="@string/password"
         app:passwordToggleEnabled="true"
-        app:helperText="@string/password_tip"
-        app:helperTextEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/parentName">
@@ -77,6 +75,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:hint="@string/repeat_password"
+        app:helperText="@string/password_tip"
+        app:helperTextEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/parentPassword"
