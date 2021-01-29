@@ -39,14 +39,14 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     buildToolsVersion "30.0.2"
     buildFeatures.viewBinding = true
 
     defaultConfig {
         applicationId "com.acmpo6ou.myaccounts"
         minSdkVersion 26
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0.0"
 
@@ -81,8 +81,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.2'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.2'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.3'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -103,13 +103,13 @@ dependencies {
     testImplementation 'junit:junit:4.13.1'
     testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0'
     testImplementation 'org.robolectric:robolectric:4.4'
-    testImplementation 'androidx.navigation:navigation-testing:2.3.2'
+    testImplementation 'androidx.navigation:navigation-testing:2.3.3'
     testImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     testImplementation 'com.github.javafaker:javafaker:0.18'
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
 
     androidTestImplementation 'com.github.javafaker:javafaker:0.18'
-    androidTestImplementation 'androidx.navigation:navigation-testing:2.3.2'
+    androidTestImplementation 'androidx.navigation:navigation-testing:2.3.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.1.0'
     androidTestImplementation 'androidx.test:runner:1.1.1'
