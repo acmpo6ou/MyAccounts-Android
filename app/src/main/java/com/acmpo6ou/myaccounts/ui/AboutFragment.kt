@@ -27,8 +27,14 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.acmpo6ou.myaccounts.BuildConfig
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.ui.about.AboutTab
+import com.acmpo6ou.myaccounts.ui.about.CreditsTab
+import com.acmpo6ou.myaccounts.ui.about.LicenseTab
 
-class AboutFragment : Fragment() {
+class AboutFragment : Fragment(),
+                      AboutTab.OnFragmentInteractionListener,
+                      LicenseTab.OnFragmentInteractionListener,
+                      CreditsTab.OnFragmentInteractionListener{
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
