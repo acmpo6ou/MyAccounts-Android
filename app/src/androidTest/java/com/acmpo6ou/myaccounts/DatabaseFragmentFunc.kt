@@ -25,10 +25,10 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.database.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.database.DatabaseFragment
-import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
@@ -47,11 +47,12 @@ class DatabaseFragmentInst {
         databaseScenario = launchFragmentInContainer<DatabaseFragment>(
                 themeResId = R.style.Theme_MyAccounts_NoActionBar)
 
-        // mock presenter with fake database
-        val mockDatabases = mutableListOf(Database("main"))
-        presenter = mock{on{databases} doReturn mockDatabases}
+        val app = MyApp()
+        app.databases = mutableListOf(Database("main"))
+        presenter = mock()
 
         databaseScenario.onFragment {
+            it.app = app
             it.presenter = presenter
         }
     }
