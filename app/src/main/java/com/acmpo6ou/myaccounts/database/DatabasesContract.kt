@@ -17,13 +17,13 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.core
+package com.acmpo6ou.myaccounts.database
 
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import com.acmpo6ou.myaccounts.MyApp
-import com.acmpo6ou.myaccounts.ui.DatabasesAdapter
+import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.ui.database.DatabasesAdapter
 
 interface DatabasesPresenterInter{
     var databases: MutableList<Database>

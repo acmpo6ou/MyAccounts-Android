@@ -25,7 +25,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="16dp"
-    tools:context=".ui.DisplayAccountFragment">
+    tools:context=".ui.account.DisplayAccountFragment">
 
     <TextView
         android:id="@+id/accountName"

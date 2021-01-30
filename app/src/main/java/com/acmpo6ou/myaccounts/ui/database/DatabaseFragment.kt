@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.ui
+package com.acmpo6ou.myaccounts.ui.database
 
 import android.app.Activity
 import android.content.Context
@@ -33,6 +33,7 @@ import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.database.*
+import com.acmpo6ou.myaccounts.database.superclass.SuperFragment
 import com.acmpo6ou.myaccounts.databinding.FragmentDatabaseListBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar

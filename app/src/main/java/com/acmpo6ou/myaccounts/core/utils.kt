@@ -22,7 +22,6 @@ package com.acmpo6ou.myaccounts.core
 import android.app.Activity
 import android.view.WindowManager
 import androidx.preference.PreferenceManager
-import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.database.Account
 import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.database.DbMap

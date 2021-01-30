@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.ui
+package com.acmpo6ou.myaccounts.ui.account
 
 import android.view.LayoutInflater
 import android.view.View

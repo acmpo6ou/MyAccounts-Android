@@ -21,9 +21,9 @@ package com.acmpo6ou.myaccounts.create_edit_database
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.ModelTest
-import com.acmpo6ou.myaccounts.MyApp
-import com.acmpo6ou.myaccounts.core.CreateEditViewModel
-import com.acmpo6ou.myaccounts.core.Database
+import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.database.superclass.CreateEditViewModel
+import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.str
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.Dispatchers

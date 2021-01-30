@@ -19,14 +19,15 @@
 
 package com.acmpo6ou.myaccounts.open_database
 
+import android.os.Build
 import android.view.View
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.str
-import com.acmpo6ou.myaccounts.ui.OpenDatabaseFragment
-import com.acmpo6ou.myaccounts.ui.OpenDatabaseViewModel
+import com.acmpo6ou.myaccounts.ui.database.OpenDatabaseFragment
+import com.acmpo6ou.myaccounts.ui.database.OpenDatabaseViewModel
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
@@ -37,11 +38,13 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 @ExperimentalCoroutinesApi
+@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class OpenDatabaseFragmentInst {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()

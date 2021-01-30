@@ -22,11 +22,12 @@ package com.acmpo6ou.myaccounts.main_activity
 import android.content.Context
 import android.content.res.Resources
 import android.net.Uri
+import android.os.Build
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.MainActivityInter
-import com.acmpo6ou.myaccounts.core.MainModelInter
-import com.acmpo6ou.myaccounts.core.MainPresenter
+import com.acmpo6ou.myaccounts.database.MainActivityInter
+import com.acmpo6ou.myaccounts.database.MainModelInter
+import com.acmpo6ou.myaccounts.database.MainPresenter
 import com.acmpo6ou.myaccounts.randomIntExcept
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
@@ -38,10 +39,12 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import java.io.File
 import java.io.IOException
 
 @RunWith(RobolectricTestRunner::class)
+@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class MainPresenterInst {
     lateinit var presenter: MainPresenter
     lateinit var model: MainModelInter

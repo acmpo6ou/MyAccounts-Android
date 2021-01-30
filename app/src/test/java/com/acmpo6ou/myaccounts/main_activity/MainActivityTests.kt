@@ -23,7 +23,7 @@ import android.app.Activity
 import com.acmpo6ou.myaccounts.DatabaseViewTest
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R.id.*
-import com.acmpo6ou.myaccounts.core.MainPresenterInter
+import com.acmpo6ou.myaccounts.database.MainPresenterInter
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify

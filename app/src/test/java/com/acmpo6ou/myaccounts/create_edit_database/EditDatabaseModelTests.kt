@@ -22,13 +22,13 @@ package com.acmpo6ou.myaccounts.create_edit_database
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.viewModelScope
 import com.acmpo6ou.myaccounts.ModelTest
-import com.acmpo6ou.myaccounts.MyApp
-import com.acmpo6ou.myaccounts.core.Database
+import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.core.createDatabaseUtil
 import com.acmpo6ou.myaccounts.core.deriveKeyUtil
 import com.acmpo6ou.myaccounts.getDatabaseMap
 import com.acmpo6ou.myaccounts.str
-import com.acmpo6ou.myaccounts.ui.EditDatabaseViewModel
+import com.acmpo6ou.myaccounts.ui.database.EditDatabaseViewModel
 import com.macasaet.fernet.StringValidator
 import com.macasaet.fernet.Token
 import com.macasaet.fernet.Validator

@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.database.`super`
+package com.acmpo6ou.myaccounts.database.superclass
 
 import android.content.Context
 import android.os.Bundle

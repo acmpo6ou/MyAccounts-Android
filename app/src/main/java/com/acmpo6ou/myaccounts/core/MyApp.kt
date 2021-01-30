@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts
+package com.acmpo6ou.myaccounts.core
 
 import android.app.Application
 import com.acmpo6ou.myaccounts.database.Database

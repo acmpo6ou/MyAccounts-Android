@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.database.`super`
+package com.acmpo6ou.myaccounts.database.superclass
 
 import androidx.lifecycle.Observer
 import com.acmpo6ou.myaccounts.R

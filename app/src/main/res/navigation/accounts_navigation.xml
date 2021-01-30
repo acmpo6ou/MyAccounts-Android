@@ -25,7 +25,7 @@
     app:startDestination="@id/accountsFragment">
     <fragment
         android:id="@+id/accountsFragment"
-        android:name="com.acmpo6ou.myaccounts.ui.AccountsFragment"
+        android:name="com.acmpo6ou.myaccounts.ui.account.AccountsFragment"
         android:label="fragment_accounts_list"
         tools:layout="@layout/fragment_accounts_list" />
 </navigation>

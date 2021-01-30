@@ -22,6 +22,7 @@ package com.acmpo6ou.myaccounts.main_activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Looper
 import android.view.View
 import android.widget.TextView
@@ -41,11 +42,13 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows
+import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 import org.robolectric.shadows.ShadowAlertDialog
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
+@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class MainActivityInst {
     lateinit var mainScenario: ActivityScenario<MainActivity>
     private val faker = Faker()

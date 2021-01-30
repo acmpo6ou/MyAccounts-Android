@@ -21,8 +21,12 @@ package com.acmpo6ou.myaccounts.database_fragment
 
 import android.content.ContentResolver
 import android.net.Uri
-import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.*
+import com.acmpo6ou.myaccounts.database.Database
+import com.acmpo6ou.myaccounts.database.DatabaseFragmentInter
+import com.acmpo6ou.myaccounts.database.DatabasesModelInter
+import com.acmpo6ou.myaccounts.database.DatabasesPresenter
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock

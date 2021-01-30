@@ -20,7 +20,7 @@
 package com.acmpo6ou.myaccounts.database_fragment
 
 import android.content.Context
-import com.acmpo6ou.myaccounts.core.Database
+import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.getDatabaseMap
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.*

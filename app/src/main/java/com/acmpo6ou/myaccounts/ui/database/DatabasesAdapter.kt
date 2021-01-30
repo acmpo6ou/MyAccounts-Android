@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.ui
+package com.acmpo6ou.myaccounts.ui.database
 
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan

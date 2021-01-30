@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.ui
+package com.acmpo6ou.myaccounts.ui.database
 
 import android.content.Context
 import android.os.Bundle
@@ -33,7 +33,7 @@ import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.database.ViewModelFragment
+import com.acmpo6ou.myaccounts.database.superclass.ViewModelFragment
 import com.acmpo6ou.myaccounts.databinding.OpenDatabaseFragmentBinding
 
 class OpenDatabaseFragment: ViewModelFragment() {

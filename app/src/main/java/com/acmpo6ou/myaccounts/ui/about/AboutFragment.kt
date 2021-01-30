@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.ui
+package com.acmpo6ou.myaccounts.ui.about
 
 import android.app.Activity
 import android.os.Bundle
@@ -29,7 +29,6 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.acmpo6ou.myaccounts.BuildConfig
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.ui.about.AboutAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 

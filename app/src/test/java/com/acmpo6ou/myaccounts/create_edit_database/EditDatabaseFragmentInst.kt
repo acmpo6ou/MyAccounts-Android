@@ -19,14 +19,15 @@
 
 package com.acmpo6ou.myaccounts.create_edit_database
 
+import android.os.Build
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.platform.app.InstrumentationRegistry
-import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.Database
-import com.acmpo6ou.myaccounts.ui.EditDatabaseFragment
+import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.database.Database
+import com.acmpo6ou.myaccounts.ui.database.EditDatabaseFragment
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import org.junit.Assert.assertEquals
@@ -35,10 +36,12 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
+@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class EditDatabaseFragmentInst {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()

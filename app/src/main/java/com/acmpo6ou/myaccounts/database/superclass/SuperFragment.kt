@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.database.`super`
+package com.acmpo6ou.myaccounts.database.superclass
 
 import android.content.Intent
 import androidx.fragment.app.Fragment

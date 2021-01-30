@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts.database_fragment
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Looper.getMainLooper
 import android.view.View
 import android.widget.ImageView
@@ -34,13 +35,13 @@ import androidx.navigation.testing.TestNavHostController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
-import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.Database
-import com.acmpo6ou.myaccounts.core.DatabasesPresenter
+import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.database.Database
+import com.acmpo6ou.myaccounts.database.DatabasesPresenter
 import com.acmpo6ou.myaccounts.findSnackbarTextView
-import com.acmpo6ou.myaccounts.ui.DatabaseFragment
-import com.acmpo6ou.myaccounts.ui.DatabaseFragmentDirections
+import com.acmpo6ou.myaccounts.ui.database.DatabaseFragment
+import com.acmpo6ou.myaccounts.ui.database.DatabaseFragmentDirections
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.assertEquals
@@ -50,11 +51,13 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
+import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 import org.robolectric.shadows.ShadowAlertDialog
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
+@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class DatabaseFragmentInstrumentation {
     lateinit var databaseScenario: FragmentScenario<DatabaseFragment>
     private lateinit var navController: NavController

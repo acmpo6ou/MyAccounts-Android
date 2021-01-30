@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.database_fragment
 
 import android.content.Context
+import android.os.Build
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.str
@@ -31,10 +32,12 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyString
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import java.io.FileNotFoundException
 import java.io.IOException
 
 @RunWith(RobolectricTestRunner::class)
+@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class DatabasesPresenterInst: DatabasesPresenterTest() {
     // get string resources
     val context: Context = InstrumentationRegistry.getInstrumentation().targetContext

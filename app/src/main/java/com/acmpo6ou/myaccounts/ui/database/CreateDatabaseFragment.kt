@@ -17,11 +17,11 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.ui
+package com.acmpo6ou.myaccounts.ui.database
 
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
-import com.acmpo6ou.myaccounts.database.CreateEditFragment
+import com.acmpo6ou.myaccounts.database.superclass.CreateEditFragment
 
 class CreateDatabaseFragment : CreateEditFragment() {
     companion object {

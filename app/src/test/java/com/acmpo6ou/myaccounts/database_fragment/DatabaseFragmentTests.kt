@@ -21,8 +21,8 @@ package com.acmpo6ou.myaccounts.database_fragment
 
 import android.app.Activity
 import com.acmpo6ou.myaccounts.DatabaseViewTest
-import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
-import com.acmpo6ou.myaccounts.ui.DatabaseFragment
+import com.acmpo6ou.myaccounts.database.DatabasesPresenterInter
+import com.acmpo6ou.myaccounts.ui.database.DatabaseFragment
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify

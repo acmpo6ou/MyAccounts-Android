@@ -22,8 +22,8 @@ package com.acmpo6ou.myaccounts
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.acmpo6ou.myaccounts.core.Account
-import com.acmpo6ou.myaccounts.core.DbMap
+import com.acmpo6ou.myaccounts.database.Account
+import com.acmpo6ou.myaccounts.database.DbMap
 import com.github.javafaker.Faker
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.SnackbarContentLayout

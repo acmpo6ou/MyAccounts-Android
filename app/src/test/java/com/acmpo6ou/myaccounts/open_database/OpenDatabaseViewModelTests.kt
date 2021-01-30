@@ -20,11 +20,11 @@
 package com.acmpo6ou.myaccounts.open_database
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.acmpo6ou.myaccounts.MyApp
-import com.acmpo6ou.myaccounts.core.Database
+import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.getDatabaseMap
 import com.acmpo6ou.myaccounts.str
-import com.acmpo6ou.myaccounts.ui.OpenDatabaseViewModel
+import com.acmpo6ou.myaccounts.ui.database.OpenDatabaseViewModel
 import com.github.javafaker.Faker
 import com.macasaet.fernet.TokenValidationException
 import com.nhaarman.mockitokotlin2.*

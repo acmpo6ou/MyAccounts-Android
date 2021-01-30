@@ -22,12 +22,12 @@ package com.acmpo6ou.myaccounts.main_activity
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
-import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.Database
-import com.acmpo6ou.myaccounts.core.MainActivityInter
-import com.acmpo6ou.myaccounts.core.MainModelInter
-import com.acmpo6ou.myaccounts.core.MainPresenter
+import com.acmpo6ou.myaccounts.database.Database
+import com.acmpo6ou.myaccounts.database.MainActivityInter
+import com.acmpo6ou.myaccounts.database.MainModelInter
+import com.acmpo6ou.myaccounts.database.MainPresenter
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.assertTrue
 import org.junit.Before

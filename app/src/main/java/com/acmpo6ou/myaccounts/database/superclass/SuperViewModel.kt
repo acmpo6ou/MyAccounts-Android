@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.database.`super`
+package com.acmpo6ou.myaccounts.database.superclass
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

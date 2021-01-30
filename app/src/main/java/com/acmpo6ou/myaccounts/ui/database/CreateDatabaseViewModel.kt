@@ -17,10 +17,10 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.ui
+package com.acmpo6ou.myaccounts.ui.database
 
 import androidx.lifecycle.viewModelScope
-import com.acmpo6ou.myaccounts.database.CreateEditViewModel
+import com.acmpo6ou.myaccounts.database.superclass.CreateEditViewModel
 import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.core.createDatabaseUtil
 import kotlinx.coroutines.async

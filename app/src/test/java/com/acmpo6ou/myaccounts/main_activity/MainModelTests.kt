@@ -20,7 +20,7 @@
 package com.acmpo6ou.myaccounts.main_activity
 
 import com.acmpo6ou.myaccounts.ModelTest
-import com.acmpo6ou.myaccounts.core.MainModel
+import com.acmpo6ou.myaccounts.database.MainModel
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test

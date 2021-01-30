@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.core
+package com.acmpo6ou.myaccounts.database
 
 import android.net.Uri
 import com.acmpo6ou.myaccounts.R

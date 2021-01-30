@@ -17,8 +17,9 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.database_utils
+package com.acmpo6ou.myaccounts.utils
 
+import android.os.Build
 import androidx.test.core.app.ActivityScenario
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
@@ -35,11 +36,13 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyString
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
+@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class GeneratePasswordInst {
     lateinit var scenario: ActivityScenario<MainActivity>
     lateinit var dialog: GeneratePassword

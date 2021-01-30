@@ -44,12 +44,13 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.acmpo6ou.myaccounts.core.MainActivityInter
-import com.acmpo6ou.myaccounts.core.MainPresenter
-import com.acmpo6ou.myaccounts.core.MainPresenterInter
+import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.loadSettings
+import com.acmpo6ou.myaccounts.database.MainActivityInter
+import com.acmpo6ou.myaccounts.database.MainPresenter
+import com.acmpo6ou.myaccounts.database.MainPresenterInter
 import com.acmpo6ou.myaccounts.databinding.ActivityMainBinding
-import com.acmpo6ou.myaccounts.ui.DatabaseFragment
+import com.acmpo6ou.myaccounts.ui.database.DatabaseFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar

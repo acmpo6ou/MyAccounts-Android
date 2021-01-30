@@ -17,11 +17,11 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.core
+package com.acmpo6ou.myaccounts.database
 
 import android.content.Context
 import android.net.Uri
-import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.core.MyApp
 
 interface MainPresenterInter{
     fun importSelected()

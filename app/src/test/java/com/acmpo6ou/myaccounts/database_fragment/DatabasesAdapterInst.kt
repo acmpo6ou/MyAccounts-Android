@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.database_fragment
 
+import android.os.Build
 import android.view.Menu.FLAG_ALWAYS_PERFORM_CLOSE
 import android.view.View
 import android.widget.ImageView
@@ -27,20 +28,22 @@ import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.Database
-import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
-import com.acmpo6ou.myaccounts.ui.DatabaseFragment
+import com.acmpo6ou.myaccounts.database.Database
+import com.acmpo6ou.myaccounts.database.DatabasesPresenterInter
+import com.acmpo6ou.myaccounts.ui.database.DatabaseFragment
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 import org.robolectric.shadows.ShadowPopupMenu
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
+@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class DatabasesAdapterInst {
     lateinit var databaseScenario: FragmentScenario<DatabaseFragment>
     lateinit var presenter: DatabasesPresenterInter

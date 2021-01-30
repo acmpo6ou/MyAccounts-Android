@@ -19,15 +19,16 @@
 
 package com.acmpo6ou.myaccounts.create_edit_database
 
+import android.os.Build
 import android.view.View
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.platform.app.InstrumentationRegistry
-import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.CreateEditFragment
-import com.acmpo6ou.myaccounts.core.CreateEditViewModel
+import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.database.superclass.CreateEditFragment
+import com.acmpo6ou.myaccounts.database.superclass.CreateEditViewModel
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.doNothing
@@ -40,6 +41,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
 // this is because CreateEditFragment is abstract
@@ -49,6 +51,7 @@ class TestFragment : CreateEditFragment(){
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
+@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class CreateEditFragmentInst {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()

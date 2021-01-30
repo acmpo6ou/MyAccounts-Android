@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.ui
+package com.acmpo6ou.myaccounts.ui.account
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle

@@ -17,11 +17,14 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.core
+package com.acmpo6ou.myaccounts.database
 
 import android.content.ContentResolver
 import android.net.Uri
-import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.core.createDatabaseUtil
+import com.acmpo6ou.myaccounts.core.deleteDatabaseUtil
+import com.acmpo6ou.myaccounts.core.openDatabaseUtil
 import kotlinx.serialization.Serializable
 import org.kamranzafar.jtar.TarEntry
 import org.kamranzafar.jtar.TarOutputStream
@@ -79,7 +82,7 @@ data class Database(val name: String,
  * @param[ACCOUNTS_DIR] path to directory that contains src folder.
  */
 class DatabasesModel(private val ACCOUNTS_DIR: String,
-                     private val contentResolver: ContentResolver): DatabasesModelInter{
+                     private val contentResolver: ContentResolver): DatabasesModelInter {
     // path to directory that contains databases
     private val SRC_DIR = "$ACCOUNTS_DIR/src/"
 

@@ -17,8 +17,9 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.database_utils
+package com.acmpo6ou.myaccounts.utils
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -29,8 +30,8 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.database.MainActivityInter
-import com.acmpo6ou.myaccounts.database.SuperViewModel
-import com.acmpo6ou.myaccounts.database.ViewModelFragment
+import com.acmpo6ou.myaccounts.database.superclass.SuperViewModel
+import com.acmpo6ou.myaccounts.database.superclass.ViewModelFragment
 import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
@@ -42,6 +43,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
 // ViewModelFragment is abstract, so here we create TestFragment so that we can instantiate it
@@ -61,6 +63,7 @@ class TestFragment: ViewModelFragment(){
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
+@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class ViewModelFragmentInst {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
