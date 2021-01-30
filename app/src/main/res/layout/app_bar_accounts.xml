@@ -39,6 +39,8 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_accounts" />
+    <include
+        android:id="@+id/content_accounts"
+        layout="@layout/content_accounts" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
