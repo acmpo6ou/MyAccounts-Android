@@ -27,5 +27,41 @@
         android:id="@+id/accountsFragment"
         android:name="com.acmpo6ou.myaccounts.ui.account.AccountsFragment"
         android:label="fragment_accounts_list"
-        tools:layout="@layout/fragment_accounts_list" />
+        tools:layout="@layout/fragment_accounts_list" >
+        <action
+            android:id="@+id/actionChangelog"
+            app:destination="@id/changelogFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/actionSettings"
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/actionAbout"
+            app:destination="@id/aboutFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/changelogFragment"
+        android:name="com.acmpo6ou.myaccounts.ui.ChangelogFragment"
+        android:label="Changelog"
+        tools:layout="@layout/fragment_changelog" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.acmpo6ou.myaccounts.ui.SettingsFragment"
+        android:label="Settings" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.acmpo6ou.myaccounts.ui.about.AboutFragment"
+        android:label="About"
+        tools:layout="@layout/fragment_about" />
 </navigation>
