@@ -1,0 +1,10 @@
+account - contains all files related to accounts
+core - contains some utils used by most packages
+
+database - contains all files related to databases
+database.superclass - contains super classes for database package
+
+ui - contains all files related to ui, such as fragments and their view models or adapters
+ui.about - contains files related to AboutFragment
+ui.account - contains ui files related to accounts
+ui.database - contains ui files related to databases
