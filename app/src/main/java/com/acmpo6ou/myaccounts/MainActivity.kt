@@ -32,19 +32,10 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.core.SuperActivity
 import com.acmpo6ou.myaccounts.core.loadSettings
 import com.acmpo6ou.myaccounts.database.MainActivityInter
 import com.acmpo6ou.myaccounts.database.MainPresenter
@@ -52,21 +43,17 @@ import com.acmpo6ou.myaccounts.database.MainPresenterInter
 import com.acmpo6ou.myaccounts.databinding.ActivityMainBinding
 import com.acmpo6ou.myaccounts.ui.database.DatabaseFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 
 
-class MainActivity : AppCompatActivity(),
-        NavigationView.OnNavigationItemSelectedListener, MainActivityInter {
-
+class MainActivity : SuperActivity(), MainActivityInter {
     val IMPORT_RC = 202
     override lateinit var ACCOUNTS_DIR: String
     override lateinit var myContext: Context
     override lateinit var app: MyApp
 
-    lateinit var b: ActivityMainBinding
-
-    private lateinit var appBarConfiguration: AppBarConfiguration
+    override lateinit var b: ActivityMainBinding
+    override val mainFragment = R.id.databaseFragment
     lateinit var presenter: MainPresenterInter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,38 +72,7 @@ class MainActivity : AppCompatActivity(),
         presenter = MainPresenter(this)
         setSupportActionBar(b.appbar.toolbar)
 
-        // setup navigation controller
-        val navController = findNavController(R.id.nav_host_fragment)
-        appBarConfiguration = AppBarConfiguration(navController.graph, b.drawerLayout)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-
-        // setup navigation view
-        b.navView.setupWithNavController(navController)
-        b.navView.setNavigationItemSelectedListener(this)
-
-        // navigation drawer should be unlocked only on DatabaseFragment and locked
-        // everywhere else
-        navController.addOnDestinationChangedListener{ _: NavController, navDestination: NavDestination, _: Bundle? ->
-            if(navDestination.id == R.id.databaseFragment){
-                b.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-            }
-            else{
-                b.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-            }
-        }
-
         checkPermissions()
-        setAppVersion()
-    }
-
-    /**
-     * This method obtains version name and sets it in navigation header.
-     */
-    private fun setAppVersion() {
-        val version = BuildConfig.VERSION_NAME
-        val header = b.navView.getHeaderView(0)
-        val versionString = header.findViewById<TextView>(R.id.versionString)
-        versionString.text = version
     }
 
     /**
@@ -128,11 +84,6 @@ class MainActivity : AppCompatActivity(),
         if(isGranted != PackageManager.PERMISSION_GRANTED){
             requestPermissions(arrayOf(permission.WRITE_EXTERNAL_STORAGE), 300)
         }
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -147,16 +98,6 @@ class MainActivity : AppCompatActivity(),
         // close drawer when any item is selected
         b.drawerLayout.closeDrawer(GravityCompat.START)
         return false
-    }
-
-    override fun onBackPressed() {
-        // close navigation drawer when Back button is pressed and if it is opened
-        if(b.drawerLayout.isDrawerOpen(GravityCompat.START)){
-            b.drawerLayout.closeDrawer(GravityCompat.START)
-        }
-        else{
-            super.onBackPressed()
-        }
     }
 
     /**

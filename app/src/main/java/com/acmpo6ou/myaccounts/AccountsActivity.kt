@@ -20,35 +20,26 @@
 package com.acmpo6ou.myaccounts
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
+import android.view.MenuItem
+import com.acmpo6ou.myaccounts.core.SuperActivity
 import com.acmpo6ou.myaccounts.core.loadSettings
-import com.google.android.material.navigation.NavigationView
+import com.acmpo6ou.myaccounts.databinding.ActivityAccountsBinding
 
-class AccountsActivity : AppCompatActivity() {
-
-    private lateinit var appBarConfiguration: AppBarConfiguration
+class AccountsActivity : SuperActivity() {
+    override lateinit var b: ActivityAccountsBinding
+    override val mainFragment = R.id.accountsFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadSettings(this)
-        setContentView(R.layout.activity_accounts)
 
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
+        b = ActivityAccountsBinding.inflate(layoutInflater)
+        setContentView(b.root)
 
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        val navView: NavigationView = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+        setSupportActionBar(b.appbar.toolbar)
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        TODO("Not yet implemented")
     }
 }
