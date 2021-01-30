@@ -24,7 +24,7 @@ import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.SuperFragment
+import com.acmpo6ou.myaccounts.database.SuperFragment
 import com.github.javafaker.Faker
 import org.junit.Assert.assertEquals
 import org.junit.Before

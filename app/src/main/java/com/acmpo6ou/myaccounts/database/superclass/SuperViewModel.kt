@@ -17,11 +17,12 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.core
+package com.acmpo6ou.myaccounts.database.`super`
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.database.Database
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

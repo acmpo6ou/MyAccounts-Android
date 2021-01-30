@@ -20,9 +20,9 @@
 package com.acmpo6ou.myaccounts.database_fragment
 
 import com.acmpo6ou.myaccounts.ModelTest
-import com.acmpo6ou.myaccounts.MyApp
-import com.acmpo6ou.myaccounts.core.Database
-import com.acmpo6ou.myaccounts.core.DatabasesModel
+import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.database.Database
+import com.acmpo6ou.myaccounts.database.DatabasesModel
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
 import org.junit.Assert.*
@@ -85,8 +85,8 @@ class DatabasesModelTests: ModelTest() {
         // then we get databases and check the result
         val databases = model.getDatabases()
         val expectedDatabases = listOf(
-                Database("database"),
                 Database("crypt"),
+                Database("database"),
                 Database("main"))
         assertEquals("getDatabases returns incorrect list of Databases!",
                 expectedDatabases, databases)

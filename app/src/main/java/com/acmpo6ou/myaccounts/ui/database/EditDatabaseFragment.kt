@@ -22,7 +22,7 @@ package com.acmpo6ou.myaccounts.ui
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.CreateEditFragment
+import com.acmpo6ou.myaccounts.database.CreateEditFragment
 
 class EditDatabaseFragment : CreateEditFragment() {
     companion object {

@@ -30,9 +30,9 @@ import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.acmpo6ou.myaccounts.MainActivity
-import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.*
+import com.acmpo6ou.myaccounts.database.*
 import com.acmpo6ou.myaccounts.databinding.FragmentDatabaseListBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar

@@ -31,9 +31,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.MainActivity
-import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.ViewModelFragment
+import com.acmpo6ou.myaccounts.database.ViewModelFragment
 import com.acmpo6ou.myaccounts.databinding.OpenDatabaseFragmentBinding
 
 class OpenDatabaseFragment: ViewModelFragment() {

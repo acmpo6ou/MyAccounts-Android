@@ -17,10 +17,11 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.core
+package com.acmpo6ou.myaccounts.database.`super`
 
 import androidx.lifecycle.Observer
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.database.MainActivityInter
 
 /**
  * Super class for all fragments that use view models.

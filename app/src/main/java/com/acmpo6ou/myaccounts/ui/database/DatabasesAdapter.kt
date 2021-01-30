@@ -30,9 +30,9 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.Database
-import com.acmpo6ou.myaccounts.core.DatabaseFragmentInter
-import com.acmpo6ou.myaccounts.core.DatabasesPresenterInter
+import com.acmpo6ou.myaccounts.database.Database
+import com.acmpo6ou.myaccounts.database.DatabaseFragmentInter
+import com.acmpo6ou.myaccounts.database.DatabasesPresenterInter
 
 
 /**

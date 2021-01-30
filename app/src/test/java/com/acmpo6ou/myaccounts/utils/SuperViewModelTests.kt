@@ -20,9 +20,9 @@
 package com.acmpo6ou.myaccounts.database_utils
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.acmpo6ou.myaccounts.MyApp
-import com.acmpo6ou.myaccounts.core.Database
-import com.acmpo6ou.myaccounts.core.SuperViewModel
+import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.database.Database
+import com.acmpo6ou.myaccounts.database.SuperViewModel
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
 import org.junit.Assert.assertEquals

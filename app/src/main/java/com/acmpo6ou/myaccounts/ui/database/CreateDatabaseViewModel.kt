@@ -20,8 +20,8 @@
 package com.acmpo6ou.myaccounts.ui
 
 import androidx.lifecycle.viewModelScope
-import com.acmpo6ou.myaccounts.core.CreateEditViewModel
-import com.acmpo6ou.myaccounts.core.Database
+import com.acmpo6ou.myaccounts.database.CreateEditViewModel
+import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.core.createDatabaseUtil
 import kotlinx.coroutines.async
 

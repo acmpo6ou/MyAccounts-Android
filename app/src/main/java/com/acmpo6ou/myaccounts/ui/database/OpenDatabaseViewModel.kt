@@ -21,8 +21,8 @@ package com.acmpo6ou.myaccounts.ui
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.acmpo6ou.myaccounts.core.Database
-import com.acmpo6ou.myaccounts.core.SuperViewModel
+import com.acmpo6ou.myaccounts.database.Database
+import com.acmpo6ou.myaccounts.database.SuperViewModel
 import com.acmpo6ou.myaccounts.core.openDatabaseUtil
 import com.macasaet.fernet.TokenValidationException
 import kotlinx.coroutines.async

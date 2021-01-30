@@ -17,11 +17,13 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.database_utils
+package com.acmpo6ou.myaccounts.utils
 
 import com.acmpo6ou.myaccounts.ModelTest
-import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.*
+import com.acmpo6ou.myaccounts.database.Database
+import com.acmpo6ou.myaccounts.database.DbMap
 import com.acmpo6ou.myaccounts.getDatabaseMap
 import com.acmpo6ou.myaccounts.str
 import com.macasaet.fernet.StringValidator
@@ -35,7 +37,7 @@ import java.time.Duration
 import java.time.Instant
 import java.time.temporal.TemporalAmount
 
-class DatabaseUtilsTests: ModelTest() {
+class UtilsTests: ModelTest() {
     var app = MyApp()
 
     /**

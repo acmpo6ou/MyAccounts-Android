@@ -28,9 +28,9 @@ import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.MainActivityInter
-import com.acmpo6ou.myaccounts.core.SuperViewModel
-import com.acmpo6ou.myaccounts.core.ViewModelFragment
+import com.acmpo6ou.myaccounts.database.MainActivityInter
+import com.acmpo6ou.myaccounts.database.SuperViewModel
+import com.acmpo6ou.myaccounts.database.ViewModelFragment
 import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker

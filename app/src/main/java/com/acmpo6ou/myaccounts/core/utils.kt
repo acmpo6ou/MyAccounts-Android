@@ -23,6 +23,9 @@ import android.app.Activity
 import android.view.WindowManager
 import androidx.preference.PreferenceManager
 import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.database.Account
+import com.acmpo6ou.myaccounts.database.Database
+import com.acmpo6ou.myaccounts.database.DbMap
 import com.macasaet.fernet.Key
 import com.macasaet.fernet.StringValidator
 import com.macasaet.fernet.Token
@@ -45,7 +48,7 @@ import javax.crypto.spec.PBEKeySpec
  * @return when [jsonStr] is empty returns empty map, when it's not empty –
  * deserialized database map.
  */
-fun loadsUtil(jsonStr: String): DbMap{
+fun loadsUtil(jsonStr: String): DbMap {
     var map = mapOf<String, Account>()
     if (jsonStr.isNotEmpty()){
         map = Json.decodeFromString(jsonStr)
