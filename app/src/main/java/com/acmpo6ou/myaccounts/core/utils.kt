@@ -39,6 +39,7 @@ import java.time.temporal.TemporalAmount
 import java.util.*
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
+import kotlin.reflect.KProperty1
 
 /**
  * Used to deserialize json string to database map.
@@ -226,3 +227,17 @@ fun loadSettings(activity: Activity){
                                  WindowManager.LayoutParams.FLAG_SECURE)
     }
 }
+
+/**
+ * Helper function to get property from [instance] by [propertyName] string using reflection.
+ * @param[instance] instance to get property from.
+ * @param[propertyName] string with property name.
+ * @return property named [propertyName] got from [instance].
+ */
+@Suppress("UNCHECKED_CAST")
+fun <R> getProperty(instance: Any, propertyName: String): R {
+    val property =
+        instance::class.members.first { it.name == propertyName } as KProperty1<Any, *>
+    return property.get(instance) as R
+}
+
