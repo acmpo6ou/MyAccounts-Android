@@ -24,42 +24,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.databinding.FragmentAccountsListBinding
 
 /**
  * A fragment representing a list of Items.
  */
 class AccountsFragment : Fragment() {
+    var binding: FragmentAccountsListBinding? = null
+    val b: FragmentAccountsListBinding get() = binding!!
 
-    private var columnCount = 1
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_accounts_list, container, false)
-
-        // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-            }
-        }
-        return view
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?): View? {
+        binding = FragmentAccountsListBinding
+                .inflate(layoutInflater, container, false)
+        return b.root
     }
 
     companion object {
