@@ -24,10 +24,11 @@ import android.view.MenuItem
 import com.acmpo6ou.myaccounts.core.SuperActivity
 import com.acmpo6ou.myaccounts.core.loadSettings
 import com.acmpo6ou.myaccounts.databinding.ActivityAccountsBinding
+import com.acmpo6ou.myaccounts.ui.account.AccountsFragment
 
 class AccountsActivity : SuperActivity() {
     override lateinit var b: ActivityAccountsBinding
-    override val mainFragment = R.id.accountsFragment
+    override val mainFragmentId = R.id.accountsFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +38,19 @@ class AccountsActivity : SuperActivity() {
         setContentView(b.root)
 
         setSupportActionBar(b.appbar.toolbar)
+    }
+
+    /**
+     * Displays snackbar to tell user that there are no updates available.
+     */
+    fun noUpdates(){
+        // get view binding of AccountFragment because we need to show snackbar in
+        // coordinator layout. AccountsActivity doesn't have one but AccountFragment does.
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
+        val accountsFragment =
+                navHostFragment?.childFragmentManager?.fragments?.get(0) as AccountsFragment
+        val coordinatorLayout = accountsFragment.b.coordinatorLayout
+        super.noUpdates(coordinatorLayout)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

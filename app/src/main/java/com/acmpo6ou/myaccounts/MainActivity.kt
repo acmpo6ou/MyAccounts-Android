@@ -43,7 +43,6 @@ import com.acmpo6ou.myaccounts.database.MainPresenterInter
 import com.acmpo6ou.myaccounts.databinding.ActivityMainBinding
 import com.acmpo6ou.myaccounts.ui.database.DatabaseFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 
 
 class MainActivity : SuperActivity(), MainActivityInter {
@@ -53,7 +52,7 @@ class MainActivity : SuperActivity(), MainActivityInter {
     override lateinit var app: MyApp
 
     override lateinit var b: ActivityMainBinding
-    override val mainFragment = R.id.databaseFragment
+    override val mainFragmentId = R.id.databaseFragment
     lateinit var presenter: MainPresenterInter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,36 +85,17 @@ class MainActivity : SuperActivity(), MainActivityInter {
         }
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
-            R.id.import_database -> presenter.importSelected()
-            R.id.check_for_updates -> presenter.checkUpdatesSelected()
-            R.id.changelog -> presenter.navigateToChangelog()
-            R.id.settings -> presenter.navigateToSettings()
-            R.id.about -> presenter.navigateToAbout()
-        }
-
-        // close drawer when any item is selected
-        b.drawerLayout.closeDrawer(GravityCompat.START)
-        return false
-    }
-
     /**
      * Displays snackbar to tell user that there are no updates available.
      */
     override fun noUpdates(){
         // get view binding of DatabaseFragment because we need to show snackbar in
-        // coordinator layout. MainActivity doesn't have one but DatabaseFragment has
+        // coordinator layout. MainActivity doesn't have one but DatabaseFragment does.
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
         val databaseFragment =
                 navHostFragment?.childFragmentManager?.fragments?.get(0) as DatabaseFragment
-        val databaseBinding = databaseFragment.b
-
-        Snackbar.make(databaseBinding.databaseCoordinator,
-                R.string.no_updates,
-                Snackbar.LENGTH_LONG)
-            .setAction("HIDE"){}
-            .show()
+        val coordinatorLayout = databaseFragment.b.coordinatorLayout
+        super.noUpdates(coordinatorLayout)
     }
 
     /**
