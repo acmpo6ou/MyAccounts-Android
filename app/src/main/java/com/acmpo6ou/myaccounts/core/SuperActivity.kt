@@ -20,8 +20,10 @@
 package com.acmpo6ou.myaccounts.core
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -35,6 +37,7 @@ import androidx.viewbinding.ViewBinding
 import com.acmpo6ou.myaccounts.BuildConfig
 import com.acmpo6ou.myaccounts.R
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 
 abstract class SuperActivity : AppCompatActivity(),
         NavigationView.OnNavigationItemSelectedListener {
@@ -44,7 +47,8 @@ abstract class SuperActivity : AppCompatActivity(),
     private val drawerLayout: DrawerLayout get() = getProperty(b, "drawerLayout")
 
     lateinit var appBarConfiguration: AppBarConfiguration
-    abstract val mainFragment: Int
+    abstract val presenter: SuperPresenter
+    abstract val mainFragmentId: Int
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
@@ -68,13 +72,25 @@ abstract class SuperActivity : AppCompatActivity(),
         // everywhere else
         navController.addOnDestinationChangedListener{
             _: NavController, navDestination: NavDestination, _: Bundle? ->
-            if(navDestination.id == mainFragment){
+            if(navDestination.id == mainFragmentId){
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             }
             else{
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             }
         }
+    }
+
+    /**
+     * Displays snackbar to tell user that there are no updates available.
+     * @param[coordinatorLayout] coordinator layout where to display snackbar.
+     */
+    open fun noUpdates(coordinatorLayout: CoordinatorLayout){
+        Snackbar.make(coordinatorLayout,
+                R.string.no_updates,
+                Snackbar.LENGTH_LONG)
+                .setAction("HIDE"){}
+                .show()
     }
 
     /**
@@ -95,5 +111,18 @@ abstract class SuperActivity : AppCompatActivity(),
         else{
             super.onBackPressed()
         }
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.check_for_updates -> presenter.checkUpdatesSelected()
+            R.id.changelog -> presenter.navigateToChangelog()
+            R.id.settings -> presenter.navigateToSettings()
+            R.id.about -> presenter.navigateToAbout()
+        }
+
+        // close drawer when any item is selected
+        drawerLayout.closeDrawer(GravityCompat.START)
+        return false
     }
 }
