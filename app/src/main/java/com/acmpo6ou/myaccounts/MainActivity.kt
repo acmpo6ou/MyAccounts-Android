@@ -22,18 +22,11 @@ package com.acmpo6ou.myaccounts
 import android.Manifest.permission
 import android.app.Activity
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Rect
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.MotionEvent
-import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.core.view.GravityCompat
-import androidx.navigation.fragment.NavHostFragment
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.SuperActivity
 import com.acmpo6ou.myaccounts.core.loadSettings
@@ -42,8 +35,6 @@ import com.acmpo6ou.myaccounts.database.MainPresenter
 import com.acmpo6ou.myaccounts.database.MainPresenterInter
 import com.acmpo6ou.myaccounts.databinding.ActivityMainBinding
 import com.acmpo6ou.myaccounts.ui.database.DatabaseFragment
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-
 
 class MainActivity : SuperActivity(), MainActivityInter {
     val IMPORT_RC = 202
@@ -53,7 +44,7 @@ class MainActivity : SuperActivity(), MainActivityInter {
 
     override lateinit var b: ActivityMainBinding
     override val mainFragmentId = R.id.databaseFragment
-    lateinit var presenter: MainPresenterInter
+    override lateinit var presenter: MainPresenterInter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_MyAccounts_NoActionBar)
@@ -85,6 +76,19 @@ class MainActivity : SuperActivity(), MainActivityInter {
         }
     }
 
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.import_database){
+            presenter.importSelected()
+        }
+        else{
+            super.onNavigationItemSelected(item)
+        }
+
+        // close drawer when any item is selected
+        b.drawerLayout.closeDrawer(GravityCompat.START)
+        return false
+    }
+
     /**
      * Displays snackbar to tell user that there are no updates available.
      */
@@ -96,20 +100,6 @@ class MainActivity : SuperActivity(), MainActivityInter {
                 navHostFragment?.childFragmentManager?.fragments?.get(0) as DatabaseFragment
         val coordinatorLayout = databaseFragment.b.coordinatorLayout
         super.noUpdates(coordinatorLayout)
-    }
-
-    /**
-     * Navigates to given destination.
-     * @param[id] id of destination action.
-     */
-    override fun navigateTo(id: Int) {
-        val navHostFragment = supportFragmentManager
-                .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navHostFragment.navController.navigate(id)
-    }
-
-    override fun startUpdatesActivity() {
-
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?){
@@ -141,35 +131,6 @@ class MainActivity : SuperActivity(), MainActivityInter {
     }
 
     /**
-     * This method will automatically hide the keyboard when any TextView is losing focus.
-     * Note: this method is completely copied from StackOverflow.
-     */
-    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-        if (event.action == MotionEvent.ACTION_DOWN) {
-            /**
-             * It gets into the above IF-BLOCK if anywhere the screen is touched.
-             */
-            val v: View? = currentFocus
-            if (v is EditText) {
-                /**
-                 * Now, it gets into the above IF-BLOCK if an EditText is already in focus, and you tap somewhere else
-                 * to take the focus away from that particular EditText. It could have 2 cases after tapping:
-                 * 1. No EditText has focus
-                 * 2. Focus is just shifted to the other EditText
-                 */
-                val outRect = Rect()
-                v.getGlobalVisibleRect(outRect)
-                if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
-                    v.clearFocus()
-                    val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0)
-                }
-            }
-        }
-        return super.dispatchTouchEvent(event)
-    }
-
-    /**
      * This method calls notifyChanged on DatabaseFragment to rerender the list.
      * @param[i] index of Database that were added to databases list.
      */
@@ -180,20 +141,5 @@ class MainActivity : SuperActivity(), MainActivityInter {
         val databaseFragment =
                 navHostFragment?.childFragmentManager?.fragments?.get(0) as DatabaseFragment
         databaseFragment.notifyChanged(i)
-    }
-
-    /**
-     * Used to display dialog saying that the error occurred.
-     *
-     * @param[title] title of error dialog.
-     * @param[details] details about the error.
-     */
-    override fun showError(title: String, details: String) {
-        MaterialAlertDialogBuilder(this)
-                .setTitle(title)
-                .setIcon(R.drawable.ic_error)
-                .setNeutralButton("Ok"){ _: DialogInterface, _: Int -> }
-                .setMessage(details)
-                .show()
     }
 }
