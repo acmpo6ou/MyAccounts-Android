@@ -22,33 +22,23 @@ package com.acmpo6ou.myaccounts.database
 import android.content.Context
 import android.net.Uri
 import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.core.SuperActivityInter
+import com.acmpo6ou.myaccounts.core.SuperPresenterInter
 
-interface MainPresenterInter{
+interface MainPresenterInter : SuperPresenterInter{
     fun importSelected()
-    fun checkUpdatesSelected()
-
-    fun navigateToChangelog()
-    fun navigateToSettings()
-    fun navigateToAbout()
-
     fun checkTarFile(location: Uri)
+
     fun checkForUpdates(): Boolean
     fun isTimeToUpdate(): Boolean
 }
 
-interface MainActivityInter{
+interface MainActivityInter : SuperActivityInter{
     val ACCOUNTS_DIR: String
-
     val myContext: Context
     var app: MyApp
 
     fun importDialog()
-    fun startUpdatesActivity()
-
-    fun noUpdates()
-    fun showError(title: String, details: String)
-
-    fun navigateTo(id: Int)
     fun notifyChanged(i: Int)
 }
 
