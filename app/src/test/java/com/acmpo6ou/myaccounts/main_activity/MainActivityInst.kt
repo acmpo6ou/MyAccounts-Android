@@ -19,21 +19,17 @@
 
 package com.acmpo6ou.myaccounts.main_activity
 
-import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Looper
 import android.view.View
-import android.widget.TextView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.findSnackbarTextView
-import com.acmpo6ou.myaccounts.str
-import com.github.javafaker.Faker
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -44,14 +40,12 @@ import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
-import org.robolectric.shadows.ShadowAlertDialog
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class MainActivityInst {
     lateinit var mainScenario: ActivityScenario<MainActivity>
-    private val faker = Faker()
 
     // get string resources
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -105,24 +99,5 @@ class MainActivityInst {
                 expectedCategory, intent.categories.first())
         assertEquals("importDialog: incorrect intent type!",
                 expectedType, intent.type)
-    }
-
-    @Test
-    fun `showError should create dialog with appropriate title and message`(){
-        val expectedTitle = faker.str()
-        val expectedMsg = faker.str()
-
-        mainScenario.onActivity {
-            it.showError(expectedTitle, expectedMsg)
-        }
-
-        val dialog: Dialog = ShadowAlertDialog.getLatestDialog()
-        val title = dialog.findViewById<TextView>(R.id.alertTitle)
-        val message = dialog.findViewById<TextView>(android.R.id.message)
-
-        assertEquals("showError created dialog with incorrect title!",
-                expectedTitle, title.text)
-        assertEquals("showError created dialog with incorrect message!",
-                expectedMsg, message.text)
     }
 }
