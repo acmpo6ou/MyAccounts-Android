@@ -25,8 +25,10 @@ import android.widget.TextView
 import com.acmpo6ou.myaccounts.database.Account
 import com.acmpo6ou.myaccounts.database.DbMap
 import com.github.javafaker.Faker
+import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.SnackbarContentLayout
+import org.robolectric.fakes.RoboMenuItem
 
 
 // This two extensions used to find a snackbar during tests
@@ -102,3 +104,17 @@ fun randomIntExcept(exception: Int, start: Int=0, end: Int=20): Int{
 
 // shortcut
 fun Faker.str(): String = this.lorem().sentence()
+
+/**
+ * Helper method to simulate selecting an item in navigation drawer.
+ * @param[id] item id.
+ * @param[activity] activity under test.
+ */
+fun selectNavigationItem(id: Int, activity: NavigationView.OnNavigationItemSelectedListener){
+    // here we using try-catch to avoid UninitializedPropertyAccessException
+    // that occurs because of view bindings
+    try {
+        activity.onNavigationItemSelected(RoboMenuItem(id))
+    }
+    catch (e: UninitializedPropertyAccessException){}
+}
