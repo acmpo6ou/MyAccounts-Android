@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.core
 
+import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Rect
 import android.os.Bundle
@@ -51,6 +52,9 @@ import com.google.android.material.snackbar.Snackbar
  * Super class for MainActivity and AccountsActivity.
  */
 abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
+    override lateinit var ACCOUNTS_DIR: String
+    override lateinit var myContext: Context
+    override lateinit var app: MyApp
 
     abstract val b: ViewBinding
     private val navView: NavigationView get() = getProperty(b, "navView")

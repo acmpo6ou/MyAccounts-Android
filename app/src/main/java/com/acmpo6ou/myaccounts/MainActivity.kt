@@ -21,7 +21,6 @@ package com.acmpo6ou.myaccounts
 
 import android.Manifest.permission
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -38,9 +37,6 @@ import com.acmpo6ou.myaccounts.ui.database.DatabaseFragment
 
 class MainActivity : SuperActivity(), MainActivityInter {
     val IMPORT_RC = 202
-    override lateinit var ACCOUNTS_DIR: String
-    override lateinit var myContext: Context
-    override lateinit var app: MyApp
 
     override lateinit var b: ActivityMainBinding
     override lateinit var presenter: MainPresenterInter

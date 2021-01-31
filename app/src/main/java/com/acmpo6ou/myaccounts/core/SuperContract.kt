@@ -19,9 +19,14 @@
 
 package com.acmpo6ou.myaccounts.core
 
+import android.content.Context
 import com.google.android.material.navigation.NavigationView
 
 interface SuperActivityInter : NavigationView.OnNavigationItemSelectedListener {
+    val ACCOUNTS_DIR: String
+    val myContext: Context
+    var app: MyApp
+
     fun startUpdatesActivity()
     fun noUpdates()
 
