@@ -19,20 +19,45 @@
 
 package com.acmpo6ou.myaccounts.core
 
-class SuperPresenter {
-    fun checkUpdatesSelected() {
-        TODO("Not yet implemented")
+import com.acmpo6ou.myaccounts.R
+
+abstract class SuperPresenter : SuperPresenterInter {
+    abstract val view: SuperActivityInter
+
+    fun checkForUpdates(): Boolean{
+        return false
     }
 
-    fun navigateToChangelog() {
-        TODO("Not yet implemented")
+    /**
+     * This method is called when user clicks `Check for updates` in navigation drawer.
+     */
+    override fun checkUpdatesSelected() {
+        if(checkForUpdates()) {
+            view.startUpdatesActivity()
+        }
+        else{
+            view.noUpdates()
+        }
     }
 
-    fun navigateToSettings() {
-        TODO("Not yet implemented")
+    /**
+     * This method is called when user clicks `Changelog` in navigation drawer.
+     */
+    override fun navigateToChangelog() {
+        view.navigateTo(R.id.actionChangelog)
     }
 
-    fun navigateToAbout() {
-        TODO("Not yet implemented")
+    /**
+     * This method is called when user clicks `Settings` in navigation drawer.
+     */
+    override fun navigateToSettings() {
+        view.navigateTo(R.id.actionSettings)
+    }
+
+    /**
+     * This method is called when user clicks `About` in navigation drawer.
+     */
+    override fun navigateToAbout() {
+        view.navigateTo(R.id.actionAbout)
     }
 }
