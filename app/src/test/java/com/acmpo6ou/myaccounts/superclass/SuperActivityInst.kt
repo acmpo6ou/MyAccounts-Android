@@ -23,6 +23,7 @@ import android.app.Dialog
 import android.os.Build
 import android.widget.TextView
 import androidx.test.core.app.ActivityScenario
+import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
@@ -40,12 +41,14 @@ import org.robolectric.shadows.ShadowAlertDialog
 @LooperMode(LooperMode.Mode.PAUSED)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class SuperActivityInst {
-    lateinit var scenario: ActivityScenario<TestActivity>
+    // here we use MainActivity instead of SuperActivity because SuperActivity is abstract
+    // and MainActivity inherits from SuperActivity
+    lateinit var scenario: ActivityScenario<MainActivity>
     private val faker = Faker()
 
     @Before
     fun setup(){
-        scenario = ActivityScenario.launch(TestActivity::class.java)
+        scenario = ActivityScenario.launch(MainActivity::class.java)
         scenario.onActivity {
             it.myContext.setTheme(R.style.Theme_MyAccounts_NoActionBar)
         }
