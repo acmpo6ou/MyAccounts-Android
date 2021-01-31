@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.utils.superclass
+package com.acmpo6ou.myaccounts.superclass
 
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.SuperActivityInter

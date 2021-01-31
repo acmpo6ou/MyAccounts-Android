@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.utils.superclass
+package com.acmpo6ou.myaccounts.superclass
 
 import android.content.Intent
 import android.os.Build
