@@ -24,7 +24,7 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/save"
+            android:id="@+id/save_database"
             android:icon="@drawable/ic_save"
             android:title="@string/save" />
         <item
