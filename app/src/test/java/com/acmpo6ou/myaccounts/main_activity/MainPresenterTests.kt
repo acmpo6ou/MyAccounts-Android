@@ -23,7 +23,6 @@ import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.database.MainActivityInter
 import com.acmpo6ou.myaccounts.database.MainModelInter
@@ -85,24 +84,6 @@ class MainPresenterTests {
     }
 
     @Test
-    fun `checkUpdatesSelected should call noUpdates when updates aren't available`(){
-        doReturn(false).`when`(spyPresenter).checkForUpdates()
-        spyPresenter.checkUpdatesSelected()
-
-        verify(view).noUpdates()
-        verify(view, never()).startUpdatesActivity()
-    }
-
-    @Test
-    fun `checkUpdatesSelected should call startUpdatesActivity when updates are available`(){
-        doReturn(true).`when`(spyPresenter).checkForUpdates()
-        spyPresenter.checkUpdatesSelected()
-
-        verify(view).startUpdatesActivity()
-        verify(view, never()).noUpdates()
-    }
-
-    @Test
     fun `autocheckForUpdates should call checkUpdatesSelected if it's time to autocheck`(){
         doReturn(true).whenever(spyPresenter).isTimeToUpdate()
         spyPresenter.autocheckForUpdates()
@@ -125,24 +106,6 @@ class MainPresenterTests {
         spyPresenter.checkTarFile(locationUri)
         verify(spyPresenter).importDatabase(locationUri)
         verify(view, never()).showError(anyString(), anyString())
-    }
-
-    @Test
-    fun `navigateToChangelog should call navigateTo`(){
-        presenter.navigateToChangelog()
-        verify(view).navigateTo(R.id.actionChangelog)
-    }
-
-    @Test
-    fun `navigateToSettings should call navigateTo`(){
-        presenter.navigateToSettings()
-        verify(view).navigateTo(R.id.actionSettings)
-    }
-
-    @Test
-    fun `navigateToAbout should call navigateTo`(){
-        presenter.navigateToAbout()
-        verify(view).navigateTo(R.id.actionAbout)
     }
 
     @Test

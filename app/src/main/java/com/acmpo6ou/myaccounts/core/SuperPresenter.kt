@@ -27,7 +27,7 @@ import com.acmpo6ou.myaccounts.R
 abstract class SuperPresenter : SuperPresenterInter {
     abstract val view: SuperActivityInter
 
-    fun checkForUpdates(): Boolean{
+    open fun checkForUpdates(): Boolean{
         return false
     }
 
