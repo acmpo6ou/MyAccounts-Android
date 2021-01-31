@@ -21,10 +21,12 @@ package com.acmpo6ou.myaccounts.database
 
 import android.net.Uri
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.core.SuperPresenter
 import java.io.File
 import java.io.IOException
 
-open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
+open class MainPresenter(override var view: MainActivityInter) : SuperPresenter(),
+        MainPresenterInter {
     var model: MainModelInter = MainModel(view.ACCOUNTS_DIR, view.myContext.contentResolver)
 
     var databases: MutableList<Database>
@@ -63,39 +65,6 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
      */
     override fun importSelected() {
         view.importDialog()
-    }
-
-    /**
-     * This method is called when user clicks `Check for updates` in navigation drawer.
-     */
-    override fun checkUpdatesSelected() {
-        if(checkForUpdates()) {
-            view.startUpdatesActivity()
-        }
-        else{
-            view.noUpdates()
-        }
-    }
-
-    /**
-     * This method is called when user clicks `Changelog` in navigation drawer.
-     */
-    override fun navigateToChangelog() {
-        view.navigateTo(R.id.actionChangelog)
-    }
-
-    /**
-     * This method is called when user clicks `Settings` in navigation drawer.
-     */
-    override fun navigateToSettings() {
-        view.navigateTo(R.id.actionSettings)
-    }
-
-    /**
-     * This method is called when user clicks `About` in navigation drawer.
-     */
-    override fun navigateToAbout() {
-        view.navigateTo(R.id.actionAbout)
     }
 
     /**
@@ -181,10 +150,6 @@ open class MainPresenter(var view: MainActivityInter): MainPresenterInter {
             val errorTitle = resources.getString(R.string.import_error_title)
             view.showError(errorTitle, errorDetails)
         }
-    }
-
-    override fun checkForUpdates(): Boolean{
-        return false
     }
 
     /**
