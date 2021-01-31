@@ -21,6 +21,8 @@ package com.acmpo6ou.myaccounts
 
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.core.view.GravityCompat
+import com.acmpo6ou.myaccounts.account.AccountsPresenterInter
 import com.acmpo6ou.myaccounts.core.SuperActivity
 import com.acmpo6ou.myaccounts.core.loadSettings
 import com.acmpo6ou.myaccounts.databinding.ActivityAccountsBinding
@@ -29,6 +31,7 @@ import com.acmpo6ou.myaccounts.ui.account.AccountsFragment
 class AccountsActivity : SuperActivity() {
     override lateinit var b: ActivityAccountsBinding
     override val mainFragmentId = R.id.accountsFragment
+    override lateinit var presenter: AccountsPresenterInter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +46,7 @@ class AccountsActivity : SuperActivity() {
     /**
      * Displays snackbar to tell user that there are no updates available.
      */
-    fun noUpdates(){
+    override fun noUpdates(){
         // get view binding of AccountFragment because we need to show snackbar in
         // coordinator layout. AccountsActivity doesn't have one but AccountFragment does.
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
@@ -54,6 +57,15 @@ class AccountsActivity : SuperActivity() {
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        TODO("Not yet implemented")
+        if(item.itemId == R.id.save){
+            presenter.saveDatabase()
+        }
+        else{
+            super.onNavigationItemSelected(item)
+        }
+
+        // close drawer when any item is selected
+        b.drawerLayout.closeDrawer(GravityCompat.START)
+        return false
     }
 }
