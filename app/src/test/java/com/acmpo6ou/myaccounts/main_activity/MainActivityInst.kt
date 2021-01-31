@@ -45,7 +45,7 @@ import org.robolectric.annotation.LooperMode
 @LooperMode(LooperMode.Mode.PAUSED)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class MainActivityInst {
-    lateinit var mainScenario: ActivityScenario<MainActivity>
+    lateinit var scenario: ActivityScenario<MainActivity>
 
     // get string resources
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -53,15 +53,15 @@ class MainActivityInst {
 
     @Before
     fun setup(){
-        mainScenario = launch(MainActivity::class.java)
-        mainScenario.onActivity {
+        scenario = launch(MainActivity::class.java)
+        scenario.onActivity {
             it.myContext.setTheme(R.style.Theme_MyAccounts_NoActionBar)
         }
     }
 
     @Test
     fun `noUpdates should display snackbar`(){
-        mainScenario.onActivity {
+        scenario.onActivity {
             it.noUpdates()
 
             // this is because of some Robolectric main looper problems
@@ -87,7 +87,7 @@ class MainActivityInst {
         val expectedCategory = Intent.CATEGORY_OPENABLE
         val expectedType = "application/x-tar"
 
-        mainScenario.onActivity { it.importDialog() }
+        scenario.onActivity { it.importDialog() }
 
         // check all intent properties
         val intent: Intent =
