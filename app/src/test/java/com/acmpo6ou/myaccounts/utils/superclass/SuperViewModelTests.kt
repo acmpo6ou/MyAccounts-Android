@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.utils
+package com.acmpo6ou.myaccounts.utils.superclass
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.core.MyApp
