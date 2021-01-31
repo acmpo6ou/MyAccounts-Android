@@ -19,8 +19,14 @@
 
 package com.acmpo6ou.myaccounts.core
 
+import android.content.DialogInterface
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -29,6 +35,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -36,18 +43,18 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.viewbinding.ViewBinding
 import com.acmpo6ou.myaccounts.BuildConfig
 import com.acmpo6ou.myaccounts.R
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 
-abstract class SuperActivity : AppCompatActivity(),
-        NavigationView.OnNavigationItemSelectedListener {
+abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
 
     abstract val b: ViewBinding
     private val navView: NavigationView get() = getProperty(b, "navView")
     private val drawerLayout: DrawerLayout get() = getProperty(b, "drawerLayout")
 
     lateinit var appBarConfiguration: AppBarConfiguration
-    abstract val presenter: SuperPresenter
+    abstract val presenter: SuperPresenterInter
     abstract val mainFragmentId: Int
 
     override fun onSupportNavigateUp(): Boolean {
@@ -120,9 +127,64 @@ abstract class SuperActivity : AppCompatActivity(),
             R.id.settings -> presenter.navigateToSettings()
             R.id.about -> presenter.navigateToAbout()
         }
-
-        // close drawer when any item is selected
-        drawerLayout.closeDrawer(GravityCompat.START)
         return false
+    }
+
+    /**
+     * Navigates to given destination.
+     * @param[id] id of destination action.
+     */
+    override fun navigateTo(id: Int) {
+        val navHostFragment = supportFragmentManager
+                .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navHostFragment.navController.navigate(id)
+    }
+
+    override fun startUpdatesActivity() {
+
+    }
+
+    /**
+     * This method will automatically hide the keyboard when any TextView is losing focus.
+     * Note: this method is completely copied from StackOverflow.
+     */
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            /**
+             * It gets into the above IF-BLOCK if anywhere the screen is touched.
+             */
+            val v: View? = currentFocus
+            if (v is EditText) {
+                /**
+                 * Now, it gets into the above IF-BLOCK if an EditText is already in focus, and you tap somewhere else
+                 * to take the focus away from that particular EditText. It could have 2 cases after tapping:
+                 * 1. No EditText has focus
+                 * 2. Focus is just shifted to the other EditText
+                 */
+                val outRect = Rect()
+                v.getGlobalVisibleRect(outRect)
+                if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
+                    v.clearFocus()
+                    val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0)
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event)
+    }
+
+    /**
+     * Used to display dialog saying that the error occurred.
+     *
+     * @param[title] title of error dialog.
+     * @param[details] details about the error.
+     */
+    override fun showError(title: String, details: String) {
+        MaterialAlertDialogBuilder(this)
+                .setTitle(title)
+                .setIcon(R.drawable.ic_error)
+                .setNeutralButton("Ok"){ _: DialogInterface, _: Int -> }
+                .setMessage(details)
+                .show()
     }
 }
