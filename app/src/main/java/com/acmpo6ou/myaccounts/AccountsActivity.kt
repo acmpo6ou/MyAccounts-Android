@@ -29,6 +29,7 @@ import com.acmpo6ou.myaccounts.databinding.ActivityAccountsBinding
 import com.acmpo6ou.myaccounts.ui.account.AccountsFragment
 
 class AccountsActivity : SuperActivity() {
+
     override lateinit var b: ActivityAccountsBinding
     override val mainFragmentId = R.id.accountsFragment
     override lateinit var presenter: AccountsPresenterInter

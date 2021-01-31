@@ -21,6 +21,9 @@ package com.acmpo6ou.myaccounts.core
 
 import com.acmpo6ou.myaccounts.R
 
+/**
+ * Super class for MainPresenter and AccountsPresenter.
+ */
 abstract class SuperPresenter : SuperPresenterInter {
     abstract val view: SuperActivityInter
 

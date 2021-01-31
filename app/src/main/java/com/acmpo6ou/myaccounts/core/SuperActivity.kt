@@ -47,6 +47,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 
+/**
+ * Super class for MainActivity and AccountsActivity.
+ */
 abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
 
     abstract val b: ViewBinding
@@ -174,8 +177,7 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
     }
 
     /**
-     * Used to display dialog saying that the error occurred.
-     *
+     * Used to display dialog saying that the error has occurred.
      * @param[title] title of error dialog.
      * @param[details] details about the error.
      */

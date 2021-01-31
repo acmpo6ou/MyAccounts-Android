@@ -43,8 +43,8 @@ class MainActivity : SuperActivity(), MainActivityInter {
     override lateinit var app: MyApp
 
     override lateinit var b: ActivityMainBinding
-    override val mainFragmentId = R.id.databaseFragment
     override lateinit var presenter: MainPresenterInter
+    override val mainFragmentId = R.id.databaseFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_MyAccounts_NoActionBar)
@@ -66,8 +66,7 @@ class MainActivity : SuperActivity(), MainActivityInter {
     }
 
     /**
-     * This method checks if permission WRITE_EXTERNAL_STORAGE is granted and requests it if
-     * it's not.
+     * This method checks if storage permission is granted and if not - requests it.
      */
     private fun checkPermissions() {
         val isGranted = checkCallingOrSelfPermission(permission.WRITE_EXTERNAL_STORAGE)
