@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.database.superclass
 
+import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -53,6 +54,10 @@ abstract class CreateEditViewModel: SuperViewModel() {
         get() = _finished.value!!
         set(value) {_finished.value = value}
 
+    // we can't get resources directly from app (i.e. like this `app.resources`)
+    // because app contains untranslated resources
+    val resources: Resources get() = app.mainActivity.resources
+
     /**
      * This LiveData property provides error message according
      * to emptyNameErr_ and existsNameErr_ live data values.
@@ -62,10 +67,10 @@ abstract class CreateEditViewModel: SuperViewModel() {
 
         var msg: String? = null
         if(empty!!){
-            msg = app.resources.getString(R.string.empty_name)
+            msg = resources.getString(R.string.empty_name)
         }
         else if(exists!!){
-            msg = app.resources.getString(R.string.db_exists)
+            msg = resources.getString(R.string.db_exists)
         }
         return@combineWith msg
     }
@@ -79,10 +84,10 @@ abstract class CreateEditViewModel: SuperViewModel() {
 
         var msg: String? = null
         if(empty!!){
-            msg = app.resources.getString(R.string.empty_password)
+            msg = resources.getString(R.string.empty_password)
         }
         else if(different!!){
-            msg = app.resources.getString(R.string.diff_passwords)
+            msg = resources.getString(R.string.diff_passwords)
         }
         return@combineWith msg
     }
