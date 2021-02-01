@@ -42,11 +42,10 @@
     <string name="create">Create</string>
     <string name="save">Save</string>
 
-    <string name="about_myaccounts">About MyAccounts</string>
     <string name="copyright" translatable="false">© Bohdan Kolvakh</string>
     <string name="version">Version: %1$s</string>
-    <string name="license">License</string>
-    <string name="credits">Credits</string>
+    <string name="license" translatable="false">License</string>
+    <string name="credits" translatable="false">Credits</string>
     <string name="about_text" translatable="false">
         <p><b>MyAccounts </b>— is simple account database manager.</p><br />
         <p>It is an android version of <a href="https://github.com/Acmpo6ou/PyQtAccounts">PyQtAccounts.</a></p><br />
@@ -75,7 +74,7 @@
     <string name="e_mail">E-mail</string>
     <string name="comment">Comment</string>
 
-    <string name="no_changelog_yet">No changelog yet</string>
+    <string name="empty_changelog">Empty</string>
     <string name="download">Download</string>
     <string name="later">Later</string>
     <string name="dots_menu" translatable="false">⋮</string>

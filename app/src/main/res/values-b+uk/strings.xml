@@ -19,7 +19,7 @@
 
 <resources>
     <string name="settings">Налаштування</string>
-    <string name="import_database">Імпортувати базу</string>
+    <string name="import_database">Імпортувати базу данних</string>
     <string name="check_for_updates">Перевірити оновлення</string>
     <string name="about">Про програму</string>
 
@@ -27,15 +27,12 @@
 
     <string name="database_name_tip">Підтримуються тільки латинські символи, цифри і .()-_</string>
     <string name="repeat_password">Повторіть пароль</string>
-    <string name="password_tip">Ви можете згенерувати його з кнопкою нижче</string>
+    <string name="password_tip">Ви можете згенерувати його кнопкою нижче</string>
     <string name="generate">Згенерувати</string>
     <string name="create">Створити</string>
     <string name="save">Зберегти</string>
 
-    <string name="about_myaccounts">Про MyAccounts</string>
-    <string name="version">Версія:</string>
-    <string name="license">Ліцензія</string>
-    <string name="credits">Кредити</string>
+    <string name="version">"Версія: "</string>
     <!-- Preference Titles -->
     <string name="language">Мова</string>
     <string name="block_screen_capture">Блокувати захоплення екрану</string>
@@ -52,7 +49,7 @@
     <string name="username">Ім\'я</string>
     <string name="e_mail">E-mail</string>
     <string name="comment">Нотатки</string>
-    <string name="no_changelog_yet">Немає журналу змін</string>
+    <string name="empty_changelog">Порожньо</string>
     <string name="download">Скачати</string>
     <string name="later">Пізніше</string>
 </resources>

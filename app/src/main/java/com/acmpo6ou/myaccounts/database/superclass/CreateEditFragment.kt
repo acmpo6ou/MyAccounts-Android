@@ -29,9 +29,9 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.MainActivity
-import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.GeneratePassword
+import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
 
 abstract class CreateEditFragment : ViewModelFragment() {
@@ -48,7 +48,7 @@ abstract class CreateEditFragment : ViewModelFragment() {
         b.parentPassword.error = it
     }
 
-    val applyEnabledObserver = Observer<Boolean> {
+    private val applyEnabledObserver = Observer<Boolean> {
         b.applyButton.isEnabled = it
     }
 
