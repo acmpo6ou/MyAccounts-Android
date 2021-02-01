@@ -38,6 +38,8 @@ class AccountsActivity : SuperActivity() {
         super.onCreate(savedInstanceState)
         loadSettings(this)
 
+        myContext = this
+
         b = ActivityAccountsBinding.inflate(layoutInflater)
         setContentView(b.root)
 
