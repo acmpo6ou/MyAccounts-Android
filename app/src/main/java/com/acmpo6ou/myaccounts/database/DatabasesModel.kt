@@ -85,7 +85,7 @@ data class Database(val name: String,
 class DatabasesModel(private val ACCOUNTS_DIR: String,
                      private val contentResolver: ContentResolver): DatabasesModelInter {
     // path to directory that contains databases
-    override val SRC_DIR = "$ACCOUNTS_DIR/src/"
+    val SRC_DIR = "$ACCOUNTS_DIR/src/"
 
     /**
      * This method deletes .db and .bin files of database given its name.

@@ -55,6 +55,7 @@ class EditDatabaseFragmentInst {
     fun setup() {
         db = Database("main", "123")
         app.databases = mutableListOf(db)
+        app.res = context.resources
 
         scenario = launchFragmentInContainer(themeResId= R.style.Theme_MyAccounts_NoActionBar)
         scenario.onFragment {

@@ -65,6 +65,7 @@ class CreateEditFragmentInst {
     @Before
     fun setup() {
         scenario = launchFragmentInContainer(themeResId= R.style.Theme_MyAccounts_NoActionBar)
+        app.res = context.resources
         scenario.onFragment {
             it.viewModel.initialize(app, faker.str())
             it.initModel()

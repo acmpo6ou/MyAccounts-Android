@@ -26,7 +26,7 @@ import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.ui.database.DatabasesAdapter
 
 interface DatabasesPresenterInter{
-    var databases: MutableList<Database>
+    var databases: DbList
 
     fun isDatabaseSaved(i: Int): Boolean
 
@@ -68,7 +68,7 @@ interface DatabaseFragmentInter{
 }
 
 interface DatabasesModelInter{
-    fun getDatabases(): MutableList<Database>
+    fun getDatabases(): DbList
     fun openDatabase(database: Database, app: MyApp): Database
     fun exportDatabase(name: String, destinationUri: Uri)
     fun deleteDatabase(name: String)

@@ -33,7 +33,7 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
     var model: DatabasesModelInter = DatabasesModel(view.ACCOUNTS_DIR, view.myContext.contentResolver)
     var exportIndex: Int? = null
 
-    override var databases: MutableList<Database>
+    override var databases: DbList
         get() = view.app.databases
         set(value) {
             view.app.databases = value

@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts.accounts_activity
 
 import com.acmpo6ou.myaccounts.account.AccountsPresenter
 import com.acmpo6ou.myaccounts.core.SuperActivityInter
+import com.nhaarman.mockitokotlin2.mock
 import org.junit.Before
 import org.junit.Test
 
@@ -30,6 +31,7 @@ class AccountsPresenterTests {
 
     @Before
     fun setup(){
+        view = mock()
         presenter = AccountsPresenter(view)
     }
 
