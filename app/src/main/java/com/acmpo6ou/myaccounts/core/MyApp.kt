@@ -20,7 +20,7 @@
 package com.acmpo6ou.myaccounts.core
 
 import android.app.Application
-import com.acmpo6ou.myaccounts.MainActivity
+import android.content.res.Resources
 import com.acmpo6ou.myaccounts.database.Database
 import com.macasaet.fernet.Key
 
@@ -38,6 +38,6 @@ open class MyApp: Application() {
     var keyCache = mutableMapOf<String, Key>()
 
     // Used to access resources of MainActivity.
-    // Resources from MainActivity are correctly translated.
-    var mainActivity: MainActivity = MainActivity()
+    // Because resources from MainActivity are correctly translated.
+    lateinit var res: Resources
 }

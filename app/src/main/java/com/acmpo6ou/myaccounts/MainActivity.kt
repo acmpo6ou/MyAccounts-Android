@@ -53,7 +53,7 @@ class MainActivity : SuperActivity(), MainActivityInter {
         ACCOUNTS_DIR = getExternalFilesDir(null)!!.path + "/"
         myContext = this
         app = applicationContext as MyApp
-        app.mainActivity = this
+        app.res = resources
 
         // setup presenter and action bar
         presenter = MainPresenter(this)
