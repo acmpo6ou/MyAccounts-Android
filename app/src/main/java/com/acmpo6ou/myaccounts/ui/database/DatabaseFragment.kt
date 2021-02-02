@@ -32,10 +32,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.database.DatabaseFragmentInter
 import com.acmpo6ou.myaccounts.database.DatabasesPresenter
 import com.acmpo6ou.myaccounts.database.DatabasesPresenterInter
+import com.acmpo6ou.myaccounts.database.DbList
 import com.acmpo6ou.myaccounts.database.superclass.SuperFragment
 import com.acmpo6ou.myaccounts.databinding.FragmentDatabaseListBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -54,7 +54,7 @@ class DatabaseFragment: SuperFragment(), DatabaseFragmentInter {
     override lateinit var adapter: DatabasesAdapter
     override lateinit var presenter: DatabasesPresenterInter
 
-    var databases: MutableList<Database>
+    var databases: DbList
         get() = app.databases
         set(value){
             app.databases = value

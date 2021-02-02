@@ -22,7 +22,7 @@ package com.acmpo6ou.myaccounts.database.superclass
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.database.Database
+import com.acmpo6ou.myaccounts.database.DbList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -40,7 +40,7 @@ open class SuperViewModel: ViewModel() {
     lateinit var SRC_DIR: String
     lateinit var titleStart: String
 
-    var databases: MutableList<Database>
+    var databases: DbList
         get() = app.databases
         set(value) {
             app.databases = value

@@ -29,7 +29,7 @@ open class MainPresenter(override var view: MainActivityInter) : SuperPresenter(
         MainPresenterInter {
     var model: MainModelInter = MainModel(view.ACCOUNTS_DIR, view.myContext.contentResolver)
 
-    var databases: MutableList<Database>
+    var databases: DbList
         get() = view.app.databases
         set(value) {
             view.app.databases = value

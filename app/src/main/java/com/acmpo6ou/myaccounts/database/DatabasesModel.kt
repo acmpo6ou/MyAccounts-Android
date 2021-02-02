@@ -55,6 +55,7 @@ data class Account(
 )
 
 typealias DbMap = Map<String, Account>
+typealias DbList = MutableList<Database>
 
 /**
  * Represents database of Accounts.
@@ -84,7 +85,7 @@ data class Database(val name: String,
 class DatabasesModel(private val ACCOUNTS_DIR: String,
                      private val contentResolver: ContentResolver): DatabasesModelInter {
     // path to directory that contains databases
-    private val SRC_DIR = "$ACCOUNTS_DIR/src/"
+    override val SRC_DIR = "$ACCOUNTS_DIR/src/"
 
     /**
      * This method deletes .db and .bin files of database given its name.
@@ -124,7 +125,7 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
      *
      * @return list of databases that are found in src directory.
      */
-    override fun getDatabases(): MutableList<Database> {
+    override fun getDatabases(): DbList {
         val databases = mutableListOf<Database>()
         // src folder where all database files are stored
         val src = File(SRC_DIR)
