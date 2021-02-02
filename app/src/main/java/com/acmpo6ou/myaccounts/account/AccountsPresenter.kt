@@ -24,7 +24,9 @@ import com.acmpo6ou.myaccounts.core.SuperPresenter
 
 class AccountsPresenter(override val view: SuperActivityInter) : SuperPresenter(),
         AccountsPresenterInter {
+    override fun saveSelected() {
+    }
+
     override fun saveDatabase() {
-        TODO("Not yet implemented")
     }
 }

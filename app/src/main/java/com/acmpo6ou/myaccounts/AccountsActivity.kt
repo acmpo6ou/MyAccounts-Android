@@ -63,7 +63,7 @@ class AccountsActivity : SuperActivity() {
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         if(item.itemId == R.id.save_database){
-            presenter.saveDatabase()
+            presenter.saveSelected()
         }
         else{
             super.onNavigationItemSelected(item)

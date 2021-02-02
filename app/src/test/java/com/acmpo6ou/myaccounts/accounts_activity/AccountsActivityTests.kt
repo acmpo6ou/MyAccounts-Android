@@ -41,9 +41,9 @@ class AccountsActivityTests {
     }
 
     @Test
-    fun `'Save' should call presenter importSelected`(){
+    fun `'Save' should call presenter saveSelected`(){
         selectNavigationItem(R.id.save_database, activity)
-        verify(presenter).saveDatabase()
+        verify(presenter).saveSelected()
 
         // all other methods should not be called
         verifyNoMoreInteractions(presenter)

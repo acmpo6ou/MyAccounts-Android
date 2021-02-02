@@ -22,5 +22,6 @@ package com.acmpo6ou.myaccounts.account
 import com.acmpo6ou.myaccounts.core.SuperPresenterInter
 
 interface AccountsPresenterInter : SuperPresenterInter{
+    fun saveSelected()
     fun saveDatabase()
 }
