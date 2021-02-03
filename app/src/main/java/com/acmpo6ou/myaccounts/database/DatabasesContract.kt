@@ -22,6 +22,7 @@ package com.acmpo6ou.myaccounts.database
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import com.acmpo6ou.myaccounts.core.DatabaseUtils
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.ui.database.DatabasesAdapter
 
@@ -52,8 +53,10 @@ interface DatabaseFragmentInter{
     var app: MyApp
 
     fun exportDialog(i: Int)
+
     fun confirmDelete(i: Int)
     fun confirmClose(i: Int)
+
     fun navigateToEdit(i: Int)
     fun navigateToOpen(i: Int)
 
@@ -67,9 +70,7 @@ interface DatabaseFragmentInter{
     fun notifyRemoved(i: Int)
 }
 
-interface DatabasesModelInter{
+interface DatabasesModelInter : DatabaseUtils{
     fun getDatabases(): DbList
-    fun openDatabase(database: Database, app: MyApp): Database
     fun exportDatabase(name: String, destinationUri: Uri)
-    fun deleteDatabase(name: String)
 }
