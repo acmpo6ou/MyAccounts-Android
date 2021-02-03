@@ -21,10 +21,6 @@ package com.acmpo6ou.myaccounts.database
 
 import android.content.ContentResolver
 import android.net.Uri
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.core.createDatabaseUtil
-import com.acmpo6ou.myaccounts.core.deleteDatabaseUtil
-import com.acmpo6ou.myaccounts.core.openDatabaseUtil
 import kotlinx.serialization.Serializable
 import org.kamranzafar.jtar.TarEntry
 import org.kamranzafar.jtar.TarOutputStream
@@ -83,42 +79,9 @@ data class Database(val name: String,
  * @param[ACCOUNTS_DIR] path to directory that contains src folder.
  */
 class DatabasesModel(private val ACCOUNTS_DIR: String,
-                     private val contentResolver: ContentResolver): DatabasesModelInter {
+                     private val contentResolver: ContentResolver) : DatabasesModelInter {
     // path to directory that contains databases
-    val SRC_DIR = "$ACCOUNTS_DIR/src/"
-
-    /**
-     * This method deletes .db and .bin files of database given its name.
-     *
-     * @param[name] name of database to delete.
-     */
-    override fun deleteDatabase(name: String) = deleteDatabaseUtil(name, SRC_DIR)
-
-    /**
-     * Used to open databases by given Database instance.
-     *
-     * In particular opening database means reading content of corresponding .db file,
-     * decrypting and deserializing it, then assigning deserialized database map to `data`
-     * property of given Database.
-     *
-     * @param[database] Database instance with password, name and salt to open database.
-     * @param[app] application instance containing cache of cryptography keys used to open
-     * database.
-     * @return same Database instance but with `data` property filled with deserialized
-     * database map.
-     */
-    override fun openDatabase(database: Database, app: MyApp): Database {
-        return openDatabaseUtil(database, SRC_DIR, app)
-    }
-
-    /**
-     * Creates .db and .bin files for database given Database instance.
-     *
-     * @param[database] Database instance from which database name, password and salt are
-     * extracted for database files creation.
-     */
-    fun createDatabase(database: Database, app: MyApp) =
-            createDatabaseUtil(database, SRC_DIR, app)
+    override val SRC_DIR = "$ACCOUNTS_DIR/src/"
 
     /**
      * Used to get a list of Database instances – databases that reside in SRC_DIR directory.
