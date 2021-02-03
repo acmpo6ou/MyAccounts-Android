@@ -20,19 +20,18 @@
 package com.acmpo6ou.myaccounts.ui.database
 
 import androidx.lifecycle.viewModelScope
-import com.acmpo6ou.myaccounts.database.superclass.CreateEditViewModel
 import com.acmpo6ou.myaccounts.database.Database
-import com.acmpo6ou.myaccounts.core.createDatabaseUtil
+import com.acmpo6ou.myaccounts.database.superclass.CreateEditViewModel
 import kotlinx.coroutines.async
 
 open class CreateDatabaseViewModel : CreateEditViewModel() {
-    open fun createDatabase(database: Database) =
+    open fun createDatabaseAsync(database: Database) =
         viewModelScope.async(defaultDispatcher){
-            createDatabaseUtil(database, SRC_DIR, app)
+            createDatabase(database, app)
         }
 
     /**
-     * This method creates database using [createDatabase] and given [name] and [password].
+     * This method creates database using [createDatabaseAsync] and given [name] and [password].
      *
      * Once the database is created it is added to the list.
      * If any error occurred it sets errorMsg to error message.
@@ -48,7 +47,7 @@ open class CreateDatabaseViewModel : CreateEditViewModel() {
             val cleanedName = fixName(name)
             val salt = generateSalt()
             val database = Database(cleanedName, password, salt)
-            createDatabase(database).await()
+            createDatabaseAsync(database).await()
 
             // add it to the list, sort the list and notify about creation
             databases.add(database)

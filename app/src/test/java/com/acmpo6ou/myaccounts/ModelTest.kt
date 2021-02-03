@@ -22,6 +22,7 @@ package com.acmpo6ou.myaccounts
 import android.content.ContentResolver
 import android.net.Uri
 import android.os.ParcelFileDescriptor
+import com.acmpo6ou.myaccounts.core.DatabaseUtils
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
@@ -30,7 +31,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 
-open class ModelTest {
+open class ModelTest : DatabaseUtils {
     val faker = Faker()
 
     open val password = "123"
@@ -43,7 +44,7 @@ open class ModelTest {
     // this is where model will create delete and edit databases during testing
     // /dev/shm/ is a fake in-memory file system
     val accountsDir = "/dev/shm/accounts/"
-    val SRC_DIR = "${accountsDir}src/"
+    override val SRC_DIR = "${accountsDir}src/"
 
     val contentResolver: ContentResolver = mock()
     val locationUri: Uri = mock()

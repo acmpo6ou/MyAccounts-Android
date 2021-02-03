@@ -23,7 +23,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.database.superclass.SuperViewModel
-import com.acmpo6ou.myaccounts.core.openDatabaseUtil
 import com.macasaet.fernet.TokenValidationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -76,7 +75,7 @@ open class OpenDatabaseViewModel : SuperViewModel() {
             database.salt = salt
 
             // save deserialized database
-            databases[databaseIndex] = openDatabase(database).await()
+            databases[databaseIndex] = openDatabaseAsync(database).await()
 
             // set opened to true to notify fragment about successful
             // database deserialization
@@ -123,8 +122,8 @@ open class OpenDatabaseViewModel : SuperViewModel() {
      * @return same Database instance but with `data` property filled with deserialized
      * database map.
      */
-    open fun openDatabase(database: Database) =
+    open fun openDatabaseAsync(database: Database) =
     viewModelScope.async(defaultDispatcher) {
-        openDatabaseUtil(database, SRC_DIR, app)
+        openDatabase(database, app)
     }
 }

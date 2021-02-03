@@ -60,7 +60,7 @@ class CreateDatabaseModelTests : ModelTest() {
         runBlocking {
             spyModel.apply(name, password)
         }
-        verify(spyModel).createDatabase(db)
+        verify(spyModel).createDatabaseAsync(db)
     }
 
     @Test
@@ -69,14 +69,14 @@ class CreateDatabaseModelTests : ModelTest() {
             // will become `clean_name` when cleaned by fixName
             spyModel.apply("c/lea  %\$n_name/", password)
         }
-        verify(spyModel).createDatabase(db)
+        verify(spyModel).createDatabaseAsync(db)
     }
 
     @Test
     fun `apply should handle any error`(){
         val msg = faker.str()
         val exception = Exception(msg)
-        whenever(spyModel.createDatabase(db))
+        whenever(spyModel.createDatabaseAsync(db))
                 .doAnswer{
                     throw exception
                 }

@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts.database.superclass
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.acmpo6ou.myaccounts.core.DatabaseUtils
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.database.DbList
 import kotlinx.coroutines.CoroutineDispatcher
@@ -30,14 +31,14 @@ import kotlinx.coroutines.Job
 /**
  * Super class for all view models.
  */
-open class SuperViewModel: ViewModel() {
+open class SuperViewModel: ViewModel(), DatabaseUtils {
     var defaultDispatcher = Dispatchers.Default
     var uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     var coroutineJob: Job? = null
 
     var databaseIndex: Int = 0
     lateinit var app: MyApp
-    lateinit var SRC_DIR: String
+    override lateinit var SRC_DIR: String
     lateinit var titleStart: String
 
     var databases: DbList

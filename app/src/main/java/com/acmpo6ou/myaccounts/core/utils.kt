@@ -51,7 +51,7 @@ interface DatabaseUtils {
      * @return when [jsonStr] is empty returns empty map, when it's not empty –
      * deserialized database map.
      */
-    fun loadsUtil(jsonStr: String): DbMap {
+    fun loads(jsonStr: String): DbMap {
         var map = mapOf<String, Account>()
         if (jsonStr.isNotEmpty()) {
             map = Json.decodeFromString(jsonStr)
@@ -66,7 +66,7 @@ interface DatabaseUtils {
      * @return when [data] is empty returns empty string, when [data] is not empty –
      * serialized json string.
      */
-    fun dumpsUtil(data: DbMap): String {
+    fun dumps(data: DbMap): String {
         var json = ""
         if (data.isNotEmpty()) {
             json = Json.encodeToString(data)
@@ -81,7 +81,7 @@ interface DatabaseUtils {
      * @param[salt] salt for key.
      * @return created fernet key.
      */
-    fun deriveKeyUtil(password: String, salt: ByteArray): Key {
+    fun deriveKey(password: String, salt: ByteArray): Key {
         val iterations = 100000
         val derivedKeyLength = 256
 
@@ -103,12 +103,12 @@ interface DatabaseUtils {
      * database.
      * @return decrypted database map.
      */
-    fun decryptDatabaseUtil(jsonString: String, password: String, salt: ByteArray, app: MyApp): DbMap {
+    fun decryptDatabase(jsonString: String, password: String, salt: ByteArray, app: MyApp): DbMap {
         // Get key from cache if it's there, if not add the key to cache.
-        // This is needed because generating cryptography key using deriveKeyUtil involves
+        // This is needed because generating cryptography key using deriveKey involves
         // 100 000 iterations which takes a long time, so the keys have to be cached and
         // generated only if they are not in the cache
-        val key = app.keyCache.getOrPut(password) { deriveKeyUtil(password, salt) }
+        val key = app.keyCache.getOrPut(password) { deriveKey(password, salt) }
 
         val validator: Validator<String> = object : StringValidator {
             // this checks whether our encrypted json string is expired or not
@@ -121,7 +121,7 @@ interface DatabaseUtils {
         // decrypt and deserialize string
         val token = Token.fromString(jsonString)
         val decrypted = token.validateAndDecrypt(key, validator)
-        return loadsUtil(decrypted)
+        return loads(decrypted)
     }
 
     /**
@@ -130,9 +130,9 @@ interface DatabaseUtils {
      * @param[db] Database instance to encrypt.
      * @return encrypted json string.
      */
-    fun encryptDatabaseUtil(db: Database, app: MyApp): String {
-        val key = app.keyCache.getOrPut(db.password!!) { deriveKeyUtil(db.password!!, db.salt!!) }
-        val data = dumpsUtil(db.data)
+    fun encryptDatabase(db: Database, app: MyApp): String {
+        val key = app.keyCache.getOrPut(db.password!!) { deriveKey(db.password!!, db.salt!!) }
+        val data = dumps(db.data)
         val token = Token.generate(key, data)
         return token.serialise()
     }
@@ -151,7 +151,7 @@ interface DatabaseUtils {
      */
     fun openDatabase(database: Database, app: MyApp): Database {
         val jsonStr = File("$SRC_DIR/${database.name}.db").readText()
-        val data = decryptDatabaseUtil(jsonStr, database.password!!, database.salt!!, app)
+        val data = decryptDatabase(jsonStr, database.password!!, database.salt!!, app)
         database.data = data
         return database
     }
@@ -175,7 +175,7 @@ interface DatabaseUtils {
         databaseFile.createNewFile()
 
         // encrypt and write database to .db file
-        val token = encryptDatabaseUtil(database, app)
+        val token = encryptDatabase(database, app)
         databaseFile.writeText(token)
     }
 

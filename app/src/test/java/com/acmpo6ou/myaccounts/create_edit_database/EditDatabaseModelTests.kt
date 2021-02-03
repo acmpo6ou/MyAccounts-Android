@@ -24,8 +24,6 @@ import androidx.lifecycle.viewModelScope
 import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.database.Database
-import com.acmpo6ou.myaccounts.core.createDatabaseUtil
-import com.acmpo6ou.myaccounts.core.deriveKeyUtil
 import com.acmpo6ou.myaccounts.getDatabaseMap
 import com.acmpo6ou.myaccounts.str
 import com.acmpo6ou.myaccounts.ui.database.EditDatabaseViewModel
@@ -65,7 +63,7 @@ class EditDatabaseModelTests : ModelTest() {
     fun setup(){
         app = MyApp()
         app.databases = mutableListOf(Database(oldName, password, salt))
-        app.keyCache = mutableMapOf(password to deriveKeyUtil(password, salt))
+        app.keyCache = mutableMapOf(password to deriveKey(password, salt))
 
         model.initialize(app, SRC_DIR, faker.str(), 0)
         spyModel = spy(model){ on{generateSalt()} doReturn salt }
@@ -155,7 +153,7 @@ class EditDatabaseModelTests : ModelTest() {
         runBlocking {
             spyModel.apply(name, "123") // now password is 123
         }
-        assertFalse(deriveKeyUtil(password, salt) in app.keyCache)
+        assertFalse(deriveKey(password, salt) in app.keyCache)
     }
 
     @Test
@@ -181,7 +179,7 @@ class EditDatabaseModelTests : ModelTest() {
     private fun setUpSaveDatabase(){
         // this database will be deleted by saveDatabase
         val db = Database("test", "123", salt)
-        createDatabaseUtil(db, SRC_DIR, MyApp())
+        createDatabase(db, MyApp())
 
         // this database will be created by saveDatabase
         val newDb = Database("test2", "321",
@@ -200,7 +198,7 @@ class EditDatabaseModelTests : ModelTest() {
      * @return decrypted string.
      */
     private fun decryptStr(string: String): String{
-        val key = deriveKeyUtil("321", salt.reversedArray())
+        val key = deriveKey("321", salt.reversedArray())
         val validator: Validator<String> = object : StringValidator {
             // this checks whether our encrypted json string is expired or not
             // in our app we don't care about expiration so we return Instant.MAX.epochSecond

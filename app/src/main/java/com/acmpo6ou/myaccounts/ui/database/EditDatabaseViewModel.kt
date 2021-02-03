@@ -20,10 +20,8 @@
 package com.acmpo6ou.myaccounts.ui.database
 
 import androidx.lifecycle.viewModelScope
-import com.acmpo6ou.myaccounts.database.superclass.CreateEditViewModel
 import com.acmpo6ou.myaccounts.database.Database
-import com.acmpo6ou.myaccounts.core.createDatabaseUtil
-import com.acmpo6ou.myaccounts.core.deleteDatabaseUtil
+import com.acmpo6ou.myaccounts.database.superclass.CreateEditViewModel
 import kotlinx.coroutines.async
 
 open class EditDatabaseViewModel : CreateEditViewModel() {
@@ -37,8 +35,8 @@ open class EditDatabaseViewModel : CreateEditViewModel() {
      */
     open fun saveDatabase(oldName: String, database: Database) =
     viewModelScope.async (defaultDispatcher) {
-        deleteDatabaseUtil(oldName, SRC_DIR)
-        createDatabaseUtil(database, SRC_DIR, app)
+        deleteDatabase(oldName)
+        createDatabase(database, app)
     }
 
     /**

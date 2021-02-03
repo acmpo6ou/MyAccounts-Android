@@ -21,7 +21,6 @@ package com.acmpo6ou.myaccounts.database_fragment
 
 import android.content.ContentResolver
 import android.net.Uri
-import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.*
 import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.database.DatabaseFragmentInter
@@ -32,11 +31,13 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import org.junit.Before
 
-open class DatabasesPresenterTest{
+open class DatabasesPresenterTest : DatabaseUtils{
     lateinit var view: DatabaseFragmentInter
     lateinit var model: DatabasesModelInter
     lateinit var presenter: DatabasesPresenter
+
     lateinit var app: MyApp
+    override lateinit var SRC_DIR: String
 
     var locationUri: Uri = mock()
     val contextResolver: ContentResolver = mock()
@@ -60,7 +61,7 @@ open class DatabasesPresenterTest{
     @Before
     fun setUp(){
         app = MyApp()
-        app.keyCache = mutableMapOf("123" to deriveKeyUtil("123", salt))
+        app.keyCache = mutableMapOf("123" to deriveKey("123", salt))
 
         view = mock{
             on{ACCOUNTS_DIR} doReturn ""

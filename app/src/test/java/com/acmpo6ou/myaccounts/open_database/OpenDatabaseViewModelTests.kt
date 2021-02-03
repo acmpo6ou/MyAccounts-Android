@@ -64,7 +64,7 @@ class OpenDatabaseViewModelTests {
     fun `verifyPassword should set incorrectPassword to true if there is TokenValidation error`(){
         doAnswer{
             throw TokenValidationException("")
-        }.whenever(spyModel).openDatabase(app.databases[0])
+        }.whenever(spyModel).openDatabaseAsync(app.databases[0])
 
         runBlocking {
             spyModel.verifyPassword(faker.str())
@@ -76,7 +76,7 @@ class OpenDatabaseViewModelTests {
     fun `verifyPassword should remove key from cache if password is incorrect`(){
         doAnswer{
             throw TokenValidationException("")
-        }.whenever(spyModel).openDatabase(app.databases[0])
+        }.whenever(spyModel).openDatabaseAsync(app.databases[0])
 
         runBlocking {
             spyModel.verifyPassword(faker.str())
@@ -90,7 +90,7 @@ class OpenDatabaseViewModelTests {
             // here we throw Exception instead of JsonDecodingException because
             // JsonDecodingException is private
             throw Exception("JsonDecodingException")
-        }.whenever(spyModel).openDatabase(any())
+        }.whenever(spyModel).openDatabaseAsync(any())
 
         runBlocking {
             spyModel.verifyPassword(faker.str())
@@ -128,7 +128,7 @@ class OpenDatabaseViewModelTests {
     fun `verifyPassword should set loading to false when password is incorrect`(){
         doAnswer{
             throw TokenValidationException("")
-        }.whenever(spyModel).openDatabase(app.databases[0])
+        }.whenever(spyModel).openDatabaseAsync(app.databases[0])
 
         runBlocking {
             spyModel.verifyPassword(faker.str())
@@ -180,7 +180,7 @@ class OpenDatabaseViewModelTests {
         val exception = Exception(msg)
         doAnswer{
             throw exception
-        }.whenever(spyModel).openDatabase(any())
+        }.whenever(spyModel).openDatabaseAsync(any())
 
         runBlocking {
             spyModel.verifyPassword(password)
