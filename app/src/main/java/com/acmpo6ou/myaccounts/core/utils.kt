@@ -41,155 +41,156 @@ import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 import kotlin.reflect.KProperty1
 
-/**
- * Used to deserialize json string to database map.
- *
- * @param[jsonStr] json string to deserialize.
- * @return when [jsonStr] is empty returns empty map, when it's not empty –
- * deserialized database map.
- */
-fun loadsUtil(jsonStr: String): DbMap {
-    var map = mapOf<String, Account>()
-    if (jsonStr.isNotEmpty()){
-        map = Json.decodeFromString(jsonStr)
-    }
-    return map
-}
+interface DatabaseUtils {
+    val SRC_DIR: String
 
-/**
- * Method used to serialize database map to json string.
- *
- * @param[data] map to serialize.
- * @return when [data] is empty returns empty string, when [data] is not empty –
- * serialized json string.
- */
-fun dumpsUtil(data: DbMap): String{
-    var json = ""
-    if (data.isNotEmpty()){
-        json = Json.encodeToString(data)
-    }
-    return json
-}
-
-/**
- * This method creates fernet key given password and salt.
- *
- * @param[password] key password.
- * @param[salt] salt for key.
- * @return created fernet key.
- */
-fun deriveKeyUtil(password: String, salt: ByteArray): Key {
-    val iterations = 100000
-    val derivedKeyLength = 256
-
-    val spec = PBEKeySpec(password.toCharArray(), salt, iterations, derivedKeyLength)
-    val secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
-
-    val key = secretKeyFactory.generateSecret(spec).encoded
-    val strKey = java.util.Base64.getUrlEncoder().encodeToString(key)
-    return Key(strKey)
-}
-
-/**
- * Used to decrypt and deserialize encrypted json string to a database map.
- *
- * @param[jsonString] encrypted json string to decrypt.
- * @param[password] password for decryption.
- * @param[salt] salt for decryption.
- * @param[app] application instance containing cache of cryptography keys used to open
- * database.
- * @return decrypted database map.
- */
-fun decryptDatabaseUtil(jsonString: String, password: String, salt: ByteArray, app: MyApp): DbMap {
-    // Get key from cache if it's there, if not add the key to cache.
-    // This is needed because generating cryptography key using deriveKeyUtil involves
-    // 100 000 iterations which takes a long time, so the keys have to be cached and
-    // generated only if they are not in the cache
-    val key = app.keyCache.getOrPut(password) {deriveKeyUtil(password, salt)}
-
-    val validator: Validator<String> = object : StringValidator {
-        // this checks whether our encrypted json string is expired or not
-        // in our app we don't care about expiration so we return Instant.MAX.epochSecond
-        override fun getTimeToLive(): TemporalAmount {
-            return Duration.ofSeconds(Instant.MAX.epochSecond)
+    /**
+     * Used to deserialize json string to database map.
+     *
+     * @param[jsonStr] json string to deserialize.
+     * @return when [jsonStr] is empty returns empty map, when it's not empty –
+     * deserialized database map.
+     */
+    fun loadsUtil(jsonStr: String): DbMap {
+        var map = mapOf<String, Account>()
+        if (jsonStr.isNotEmpty()) {
+            map = Json.decodeFromString(jsonStr)
         }
+        return map
     }
 
-    // decrypt and deserialize string
-    val token = Token.fromString(jsonString)
-    val decrypted = token.validateAndDecrypt(key, validator)
-    return loadsUtil(decrypted)
-}
+    /**
+     * Method used to serialize database map to json string.
+     *
+     * @param[data] map to serialize.
+     * @return when [data] is empty returns empty string, when [data] is not empty –
+     * serialized json string.
+     */
+    fun dumpsUtil(data: DbMap): String {
+        var json = ""
+        if (data.isNotEmpty()) {
+            json = Json.encodeToString(data)
+        }
+        return json
+    }
 
-/**
- * This method is for database serialization and encryption.
- *
- * @param[db] Database instance to encrypt.
- * @return encrypted json string.
- */
-fun encryptDatabaseUtil(db: Database, app: MyApp): String{
-    val key = app.keyCache.getOrPut(db.password!!) {deriveKeyUtil(db.password!!, db.salt!!)}
-    val data = dumpsUtil(db.data)
-    val token = Token.generate(key, data)
-    return token.serialise()
-}
+    /**
+     * This method creates fernet key given password and salt.
+     *
+     * @param[password] key password.
+     * @param[salt] salt for key.
+     * @return created fernet key.
+     */
+    fun deriveKeyUtil(password: String, salt: ByteArray): Key {
+        val iterations = 100000
+        val derivedKeyLength = 256
 
-/**
- * Used to open databases by given Database instance.
- *
- * In particular opening database means reading content of corresponding .db file,
- * decrypting and deserializing it, then assigning deserialized database map to `data`
- * property of given Database.
- *
- * @param[database] Database instance with password, name and salt to open database.
- * @param[SRC_DIR] path to src directory that contains databases.
- * @param[app] application instance containing cache of cryptography keys used to open
- * database.
- * @return same Database instance but with `data` property filled with deserialized
- * database map.
- */
-fun openDatabaseUtil(database: Database, SRC_DIR: String, app: MyApp): Database {
-    val jsonStr = File("$SRC_DIR/${database.name}.db").readText()
-    val data = decryptDatabaseUtil(jsonStr, database.password!!, database.salt!!, app)
-    database.data = data
-    return database
-}
+        val spec = PBEKeySpec(password.toCharArray(), salt, iterations, derivedKeyLength)
+        val secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
 
-/**
- * Creates .db and .bin files for database given Database instance.
- *
- * @param[database] Database instance from which database name, password and salt are
- * @param[SRC_DIR] path to src directory that contains databases.
- * extracted for database files creation.
- */
-fun createDatabaseUtil(database: Database, SRC_DIR: String, app: MyApp) {
-    val name = database.name
+        val key = secretKeyFactory.generateSecret(spec).encoded
+        val strKey = java.util.Base64.getUrlEncoder().encodeToString(key)
+        return Key(strKey)
+    }
 
-    // create salt file
-    val saltFile = File("$SRC_DIR/$name.bin")
-    saltFile.createNewFile()
-    saltFile.writeBytes(database.salt!!)
+    /**
+     * Used to decrypt and deserialize encrypted json string to a database map.
+     *
+     * @param[jsonString] encrypted json string to decrypt.
+     * @param[password] password for decryption.
+     * @param[salt] salt for decryption.
+     * @param[app] application instance containing cache of cryptography keys used to open
+     * database.
+     * @return decrypted database map.
+     */
+    fun decryptDatabaseUtil(jsonString: String, password: String, salt: ByteArray, app: MyApp): DbMap {
+        // Get key from cache if it's there, if not add the key to cache.
+        // This is needed because generating cryptography key using deriveKeyUtil involves
+        // 100 000 iterations which takes a long time, so the keys have to be cached and
+        // generated only if they are not in the cache
+        val key = app.keyCache.getOrPut(password) { deriveKeyUtil(password, salt) }
 
-    // create database file
-    val databaseFile = File("$SRC_DIR/$name.db")
-    databaseFile.createNewFile()
+        val validator: Validator<String> = object : StringValidator {
+            // this checks whether our encrypted json string is expired or not
+            // in our app we don't care about expiration so we return Instant.MAX.epochSecond
+            override fun getTimeToLive(): TemporalAmount {
+                return Duration.ofSeconds(Instant.MAX.epochSecond)
+            }
+        }
 
-    // encrypt and write database to .db file
-    val token = encryptDatabaseUtil(database, app)
-    databaseFile.writeText(token)
-}
+        // decrypt and deserialize string
+        val token = Token.fromString(jsonString)
+        val decrypted = token.validateAndDecrypt(key, validator)
+        return loadsUtil(decrypted)
+    }
 
-/**
- * This method deletes .db and .bin files of database given its name.
- *
- * @param[name] name of database to delete.
- */
-fun deleteDatabaseUtil(name: String, SRC_DIR: String){
-    val binFile = File("$SRC_DIR/$name.bin")
-    binFile.delete()
+    /**
+     * This method is for database serialization and encryption.
+     *
+     * @param[db] Database instance to encrypt.
+     * @return encrypted json string.
+     */
+    fun encryptDatabaseUtil(db: Database, app: MyApp): String {
+        val key = app.keyCache.getOrPut(db.password!!) { deriveKeyUtil(db.password!!, db.salt!!) }
+        val data = dumpsUtil(db.data)
+        val token = Token.generate(key, data)
+        return token.serialise()
+    }
 
-    val dbFile = File("$SRC_DIR/$name.db")
-    dbFile.delete()
+    /**
+     * Used to open databases by given Database instance.
+     *
+     * In particular opening database means reading content of corresponding .db file,
+     * decrypting and deserializing it, then assigning deserialized database map to `data`
+     * property of given Database.
+     *
+     * @param[database] Database instance with password, name and salt to open database.
+     * database.
+     * @return same Database instance but with `data` property filled with deserialized
+     * database map.
+     */
+    fun openDatabase(database: Database, app: MyApp): Database {
+        val jsonStr = File("$SRC_DIR/${database.name}.db").readText()
+        val data = decryptDatabaseUtil(jsonStr, database.password!!, database.salt!!, app)
+        database.data = data
+        return database
+    }
+
+    /**
+     * Creates .db and .bin files for database given Database instance.
+     *
+     * @param[database] Database instance from which database name, password and salt are
+     * extracted for database files creation.
+     */
+    fun createDatabase(database: Database, app: MyApp) {
+        val name = database.name
+
+        // create salt file
+        val saltFile = File("$SRC_DIR/$name.bin")
+        saltFile.createNewFile()
+        saltFile.writeBytes(database.salt!!)
+
+        // create database file
+        val databaseFile = File("$SRC_DIR/$name.db")
+        databaseFile.createNewFile()
+
+        // encrypt and write database to .db file
+        val token = encryptDatabaseUtil(database, app)
+        databaseFile.writeText(token)
+    }
+
+    /**
+     * This method deletes .db and .bin files of database given its name.
+     *
+     * @param[name] name of database to delete.
+     */
+    fun deleteDatabase(name: String) {
+        val binFile = File("$SRC_DIR/$name.bin")
+        binFile.delete()
+
+        val dbFile = File("$SRC_DIR/$name.db")
+        dbFile.delete()
+    }
 }
 
 /**
