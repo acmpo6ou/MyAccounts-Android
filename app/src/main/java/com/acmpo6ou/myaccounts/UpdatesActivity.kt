@@ -21,14 +21,12 @@ package com.acmpo6ou.myaccounts
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.acmpo6ou.myaccounts.core.loadSettings
 import com.acmpo6ou.myaccounts.ui.UpdatesFragment
 
 class UpdatesActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        loadSettings(this)
         setContentView(R.layout.updates_activity)
 
         if (savedInstanceState == null) {

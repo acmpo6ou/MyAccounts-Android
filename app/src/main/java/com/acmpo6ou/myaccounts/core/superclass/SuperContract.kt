@@ -21,9 +21,11 @@ package com.acmpo6ou.myaccounts.core.superclass
 
 import android.content.Context
 import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.core.SettingsUtils
 import com.google.android.material.navigation.NavigationView
 
-interface SuperActivityInter : NavigationView.OnNavigationItemSelectedListener {
+interface SuperActivityInter : NavigationView.OnNavigationItemSelectedListener,
+                               SettingsUtils {
     val ACCOUNTS_DIR: String
     val myContext: Context
     var app: MyApp

@@ -19,13 +19,14 @@
 
 package com.acmpo6ou.myaccounts
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.core.view.GravityCompat
+import androidx.preference.PreferenceManager
 import com.acmpo6ou.myaccounts.account.AccountsPresenter
 import com.acmpo6ou.myaccounts.account.AccountsPresenterInter
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
-import com.acmpo6ou.myaccounts.core.loadSettings
 import com.acmpo6ou.myaccounts.databinding.ActivityAccountsBinding
 import com.acmpo6ou.myaccounts.ui.account.AccountsFragment
 
@@ -34,13 +35,15 @@ class AccountsActivity : SuperActivity() {
     override lateinit var b: ActivityAccountsBinding
     override val mainFragmentId = R.id.accountsFragment
     override lateinit var presenter: AccountsPresenterInter
+    override lateinit var prefs: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        loadSettings(this)
-
         myContext = this
         presenter = AccountsPresenter(this)
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        loadSettings()
 
         b = ActivityAccountsBinding.inflate(layoutInflater)
         setContentView(b.root)

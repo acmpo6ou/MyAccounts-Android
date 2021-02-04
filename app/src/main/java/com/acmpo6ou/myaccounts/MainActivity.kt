@@ -22,13 +22,14 @@ package com.acmpo6ou.myaccounts
 import android.Manifest.permission
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.core.view.GravityCompat
+import androidx.preference.PreferenceManager
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
-import com.acmpo6ou.myaccounts.core.loadSettings
 import com.acmpo6ou.myaccounts.database.MainActivityInter
 import com.acmpo6ou.myaccounts.database.MainPresenter
 import com.acmpo6ou.myaccounts.database.MainPresenterInter
@@ -41,17 +42,19 @@ class MainActivity : SuperActivity(), MainActivityInter {
     override lateinit var b: ActivityMainBinding
     override lateinit var presenter: MainPresenterInter
     override val mainFragmentId = R.id.databaseFragment
+    override lateinit var prefs: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_MyAccounts_NoActionBar)
         super.onCreate(savedInstanceState)
-        loadSettings(this)
+        myContext = this
+        prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        loadSettings()
 
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
 
         ACCOUNTS_DIR = getExternalFilesDir(null)!!.path + "/"
-        myContext = this
         app = applicationContext as MyApp
         app.res = resources
 

@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.core.superclass
 
+import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Rect
@@ -56,6 +57,7 @@ import com.google.android.material.snackbar.Snackbar
 abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
     override lateinit var ACCOUNTS_DIR: String
     override lateinit var myContext: Context
+    override val activity get() = myContext as Activity
     override lateinit var app: MyApp
 
     abstract val b: ViewBinding
