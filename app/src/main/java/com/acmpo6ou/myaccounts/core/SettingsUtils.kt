@@ -24,12 +24,16 @@ import android.content.SharedPreferences
 import android.view.WindowManager
 import java.util.*
 
+/**
+ * Contains helper methods to load app settings.
+ * Should be used by all activities.
+ */
 interface SettingsUtils {
     val activity: Activity
     val prefs: SharedPreferences
 
     /**
-     * Helper method to change app locale.
+     * Helper method to change activity locale.
      * @param[languageCode] language code ot change locale such as `uk` for Ukraine.
      */
     fun setLocale(languageCode: String) {
