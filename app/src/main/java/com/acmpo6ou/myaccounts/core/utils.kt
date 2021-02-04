@@ -19,9 +19,6 @@
 
 package com.acmpo6ou.myaccounts.core
 
-import android.app.Activity
-import android.view.WindowManager
-import androidx.preference.PreferenceManager
 import com.acmpo6ou.myaccounts.database.Account
 import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.database.DbMap
@@ -36,7 +33,6 @@ import java.io.File
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.TemporalAmount
-import java.util.*
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 import kotlin.reflect.KProperty1
@@ -190,42 +186,6 @@ interface DatabaseUtils {
 
         val dbFile = File("$SRC_DIR/$name.db")
         dbFile.delete()
-    }
-}
-
-/**
- * Helper method to change app locale.
- * @param[activity] activity that needs to change locale.
- * @param[languageCode] language code ot change locale such as `uk` for Ukraine.
- */
-fun setLocale(activity: Activity, languageCode:String) {
-    val locale = Locale(languageCode)
-    Locale.setDefault(locale)
-
-    val resources = activity.resources
-    val config = resources.configuration
-    config.setLocale(locale)
-    resources.updateConfiguration(config, resources.displayMetrics)
-}
-
-/**
- * Loads defined by user settings such as app locale and screen capture.
- * @param[activity] activity where to load settings.
- */
-fun loadSettings(activity: Activity){
-    val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
-
-    // get locale preference and set locale
-    val localeCode = prefs.getString("language", "default")
-    if(localeCode != "default") {
-        setLocale(activity, localeCode!!)
-    }
-
-    // get screen capture preference and block screen capture if needed
-    val screenCapture = prefs.getBoolean("block_screen_capture", true)
-    if (screenCapture) {
-        activity.window.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
-                                 WindowManager.LayoutParams.FLAG_SECURE)
     }
 }
 
