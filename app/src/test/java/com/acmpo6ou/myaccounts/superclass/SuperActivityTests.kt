@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.superclass
 
+import android.content.SharedPreferences
 import androidx.viewbinding.ViewBinding
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
@@ -34,6 +35,7 @@ open class TestActivity : SuperActivity() {
     override val b: ViewBinding = mock()
     override var presenter: SuperPresenterInter = mock()
     override val mainFragmentId = 0
+    override val prefs: SharedPreferences = mock()
 
     override fun noUpdates() {
     }
