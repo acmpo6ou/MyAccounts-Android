@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.core
+package com.acmpo6ou.myaccounts.core.superclass
 
 import android.content.Context
 import android.content.DialogInterface
@@ -44,6 +44,8 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.viewbinding.ViewBinding
 import com.acmpo6ou.myaccounts.BuildConfig
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.core.getProperty
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar

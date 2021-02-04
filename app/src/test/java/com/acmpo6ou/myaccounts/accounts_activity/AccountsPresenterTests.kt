@@ -20,7 +20,7 @@
 package com.acmpo6ou.myaccounts.accounts_activity
 
 import com.acmpo6ou.myaccounts.account.AccountsPresenter
-import com.acmpo6ou.myaccounts.core.SuperActivityInter
+import com.acmpo6ou.myaccounts.core.superclass.SuperActivityInter
 import com.nhaarman.mockitokotlin2.mock
 import org.junit.Before
 import org.junit.Test

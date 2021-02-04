@@ -27,7 +27,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.core.view.GravityCompat
 import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.core.SuperActivity
+import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
 import com.acmpo6ou.myaccounts.core.loadSettings
 import com.acmpo6ou.myaccounts.database.MainActivityInter
 import com.acmpo6ou.myaccounts.database.MainPresenter

@@ -17,9 +17,10 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.core
+package com.acmpo6ou.myaccounts.core.superclass
 
 import android.content.Context
+import com.acmpo6ou.myaccounts.core.MyApp
 import com.google.android.material.navigation.NavigationView
 
 interface SuperActivityInter : NavigationView.OnNavigationItemSelectedListener {

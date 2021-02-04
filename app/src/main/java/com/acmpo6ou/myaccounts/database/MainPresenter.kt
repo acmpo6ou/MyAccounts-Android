@@ -21,7 +21,7 @@ package com.acmpo6ou.myaccounts.database
 
 import android.net.Uri
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.SuperPresenter
+import com.acmpo6ou.myaccounts.core.superclass.SuperPresenter
 import java.io.File
 import java.io.IOException
 

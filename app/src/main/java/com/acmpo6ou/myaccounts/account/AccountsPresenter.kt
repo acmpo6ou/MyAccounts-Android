@@ -19,8 +19,8 @@
 
 package com.acmpo6ou.myaccounts.account
 
-import com.acmpo6ou.myaccounts.core.SuperActivityInter
-import com.acmpo6ou.myaccounts.core.SuperPresenter
+import com.acmpo6ou.myaccounts.core.superclass.SuperActivityInter
+import com.acmpo6ou.myaccounts.core.superclass.SuperPresenter
 
 class AccountsPresenter(override val view: SuperActivityInter) : SuperPresenter(),
         AccountsPresenterInter {

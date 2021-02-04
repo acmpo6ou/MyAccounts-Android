@@ -20,16 +20,16 @@
 package com.acmpo6ou.myaccounts.database
 
 import android.net.Uri
-import com.acmpo6ou.myaccounts.core.SuperActivityInter
-import com.acmpo6ou.myaccounts.core.SuperPresenterInter
+import com.acmpo6ou.myaccounts.core.superclass.SuperActivityInter
+import com.acmpo6ou.myaccounts.core.superclass.SuperPresenterInter
 
-interface MainPresenterInter : SuperPresenterInter{
+interface MainPresenterInter : SuperPresenterInter {
     fun importSelected()
     fun checkTarFile(location: Uri)
     fun isTimeToUpdate(): Boolean
 }
 
-interface MainActivityInter : SuperActivityInter{
+interface MainActivityInter : SuperActivityInter {
     fun importDialog()
     fun notifyChanged(i: Int)
 }

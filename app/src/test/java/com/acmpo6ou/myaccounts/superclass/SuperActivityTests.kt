@@ -21,8 +21,8 @@ package com.acmpo6ou.myaccounts.superclass
 
 import androidx.viewbinding.ViewBinding
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.SuperActivity
-import com.acmpo6ou.myaccounts.core.SuperPresenterInter
+import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
+import com.acmpo6ou.myaccounts.core.superclass.SuperPresenterInter
 import com.acmpo6ou.myaccounts.selectNavigationItem
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify

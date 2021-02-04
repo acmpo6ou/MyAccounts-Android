@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.core
+package com.acmpo6ou.myaccounts.core.superclass
 
 import com.acmpo6ou.myaccounts.R
 

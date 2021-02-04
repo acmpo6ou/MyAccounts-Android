@@ -19,9 +19,9 @@
 
 package com.acmpo6ou.myaccounts.account
 
-import com.acmpo6ou.myaccounts.core.SuperPresenterInter
+import com.acmpo6ou.myaccounts.core.superclass.SuperPresenterInter
 
-interface AccountsPresenterInter : SuperPresenterInter{
+interface AccountsPresenterInter : SuperPresenterInter {
     fun saveSelected()
     fun saveDatabase()
 }

@@ -20,8 +20,8 @@
 package com.acmpo6ou.myaccounts.superclass
 
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.SuperActivityInter
-import com.acmpo6ou.myaccounts.core.SuperPresenter
+import com.acmpo6ou.myaccounts.core.superclass.SuperActivityInter
+import com.acmpo6ou.myaccounts.core.superclass.SuperPresenter
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
