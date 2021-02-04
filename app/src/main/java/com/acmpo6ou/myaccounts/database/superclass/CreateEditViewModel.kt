@@ -19,11 +19,10 @@
 
 package com.acmpo6ou.myaccounts.database.superclass
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.core.combineWith
 import kotlinx.coroutines.launch
 import java.security.SecureRandom
 
@@ -160,21 +159,4 @@ abstract class CreateEditViewModel: SuperViewModel() {
     }
 
     abstract suspend fun apply(name: String, password: String)
-}
-
-/**
- * Helper extension function to combine 2 LiveData properties into one.
- * Note: it's completely copied from StackOverflow.
- */
-fun <T, K, R> LiveData<T>.combineWith(
-        liveData: LiveData<K>,
-        block: (T?, K?) -> R): LiveData<R> {
-    val result = MediatorLiveData<R>()
-    result.addSource(this) {
-        result.value = block(this.value, liveData.value)
-    }
-    result.addSource(liveData) {
-        result.value = block(this.value, liveData.value)
-    }
-    return result
 }
