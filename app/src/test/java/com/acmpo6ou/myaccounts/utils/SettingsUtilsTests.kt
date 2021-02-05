@@ -24,6 +24,8 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.util.DisplayMetrics
+import android.view.Window
+import android.view.WindowManager
 import com.acmpo6ou.myaccounts.core.SettingsUtils
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
@@ -43,9 +45,11 @@ class SettingsUtilsTests {
     private lateinit var mockResources: Resources
     private val mockConfig: Configuration = mock()
     private val displayMetrics: DisplayMetrics = mock()
+    private val mockWindow: Window = mock()
 
     private val languageCode = "uk"
     private val expectedLocale = Locale(languageCode)
+    private val secureFlag = WindowManager.LayoutParams.FLAG_SECURE
 
     @Before
     fun setup() {
@@ -55,7 +59,10 @@ class SettingsUtilsTests {
         }
 
         testActivity = TestActivity()
-        testActivity.activity = mock{ on{resources} doReturn mockResources }
+        testActivity.activity = mock{
+            on{resources} doReturn mockResources
+            on{window} doReturn mockWindow
+        }
         spyActivity = spy(testActivity)
     }
 
@@ -72,7 +79,7 @@ class SettingsUtilsTests {
     }
 
     @Test
-    fun `loadSettings should not call setLocale if language setting is set to 'default'`(){
+    fun `loadSettings should not call setLocale if 'language' setting is set to 'default'`(){
         spyActivity.prefs = mock{
             on{ getString("language", "default") } doReturn "default"
         }
@@ -82,12 +89,34 @@ class SettingsUtilsTests {
     }
 
     @Test
-    fun `loadSettings should call setLocale if language setting is other then 'default'`(){
+    fun `loadSettings should call setLocale if 'language' setting is other then 'default'`(){
         spyActivity.prefs = mock{
             on{ getString("language", "default") } doReturn languageCode
         }
 
         spyActivity.loadSettings()
         verify(spyActivity).setLocale(languageCode)
+    }
+
+    @Test
+    fun `loadSettings should block screen capture when 'block_screen_capture' is true`(){
+        testActivity.prefs = mock{
+            on{ getString(anyString(), anyString()) } doReturn "default"
+            on{ getBoolean("block_screen_capture", true) } doReturn true
+        }
+
+        testActivity.loadSettings()
+        verify(mockWindow).setFlags(secureFlag, secureFlag)
+    }
+
+    @Test
+    fun `loadSettings should not block screen capture when 'block_screen_capture' is false`(){
+        testActivity.prefs = mock{
+            on{ getString(anyString(), anyString()) } doReturn "default"
+            on{ getBoolean("block_screen_capture", true) } doReturn false
+        }
+
+        testActivity.loadSettings()
+        verify(mockWindow, never()).setFlags(secureFlag, secureFlag)
     }
 }
