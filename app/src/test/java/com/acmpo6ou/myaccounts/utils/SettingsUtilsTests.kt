@@ -25,20 +25,21 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.util.DisplayMetrics
 import com.acmpo6ou.myaccounts.core.SettingsUtils
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
+import org.mockito.ArgumentMatchers.anyString
 import java.util.*
 
-class TestActivity : SettingsUtils {
+open class TestActivity : SettingsUtils {
     override lateinit var activity: Activity
     override lateinit var prefs: SharedPreferences
 }
 
 class SettingsUtilsTests {
-    lateinit var testActivity: TestActivity
+    private lateinit var testActivity: TestActivity
+    lateinit var spyActivity: TestActivity
+
     private lateinit var mockResources: Resources
     private val mockConfig: Configuration = mock()
     private val displayMetrics: DisplayMetrics = mock()
@@ -54,7 +55,8 @@ class SettingsUtilsTests {
         }
 
         testActivity = TestActivity()
-        testActivity.activity = mock{on{resources} doReturn mockResources}
+        testActivity.activity = mock{ on{resources} doReturn mockResources }
+        spyActivity = spy(testActivity)
     }
 
     @Test
@@ -67,5 +69,25 @@ class SettingsUtilsTests {
     fun `setLocale should update configuration of resources`(){
         testActivity.setLocale(languageCode)
         verify(mockResources).updateConfiguration(mockConfig, displayMetrics)
+    }
+
+    @Test
+    fun `loadSettings should not call setLocale if language setting is set to 'default'`(){
+        spyActivity.prefs = mock{
+            on{ getString("language", "default") } doReturn "default"
+        }
+
+        spyActivity.loadSettings()
+        verify(spyActivity, never()).setLocale(anyString())
+    }
+
+    @Test
+    fun `loadSettings should call setLocale if language setting is other then 'default'`(){
+        spyActivity.prefs = mock{
+            on{ getString("language", "default") } doReturn languageCode
+        }
+
+        spyActivity.loadSettings()
+        verify(spyActivity).setLocale(languageCode)
     }
 }
