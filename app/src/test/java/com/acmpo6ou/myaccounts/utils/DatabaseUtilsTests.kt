@@ -28,8 +28,7 @@ import com.acmpo6ou.myaccounts.str
 import com.macasaet.fernet.StringValidator
 import com.macasaet.fernet.Token
 import com.macasaet.fernet.Validator
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Test
 import java.io.File
 import java.time.Duration
@@ -65,9 +64,8 @@ class DatabaseUtilsTests: ModelTest() {
         val validator: Validator<String> = object : StringValidator {
             // this checks whether our encrypted json string is expired or not
             // in our app we don't care about expiration so we return Instant.MAX.epochSecond
-            override fun getTimeToLive(): TemporalAmount {
-                return Duration.ofSeconds(Instant.MAX.epochSecond)
-            }
+            override fun getTimeToLive(): TemporalAmount =
+                Duration.ofSeconds(Instant.MAX.epochSecond)
         }
         val token = Token.fromString(string)
         return token.validateAndDecrypt(key, validator)
@@ -119,12 +117,27 @@ class DatabaseUtilsTests: ModelTest() {
         // create fresh application instance
         app = MyApp()
 
-        val database = Database(faker.name().name(), password, salt, getDatabaseMap())
+        val database = Database(faker.str(), password, salt, getDatabaseMap())
         encryptDatabase(database, app)
 
         // check that key was cached
         val expectedKey = deriveKey(password, salt)
         assertEquals(app.keyCache[password], expectedKey)
+    }
+
+    @Test
+    fun `encryptDatabase should return encrypted json string from Database`(){
+        val database = Database(faker.str(), faker.str(), salt, getDatabaseMap())
+
+        // get encrypted json string
+        val jsonStr = encryptDatabase(database, app)
+
+        // here we decrypt the json string using salt and password we defined earlier
+        // to check if it were encrypted correctly
+        val data = decryptStr(jsonStr, database.password!!, database.salt!!)
+
+        assertEquals("encryptDatabase has returned incorrectly encrypted json string!",
+            jsonDatabase, data)
     }
 
     @Test
@@ -148,34 +161,14 @@ class DatabaseUtilsTests: ModelTest() {
 
     @Test
     fun `dumps should return serialized string when passed non empty map`(){
-        // create database with account that we will serialize
-        val database = getDatabaseMap()
+        // create database map with account that we will serialize
+        val databaseMap = getDatabaseMap()
 
         // serialize database and check resulting json string
-        val dumpStr = dumps(database)
+        val dumpStr = dumps(databaseMap)
         val expectedStr = jsonDatabase
 
         assertEquals(expectedStr, dumpStr)
-    }
-
-    @Test
-    fun `encryptDatabase should return encrypted json string from Database`(){
-        val dataMap = getDatabaseMap()
-
-        val database = Database(
-                faker.name().name(),
-                faker.str(),
-                salt, dataMap)
-
-        // get encrypted json string
-        val jsonStr = encryptDatabase(database, app)
-
-        // here we decrypt the json string using salt and password we defined earlier
-        // to check if it were encrypted correctly
-        val data = decryptStr(jsonStr, database.password!!, database.salt!!)
-
-        assertEquals("encryptDatabase has returned incorrectly encrypted json string!",
-                jsonDatabase, data)
     }
 
     @Test
@@ -202,5 +195,23 @@ class DatabaseUtilsTests: ModelTest() {
 
         assertEquals("createDatabase created incorrect salt file!",
                 String(salt), String(actualBin))
+    }
+
+    @Test
+    fun `deleteDatabase should remove db and bin files from disk`(){
+        // create empty database so that we can delete it using deleteDatabase
+        val database = Database("main", "123", salt)
+        createDatabase(database, MyApp())
+
+        deleteDatabase("main")
+
+        // files that should be deleted
+        val binFile = File("$SRC_DIR/main.bin")
+        val dbFile = File("$SRC_DIR/main.db")
+
+        assertFalse("deleteDatabase didn't delete .bin file",
+            binFile.exists())
+        assertFalse("deleteDatabase didn't delete .db file",
+            dbFile.exists())
     }
 }

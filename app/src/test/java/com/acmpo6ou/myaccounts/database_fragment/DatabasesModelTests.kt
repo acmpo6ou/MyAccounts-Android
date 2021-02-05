@@ -20,7 +20,6 @@
 package com.acmpo6ou.myaccounts.database_fragment
 
 import com.acmpo6ou.myaccounts.ModelTest
-import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.database.DatabasesModel
 import com.acmpo6ou.myaccounts.str
@@ -56,24 +55,6 @@ class DatabasesTests {
 
 class DatabasesModelTests: ModelTest() {
     var model = DatabasesModel(accountsDir, contentResolver)
-
-    @Test
-    fun `deleteDatabase removes db and bin files from disk`(){
-        // create empty database so that we can delete it using deleteDatabase
-        val database = Database("main", "123", salt)
-        model.createDatabase(database, MyApp())
-
-        model.deleteDatabase("main")
-
-        // files that should be deleted
-        val binFile = File("$SRC_DIR/main.bin")
-        val dbFile = File("$SRC_DIR/main.db")
-
-        assertFalse("deleteDatabase doesn't delete .bin file",
-                binFile.exists())
-        assertFalse("deleteDatabase doesn't delete .db file",
-                dbFile.exists())
-    }
 
     @Test
     fun `getDatabases should return list of Databases that reside in SRC_DIR`(){

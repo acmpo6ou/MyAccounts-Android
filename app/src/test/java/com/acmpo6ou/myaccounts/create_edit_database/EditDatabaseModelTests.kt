@@ -202,9 +202,8 @@ class EditDatabaseModelTests : ModelTest() {
         val validator: Validator<String> = object : StringValidator {
             // this checks whether our encrypted json string is expired or not
             // in our app we don't care about expiration so we return Instant.MAX.epochSecond
-            override fun getTimeToLive(): TemporalAmount {
-                return Duration.ofSeconds(Instant.MAX.epochSecond)
-            }
+            override fun getTimeToLive(): TemporalAmount =
+                Duration.ofSeconds(Instant.MAX.epochSecond)
         }
         val token = Token.fromString(string)
         return token.validateAndDecrypt(key, validator)

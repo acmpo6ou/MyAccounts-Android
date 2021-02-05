@@ -36,6 +36,9 @@ import java.time.temporal.TemporalAmount
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 
+/**
+ * Provides some helper methods to work with databases.
+ */
 interface DatabaseUtils {
     val SRC_DIR: String
 
@@ -77,7 +80,7 @@ interface DatabaseUtils {
      * @return created fernet key.
      */
     fun deriveKey(password: String, salt: ByteArray): Key {
-        val iterations = 100000
+        val iterations = 100_000
         val derivedKeyLength = 256
 
         val spec = PBEKeySpec(password.toCharArray(), salt, iterations, derivedKeyLength)
@@ -94,8 +97,7 @@ interface DatabaseUtils {
      * @param[jsonString] encrypted json string to decrypt.
      * @param[password] password for decryption.
      * @param[salt] salt for decryption.
-     * @param[app] application instance containing cache of cryptography keys used to open
-     * database.
+     * @param[app] application instance containing cache of cryptography keys.
      * @return decrypted database map.
      */
     fun decryptDatabase(jsonString: String, password: String, salt: ByteArray, app: MyApp): DbMap {
@@ -108,9 +110,8 @@ interface DatabaseUtils {
         val validator: Validator<String> = object : StringValidator {
             // this checks whether our encrypted json string is expired or not
             // in our app we don't care about expiration so we return Instant.MAX.epochSecond
-            override fun getTimeToLive(): TemporalAmount {
-                return Duration.ofSeconds(Instant.MAX.epochSecond)
-            }
+            override fun getTimeToLive(): TemporalAmount =
+                Duration.ofSeconds(Instant.MAX.epochSecond)
         }
 
         // decrypt and deserialize string
@@ -123,6 +124,7 @@ interface DatabaseUtils {
      * This method is for database serialization and encryption.
      *
      * @param[db] Database instance to encrypt.
+     * @param[app] application instance containing cache of cryptography keys.
      * @return encrypted json string.
      */
     fun encryptDatabase(db: Database, app: MyApp): String {
@@ -140,7 +142,7 @@ interface DatabaseUtils {
      * property of given Database.
      *
      * @param[database] Database instance with password, name and salt to open database.
-     * database.
+     * @param[app] application instance containing cache of cryptography keys.
      * @return same Database instance but with `data` property filled with deserialized
      * database map.
      */
@@ -156,6 +158,7 @@ interface DatabaseUtils {
      *
      * @param[database] Database instance from which database name, password and salt are
      * extracted for database files creation.
+     * @param[app] application instance containing cache of cryptography keys.
      */
     fun createDatabase(database: Database, app: MyApp) {
         val name = database.name
@@ -176,7 +179,6 @@ interface DatabaseUtils {
 
     /**
      * This method deletes .db and .bin files of database given its name.
-     *
      * @param[name] name of database to delete.
      */
     fun deleteDatabase(name: String) {

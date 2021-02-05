@@ -24,7 +24,7 @@ import androidx.lifecycle.MediatorLiveData
 import kotlin.reflect.KProperty1
 
 /**
- * Helper extension function to combine 2 LiveData properties into one.
+ * Extension function to combine 2 LiveData properties into one.
  * Note: it's completely copied from StackOverflow.
  */
 fun <T, K, R> LiveData<T>.combineWith(
@@ -41,7 +41,9 @@ fun <T, K, R> LiveData<T>.combineWith(
 }
 
 /**
- * Helper function to get property from [instance] by [propertyName] string using reflection.
+ * Function to get property from [instance] by [propertyName] string using reflection.
+ * Note: it's completely copied from StackOverflow.
+ *
  * @param[instance] instance to get property from.
  * @param[propertyName] string with property name.
  * @return property named [propertyName] got from [instance].
