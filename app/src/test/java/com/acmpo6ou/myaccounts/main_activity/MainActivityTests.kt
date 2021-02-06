@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.main_activity
 
 import android.app.Activity
+import androidx.core.view.GravityCompat
 import com.acmpo6ou.myaccounts.DatabaseViewTest
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R.id.import_database
@@ -50,6 +51,13 @@ class MainActivityTests: DatabaseViewTest() {
 
         // all other methods should not be called
         verifyNoMoreInteractions(presenter)
+    }
+
+    @Test
+    fun `onNavigationItemSelected should close drawer when any of it's items is selected`(){
+        activity.drawerLayout = mock()
+        selectNavigationItem(import_database, activity)
+        verify(activity.drawerLayout).closeDrawer(GravityCompat.START)
     }
 
     @Test
