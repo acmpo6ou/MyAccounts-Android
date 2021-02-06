@@ -23,12 +23,11 @@ import android.os.Build
 import androidx.test.core.app.ActivityScenario
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.GeneratePassword
+import com.acmpo6ou.myaccounts.core.GenPassDialog
 import com.acmpo6ou.myaccounts.core.hasoneof
 import com.google.android.material.textfield.TextInputEditText
 import com.nhaarman.mockitokotlin2.*
 import junit.framework.TestCase.assertTrue
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Before
@@ -43,9 +42,9 @@ import org.robolectric.annotation.LooperMode
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
-class GeneratePasswordInst {
+class GenPassDialogInst {
     lateinit var scenario: ActivityScenario<MainActivity>
-    lateinit var dialog: GeneratePassword
+    lateinit var dialog: GenPassDialog
 
     val pass1: TextInputEditText = mock()
     val pass2: TextInputEditText = mock()
@@ -55,7 +54,7 @@ class GeneratePasswordInst {
         scenario = ActivityScenario.launch(MainActivity::class.java)
         scenario.onActivity {
             it.myContext.setTheme(R.style.Theme_MyAccounts_NoActionBar)
-            dialog = GeneratePassword(it, pass1, pass2)
+            dialog = GenPassDialog(it, pass1, pass2)
         }
     }
 
@@ -127,8 +126,8 @@ class GeneratePasswordInst {
     @Test
     fun `genPass should generate password from passed characters only`(){
         val password = dialog.genPass(16, listOf(dialog.digits, dialog.lower))
-        Assert.assertTrue(password hasoneof dialog.digits)
-        Assert.assertTrue(password hasoneof dialog.lower)
+        assertTrue(password hasoneof dialog.digits)
+        assertTrue(password hasoneof dialog.lower)
         assertFalse(password hasoneof dialog.upper)
         assertFalse(password hasoneof dialog.punctuation)
     }

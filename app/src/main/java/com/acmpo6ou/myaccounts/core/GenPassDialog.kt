@@ -28,8 +28,15 @@ import com.acmpo6ou.myaccounts.R
 import com.google.android.material.textfield.TextInputEditText
 import com.shawnlin.numberpicker.NumberPicker
 
-open class GeneratePassword(activity: AppCompatActivity,
-                       pass1: TextInputEditText, pass2: TextInputEditText) {
+/**
+ * Dialog to generate password and fill [pass1] and [pass2] password fields of
+ * [activity] with it.
+ *
+ * Dialog that contains number picker to chose password length and checkboxes to chose what
+ * characters to use to generate password (i.e. digits, letters, etc.).
+ */
+open class GenPassDialog(activity: AppCompatActivity,
+                         pass1: TextInputEditText, pass2: TextInputEditText) {
     val dialog: Dialog = Dialog(activity)
     val generateButton: Button
     val cancelButton: Button
@@ -60,7 +67,7 @@ open class GeneratePassword(activity: AppCompatActivity,
         punctBox = dialog.findViewById(R.id.punctBox)
         checkBoxes = listOf(digitsBox, lowerBox, upperBox, punctBox)
 
-        // set width and height
+        // set width and height of dialog
         val width = (activity.resources.displayMetrics.widthPixels * 0.90).toInt()
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
         dialog.window?.setLayout(width, height)
@@ -111,8 +118,8 @@ open class GeneratePassword(activity: AppCompatActivity,
                 .joinToString("")
 
         // because password generates randomly it not necessary will contain all characters that are
-        // specified in [chars], so here we check that generated password contains at least one character
-        // from each string specified in [chars] and if not we generate password again
+        // specified in [chars], so here we check that generated password contains at least one
+        // character from each string specified in [chars] and if not we generate password again
         for(seq in chars){
             if (!(password hasoneof seq)){
                 return genPass(len, chars)
@@ -125,9 +132,9 @@ open class GeneratePassword(activity: AppCompatActivity,
 /**
  * Checks whether [String] on the left has at least one character from [String] on the right.
  *
- * @param[other] [String] on the right, i.e. the one from which we check characters.
- * @return [Boolean] value representing whether [String] on the left contains
- * at least one character from [String] on the right.
+ * @param[other] string on the right, i.e. the one from which we check characters.
+ * @return boolean value representing whether string on the left contains
+ * at least one character from string on the right.
  */
 infix fun String.hasoneof(other: String): Boolean {
     for(c in other){

@@ -30,7 +30,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.GeneratePassword
+import com.acmpo6ou.myaccounts.core.GenPassDialog
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
 
@@ -135,7 +135,7 @@ abstract class CreateEditFragment : ViewModelFragment() {
         })
 
         b.databaseGenerate.setOnClickListener {
-            GeneratePassword(mainActivity, b.databasePassword, b.databaseRepeatPassword)
+            GenPassDialog(mainActivity, b.databasePassword, b.databaseRepeatPassword)
         }
 
         // call applyPressed when clicking on `Create` button
