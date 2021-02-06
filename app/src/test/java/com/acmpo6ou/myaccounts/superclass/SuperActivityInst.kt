@@ -22,12 +22,16 @@ package com.acmpo6ou.myaccounts.superclass
 import android.app.Dialog
 import android.os.Build
 import android.widget.TextView
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.findNavController
 import androidx.test.core.app.ActivityScenario
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
-import org.junit.Assert
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -67,9 +71,31 @@ class SuperActivityInst {
         val title = dialog.findViewById<TextView>(R.id.alertTitle)
         val message = dialog.findViewById<TextView>(android.R.id.message)
 
-        Assert.assertEquals("showError created dialog with incorrect title!",
+        assertEquals("showError created dialog with incorrect title!",
                 expectedTitle, title.text)
-        Assert.assertEquals("showError created dialog with incorrect message!",
+        assertEquals("showError created dialog with incorrect message!",
                 expectedMsg, message.text)
+    }
+
+    @Test
+    fun `navigation drawer should be locked when current fragment is not mainFragment`(){
+        scenario.onActivity {
+            it.drawerLayout = mock()
+            val navController = it.findNavController(R.id.nav_host_fragment)
+
+            navController.navigate(R.id.aboutFragment)
+            verify(it.drawerLayout).setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+        }
+    }
+
+    @Test
+    fun `navigation drawer should not be locked when current fragment is mainFragment`(){
+        scenario.onActivity {
+            it.drawerLayout = mock()
+            val navController = it.findNavController(R.id.nav_host_fragment)
+
+            navController.navigate(it.mainFragmentId)
+            verify(it.drawerLayout).setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+        }
     }
 }

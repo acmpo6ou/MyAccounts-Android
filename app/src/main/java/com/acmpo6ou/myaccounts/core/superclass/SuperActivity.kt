@@ -57,12 +57,12 @@ import com.google.android.material.snackbar.Snackbar
 abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
     override lateinit var ACCOUNTS_DIR: String
     override lateinit var myContext: Context
-    override val activity get() = myContext as Activity
     override lateinit var app: MyApp
+    override val activity get() = myContext as Activity
 
     abstract val b: ViewBinding
-    private val navView: NavigationView get() = getProperty(b, "navView")
-    private val drawerLayout: DrawerLayout get() = getProperty(b, "drawerLayout")
+    lateinit var navView: NavigationView
+    lateinit var drawerLayout: DrawerLayout
 
     lateinit var appBarConfiguration: AppBarConfiguration
     abstract val presenter: SuperPresenterInter
@@ -75,6 +75,9 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
 
     override fun onStart() {
         super.onStart()
+        navView = getProperty(b, "navView")
+        drawerLayout = getProperty(b, "drawerLayout")
+
         setAppVersion()
 
         // setup navigation controller
