@@ -20,14 +20,14 @@
 package com.acmpo6ou.myaccounts.superclass
 
 import android.content.SharedPreferences
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewbinding.ViewBinding
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
 import com.acmpo6ou.myaccounts.core.superclass.SuperPresenterInter
 import com.acmpo6ou.myaccounts.selectNavigationItem
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
 
@@ -90,5 +90,27 @@ class SuperActivityTests {
 
         // all other methods should not be called
         verifyNoMoreInteractions(presenter)
+    }
+
+    @Test
+    fun `back button should close nav drawer if it is opened`(){
+        val mockDrawer: DrawerLayout = mock{
+            on{isDrawerOpen(GravityCompat.START)} doReturn true
+        }
+        activity.drawerLayout = mockDrawer
+
+        activity.onBackPressed()
+        verify(mockDrawer).closeDrawer(GravityCompat.START)
+    }
+
+    @Test
+    fun `back button should not close nav drawer if it isn't opened`(){
+        val mockDrawer: DrawerLayout = mock{
+            on{isDrawerOpen(GravityCompat.START)} doReturn false
+        }
+        activity.drawerLayout = mockDrawer
+
+        activity.onBackPressed()
+        verify(mockDrawer, never()).closeDrawer(GravityCompat.START)
     }
 }

@@ -77,7 +77,6 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
         super.onStart()
         navView = getProperty(b, "navView")
         drawerLayout = getProperty(b, "drawerLayout")
-
         setAppVersion()
 
         // setup navigation controller
