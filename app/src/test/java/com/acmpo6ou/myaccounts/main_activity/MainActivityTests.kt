@@ -62,7 +62,7 @@ class MainActivityTests: DatabaseViewTest() {
 
     @Test
     fun `onActivityResult should call checkTarFile when code is IMPORT_RC`(){
-        // call onActivityResult passing import request code, result ok and intent with
+        // call onActivityResult passing import request code, result OK and intent with
         // location where to import database
         activity.onActivityResult(activity.IMPORT_RC, Activity.RESULT_OK, intent)
         verify(presenter).checkTarFile(locationUri)
@@ -70,14 +70,14 @@ class MainActivityTests: DatabaseViewTest() {
 
     @Test
     fun `onActivityResult should not call checkTarFile when code is other than EXPORT_RC`(){
-        // call onActivityResult passing other request code, result ok and intent
+        // call onActivityResult passing other request code, result OK and intent
         activity.onActivityResult(OTHER_RC, Activity.RESULT_OK, intent)
         verify(presenter, never()).checkTarFile(locationUri)
     }
 
     @Test
-    fun `onActivityResult should not call checkTarFile when result code is canceled`(){
-        // call onActivityResult passing other request code, result canceled and intent
+    fun `onActivityResult should not call checkTarFile when result code is CANCELED`(){
+        // call onActivityResult passing other request code, result CANCELED and intent
         activity.onActivityResult(activity.IMPORT_RC, Activity.RESULT_CANCELED, intent)
         verify(presenter, never()).checkTarFile(locationUri)
     }

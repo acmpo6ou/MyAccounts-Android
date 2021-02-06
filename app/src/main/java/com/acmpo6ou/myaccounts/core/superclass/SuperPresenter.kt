@@ -44,21 +44,21 @@ abstract class SuperPresenter : SuperPresenterInter {
     }
 
     /**
-     * This method is called when user clicks `Changelog` in navigation drawer.
+     * Called when user clicks `Changelog` in navigation drawer.
      */
     override fun navigateToChangelog() {
         view.navigateTo(R.id.actionChangelog)
     }
 
     /**
-     * This method is called when user clicks `Settings` in navigation drawer.
+     * Called when user clicks `Settings` in navigation drawer.
      */
     override fun navigateToSettings() {
         view.navigateTo(R.id.actionSettings)
     }
 
     /**
-     * This method is called when user clicks `About` in navigation drawer.
+     * Called when user clicks `About` in navigation drawer.
      */
     override fun navigateToAbout() {
         view.navigateTo(R.id.actionAbout)

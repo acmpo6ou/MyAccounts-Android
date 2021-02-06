@@ -214,10 +214,8 @@ class DatabaseFragment: SuperFragment(), DatabaseFragmentInter {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        // if activity was canceled don't do anything
-        if (resultCode != Activity.RESULT_OK){
-            return
-        }
+        // do not do anything if activity was canceled
+        if (resultCode != Activity.RESULT_OK) return
 
         if(requestCode == EXPORT_RC) {
             presenter.exportDatabase(data?.data!!)

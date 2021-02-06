@@ -22,7 +22,7 @@ package com.acmpo6ou.myaccounts.main_activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.os.Looper
+import android.os.Looper.getMainLooper
 import android.view.View
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ActivityScenario.launch
@@ -37,7 +37,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
-import org.robolectric.Shadows
+import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
@@ -46,8 +46,6 @@ import org.robolectric.annotation.LooperMode
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class MainActivityInst {
     lateinit var scenario: ActivityScenario<MainActivity>
-
-    // get string resources
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     private val noUpdatesMsg = context.resources.getString(R.string.no_updates)
 
@@ -65,7 +63,7 @@ class MainActivityInst {
             it.noUpdates()
 
             // this is because of some Robolectric main looper problems
-            Shadows.shadowOf(Looper.getMainLooper()).idle()
+            shadowOf(getMainLooper()).idle()
 
             // get the snackbar
             val v: View = it.findViewById(android.R.id.content)
@@ -91,7 +89,7 @@ class MainActivityInst {
 
         // check all intent properties
         val intent: Intent =
-                Shadows.shadowOf(RuntimeEnvironment.application).nextStartedActivity
+                shadowOf(RuntimeEnvironment.application).nextStartedActivity
 
         assertEquals("importDialog: incorrect intent action!",
                 expectedAction, intent.action)

@@ -47,6 +47,7 @@ class MainActivity : SuperActivity(), MainActivityInter {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_MyAccounts_NoActionBar)
         super.onCreate(savedInstanceState)
+
         myContext = this
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
         loadSettings()
@@ -66,7 +67,7 @@ class MainActivity : SuperActivity(), MainActivityInter {
     }
 
     /**
-     * This method checks if storage permission is granted and if not - requests it.
+     * Checks if storage permission is granted and if not - requests it.
      */
     private fun checkPermissions() {
         val isGranted = checkCallingOrSelfPermission(permission.WRITE_EXTERNAL_STORAGE)
@@ -84,7 +85,7 @@ class MainActivity : SuperActivity(), MainActivityInter {
         }
 
         // close drawer when any item is selected
-        b.drawerLayout.closeDrawer(GravityCompat.START)
+        drawerLayout.closeDrawer(GravityCompat.START)
         return false
     }
 
@@ -103,10 +104,8 @@ class MainActivity : SuperActivity(), MainActivityInter {
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?){
         super.onActivityResult(requestCode, resultCode, resultData)
-        // if activity was canceled don't do anything
-        if (resultCode != Activity.RESULT_OK){
-            return
-        }
+        // do not do anything if activity was canceled
+        if (resultCode != Activity.RESULT_OK) return
 
         if(requestCode == IMPORT_RC) {
             val locationUri = resultData?.data!!
@@ -118,7 +117,7 @@ class MainActivity : SuperActivity(), MainActivityInter {
      * Used to display import dialog where user can chose database that he wants to import.
      *
      * Starts intent with [IMPORT_RC] request code.
-     * Shows dialog to chose location using Storage Access framework.
+     * Shows dialog to chose location using Storage Access Framework.
      */
     override fun importDialog() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)

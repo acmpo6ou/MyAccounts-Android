@@ -43,14 +43,12 @@ open class TestActivity : SuperActivity() {
 
 class SuperActivityTests {
     private lateinit var activity: TestActivity
-    private var presenter
-        get() = activity.presenter
-        set(value) {activity.presenter = value}
+    private val presenter get() = activity.presenter
 
     @Before
     fun setup(){
         activity = TestActivity()
-        presenter = mock()
+        activity.presenter = mock()
     }
 
     // shortcut
