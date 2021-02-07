@@ -74,7 +74,7 @@ class MainModelTests: ModelTest(){
     }
 
     @Test
-    fun `importDatabase should extract database files only from given tar file`(){
+    fun `importDatabase should extract database files only`(){
         model.importDatabase(locationUri)
 
         // there should be no other files in parent of `src` folder
@@ -97,14 +97,14 @@ class MainModelTests: ModelTest(){
 
     @Test
     fun `getNames should return list of names`(){
-        val expectedList = mutableListOf("main", "main")
+        val expectedList = listOf("main", "main")
         val actualList = model.getNames(locationUri)
         assertEquals(expectedList, actualList)
     }
 
     @Test
     fun `getSizes should return list of file sizes`(){
-        val expectedList = mutableListOf(268, 16) // sizes of .bin and .db files
+        val expectedList = listOf(268, 16) // sizes of .db and .bin files
         val actualList = model.getSizes(locationUri)
         assertEquals(expectedList, actualList)
     }

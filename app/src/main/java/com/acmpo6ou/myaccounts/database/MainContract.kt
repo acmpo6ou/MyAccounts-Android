@@ -36,7 +36,7 @@ interface MainActivityInter : SuperActivityInter {
 
 interface MainModelInter{
     fun countFiles(location: Uri): Int
-    fun getNames(locationUri: Uri): MutableList<String>
-    fun getSizes(locationUri: Uri): MutableList<Int>
+    fun getNames(locationUri: Uri): List<String>
+    fun getSizes(locationUri: Uri): List<Int>
     fun importDatabase(locationUri: Uri): String
 }

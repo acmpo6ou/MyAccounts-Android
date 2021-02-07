@@ -47,19 +47,20 @@ open class ModelTest : DatabaseUtils {
     override val SRC_DIR = "${accountsDir}src/"
 
     val contentResolver: ContentResolver = mock()
-    val locationUri: Uri = mock()
-    val destinationUri: Uri = mock()
     private val descriptor: ParcelFileDescriptor = mock()
 
-    private val destination = "$accountsDir/main.tar"
+    val locationUri: Uri = mock()
+    val destinationUri: Uri = mock()
+
     private val location = "sampledata/tar/main.tar"
+    private val destination = "$accountsDir/main.tar"
 
     /**
      * This method creates empty src folder in a fake file system, it ensures that
      * directory will be empty.
      */
     @Before
-    fun setUpScrFolder(){
+    fun setupSrcFolder(){
         val srcFolder = File(SRC_DIR)
         val accountsFolder = File(accountsDir)
 
@@ -75,25 +76,27 @@ open class ModelTest : DatabaseUtils {
 
     fun setupOutputResolver(){
         // to simulate the Android Storage Access Framework
-        val fos = FileOutputStream(File(destination))
+        val fos = FileOutputStream( File(destination) )
         whenever(descriptor.fileDescriptor).thenReturn(fos.fd)
-        whenever(contentResolver.openFileDescriptor(destinationUri, "w")).thenReturn(descriptor)
+        whenever(contentResolver.openFileDescriptor(destinationUri, "w"))
+                .thenReturn(descriptor)
     }
 
     fun setupInputResolver(){
         // to simulate the Android Storage Access Framework
-        val fis = FileInputStream(File(location))
+        val fis = FileInputStream( File(location) )
         whenever(descriptor.fileDescriptor).thenReturn(fis.fd)
-        whenever(contentResolver.openFileDescriptor(locationUri, "r")).thenReturn(descriptor)
+        whenever(contentResolver.openFileDescriptor(locationUri, "r"))
+                .thenReturn(descriptor)
     }
 
     /**
-     * This is a helper method that will copy our test  databases from sampledata folder to
+     * This is a helper method that will copy our test databases from sampledata folder to
      * the fake file system.
      *
      * @param[name] name of the database that we want to copy to the fake file system
      */
-    fun copyDatabase(name: String ="database"){
+    fun copyDatabase(name: String = "database"){
         // this are were we want to copy database .bin and .db files
         val binDestination = File("$SRC_DIR$name.bin")
         val dbDestination = File("$SRC_DIR$name.db")
