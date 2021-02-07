@@ -86,9 +86,8 @@ class MainPresenterInst {
     @Test
     fun `checkTarFile should check names of files`(){
         // mock model to return fake names and correct files count
-        val filesList = mutableListOf(
-                faker.name().name(),
-                faker.name().name())
+        val filesList = listOf(faker.name().name(),
+                               faker.name().name())
         whenever(model.getNames(locationUri)).thenReturn(filesList)
         whenever(model.countFiles(locationUri)).thenReturn(2)
 
@@ -101,8 +100,8 @@ class MainPresenterInst {
     @Test
     fun `checkTarFile should check bin file size`(){
         // mock model to return fake sizes, correct files count and file names
-        val filesList = mutableListOf("main", "main")
-        val sizesList = mutableListOf(
+        val filesList = listOf("main", "main")
+        val sizesList = listOf(
                 // size of db file should be not less then 100
                 100,
                 // size of bin file should be exactly 16
@@ -120,8 +119,8 @@ class MainPresenterInst {
     @Test
     fun `checkTarFile should check db file size`(){
         // mock model to return fake sizes, correct files count and file names
-        val filesList = mutableListOf("main", "main")
-        val sizesList = mutableListOf(
+        val filesList = listOf("main", "main")
+        val sizesList = listOf(
                 // size of db file should be not less then 100
                 faker.number().numberBetween(0, 90),
                 16) // size of bin file should be exactly 16

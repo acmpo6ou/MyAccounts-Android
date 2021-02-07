@@ -44,7 +44,6 @@ class MainPresenterTests {
 
     private val locationUri: Uri = mock()
     val app = MyApp()
-
     private val accountsDir = "/dev/shm/accounts"
 
     @Before
@@ -63,11 +62,10 @@ class MainPresenterTests {
     }
 
     private fun mockCorrectModel(){
-        val filesList = mutableListOf("main", "main")
-        val sizesList = mutableListOf(
+        val filesList = listOf("main", "main")
+        val sizesList = listOf(
                 100, // size of db file should be not less then 100
-                16, // size of bin file should be exactly 16
-        )
+                16) // size of bin file should be exactly 16
 
         // mock model to return correct file sizes, count and names
         model = mock{
@@ -113,9 +111,7 @@ class MainPresenterTests {
         // here we delete accounts folder if it already exists to ensure that it will
         // be empty as is needed for our tests
         val accountsFolder = File(accountsDir)
-        if(accountsFolder.exists()){
-            accountsFolder.deleteRecursively()
-        }
+        if(accountsFolder.exists()) accountsFolder.deleteRecursively()
 
         presenter.fixSrcFolder()
 

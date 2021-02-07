@@ -26,9 +26,9 @@ import java.io.File
 import java.io.IOException
 
 open class MainPresenter(override var view: MainActivityInter) : SuperPresenter(),
-        MainPresenterInter {
-    var model: MainModelInter = MainModel(view.ACCOUNTS_DIR, view.myContext.contentResolver)
-
+                                                                 MainPresenterInter {
+    var model: MainModelInter = MainModel(view.ACCOUNTS_DIR,
+                                          view.myContext.contentResolver)
     var databases: DbList
         get() = view.app.databases
         set(value) {
@@ -45,27 +45,21 @@ open class MainPresenter(override var view: MainActivityInter) : SuperPresenter(
      * This method is called on app startup, it checks for updates if it's time to.
      */
     fun autocheckForUpdates() {
-        if(isTimeToUpdate()) {
-            checkUpdatesSelected()
-        }
+        if(isTimeToUpdate()) checkUpdatesSelected()
     }
 
     /**
      * This method is called on app startup, if src folder doesn't exist method will create it.
      */
     fun fixSrcFolder(){
-        val srcDir = File(view.ACCOUNTS_DIR + "/src")
-        if(!srcDir.exists()){
-            srcDir.mkdirs()
-        }
+        val srcDir = File("${view.ACCOUNTS_DIR}/src")
+        if(!srcDir.exists()) srcDir.mkdirs()
     }
 
     /**
      * This method is called when user clicks `Import database` in navigation drawer.
      */
-    override fun importSelected() {
-        view.importDialog()
-    }
+    override fun importSelected() = view.importDialog()
 
     /**
      * This method checks given tar file on validity.
@@ -78,11 +72,13 @@ open class MainPresenter(override var view: MainActivityInter) : SuperPresenter(
         // get everything we need (file names and sizes etc.)
         val resources = view.myContext?.resources
         var errorDetails = ""
+
+        val fileCount = model.countFiles(location)
         val fileNames = model.getNames(location)
         val fileSizes = model.getSizes(location)
 
         // check that there are only 2 files
-        if(model.countFiles(location) != 2) {
+        if(fileCount != 2) {
             errorDetails = resources.getString(R.string.import_2_files)
         }
         // check that files have the same name
@@ -113,7 +109,7 @@ open class MainPresenter(override var view: MainActivityInter) : SuperPresenter(
     /**
      * This method calls model.importDatabase() handling all errors.
      *
-     * After importing database adds it to the list which then sorts and
+     * After import, it adds database to the list which then sorts and
      * notifies about changes.
      * If there are any errors during this process it displays error dialog.
      */
