@@ -43,10 +43,10 @@ class DatabasesPresenterInst: DatabasesPresenterTest() {
     val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     val resources = context.resources
 
-    val exportErrorTitle = resources.getString(R.string.export_error_title)
-    val deleteErrorTitle = resources.getString(R.string.delete_error_title)
-    val exportFileNotFoundDetails = resources.getString(R.string.export_file_not_found_details)
-    val ioError = resources.getString(R.string.io_error)
+    private val exportErrorTitle = resources.getString(R.string.export_error_title)
+    private val deleteErrorTitle = resources.getString(R.string.delete_error_title)
+    private val exportFileNotFoundDetails = resources.getString(R.string.export_file_not_found_details)
+    private val ioError = resources.getString(R.string.io_error)
 
     @Before
     fun setup(){

@@ -35,7 +35,7 @@ class DatabasesTests {
     @Test
     fun `Database should have isOpen property set to false when password is null`(){
         // we didn't  pass the password so it will be null by default
-        val database = Database(faker.name().toString())
+        val database = Database(faker.str())
 
         // if password is null then database should be closed
         assertFalse("Password of Database is null but isOpen is true!",
@@ -45,7 +45,7 @@ class DatabasesTests {
     @Test
     fun `Database should have isOpen property set to true when password is NOT null`(){
         // we passed the password, so it is not null
-        val database = Database(faker.name().toString(), faker.str())
+        val database = Database(faker.str(), faker.str())
 
         // when password is not null database should be opened
         assertTrue("Password of Database is NOT null but isOpen is false!",
@@ -65,10 +65,9 @@ class DatabasesModelTests: ModelTest() {
 
         // then we get databases and check the result
         val databases = model.getDatabases()
-        val expectedDatabases = listOf(
-                Database("crypt"),
-                Database("database"),
-                Database("main"))
+        val expectedDatabases = listOf(Database("crypt"),   // note that list is sorted
+                                       Database("database"),
+                                       Database("main"))
         assertEquals("getDatabases returns incorrect list of Databases!",
                 expectedDatabases, databases)
     }
@@ -109,8 +108,7 @@ class DatabasesModelTests: ModelTest() {
         // testing.db and testing.bin files
         try {
             model.exportDatabase("testing", destinationUri)
-            // if there is no exception thrown the test will fail
-            assert(false)
+            assert(false) // if there is no exception thrown the test will fail
         }
         catch (e: FileNotFoundException){
             // if this exception were thrown its okay, test should pass

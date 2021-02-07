@@ -41,6 +41,7 @@ open class DatabasesPresenterTest : DatabaseUtils{
 
     var locationUri: Uri = mock()
     val contextResolver: ContentResolver = mock()
+
     val faker = Faker()
     val salt = "0123456789abcdef".toByteArray()
 

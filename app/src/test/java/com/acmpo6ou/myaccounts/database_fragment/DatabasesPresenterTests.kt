@@ -60,8 +60,6 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
 
     @Test
     fun `closeSelected should call closeDatabase when database is saved`(){
-        // mock isDatabaseSaved to return true that will mean that database is saved
-        // so presenter should call closeDatabase in this condition
         val presenterSpy = spy(presenter)
         doReturn(true).`when`(presenterSpy).isDatabaseSaved(0)
 
@@ -71,8 +69,6 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
 
     @Test
     fun `closeSelected should call confirmClose when database isn't saved`(){
-        // mock isDatabaseSaved to return false that will mean that database isn't saved
-        // so presenter should call confirmClose in this condition
         val presenterSpy = spy(presenter)
         doReturn(false).`when`(presenterSpy).isDatabaseSaved(0)
 
@@ -104,6 +100,15 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
                 .thenReturn(diskDatabase)
 
         assertTrue(presenter.isDatabaseSaved(1))
+    }
+
+    @Test
+    fun `isDatabaseSaved should return false when FileNotFoundException occurred`(){
+        whenever(model.openDatabase(presenter.databases[1], app))
+                .thenAnswer{
+                    throw FileNotFoundException("")
+                }
+        assertFalse(presenter.isDatabaseSaved(1))
     }
 
     @Test
@@ -167,15 +172,6 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
         // there is no key for first database (it's closed), so nothing should be removed
         presenter.deleteDatabase(0)
         assertEquals(1, app.keyCache.size)
-    }
-
-    @Test
-    fun `isDatabaseSaved should return false when FileNotFoundException occurred`(){
-        whenever(model.openDatabase(presenter.databases[1], app))
-                .thenAnswer{
-                    throw FileNotFoundException("")
-                }
-        assertFalse(presenter.isDatabaseSaved(1))
     }
 
     @Test

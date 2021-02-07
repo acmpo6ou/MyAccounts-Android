@@ -29,8 +29,6 @@ import com.acmpo6ou.myaccounts.ui.database.DatabasesAdapter
 interface DatabasesPresenterInter{
     var databases: DbList
 
-    fun isDatabaseSaved(i: Int): Boolean
-
     fun exportSelected(i: Int)
     fun exportDatabase(locationUri: Uri)
 
@@ -42,13 +40,14 @@ interface DatabasesPresenterInter{
 
     fun editSelected(i: Int)
     fun openDatabase(i: Int)
+    fun isDatabaseSaved(i: Int): Boolean
 }
 
 interface DatabaseFragmentInter{
-    val ACCOUNTS_DIR: String
     val presenter: DatabasesPresenterInter
     val adapter: DatabasesAdapter
 
+    val ACCOUNTS_DIR: String
     var myContext: Context
     var app: MyApp
 

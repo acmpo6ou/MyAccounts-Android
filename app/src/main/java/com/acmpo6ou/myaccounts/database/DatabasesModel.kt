@@ -30,7 +30,7 @@ import java.io.FileNotFoundException
 import java.io.FileOutputStream
 
 /**
- * Represents Account, it stores all account data such
+ * Represents account, it stores all account data such
  * as name, password, email, etc.
  *
  * @param[account] account name.
@@ -58,8 +58,8 @@ typealias DbList = MutableList<Database>
  *
  * @param[name] name of the database.
  * @param[password] password of the database.
- * @param[data] map of account names to corresponding Account instances.
  * @param[salt] 16 purely random bits needed for encryption and decryption of database.
+ * @param[data] map of account names to corresponding Account instances.
  * @property isOpen dynamically returns whether database is open or not, the database is
  * considered open when [password] is not null.
  */
@@ -67,9 +67,7 @@ data class Database(val name: String,
                     var password: String? = null,
                     var salt: ByteArray? = null,
                     var data: DbMap = emptyMap()){
-    var isOpen: Boolean = false
-        get() = password != null
-        private set
+    val isOpen get() = password != null
 }
 
 /**
@@ -93,9 +91,9 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
         // src folder where all database files are stored
         val src = File(SRC_DIR)
 
-        // walk through all files in src directory, for each whose extension is .db
-        // add corresponding Database instance to databases list passing through as a parameter
-        // name of that file without .db extension
+        // walk through all files in src directory, for each file whose extension is .db
+        // add corresponding Database instance to [databases] list passing through
+        // as a parameter name of that file without .db extension
         src.list()?.forEach {
             if(it.endsWith(".db")){
                 val name = it.removeSuffix(".db")
@@ -115,6 +113,7 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
      * src
      * ├── main.bin – salt file.
      * └── main.db  – encrypted database file.
+     *
      * @param[name] name of the database to export.
      * @param[destinationUri] uri with path to folder where we want to export database.
      */
@@ -124,20 +123,15 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
         val destination = FileOutputStream(descriptor?.fileDescriptor)
 
         // create tar file
-        val outStream = TarOutputStream(BufferedOutputStream(destination))
+        val outStream = TarOutputStream( BufferedOutputStream(destination) )
 
-        // salt and database files to compress to a tar file
-        val dbFiles = listOf(
-            File("$SRC_DIR$name.db"),
-            File("$SRC_DIR$name.bin"),
-        )
+        // salt and database files to compress to the tar file
+        val dbFiles = listOf(File("$SRC_DIR$name.db"),
+                             File("$SRC_DIR$name.bin"))
 
         // each file is added to tar file
         for(f in dbFiles){
-            // check if .db or .bin file exists
-            if(!f.exists()){
-                throw FileNotFoundException(f.name)
-            }
+            if(!f.exists()) throw FileNotFoundException(f.name)
 
             val entry = TarEntry(f, "src/${f.name}")
             outStream.putNextEntry(entry)

@@ -24,13 +24,10 @@ import com.acmpo6ou.myaccounts.R
 import java.io.FileNotFoundException
 import java.io.IOException
 
-
-/**
- * Contains various methods for business logic of DatabaseFragment.
- */
 open class DatabasesPresenter(private val view: DatabaseFragmentInter)
-    : DatabasesPresenterInter {
-    var model: DatabasesModelInter = DatabasesModel(view.ACCOUNTS_DIR, view.myContext.contentResolver)
+                             : DatabasesPresenterInter {
+    var model: DatabasesModelInter =
+            DatabasesModel(view.ACCOUNTS_DIR, view.myContext.contentResolver)
     var exportIndex: Int? = null
 
     override var databases: DbList
@@ -46,10 +43,9 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
     /**
      * Called when user selects `Export` in database item popup menu.
      *
-     * Should save [i] in [exportIndex] as it will be used by exportDatabase to determine
+     * Should save [i] in [exportIndex] as it will be used by [exportDatabase] to determine
      * what database to export.
-     * Also it calls exportDialog to display export dialog where user can chose export
-     * location.
+     * Also it calls exportDialog to display dialog where user can chose export location.
      * @param[i] index of database we want to export.
      */
     override fun exportSelected(i: Int) {
@@ -60,9 +56,9 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
     /**
      * Used to export database to user defined location.
      *
-     * Calls model.exportDatabase() in try-catch block handling all errors. When error
-     * occurred calls view.showError() passing through appropriate error details to display
-     * dialog about error.
+     * Calls model.exportDatabase() in try-catch block handling all errors.
+     * When error occurred calls view.showError() passing through appropriate error
+     * details to display dialog about error.
      * If there are no errors - displays snackbar with success message.
      */
     override fun exportDatabase(locationUri: Uri) {
@@ -106,13 +102,10 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
      * Calls confirmDelete to display a dialog about confirmation of database deletion.
      * @param[i] index of database we want to delete.
      */
-    override fun deleteSelected(i: Int) {
-        view.confirmDelete(i)
-    }
+    override fun deleteSelected(i: Int) = view.confirmDelete(i)
 
     /**
      * Calls model.deleteDatabase() in try-catch block handling all errors.
-     *
      * @param[i] database index.
      */
     override fun deleteDatabase(i: Int) {
@@ -130,6 +123,7 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
             val errorTitle = view.myContext.resources
                     .getString(R.string.delete_error_title)
             val errorDetails = e.toString()
+
             view.showError(errorTitle, errorDetails)
             e.printStackTrace()
         }
@@ -158,14 +152,11 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
      * Using navigateToEdit navigates to EditDatabaseFragment passing through database index.
      * @param[i] index of database we want to edit.
      */
-    override fun editSelected(i: Int) {
-        view.navigateToEdit(i)
-    }
+    override fun editSelected(i: Int) = view.navigateToEdit(i)
 
     /**
      * Used to reset database password in this way 'closing' it.
      * It also removes cryptography key of database from cache.
-     *
      * @param[i] - database index.
      */
     override fun closeDatabase(i: Int) {
@@ -178,7 +169,7 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
      * Called when user selects item in database list.
      *
      * If selected database is closed should navigate to OpenDatabaseFragment, if it
-     * is open - call view.startDatabase passing through database index.
+     * is open - call view.startDatabase() passing through database index.
      */
     override fun openDatabase(i: Int) {
         if(databases[i].isOpen){
@@ -194,8 +185,7 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
      * is same as the data that is in memory.
      *
      * This method is needed when we want to close database, using isDatabaseSaved we
-     * can determine whether it's better to show confirmation dialog about
-     * unsaved data to user or not.
+     * can determine whether to show confirmation dialog about unsaved data to user or not.
      * @param[i] index of database we want to check.
      */
     override fun isDatabaseSaved(i: Int): Boolean{
@@ -203,7 +193,7 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
         val actualDatabase = databases[i]
 
         // database that is on the disk
-        val diskDatabase: Database?
+        val diskDatabase: Database
         try {
             diskDatabase = model.openDatabase(actualDatabase, view.app)
         }
