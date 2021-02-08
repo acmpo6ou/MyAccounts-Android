@@ -27,23 +27,23 @@ import kotlinx.coroutines.launch
 import java.security.SecureRandom
 
 abstract class CreateEditViewModel: SuperViewModel() {
-    val emptyNameErr_ = MutableLiveData(true)
-    val existsNameErr_ = MutableLiveData(false)
+    private val emptyNameErr_ = MutableLiveData(true)
+    private val existsNameErr_ = MutableLiveData(false)
 
-    val emptyPassErr_ = MutableLiveData(true)
-    val diffPassErr_ = MutableLiveData(false)
+    private val emptyPassErr_ = MutableLiveData(true)
+    private val diffPassErr_ = MutableLiveData(false)
 
-    var emptyNameErr: Boolean
+    var emptyNameErr
         get() = emptyNameErr_.value!!
         set(value) {emptyNameErr_.value = value}
-    var existsNameErr: Boolean
+    var existsNameErr
         get() = existsNameErr_.value!!
         set(value) {existsNameErr_.value = value}
 
-    var diffPassErr: Boolean
+    var diffPassErr
         get() = diffPassErr_.value!!
         set(value) {diffPassErr_.value = value}
-    var emptyPassErr: Boolean
+    var emptyPassErr
         get() = emptyPassErr_.value!!
         set(value) {emptyPassErr_.value = value}
 
@@ -88,7 +88,7 @@ abstract class CreateEditViewModel: SuperViewModel() {
 
     /**
      * This LiveData property used to decide whether `Create` button should be enabled
-     * or not. If there are any errors it should be disabled, if there are no errors - enabled.
+     * or not. If there are any errors it should be disabled, if there are no - enabled.
      */
     val applyEnabled = nameErrors.combineWith(passwordErrors) {
         nameErr: String?, passwordErr: String? ->
@@ -103,8 +103,8 @@ abstract class CreateEditViewModel: SuperViewModel() {
      * @return cleaned from unsupported characters name.
      */
     fun fixName(name: String): String{
-        val supported = (('A'..'Z') + ('a'..'z') + ('0'..'9'))
-                .joinToString("") + ".-_()"
+        val supported =
+                ( ('A'..'Z') + ('a'..'z') + ('0'..'9') ).joinToString("") + ".-_()"
         return name.filter { it in supported }
     }
 
@@ -125,14 +125,15 @@ abstract class CreateEditViewModel: SuperViewModel() {
     /**
      * This method validates given passwords.
      *
-     * If passwords don't match [diffPassErr] is true.
      * If passwords are empty [emptyPassErr] is true.
+     * If passwords don't match [diffPassErr] is true.
+     *
      * @param[pass1] first password.
      * @param[pass2] second password.
      */
     open fun validatePasswords(pass1: String, pass2: String){
-        diffPassErr = pass1 != pass2
         emptyPassErr = pass1.isEmpty()
+        diffPassErr = pass1 != pass2
     }
 
     /**
@@ -147,8 +148,8 @@ abstract class CreateEditViewModel: SuperViewModel() {
     }
 
     /**
-     * Called when user presses `Create` button.
-     * Launches apply only if it's not already launched.
+     * Called when user presses `Create` or `Save` button.
+     * Launches [apply] only if it's not already launched.
      */
     open fun applyPressed(name: String, password: String){
         if(coroutineJob == null || !coroutineJob!!.isActive){

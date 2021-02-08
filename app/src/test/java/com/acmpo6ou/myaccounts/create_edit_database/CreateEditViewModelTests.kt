@@ -22,8 +22,8 @@ package com.acmpo6ou.myaccounts.create_edit_database
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.database.superclass.CreateEditViewModel
 import com.acmpo6ou.myaccounts.database.Database
+import com.acmpo6ou.myaccounts.database.superclass.CreateEditViewModel
 import com.acmpo6ou.myaccounts.str
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +36,6 @@ import org.junit.Test
 // CreateDatabaseViewModel class is abstract and we can't instantiate it for tests
 open class TestModel : CreateEditViewModel(){
     override suspend fun apply(name: String, password: String) {
-
     }
 }
 
@@ -58,8 +57,15 @@ class CreateEditViewModelTests : ModelTest() {
 
         model.initialize(app, SRC_DIR)
         spyModel = spy(model){ on{generateSalt()} doReturn salt }
+
         spyModel.uiDispatcher = Dispatchers.Unconfined
         spyModel.defaultDispatcher = Dispatchers.Unconfined
+    }
+
+    @Test
+    fun `fixName should remove all unsupported characters`(){
+        val name = model.fixName("This is (test)/.\\-_-")
+        assertEquals("Thisis(test).-_-", name)
     }
 
     @Test
@@ -70,13 +76,6 @@ class CreateEditViewModelTests : ModelTest() {
 
         // if name is empty emptyNameErr should be true
         model.validateName("")
-        assertTrue(model.emptyNameErr)
-    }
-
-    @Test
-    fun `validateName should use fixName`(){
-        val name = " \\/%$" // this name will be empty when cleaned by fixName
-        model.validateName(name)
         assertTrue(model.emptyNameErr)
     }
 
@@ -95,9 +94,21 @@ class CreateEditViewModelTests : ModelTest() {
     }
 
     @Test
-    fun `fixName should remove all unsupported characters`(){
-        val name = model.fixName("This is (test)/.\\-_-")
-        assertEquals("Thisis(test).-_-", name)
+    fun `validateName should use fixName`(){
+        val name = " \\/%$" // this name will be empty when cleaned by fixName
+        model.validateName(name)
+        assertTrue(model.emptyNameErr)
+    }
+
+    @Test
+    fun `validatePasswords should change emptyPassErr`(){
+        // if password is empty - emptyPassErr = true
+        model.validatePasswords("", "")
+        assertTrue(model.emptyPassErr)
+
+        // if password isn't empty - emptyPassErr = false
+        model.validatePasswords(faker.str(), faker.str())
+        assertFalse(model.emptyPassErr)
     }
 
     @Test
@@ -112,17 +123,6 @@ class CreateEditViewModelTests : ModelTest() {
         // if passwords are same - diffPassErr = false
         model.validatePasswords(pass1, pass1)
         assertFalse(model.diffPassErr)
-    }
-
-    @Test
-    fun `validatePasswords should change emptyPassErr`(){
-        // if password is empty - emptyPassErr = true
-        model.validatePasswords("", "")
-        assertTrue(model.emptyPassErr)
-
-        // if password isn't empty - emptyPassErr = false
-        model.validatePasswords(faker.str(), faker.str())
-        assertFalse(model.emptyPassErr)
     }
 
     @Test

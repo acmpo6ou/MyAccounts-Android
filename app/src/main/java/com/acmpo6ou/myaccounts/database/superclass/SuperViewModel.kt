@@ -37,8 +37,8 @@ open class SuperViewModel: ViewModel(), DatabaseUtils {
     var coroutineJob: Job? = null
 
     var databaseIndex: Int = 0
-    lateinit var app: MyApp
     override lateinit var SRC_DIR: String
+    lateinit var app: MyApp
     lateinit var titleStart: String
 
     var databases: DbList
@@ -83,6 +83,7 @@ open class SuperViewModel: ViewModel(), DatabaseUtils {
         databaseIndex?.let {
             this.titleStart = titleStart!!
             this.databaseIndex = it
+
             val name = databases[it].name
             title = "$titleStart $name"
         }
