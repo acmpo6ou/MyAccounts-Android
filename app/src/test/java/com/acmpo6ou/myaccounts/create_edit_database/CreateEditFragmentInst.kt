@@ -21,7 +21,6 @@ package com.acmpo6ou.myaccounts.create_edit_database
 
 import android.os.Build
 import android.view.View
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.platform.app.InstrumentationRegistry
@@ -37,7 +36,6 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert.*
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -53,12 +51,10 @@ class TestFragment : CreateEditFragment(){
 @LooperMode(LooperMode.Mode.PAUSED)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class CreateEditFragmentInst {
-    @get:Rule
-    val taskExecutorRule = InstantTaskExecutorRule()
-
     lateinit var scenario: FragmentScenario<TestFragment>
     val context = InstrumentationRegistry.getInstrumentation().targetContext
     val app = context.applicationContext as MyApp
+
     val faker = Faker()
     val name = faker.str()
 
@@ -66,6 +62,7 @@ class CreateEditFragmentInst {
     fun setup() {
         scenario = launchFragmentInContainer(themeResId= R.style.Theme_MyAccounts_NoActionBar)
         app.res = context.resources
+
         scenario.onFragment {
             it.viewModel.initialize(app, faker.str())
             it.initModel()

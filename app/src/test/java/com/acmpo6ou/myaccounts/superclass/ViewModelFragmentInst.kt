@@ -24,7 +24,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.platform.app.InstrumentationRegistry
@@ -39,15 +38,12 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
-// ViewModelFragment is abstract, so here we create TestFragment so that we can instantiate it
-// in tests
 class TestFragment: ViewModelFragment(){
     override val viewModel = SuperViewModel()
     override val mainActivity: MainActivityInter = mock()
@@ -65,9 +61,6 @@ class TestFragment: ViewModelFragment(){
 @LooperMode(LooperMode.Mode.PAUSED)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class ViewModelFragmentInst {
-    @get:Rule
-    val taskExecutorRule = InstantTaskExecutorRule()
-
     private val faker = Faker()
     lateinit var scenario: FragmentScenario<TestFragment>
     val context = InstrumentationRegistry.getInstrumentation().targetContext

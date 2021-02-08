@@ -34,28 +34,32 @@ import com.acmpo6ou.myaccounts.core.GenPassDialog
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
 
+/**
+ * Super class for CreateDatabaseFragment and EditDatabaseFragment.
+ */
 abstract class CreateEditFragment : ViewModelFragment() {
     abstract override val viewModel: CreateEditViewModel
     lateinit var app: MyApp
     lateinit var myContext: Context
     override val mainActivity get() = myContext as MainActivity
 
+    // Hides/displays error tip about database name.
     private val nameErrorObserver = Observer<String?> {
         b.parentName.error = it
     }
 
+    // Hides/displays error tip about database password.
     private val passwordErrorObserver = Observer<String?> {
         b.parentPassword.error = it
     }
 
+    // if there are any errors (about database name or password) apply button is disabled,
+    // otherwise enabled
     private val applyEnabledObserver = Observer<Boolean> {
         b.applyButton.isEnabled = it
     }
 
-    /**
-     * This observer hides/displays loading progress bar of `Create` button
-     * depending on `loading` live data of view model.
-     */
+    // Hides/displays loading progress bar of `Create` button.
     private val loadingObserver = Observer<Boolean> {
         if(it) {
             b.progressLoading.visibility = View.VISIBLE
@@ -67,10 +71,8 @@ abstract class CreateEditFragment : ViewModelFragment() {
         }
     }
 
-    /**
-     * This observer invoked when database is successfully created.
-     * It navigates back to the DatabaseFragment.
-     */
+    // This observer invoked when database is successfully created.
+    // It navigates back to the DatabaseFragment.
     private val finishedObserver = Observer<Boolean>{
         mainActivity.findNavController(R.id.nav_host_fragment).navigateUp()
     }
@@ -91,7 +93,6 @@ abstract class CreateEditFragment : ViewModelFragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-
         // save context and app
         myContext = requireContext()
         app = context.applicationContext as MyApp
@@ -106,34 +107,25 @@ abstract class CreateEditFragment : ViewModelFragment() {
         b.databaseName.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s:CharSequence, start:Int,
-                                       before:Int, count:Int) {
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) =
                 viewModel.validateName(s.toString())
-            }
         })
 
-        // text changed listeners for password fields to validate them and display error
+        // text changed listener for password fields to validate them and display error
         // in case of problems
-        b.databasePassword.addTextChangedListener(object: TextWatcher {
+        val passwordListener = object: TextWatcher {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s:CharSequence, start:Int,
-                                       before:Int, count:Int) {
-                viewModel.validatePasswords(b.databasePassword.text.toString(),
-                                            b.databaseRepeatPassword.text.toString())
-            }
-        })
 
-        b.databaseRepeatPassword.addTextChangedListener(object: TextWatcher {
-            override fun afterTextChanged(s: Editable) {}
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s:CharSequence, start:Int,
-                                       before:Int, count:Int) {
-                viewModel.validatePasswords(b.databasePassword.text.toString(),
-                                            b.databaseRepeatPassword.text.toString())
-            }
-        })
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) =
+                    viewModel.validatePasswords(b.databasePassword.text.toString(),
+                                                b.databaseRepeatPassword.text.toString())
+        }
+        b.databasePassword.addTextChangedListener(passwordListener)
+        b.databaseRepeatPassword.addTextChangedListener(passwordListener)
 
+        // display generate password dialog when `Generate` button is pressed
         b.databaseGenerate.setOnClickListener {
             GenPassDialog(mainActivity, b.databasePassword, b.databaseRepeatPassword)
         }
@@ -141,7 +133,7 @@ abstract class CreateEditFragment : ViewModelFragment() {
         // call applyPressed when clicking on `Create` button
         b.applyButton.setOnClickListener {
             viewModel.applyPressed(b.databaseName.text.toString(),
-                                    b.databasePassword.text.toString())
+                                   b.databasePassword.text.toString())
         }
     }
 
