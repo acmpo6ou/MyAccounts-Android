@@ -39,9 +39,9 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
+@ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
-@ExperimentalCoroutinesApi
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class OpenDatabaseFragmentInst {
     lateinit var scenario: FragmentScenario<OpenDatabaseFragment>
@@ -50,7 +50,6 @@ class OpenDatabaseFragmentInst {
 
     @Before
     fun setUp() {
-        // Create a graphical FragmentScenario for the fragment
         scenario = launchFragmentInContainer(themeResId=R.style.Theme_MyAccounts_NoActionBar)
     }
 

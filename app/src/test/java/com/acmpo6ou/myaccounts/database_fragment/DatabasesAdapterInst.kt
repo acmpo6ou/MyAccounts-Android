@@ -31,7 +31,10 @@ import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.database.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.database.DatabaseFragment
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -47,20 +50,20 @@ import org.robolectric.shadows.ShadowPopupMenu
 class DatabasesAdapterInst {
     lateinit var scenario: FragmentScenario<DatabaseFragment>
     lateinit var presenter: DatabasesPresenterInter
+
     var recycler: RecyclerView? = null
     var itemLayout: View? = null
     var itemLayout2: View? = null
 
     @Before
     fun setUp() {
-        // Create a graphical FragmentScenario for the DatabaseFragment
         scenario = launchFragmentInContainer<DatabaseFragment>(
                 themeResId = R.style.Theme_MyAccounts_NoActionBar)
 
         // mock the list of databases for test
-        val mockDatabases = mutableListOf(
-                Database("main"), // locked
-                Database("test", password = "123") /* opened*/)
+        val mockDatabases =
+                mutableListOf(Database("main"), // locked
+                              Database("test", password = "123") /* opened */)
         presenter = mock{ on{databases} doReturn mockDatabases }
 
         scenario.onFragment {
@@ -78,24 +81,21 @@ class DatabasesAdapterInst {
 
     @Test
     fun `click on recycler item should call openDatabase`(){
-        // perform click on database item
         itemLayout?.performClick()
-
-        verify(presenter).openDatabase(eq(0))
+        verify(presenter).openDatabase(0)
     }
 
     @Test
     fun `database item should have appropriate name`(){
         val databaseName = itemLayout?.findViewById<TextView>(R.id.itemName)
-        assertEquals("item in databases list has incorrect name!",
-                "main", databaseName?.text)
+        assertEquals("main", databaseName?.text)
     }
 
     @Test
     fun `database item should have locked icon when isOpen of Database is false`(){
         // the first database in the list above is closed
         val itemLock = itemLayout?.findViewById<ImageView>(R.id.itemIcon)
-        assertEquals("database item has incorrect lock icon when isOpen of Database is false!",
+        assertEquals("database item has unlocked icon when isOpen of Database is false!",
                 R.drawable.ic_locked, itemLock?.tag)
     }
 
@@ -103,7 +103,7 @@ class DatabasesAdapterInst {
     fun `database item should have opened icon when isOpen of Database is true`(){
         // the second database in the list above is opened
         val itemLock = itemLayout2?.findViewById<ImageView>(R.id.itemIcon)
-        assertEquals("database item has incorrect lock icon when isOpen of Database is true!",
+        assertEquals("database item has locked icon when isOpen of Database is true!",
                 R.drawable.ic_opened, itemLock?.tag)
     }
 

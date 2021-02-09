@@ -31,8 +31,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.MainActivity
-import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.database.superclass.ViewModelFragment
 import com.acmpo6ou.myaccounts.databinding.OpenDatabaseFragmentBinding
 
@@ -43,64 +43,46 @@ class OpenDatabaseFragment: ViewModelFragment() {
 
     override lateinit var viewModel: OpenDatabaseViewModel
     var args: OpenDatabaseFragmentArgs? = null
-    lateinit var myContext: Context
-    lateinit var app: MyApp
 
+    lateinit var app: MyApp
+    lateinit var myContext: Context
     override val mainActivity get() = myContext as MainActivity
 
     var binding: OpenDatabaseFragmentBinding? = null
     val b: OpenDatabaseFragmentBinding get() = binding!!
 
-    /**
-     * This observer sets app bar title to `Open <database name>`.
-     */
+    // This observer sets app bar title to `Open <database name>`.
     private val titleObserver = Observer<String>{
         mainActivity.supportActionBar?.title = it
     }
 
-    /**
-     * This observer displays and hides error tip of password field depending on
-     * state of incorrectPassword live data value of view model.
-     */
+    // This observer displays and hides error tip of password field
     private val passwordObserver = Observer<Boolean>{
         if(it) {
-            // display password error tip when incorrectPassword is true
             val passwordError = myContext.resources.getString(R.string.password_error)
             b.parentPassword.error = passwordError
         }
         else{
-            // clear password error tip when incorrectPassword is false
             b.parentPassword.error = null
         }
     }
 
-    /**
-     * This observer displays error dialog when user tries to open corrupted database.
-     */
+    // This observer displays error dialog when user tries to open corrupted database.
     private val corruptedObserver = Observer<Boolean> {
-        if(it){
-            val index = args!!.databaseIndex
-            val dbName = app.databases[index].name
+        val index = args!!.databaseIndex
+        val dbName = app.databases[index].name
 
-            val errorTitle = myContext.resources.getString(R.string.open_error)
-            val errorMsg = myContext.resources.getString(R.string.corrupted_db, dbName)
-            mainActivity.showError(errorTitle, errorMsg)
-        }
+        val errorTitle = myContext.resources.getString(R.string.open_error)
+        val errorMsg = myContext.resources.getString(R.string.corrupted_db, dbName)
+        mainActivity.showError(errorTitle, errorMsg)
     }
 
-    /**
-     * This observer starts AccountsActivity when corresponding Database is opened.
-     */
+    // This observer starts AccountsActivity when corresponding Database is opened.
     private val openedObserver = Observer<Boolean> {
-        if(it){
-            startDatabase(args!!.databaseIndex)
-        }
+        startDatabase(args!!.databaseIndex)
     }
 
-    /**
-     * This observer hides/displays loading progress bar of `Open database` button
-     * depending on `loading` live data of view model.
-     */
+    // This observer hides/displays loading progress bar of `Open database` button
     private val loadingObserver = Observer<Boolean> {
         if(it) {
             b.progressLoading.visibility = View.VISIBLE
@@ -114,13 +96,9 @@ class OpenDatabaseFragment: ViewModelFragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-
-        // save arguments, context and app
         myContext = requireContext()
         app = context.applicationContext as MyApp
-        arguments?.let {
-            args = OpenDatabaseFragmentArgs.fromBundle(it)
-        }
+        args = OpenDatabaseFragmentArgs.fromBundle(requireArguments())
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -147,6 +125,7 @@ class OpenDatabaseFragment: ViewModelFragment() {
         // open database when Enter is pressed in password field
         b.databasePassword.setOnEditorActionListener{
             _: TextView, action: Int, keyEvent: KeyEvent? ->
+
             if(keyEvent?.keyCode == KeyEvent.KEYCODE_ENTER ||
                action == EditorInfo.IME_ACTION_DONE){
                 b.openDatabase.performClick()

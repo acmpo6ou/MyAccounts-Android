@@ -41,10 +41,8 @@ import com.acmpo6ou.myaccounts.database.DatabasesPresenterInter
 class DatabasesAdapter(val view: DatabaseFragmentInter)
     : RecyclerView.Adapter<DatabasesAdapter.ViewHolder>() {
 
-    val presenter: DatabasesPresenterInter
-        get() = view.presenter // alias
-    private val databases: List<Database>
-        get() = presenter.databases // alias
+    val presenter: DatabasesPresenterInter get() = view.presenter
+    private val databases: List<Database> get() = presenter.databases
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -58,7 +56,8 @@ class DatabasesAdapter(val view: DatabaseFragmentInter)
         holder.databaseName.text = database.name
 
         // set appropriate lock icon according to isOpen property
-        // note: we also set tag on lock icon so later we can determine icon resource
+        // note: we also set tag on lock icon so later we can determine what image is set
+        // on icon
         if(database.isOpen){
             holder.lockImage.setImageResource(R.drawable.ic_opened)
             holder.lockImage.tag = R.drawable.ic_opened
@@ -107,15 +106,11 @@ class DatabasesAdapter(val view: DatabaseFragmentInter)
      * Represents ViewHolder for item of databases list.
      */
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var lockImage: ImageView
-        var databaseName: TextView
-        var menu: TextView
+        var lockImage: ImageView = view.findViewById(R.id.itemIcon)
+        var databaseName: TextView = view.findViewById(R.id.itemName)
+        var menu: TextView = view.findViewById(R.id.dots_menu)
 
         init{
-            lockImage = view.findViewById(R.id.itemIcon)
-            databaseName = view.findViewById(R.id.itemName)
-            menu = view.findViewById(R.id.dots_menu)
-
             // when click is performed on database item we should display open database form
             // or start AccountsActivity for given database, this behaviour is decided in
             // openDatabase method of presenter

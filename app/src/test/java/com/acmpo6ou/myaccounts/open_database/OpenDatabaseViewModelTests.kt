@@ -35,6 +35,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+@Suppress("DeferredResultUnused")
 class OpenDatabaseViewModelTests {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
@@ -44,7 +45,7 @@ class OpenDatabaseViewModelTests {
     private val password = "123"
 
     val SRC_DIR = "sampledata/src/"
-    val titleStart = faker.str()
+    private val titleStart = faker.str()
     private val salt = "0123456789abcdef".toByteArray()
     lateinit var app: MyApp
 
@@ -99,7 +100,7 @@ class OpenDatabaseViewModelTests {
     }
 
     @Test
-    fun `verifyPassword should save deserialized Database to list`(){
+    fun `verifyPassword should save deserialized Database to the list`(){
         val expectedDatabase = Database("main", password, salt, getDatabaseMap())
 
         runBlocking {

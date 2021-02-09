@@ -52,7 +52,7 @@ open class OpenDatabaseViewModel : SuperViewModel() {
     }
 
     /**
-     * Tries to open database using given password handling all errors.
+     * Tries to open database using given password and handling all errors.
      *
      * If there is TokenValidationException then set incorrectPassword to true, this will
      * lead to error message displaying near the password field.
@@ -67,10 +67,8 @@ open class OpenDatabaseViewModel : SuperViewModel() {
             _loading.value = true
 
             val database = databases[databaseIndex].copy()
-            // get salt
             val salt = File("$SRC_DIR/${database.name}.bin").readBytes()
 
-            // set password and salt
             database.password = password
             database.salt = salt
 
@@ -92,9 +90,9 @@ open class OpenDatabaseViewModel : SuperViewModel() {
             app.keyCache.remove(password)
         }
         catch (e: Exception){
-            // here we catch Exception because JsonDecodingException is private
-            // then we verify that this is the JsonDecodingException by looking at error
-            // message
+            // Here we catch Exception because JsonDecodingException is private.
+            // Then we verify that this is the JsonDecodingException by looking at the
+            // error message
             if ("JsonDecodingException" in e.toString()){
                 _incorrectPassword.value = false
                 _corrupted.value = true
