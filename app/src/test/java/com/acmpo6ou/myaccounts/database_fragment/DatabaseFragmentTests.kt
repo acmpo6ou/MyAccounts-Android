@@ -42,26 +42,23 @@ class DatabaseFragmentTests: DatabaseViewTest() {
 
     @Test
     fun `onActivityResult should call exportDatabase when code is EXPORT_RC`(){
-        // call onActivityResult passing export request code, result ok and intent with
+        // call onActivityResult passing EXPORT_RC request code, result OK and intent with
         // location where to export database
         fragment.onActivityResult(fragment.EXPORT_RC, Activity.RESULT_OK, intent)
-
         verify(presenter).exportDatabase(locationUri)
     }
 
     @Test
     fun `onActivityResult should not call exportDatabase when code is other than EXPORT_RC`(){
-        // call onActivityResult passing other request code, result ok and intent
+        // call onActivityResult passing OTHER request code, result OK and intent
         fragment.onActivityResult(OTHER_RC, Activity.RESULT_OK, intent)
-
         verify(presenter, never()).exportDatabase(locationUri)
     }
 
     @Test
     fun `onActivityResult should not call exportDatabase when result code is canceled`(){
-        // call onActivityResult passing other request code, result canceled and intent
+        // call onActivityResult passing EXPORT_RC request code, result canceled and intent
         fragment.onActivityResult(fragment.EXPORT_RC, Activity.RESULT_CANCELED, intent)
-
         verify(presenter, never()).exportDatabase(locationUri)
     }
 }

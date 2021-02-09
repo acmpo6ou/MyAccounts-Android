@@ -4,7 +4,7 @@ Constructor:
 * databases - property that holds a List of Database instances 
 
 * EXPORT_RC - request code used when exporting database
-* exportIndex - used to identify which database to export after user chose location in export database dialog
+* exportIndex - used to identify which database to export after user choose location in export database dialog
 
 * exportSelected(i)
 i - database index

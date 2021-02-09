@@ -38,20 +38,20 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class DatabaseFragmentInst {
-    lateinit var databaseScenario: FragmentScenario<DatabaseFragment>
+    lateinit var scenario: FragmentScenario<DatabaseFragment>
     lateinit var presenter: DatabasesPresenterInter
 
     @Before
     fun setUp(){
         // Create a graphical FragmentScenario for the DatabaseFragment
-        databaseScenario = launchFragmentInContainer<DatabaseFragment>(
+        scenario = launchFragmentInContainer<DatabaseFragment>(
                 themeResId = R.style.Theme_MyAccounts_NoActionBar)
 
         val app = MyApp()
         app.databases = mutableListOf(Database("main"))
         presenter = mock()
 
-        databaseScenario.onFragment {
+        scenario.onFragment {
             it.app = app
             it.presenter = presenter
         }
@@ -59,13 +59,13 @@ class DatabaseFragmentInst {
 
     @Test
     fun confirmDelete_should_call_deleteDatabase_when_Yes_is_chosen_in_dialog() {
-        databaseScenario.onFragment {
+        scenario.onFragment {
             it.confirmDelete(0)
         }
         // wait for dialog to appear
         Thread.sleep(1000)
 
-        // chose Yes
+        // choose Yes
         onView(withId(android.R.id.button1)).perform(click())
 
         verify(presenter).deleteDatabase(0)
@@ -73,13 +73,13 @@ class DatabaseFragmentInst {
 
     @Test
     fun confirmDelete_should_not_call_deleteDatabase_when_No_is_chosen_in_dialog() {
-        databaseScenario.onFragment {
+        scenario.onFragment {
             it.confirmDelete(0)
         }
         // wait for dialog to appear
         Thread.sleep(1000)
 
-        // chose No
+        // choose No
         onView(withId(android.R.id.button2)).perform(click())
 
         verify(presenter, never()).deleteDatabase(0)
@@ -87,13 +87,13 @@ class DatabaseFragmentInst {
 
     @Test
     fun confirmClose_should_call_closeDatabase_when_Yes_is_chosen_in_dialog() {
-        databaseScenario.onFragment {
+        scenario.onFragment {
             it.confirmClose(0)
         }
         // wait for dialog to appear
         Thread.sleep(1000)
 
-        // chose Yes
+        // choose Yes
         onView(withId(android.R.id.button1)).perform(click())
 
         verify(presenter).closeDatabase(0)
@@ -101,13 +101,13 @@ class DatabaseFragmentInst {
 
     @Test
     fun confirmClose_should_not_call_closeDatabase_when_No_is_chosen_in_dialog() {
-        databaseScenario.onFragment {
+        scenario.onFragment {
             it.confirmClose(0)
         }
         // wait for dialog to appear
         Thread.sleep(1000)
 
-        // chose No
+        // choose No
         onView(withId(android.R.id.button2)).perform(click())
 
         verify(presenter, never()).closeDatabase(0)

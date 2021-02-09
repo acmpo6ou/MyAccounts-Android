@@ -32,7 +32,7 @@ import com.shawnlin.numberpicker.NumberPicker
  * Dialog to generate password and fill [pass1] and [pass2] password fields of
  * [activity] with it.
  *
- * Dialog that contains number picker to chose password length and checkboxes to chose what
+ * Dialog that contains number picker to choose password length and checkboxes to choose what
  * characters to use to generate password (i.e. digits, letters, etc.).
  */
 open class GenPassDialog(activity: AppCompatActivity,

@@ -11,14 +11,14 @@ using when(item.itemId) check the id and call appropriate MainPresenter method:
 `Check for updates` - presenter.checkUpdatesSelected()
 all others - presenter.navigateTo...
 
-* importDialog - displays dialog to chose database tar file to import
+* importDialog - displays dialog to choose database tar file to import
 - create intent ACTION_OPEN_DOCUMENT
 - add category Intent.CATEGORY_OPENABLE
 - set type to "application/x-tar"
 - call startActivityForResult(intent, IMPORT_RQ)
 
 * onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?)
-- if resultCode is Activity.RESULT_OK i.e. user did chose tar file to import - proceed
+- if resultCode is Activity.RESULT_OK i.e. user did choose tar file to import - proceed
 - call presenter.checkTarFile(location)
 where location is data retrieved from uri resultData
 

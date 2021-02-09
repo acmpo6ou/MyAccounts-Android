@@ -44,19 +44,19 @@ import org.robolectric.annotation.LooperMode
 @ExperimentalCoroutinesApi
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class OpenDatabaseFragmentInst {
-    lateinit var openScenario: FragmentScenario<OpenDatabaseFragment>
+    lateinit var scenario: FragmentScenario<OpenDatabaseFragment>
     private var model: OpenDatabaseViewModel = spy()
     private val faker = Faker()
 
     @Before
     fun setUp() {
         // Create a graphical FragmentScenario for the fragment
-        openScenario = launchFragmentInContainer(themeResId=R.style.Theme_MyAccounts_NoActionBar)
+        scenario = launchFragmentInContainer(themeResId=R.style.Theme_MyAccounts_NoActionBar)
     }
 
     @Test
     fun `'Open database' button should call startPasswordCheck`(){
-        openScenario.onFragment {
+        scenario.onFragment {
             it.viewModel = model
             val txt = faker.str()
             it.b.databasePassword.setText(txt)
@@ -68,7 +68,7 @@ class OpenDatabaseFragmentInst {
 
     @Test
     fun `error tip should change when incorrectPassword changes`(){
-        openScenario.onFragment {
+        scenario.onFragment {
             val errorMsg = it.myContext.resources.getString(R.string.password_error)
 
             // error tip should appear when incorrectPassword is true
@@ -83,7 +83,7 @@ class OpenDatabaseFragmentInst {
 
     @Test
     fun `should display or hide progress bar depending on 'loading' of view model`(){
-        openScenario.onFragment {
+        scenario.onFragment {
             // when loading is true progress bar should be displayed and button - disabled
             it.viewModel._loading.value = true
             assertEquals(View.VISIBLE, it.b.progressLoading.visibility)

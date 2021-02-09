@@ -36,12 +36,12 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class MainActivityFunc {
-    lateinit var mainScenario: ActivityScenario<MainActivity>
+    lateinit var scenario: ActivityScenario<MainActivity>
     val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
     @Before
     fun setup() {
-        mainScenario = ActivityScenario.launch(MainActivity::class.java)
+        scenario = ActivityScenario.launch(MainActivity::class.java)
     }
 
     @Test

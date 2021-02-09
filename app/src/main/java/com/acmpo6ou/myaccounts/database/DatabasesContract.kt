@@ -63,7 +63,7 @@ interface DatabaseFragmentInter{
     fun showError(title: String, details: String)
 
     fun startDatabase(index: Int)
-    fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?)
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
 
     fun notifyChanged(i: Int)
     fun notifyRemoved(i: Int)

@@ -24,13 +24,14 @@ import android.content.Intent
 import android.os.Build
 import android.os.Looper.getMainLooper
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
+import androidx.navigation.Navigation.setViewNavController
 import androidx.navigation.testing.TestNavHostController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
@@ -41,7 +42,8 @@ import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.database.DatabasesPresenter
 import com.acmpo6ou.myaccounts.findSnackbarTextView
 import com.acmpo6ou.myaccounts.ui.database.DatabaseFragment
-import com.acmpo6ou.myaccounts.ui.database.DatabaseFragmentDirections
+import com.acmpo6ou.myaccounts.ui.database.DatabaseFragmentDirections.actionEditDatabase
+import com.acmpo6ou.myaccounts.ui.database.DatabaseFragmentDirections.actionOpenDatabase
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.assertEquals
@@ -59,7 +61,7 @@ import org.robolectric.shadows.ShadowAlertDialog
 @LooperMode(LooperMode.Mode.PAUSED)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class DatabaseFragmentInstrumentation {
-    lateinit var databaseScenario: FragmentScenario<DatabaseFragment>
+    lateinit var scenario: FragmentScenario<DatabaseFragment>
     private lateinit var navController: NavController
 
     // get string resources
@@ -71,14 +73,12 @@ class DatabaseFragmentInstrumentation {
 
     @Before
     fun setUp(){
-        // Create a graphical FragmentScenario for the DatabaseFragment
-        databaseScenario = launchFragmentInContainer(
+        scenario = launchFragmentInContainer(
                 themeResId=R.style.Theme_MyAccounts_NoActionBar)
 
-        // mock presenter with fake database
         val app = MyApp()
         app.databases = mutableListOf(Database("main"))
-        databaseScenario.onFragment { it.app = app }
+        scenario.onFragment { it.app = app }
     }
 
     private fun setUpNavController() {
@@ -86,64 +86,29 @@ class DatabaseFragmentInstrumentation {
         navController = TestNavHostController(ApplicationProvider.getApplicationContext())
         navController.setGraph(R.navigation.mobile_navigation)
 
-        databaseScenario.onFragment {
+        scenario.onFragment {
             // Set the NavController property on the fragment
-            Navigation.setViewNavController(it.requireView(), navController)
+            setViewNavController(it.requireView(), navController)
         }
     }
 
     private fun mockNavController(fragment: DatabaseFragment){
         navController = mock()
-        Navigation.setViewNavController(fragment.requireView(), navController)
-    }
-
-    @Test
-    fun `navigateToEdit should pass appropriate database index`(){
-        databaseScenario.onFragment {
-            mockNavController(it)
-            it.navigateToEdit(0)
-
-            val expectedAction = DatabaseFragmentDirections.actionEditDatabase(0)
-            verify(navController).navigate(expectedAction)
-        }
-    }
-
-    @Test
-    fun `navigateToOpen should pass appropriate database index`(){
-        databaseScenario.onFragment {
-            mockNavController(it)
-            it.navigateToOpen(0)
-
-            val expectedAction = DatabaseFragmentDirections.actionOpenDatabase(0)
-            verify(navController).navigate(expectedAction)
-        }
+        setViewNavController(fragment.requireView(), navController)
     }
 
     @Test
     fun `+ FAB must navigate to CreateDatabaseFragment`() {
         setUpNavController()
         // Verify that performing a click changes the NavController’s state
-        databaseScenario.onFragment {
-            val addButton = it.view?.findViewById<View>(R.id.addDatabase)
+        scenario.onFragment {
+            val addButton = it.view?.findViewById<Button>(R.id.addDatabase)
             addButton?.performClick()
         }
 
         assertEquals("(+) FAB on DatabaseFragment doesn't navigate to CreateDatabaseFragment!",
-            navController.currentDestination?.id,
-            R.id.createDatabaseFragment)
-    }
-
-    @Test
-    fun `navigateToEdit should navigate to EditDatabaseFragment`(){
-        setUpNavController()
-        databaseScenario.onFragment {
-            it.navigateToEdit(0)
-        }
-
-        // verify that we navigated to edit database
-        assertEquals("navigateToEdit doesn't navigate to EditDatabaseFragment!",
                 navController.currentDestination?.id,
-                R.id.editDatabaseFragment)
+                R.id.createDatabaseFragment)
     }
 
     @Test
@@ -153,7 +118,7 @@ class DatabaseFragmentInstrumentation {
         val expectedType = "application/x-tar"
         val expectedTitle = "main.tar"
 
-        databaseScenario.onFragment {
+        scenario.onFragment {
             it.exportDialog(0)
         }
 
@@ -170,18 +135,37 @@ class DatabaseFragmentInstrumentation {
                 expectedTitle, intent.getStringExtra(Intent.EXTRA_TITLE))
     }
 
+    @Test
+    fun `navigateToEdit should pass appropriate database index`(){
+        scenario.onFragment {
+            mockNavController(it)
+            it.navigateToEdit(0)
+
+            val expectedAction = actionEditDatabase(0)
+            verify(navController).navigate(expectedAction)
+        }
+    }
+
+    @Test
+    fun `navigateToOpen should pass appropriate database index`(){
+        scenario.onFragment {
+            mockNavController(it)
+            it.navigateToOpen(0)
+
+            val expectedAction = actionOpenDatabase(0)
+            verify(navController).navigate(expectedAction)
+        }
+    }
 
     @Test
     fun `showSuccess should display snackbar`(){
-        databaseScenario.onFragment {
+        scenario.onFragment {
             it.showSuccess()
 
             // this is because of some Robolectric main looper problems
             shadowOf(getMainLooper()).idle()
 
             val snackbar: TextView? = it.view?.findSnackbarTextView()
-
-            // check the snackbar's message
             assertEquals("showSuccess snackbar has incorrect message!",
                     successMessage, snackbar?.text)
         }
@@ -189,7 +173,7 @@ class DatabaseFragmentInstrumentation {
 
     @Test
     fun `confirmDelete should create dialog with appropriate message and title`(){
-        databaseScenario.onFragment {
+        scenario.onFragment {
             it.confirmDelete(0)
         }
 
@@ -205,7 +189,7 @@ class DatabaseFragmentInstrumentation {
 
     @Test
     fun `confirmClose should create dialog with appropriate message and title`(){
-        databaseScenario.onFragment {
+        scenario.onFragment {
             it.confirmClose(0)
         }
 
@@ -236,10 +220,10 @@ class DatabaseFragmentInstrumentation {
     }
 
     /**
-     * This method is used in tests to measure and lay out the recyclerview.
-     * @param[fragment] DatabaseFragment for which we will setup the recycler.
+     * This method is used in tests to get measured and laid out recyclerview.
+     * @param[fragment] DatabaseFragment from which we will get the recyclerview.
      */
-    private fun setupRecycler(fragment: DatabaseFragment): RecyclerView {
+    private fun getRecycler(fragment: DatabaseFragment): RecyclerView {
         // find recycler, measure and lay it out, so that later we can obtain its items
         val recycler: RecyclerView = fragment.view!!.findViewById(R.id.databasesList)
         recycler.measure(0, 0)
@@ -249,10 +233,10 @@ class DatabaseFragmentInstrumentation {
 
     @Test
     fun `when closing database lock icon should change`(){
-        databaseScenario.onFragment {
+        scenario.onFragment {
             setupRealPresenter(it)
             it.presenter.closeDatabase(1)
-            val recycler = setupRecycler(it)
+            val recycler = getRecycler(it)
 
             // check that lock icon changed to locked
             val itemLayout = recycler.getChildAt(1)
@@ -263,10 +247,10 @@ class DatabaseFragmentInstrumentation {
 
     @Test
     fun `when deleting database it should disappear from recycler`(){
-        databaseScenario.onFragment {
+        scenario.onFragment {
             setupRealPresenter(it)
             it.presenter.deleteDatabase(0)
-            val recycler = setupRecycler(it)
+            val recycler = getRecycler(it)
 
             // check that the first database is `test` as `main` was deleted
             val itemLayout = recycler.getChildAt(0)
@@ -277,7 +261,7 @@ class DatabaseFragmentInstrumentation {
 
     @Test
     fun `checkListPlaceholder should hide placeholder when list has items`(){
-        databaseScenario.onFragment {
+        scenario.onFragment {
             it.checkListPlaceholder()
 
             // placeholder should be invisible
@@ -292,7 +276,7 @@ class DatabaseFragmentInstrumentation {
 
     @Test
     fun `checkListPlaceholder should display placeholder when list has no items`(){
-        databaseScenario.onFragment {
+        scenario.onFragment {
             it.databases = mutableListOf()
             it.checkListPlaceholder()
 

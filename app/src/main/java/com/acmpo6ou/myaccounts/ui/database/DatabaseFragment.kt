@@ -35,9 +35,10 @@ import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.database.DatabaseFragmentInter
 import com.acmpo6ou.myaccounts.database.DatabasesPresenter
 import com.acmpo6ou.myaccounts.database.DatabasesPresenterInter
-import com.acmpo6ou.myaccounts.database.DbList
 import com.acmpo6ou.myaccounts.database.superclass.SuperFragment
 import com.acmpo6ou.myaccounts.databinding.FragmentDatabaseListBinding
+import com.acmpo6ou.myaccounts.ui.database.DatabaseFragmentDirections.actionEditDatabase
+import com.acmpo6ou.myaccounts.ui.database.DatabaseFragmentDirections.actionOpenDatabase
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 
@@ -54,7 +55,7 @@ class DatabaseFragment: SuperFragment(), DatabaseFragmentInter {
     override lateinit var adapter: DatabasesAdapter
     override lateinit var presenter: DatabasesPresenterInter
 
-    var databases: DbList
+    var databases
         get() = app.databases
         set(value){
             app.databases = value
@@ -65,22 +66,18 @@ class DatabaseFragment: SuperFragment(), DatabaseFragmentInter {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        // saving context to use it later
         myContext = context
         app = context.applicationContext as MyApp
-        databases = app.databases
         ACCOUNTS_DIR = context.getExternalFilesDir(null)!!.path + "/"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // initializing recycler's adapter and presenter
         adapter = DatabasesAdapter(this)
         presenter = DatabasesPresenter(this)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View{
         binding = FragmentDatabaseListBinding
                 .inflate(layoutInflater, container, false)
@@ -99,16 +96,16 @@ class DatabaseFragment: SuperFragment(), DatabaseFragmentInter {
             view.findNavController().navigate(R.id.actionCreateDatabase)
         }
 
-        // initializing recycler
         b.databasesList.layoutManager = LinearLayoutManager(myContext)
         b.databasesList.adapter = adapter
     }
 
     /**
-     * Used to display export dialog where user can chose location where to export database.
+     * Used to display export dialog so that user can choose location where to export database.
      *
-     * Starts intent with export request code. Shows dialog to chose location using Storage
-     * Access framework.
+     * Starts intent with [EXPORT_RC] request code.
+     * Shows dialog to choose location using Storage Access Framework.
+     *
      * @param[i] index of database we want to export, used to get database name that will be
      * default in export dialog.
      */
@@ -128,7 +125,7 @@ class DatabaseFragment: SuperFragment(), DatabaseFragmentInter {
      *
      * @param[message] message to describe what we asking user to confirm.
      * @param[positiveAction] function to invoke when user confirms an action (i.e. presses
-     * `Yes` button).
+     * the `Yes` button).
      */
     private inline fun confirmDialog(message: String, crossinline positiveAction: ()->Unit) {
         MaterialAlertDialogBuilder(myContext)
@@ -147,10 +144,9 @@ class DatabaseFragment: SuperFragment(), DatabaseFragmentInter {
      * Displays a dialog for user to confirm deletion of database.
      *
      * If user is choosing No – we will do nothing, if Yes – delete database.
-     * @param[i] - database index
+     * @param[i] - database index.
      */
     override fun confirmDelete(i: Int) {
-        // get name of the database to delete
         val name = databases[i].name
         val message = resources.getString(R.string.confirm_delete, name)
         confirmDialog(message) { presenter.deleteDatabase(i) }
@@ -160,10 +156,9 @@ class DatabaseFragment: SuperFragment(), DatabaseFragmentInter {
      * Displays a dialog for user to confirm closing of database.
      *
      * If user is choosing No – we will do nothing, if Yes – close database.
-     * @param[i] - database index
+     * @param[i] - database index.
      */
     override fun confirmClose(i: Int) {
-        // get name of the database to close
         val name = databases[i].name
         val message = resources.getString(R.string.confirm_close, name)
         confirmDialog(message) { presenter.closeDatabase(i) }
@@ -171,21 +166,19 @@ class DatabaseFragment: SuperFragment(), DatabaseFragmentInter {
 
     /**
      * Navigates to EditDatabaseFragment passing database index.
-     *
      * @param[i] index of database we want to edit.
      */
     override fun navigateToEdit(i: Int) {
-        val action = DatabaseFragmentDirections.actionEditDatabase(i)
+        val action = actionEditDatabase(i)
         view?.findNavController()?.navigate(action)
     }
 
     /**
      * Navigates to OpenDatabaseFragment passing database index.
-     *
      * @param[i] index of database we want to open.
      */
     override fun navigateToOpen(i: Int) {
-        val action = DatabaseFragmentDirections.actionOpenDatabase(i)
+        val action = actionOpenDatabase(i)
         view?.findNavController()?.navigate(action)
     }
 
@@ -193,12 +186,11 @@ class DatabaseFragment: SuperFragment(), DatabaseFragmentInter {
      * Used to display a snackbar with success message.
      */
     override fun showSuccess() {
-        Snackbar.make(
-            b.coordinatorLayout,
-            R.string.success_message,
-            Snackbar.LENGTH_LONG)
-                .setAction("HIDE"){}
-                .show()
+        Snackbar.make(b.coordinatorLayout,
+                      R.string.success_message,
+                      Snackbar.LENGTH_LONG)
+                     .setAction("HIDE"){}
+                     .show()
     }
 
     /**
@@ -214,17 +206,14 @@ class DatabaseFragment: SuperFragment(), DatabaseFragmentInter {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        // do not do anything if activity was canceled
+        // do nothing if activity was canceled
         if (resultCode != Activity.RESULT_OK) return
 
-        if(requestCode == EXPORT_RC) {
-            presenter.exportDatabase(data?.data!!)
-        }
+        if(requestCode == EXPORT_RC) presenter.exportDatabase(data?.data!!)
     }
 
     /**
      * This method rerenders list of databases after any database have changed.
-     *
      * @param[i] index of database that have changed.
      */
     override fun notifyChanged(i: Int) {
@@ -235,7 +224,6 @@ class DatabaseFragment: SuperFragment(), DatabaseFragmentInter {
 
     /**
      * This method rerenders list of databases after any database have been deleted.
-     *
      * @param[i] index of database that have been deleted.
      */
     override fun notifyRemoved(i: Int) {
@@ -252,7 +240,7 @@ class DatabaseFragment: SuperFragment(), DatabaseFragmentInter {
      * the placeholder.
      */
     fun checkListPlaceholder(){
-        if (databases.size == 0) {
+        if (databases.isEmpty()) {
             b.databasesList.visibility = View.GONE
             b.noDatabases.visibility = View.VISIBLE
         }

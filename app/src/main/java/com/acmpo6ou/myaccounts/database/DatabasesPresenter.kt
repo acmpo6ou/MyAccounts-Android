@@ -45,7 +45,7 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
      *
      * Should save [i] in [exportIndex] as it will be used by [exportDatabase] to determine
      * what database to export.
-     * Also it calls exportDialog to display dialog where user can chose export location.
+     * Also it calls exportDialog to display dialog where user can choose export location.
      * @param[i] index of database we want to export.
      */
     override fun exportSelected(i: Int) {

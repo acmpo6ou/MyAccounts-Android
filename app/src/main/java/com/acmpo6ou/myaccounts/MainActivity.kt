@@ -104,7 +104,7 @@ class MainActivity : SuperActivity(), MainActivityInter {
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?){
         super.onActivityResult(requestCode, resultCode, resultData)
-        // do not do anything if activity was canceled
+        // do nothing if activity was canceled
         if (resultCode != Activity.RESULT_OK) return
 
         if(requestCode == IMPORT_RC) {
@@ -114,10 +114,10 @@ class MainActivity : SuperActivity(), MainActivityInter {
     }
 
     /**
-     * Used to display import dialog where user can chose database that he wants to import.
+     * Used to display import dialog where user can choose database that he wants to import.
      *
      * Starts intent with [IMPORT_RC] request code.
-     * Shows dialog to chose location using Storage Access Framework.
+     * Shows dialog to choose location using Storage Access Framework.
      */
     override fun importDialog() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)

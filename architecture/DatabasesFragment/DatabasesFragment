@@ -7,7 +7,7 @@ onCreate:
 1. initializes DatabasesRecycler with corresponding LinearLayoutManager and
 DatabasesAdapter
 
-* exportDialog(i) - displays dialog to chose a location and name of tar file to be exported:
+* exportDialog(i) - displays dialog to choose a location and name of tar file to be exported:
 name - is the default name of the database to be displayed in export dialog
 1. creates intent ACTION_CREATE_DOCUMENT of type 'application/x-tar' and with
 name '$name.tar'
@@ -36,7 +36,7 @@ details - details about why the error might occurred and how to resolve it
 
 * onActivityResult(requestCode: Int, resultCode: Int,
                    resultData: Intent?) - handles result from various dialogs:
-1. if result code is activity OK (i.e. user did chose the location) and if the
+1. if result code is activity OK (i.e. user did choose the location) and if the
 request code is EXPORT_RC then call presenter.exportDatabase(location)
 * location - is a string containing path that user picked in export dialog
 

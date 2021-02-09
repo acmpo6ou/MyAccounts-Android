@@ -45,7 +45,7 @@ import org.robolectric.shadows.ShadowPopupMenu
 @LooperMode(LooperMode.Mode.PAUSED)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class DatabasesAdapterInst {
-    lateinit var databaseScenario: FragmentScenario<DatabaseFragment>
+    lateinit var scenario: FragmentScenario<DatabaseFragment>
     lateinit var presenter: DatabasesPresenterInter
     var recycler: RecyclerView? = null
     var itemLayout: View? = null
@@ -54,7 +54,7 @@ class DatabasesAdapterInst {
     @Before
     fun setUp() {
         // Create a graphical FragmentScenario for the DatabaseFragment
-        databaseScenario = launchFragmentInContainer<DatabaseFragment>(
+        scenario = launchFragmentInContainer<DatabaseFragment>(
                 themeResId = R.style.Theme_MyAccounts_NoActionBar)
 
         // mock the list of databases for test
@@ -63,7 +63,7 @@ class DatabasesAdapterInst {
                 Database("test", password = "123") /* opened*/)
         presenter = mock{ on{databases} doReturn mockDatabases }
 
-        databaseScenario.onFragment {
+        scenario.onFragment {
             it.presenter = presenter
             recycler = it.view?.findViewById(R.id.databasesList) // find recycler
         }
