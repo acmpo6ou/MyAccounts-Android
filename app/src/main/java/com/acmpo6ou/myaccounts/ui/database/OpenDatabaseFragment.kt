@@ -69,6 +69,8 @@ class OpenDatabaseFragment: ViewModelFragment() {
 
     // This observer displays error dialog when user tries to open corrupted database.
     private val corruptedObserver = Observer<Boolean> {
+        if(!it) return@Observer
+
         val index = args!!.databaseIndex
         val dbName = app.databases[index].name
 
@@ -79,7 +81,7 @@ class OpenDatabaseFragment: ViewModelFragment() {
 
     // This observer starts AccountsActivity when corresponding Database is opened.
     private val openedObserver = Observer<Boolean> {
-        startDatabase(args!!.databaseIndex)
+        if(it) startDatabase(args!!.databaseIndex)
     }
 
     // This observer hides/displays loading progress bar of `Open database` button
@@ -98,7 +100,10 @@ class OpenDatabaseFragment: ViewModelFragment() {
         super.onAttach(context)
         myContext = requireContext()
         app = context.applicationContext as MyApp
-        args = OpenDatabaseFragmentArgs.fromBundle(requireArguments())
+
+        arguments?.let {
+            args = OpenDatabaseFragmentArgs.fromBundle(it)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

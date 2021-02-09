@@ -35,13 +35,4 @@ class CreateDatabaseFragment : CreateEditFragment() {
         initModel()
         initForm()
     }
-
-    /**
-     * This method initializes view model providing all needed resources.
-     */
-    override fun initModel() {
-        super.initModel()
-        val SRC_DIR = myContext.getExternalFilesDir(null)?.path + "/src"
-        viewModel.initialize(app, SRC_DIR)
-    }
 }

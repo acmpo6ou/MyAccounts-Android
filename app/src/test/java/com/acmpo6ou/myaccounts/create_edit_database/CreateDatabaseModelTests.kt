@@ -33,6 +33,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+@Suppress("DeferredResultUnused")
 class CreateDatabaseModelTests : ModelTest() {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
@@ -50,13 +51,13 @@ class CreateDatabaseModelTests : ModelTest() {
         app.databases = mutableListOf(Database("main"))
 
         model.initialize(app, SRC_DIR)
-        spyModel = spy(model){ on{generateSalt()} doReturn salt }
+        spyModel = spy(model){ on{ generateSalt() } doReturn salt }
         spyModel.uiDispatcher = Dispatchers.Unconfined
         spyModel.defaultDispatcher = Dispatchers.Unconfined
     }
 
     @Test
-    fun `apply should call createDatabase`(){
+    fun `apply should call createDatabaseAsync`(){
         runBlocking {
             spyModel.apply(name, password)
         }

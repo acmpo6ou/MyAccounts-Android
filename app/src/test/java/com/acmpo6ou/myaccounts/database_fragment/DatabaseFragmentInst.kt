@@ -24,7 +24,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Looper.getMainLooper
 import android.view.View
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -102,7 +101,7 @@ class DatabaseFragmentInstrumentation {
         setUpNavController()
         // Verify that performing a click changes the NavController’s state
         scenario.onFragment {
-            val addButton = it.view?.findViewById<Button>(R.id.addDatabase)
+            val addButton = it.view?.findViewById<View>(R.id.addDatabase)
             addButton?.performClick()
         }
 

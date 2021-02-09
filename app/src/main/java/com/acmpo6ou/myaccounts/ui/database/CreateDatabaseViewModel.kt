@@ -31,10 +31,11 @@ open class CreateDatabaseViewModel : CreateEditViewModel() {
         }
 
     /**
-     * This method creates database using [createDatabaseAsync] and given [name] and [password].
+     * This method creates database using [createDatabaseAsync], given [name] and [password].
      *
      * Once the database is created it is added to the list.
      * If any error occurred it sets errorMsg to error message.
+     *
      * @param[name] name for the database.
      * @param[password] password for the database.
      */
