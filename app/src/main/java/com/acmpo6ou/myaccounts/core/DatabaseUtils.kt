@@ -188,4 +188,18 @@ interface DatabaseUtils {
         val dbFile = File("$SRC_DIR/$name.db")
         dbFile.delete()
     }
+
+    /**
+     * This method simply deletes old database (which is determined by [oldName]) and
+     * creates new one using [database], to more specifically say: it replaces old database
+     * with a new one.
+     *
+     * @param[oldName] name of the old database that is to be replaced.
+     * @param[database] new Database to be created, replacing the old one.
+     * @param[app] application instance containing cache of cryptography keys.
+     */
+    fun saveDatabase(oldName: String, database: Database, app: MyApp){
+        deleteDatabase(oldName)
+        createDatabase(database, app)
+    }
 }

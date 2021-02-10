@@ -84,7 +84,7 @@ class EditDatabaseModelTests : ModelTest() {
         runBlocking {
             spyModel.apply(name, password)
         }
-        verify(spyModel).saveDatabase(oldName, db)
+        verify(spyModel).saveDatabaseAsync(oldName, db)
     }
 
     @Test
@@ -93,7 +93,7 @@ class EditDatabaseModelTests : ModelTest() {
             // will become `clean_name` when cleaned by fixName
             spyModel.apply("c/lea  %\$n_name/", password)
         }
-        verify(spyModel).saveDatabase(oldName, db)
+        verify(spyModel).saveDatabaseAsync(oldName, db)
     }
 
     @Test
@@ -141,15 +141,5 @@ class EditDatabaseModelTests : ModelTest() {
             spyModel.apply(name, password)
         }
         assertTrue(spyModel.loading)
-    }
-
-    @Test
-    fun `saveDatabase should call deleteDatabase and createDatabase`(){
-        runBlocking {
-            spyModel.apply(name, password)
-        }
-
-        verify(spyModel).deleteDatabase(oldName)
-        verify(spyModel).createDatabase(db, app)
     }
 }

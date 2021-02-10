@@ -25,22 +25,14 @@ import com.acmpo6ou.myaccounts.database.superclass.CreateEditViewModel
 import kotlinx.coroutines.async
 
 open class EditDatabaseViewModel : CreateEditViewModel() {
-    /**
-     * This method simply deletes old database (which is determined by [oldName]) and
-     * creates new one using [database], to more specifically say: it replaces old database
-     * with a new one.
-     *
-     * @param[oldName] name of the old database that is to be replaced.
-     * @param[database] new Database to be created, replacing the old one.
-     */
-    open fun saveDatabase(oldName: String, database: Database) =
+
+    open fun saveDatabaseAsync(oldName: String, database: Database) =
     viewModelScope.async (defaultDispatcher) {
-        deleteDatabase(oldName)
-        createDatabase(database, app)
+        saveDatabase(oldName, database, app)
     }
 
     /**
-     * This method saves new Database using [saveDatabase].
+     * This method saves new Database using [saveDatabaseAsync].
      * If any error occurred it sets errorMsg to error message.
      *
      * @param[name] name for the database.
@@ -56,7 +48,7 @@ open class EditDatabaseViewModel : CreateEditViewModel() {
             val oldDatabase = databases[databaseIndex]
             val newDatabase = Database(cleanedName, password,
                                        oldDatabase.salt, oldDatabase.data)
-            saveDatabase(oldDatabase.name, newDatabase).await()
+            saveDatabaseAsync(oldDatabase.name, newDatabase).await()
 
             // if password has changed remove old cryptography key from cache
             if(oldDatabase.password != password) {
