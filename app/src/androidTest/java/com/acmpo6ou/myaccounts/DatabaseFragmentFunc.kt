@@ -43,9 +43,7 @@ class DatabaseFragmentInst {
 
     @Before
     fun setUp(){
-        // Create a graphical FragmentScenario for the DatabaseFragment
-        scenario = launchFragmentInContainer<DatabaseFragment>(
-                themeResId = R.style.Theme_MyAccounts_NoActionBar)
+        scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
 
         val app = MyApp()
         app.databases = mutableListOf(Database("main"))
