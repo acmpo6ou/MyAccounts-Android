@@ -54,7 +54,7 @@ class MainActivityTests: DatabaseViewTest() {
     }
 
     @Test
-    fun `onNavigationItemSelected should close drawer when any of it's items is selected`(){
+    fun `navigation drawer should be closed when any of it's items is selected`(){
         activity.drawerLayout = mock()
         selectNavigationItem(import_database, activity)
         verify(activity.drawerLayout).closeDrawer(GravityCompat.START)

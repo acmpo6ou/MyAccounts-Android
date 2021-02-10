@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.accounts_activity
 
+import androidx.core.view.GravityCompat
 import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account.AccountsPresenterInter
@@ -47,5 +48,12 @@ class AccountsActivityTests {
 
         // all other methods should not be called
         verifyNoMoreInteractions(presenter)
+    }
+
+    @Test
+    fun `navigation drawer should be closed when any of it's items is selected`(){
+        activity.drawerLayout = mock()
+        selectNavigationItem(R.id.save_database, activity)
+        verify(activity.drawerLayout).closeDrawer(GravityCompat.START)
     }
 }

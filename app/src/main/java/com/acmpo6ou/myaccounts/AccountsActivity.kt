@@ -73,7 +73,7 @@ class AccountsActivity : SuperActivity() {
         }
 
         // close drawer when any item is selected
-        b.drawerLayout.closeDrawer(GravityCompat.START)
+        drawerLayout.closeDrawer(GravityCompat.START)
         return false
     }
 }
