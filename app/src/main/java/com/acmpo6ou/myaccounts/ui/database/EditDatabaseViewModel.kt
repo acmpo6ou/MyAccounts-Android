@@ -41,8 +41,8 @@ open class EditDatabaseViewModel : CreateEditViewModel() {
 
     /**
      * This method saves new Database using [saveDatabase].
-     *
      * If any error occurred it sets errorMsg to error message.
+     *
      * @param[name] name for the database.
      * @param[password] password for the database.
      */
@@ -58,7 +58,7 @@ open class EditDatabaseViewModel : CreateEditViewModel() {
                                        oldDatabase.salt, oldDatabase.data)
             saveDatabase(oldDatabase.name, newDatabase).await()
 
-            // if password has change remove old cryptography key from cache
+            // if password has changed remove old cryptography key from cache
             if(oldDatabase.password != password) {
                 app.keyCache.remove(oldDatabase.password)
             }

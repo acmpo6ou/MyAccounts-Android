@@ -20,38 +20,27 @@
 package com.acmpo6ou.myaccounts.create_edit_database
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.viewModelScope
 import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.database.Database
-import com.acmpo6ou.myaccounts.getDatabaseMap
 import com.acmpo6ou.myaccounts.str
 import com.acmpo6ou.myaccounts.ui.database.EditDatabaseViewModel
-import com.macasaet.fernet.StringValidator
-import com.macasaet.fernet.Token
-import com.macasaet.fernet.Validator
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.io.File
-import java.time.Duration
-import java.time.Instant
-import java.time.temporal.TemporalAmount
+import org.mockito.ArgumentMatchers.anyString
 
+@Suppress("DeferredResultUnused")
 class EditDatabaseModelTests : ModelTest() {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 
     val model = EditDatabaseViewModel()
     lateinit var spyModel: EditDatabaseViewModel
-    lateinit var testModel: EditDatabaseViewModel
     lateinit var app: MyApp
 
     private val oldName = "main"
@@ -62,27 +51,21 @@ class EditDatabaseModelTests : ModelTest() {
     @Before
     fun setup(){
         app = MyApp()
-        app.databases = mutableListOf(Database(oldName, password, salt))
+        app.databases = mutableListOf( Database(oldName, password, salt) )
         app.keyCache = mutableMapOf(password to deriveKey(password, salt))
 
         model.initialize(app, SRC_DIR, faker.str(), 0)
         spyModel = spy(model){ on{generateSalt()} doReturn salt }
+
+        doNothing().whenever(spyModel).deleteDatabase(anyString())
+        doNothing().whenever(spyModel).createDatabase(any(), eq(app))
+
         spyModel.uiDispatcher = Dispatchers.Unconfined
         spyModel.defaultDispatcher = Dispatchers.Unconfined
-
-        // inherit from EditDatabaseViewModel to override saveDatabase because it's a
-        // coroutine and can't be mocked
-        open class TestModel : EditDatabaseViewModel(){
-            override fun saveDatabase(oldName: String, database: Database) =
-                    viewModelScope.async (Dispatchers.Unconfined) {
-                    }
-        }
-        testModel = TestModel()
-        testModel.initialize(app, SRC_DIR, faker.str(), 0)
     }
 
     @Test
-    fun `if name of Database didn't change through editing`(){
+    fun `validateName when name of Database didn't change through editing`(){
         // database `main` already exists but it's being edited, so that doesn't count
         model.validateName(oldName)
         assertFalse(model.existsNameErr)
@@ -98,7 +81,6 @@ class EditDatabaseModelTests : ModelTest() {
 
     @Test
     fun `apply should call saveDatabase`(){
-        spyModel = spy(testModel)
         runBlocking {
             spyModel.apply(name, password)
         }
@@ -107,7 +89,6 @@ class EditDatabaseModelTests : ModelTest() {
 
     @Test
     fun `apply should use fixName`(){
-        spyModel = spy(testModel)
         runBlocking {
             // will become `clean_name` when cleaned by fixName
             spyModel.apply("c/lea  %\$n_name/", password)
@@ -119,23 +100,13 @@ class EditDatabaseModelTests : ModelTest() {
     fun `apply should handle any error`(){
         val msg = faker.str()
         val exception = Exception(msg)
-
-        // inherit from EditDatabaseViewModel to override saveDatabase because it's a
-        // coroutine and can't be mocked
-        class TestModel : EditDatabaseViewModel(){
-            override fun saveDatabase(oldName: String, database: Database) =
-                    viewModelScope.async (Dispatchers.Unconfined) {
-                        throw exception
-                    }
-        }
-        val model = TestModel()
-        model.initialize(app, SRC_DIR, faker.str(), 0)
+        doAnswer { throw exception }.whenever(spyModel).deleteDatabase(anyString())
 
         runBlocking {
-            model.apply(name, password)
+            spyModel.apply(name, password)
         }
-        assertEquals(exception.toString(), model.errorMsg)
-        assertFalse(model.loading)
+        assertEquals(exception.toString(), spyModel.errorMsg)
+        assertFalse(spyModel.loading)
     }
 
     @Test
@@ -159,92 +130,26 @@ class EditDatabaseModelTests : ModelTest() {
     @Test
     fun `apply should set finished to true after successful save of database`(){
         runBlocking {
-            testModel.apply(name, password)
+            spyModel.apply(name, password)
         }
-        assertTrue(testModel.finished)
+        assertTrue(spyModel.finished)
     }
 
     @Test
     fun `apply should set loading to true`(){
         runBlocking {
-            testModel.apply(name, password)
+            spyModel.apply(name, password)
         }
-        assertTrue(testModel.loading)
+        assertTrue(spyModel.loading)
     }
 
-    /**
-     * Helper method used by saveDatabase test to create old database and to call
-     * saveDatabase passing through new database.
-     */
-    private fun setUpSaveDatabase(){
-        // this database will be deleted by saveDatabase
-        val db = Database("test", "123", salt)
-        createDatabase(db, MyApp())
-
-        // this database will be created by saveDatabase
-        val newDb = Database("test2", "321",
-                salt.reversedArray(), getDatabaseMap())
-
-        // save newDb deleting db
+    @Test
+    fun `saveDatabase should call deleteDatabase and createDatabase`(){
         runBlocking {
-            model.saveDatabase("test", newDb).await()
+            spyModel.apply(name, password)
         }
-    }
 
-    /**
-     * This method decrypts given string using password `123` and [salt].
-     *
-     * @param[string] string to decrypt.
-     * @return decrypted string.
-     */
-    private fun decryptStr(string: String): String{
-        val key = deriveKey("321", salt.reversedArray())
-        val validator: Validator<String> = object : StringValidator {
-            // this checks whether our encrypted json string is expired or not
-            // in our app we don't care about expiration so we return Instant.MAX.epochSecond
-            override fun getTimeToLive(): TemporalAmount =
-                Duration.ofSeconds(Instant.MAX.epochSecond)
-        }
-        val token = Token.fromString(string)
-        return token.validateAndDecrypt(key, validator)
-    }
-
-    @Test
-    fun `saveDatabase should delete files of old database`(){
-        setUpSaveDatabase()
-
-        // check that there is no longer test.db and test.bin files
-        val oldDb = File("$SRC_DIR/test.db")
-        val oldBin = File("$SRC_DIR/test.bin")
-
-        assertFalse(".db file of old database is not deleted by saveDatabase method!",
-                oldDb.exists())
-        assertFalse(".bin file of old database is not deleted by saveDatabase method!",
-                oldBin.exists())
-    }
-
-    @Test
-    fun `saveDatabase should create new, non empty database file`(){
-        setUpSaveDatabase()
-
-        // this is a .db file that saveDatabase should create for us
-        val actualDb = File("$SRC_DIR/test2.db").readBytes()
-
-        // here we decrypt data saved to .db file to check that it was encrypted correctly
-        val data = decryptStr(String(actualDb))
-        assertEquals("saveDatabase creates incorrect database!",
-                jsonDatabase, data)
-    }
-
-    @Test
-    fun `saveDatabase should create new, non empty salt file`(){
-        setUpSaveDatabase()
-
-        // this is a .bin file that saveDatabase should create for us
-        val actualBin = File("$SRC_DIR/test2.bin").readBytes()
-
-        // .bin file must have appropriate content (i.e. salt)
-        assertEquals("saveDatabase created .bin file with incorrect salt!",
-                String(salt.reversedArray()), String(actualBin))
+        verify(spyModel).deleteDatabase(oldName)
+        verify(spyModel).createDatabase(db, app)
     }
 }
