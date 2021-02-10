@@ -66,14 +66,12 @@ private fun View.findSnackbarLayout(): Snackbar.SnackbarLayout? {
  * @return created database map.
  */
 fun getDatabaseMap(): DbMap {
-    val account = Account(
-            account="gmail",
-            name="Tom",
-            email="tom@gmail.com",
-            password="123",
-            date="01.01.1990",
-            comment="My gmail account.",
-    )
+    val account = Account(account="gmail",
+                          name="Tom",
+                          email="tom@gmail.com",
+                          password="123",
+                          date="01.01.1990",
+                          comment="My gmail account.")
     return mapOf("gmail" to account)
 }
 
@@ -93,6 +91,7 @@ fun getDatabaseMap(): DbMap {
 fun randomIntExcept(exception: Int, start: Int=0, end: Int=20): Int{
     val faker = Faker()
     var res: Int
+
     while (true) {
         res = faker.number().numberBetween(start, end)
         if(res != exception){
@@ -108,13 +107,13 @@ fun Faker.str(): String = this.lorem().sentence()
 /**
  * Helper method to simulate selecting an item in navigation drawer.
  * @param[id] item id.
- * @param[activity] activity under test.
+ * @param[view] system under test.
  */
-fun selectNavigationItem(id: Int, activity: NavigationView.OnNavigationItemSelectedListener){
+fun selectNavigationItem(id: Int, view: NavigationView.OnNavigationItemSelectedListener){
     // here we using try-catch to avoid UninitializedPropertyAccessException
     // that occurs because of view bindings
     try {
-        activity.onNavigationItemSelected(RoboMenuItem(id))
+        view.onNavigationItemSelected(RoboMenuItem(id))
     }
     catch (e: UninitializedPropertyAccessException){}
 }

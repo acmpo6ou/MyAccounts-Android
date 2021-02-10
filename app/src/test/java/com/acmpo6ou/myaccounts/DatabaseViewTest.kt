@@ -27,7 +27,6 @@ import com.nhaarman.mockitokotlin2.mock
 
 /**
  * Super class test for DatabaseFragmentInst and MainActivityInst.
- *
  * Contains some helper methods and properties.
  */
 open class DatabaseViewTest {
