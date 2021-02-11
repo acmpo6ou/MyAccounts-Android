@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.utils
 
 import com.acmpo6ou.myaccounts.ModelTest
+import com.acmpo6ou.myaccounts.core.DatabaseUtils
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.database.DbMap
@@ -28,15 +29,34 @@ import com.acmpo6ou.myaccounts.str
 import com.macasaet.fernet.StringValidator
 import com.macasaet.fernet.Token
 import com.macasaet.fernet.Validator
+import com.nhaarman.mockitokotlin2.doAnswer
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.spy
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert.*
+import org.junit.Before
 import org.junit.Test
 import java.io.File
+import java.io.FileNotFoundException
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.TemporalAmount
 
+open class DbUtils : DatabaseUtils{
+    override val SRC_DIR = ""
+}
+
 class DatabaseUtilsTests: ModelTest() {
     var app = MyApp()
+    private lateinit var databaseUtils: DatabaseUtils
+    lateinit var spyUtils: DatabaseUtils
+    val database = Database("test", "123", salt, mapOf())
+
+    @Before
+    fun setup(){
+        databaseUtils = DbUtils()
+        spyUtils = spy(databaseUtils)
+    }
 
     /**
      * This helper method encrypts given map using [password] and [salt].
@@ -213,5 +233,29 @@ class DatabaseUtilsTests: ModelTest() {
             binFile.exists())
         assertFalse("deleteDatabase didn't delete .db file",
             dbFile.exists())
+    }
+
+    @Test
+    fun `isDatabaseSaved should return false`(){
+        // here database on disk is different then in-memory database
+        val diskDatabase = Database("test", "123", salt, getDatabaseMap())
+        doReturn(diskDatabase).`when`(spyUtils).openDatabase(database, app)
+
+        assertFalse(spyUtils.isDatabaseSaved(database, app))
+    }
+
+    @Test
+    fun `isDatabaseSaved should return true`(){
+        // here database on disk is exactly the same as database in memory
+        doReturn(database).`when`(spyUtils).openDatabase(database, app)
+        assertTrue(spyUtils.isDatabaseSaved(database, app))
+    }
+
+    @Test
+    fun `isDatabaseSaved should return false when FileNotFoundException occurred`(){
+        doAnswer{
+            throw FileNotFoundException("")
+        }.whenever(spyUtils).openDatabase(database, app)
+        assertFalse(spyUtils.isDatabaseSaved(database, app))
     }
 }

@@ -20,14 +20,12 @@
 package com.acmpo6ou.myaccounts.database_fragment
 
 import android.content.Context
-import com.acmpo6ou.myaccounts.database.Database
-import com.acmpo6ou.myaccounts.getDatabaseMap
 import com.nhaarman.mockitokotlin2.*
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyInt
-import java.io.FileNotFoundException
 
 
 class DatabasesPresenterTests: DatabasesPresenterTest() {
@@ -61,7 +59,7 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
     @Test
     fun `closeSelected should call closeDatabase when database is saved`(){
         val presenterSpy = spy(presenter)
-        doReturn(true).`when`(presenterSpy).isDatabaseSaved(0)
+        doReturn(true).`when`(presenterSpy).isDatabaseSaved(any(), eq(app))
 
         presenterSpy.closeSelected(0)
         verify(presenterSpy).closeDatabase(0)
@@ -70,7 +68,7 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
     @Test
     fun `closeSelected should call confirmClose when database isn't saved`(){
         val presenterSpy = spy(presenter)
-        doReturn(false).`when`(presenterSpy).isDatabaseSaved(0)
+        doReturn(false).`when`(presenterSpy).isDatabaseSaved(any(), eq(app))
 
         presenterSpy.closeSelected(0)
         verify(view).confirmClose(0)
@@ -80,35 +78,6 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
     fun `editSelected should call navigateToEdit passing through database index`(){
         presenter.editSelected(0)
         verify(view).navigateToEdit(0)
-    }
-
-    @Test
-    fun `isDatabaseSaved should return false`(){
-        // here database on disk is different then in-memory database
-        val diskDatabase = Database("test", "123", salt, getDatabaseMap())
-        whenever(model.openDatabase(presenter.databases[1], app))
-                .thenReturn(diskDatabase)
-
-        assertFalse(presenter.isDatabaseSaved(1))
-    }
-
-    @Test
-    fun `isDatabaseSaved should return true`(){
-        // here database on disk is exactly the same as database in memory
-        val diskDatabase = Database("test", "123", salt, mapOf())
-        whenever(model.openDatabase(presenter.databases[1], app))
-                .thenReturn(diskDatabase)
-
-        assertTrue(presenter.isDatabaseSaved(1))
-    }
-
-    @Test
-    fun `isDatabaseSaved should return false when FileNotFoundException occurred`(){
-        whenever(model.openDatabase(presenter.databases[1], app))
-                .thenAnswer{
-                    throw FileNotFoundException("")
-                }
-        assertFalse(presenter.isDatabaseSaved(1))
     }
 
     @Test

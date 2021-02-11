@@ -26,7 +26,7 @@ import com.acmpo6ou.myaccounts.core.DatabaseUtils
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.ui.database.DatabasesAdapter
 
-interface DatabasesPresenterInter{
+interface DatabasesPresenterInter : DatabaseUtils{
     var databases: DbList
 
     fun exportSelected(i: Int)
@@ -40,7 +40,6 @@ interface DatabasesPresenterInter{
 
     fun editSelected(i: Int)
     fun openDatabase(i: Int)
-    fun isDatabaseSaved(i: Int): Boolean
 }
 
 interface DatabaseFragmentInter{

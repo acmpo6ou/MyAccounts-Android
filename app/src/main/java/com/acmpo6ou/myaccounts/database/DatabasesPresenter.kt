@@ -26,8 +26,10 @@ import java.io.IOException
 
 open class DatabasesPresenter(private val view: DatabaseFragmentInter)
                              : DatabasesPresenterInter {
-    var model: DatabasesModelInter =
-            DatabasesModel(view.ACCOUNTS_DIR, view.myContext.contentResolver)
+
+    var model: DatabasesModelInter = DatabasesModel(view.ACCOUNTS_DIR,
+                                                    view.myContext.contentResolver)
+    override val SRC_DIR: String get() = model.SRC_DIR
     var exportIndex: Int? = null
 
     override var databases: DbList
@@ -138,7 +140,7 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
      * @param[i] index of database we want to close.
      */
     override fun closeSelected(i: Int) {
-        if(isDatabaseSaved(i)) {
+        if(isDatabaseSaved(databases[i], view.app)) {
             closeDatabase(i)
         }
         else{
@@ -180,29 +182,4 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
         }
     }
 
-    /**
-     * Checks whether given database is saved i.e. the database data that is on the disk
-     * is same as the data that is in memory.
-     *
-     * This method is needed when we want to close database, using isDatabaseSaved we
-     * can determine whether to show confirmation dialog about unsaved data to user or not.
-     * @param[i] index of database we want to check.
-     */
-    override fun isDatabaseSaved(i: Int): Boolean{
-        // the in-memory database
-        val actualDatabase = databases[i]
-
-        // database that is on the disk
-        val diskDatabase: Database
-        try {
-            diskDatabase = model.openDatabase(actualDatabase, view.app)
-        }
-        catch (e: FileNotFoundException){
-            // if database on disk doesn't exist then it definitely
-            // differs from the one in memory
-            e.printStackTrace()
-            return false
-        }
-        return actualDatabase.data == diskDatabase.data
-    }
 }

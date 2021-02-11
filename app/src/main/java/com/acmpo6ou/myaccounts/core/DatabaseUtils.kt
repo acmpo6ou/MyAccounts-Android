@@ -30,6 +30,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
+import java.io.FileNotFoundException
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.TemporalAmount
@@ -132,6 +133,28 @@ interface DatabaseUtils {
         val data = dumps(db.data)
         val token = Token.generate(key, data)
         return token.serialise()
+    }
+
+    /**
+     * Checks whether given database is saved i.e. the database data that is on the disk
+     * is same as the data that is in memory.
+     *
+     * This method is needed when we want to close database, using isDatabaseSaved we
+     * can determine whether to show confirmation dialog about unsaved data to user or not.
+     * @param[database] database we want to check (the one that resides in memory).
+     */
+    fun isDatabaseSaved(database: Database, app: MyApp): Boolean{
+        val diskDatabase: Database
+        try {
+            diskDatabase = openDatabase(database, app)
+        }
+        catch (e: FileNotFoundException){
+            // if database on disk doesn't exist then it definitely
+            // differs from the one in memory
+            e.printStackTrace()
+            return false
+        }
+        return database.data == diskDatabase.data
     }
 
     /**
