@@ -53,19 +53,20 @@ class AccountsPresenterTests {
 
         presenter = AccountsPresenter(view)
         spyPresenter = spy(presenter)
+        doNothing().whenever(spyPresenter).saveDatabase(db.name, db, app)
     }
 
     @Test
     fun `saveSelected should call saveDatabase when isDatabaseSaved returns false`(){
         doReturn(false).whenever(spyPresenter).isDatabaseSaved(db, app)
         spyPresenter.saveSelected()
-        verify(spyPresenter).saveDatabase()
+        verify(spyPresenter).saveDatabase(db.name, db, app)
     }
 
     @Test
     fun `saveSelected should not call saveDatabase when isDatabaseSaved returns true`(){
         doReturn(true).whenever(spyPresenter).isDatabaseSaved(db, app)
         spyPresenter.saveSelected()
-        verify(spyPresenter, never()).saveDatabase()
+        verify(spyPresenter, never()).saveDatabase(db.name, db, app)
     }
 }

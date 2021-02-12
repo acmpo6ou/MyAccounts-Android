@@ -26,7 +26,6 @@ import com.acmpo6ou.myaccounts.database.Database
 
 interface AccountsPresenterInter : SuperPresenterInter, DatabaseUtils {
     fun saveSelected()
-    fun saveDatabase()
 }
 
 interface AccountsActivityInter: SuperActivityInter{
