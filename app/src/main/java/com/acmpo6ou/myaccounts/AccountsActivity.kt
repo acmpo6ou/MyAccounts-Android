@@ -27,6 +27,7 @@ import androidx.preference.PreferenceManager
 import com.acmpo6ou.myaccounts.account.AccountsActivityInter
 import com.acmpo6ou.myaccounts.account.AccountsPresenter
 import com.acmpo6ou.myaccounts.account.AccountsPresenterInter
+import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
 import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.databinding.ActivityAccountsBinding
@@ -35,14 +36,15 @@ import com.acmpo6ou.myaccounts.ui.account.AccountsFragment
 class AccountsActivity : SuperActivity(), AccountsActivityInter {
 
     override lateinit var b: ActivityAccountsBinding
-    override val mainFragmentId = R.id.accountsFragment
     override lateinit var prefs: SharedPreferences
+    override val mainFragmentId = R.id.accountsFragment
 
     override lateinit var presenter: AccountsPresenterInter
     override lateinit var database: Database
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        app = applicationContext as MyApp
         myContext = this
         presenter = AccountsPresenter(this)
 
@@ -51,8 +53,10 @@ class AccountsActivity : SuperActivity(), AccountsActivityInter {
 
         b = ActivityAccountsBinding.inflate(layoutInflater)
         setContentView(b.root)
-
         setSupportActionBar(b.appbar.toolbar)
+
+        val index = intent.extras!!.getInt("databaseIndex")
+        database = app.databases[index]
     }
 
     /**
