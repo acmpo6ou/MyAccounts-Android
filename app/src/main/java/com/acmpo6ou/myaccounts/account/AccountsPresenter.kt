@@ -30,6 +30,10 @@ open class AccountsPresenter(override val view: AccountsActivityInter)
     val database: Database get() = view.database
     val app: MyApp get() = view.app
 
+    /**
+     * Called when user clicks `Save` in navigation drawer.
+     * Saves database only if it has changed.
+     */
     override fun saveSelected() {
         if (!isDatabaseSaved(database, app)) saveDatabase(database.name, database, app)
     }
