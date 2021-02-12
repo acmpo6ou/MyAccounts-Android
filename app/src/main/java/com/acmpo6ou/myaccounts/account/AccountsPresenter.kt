@@ -19,14 +19,19 @@
 
 package com.acmpo6ou.myaccounts.account
 
-import com.acmpo6ou.myaccounts.core.superclass.SuperActivityInter
 import com.acmpo6ou.myaccounts.core.superclass.SuperPresenter
+import com.acmpo6ou.myaccounts.database.Database
 
-class AccountsPresenter(override val view: SuperActivityInter) : SuperPresenter(),
+open class AccountsPresenter(override val view: AccountsActivityInter) : SuperPresenter(),
         AccountsPresenterInter {
+
+    override val SRC_DIR = view.myContext.getExternalFilesDir(null)?.path + "/src"
+    val database: Database get() = view.database
+
     override fun saveSelected() {
     }
 
     override fun saveDatabase() {
     }
+
 }

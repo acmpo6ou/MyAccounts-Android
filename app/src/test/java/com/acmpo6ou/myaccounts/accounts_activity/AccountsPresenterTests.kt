@@ -19,24 +19,52 @@
 
 package com.acmpo6ou.myaccounts.accounts_activity
 
+import android.content.Context
+import com.acmpo6ou.myaccounts.account.AccountsActivityInter
 import com.acmpo6ou.myaccounts.account.AccountsPresenter
-import com.acmpo6ou.myaccounts.core.superclass.SuperActivityInter
-import com.nhaarman.mockitokotlin2.mock
+import com.acmpo6ou.myaccounts.account.AccountsPresenterInter
+import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.database.Database
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
+import java.io.File
 
 class AccountsPresenterTests {
     lateinit var presenter: AccountsPresenter
-    lateinit var view: SuperActivityInter
+    lateinit var spyPresenter: AccountsPresenterInter
+    lateinit var view: AccountsActivityInter
+
+    val db = Database("main")
+    lateinit var app: MyApp
 
     @Before
     fun setup(){
-        view = mock()
+        app = MyApp()
+
+        val context: Context = mock{
+                on{getExternalFilesDir(null)} doReturn File("")
+            }
+        view = mock{
+            on{database} doReturn db
+            on{myContext} doReturn context
+        }
+
         presenter = AccountsPresenter(view)
+        spyPresenter = spy(presenter)
     }
 
     @Test
     fun `saveSelected should call saveDatabase when isDatabaseSaved returns false`(){
+        doReturn(false).whenever(spyPresenter).isDatabaseSaved(db, app)
+        spyPresenter.saveSelected()
+        verify(spyPresenter).saveDatabase()
+    }
 
+    @Test
+    fun `saveSelected should not call saveDatabase when isDatabaseSaved returns true`(){
+        doReturn(true).whenever(spyPresenter).isDatabaseSaved(db, app)
+        spyPresenter.saveSelected()
+        verify(spyPresenter, never()).saveDatabase()
     }
 }

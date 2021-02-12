@@ -19,9 +19,16 @@
 
 package com.acmpo6ou.myaccounts.account
 
+import com.acmpo6ou.myaccounts.core.DatabaseUtils
+import com.acmpo6ou.myaccounts.core.superclass.SuperActivityInter
 import com.acmpo6ou.myaccounts.core.superclass.SuperPresenterInter
+import com.acmpo6ou.myaccounts.database.Database
 
-interface AccountsPresenterInter : SuperPresenterInter {
+interface AccountsPresenterInter : SuperPresenterInter, DatabaseUtils {
     fun saveSelected()
     fun saveDatabase()
+}
+
+interface AccountsActivityInter: SuperActivityInter{
+    val database: Database
 }
