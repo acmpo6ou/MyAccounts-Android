@@ -46,6 +46,7 @@ class AccountsPresenterTests {
                 on{getExternalFilesDir(null)} doReturn File("")
             }
         view = mock{
+            on{app} doReturn app
             on{database} doReturn db
             on{myContext} doReturn context
         }

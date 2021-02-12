@@ -29,6 +29,7 @@ open class AccountsPresenter(override val view: AccountsActivityInter) : SuperPr
     val database: Database get() = view.database
 
     override fun saveSelected() {
+        if (!isDatabaseSaved(database, view.app)) saveDatabase()
     }
 
     override fun saveDatabase() {
