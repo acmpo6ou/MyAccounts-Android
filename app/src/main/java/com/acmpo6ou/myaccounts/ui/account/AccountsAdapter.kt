@@ -22,36 +22,35 @@ package com.acmpo6ou.myaccounts.ui.account
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.account.AccountsFragmentInter
+import com.acmpo6ou.myaccounts.account.AccountsListPresenterInter
+import com.acmpo6ou.myaccounts.database.Account
 
 
 /**
- * [RecyclerView.Adapter] that can display a [DummyItem].
- * TODO: Replace the implementation with code for your data type.
+ * [RecyclerView.Adapter] that can display an [Account].
  */
-class DisplayAccountRecyclerViewAdapter(
-    private val values: List<Int>
-) : RecyclerView.Adapter<DisplayAccountRecyclerViewAdapter.ViewHolder>() {
+class AccountsAdapter(val view: AccountsFragmentInter)
+    : RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
+
+    val presenter: AccountsListPresenterInter get() = view.presenter
+    val accounts: List<Account> get() = presenter.accounts
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.fragment_account, parent, false)
+            .inflate(R.layout.account_item, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = values[position]
+        val account = accounts[position]
     }
 
-    override fun getItemCount(): Int = values.size
+    override fun getItemCount(): Int = accounts.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val contentView: TextView = view.findViewById(R.id.content)
 
-        override fun toString(): String {
-            return super.toString() + " '" + contentView.text + "'"
-        }
     }
 }
