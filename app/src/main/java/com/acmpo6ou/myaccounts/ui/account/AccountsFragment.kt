@@ -19,25 +19,24 @@
 
 package com.acmpo6ou.myaccounts.ui.account
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.ListFragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.acmpo6ou.myaccounts.account.AccountsFragmentInter
 import com.acmpo6ou.myaccounts.account.AccountsListPresenter
 import com.acmpo6ou.myaccounts.account.AccountsListPresenterInter
+import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.databinding.FragmentAccountsListBinding
 
 /**
  * A fragment representing a list of Accounts.
  */
-class AccountsFragment : Fragment(), AccountsFragmentInter {
-    var binding: FragmentAccountsListBinding? = null
-    val b: FragmentAccountsListBinding get() = binding!!
-
-    lateinit var adapter: AccountsAdapter
-    override lateinit var presenter: AccountsListPresenterInter
+class AccountsFragment : ListFragment(), AccountsFragmentInter {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,19 +44,14 @@ class AccountsFragment : Fragment(), AccountsFragmentInter {
         presenter = AccountsListPresenter(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View {
-        binding = FragmentAccountsListBinding
-                .inflate(layoutInflater, container, false)
-        return b.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding = null
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        myContext = context
+        app = context.applicationContext as MyApp
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        b.accountsList.layoutManager = LinearLayoutManager(myContext)
         b.accountsList.adapter = adapter
     }
 }

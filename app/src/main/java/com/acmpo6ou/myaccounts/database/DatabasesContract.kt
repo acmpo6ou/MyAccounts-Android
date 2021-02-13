@@ -24,9 +24,10 @@ import android.content.Intent
 import android.net.Uri
 import com.acmpo6ou.myaccounts.core.DatabaseUtils
 import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.core.superclass.ListPresenter
 import com.acmpo6ou.myaccounts.ui.database.DatabasesAdapter
 
-interface DatabasesPresenterInter : DatabaseUtils{
+interface DatabasesPresenterInter : DatabaseUtils, ListPresenter{
     var databases: DbList
 
     fun exportSelected(i: Int)

@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.core.superclass.ListFragment
 import com.acmpo6ou.myaccounts.database.DatabaseFragmentInter
 import com.acmpo6ou.myaccounts.database.DatabasesPresenter
 import com.acmpo6ou.myaccounts.database.DatabasesPresenterInter
@@ -45,12 +46,9 @@ import com.google.android.material.snackbar.Snackbar
 /**
  * A fragment representing a list of Databases.
  */
-class DatabaseFragment: SuperFragment(), DatabaseFragmentInter {
+class DatabaseFragment: ListFragment(), DatabaseFragmentInter {
     override lateinit var ACCOUNTS_DIR: String
     val EXPORT_RC = 101
-
-    var binding: FragmentDatabaseListBinding? = null
-    val b: FragmentDatabaseListBinding get() = binding!!
 
     override lateinit var adapter: DatabasesAdapter
     override lateinit var presenter: DatabasesPresenterInter
@@ -60,9 +58,6 @@ class DatabaseFragment: SuperFragment(), DatabaseFragmentInter {
         set(value){
             app.databases = value
         }
-
-    override lateinit var myContext: Context
-    override lateinit var app: MyApp
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -75,29 +70,6 @@ class DatabaseFragment: SuperFragment(), DatabaseFragmentInter {
         super.onCreate(savedInstanceState)
         adapter = DatabasesAdapter(this)
         presenter = DatabasesPresenter(this)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View{
-        binding = FragmentDatabaseListBinding
-                .inflate(layoutInflater, container, false)
-        return b.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding = null
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        checkListPlaceholder()
-        // when clicking on (+) FAB navigate to CreateDatabaseFragment
-        b.addDatabase.setOnClickListener{
-            view.findNavController().navigate(R.id.actionCreateDatabase)
-        }
-
-        b.databasesList.layoutManager = LinearLayoutManager(myContext)
-        b.databasesList.adapter = adapter
     }
 
     /**
@@ -138,7 +110,6 @@ class DatabaseFragment: SuperFragment(), DatabaseFragmentInter {
                 }
                 .show()
     }
-
 
     /**
      * Displays a dialog for user to confirm deletion of database.
@@ -230,24 +201,6 @@ class DatabaseFragment: SuperFragment(), DatabaseFragmentInter {
         adapter.notifyItemRemoved(i)
         adapter.notifyItemRangeRemoved(i, 1)
         checkListPlaceholder()
-    }
-
-    /**
-     * This method decides whether to show recycler view placeholder (tip that is shown when
-     * recycler is empty).
-     *
-     * If there are items in the list it hides placeholder, if there aren't it displays
-     * the placeholder.
-     */
-    fun checkListPlaceholder(){
-        if (databases.isEmpty()) {
-            b.databasesList.visibility = View.GONE
-            b.noDatabases.visibility = View.VISIBLE
-        }
-        else{
-            b.databasesList.visibility = View.VISIBLE
-            b.noDatabases.visibility = View.GONE
-        }
     }
 
     companion object {
