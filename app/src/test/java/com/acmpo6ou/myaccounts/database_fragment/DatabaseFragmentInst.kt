@@ -101,7 +101,7 @@ class DatabaseFragmentInstrumentation {
         setUpNavController()
         // Verify that performing a click changes the NavController’s state
         scenario.onFragment {
-            val addButton = it.view?.findViewById<View>(R.id.addDatabase)
+            val addButton = it.view?.findViewById<View>(R.id.addItem)
             addButton?.performClick()
         }
 
@@ -224,7 +224,7 @@ class DatabaseFragmentInstrumentation {
      */
     private fun getRecycler(fragment: DatabaseFragment): RecyclerView {
         // find recycler, measure and lay it out, so that later we can obtain its items
-        val recycler: RecyclerView = fragment.view!!.findViewById(R.id.databasesList)
+        val recycler: RecyclerView = fragment.view!!.findViewById(R.id.itemsList)
         recycler.measure(0, 0)
         recycler.layout(0, 0, 100, 10000)
         return recycler
@@ -264,11 +264,11 @@ class DatabaseFragmentInstrumentation {
             it.checkListPlaceholder()
 
             // placeholder should be invisible
-            val placeholder = it.view?.findViewById<TextView>(R.id.no_databases)
+            val placeholder = it.view?.findViewById<TextView>(R.id.no_items)
             assertEquals(View.GONE, placeholder?.visibility)
 
             // while the list should be visible
-            val list = it.view?.findViewById<RecyclerView>(R.id.databasesList)
+            val list = it.view?.findViewById<RecyclerView>(R.id.itemsList)
             assertEquals(View.VISIBLE, list?.visibility)
         }
     }
@@ -280,11 +280,11 @@ class DatabaseFragmentInstrumentation {
             it.checkListPlaceholder()
 
             // placeholder should be invisible
-            val placeholder = it.view?.findViewById<TextView>(R.id.no_databases)
+            val placeholder = it.view?.findViewById<TextView>(R.id.no_items)
             assertEquals(View.VISIBLE, placeholder?.visibility)
 
             // while the list should be visible
-            val list = it.view?.findViewById<RecyclerView>(R.id.databasesList)
+            val list = it.view?.findViewById<RecyclerView>(R.id.itemsList)
             assertEquals(View.GONE, list?.visibility)
         }
     }

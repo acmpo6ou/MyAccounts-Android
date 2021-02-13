@@ -27,7 +27,7 @@
         android:id="@+id/databaseFragment"
         android:name="com.acmpo6ou.myaccounts.ui.database.DatabaseFragment"
         android:label="MyAccounts"
-        tools:layout="@layout/fragment_database_list" >
+        tools:layout="@layout/fragment_list" >
         <action
             android:id="@+id/actionCreateDatabase"
             app:destination="@id/createDatabaseFragment"
