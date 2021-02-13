@@ -57,13 +57,11 @@ class DatabasesAdapterInst {
 
     @Before
     fun setUp() {
-        scenario = launchFragmentInContainer<DatabaseFragment>(
-                themeResId = R.style.Theme_MyAccounts_NoActionBar)
+        scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
 
         // mock the list of databases for test
-        val mockDatabases =
-                mutableListOf(Database("main"), // locked
-                              Database("test", password = "123") /* opened */)
+        val mockDatabases = mutableListOf(Database("main"), // locked
+                                          Database("test", "123")) // opened
         presenter = mock{ on{databases} doReturn mockDatabases }
 
         scenario.onFragment {

@@ -24,34 +24,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.acmpo6ou.myaccounts.account.AccountsFragmentInter
+import com.acmpo6ou.myaccounts.account.AccountsListPresenterInter
 import com.acmpo6ou.myaccounts.databinding.FragmentAccountsListBinding
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing a list of Accounts.
  */
-class AccountsFragment : Fragment() {
+class AccountsFragment : Fragment(), AccountsFragmentInter {
     var binding: FragmentAccountsListBinding? = null
     val b: FragmentAccountsListBinding get() = binding!!
 
+    lateinit var adapter: AccountsAdapter
+    override lateinit var presenter: AccountsListPresenterInter
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View? {
+        savedInstanceState: Bundle?): View {
         binding = FragmentAccountsListBinding
                 .inflate(layoutInflater, container, false)
         return b.root
     }
 
-    companion object {
-
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
-
-        // TODO: Customize parameter initialization
-        @JvmStatic
-        fun newInstance(columnCount: Int) =
-            AccountsFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
-                }
-            }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 }
