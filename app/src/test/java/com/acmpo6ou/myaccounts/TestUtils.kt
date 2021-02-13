@@ -60,20 +60,17 @@ private fun View.findSnackbarLayout(): Snackbar.SnackbarLayout? {
     return null
 }
 
+// Helper function to get ready-to-use Account.
+fun getAccount() =
+    Account(account="gmail",
+            name="Tom",
+            email="tom@gmail.com",
+            password="123",
+            date="01.01.1990",
+            comment="My gmail account.")
 
-/**
- * Helper function that creates simple database map used in tests.
- * @return created database map.
- */
-fun getDatabaseMap(): DbMap {
-    val account = Account(account="gmail",
-                          name="Tom",
-                          email="tom@gmail.com",
-                          password="123",
-                          date="01.01.1990",
-                          comment="My gmail account.")
-    return mapOf("gmail" to account)
-}
+// Helper function that creates simple database map used in tests.
+fun getDatabaseMap(): DbMap = mapOf("gmail" to getAccount())
 
 /**
  * Helper function that generates random Int in specified range, but excluding number
