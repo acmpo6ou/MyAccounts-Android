@@ -30,7 +30,9 @@ import com.acmpo6ou.myaccounts.getAccount
 import com.acmpo6ou.myaccounts.ui.account.AccountsFragment
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
@@ -63,5 +65,11 @@ class AccountsAdapterInst {
 
         // get item layout from recycler
         itemLayout = recycler?.getChildAt(0)
+    }
+
+    @Test
+    fun `click on recycler item should call displayAccount`(){
+        itemLayout?.performClick()
+        verify(presenter).displayAccount(0)
     }
 }

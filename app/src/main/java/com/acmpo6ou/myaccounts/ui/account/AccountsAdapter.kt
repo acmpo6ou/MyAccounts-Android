@@ -36,7 +36,7 @@ class AccountsAdapter(val view: AccountsFragmentInter)
     : RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
 
     val presenter: AccountsListPresenterInter get() = view.presenter
-    val accounts: List<Account> get() = presenter.accounts
+    private val accounts: List<Account> get() = presenter.accounts
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -51,6 +51,11 @@ class AccountsAdapter(val view: AccountsFragmentInter)
     override fun getItemCount(): Int = accounts.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
+        init {
+            // navigate to DisplayAccountFragment when account item is selected
+            view.setOnClickListener{
+                presenter.displayAccount(adapterPosition)
+            }
+        }
     }
 }

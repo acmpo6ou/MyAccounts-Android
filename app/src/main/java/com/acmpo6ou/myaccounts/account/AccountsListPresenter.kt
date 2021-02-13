@@ -21,12 +21,10 @@ package com.acmpo6ou.myaccounts.account
 
 import com.acmpo6ou.myaccounts.database.Account
 
-interface AccountsFragmentInter{
-    val presenter: AccountsListPresenterInter
-}
+class AccountsListPresenter(val view: AccountsFragmentInter) : AccountsListPresenterInter {
+    override val accounts: List<Account> = listOf()
 
-interface AccountsListPresenterInter{
-    val accounts: List<Account>
-
-    fun displayAccount(i: Int)
+    override fun displayAccount(i: Int) {
+        TODO("Not yet implemented")
+    }
 }

@@ -25,6 +25,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.acmpo6ou.myaccounts.account.AccountsFragmentInter
+import com.acmpo6ou.myaccounts.account.AccountsListPresenter
 import com.acmpo6ou.myaccounts.account.AccountsListPresenterInter
 import com.acmpo6ou.myaccounts.databinding.FragmentAccountsListBinding
 
@@ -38,6 +39,12 @@ class AccountsFragment : Fragment(), AccountsFragmentInter {
     lateinit var adapter: AccountsAdapter
     override lateinit var presenter: AccountsListPresenterInter
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        adapter = AccountsAdapter(this)
+        presenter = AccountsListPresenter(this)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View {
         binding = FragmentAccountsListBinding
@@ -48,5 +55,9 @@ class AccountsFragment : Fragment(), AccountsFragmentInter {
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        b.accountsList.adapter = adapter
     }
 }
