@@ -32,7 +32,7 @@
         android:layout_width="40dp"
         android:layout_height="match_parent"
         android:layout_marginStart="16dp"
-        app:srcCompat="@drawable/ic_locked" />
+        app:srcCompat="@drawable/ic_account" />
 
     <TextView
         android:id="@+id/itemName"

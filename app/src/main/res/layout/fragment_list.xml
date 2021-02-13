@@ -27,23 +27,23 @@
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/databasesList"
+        android:id="@+id/itemsList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/list_item" />
 
     <TextView
-        android:id="@+id/no_databases"
+        android:id="@+id/no_items"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:padding="16dp"
-        android:text="@string/no_databases"
+        android:text="@string/no_items"
         android:textSize="20sp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addDatabase"
+        android:id="@+id/addItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

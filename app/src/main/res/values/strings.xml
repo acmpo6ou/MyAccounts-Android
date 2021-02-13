@@ -95,7 +95,7 @@
     <string name="import_bin_size">.bin file must have size of exactly 16 bytes, yours: %1$d</string>
     <string name="import_db_size">.db file must have size of at least 100 bytes, yours: %1$d</string>
     <string name="db_exists">Database with such name already exists.</string>
-    <string name="no_databases">No databases yet.\n To create one press the + button.</string>
+    <string name="no_items">No %1$s yet.\n To create one press the + button.</string>
 
     <string name="password_error">Incorrect password</string>
     <string name="corrupted_db">The %1$s database is probably corrupted.</string>
