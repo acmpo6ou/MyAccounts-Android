@@ -19,39 +19,28 @@
 
 package com.acmpo6ou.myaccounts.ui.account
 
-import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.ListFragment
-import androidx.recyclerview.widget.LinearLayoutManager
+import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.account.AccountsFragmentInter
 import com.acmpo6ou.myaccounts.account.AccountsListPresenter
 import com.acmpo6ou.myaccounts.account.AccountsListPresenterInter
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.databinding.FragmentAccountsListBinding
+import com.acmpo6ou.myaccounts.core.superclass.ListFragment
 
 /**
  * A fragment representing a list of Accounts.
  */
 class AccountsFragment : ListFragment(), AccountsFragmentInter {
+    override lateinit var adapter: AccountsAdapter
+    override lateinit var presenter: AccountsListPresenterInter
+
+    val accountsActivity get() = activity as AccountsActivity
+    val accounts get() = accountsActivity.database.data
+    override val items get() = accounts.toList()
+    override val actionCreateItem = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         adapter = AccountsAdapter(this)
         presenter = AccountsListPresenter(this)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        myContext = context
-        app = context.applicationContext as MyApp
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        b.accountsList.layoutManager = LinearLayoutManager(myContext)
-        b.accountsList.adapter = adapter
     }
 }
