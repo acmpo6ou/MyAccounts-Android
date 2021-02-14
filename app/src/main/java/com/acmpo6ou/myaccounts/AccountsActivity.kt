@@ -31,7 +31,6 @@ import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
 import com.acmpo6ou.myaccounts.databinding.ActivityAccountsBinding
 import com.acmpo6ou.myaccounts.ui.account.AccountsFragment
-import kotlin.properties.Delegates
 
 class AccountsActivity : SuperActivity(), AccountsActivityInter {
 
@@ -40,7 +39,7 @@ class AccountsActivity : SuperActivity(), AccountsActivityInter {
     override val mainFragmentId = R.id.accountsFragment
     override lateinit var presenter: AccountsPresenterInter
 
-    var index by Delegates.notNull<Int>()
+    var index = 0
     override var database
         get() = app.databases[index]
         set(value) {
@@ -60,7 +59,9 @@ class AccountsActivity : SuperActivity(), AccountsActivityInter {
         setContentView(b.root)
         setSupportActionBar(b.appbar.toolbar)
 
-        index = intent.extras!!.getInt("databaseIndex")
+        intent.extras?.let {
+            index = it.getInt("databaseIndex")
+        }
     }
 
     /**

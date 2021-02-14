@@ -27,6 +27,8 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.findSnackbarTextView
 import org.junit.Assert
 import org.junit.Before
@@ -49,6 +51,9 @@ class AccountsActivityInst {
 
     @Before
     fun setup(){
+        val app = context.applicationContext as MyApp
+        app.databases = mutableListOf( Database("main") )
+
         scenario = ActivityScenario.launch(AccountsActivity::class.java)
         scenario.onActivity {
             it.myContext.setTheme(R.style.Theme_MyAccounts_NoActionBar)
