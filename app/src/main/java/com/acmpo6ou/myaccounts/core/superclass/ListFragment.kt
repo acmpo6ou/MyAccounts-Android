@@ -34,7 +34,7 @@ import com.acmpo6ou.myaccounts.database.superclass.SuperFragment
 import com.acmpo6ou.myaccounts.databinding.FragmentListBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-abstract class ListFragment : SuperFragment() {
+abstract class ListFragment : SuperFragment(), ListFragmentInter {
     private var binding: FragmentListBinding? = null
     val b: FragmentListBinding get() = binding!!
 
@@ -112,22 +112,27 @@ abstract class ListFragment : SuperFragment() {
     }
 
     /**
-     * This method rerenders list of databases after any database have changed.
-     * @param[i] index of database that have changed.
+     * This method rerenders list after any item have changed.
+     * @param[i] index of item that have changed.
      */
-    fun notifyChanged(i: Int) {
+    override fun notifyChanged(i: Int) {
         adapter.notifyItemChanged(i)
         adapter.notifyItemRangeChanged(i, 1)
         checkListPlaceholder()
     }
 
     /**
-     * This method rerenders list of databases after any database have been deleted.
-     * @param[i] index of database that have been deleted.
+     * This method rerenders list after any item have been deleted.
+     * @param[i] index of item that have been deleted.
      */
-    fun notifyRemoved(i: Int) {
+    override fun notifyRemoved(i: Int) {
         adapter.notifyItemRemoved(i)
         adapter.notifyItemRangeRemoved(i, 1)
         checkListPlaceholder()
     }
+}
+
+interface ListFragmentInter{
+    fun notifyChanged(i: Int)
+    fun notifyRemoved(i: Int)
 }

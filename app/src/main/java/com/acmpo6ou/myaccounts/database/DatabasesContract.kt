@@ -24,6 +24,7 @@ import android.content.Intent
 import android.net.Uri
 import com.acmpo6ou.myaccounts.core.DatabaseUtils
 import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.core.superclass.ListFragmentInter
 import com.acmpo6ou.myaccounts.core.superclass.ListPresenter
 import com.acmpo6ou.myaccounts.ui.database.DatabasesAdapter
 
@@ -43,7 +44,7 @@ interface DatabasesPresenterInter : DatabaseUtils, ListPresenter{
     fun openDatabase(i: Int)
 }
 
-interface DatabaseFragmentInter{
+interface DatabaseFragmentInter : ListFragmentInter{
     val presenter: DatabasesPresenterInter
     val adapter: DatabasesAdapter
 
