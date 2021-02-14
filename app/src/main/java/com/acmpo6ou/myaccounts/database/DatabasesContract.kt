@@ -64,9 +64,6 @@ interface DatabaseFragmentInter{
 
     fun startDatabase(index: Int)
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
-
-    fun notifyChanged(i: Int)
-    fun notifyRemoved(i: Int)
 }
 
 interface DatabasesModelInter : DatabaseUtils{

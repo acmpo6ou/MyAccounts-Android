@@ -40,7 +40,7 @@ class AccountsAdapter(val view: AccountsFragmentInter)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.account_item, parent, false)
+            .inflate(R.layout.list_item, parent, false)
         return ViewHolder(view)
     }
 

@@ -19,13 +19,14 @@
 
 package com.acmpo6ou.myaccounts.account
 
+import com.acmpo6ou.myaccounts.core.superclass.ListPresenter
 import com.acmpo6ou.myaccounts.database.Account
 
 interface AccountsFragmentInter{
     val presenter: AccountsListPresenterInter
 }
 
-interface AccountsListPresenterInter{
+interface AccountsListPresenterInter : ListPresenter {
     val accounts: List<Account>
 
     fun displayAccount(i: Int)

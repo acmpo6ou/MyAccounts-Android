@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.core.superclass
 
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -31,17 +32,25 @@ import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.database.superclass.SuperFragment
 import com.acmpo6ou.myaccounts.databinding.FragmentListBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 abstract class ListFragment : SuperFragment() {
-    var binding: FragmentListBinding? = null
+    private var binding: FragmentListBinding? = null
     val b: FragmentListBinding get() = binding!!
 
     abstract val items: List<*>
     abstract val adapter: RecyclerView.Adapter<*>
     abstract val presenter: ListPresenter
+    abstract val actionCreateItem: Int
 
     lateinit var myContext: Context
     lateinit var app: MyApp
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        myContext = context
+        app = context.applicationContext as MyApp
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -56,9 +65,9 @@ abstract class ListFragment : SuperFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         checkListPlaceholder()
-        // when clicking on (+) FAB navigate to CreateDatabaseFragment
+        // when clicking on (+) FAB navigate to fragment where item will be created
         b.addItem.setOnClickListener{
-            view.findNavController().navigate(R.id.actionCreateDatabase)
+            view.findNavController().navigate(actionCreateItem)
         }
 
         b.itemsList.layoutManager = LinearLayoutManager(myContext)
@@ -81,5 +90,44 @@ abstract class ListFragment : SuperFragment() {
             b.itemsList.visibility = View.VISIBLE
             b.noItems.visibility = View.GONE
         }
+    }
+
+    /**
+     * Used to build and display confirmation dialog.
+     *
+     * @param[message] message to describe what we asking user to confirm.
+     * @param[positiveAction] function to invoke when user confirms an action (i.e. presses
+     * the `Yes` button).
+     */
+    inline fun confirmDialog(message: String, crossinline positiveAction: ()->Unit) {
+        MaterialAlertDialogBuilder(myContext)
+                .setTitle(R.string.warning)
+                .setMessage(message)
+                .setIcon(R.drawable.ic_warning)
+                .setNegativeButton(R.string.no) { _: DialogInterface, _: Int -> }
+                .setPositiveButton(R.string.yes){ _: DialogInterface, _: Int ->
+                    positiveAction()
+                }
+                .show()
+    }
+
+    /**
+     * This method rerenders list of databases after any database have changed.
+     * @param[i] index of database that have changed.
+     */
+    fun notifyChanged(i: Int) {
+        adapter.notifyItemChanged(i)
+        adapter.notifyItemRangeChanged(i, 1)
+        checkListPlaceholder()
+    }
+
+    /**
+     * This method rerenders list of databases after any database have been deleted.
+     * @param[i] index of database that have been deleted.
+     */
+    fun notifyRemoved(i: Int) {
+        adapter.notifyItemRemoved(i)
+        adapter.notifyItemRangeRemoved(i, 1)
+        checkListPlaceholder()
     }
 }
