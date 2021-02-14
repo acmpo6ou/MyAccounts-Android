@@ -35,7 +35,7 @@ import com.acmpo6ou.myaccounts.ui.database.DatabaseFragmentDirections.actionOpen
 import com.google.android.material.snackbar.Snackbar
 
 /**
- * A fragment representing a list of Databases.
+ * Fragment representing a list of Databases.
  */
 class DatabaseFragment: ListFragment(), DatabaseFragmentInter {
     override lateinit var ACCOUNTS_DIR: String

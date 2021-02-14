@@ -27,7 +27,7 @@ import com.acmpo6ou.myaccounts.account.AccountsListPresenterInter
 import com.acmpo6ou.myaccounts.core.superclass.ListFragment
 
 /**
- * A fragment representing a list of Accounts.
+ * Fragment representing a list of Accounts.
  */
 class AccountsFragment : ListFragment(), AccountsFragmentInter {
     override lateinit var adapter: AccountsAdapter

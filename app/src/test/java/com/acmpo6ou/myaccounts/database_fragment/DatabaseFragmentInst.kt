@@ -72,8 +72,7 @@ class DatabaseFragmentInstrumentation {
 
     @Before
     fun setUp(){
-        scenario = launchFragmentInContainer(
-                themeResId=R.style.Theme_MyAccounts_NoActionBar)
+        scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
 
         val app = MyApp()
         app.databases = mutableListOf(Database("main"))
@@ -255,37 +254,6 @@ class DatabaseFragmentInstrumentation {
             val itemLayout = recycler.getChildAt(0)
             val databaseName = itemLayout?.findViewById<TextView>(R.id.itemName)
             assertEquals("test", databaseName?.text)
-        }
-    }
-
-    @Test
-    fun `checkListPlaceholder should hide placeholder when list has items`(){
-        scenario.onFragment {
-            it.checkListPlaceholder()
-
-            // placeholder should be invisible
-            val placeholder = it.view?.findViewById<TextView>(R.id.no_items)
-            assertEquals(View.GONE, placeholder?.visibility)
-
-            // while the list should be visible
-            val list = it.view?.findViewById<RecyclerView>(R.id.itemsList)
-            assertEquals(View.VISIBLE, list?.visibility)
-        }
-    }
-
-    @Test
-    fun `checkListPlaceholder should display placeholder when list has no items`(){
-        scenario.onFragment {
-            it.databases = mutableListOf()
-            it.checkListPlaceholder()
-
-            // placeholder should be invisible
-            val placeholder = it.view?.findViewById<TextView>(R.id.no_items)
-            assertEquals(View.VISIBLE, placeholder?.visibility)
-
-            // while the list should be visible
-            val list = it.view?.findViewById<RecyclerView>(R.id.itemsList)
-            assertEquals(View.GONE, list?.visibility)
         }
     }
 }
