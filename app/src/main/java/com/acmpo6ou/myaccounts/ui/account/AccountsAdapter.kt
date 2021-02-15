@@ -60,6 +60,7 @@ class AccountsAdapter(val view: AccountsFragmentInter)
      */
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var accountName: TextView = view.findViewById(R.id.itemName)
+
         init {
             // navigate to DisplayAccountFragment when account item is selected
             view.setOnClickListener{

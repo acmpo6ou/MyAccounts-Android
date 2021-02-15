@@ -32,4 +32,6 @@ interface AccountsListPresenterInter : ListPresenter {
 
     fun getAccount(i: Int): Account
     fun displayAccount(i: Int)
+    fun editAccount(i: Int)
+    fun deleteAccount(i: Int)
 }

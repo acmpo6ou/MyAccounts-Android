@@ -27,6 +27,7 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account.AccountsListPresenterInter
+import com.acmpo6ou.myaccounts.clickMenuItem
 import com.acmpo6ou.myaccounts.getDatabaseMap
 import com.acmpo6ou.myaccounts.ui.account.AccountsFragment
 import com.nhaarman.mockitokotlin2.doReturn
@@ -77,5 +78,17 @@ class AccountsAdapterInst {
     fun `account item should have appropriate name`(){
         val accountName = itemLayout?.findViewById<TextView>(R.id.itemName)
         assertEquals("gmail", accountName?.text)
+    }
+
+    @Test
+    fun `clicking on 'Edit' should call editSelected`(){
+        clickMenuItem(itemLayout, R.id.edit_account_item)
+        verify(presenter).editAccount(0)
+    }
+
+    @Test
+    fun `clicking on 'Delete' should call editSelected`(){
+        clickMenuItem(itemLayout, R.id.delete_account_item)
+        verify(presenter).deleteAccount(0)
     }
 }

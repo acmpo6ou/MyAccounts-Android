@@ -40,4 +40,12 @@ class AccountsListPresenter(val view: AccountsFragmentInter) : AccountsListPrese
     override fun displayAccount(i: Int) {
         TODO("Not yet implemented")
     }
+
+    override fun editAccount(i: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun deleteAccount(i: Int) {
+        TODO("Not yet implemented")
+    }
 }
