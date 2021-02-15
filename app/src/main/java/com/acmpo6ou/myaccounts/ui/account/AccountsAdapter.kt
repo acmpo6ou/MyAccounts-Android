@@ -47,9 +47,10 @@ class AccountsAdapter(val view: AccountsFragmentInter)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val account = presenter.getAccount(position)
+
         // set account item name
-        val accountName = accounts.keys.sortedBy { it }[position]
-        holder.accountName.text = accountName
+        holder.accountName.text = account.name
     }
 
     override fun getItemCount(): Int = accounts.size

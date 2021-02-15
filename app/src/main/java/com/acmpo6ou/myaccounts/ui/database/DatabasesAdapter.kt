@@ -52,6 +52,7 @@ class DatabasesAdapter(val view: DatabaseFragmentInter)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val database = databases[position]
+
         // set database item name
         holder.databaseName.text = database.name
 
