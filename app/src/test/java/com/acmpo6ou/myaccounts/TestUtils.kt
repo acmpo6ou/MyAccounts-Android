@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts
 
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -29,6 +30,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.SnackbarContentLayout
 import org.robolectric.fakes.RoboMenuItem
+import org.robolectric.shadows.ShadowPopupMenu
 
 
 // This two extensions used to find a snackbar during tests
@@ -113,4 +115,19 @@ fun selectNavigationItem(id: Int, view: NavigationView.OnNavigationItemSelectedL
         view.onNavigationItemSelected(RoboMenuItem(id))
     }
     catch (e: UninitializedPropertyAccessException){}
+}
+
+/**
+ * Helper method to click on the popup menu item.
+ * @param[itemLayout] layout containing 3 dots to open the popup menu.
+ * @param[itemId] id of the item we want to click.
+ */
+fun clickMenuItem(itemLayout: View?, itemId: Int){
+    // click on 3 dots to display popup menu
+    val dotsMenu = itemLayout?.findViewById<TextView>(R.id.dots_menu)
+    dotsMenu?.performClick()
+
+    // find the popup menu and click on the item
+    val menu = ShadowPopupMenu.getLatestPopupMenu().menu
+    menu.performIdentifierAction(itemId, Menu.FLAG_ALWAYS_PERFORM_CLOSE)
 }

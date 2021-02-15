@@ -20,7 +20,6 @@
 package com.acmpo6ou.myaccounts.database_fragment
 
 import android.os.Build
-import android.view.Menu.FLAG_ALWAYS_PERFORM_CLOSE
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -28,6 +27,7 @@ import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.clickMenuItem
 import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.database.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.database.DatabaseFragment
@@ -42,7 +42,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
-import org.robolectric.shadows.ShadowPopupMenu
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
@@ -105,27 +104,11 @@ class DatabasesAdapterInst {
                 R.drawable.ic_opened, itemLock?.tag)
     }
 
-    /**
-     * Helper method used by tests bellow. Clicks on the popup menu item.
-     * @param[itemLayout] layout containing 3 dots to open the popup menu.
-     * @param[itemId] id of the item we want to click.
-     */
-    private fun clickMenuItem(itemLayout: View?, itemId: Int){
-        // click on 3 dots to display popup menu
-        val dotsMenu = itemLayout?.findViewById<TextView>(R.id.dots_menu)
-        dotsMenu?.performClick()
-
-        // find the popup menu and click on the item
-        val menu = ShadowPopupMenu.getLatestPopupMenu().menu
-        menu.performIdentifierAction(itemId, FLAG_ALWAYS_PERFORM_CLOSE)
-    }
-
     @Test
     fun `clicking on 'Close' should call closeSelected`(){
         clickMenuItem(itemLayout2, R.id.close_database_item)
         verify(presenter).closeSelected(1)
     }
-
 
     @Test
     fun `clicking on 'Close' should not call closeSelected when database is already closed`(){
