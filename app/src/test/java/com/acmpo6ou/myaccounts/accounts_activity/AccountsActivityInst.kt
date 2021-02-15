@@ -31,6 +31,7 @@ import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.findSnackbarTextView
 import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -77,7 +78,7 @@ class AccountsActivityInst {
                     snackbar != null)
 
             // check the snackbar's message
-            Assert.assertEquals("noUpdates snackbar has incorrect message!",
+            assertEquals("noUpdates snackbar has incorrect message!",
                     noUpdatesMsg, snackbar?.text)
         }
     }

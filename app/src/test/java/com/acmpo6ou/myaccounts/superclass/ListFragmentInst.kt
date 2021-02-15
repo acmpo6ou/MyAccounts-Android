@@ -24,6 +24,8 @@ import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.superclass.ListFragment
@@ -31,7 +33,8 @@ import com.acmpo6ou.myaccounts.core.superclass.ListPresenter
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
-import org.junit.Assert
+import com.nhaarman.mockitokotlin2.verify
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -39,9 +42,9 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
-class TestListFragment : ListFragment(){
+class TestListFragment : ListFragment() {
     override var items: List<String> = listOf()
-    override val actionCreateItem = 0
+    override val actionCreateItem = Faker().number().randomDigit()
     override val adapter: RecyclerView.Adapter<*> = mock()
     override val presenter: ListPresenter = mock()
 }
@@ -65,11 +68,11 @@ class ListFragmentInst {
 
             // placeholder should be invisible
             val placeholder = it.view?.findViewById<TextView>(R.id.no_items)
-            Assert.assertEquals(View.GONE, placeholder?.visibility)
+            assertEquals(View.GONE, placeholder?.visibility)
 
             // while the list should be visible
             val list = it.view?.findViewById<RecyclerView>(R.id.itemsList)
-            Assert.assertEquals(View.VISIBLE, list?.visibility)
+            assertEquals(View.VISIBLE, list?.visibility)
         }
     }
 
@@ -81,11 +84,24 @@ class ListFragmentInst {
 
             // placeholder should be invisible
             val placeholder = it.view?.findViewById<TextView>(R.id.no_items)
-            Assert.assertEquals(View.VISIBLE, placeholder?.visibility)
+            assertEquals(View.VISIBLE, placeholder?.visibility)
 
             // while the list should be visible
             val list = it.view?.findViewById<RecyclerView>(R.id.itemsList)
-            Assert.assertEquals(View.GONE, list?.visibility)
+            assertEquals(View.GONE, list?.visibility)
+        }
+    }
+
+    @Test
+    fun `click on (+) FAB must navigate to actionCreateItem`() {
+        scenario.onFragment {
+            val navController: NavController = mock()
+            Navigation.setViewNavController(it.requireView(), navController)
+
+            val addItem = it.view?.findViewById<View>(R.id.addItem)
+            addItem?.performClick()
+
+            verify(navController).navigate(it.actionCreateItem)
         }
     }
 }

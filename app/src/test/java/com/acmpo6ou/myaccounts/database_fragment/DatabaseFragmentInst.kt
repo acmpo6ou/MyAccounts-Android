@@ -23,7 +23,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Looper.getMainLooper
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -31,9 +30,7 @@ import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.setViewNavController
-import androidx.navigation.testing.TestNavHostController
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MyApp
@@ -79,34 +76,9 @@ class DatabaseFragmentInstrumentation {
         scenario.onFragment { it.app = app }
     }
 
-    private fun setUpNavController() {
-        // Create a TestNavHostController
-        navController = TestNavHostController(ApplicationProvider.getApplicationContext())
-        navController.setGraph(R.navigation.mobile_navigation)
-
-        scenario.onFragment {
-            // Set the NavController property on the fragment
-            setViewNavController(it.requireView(), navController)
-        }
-    }
-
     private fun mockNavController(fragment: DatabaseFragment){
         navController = mock()
         setViewNavController(fragment.requireView(), navController)
-    }
-
-    @Test
-    fun `+ FAB must navigate to CreateDatabaseFragment`() {
-        setUpNavController()
-        // Verify that performing a click changes the NavController’s state
-        scenario.onFragment {
-            val addButton = it.view?.findViewById<View>(R.id.addItem)
-            addButton?.performClick()
-        }
-
-        assertEquals("(+) FAB on DatabaseFragment doesn't navigate to CreateDatabaseFragment!",
-                navController.currentDestination?.id,
-                R.id.createDatabaseFragment)
     }
 
     @Test
@@ -202,7 +174,7 @@ class DatabaseFragmentInstrumentation {
     }
 
     /**
-     * This method is used in tests to setup real (non mocked) DatabasesPresenter to test
+     * Used in tests to setup real (non mocked) DatabasesPresenter to test
      * how does DatabasesPresenter and DatabaseFragment are integrated.
      * @param[fragment] DatabaseFragment for which we will setup DatabasesPresenter.
      */
@@ -218,7 +190,7 @@ class DatabaseFragmentInstrumentation {
     }
 
     /**
-     * This method is used in tests to get measured and laid out recyclerview.
+     * Used in tests to get measured and laid out recyclerview.
      * @param[fragment] DatabaseFragment from which we will get the recyclerview.
      */
     private fun getRecycler(fragment: DatabaseFragment): RecyclerView {
