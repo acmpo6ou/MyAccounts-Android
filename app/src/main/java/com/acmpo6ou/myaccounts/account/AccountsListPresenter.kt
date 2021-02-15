@@ -19,10 +19,10 @@
 
 package com.acmpo6ou.myaccounts.account
 
-import com.acmpo6ou.myaccounts.database.Account
+import com.acmpo6ou.myaccounts.database.DbMap
 
 class AccountsListPresenter(val view: AccountsFragmentInter) : AccountsListPresenterInter {
-    override val accounts: List<Account> = listOf()
+    override val accounts: DbMap = mapOf()
 
     override fun displayAccount(i: Int) {
         TODO("Not yet implemented")

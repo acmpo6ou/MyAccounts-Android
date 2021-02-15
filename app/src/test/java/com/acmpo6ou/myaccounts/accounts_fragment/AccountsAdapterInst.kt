@@ -26,7 +26,7 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account.AccountsListPresenterInter
-import com.acmpo6ou.myaccounts.getAccount
+import com.acmpo6ou.myaccounts.getDatabaseMap
 import com.acmpo6ou.myaccounts.ui.account.AccountsFragment
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
@@ -51,9 +51,7 @@ class AccountsAdapterInst {
     @Before
     fun setUp() {
         scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
-
-        val mockAccounts = listOf(getAccount())
-        presenter = mock{ on{accounts} doReturn mockAccounts }
+        presenter = mock{ on{accounts} doReturn getDatabaseMap() }
 
         scenario.onFragment {
             it.presenter = presenter

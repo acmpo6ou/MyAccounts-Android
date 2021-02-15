@@ -20,14 +20,14 @@
 package com.acmpo6ou.myaccounts.account
 
 import com.acmpo6ou.myaccounts.core.superclass.ListPresenter
-import com.acmpo6ou.myaccounts.database.Account
+import com.acmpo6ou.myaccounts.database.DbMap
 
 interface AccountsFragmentInter{
     val presenter: AccountsListPresenterInter
 }
 
 interface AccountsListPresenterInter : ListPresenter {
-    val accounts: List<Account>
+    val accounts: DbMap
 
     fun displayAccount(i: Int)
 }
