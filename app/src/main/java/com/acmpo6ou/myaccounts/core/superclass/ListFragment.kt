@@ -34,6 +34,10 @@ import com.acmpo6ou.myaccounts.database.superclass.SuperFragment
 import com.acmpo6ou.myaccounts.databinding.FragmentListBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
+/**
+ * Super class for DatabaseFragment and AccountsFragment – fragments that contain
+ * list of items.
+ */
 abstract class ListFragment : SuperFragment(), ListFragmentInter {
     private var binding: FragmentListBinding? = null
     val b: FragmentListBinding get() = binding!!
