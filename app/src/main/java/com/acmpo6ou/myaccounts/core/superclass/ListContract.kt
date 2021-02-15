@@ -20,3 +20,8 @@
 package com.acmpo6ou.myaccounts.core.superclass
 
 interface ListPresenter
+
+interface ListFragmentInter{
+    fun notifyChanged(i: Int)
+    fun notifyRemoved(i: Int)
+}

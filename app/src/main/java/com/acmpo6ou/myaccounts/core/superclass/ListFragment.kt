@@ -131,8 +131,3 @@ abstract class ListFragment : SuperFragment(), ListFragmentInter {
         checkListPlaceholder()
     }
 }
-
-interface ListFragmentInter{
-    fun notifyChanged(i: Int)
-    fun notifyRemoved(i: Int)
-}
