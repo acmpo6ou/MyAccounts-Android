@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts.accounts_fragment
 
 import android.os.Build
 import android.view.View
+import android.widget.TextView
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +32,7 @@ import com.acmpo6ou.myaccounts.ui.account.AccountsFragment
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -69,5 +71,11 @@ class AccountsAdapterInst {
     fun `click on recycler item should call displayAccount`(){
         itemLayout?.performClick()
         verify(presenter).displayAccount(0)
+    }
+
+    @Test
+    fun `account item should have appropriate name`(){
+        val accountName = itemLayout?.findViewById<TextView>(R.id.itemName)
+        assertEquals("gmail", accountName?.text)
     }
 }

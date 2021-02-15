@@ -22,6 +22,7 @@ package com.acmpo6ou.myaccounts.ui.account
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account.AccountsFragmentInter
@@ -46,12 +47,18 @@ class AccountsAdapter(val view: AccountsFragmentInter)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val account = accounts[position]
+        // set account item name
+        val accountName = accounts.keys.sortedBy { it }[position]
+        holder.accountName.text = accountName
     }
 
     override fun getItemCount(): Int = accounts.size
 
+    /**
+     * Represents ViewHolder for item of accounts list.
+     */
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        var accountName: TextView = view.findViewById(R.id.itemName)
         init {
             // navigate to DisplayAccountFragment when account item is selected
             view.setOnClickListener{
