@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.account_fragment
+package com.acmpo6ou.myaccounts.accounts_fragment
 
 import android.os.Build
 import android.view.View
