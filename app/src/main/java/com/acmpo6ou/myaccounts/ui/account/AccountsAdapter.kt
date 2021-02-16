@@ -49,7 +49,7 @@ class AccountsAdapter(val view: AccountsFragmentInter)
         val account = accountsList[position]
 
         // set account item name
-        holder.accountName.text = account.name
+        holder.accountName.text = account.account
     }
 
     override fun getItemCount(): Int = accountsList.size
