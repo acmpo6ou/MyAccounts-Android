@@ -19,9 +19,13 @@
 
 package com.acmpo6ou.myaccounts.core.superclass
 
+import android.content.Context
+
 interface ListPresenter
 
 interface ListFragmentInter{
+    var myContext: Context
+
     fun notifyChanged(i: Int)
     fun notifyRemoved(i: Int)
 }

@@ -19,7 +19,6 @@
 
 package com.acmpo6ou.myaccounts.database
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import com.acmpo6ou.myaccounts.core.DatabaseUtils
@@ -49,7 +48,6 @@ interface DatabaseFragmentInter : ListFragmentInter{
     val adapter: DatabasesAdapter
 
     val ACCOUNTS_DIR: String
-    var myContext: Context
     var app: MyApp
 
     fun exportDialog(i: Int)

@@ -47,7 +47,7 @@ abstract class ListFragment : SuperFragment(), ListFragmentInter {
     abstract val presenter: ListPresenter
     abstract val actionCreateItem: Int
 
-    lateinit var myContext: Context
+    override lateinit var myContext: Context
     lateinit var app: MyApp
 
     override fun onAttach(context: Context) {
