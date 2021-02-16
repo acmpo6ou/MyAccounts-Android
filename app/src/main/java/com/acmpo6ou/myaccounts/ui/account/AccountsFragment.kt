@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.ui.account
 
 import android.os.Bundle
+import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.account.AccountsFragmentInter
 import com.acmpo6ou.myaccounts.account.AccountsListPresenter
 import com.acmpo6ou.myaccounts.account.AccountsListPresenterInter
@@ -31,6 +32,7 @@ import com.acmpo6ou.myaccounts.core.superclass.ListFragment
 class AccountsFragment : ListFragment(), AccountsFragmentInter {
     override lateinit var adapter: AccountsAdapter
     override lateinit var presenter: AccountsListPresenterInter
+    override val accountsActivity get() = activity as AccountsActivity
 
     override val items get() = presenter.accountsList
     override val actionCreateItem = 0
