@@ -32,8 +32,7 @@ class AccountsFragment : ListFragment(), AccountsFragmentInter {
     override lateinit var adapter: AccountsAdapter
     override lateinit var presenter: AccountsListPresenterInter
 
-    private val accounts get() = presenter.accounts
-    override val items get() = accounts.toList()
+    override val items get() = presenter.accountsList
     override val actionCreateItem = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -28,7 +28,6 @@ import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account.AccountsFragmentInter
 import com.acmpo6ou.myaccounts.account.AccountsListPresenterInter
 import com.acmpo6ou.myaccounts.database.Account
-import com.acmpo6ou.myaccounts.database.DbMap
 
 
 /**
@@ -38,7 +37,7 @@ class AccountsAdapter(val view: AccountsFragmentInter)
     : RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
 
     val presenter: AccountsListPresenterInter get() = view.presenter
-    private val accounts: DbMap get() = presenter.accounts
+    private val accountsList: List<Account> get() = presenter.accountsList
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -47,13 +46,13 @@ class AccountsAdapter(val view: AccountsFragmentInter)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val account = presenter.getAccount(position)
+        val account = accountsList[position]
 
         // set account item name
         holder.accountName.text = account.name
     }
 
-    override fun getItemCount(): Int = accounts.size
+    override fun getItemCount(): Int = accountsList.size
 
     /**
      * Represents ViewHolder for item of accounts list.

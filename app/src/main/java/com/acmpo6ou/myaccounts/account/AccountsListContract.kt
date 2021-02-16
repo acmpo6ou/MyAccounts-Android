@@ -28,9 +28,9 @@ interface AccountsFragmentInter{
 }
 
 interface AccountsListPresenterInter : ListPresenter {
-    val accounts: DbMap
+    var accounts: DbMap
+    val accountsList: List<Account>
 
-    fun getAccount(i: Int): Account
     fun displayAccount(i: Int)
     fun editAccount(i: Int)
     fun deleteAccount(i: Int)

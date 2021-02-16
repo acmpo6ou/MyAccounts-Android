@@ -30,8 +30,7 @@ import com.acmpo6ou.myaccounts.account.AccountsListPresenterInter
 import com.acmpo6ou.myaccounts.clickMenuItem
 import com.acmpo6ou.myaccounts.getDatabaseMap
 import com.acmpo6ou.myaccounts.ui.account.AccountsFragment
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -46,7 +45,7 @@ import org.robolectric.annotation.LooperMode
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class AccountsAdapterInst {
     lateinit var scenario: FragmentScenario<AccountsFragment>
-    lateinit var presenter: AccountsListPresenterInter
+    lateinit var spyPresenter: AccountsListPresenterInter
 
     var recycler: RecyclerView? = null
     var itemLayout: View? = null
@@ -54,10 +53,11 @@ class AccountsAdapterInst {
     @Before
     fun setUp() {
         scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
-        presenter = mock{ on{accounts} doReturn getDatabaseMap() }
 
         scenario.onFragment {
-            it.presenter = presenter
+            spyPresenter = spy(it.presenter)
+            spyPresenter.accounts = getDatabaseMap()
+            it.presenter = spyPresenter
             recycler = it.view?.findViewById(R.id.itemsList) // find recycler
         }
         // measure and lay recycler out as is needed so we can later obtain its items
@@ -71,7 +71,7 @@ class AccountsAdapterInst {
     @Test
     fun `click on recycler item should call displayAccount`(){
         itemLayout?.performClick()
-        verify(presenter).displayAccount(0)
+        verify(spyPresenter).displayAccount(0)
     }
 
     @Test
@@ -83,12 +83,12 @@ class AccountsAdapterInst {
     @Test
     fun `clicking on 'Edit' should call editSelected`(){
         clickMenuItem(itemLayout, R.id.edit_account_item)
-        verify(presenter).editAccount(0)
+        verify(spyPresenter).editAccount(0)
     }
 
     @Test
     fun `clicking on 'Delete' should call editSelected`(){
         clickMenuItem(itemLayout, R.id.delete_account_item)
-        verify(presenter).deleteAccount(0)
+        verify(spyPresenter).deleteAccount(0)
     }
 }
