@@ -28,6 +28,9 @@ import com.acmpo6ou.myaccounts.database.DbMap
 interface AccountsFragmentInter : ListFragmentInter{
     val presenter: AccountsListPresenterInter
     val accountsActivity: AccountsActivity
+
+    fun navigateToDisplay(account: Account)
+    fun navigateToEdit(account: Account)
 }
 
 interface AccountsListPresenterInter : ListPresenter {

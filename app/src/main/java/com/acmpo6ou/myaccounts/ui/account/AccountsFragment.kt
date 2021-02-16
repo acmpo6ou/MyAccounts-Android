@@ -25,6 +25,7 @@ import com.acmpo6ou.myaccounts.account.AccountsFragmentInter
 import com.acmpo6ou.myaccounts.account.AccountsListPresenter
 import com.acmpo6ou.myaccounts.account.AccountsListPresenterInter
 import com.acmpo6ou.myaccounts.core.superclass.ListFragment
+import com.acmpo6ou.myaccounts.database.Account
 
 /**
  * Fragment representing a list of Accounts.
@@ -41,5 +42,13 @@ class AccountsFragment : ListFragment(), AccountsFragmentInter {
         super.onCreate(savedInstanceState)
         adapter = AccountsAdapter(this)
         presenter = AccountsListPresenter(this)
+    }
+
+    override fun navigateToDisplay(account: Account) {
+        TODO("Not yet implemented")
+    }
+
+    override fun navigateToEdit(account: Account) {
+        TODO("Not yet implemented")
     }
 }
