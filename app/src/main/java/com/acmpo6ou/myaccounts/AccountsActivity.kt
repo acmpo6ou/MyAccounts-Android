@@ -30,14 +30,13 @@ import com.acmpo6ou.myaccounts.account.AccountsPresenterInter
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
 import com.acmpo6ou.myaccounts.databinding.ActivityAccountsBinding
-import com.acmpo6ou.myaccounts.ui.account.AccountsFragment
 
 class AccountsActivity : SuperActivity(), AccountsActivityInter {
 
     override lateinit var b: ActivityAccountsBinding
     override lateinit var prefs: SharedPreferences
-    override val mainFragmentId = R.id.accountsFragment
     override lateinit var presenter: AccountsPresenterInter
+    override val mainFragmentId = R.id.accountsFragment
 
     var index = 0
     override var database
@@ -63,19 +62,6 @@ class AccountsActivity : SuperActivity(), AccountsActivityInter {
             index = it.getInt("databaseIndex")
         }
         supportActionBar?.title = database.name
-    }
-
-    /**
-     * Displays snackbar to tell user that there are no updates available.
-     */
-    override fun noUpdates(){
-        // get view binding of AccountFragment because we need to show snackbar in
-        // coordinator layout. AccountsActivity doesn't have one but AccountFragment does.
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
-        val accountsFragment =
-                navHostFragment?.childFragmentManager?.fragments?.get(0) as AccountsFragment
-        val coordinatorLayout = accountsFragment.b.coordinatorLayout
-        super.noUpdates(coordinatorLayout)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

@@ -36,5 +36,6 @@ open class AccountsPresenter(override val view: AccountsActivityInter)
      */
     override fun saveSelected() {
         if (!isDatabaseSaved(database, app)) saveDatabase(database.name, database, app)
+        view.mainFragment.showSuccess()
     }
 }

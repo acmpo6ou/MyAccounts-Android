@@ -31,7 +31,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -66,7 +65,12 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
 
     lateinit var appBarConfiguration: AppBarConfiguration
     abstract val presenter: SuperPresenterInter
+
     abstract val mainFragmentId: Int
+    override val mainFragment: ListFragment get(){
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
+        return navHostFragment?.childFragmentManager?.fragments?.get(0) as ListFragment
+    }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
@@ -103,10 +107,9 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
 
     /**
      * Displays snackbar to tell user that there are no updates available.
-     * @param[coordinatorLayout] coordinator layout where to display snackbar.
      */
-    open fun noUpdates(coordinatorLayout: CoordinatorLayout){
-        Snackbar.make(coordinatorLayout,
+    override fun noUpdates(){
+        Snackbar.make(mainFragment.b.coordinatorLayout,
                 R.string.no_updates,
                 Snackbar.LENGTH_LONG)
                 .setAction("HIDE"){}

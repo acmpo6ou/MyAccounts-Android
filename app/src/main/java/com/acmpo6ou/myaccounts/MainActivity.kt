@@ -40,9 +40,9 @@ class MainActivity : SuperActivity(), MainActivityInter {
     val IMPORT_RC = 202
 
     override lateinit var b: ActivityMainBinding
+    override lateinit var prefs: SharedPreferences
     override lateinit var presenter: MainPresenterInter
     override val mainFragmentId = R.id.databaseFragment
-    override lateinit var prefs: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_MyAccounts_NoActionBar)
@@ -89,19 +89,6 @@ class MainActivity : SuperActivity(), MainActivityInter {
         return false
     }
 
-    /**
-     * Displays snackbar to tell user that there are no updates available.
-     */
-    override fun noUpdates(){
-        // get view binding of DatabaseFragment because we need to show snackbar in
-        // coordinator layout. MainActivity doesn't have one but DatabaseFragment does.
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
-        val databaseFragment =
-                navHostFragment?.childFragmentManager?.fragments?.get(0) as DatabaseFragment
-        val coordinatorLayout = databaseFragment.b.coordinatorLayout
-        super.noUpdates(coordinatorLayout)
-    }
-
     public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?){
         super.onActivityResult(requestCode, resultCode, resultData)
         // do nothing if activity was canceled
@@ -133,11 +120,7 @@ class MainActivity : SuperActivity(), MainActivityInter {
      * @param[i] index of Database that were added to databases list.
      */
     override fun notifyChanged(i: Int){
-        // get DatabaseFragment as it contains the list of databases and is responsible
-        // for rerendering
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
-        val databaseFragment =
-                navHostFragment?.childFragmentManager?.fragments?.get(0) as DatabaseFragment
+        val databaseFragment = mainFragment as DatabaseFragment
         databaseFragment.notifyChanged(i)
     }
 }

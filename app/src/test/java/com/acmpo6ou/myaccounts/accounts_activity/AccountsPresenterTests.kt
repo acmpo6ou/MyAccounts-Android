@@ -24,6 +24,7 @@ import com.acmpo6ou.myaccounts.account.AccountsActivityInter
 import com.acmpo6ou.myaccounts.account.AccountsPresenter
 import com.acmpo6ou.myaccounts.account.AccountsPresenterInter
 import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.core.superclass.ListFragmentInter
 import com.acmpo6ou.myaccounts.database.Database
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
@@ -33,7 +34,9 @@ import java.io.File
 class AccountsPresenterTests {
     lateinit var presenter: AccountsPresenter
     lateinit var spyPresenter: AccountsPresenterInter
+
     lateinit var view: AccountsActivityInter
+    lateinit var mockFragment: ListFragmentInter
 
     val db = Database("main")
     lateinit var app: MyApp
@@ -42,6 +45,7 @@ class AccountsPresenterTests {
     fun setup(){
         app = MyApp()
 
+        mockFragment = mock()
         val context: Context = mock{
                 on{getExternalFilesDir(null)} doReturn File("")
             }
@@ -49,11 +53,18 @@ class AccountsPresenterTests {
             on{app} doReturn app
             on{database} doReturn db
             on{myContext} doReturn context
+            on{mainFragment} doReturn mockFragment
         }
 
         presenter = AccountsPresenter(view)
         spyPresenter = spy(presenter)
         doNothing().whenever(spyPresenter).saveDatabase(db.name, db, app)
+    }
+
+    @Test
+    fun `saveSelected should call showSuccess`(){
+        spyPresenter.saveSelected()
+        verify(mockFragment).showSuccess()
     }
 
     @Test

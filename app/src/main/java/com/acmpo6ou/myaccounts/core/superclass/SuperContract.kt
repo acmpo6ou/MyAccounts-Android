@@ -26,6 +26,7 @@ import com.google.android.material.navigation.NavigationView
 
 interface SuperActivityInter : NavigationView.OnNavigationItemSelectedListener,
                                SettingsUtils {
+    val mainFragment: ListFragmentInter
     val ACCOUNTS_DIR: String
     val myContext: Context
     var app: MyApp
