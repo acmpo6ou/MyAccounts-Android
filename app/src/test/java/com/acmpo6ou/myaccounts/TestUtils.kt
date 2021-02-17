@@ -24,7 +24,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.acmpo6ou.myaccounts.database.Account
-import com.acmpo6ou.myaccounts.database.DbMap
 import com.github.javafaker.Faker
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -62,17 +61,13 @@ private fun View.findSnackbarLayout(): Snackbar.SnackbarLayout? {
     return null
 }
 
-// Helper function to get ready-to-use Account.
-fun getAccount() =
-    Account(account="gmail",
-            name="Tom",
-            email="tom@gmail.com",
-            password="123",
-            date="01.01.1990",
-            comment="My gmail account.")
-
-// Helper function that creates simple database map used in tests.
-fun getDatabaseMap(): DbMap = mapOf("gmail" to getAccount())
+val account = Account(account="gmail",
+                      name="Tom",
+                      email="tom@gmail.com",
+                      password="123",
+                      date="01.01.1990",
+                      comment="My gmail account.")
+val sampleDatabase = mapOf("gmail" to account)
 
 /**
  * Helper function that generates random Int in specified range, but excluding number

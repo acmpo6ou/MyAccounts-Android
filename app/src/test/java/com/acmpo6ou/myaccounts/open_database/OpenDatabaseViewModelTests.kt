@@ -22,7 +22,7 @@ package com.acmpo6ou.myaccounts.open_database
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.database.Database
-import com.acmpo6ou.myaccounts.getDatabaseMap
+import com.acmpo6ou.myaccounts.sampleDatabase
 import com.acmpo6ou.myaccounts.str
 import com.acmpo6ou.myaccounts.ui.database.OpenDatabaseViewModel
 import com.github.javafaker.Faker
@@ -101,7 +101,7 @@ class OpenDatabaseViewModelTests {
 
     @Test
     fun `verifyPassword should save deserialized Database to the list`(){
-        val expectedDatabase = Database("main", password, salt, getDatabaseMap())
+        val expectedDatabase = Database("main", password, salt, sampleDatabase)
 
         runBlocking {
             spyModel.verifyPassword(password)

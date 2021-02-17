@@ -23,8 +23,8 @@ import com.acmpo6ou.myaccounts.account.AccountsActivityInter
 import com.acmpo6ou.myaccounts.account.AccountsFragmentInter
 import com.acmpo6ou.myaccounts.account.AccountsListPresenter
 import com.acmpo6ou.myaccounts.database.Database
-import com.acmpo6ou.myaccounts.getAccount
-import com.acmpo6ou.myaccounts.getDatabaseMap
+import com.acmpo6ou.myaccounts.account
+import com.acmpo6ou.myaccounts.sampleDatabase
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
@@ -36,7 +36,7 @@ class AccountsListPresenterTests {
     @Before
     fun setup(){
         val mockActivity: AccountsActivityInter =
-                mock{ on{database} doReturn Database("", data = getDatabaseMap()) }
+                mock{ on{database} doReturn Database("", data = sampleDatabase) }
         view = mock{ on{accountsActivity} doReturn mockActivity }
         doAnswer { throw ClassCastException() }.whenever(view).accountsActivity
 
@@ -46,6 +46,6 @@ class AccountsListPresenterTests {
     @Test
     fun `displayAccount should call view navigateToDisplay`(){
         presenter.displayAccount(0)
-        verify(view).navigateToDisplay(getAccount())
+        verify(view).navigateToDisplay(account)
     }
 }
