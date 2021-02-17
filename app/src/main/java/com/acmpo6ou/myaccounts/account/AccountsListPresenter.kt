@@ -20,33 +20,15 @@
 package com.acmpo6ou.myaccounts.account
 
 import com.acmpo6ou.myaccounts.database.Account
-import com.acmpo6ou.myaccounts.database.DbMap
 
 open class AccountsListPresenter(val view: AccountsFragmentInter) : AccountsListPresenterInter {
-    override var accounts = getDbMap()
+    override val accounts get() = view.accountsActivity?.database?.data ?: mapOf()
 
     // [accounts] is a map of [String] to [Account], but AccountsAdapter
     // will typically work with indexes rather then Strings, so here we have a dynamic
     // property to convert [accounts] to sorted by account names list
     override val accountsList: List<Account>
         get() = accounts.values.toList().sortedBy { it.name }
-
-    /**
-     * Helper method to get database map from AccountsActivity.
-     *
-     * This method exists because there is no AccountsActivity during tests, in this way
-     * we can silent the ClassCastException allowing tests to run normally.
-     */
-    private fun getDbMap(): DbMap {
-        var result: DbMap = mapOf()
-        try {
-            result = view.accountsActivity.database.data
-        }
-        catch (e: ClassCastException){
-            e.printStackTrace()
-        }
-        return result
-    }
 
     override fun displayAccount(i: Int) {
     }

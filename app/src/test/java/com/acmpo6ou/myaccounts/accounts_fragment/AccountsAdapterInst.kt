@@ -30,8 +30,10 @@ import com.acmpo6ou.myaccounts.account.AccountsListPresenterInter
 import com.acmpo6ou.myaccounts.clickMenuItem
 import com.acmpo6ou.myaccounts.getDatabaseMap
 import com.acmpo6ou.myaccounts.ui.account.AccountsFragment
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -56,9 +58,9 @@ class AccountsAdapterInst {
 
         scenario.onFragment {
             spyPresenter = spy(it.presenter)
-            spyPresenter.accounts = getDatabaseMap()
+            whenever(spyPresenter.accounts).doReturn(getDatabaseMap())
             it.presenter = spyPresenter
-            recycler = it.view?.findViewById(R.id.itemsList) // find recycler
+            recycler = it.view?.findViewById(R.id.itemsList)
         }
         // measure and lay recycler out as is needed so we can later obtain its items
         recycler?.measure(0, 0)

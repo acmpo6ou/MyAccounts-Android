@@ -19,7 +19,6 @@
 
 package com.acmpo6ou.myaccounts.account
 
-import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.core.superclass.ListFragmentInter
 import com.acmpo6ou.myaccounts.core.superclass.ListPresenter
 import com.acmpo6ou.myaccounts.database.Account
@@ -27,14 +26,14 @@ import com.acmpo6ou.myaccounts.database.DbMap
 
 interface AccountsFragmentInter : ListFragmentInter{
     val presenter: AccountsListPresenterInter
-    val accountsActivity: AccountsActivity
+    val accountsActivity: AccountsActivityInter?
 
     fun navigateToDisplay(account: Account)
     fun navigateToEdit(account: Account)
 }
 
 interface AccountsListPresenterInter : ListPresenter {
-    var accounts: DbMap
+    val accounts: DbMap
     val accountsList: List<Account>
 
     fun displayAccount(i: Int)
