@@ -19,19 +19,13 @@
 
 package com.acmpo6ou.myaccounts.main_activity
 
-import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.os.Looper.getMainLooper
-import android.view.View
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ActivityScenario.launch
-import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.findSnackbarTextView
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -46,36 +40,12 @@ import org.robolectric.annotation.LooperMode
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class MainActivityInst {
     lateinit var scenario: ActivityScenario<MainActivity>
-    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
-    private val noUpdatesMsg = context.resources.getString(R.string.no_updates)
 
     @Before
     fun setup(){
         scenario = launch(MainActivity::class.java)
         scenario.onActivity {
             it.myContext.setTheme(R.style.Theme_MyAccounts_NoActionBar)
-        }
-    }
-
-    @Test
-    fun `noUpdates should display snackbar`(){
-        scenario.onActivity {
-            it.noUpdates()
-
-            // this is because of some Robolectric main looper problems
-            shadowOf(getMainLooper()).idle()
-
-            // get the snackbar
-            val v: View = it.findViewById(android.R.id.content)
-            val snackbar = v.rootView.findSnackbarTextView()
-
-            // check that snackbar was displayed
-            assertTrue("No snackbar is displayed when call to noUpdates is made!",
-                    snackbar != null)
-
-            // check the snackbar's message
-            assertEquals("noUpdates snackbar has incorrect message!",
-                        noUpdatesMsg, snackbar?.text)
         }
     }
 

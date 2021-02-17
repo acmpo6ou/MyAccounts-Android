@@ -20,13 +20,18 @@
 package com.acmpo6ou.myaccounts.superclass
 
 import android.app.Dialog
+import android.content.Context
 import android.os.Build
+import android.os.Looper
+import android.view.View
 import android.widget.TextView
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.test.core.app.ActivityScenario
+import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.findSnackbarTextView
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
@@ -36,6 +41,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.Shadows
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 import org.robolectric.shadows.ShadowAlertDialog
@@ -49,6 +55,9 @@ class SuperActivityInst {
     // and MainActivity inherits from SuperActivity
     lateinit var scenario: ActivityScenario<MainActivity>
     private val faker = Faker()
+
+    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
+    private val noUpdatesMsg = context.resources.getString(R.string.no_updates)
 
     @Before
     fun setup(){
@@ -75,6 +84,24 @@ class SuperActivityInst {
                 expectedTitle, title.text)
         assertEquals("showError created dialog with incorrect message!",
                 expectedMsg, message.text)
+    }
+
+    @Test
+    fun `noUpdates should display snackbar`(){
+        scenario.onActivity {
+            it.noUpdates()
+
+            // this is because of some Robolectric main looper problems
+            Shadows.shadowOf(Looper.getMainLooper()).idle()
+
+            // get the snackbar
+            val v: View = it.findViewById(android.R.id.content)
+            val snackbar = v.rootView.findSnackbarTextView()
+
+            // check the snackbar's message
+            assertEquals("noUpdates snackbar has incorrect message!",
+                    noUpdatesMsg, snackbar?.text)
+        }
     }
 
     @Test
