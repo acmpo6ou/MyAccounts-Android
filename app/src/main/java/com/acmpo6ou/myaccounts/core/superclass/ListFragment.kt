@@ -33,6 +33,7 @@ import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.database.superclass.SuperFragment
 import com.acmpo6ou.myaccounts.databinding.FragmentListBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 
 /**
  * Super class for DatabaseFragment and AccountsFragment – fragments that contain
@@ -94,6 +95,17 @@ abstract class ListFragment : SuperFragment(), ListFragmentInter {
             b.itemsList.visibility = View.VISIBLE
             b.noItems.visibility = View.GONE
         }
+    }
+
+    /**
+     * Used to display a snackbar with success message.
+     */
+    override fun showSuccess() {
+        Snackbar.make(b.coordinatorLayout,
+                R.string.success_message,
+                Snackbar.LENGTH_LONG)
+                .setAction("HIDE"){}
+                .show()
     }
 
     /**

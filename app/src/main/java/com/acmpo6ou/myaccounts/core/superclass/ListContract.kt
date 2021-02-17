@@ -26,6 +26,7 @@ interface ListPresenter
 interface ListFragmentInter{
     var myContext: Context
 
+    fun showSuccess()
     fun notifyChanged(i: Int)
     fun notifyRemoved(i: Int)
 }

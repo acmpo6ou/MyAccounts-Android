@@ -51,15 +51,13 @@ interface DatabaseFragmentInter : ListFragmentInter{
     var app: MyApp
 
     fun exportDialog(i: Int)
+    fun showError(title: String, details: String)
 
     fun confirmDelete(i: Int)
     fun confirmClose(i: Int)
 
     fun navigateToEdit(i: Int)
     fun navigateToOpen(i: Int)
-
-    fun showSuccess()
-    fun showError(title: String, details: String)
 
     fun startDatabase(index: Int)
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)

@@ -32,7 +32,6 @@ import com.acmpo6ou.myaccounts.database.DatabasesPresenter
 import com.acmpo6ou.myaccounts.database.DatabasesPresenterInter
 import com.acmpo6ou.myaccounts.ui.database.DatabaseFragmentDirections.actionEditDatabase
 import com.acmpo6ou.myaccounts.ui.database.DatabaseFragmentDirections.actionOpenDatabase
-import com.google.android.material.snackbar.Snackbar
 
 /**
  * Fragment representing a list of Databases.
@@ -123,17 +122,6 @@ class DatabaseFragment: ListFragment(), DatabaseFragmentInter {
     override fun navigateToOpen(i: Int) {
         val action = actionOpenDatabase(i)
         view?.findNavController()?.navigate(action)
-    }
-
-    /**
-     * Used to display a snackbar with success message.
-     */
-    override fun showSuccess() {
-        Snackbar.make(b.coordinatorLayout,
-                      R.string.success_message,
-                      Snackbar.LENGTH_LONG)
-                     .setAction("HIDE"){}
-                     .show()
     }
 
     /**
