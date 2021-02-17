@@ -22,7 +22,6 @@ package com.acmpo6ou.myaccounts.database_fragment
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.os.Looper.getMainLooper
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -36,7 +35,6 @@ import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.database.DatabasesPresenter
-import com.acmpo6ou.myaccounts.findSnackbarTextView
 import com.acmpo6ou.myaccounts.ui.database.DatabaseFragment
 import com.acmpo6ou.myaccounts.ui.database.DatabaseFragmentDirections.actionEditDatabase
 import com.acmpo6ou.myaccounts.ui.database.DatabaseFragmentDirections.actionOpenDatabase
@@ -62,7 +60,6 @@ class DatabaseFragmentInstrumentation {
 
     // get string resources
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
-    private val successMessage = context.resources.getString(R.string.success_message)
     private val warningTitle = context.resources.getString(R.string.warning)
     private val confirmDeleteMsg = context.resources.getString(R.string.confirm_delete)
     private val confirmCloseMsg = context.resources.getString(R.string.confirm_close)
@@ -124,20 +121,6 @@ class DatabaseFragmentInstrumentation {
 
             val expectedAction = actionOpenDatabase(0)
             verify(navController).navigate(expectedAction)
-        }
-    }
-
-    @Test
-    fun `showSuccess should display snackbar`(){
-        scenario.onFragment {
-            it.showSuccess()
-
-            // this is because of some Robolectric main looper problems
-            shadowOf(getMainLooper()).idle()
-
-            val snackbar: TextView? = it.view?.findSnackbarTextView()
-            assertEquals("showSuccess snackbar has incorrect message!",
-                    successMessage, snackbar?.text)
         }
     }
 

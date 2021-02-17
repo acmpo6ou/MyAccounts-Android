@@ -19,7 +19,9 @@
 
 package com.acmpo6ou.myaccounts.superclass
 
+import android.content.Context
 import android.os.Build
+import android.os.Looper
 import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.testing.FragmentScenario
@@ -27,9 +29,11 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.superclass.ListFragment
 import com.acmpo6ou.myaccounts.core.superclass.ListPresenter
+import com.acmpo6ou.myaccounts.findSnackbarTextView
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
@@ -39,6 +43,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.Shadows
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
@@ -54,6 +59,8 @@ class TestListFragment : ListFragment() {
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class ListFragmentInst {
     lateinit var scenario: FragmentScenario<TestListFragment>
+    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
+    private val successMessage = context.resources.getString(R.string.success_message)
 
     @Before
     fun setup(){
@@ -102,6 +109,20 @@ class ListFragmentInst {
             addItem?.performClick()
 
             verify(navController).navigate(it.actionCreateItem)
+        }
+    }
+
+    @Test
+    fun `showSuccess should display snackbar`(){
+        scenario.onFragment {
+            it.showSuccess()
+
+            // this is because of some Robolectric main looper problems
+            Shadows.shadowOf(Looper.getMainLooper()).idle()
+
+            val snackbar: TextView? = it.view?.findSnackbarTextView()
+            assertEquals("showSuccess snackbar has incorrect message!",
+                    successMessage, snackbar?.text)
         }
     }
 }
