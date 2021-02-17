@@ -62,6 +62,7 @@ class AccountsActivity : SuperActivity(), AccountsActivityInter {
         intent.extras?.let {
             index = it.getInt("databaseIndex")
         }
+        supportActionBar?.title = database.name
     }
 
     /**
