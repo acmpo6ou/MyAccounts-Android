@@ -76,7 +76,7 @@ class OpenDatabaseFragmentInst {
 
             // and disappear when incorrectPassword is false
             it.viewModel._incorrectPassword.value = false
-            assertEquals(null, it.b.parentPassword.error)
+            assertNull(it.b.parentPassword.error)
         }
     }
 

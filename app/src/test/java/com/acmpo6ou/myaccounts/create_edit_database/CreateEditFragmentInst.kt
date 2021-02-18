@@ -97,7 +97,7 @@ class CreateEditFragmentInst {
             // name field is filled and contains name that isn't taken
             it.viewModel.emptyNameErr = false
             it.viewModel.existsNameErr = false
-            assertEquals(null, it.b.parentName.error)
+            assertNull(it.b.parentName.error)
         }
     }
 
@@ -133,7 +133,7 @@ class CreateEditFragmentInst {
             // everything is okay
             it.viewModel.emptyPassErr = false
             it.viewModel.diffPassErr = false
-            assertEquals(null, it.b.parentPassword.error)
+            assertNull(it.b.parentPassword.error)
         }
     }
 

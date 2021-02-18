@@ -23,26 +23,37 @@ import androidx.core.view.GravityCompat
 import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account.AccountsPresenterInter
+import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.selectNavigationItem
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
 
 class AccountsActivityTests {
     private lateinit var activity: AccountsActivity
+    lateinit var spyActivity: AccountsActivity
     private lateinit var presenter: AccountsPresenterInter
 
+    val database = Database("main")
+    lateinit var app: MyApp
+
     @Before
-    fun setup(){
-        activity = AccountsActivity()
+    fun setup() {
+        app = MyApp()
+        app.databases = mutableListOf(database)
         presenter = mock()
+
+        activity = AccountsActivity()
         activity.presenter = presenter
+        activity.app = app
+
+        spyActivity = spy(activity)
+        spyActivity.drawerLayout = mock()
     }
 
     @Test
-    fun `'Save' should call presenter saveSelected`(){
+    fun `'Save' should call presenter saveSelected`() {
         selectNavigationItem(R.id.save_database, activity)
         verify(presenter).saveSelected()
 
@@ -51,9 +62,23 @@ class AccountsActivityTests {
     }
 
     @Test
-    fun `navigation drawer should be closed when any of it's items is selected`(){
+    fun `navigation drawer should be closed when any of it's items is selected`() {
         activity.drawerLayout = mock()
         selectNavigationItem(R.id.save_database, activity)
         verify(activity.drawerLayout).closeDrawer(GravityCompat.START)
+    }
+
+    @Test
+    fun `back button should not call confirmBack if database is saved`() {
+        whenever(presenter.isDatabaseSaved(database, app)).thenReturn(true)
+        spyActivity.onBackPressed()
+        verify(spyActivity, never()).confirmBack()
+    }
+
+    @Test
+    fun `back button should call confirmBack if database isn't saved`() {
+        whenever(presenter.isDatabaseSaved(database, app)).thenReturn(false)
+        spyActivity.onBackPressed()
+        verify(spyActivity).confirmBack()
     }
 }

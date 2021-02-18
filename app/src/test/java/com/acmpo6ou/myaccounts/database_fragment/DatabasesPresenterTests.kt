@@ -21,8 +21,7 @@ package com.acmpo6ou.myaccounts.database_fragment
 
 import android.content.Context
 import com.nhaarman.mockitokotlin2.*
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyInt
@@ -89,7 +88,7 @@ class DatabasesPresenterTests: DatabasesPresenterTest() {
     @Test
     fun `closeDatabase should reset database password`(){
         presenter.closeDatabase(1)
-        assertEquals(null, presenter.databases[1].password)
+        assertNull(presenter.databases[1].password)
     }
 
     @Test
