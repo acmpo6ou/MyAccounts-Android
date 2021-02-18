@@ -50,6 +50,7 @@ class AccountsActivityTests {
 
         spyActivity = spy(activity)
         spyActivity.drawerLayout = mock()
+        doNothing().whenever(spyActivity).confirmBack()
     }
 
     @Test
