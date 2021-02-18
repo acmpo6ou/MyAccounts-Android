@@ -31,7 +31,7 @@ import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
 import com.acmpo6ou.myaccounts.databinding.ActivityAccountsBinding
 
-class AccountsActivity : SuperActivity(), AccountsActivityInter {
+open class AccountsActivity : SuperActivity(), AccountsActivityInter {
 
     override lateinit var b: ActivityAccountsBinding
     override lateinit var prefs: SharedPreferences
@@ -75,5 +75,17 @@ class AccountsActivity : SuperActivity(), AccountsActivityInter {
         // close drawer when any item is selected
         drawerLayout.closeDrawer(GravityCompat.START)
         return false
+    }
+
+    open fun confirmBack(){
+    }
+
+    override fun onBackPressed() {
+        if (presenter.isDatabaseSaved(database, app)){
+            super.onBackPressed()
+        }
+        else {
+            confirmBack()
+        }
     }
 }
