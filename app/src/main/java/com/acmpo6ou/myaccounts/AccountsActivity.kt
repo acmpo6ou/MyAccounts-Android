@@ -30,6 +30,7 @@ import com.acmpo6ou.myaccounts.account.AccountsPresenterInter
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
 import com.acmpo6ou.myaccounts.databinding.ActivityAccountsBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 open class AccountsActivity : SuperActivity(), AccountsActivityInter {
 
@@ -78,6 +79,11 @@ open class AccountsActivity : SuperActivity(), AccountsActivityInter {
     }
 
     open fun confirmBack(){
+        MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.warning)
+                .setMessage(R.string.confirm_going_back)
+                .setIcon(R.drawable.ic_warning)
+                .show()
     }
 
     override fun onBackPressed() {
