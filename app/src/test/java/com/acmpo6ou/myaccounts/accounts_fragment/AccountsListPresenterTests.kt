@@ -19,12 +19,12 @@
 
 package com.acmpo6ou.myaccounts.accounts_fragment
 
+import com.acmpo6ou.myaccounts.account
 import com.acmpo6ou.myaccounts.account.AccountsActivityInter
 import com.acmpo6ou.myaccounts.account.AccountsFragmentInter
 import com.acmpo6ou.myaccounts.account.AccountsListPresenter
 import com.acmpo6ou.myaccounts.database.Database
-import com.acmpo6ou.myaccounts.account
-import com.acmpo6ou.myaccounts.sampleDatabase
+import com.acmpo6ou.myaccounts.databaseMap
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
@@ -36,7 +36,7 @@ class AccountsListPresenterTests {
     @Before
     fun setup(){
         val mockActivity: AccountsActivityInter =
-                mock{ on{database} doReturn Database("", data = sampleDatabase) }
+                mock{ on{database} doReturn Database("", data = databaseMap) }
         view = mock{ on{accountsActivity} doReturn mockActivity }
         doAnswer { throw ClassCastException() }.whenever(view).accountsActivity
 

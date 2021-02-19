@@ -24,7 +24,7 @@ import com.acmpo6ou.myaccounts.core.DatabaseUtils
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.database.DbMap
-import com.acmpo6ou.myaccounts.sampleDatabase
+import com.acmpo6ou.myaccounts.databaseMap
 import com.acmpo6ou.myaccounts.str
 import com.macasaet.fernet.StringValidator
 import com.macasaet.fernet.Token
@@ -100,7 +100,7 @@ class DatabaseUtilsTests: ModelTest() {
         val db = Database("main", password, salt)
 
         val actualDatabase = openDatabase(db, app)
-        val expectedDatabase = Database("main", password, salt, sampleDatabase)
+        val expectedDatabase = Database("main", password, salt, databaseMap)
 
         assertEquals(expectedDatabase, actualDatabase)
     }
@@ -108,7 +108,7 @@ class DatabaseUtilsTests: ModelTest() {
     @Test
     fun `decryptDatabase should return decrypted and deserialized map given string`(){
         // encrypt database
-        val expectedMap = sampleDatabase
+        val expectedMap = databaseMap
         val encryptedJson = encryptStr(expectedMap)
 
         val map = decryptDatabase(encryptedJson, password, salt, app)
@@ -122,7 +122,7 @@ class DatabaseUtilsTests: ModelTest() {
         app = MyApp()
 
         // encrypt database
-        val expectedMap = sampleDatabase
+        val expectedMap = databaseMap
         val encryptedJson = encryptStr(expectedMap)
 
         decryptDatabase(encryptedJson, password, salt, app)
@@ -137,7 +137,7 @@ class DatabaseUtilsTests: ModelTest() {
         // create fresh application instance
         app = MyApp()
 
-        val database = Database(faker.str(), password, salt, sampleDatabase)
+        val database = Database(faker.str(), password, salt, databaseMap)
         encryptDatabase(database, app)
 
         // check that key was cached
@@ -147,7 +147,7 @@ class DatabaseUtilsTests: ModelTest() {
 
     @Test
     fun `encryptDatabase should return encrypted json string from Database`(){
-        val database = Database(faker.str(), faker.str(), salt, sampleDatabase)
+        val database = Database(faker.str(), faker.str(), salt, databaseMap)
 
         // get encrypted json string
         val jsonStr = encryptDatabase(database, app)
@@ -169,7 +169,7 @@ class DatabaseUtilsTests: ModelTest() {
     @Test
     fun `loads should return non empty map when passed non empty string`(){
         val map = loads(jsonDatabase)
-        val expectedMap = sampleDatabase
+        val expectedMap = databaseMap
         assertEquals(expectedMap, map)
     }
 
@@ -182,7 +182,7 @@ class DatabaseUtilsTests: ModelTest() {
     @Test
     fun `dumps should return serialized string when passed non empty map`(){
         // create database map with account that we will serialize
-        val databaseMap = sampleDatabase
+        val databaseMap = databaseMap
 
         // serialize database and check resulting json string
         val dumpStr = dumps(databaseMap)
@@ -193,7 +193,7 @@ class DatabaseUtilsTests: ModelTest() {
 
     @Test
     fun `createDatabase should create db file given Database instance`(){
-        val database = Database("main", "123", salt, sampleDatabase)
+        val database = Database("main", "123", salt, databaseMap)
         createDatabase(database, app)
 
         // this is a .db file that createDatabase should create for us
@@ -238,7 +238,7 @@ class DatabaseUtilsTests: ModelTest() {
     @Test
     fun `isDatabaseSaved should return false`(){
         // here database on disk is different then in-memory database
-        val diskDatabase = Database("test", "123", salt, sampleDatabase)
+        val diskDatabase = Database("test", "123", salt, databaseMap)
         doReturn(diskDatabase).`when`(spyUtils).openDatabase(database, app)
 
         assertFalse(spyUtils.isDatabaseSaved(database, app))

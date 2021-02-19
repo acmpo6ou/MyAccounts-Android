@@ -28,7 +28,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account.AccountsListPresenterInter
 import com.acmpo6ou.myaccounts.clickMenuItem
-import com.acmpo6ou.myaccounts.sampleDatabase
+import com.acmpo6ou.myaccounts.databaseMap
 import com.acmpo6ou.myaccounts.ui.account.AccountsFragment
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.spy
@@ -58,7 +58,7 @@ class AccountsAdapterInst {
 
         scenario.onFragment {
             spyPresenter = spy(it.presenter)
-            whenever(spyPresenter.accounts).doReturn(sampleDatabase)
+            whenever(spyPresenter.accounts).doReturn(databaseMap)
             it.presenter = spyPresenter
             recycler = it.view?.findViewById(R.id.itemsList)
         }
