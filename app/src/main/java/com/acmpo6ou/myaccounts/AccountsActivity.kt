@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts
 
+import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
@@ -83,6 +84,14 @@ open class AccountsActivity : SuperActivity(), AccountsActivityInter {
                 .setTitle(R.string.warning)
                 .setMessage(R.string.confirm_going_back)
                 .setIcon(R.drawable.ic_warning)
+                .setPositiveButton("Ok") { _: DialogInterface, _: Int ->
+                    super.onBackPressed()
+                }
+                .setNegativeButton(R.string.save) { _: DialogInterface, _: Int ->
+                    presenter.saveSelected()
+                    super.onBackPressed()
+                }
+                .setNeutralButton(R.string.cancel) { _: DialogInterface, _: Int -> }
                 .show()
     }
 
