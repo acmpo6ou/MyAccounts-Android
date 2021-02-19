@@ -50,7 +50,7 @@ class DatabaseUtilsTests: ModelTest() {
     var app = MyApp()
     private lateinit var databaseUtils: DatabaseUtils
     lateinit var spyUtils: DatabaseUtils
-    val database = Database("test", "123", salt, mapOf())
+    val database = Database("test", "123", salt, mutableMapOf())
 
     @Before
     fun setup(){
@@ -175,7 +175,7 @@ class DatabaseUtilsTests: ModelTest() {
 
     @Test
     fun `dumps should return empty string when passed empty map`(){
-        val dumpStr = dumps(mapOf())
+        val dumpStr = dumps(mutableMapOf())
         assertTrue(dumpStr.isEmpty())
     }
 

@@ -51,7 +51,7 @@ open class DatabasesPresenterTest : DatabaseUtils{
         presenter.model = model
         presenter.databases = mutableListOf(
                 Database("main"),
-                Database("test", "123", salt, mapOf()))
+                Database("test", "123", salt, mutableMapOf()))
     }
 
     fun callExportDatabase(){

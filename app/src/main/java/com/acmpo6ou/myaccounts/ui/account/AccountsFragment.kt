@@ -45,10 +45,8 @@ class AccountsFragment : ListFragment(), AccountsFragmentInter {
     }
 
     override fun navigateToDisplay(account: Account) {
-        TODO("Not yet implemented")
     }
 
-    override fun navigateToEdit(account: Account) {
-        TODO("Not yet implemented")
+    override fun navigateToEdit(name: String) {
     }
 }

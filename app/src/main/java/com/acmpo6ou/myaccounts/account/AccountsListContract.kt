@@ -29,7 +29,7 @@ interface AccountsFragmentInter : ListFragmentInter{
     val accountsActivity: AccountsActivityInter?
 
     fun navigateToDisplay(account: Account)
-    fun navigateToEdit(account: Account)
+    fun navigateToEdit(name: String)
 }
 
 interface AccountsListPresenterInter : ListPresenter {

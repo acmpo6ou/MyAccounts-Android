@@ -50,7 +50,7 @@ data class Account(
         val comment: String,
 )
 
-typealias DbMap = Map<String, Account>
+typealias DbMap = MutableMap<String, Account>
 typealias DbList = MutableList<Database>
 
 /**
@@ -66,7 +66,7 @@ typealias DbList = MutableList<Database>
 data class Database(val name: String,
                     var password: String? = null,
                     var salt: ByteArray? = null,
-                    var data: DbMap = emptyMap()){
+                    var data: DbMap = mutableMapOf()){
     val isOpen get() = password != null
 }
 

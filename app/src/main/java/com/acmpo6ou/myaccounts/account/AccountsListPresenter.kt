@@ -20,9 +20,10 @@
 package com.acmpo6ou.myaccounts.account
 
 import com.acmpo6ou.myaccounts.database.Account
+import com.acmpo6ou.myaccounts.database.DbMap
 
 open class AccountsListPresenter(val view: AccountsFragmentInter) : AccountsListPresenterInter {
-    override val accounts get() = view.accountsActivity?.database?.data ?: mapOf()
+    override val accounts: DbMap get() = view.accountsActivity?.database?.data ?: mutableMapOf()
 
     // [accounts] is a map of [String] to [Account], but AccountsAdapter
     // will typically work with indexes rather then Strings, so here we have a dynamic
@@ -30,12 +31,12 @@ open class AccountsListPresenter(val view: AccountsFragmentInter) : AccountsList
     override val accountsList: List<Account>
         get() = accounts.values.toList().sortedBy { it.name }
 
-    override fun displayAccount(i: Int) {
-    }
+    override fun displayAccount(i: Int) = view.navigateToDisplay(accountsList[i])
 
-    override fun editAccount(i: Int) {
-    }
+    override fun editAccount(i: Int) = view.navigateToEdit(accountsList[i].account)
 
     override fun deleteAccount(i: Int) {
+        accounts.remove(accountsList[i].account)
+        view.notifyRemoved(i)
     }
 }

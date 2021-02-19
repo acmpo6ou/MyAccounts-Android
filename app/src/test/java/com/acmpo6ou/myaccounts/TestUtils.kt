@@ -67,7 +67,7 @@ val account = Account(account="gmail",
                       password="123",
                       date="01.01.1990",
                       comment="My gmail account.")
-val databaseMap = mapOf("gmail" to account)
+val databaseMap = mutableMapOf("gmail" to account)
 
 /**
  * Helper function that generates random Int in specified range, but excluding number

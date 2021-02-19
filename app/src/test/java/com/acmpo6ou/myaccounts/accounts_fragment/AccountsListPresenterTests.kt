@@ -25,7 +25,10 @@ import com.acmpo6ou.myaccounts.account.AccountsFragmentInter
 import com.acmpo6ou.myaccounts.account.AccountsListPresenter
 import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.databaseMap
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Test
 
@@ -35,11 +38,12 @@ class AccountsListPresenterTests {
 
     @Before
     fun setup(){
-        val mockActivity: AccountsActivityInter =
-                mock{ on{database} doReturn Database("", data = databaseMap) }
+        val mockActivity: AccountsActivityInter = mock{
+            on{database} doReturn Database("",
+                    data = databaseMap.toMap().toMutableMap()) // we need to do this to clone
+                                                               // the mutable map
+        }
         view = mock{ on{accountsActivity} doReturn mockActivity }
-        doAnswer { throw ClassCastException() }.whenever(view).accountsActivity
-
         presenter = AccountsListPresenter(view)
     }
 
@@ -47,5 +51,23 @@ class AccountsListPresenterTests {
     fun `displayAccount should call view navigateToDisplay`(){
         presenter.displayAccount(0)
         verify(view).navigateToDisplay(account)
+    }
+
+    @Test
+    fun `editAccount should call view navigateToDisplay`(){
+        presenter.editAccount(0)
+        verify(view).navigateToEdit(account.account)
+    }
+
+    @Test
+    fun `deleteAccount should call view notifyRemoved`(){
+        presenter.deleteAccount(0)
+        verify(view).notifyRemoved(0)
+    }
+
+    @Test
+    fun `deleteAccount should remove account from 'accounts' map`(){
+        presenter.deleteAccount(0)
+        assertFalse(account in presenter.accountsList)
     }
 }

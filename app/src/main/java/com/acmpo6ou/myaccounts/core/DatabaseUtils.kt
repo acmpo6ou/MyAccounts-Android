@@ -51,7 +51,7 @@ interface DatabaseUtils {
      * deserialized database map.
      */
     fun loads(jsonStr: String): DbMap {
-        var map = mapOf<String, Account>()
+        var map = mutableMapOf<String, Account>()
         if (jsonStr.isNotEmpty()) {
             map = Json.decodeFromString(jsonStr)
         }
