@@ -35,6 +35,8 @@ open class AccountsListPresenter(val view: AccountsFragmentInter) : AccountsList
 
     override fun editAccount(i: Int) = view.navigateToEdit(accountsList[i].account)
 
+    override fun deleteSelected(i: Int) = view.confirmDelete(i)
+
     override fun deleteAccount(i: Int) {
         accounts.remove(accountsList[i].account)
         view.notifyRemoved(i)

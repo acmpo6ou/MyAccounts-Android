@@ -60,6 +60,12 @@ class AccountsListPresenterTests {
     }
 
     @Test
+    fun `deleteSelected should call view confirmDelete`(){
+        presenter.deleteSelected(0)
+        verify(view).confirmDelete(0)
+    }
+
+    @Test
     fun `deleteAccount should call view notifyRemoved`(){
         presenter.deleteAccount(0)
         verify(view).notifyRemoved(0)

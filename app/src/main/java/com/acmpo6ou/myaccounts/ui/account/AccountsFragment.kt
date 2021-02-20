@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.ui.account
 
 import android.os.Bundle
+import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account.AccountsActivityInter
 import com.acmpo6ou.myaccounts.account.AccountsFragmentInter
 import com.acmpo6ou.myaccounts.account.AccountsListPresenter
@@ -33,8 +34,8 @@ import com.acmpo6ou.myaccounts.database.Account
 class AccountsFragment : ListFragment(), AccountsFragmentInter {
     override lateinit var adapter: AccountsAdapter
     override lateinit var presenter: AccountsListPresenterInter
-    override val accountsActivity get() = activity as? AccountsActivityInter
 
+    override val accountsActivity get() = activity as? AccountsActivityInter
     override val items get() = presenter.accountsList
     override val actionCreateItem = 0
 
@@ -48,5 +49,11 @@ class AccountsFragment : ListFragment(), AccountsFragmentInter {
     }
 
     override fun navigateToEdit(name: String) {
+    }
+
+    override fun confirmDelete(i: Int) {
+        val name = presenter.accountsList[i].account
+        val message = resources.getString(R.string.confirm_account_delete, name)
+        confirmDialog(message){ presenter.deleteAccount(i) }
     }
 }

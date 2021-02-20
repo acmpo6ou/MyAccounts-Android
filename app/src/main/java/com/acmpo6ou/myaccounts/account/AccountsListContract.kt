@@ -30,6 +30,7 @@ interface AccountsFragmentInter : ListFragmentInter{
 
     fun navigateToDisplay(account: Account)
     fun navigateToEdit(name: String)
+    fun confirmDelete(i: Int)
 }
 
 interface AccountsListPresenterInter : ListPresenter {
@@ -38,5 +39,6 @@ interface AccountsListPresenterInter : ListPresenter {
 
     fun displayAccount(i: Int)
     fun editAccount(i: Int)
+    fun deleteSelected(i: Int)
     fun deleteAccount(i: Int)
 }
