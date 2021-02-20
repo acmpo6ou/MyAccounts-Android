@@ -34,10 +34,11 @@ open class AccountsListPresenter(val view: AccountsFragmentInter) : AccountsList
     /**
      * Called when user selects item in accounts list.
      *
-     * Using navigateToDisplay navigates to DisplayAccountFragment passing through account.
+     * Using navigateToDisplay navigates to DisplayAccountFragment passing through
+     * account name.
      * @param[i] index of account we want to display.
      */
-    override fun displayAccount(i: Int) = view.navigateToDisplay(accountsList[i])
+    override fun displayAccount(i: Int) = view.navigateToDisplay(accountsList[i].account)
 
     /**
      * Called when user selects `Edit` in account item popup menu.

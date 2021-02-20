@@ -50,7 +50,7 @@ class AccountsListPresenterTests {
     @Test
     fun `displayAccount should call view navigateToDisplay`(){
         presenter.displayAccount(0)
-        verify(view).navigateToDisplay(account)
+        verify(view).navigateToDisplay(account.account)
     }
 
     @Test

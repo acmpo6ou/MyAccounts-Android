@@ -26,7 +26,6 @@ import com.acmpo6ou.myaccounts.account.AccountsFragmentInter
 import com.acmpo6ou.myaccounts.account.AccountsListPresenter
 import com.acmpo6ou.myaccounts.account.AccountsListPresenterInter
 import com.acmpo6ou.myaccounts.core.superclass.ListFragment
-import com.acmpo6ou.myaccounts.database.Account
 
 /**
  * Fragment representing a list of Accounts.
@@ -45,7 +44,7 @@ class AccountsFragment : ListFragment(), AccountsFragmentInter {
         presenter = AccountsListPresenter(this)
     }
 
-    override fun navigateToDisplay(account: Account) {
+    override fun navigateToDisplay(name: String) {
     }
 
     override fun navigateToEdit(name: String) {
