@@ -146,7 +146,7 @@ interface DatabaseUtils {
     fun isDatabaseSaved(database: Database, app: MyApp): Boolean{
         val diskDatabase: Database
         try {
-            diskDatabase = openDatabase(database, app)
+            diskDatabase = openDatabase(database.copy(), app)
         }
         catch (e: FileNotFoundException){
             // if database on disk doesn't exist then it definitely
