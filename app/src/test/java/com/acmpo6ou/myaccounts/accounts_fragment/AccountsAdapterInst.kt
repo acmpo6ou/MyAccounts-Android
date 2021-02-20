@@ -83,14 +83,14 @@ class AccountsAdapterInst {
     }
 
     @Test
-    fun `clicking on 'Edit' should call editSelected`(){
+    fun `clicking on 'Edit' should call editAccount`(){
         clickMenuItem(itemLayout, R.id.edit_account_item)
         verify(spyPresenter).editAccount(0)
     }
 
     @Test
-    fun `clicking on 'Delete' should call editSelected`(){
+    fun `clicking on 'Delete' should call deleteSelected`(){
         clickMenuItem(itemLayout, R.id.delete_account_item)
-        verify(spyPresenter).deleteAccount(0)
+        verify(spyPresenter).deleteSelected(0)
     }
 }

@@ -70,7 +70,7 @@ class AccountsAdapter(val view: AccountsFragmentInter)
 
             popup.setOnMenuItemClickListener {
                 when(it.itemId){
-                    R.id.delete_account_item -> presenter.deleteAccount(position)
+                    R.id.delete_account_item -> presenter.deleteSelected(position)
                     R.id.edit_account_item-> presenter.editAccount(position)
                     else -> return@setOnMenuItemClickListener false
                 }
