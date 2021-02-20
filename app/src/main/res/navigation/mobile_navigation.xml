@@ -49,6 +49,7 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right" />
+
         <action
             android:id="@+id/actionChangelog"
             app:destination="@id/changelogFragment"
@@ -71,6 +72,7 @@
             app:popEnterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
+
     <fragment
         android:id="@+id/createDatabaseFragment"
         android:name="com.acmpo6ou.myaccounts.ui.database.CreateDatabaseFragment"
@@ -93,6 +95,7 @@
             android:name="databaseIndex"
             app:argType="integer" />
     </fragment>
+
     <fragment
         android:id="@+id/changelogFragment"
         android:name="com.acmpo6ou.myaccounts.ui.ChangelogFragment"

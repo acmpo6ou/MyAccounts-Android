@@ -28,6 +28,28 @@
         android:name="com.acmpo6ou.myaccounts.ui.account.AccountsFragment"
         tools:layout="@layout/fragment_list" >
         <action
+            android:id="@+id/actionCreateAccount"
+            app:destination="@id/createAccountFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/actionEditAccount"
+            app:destination="@id/editAccountFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/actionDisplayAccount"
+            app:destination="@id/displayAccountFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+
+        <action
             android:id="@+id/actionChangelog"
             app:destination="@id/changelogFragment"
             app:enterAnim="@anim/slide_in_right"
@@ -49,6 +71,30 @@
             app:popEnterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
+
+    <fragment
+        android:id="@+id/createAccountFragment"
+        android:name="com.acmpo6ou.myaccounts.ui.account.CreateAccountFragment"
+        android:label="Create account"
+        tools:layout="@layout/create_edit_account_fragment" />
+    <fragment
+        android:id="@+id/editAccountFragment"
+        android:name="com.acmpo6ou.myaccounts.ui.account.EditAccountFragment"
+        android:label="Edit account"
+        tools:layout="@layout/create_edit_account_fragment" >
+        <argument
+            android:name="accountName"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/displayAccountFragment"
+        android:name="com.acmpo6ou.myaccounts.ui.account.DisplayAccountFragment"
+        tools:layout="@layout/fragment_display_account" >
+        <argument
+            android:name="accountName"
+            app:argType="string" />
+    </fragment>
+
     <fragment
         android:id="@+id/changelogFragment"
         android:name="com.acmpo6ou.myaccounts.ui.ChangelogFragment"
