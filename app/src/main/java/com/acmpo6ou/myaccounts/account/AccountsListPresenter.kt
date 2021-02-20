@@ -31,12 +31,34 @@ open class AccountsListPresenter(val view: AccountsFragmentInter) : AccountsList
     override val accountsList: List<Account>
         get() = accounts.values.toList().sortedBy { it.name }
 
+    /**
+     * Called when user selects item in accounts list.
+     *
+     * Using navigateToDisplay navigates to DisplayAccountFragment passing through account.
+     * @param[i] index of account we want to display.
+     */
     override fun displayAccount(i: Int) = view.navigateToDisplay(accountsList[i])
 
+    /**
+     * Called when user selects `Edit` in account item popup menu.
+     *
+     * Using navigateToEdit navigates to EditAccountFragment passing through account name.
+     * @param[i] index of account we want to edit.
+     */
     override fun editAccount(i: Int) = view.navigateToEdit(accountsList[i].account)
 
+    /**
+     * Called when user selects `Delete` in account item popup menu.
+     *
+     * Calls confirmDelete to display a dialog about confirmation of account deletion.
+     * @param[i] index of account we want to delete.
+     */
     override fun deleteSelected(i: Int) = view.confirmDelete(i)
 
+    /**
+     * Removes account from database map by [i] index and notifies about deletion.
+     * @param[i] account index.
+     */
     override fun deleteAccount(i: Int) {
         accounts.remove(accountsList[i].account)
         view.notifyRemoved(i)

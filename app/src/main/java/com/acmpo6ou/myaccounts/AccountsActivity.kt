@@ -79,6 +79,10 @@ open class AccountsActivity : SuperActivity(), AccountsActivityInter {
         return false
     }
 
+    /**
+     * Displays confirmation dialog asking user to confirm does he really wan't to go back
+     * from AccountsActivity with unsaved changes.
+     */
     open fun confirmBack(){
         MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.warning)
@@ -96,6 +100,8 @@ open class AccountsActivity : SuperActivity(), AccountsActivityInter {
     }
 
     override fun onBackPressed() {
+        // if database isn't saved display confirmation dialog when going back
+        // from AccountsActivity
         if (presenter.isDatabaseSaved(database, app)){
             super.onBackPressed()
         }

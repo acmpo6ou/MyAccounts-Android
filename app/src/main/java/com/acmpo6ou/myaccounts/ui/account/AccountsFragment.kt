@@ -51,6 +51,12 @@ class AccountsFragment : ListFragment(), AccountsFragmentInter {
     override fun navigateToEdit(name: String) {
     }
 
+    /**
+     * Displays a dialog for user to confirm deletion of account.
+     *
+     * If user is choosing No – we will do nothing, if Yes – delete account.
+     * @param[i] - account index.
+     */
     override fun confirmDelete(i: Int) {
         val name = presenter.accountsList[i].account
         val message = resources.getString(R.string.confirm_account_delete, name)
