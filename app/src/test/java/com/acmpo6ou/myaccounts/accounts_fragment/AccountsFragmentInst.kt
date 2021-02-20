@@ -25,13 +25,18 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.navigation.NavController
+import androidx.navigation.Navigation.setViewNavController
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account
 import com.acmpo6ou.myaccounts.databaseMap
 import com.acmpo6ou.myaccounts.ui.account.AccountsFragment
+import com.acmpo6ou.myaccounts.ui.account.AccountsFragmentDirections.actionDisplayAccount
+import com.acmpo6ou.myaccounts.ui.account.AccountsFragmentDirections.actionEditAccount
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -46,8 +51,9 @@ import org.robolectric.shadows.ShadowAlertDialog
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class AccountsFragmentInst {
     lateinit var scenario: FragmentScenario<AccountsFragment>
-    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
+    private lateinit var navController: NavController
 
+    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     private val warningTitle = context.resources.getString(R.string.warning)
     private val confirmDeleteMsg = context.resources.getString(R.string.confirm_account_delete)
 
@@ -57,6 +63,11 @@ class AccountsFragmentInst {
         scenario.onFragment {
             it.presenter = mock{ on{accountsList} doReturn databaseMap.values.toList()}
         }
+    }
+
+    private fun mockNavController(fragment: AccountsFragment){
+        navController = mock()
+        setViewNavController(fragment.requireView(), navController)
     }
 
     @Test
@@ -73,5 +84,27 @@ class AccountsFragmentInst {
                 warningTitle, title?.text)
         assertEquals("confirmDelete created dialog with incorrect message!",
                 String.format(confirmDeleteMsg, account.account), message?.text)
+    }
+
+    @Test
+    fun `navigateToEdit should pass appropriate account name`(){
+        scenario.onFragment {
+            mockNavController(it)
+            it.navigateToEdit(account.account)
+
+            val expectedAction = actionEditAccount(account.account)
+            verify(navController).navigate(expectedAction)
+        }
+    }
+
+    @Test
+    fun `navigateToDisplay should pass appropriate account name`(){
+        scenario.onFragment {
+            mockNavController(it)
+            it.navigateToDisplay(account.account)
+
+            val expectedAction = actionDisplayAccount(account.account)
+            verify(navController).navigate(expectedAction)
+        }
     }
 }
