@@ -28,17 +28,6 @@
     tools:context=".ui.account.DisplayAccountFragment">
 
     <TextView
-        android:id="@+id/accountName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/account_"
-        android:textAlignment="textStart"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
         android:id="@+id/accountUsername"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -47,7 +36,7 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/accountName" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/accountEmail"

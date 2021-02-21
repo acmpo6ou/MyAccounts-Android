@@ -19,59 +19,47 @@
 
 package com.acmpo6ou.myaccounts.ui.account
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.database.Account
+import com.acmpo6ou.myaccounts.databinding.FragmentDisplayAccountBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [DisplayAccountFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class DisplayAccountFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var binding: FragmentDisplayAccountBinding? = null
+    val b: FragmentDisplayAccountBinding get() = binding!!
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View {
+        binding = FragmentDisplayAccountBinding.inflate(layoutInflater, container, false)
+        return b.root
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+        arguments?.getString("accountName")?.let{
+            val accountsActivity = activity as AccountsActivity
+            setAccount(accountsActivity.database.data[it]!!)
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_display_account, container, false)
-    }
+    @SuppressLint("SetTextI18n")
+    fun setAccount(account: Account){
+        val usernameStr = requireContext().resources.getString(R.string.username_)
+        val emailStr = requireContext().resources.getString(R.string.e_mail_)
+        val passwordStr = requireContext().resources.getString(R.string.password_)
+        val dateOfBirthStr = requireContext().resources.getString(R.string.date_of_birth_)
+        val commentStr = requireContext().resources.getString(R.string.comment_)
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment DisplayAccountFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-                DisplayAccountFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
-                }
+        b.accountUsername.text = "$usernameStr ${account.name}"
+        b.accountEmail.text = "$emailStr ${account.email}"
+        b.accountPassword.text = "$passwordStr ${account.password}"
+        b.birthDate.text = "$dateOfBirthStr ${account.date}"
+        b.accountComment.text = "$commentStr\n${account.comment}"
     }
 }
