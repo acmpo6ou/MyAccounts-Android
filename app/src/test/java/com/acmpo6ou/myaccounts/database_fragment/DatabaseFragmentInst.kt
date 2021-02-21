@@ -54,7 +54,7 @@ import org.robolectric.shadows.ShadowAlertDialog
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
-class DatabaseFragmentInstrumentation {
+class DatabaseFragmentInst {
     lateinit var scenario: FragmentScenario<DatabaseFragment>
     private lateinit var navController: NavController
 

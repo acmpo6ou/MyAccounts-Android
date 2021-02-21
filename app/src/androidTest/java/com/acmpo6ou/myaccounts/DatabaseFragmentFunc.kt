@@ -37,7 +37,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class DatabaseFragmentInst {
+class DatabaseFragmentFunc {
     lateinit var scenario: FragmentScenario<DatabaseFragment>
     lateinit var presenter: DatabasesPresenterInter
 
