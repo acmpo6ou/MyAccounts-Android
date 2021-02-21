@@ -20,12 +20,15 @@
 package com.acmpo6ou.myaccounts.ui.account
 
 import android.os.Bundle
+import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account.AccountsActivityInter
 import com.acmpo6ou.myaccounts.account.AccountsFragmentInter
 import com.acmpo6ou.myaccounts.account.AccountsListPresenter
 import com.acmpo6ou.myaccounts.account.AccountsListPresenterInter
 import com.acmpo6ou.myaccounts.core.superclass.ListFragment
+import com.acmpo6ou.myaccounts.ui.account.AccountsFragmentDirections.actionDisplayAccount
+import com.acmpo6ou.myaccounts.ui.account.AccountsFragmentDirections.actionEditAccount
 
 /**
  * Fragment representing a list of Accounts.
@@ -44,10 +47,22 @@ class AccountsFragment : ListFragment(), AccountsFragmentInter {
         presenter = AccountsListPresenter(this)
     }
 
+    /**
+     * Navigates to DisplayAccountFragment passing account name.
+     * @param[name] name of account we want to display.
+     */
     override fun navigateToDisplay(name: String) {
+        val action = actionDisplayAccount(name)
+        view?.findNavController()?.navigate(action)
     }
 
+    /**
+     * Navigates to EditAccountFragment passing account name.
+     * @param[name] name of account we want to edit.
+     */
     override fun navigateToEdit(name: String) {
+        val action = actionEditAccount(name)
+        view?.findNavController()?.navigate(action)
     }
 
     /**
