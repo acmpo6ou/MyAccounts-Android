@@ -24,16 +24,14 @@ import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account.AccountsListPresenterInter
 import com.acmpo6ou.myaccounts.clickMenuItem
 import com.acmpo6ou.myaccounts.databaseMap
 import com.acmpo6ou.myaccounts.ui.account.AccountsFragment
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -60,7 +58,9 @@ class AccountsAdapterInst {
             spyPresenter = spy(it.presenter)
             whenever(spyPresenter.accounts).doReturn(databaseMap)
             it.presenter = spyPresenter
+
             recycler = it.view?.findViewById(R.id.itemsList)
+            Navigation.setViewNavController(it.requireView(), mock())
         }
         // measure and lay recycler out as is needed so we can later obtain its items
         recycler?.measure(0, 0)
