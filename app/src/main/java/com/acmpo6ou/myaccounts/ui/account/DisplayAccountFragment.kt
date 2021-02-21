@@ -40,8 +40,7 @@ class DisplayAccountFragment : Fragment() {
         return b.root
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         arguments?.getString("accountName")?.let{
             val accountsActivity = activity as AccountsActivity
             setAccount(accountsActivity.database.data[it]!!)
