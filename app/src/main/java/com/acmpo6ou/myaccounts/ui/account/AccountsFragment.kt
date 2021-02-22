@@ -39,7 +39,7 @@ class AccountsFragment : ListFragment(), AccountsFragmentInter {
 
     override val accountsActivity get() = activity as? AccountsActivityInter
     override val items get() = presenter.accountsList
-    override val actionCreateItem = 0
+    override val actionCreateItem = R.id.actionCreateAccount
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
