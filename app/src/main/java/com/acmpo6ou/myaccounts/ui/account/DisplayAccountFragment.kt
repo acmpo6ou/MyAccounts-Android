@@ -24,6 +24,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.R
@@ -49,16 +50,18 @@ class DisplayAccountFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     fun setAccount(account: Account){
+        // set account name as app bar title
+        (activity as? AppCompatActivity)?.supportActionBar?.title = account.account
+
         val usernameStr = requireContext().resources.getString(R.string.username_)
         val emailStr = requireContext().resources.getString(R.string.e_mail_)
         val passwordStr = requireContext().resources.getString(R.string.password_)
-        val dateOfBirthStr = requireContext().resources.getString(R.string.date_of_birth_)
         val commentStr = requireContext().resources.getString(R.string.comment_)
 
         b.accountUsername.text = "$usernameStr ${account.name}"
         b.accountEmail.text = "$emailStr ${account.email}"
         b.accountPassword.text = "$passwordStr ${account.password}"
-        b.birthDate.text = "$dateOfBirthStr ${account.date}"
+        b.birthDate.text = account.date
         b.accountComment.text = "$commentStr\n${account.comment}"
     }
 }

@@ -45,7 +45,6 @@ class DisplayAccountInst {
     val usernameStr = context.resources.getString(R.string.username_)
     val emailStr = context.resources.getString(R.string.e_mail_)
     val passwordStr = context.resources.getString(R.string.password_)
-    val dateOfBirthStr = context.resources.getString(R.string.date_of_birth_)
     val commentStr = context.resources.getString(R.string.comment_)
 
     @Before
@@ -58,11 +57,11 @@ class DisplayAccountInst {
         scenario.onFragment{
             it.setAccount(account)
 
-            assertEquals("$usernameStr ${account.name}", it.b.accountUsername.text)
-            assertEquals("$emailStr ${account.email}", it.b.accountEmail.text)
-            assertEquals("$passwordStr ${account.password}", it.b.accountPassword.text)
-            assertEquals("$dateOfBirthStr ${account.date}", it.b.birthDate.text)
-            assertEquals("$commentStr\n${account.comment}", it.b.accountComment.text)
+            assertEquals("$usernameStr ${account.name}", it.b.accountUsername.text.toString())
+            assertEquals("$emailStr ${account.email}", it.b.accountEmail.text.toString())
+            assertEquals("$passwordStr ${account.password}", it.b.accountPassword.text.toString())
+            assertEquals(account.date, it.b.birthDate.text.toString())
+            assertEquals("$commentStr\n${account.comment}", it.b.accountComment.text.toString())
         }
     }
 }
