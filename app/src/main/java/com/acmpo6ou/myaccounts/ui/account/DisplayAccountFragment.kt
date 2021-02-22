@@ -52,6 +52,9 @@ class DisplayAccountFragment : Fragment() {
         }
     }
 
+    /**
+     * Displays snackbar saying that password is copied.
+     */
     private fun successCopy(){
         Snackbar.make(b.displayAccountLayout,
                 R.string.copied,
@@ -60,6 +63,9 @@ class DisplayAccountFragment : Fragment() {
                 .show()
     }
 
+    /**
+     * Initializes display account form with data provided from [account].
+     */
     @SuppressLint("SetTextI18n")
     fun setAccount(account: Account){
         // set account name as app bar title
@@ -73,6 +79,7 @@ class DisplayAccountFragment : Fragment() {
             successCopy()
         }
 
+        // set text on all of the form account labels
         val usernameStr = requireContext().resources.getString(R.string.username_)
         val emailStr = requireContext().resources.getString(R.string.e_mail_)
         val passwordStr = requireContext().resources.getString(R.string.password_)
