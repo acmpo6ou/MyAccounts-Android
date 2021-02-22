@@ -33,6 +33,7 @@ import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.database.Account
 import com.acmpo6ou.myaccounts.databinding.FragmentDisplayAccountBinding
+import com.google.android.material.snackbar.Snackbar
 
 class DisplayAccountFragment : Fragment() {
     private var binding: FragmentDisplayAccountBinding? = null
@@ -51,6 +52,14 @@ class DisplayAccountFragment : Fragment() {
         }
     }
 
+    private fun successCopy(){
+        Snackbar.make(b.displayAccountLayout,
+                R.string.copied,
+                Snackbar.LENGTH_LONG)
+                .setAction("HIDE"){}
+                .show()
+    }
+
     @SuppressLint("SetTextI18n")
     fun setAccount(account: Account){
         // set account name as app bar title
@@ -61,6 +70,7 @@ class DisplayAccountFragment : Fragment() {
             val clipboard = context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("password", account.password)
             clipboard.setPrimaryClip(clip)
+            successCopy()
         }
 
         val usernameStr = requireContext().resources.getString(R.string.username_)

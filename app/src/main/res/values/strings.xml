@@ -114,4 +114,5 @@
     <string name="confirm_going_back">Are you sure you want to go back?\nNote: if you completely close the app any unsaved changes will be lost.</string>
     <string name="cancel">Cancel</string>
     <string name="confirm_account_delete">Are you sure you want to delete account %1$s?</string>
+    <string name="copied">Copied!</string>
 </resources>
