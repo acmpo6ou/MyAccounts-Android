@@ -19,7 +19,9 @@
 
 package com.acmpo6ou.myaccounts.display_account
 
+import android.content.ClipboardManager
 import android.content.Context
+import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Build
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
@@ -62,6 +64,17 @@ class DisplayAccountInst {
             assertEquals("$passwordStr ${account.password}", it.b.accountPassword.text.toString())
             assertEquals(account.date, it.b.birthDate.text.toString())
             assertEquals("$commentStr\n${account.comment}", it.b.accountComment.text.toString())
+        }
+    }
+
+    @Test
+    fun `press on copy FAB should copy password`(){
+        scenario.onFragment {
+            it.setAccount(account)
+            it.b.copyPassword.performClick()
+
+            val clipboard = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+            assertEquals(account.password, clipboard.primaryClip!!.getItemAt(0).text)
         }
     }
 }
