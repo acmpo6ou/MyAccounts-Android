@@ -24,6 +24,9 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.core.view.GravityCompat
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.navigation.findNavController
 import androidx.preference.PreferenceManager
 import com.acmpo6ou.myaccounts.account.AccountsActivityInter
 import com.acmpo6ou.myaccounts.account.AccountsPresenter
@@ -64,6 +67,15 @@ open class AccountsActivity : SuperActivity(), AccountsActivityInter {
             index = it.getInt("databaseIndex")
         }
         supportActionBar?.title = database.name
+
+        val navController = findNavController(R.id.nav_host_fragment)
+        navController.addOnDestinationChangedListener {
+            _: NavController, navDestination: NavDestination, _: Bundle? ->
+            // change app bar title back to database name after navigating to main fragment
+            if(navDestination.id == mainFragmentId){
+                supportActionBar?.title = database.name
+            }
+        }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
