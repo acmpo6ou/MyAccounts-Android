@@ -25,8 +25,11 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent.ACTION_DOWN
+import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.acmpo6ou.myaccounts.AccountsActivity
@@ -66,7 +69,7 @@ class DisplayAccountFragment : Fragment() {
     /**
      * Initializes display account form with data provided from [account].
      */
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
     fun setAccount(account: Account){
         // set account name as app bar title
         (activity as? AppCompatActivity)?.supportActionBar?.title = account.account
@@ -87,8 +90,20 @@ class DisplayAccountFragment : Fragment() {
 
         b.accountUsername.text = "$usernameStr ${account.name}"
         b.accountEmail.text = "$emailStr ${account.email}"
-        b.accountPassword.text = "$passwordStr ${account.password}"
+        b.accountPassword.text = "$passwordStr ${"•".repeat(16)}"
         b.birthDate.text = account.date
         b.accountComment.text = "$commentStr\n${account.comment}"
+
+        // display password only when password label is held, otherwise hide the password
+        b.accountPassword.setOnTouchListener { v, event ->
+            val view = v as TextView
+            if (event.action == ACTION_DOWN) {
+                view.text = "$passwordStr ${account.password}"
+            }
+            else if (event.action == ACTION_UP){
+                view.text = "$passwordStr ${"•".repeat(16)}"
+            }
+            true
+        }
     }
 }

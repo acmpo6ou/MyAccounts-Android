@@ -24,6 +24,8 @@ import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Build
 import android.os.Looper
+import android.os.SystemClock
+import android.view.MotionEvent
 import android.widget.TextView
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
@@ -65,7 +67,7 @@ class DisplayAccountInst {
 
             assertEquals("$usernameStr ${account.name}", it.b.accountUsername.text.toString())
             assertEquals("$emailStr ${account.email}", it.b.accountEmail.text.toString())
-            assertEquals("$passwordStr ${account.password}", it.b.accountPassword.text.toString())
+            assertEquals("$passwordStr ${"•".repeat(16)}", it.b.accountPassword.text.toString())
             assertEquals(account.date, it.b.birthDate.text.toString())
             assertEquals("$commentStr\n${account.comment}", it.b.accountComment.text.toString())
         }
@@ -94,6 +96,29 @@ class DisplayAccountInst {
 
             val snackbar: TextView? = it.view?.findSnackbarTextView()
             assertEquals(copyMessage, snackbar?.text)
+        }
+    }
+
+    @Test
+    fun `should hide display or hide password when pressing and releasing password label`(){
+        scenario.onFragment {
+            it.setAccount(account)
+
+            // when touching password label password should be displayed
+            it.b.accountPassword.dispatchTouchEvent(
+                            MotionEvent.obtain(SystemClock.uptimeMillis(),
+                            SystemClock.uptimeMillis(),
+                            MotionEvent.ACTION_DOWN, 0F, 0F, 0))
+            assertEquals("$passwordStr ${account.password}",
+                         it.b.accountPassword.text.toString())
+
+            // when releasing password label password should be hidden
+            it.b.accountPassword.dispatchTouchEvent(
+                            MotionEvent.obtain(SystemClock.uptimeMillis(),
+                            SystemClock.uptimeMillis(),
+                            MotionEvent.ACTION_UP, 0F, 0F, 0))
+            assertEquals("$passwordStr ${"•".repeat(16)}",
+                    it.b.accountPassword.text.toString())
         }
     }
 }
