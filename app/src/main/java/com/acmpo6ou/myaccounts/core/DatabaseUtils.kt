@@ -53,7 +53,7 @@ interface DatabaseUtils {
     fun loads(jsonStr: String): DbMap {
         var map = mutableMapOf<String, Account>()
         if (jsonStr.isNotEmpty()) {
-            map = Json.decodeFromString(jsonStr)
+            map = Json{ ignoreUnknownKeys = true }.decodeFromString(jsonStr)
         }
         return map
     }
