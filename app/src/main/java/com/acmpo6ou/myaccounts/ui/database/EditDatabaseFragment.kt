@@ -25,9 +25,6 @@ import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.database.superclass.CreateEditFragment
 
 class EditDatabaseFragment : CreateEditFragment() {
-    companion object {
-        fun newInstance() = EditDatabaseFragment()
-    }
     override lateinit var viewModel: EditDatabaseViewModel
     var args: EditDatabaseFragmentArgs? = null
 

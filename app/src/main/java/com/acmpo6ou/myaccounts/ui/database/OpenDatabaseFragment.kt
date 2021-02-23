@@ -21,11 +21,9 @@ package com.acmpo6ou.myaccounts.ui.database
 
 import android.content.Context
 import android.os.Bundle
-import android.view.KeyEvent
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -37,10 +35,6 @@ import com.acmpo6ou.myaccounts.database.superclass.ViewModelFragment
 import com.acmpo6ou.myaccounts.databinding.OpenDatabaseFragmentBinding
 
 class OpenDatabaseFragment: ViewModelFragment() {
-    companion object {
-        fun newInstance() = OpenDatabaseFragment()
-    }
-
     override lateinit var viewModel: OpenDatabaseViewModel
     var args: OpenDatabaseFragmentArgs? = null
 
@@ -110,6 +104,13 @@ class OpenDatabaseFragment: ViewModelFragment() {
         savedInstanceState: Bundle?): View {
         binding = OpenDatabaseFragmentBinding.inflate(layoutInflater, container, false)
         return b.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // set focus on password field and display keyboard
+        b.databasePassword.requestFocus()
+        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(b.databasePassword, InputMethodManager.SHOW_IMPLICIT)
     }
 
     override fun onDestroyView() {

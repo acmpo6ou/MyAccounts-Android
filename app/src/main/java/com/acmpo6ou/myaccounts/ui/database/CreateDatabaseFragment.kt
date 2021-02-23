@@ -19,14 +19,14 @@
 
 package com.acmpo6ou.myaccounts.ui.database
 
+import android.content.Context
 import android.os.Bundle
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.ViewModelProvider
 import com.acmpo6ou.myaccounts.database.superclass.CreateEditFragment
 
 class CreateDatabaseFragment : CreateEditFragment() {
-    companion object {
-        fun newInstance() = CreateDatabaseFragment()
-    }
     override lateinit var viewModel: CreateDatabaseViewModel
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -34,5 +34,12 @@ class CreateDatabaseFragment : CreateEditFragment() {
         viewModel = ViewModelProvider(this).get(CreateDatabaseViewModel::class.java)
         initModel()
         initForm()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // set focus on database name field and display keyboard
+        b.databaseName.requestFocus()
+        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(b.databaseName, InputMethodManager.SHOW_IMPLICIT)
     }
 }
