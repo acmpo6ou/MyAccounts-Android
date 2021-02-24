@@ -24,9 +24,9 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.ViewModelProvider
-import com.acmpo6ou.myaccounts.database.superclass.CreateEditFragment
+import com.acmpo6ou.myaccounts.database.superclass.CreateEditDatabase
 
-class CreateDatabaseFragment : CreateEditFragment() {
+class CreateDatabaseFragment : CreateEditDatabase() {
     override lateinit var viewModel: CreateDatabaseViewModel
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
