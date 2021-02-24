@@ -30,10 +30,7 @@ import com.acmpo6ou.myaccounts.database.superclass.CreateEditDatabase
 import com.acmpo6ou.myaccounts.database.superclass.CreateEditViewModel
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
-import com.nhaarman.mockitokotlin2.doNothing
 import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -67,116 +64,6 @@ class CreateEditDatabaseInst {
             it.viewModel.initialize(app, faker.str())
             it.initModel()
             it.initForm()
-        }
-    }
-
-    @Test
-    fun `should call validateName when text in databaseName changes`(){
-        scenario.onFragment {
-            it.b.databaseName.setText(name)
-            verify(it.viewModel).validateName(name)
-        }
-    }
-
-    @Test
-    fun `should hide or display error tip according to emptyNameErr and existsNameErr`(){
-        val emptyName = context.resources.getString(R.string.empty_name)
-        val nameExists = context.resources.getString(R.string.db_exists)
-
-        scenario.onFragment {
-            // name field is empty
-            it.viewModel.emptyNameErr = true
-            it.viewModel.existsNameErr = false
-            assertEquals(emptyName, it.b.parentName.error)
-
-            // name field contains name that is already taken
-            it.viewModel.emptyNameErr = false
-            it.viewModel.existsNameErr = true
-            assertEquals(nameExists, it.b.parentName.error)
-
-            // name field is filled and contains name that isn't taken
-            it.viewModel.emptyNameErr = false
-            it.viewModel.existsNameErr = false
-            assertNull(it.b.parentName.error)
-        }
-    }
-
-    @Test
-    fun `should call validatePasswords when password in either password fields changes`(){
-        scenario.onFragment {
-            val str = faker.str()
-
-            it.b.databasePassword.setText(str)
-            verify(it.viewModel).validatePasswords(str, "")
-
-            it.b.databaseRepeatPassword.setText(str)
-            verify(it.viewModel).validatePasswords(str, str)
-        }
-    }
-
-    @Test
-    fun `should hide or display error tip according to emptyPassErr and diffPassErr`(){
-        val emptyPassword = context.resources.getString(R.string.empty_password)
-        val diffPasswords = context.resources.getString(R.string.diff_passwords)
-
-        scenario.onFragment {
-            // password fields are empty
-            it.viewModel.emptyPassErr = true
-            it.viewModel.diffPassErr = false
-            assertEquals(emptyPassword, it.b.parentPassword.error)
-
-            // passwords do not match
-            it.viewModel.emptyPassErr = false
-            it.viewModel.diffPassErr = true
-            assertEquals(diffPasswords, it.b.parentPassword.error)
-
-            // everything is okay
-            it.viewModel.emptyPassErr = false
-            it.viewModel.diffPassErr = false
-            assertNull(it.b.parentPassword.error)
-        }
-    }
-
-    @Test
-    fun `applyButton should change according to nameErrors and passwordErrors`(){
-        scenario.onFragment {
-            val applyButton = it.b.applyButton
-
-            // there are no errors
-            it.viewModel.emptyNameErr = false
-            it.viewModel.existsNameErr = false
-            it.viewModel.emptyPassErr = false
-            it.viewModel.diffPassErr = false
-            assertTrue(applyButton.isEnabled)
-
-            // there is a name error
-            it.viewModel.emptyNameErr = true
-            it.viewModel.existsNameErr = false
-            it.viewModel.emptyPassErr = false
-            it.viewModel.diffPassErr = false
-            assertFalse(applyButton.isEnabled)
-
-            // there is a password error
-            it.viewModel.emptyNameErr = false
-            it.viewModel.existsNameErr = false
-            it.viewModel.emptyPassErr = true
-            it.viewModel.diffPassErr = false
-            assertFalse(applyButton.isEnabled)
-        }
-    }
-
-    @Test
-    fun `press on applyButton should call applyPressed`(){
-        scenario.onFragment {
-            val pass = faker.str()
-            doNothing().whenever(it.viewModel).applyPressed(name, pass)
-
-            it.b.databaseName.setText(name)
-            it.b.databasePassword.setText(pass)
-            it.b.databaseRepeatPassword.setText(pass)
-
-            it.b.applyButton.performClick()
-            verify(it.viewModel).applyPressed(name, pass)
         }
     }
 
