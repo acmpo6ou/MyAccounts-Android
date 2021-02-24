@@ -132,8 +132,9 @@ class OpenDatabaseFragment: ViewModelFragment() {
         b.databasePassword.setOnEditorActionListener{
             _: TextView, action: Int, keyEvent: KeyEvent? ->
 
-            if(keyEvent?.keyCode == KeyEvent.KEYCODE_ENTER ||
-               action == EditorInfo.IME_ACTION_DONE){
+            if (keyEvent?.keyCode == KeyEvent.KEYCODE_ENTER ||
+                action == EditorInfo.IME_ACTION_DONE ||
+                action == EditorInfo.IME_ACTION_NEXT) {
                 b.openDatabase.performClick()
             }
             false
