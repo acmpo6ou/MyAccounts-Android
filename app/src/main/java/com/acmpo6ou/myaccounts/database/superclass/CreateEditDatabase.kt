@@ -21,46 +21,32 @@ package com.acmpo6ou.myaccounts.database.superclass
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.Observer
-import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.MainActivity
-import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.GenPassDialog
 import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.core.superclass.CreateEditFragment
 import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
 
 /**
  * Super class for CreateDatabaseFragment and EditDatabaseFragment.
  */
-abstract class CreateEditFragment : ViewModelFragment() {
-    abstract override val viewModel: CreateEditViewModel
-    lateinit var app: MyApp
-    lateinit var myContext: Context
+abstract class CreateEditDatabase : CreateEditFragment() {
     override val mainActivity get() = myContext as MainActivity
+    override val applyButton get() = b.applyButton
+    override val buttonGenerate get() = b.databaseGenerate
 
-    // Hides/displays error tip about database name.
-    private val nameErrorObserver = Observer<String?> {
-        b.parentName.error = it
-    }
+    override val nameField get() = b.databaseName
+    override val passwordField get() = b.databasePassword
+    override val repeatPasswordField get() = b.databaseRepeatPassword
 
-    // Hides/displays error tip about database password.
-    private val passwordErrorObserver = Observer<String?> {
-        b.parentPassword.error = it
-    }
+    override val parentName get() = b.parentName
+    override val parentPassword get() = b.parentPassword
 
-    // if there are any errors (about database name or password) apply button is disabled,
-    // otherwise enabled
-    private val applyEnabledObserver = Observer<Boolean> {
-        b.applyButton.isEnabled = it
-    }
 
-    // Hides/displays loading progress bar of `Create` button.
+    // Hides/displays loading progress bar of apply button.
     private val loadingObserver = Observer<Boolean> {
         if(it) {
             b.progressLoading.visibility = View.VISIBLE
@@ -72,13 +58,7 @@ abstract class CreateEditFragment : ViewModelFragment() {
         }
     }
 
-    // This observer invoked when database is successfully created.
-    // It navigates back to the DatabaseFragment.
-    private val finishedObserver = Observer<Boolean>{
-        mainActivity.findNavController(R.id.nav_host_fragment).navigateUp()
-    }
-
-    var binding: CreateEditDatabaseFragmentBinding? = null
+    private var binding: CreateEditDatabaseFragmentBinding? = null
     val b: CreateEditDatabaseFragmentBinding get() = binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -100,59 +80,11 @@ abstract class CreateEditFragment : ViewModelFragment() {
     }
 
     /**
-     * Used to initialize all fields and buttons of the create_edit_database form.
-     */
-    open fun initForm(){
-        // when database name is changed validate it using model to display error in case
-        // such name already exists or the name is empty
-        b.databaseName.addTextChangedListener(object: TextWatcher {
-            override fun afterTextChanged(s: Editable) {}
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) =
-                viewModel.validateName(s.toString())
-        })
-
-        // text changed listener for password fields to validate them and display error
-        // in case of problems
-        val passwordListener = object: TextWatcher {
-            override fun afterTextChanged(s: Editable) {}
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) =
-                    viewModel.validatePasswords(b.databasePassword.text.toString(),
-                                                b.databaseRepeatPassword.text.toString())
-        }
-        b.databasePassword.addTextChangedListener(passwordListener)
-        b.databaseRepeatPassword.addTextChangedListener(passwordListener)
-
-        // display generate password dialog when `Generate` button is pressed
-        b.databaseGenerate.setOnClickListener {
-            GenPassDialog(mainActivity, b.databasePassword, b.databaseRepeatPassword)
-        }
-
-        // call applyPressed when clicking on `Create` button
-        b.applyButton.setOnClickListener {
-            viewModel.applyPressed(b.databaseName.text.toString(),
-                                   b.databasePassword.text.toString())
-        }
-    }
-
-    /**
      * This method initializes view model providing all needed resources.
      */
     override fun initModel() {
         super.initModel()
-        // init observers
-        viewModel.apply {
-            viewLifecycleOwner.let {
-                nameErrors.observe(it, nameErrorObserver)
-                passwordErrors.observe(it, passwordErrorObserver)
-                _loading.observe(it, loadingObserver)
-                _finished.observe(it, finishedObserver)
-                applyEnabled.observe(it, applyEnabledObserver)
-            }
-        }
+        viewModel._loading.observe(viewLifecycleOwner, loadingObserver)
 
         val SRC_DIR = myContext.getExternalFilesDir(null)?.path + "/src"
         viewModel.initialize(app, SRC_DIR)
