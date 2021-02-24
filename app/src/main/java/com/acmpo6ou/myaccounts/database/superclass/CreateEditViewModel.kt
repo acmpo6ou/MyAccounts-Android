@@ -61,10 +61,10 @@ abstract class CreateEditViewModel: SuperViewModel() {
 
         var msg: String? = null
         if(empty!!){
-            msg = app.res.getString(R.string.empty_name)
+            msg = app.res.getString(R.string.name_empty)
         }
         else if(exists!!){
-            msg = app.res.getString(R.string.db_exists)
+            msg = app.res.getString(R.string.name_exists)
         }
         return@combineWith msg
     }

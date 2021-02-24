@@ -38,8 +38,6 @@
     <string name="block_screen_capture">Блокувати захоплення екрану</string>
     <string name="block_screen_capture_summary">Щоб уникнути витоку конфіденційної інформації</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="account_">Акаунт:</string>
     <string name="username_">Ім\'я:</string>
     <string name="e_mail_">E-mail:</string>
     <string name="password_">Пароль:</string>

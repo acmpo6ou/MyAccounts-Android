@@ -63,7 +63,6 @@
     <string name="block_screen_capture_summary">To avoid sensitive info leak</string>
     <string name="title_activity_accounts" translatable="false">AccountsActivity</string>
 
-    <string name="account_">Account:</string>
     <string name="username_">Username:</string>
     <string name="e_mail_">E-mail:</string>
     <string name="password_">Password:</string>
@@ -101,7 +100,7 @@
     <string name="corrupted_db">The %1$s database is probably corrupted.</string>
     <string name="open_error">Error opening database</string>
 
-    <string name="empty_name">Please, provide a name</string>
+    <string name="name_empty">Please, provide a name</string>
     <string name="empty_password">Please, provide a password</string>
     <string name="diff_passwords">Passwords do not match!</string>
     <string name="error_title">Error</string>
@@ -115,4 +114,5 @@
     <string name="cancel">Cancel</string>
     <string name="confirm_account_delete">Are you sure you want to delete account %1$s?</string>
     <string name="copied">Copied password!</string>
+    <string name="name_exists">This name is already taken!</string>
 </resources>
