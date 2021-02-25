@@ -24,13 +24,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.lifecycle.LifecycleOwner
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.database.MainActivityInter
+import com.acmpo6ou.myaccounts.database.superclass.ErrorFragment
 import com.acmpo6ou.myaccounts.database.superclass.SuperViewModel
-import com.acmpo6ou.myaccounts.database.superclass.ViewModelFragment
 import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
@@ -44,9 +46,15 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
-class TestFragment: ViewModelFragment(){
+class TestFragment: Fragment(), ErrorFragment{
     override val viewModel = SuperViewModel()
     override val mainActivity: MainActivityInter = mock()
+    override lateinit var lifecycle: LifecycleOwner
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        lifecycle = viewLifecycleOwner
+    }
 
     // dummy onCreateView method
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -60,7 +68,7 @@ class TestFragment: ViewModelFragment(){
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
-class ViewModelFragmentInst {
+class ErrorFragmentInst {
     private val faker = Faker()
     lateinit var scenario: FragmentScenario<TestFragment>
     val context = InstrumentationRegistry.getInstrumentation().targetContext

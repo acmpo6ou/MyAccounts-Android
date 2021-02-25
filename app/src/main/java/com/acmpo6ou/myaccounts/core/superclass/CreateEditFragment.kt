@@ -23,20 +23,20 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.GenPassDialog
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.database.superclass.CreateEditViewModel
-import com.acmpo6ou.myaccounts.database.superclass.ViewModelFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
 /**
  * Super class for all fragments that edit/create items.
  */
-abstract class CreateEditFragment : ViewModelFragment() {
+abstract class CreateEditFragment : Fragment() {
     abstract val nameField: TextInputEditText
     abstract val passwordField: TextInputEditText
     abstract val repeatPasswordField: TextInputEditText
@@ -47,7 +47,7 @@ abstract class CreateEditFragment : ViewModelFragment() {
     abstract val buttonGenerate: Button
     abstract val applyButton: Button
 
-    abstract override val viewModel: CreateEditViewModel
+    abstract val viewModel: CreateEditViewModel
     lateinit var app: MyApp
     lateinit var myContext: Context
     private val superActivity get() = myContext as SuperActivity
@@ -116,8 +116,7 @@ abstract class CreateEditFragment : ViewModelFragment() {
     /**
      * This method initializes view model providing all needed resources.
      */
-    override fun initModel() {
-        super.initModel()
+    open fun initModel() {
         // init observers
         viewModel.apply {
             viewLifecycleOwner.let {

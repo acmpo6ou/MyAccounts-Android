@@ -25,22 +25,26 @@ import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.database.superclass.ViewModelFragment
+import com.acmpo6ou.myaccounts.core.startDatabaseUtil
+import com.acmpo6ou.myaccounts.database.superclass.ErrorFragment
 import com.acmpo6ou.myaccounts.databinding.OpenDatabaseFragmentBinding
 
-class OpenDatabaseFragment: ViewModelFragment() {
+class OpenDatabaseFragment: Fragment(), ErrorFragment {
     override lateinit var viewModel: OpenDatabaseViewModel
     var args: OpenDatabaseFragmentArgs? = null
 
     lateinit var app: MyApp
     lateinit var myContext: Context
     override val mainActivity get() = myContext as MainActivity
+    override lateinit var lifecycle: LifecycleOwner
 
     var binding: OpenDatabaseFragmentBinding? = null
     val b: OpenDatabaseFragmentBinding get() = binding!!
@@ -120,6 +124,7 @@ class OpenDatabaseFragment: ViewModelFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        lifecycle = viewLifecycleOwner
         viewModel = ViewModelProvider(this).get(OpenDatabaseViewModel::class.java)
         initModel()
 
@@ -168,9 +173,8 @@ class OpenDatabaseFragment: ViewModelFragment() {
      * Used to start AccountsActivity for given database.
      * @param[index] index of database for which we want to start AccountsActivity.
      */
-    override fun startDatabase(index: Int) {
-        super.startDatabase(index)
-
+    private fun startDatabase(index: Int) {
+        startDatabaseUtil(index, myContext)
         // navigate back to DatabaseFragment
         mainActivity.findNavController(R.id.nav_host_fragment).navigateUp()
     }
