@@ -26,6 +26,7 @@ import android.os.Bundle
 import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.core.startDatabaseUtil
 import com.acmpo6ou.myaccounts.core.superclass.ListFragment
 import com.acmpo6ou.myaccounts.database.DatabaseFragmentInter
 import com.acmpo6ou.myaccounts.database.DatabasesPresenter
@@ -143,8 +144,5 @@ class DatabaseFragment: ListFragment(), DatabaseFragmentInter {
         if(requestCode == EXPORT_RC) presenter.exportDatabase(data?.data!!)
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance() = DatabaseFragment()
-    }
+    override fun startDatabase(index: Int) = startDatabaseUtil(index, myContext)
 }

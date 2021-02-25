@@ -25,7 +25,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.CreateEditFragment
 import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
@@ -34,7 +33,6 @@ import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
  * Super class for CreateDatabaseFragment and EditDatabaseFragment.
  */
 abstract class CreateEditDatabase : CreateEditFragment() {
-    override val mainActivity get() = myContext as MainActivity
     override val applyButton get() = b.applyButton
     override val buttonGenerate get() = b.databaseGenerate
 

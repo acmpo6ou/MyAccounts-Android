@@ -19,8 +19,11 @@
 
 package com.acmpo6ou.myaccounts.core
 
+import android.content.Context
+import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import com.acmpo6ou.myaccounts.AccountsActivity
 import kotlin.reflect.KProperty1
 
 /**
@@ -55,3 +58,12 @@ fun <R> getProperty(instance: Any, propertyName: String): R {
     return property.get(instance) as R
 }
 
+/**
+ * Used to start AccountsActivity for given database.
+ * @param[index] index of database for which we want to start AccountsActivity.
+ */
+fun startDatabaseUtil(index: Int, context: Context) {
+    val intent = Intent(context, AccountsActivity::class.java)
+    intent.putExtra("databaseIndex", index)
+    context.startActivity(intent)
+}

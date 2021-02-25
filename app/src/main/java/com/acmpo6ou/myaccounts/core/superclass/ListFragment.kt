@@ -25,21 +25,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.database.superclass.SuperFragment
 import com.acmpo6ou.myaccounts.databinding.FragmentListBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 
 /**
  * Super class for DatabaseFragment and AccountsFragment – fragments that contain
- * list of items.
+ * lists of items.
  */
-abstract class ListFragment : SuperFragment(), ListFragmentInter {
+abstract class ListFragment : Fragment(), ListFragmentInter {
     private var binding: FragmentListBinding? = null
     val b: FragmentListBinding get() = binding!!
 
