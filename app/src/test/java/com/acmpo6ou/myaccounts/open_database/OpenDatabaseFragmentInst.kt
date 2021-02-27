@@ -30,6 +30,7 @@ import com.acmpo6ou.myaccounts.ui.database.OpenDatabaseViewModel
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.*
 import org.junit.Before
@@ -51,6 +52,8 @@ class OpenDatabaseFragmentInst {
     @Before
     fun setUp() {
         scenario = launchFragmentInContainer(themeResId=R.style.Theme_MyAccounts_NoActionBar)
+        model.uiDispatcher = Dispatchers.Unconfined
+        model.defaultDispatcher = Dispatchers.Unconfined
     }
 
     @Test

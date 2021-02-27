@@ -20,15 +20,32 @@
 package com.acmpo6ou.myaccounts.ui.database
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.database.Database
-import com.acmpo6ou.myaccounts.database.superclass.SuperViewModel
+import com.acmpo6ou.myaccounts.database.superclass.DatabaseViewModel
 import com.macasaet.fernet.TokenValidationException
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.io.File
 
-open class OpenDatabaseViewModel : SuperViewModel() {
+open class OpenDatabaseViewModel : ViewModel(), DatabaseViewModel {
+    override var databaseIndex: Int = 0
+    override lateinit var SRC_DIR: String
+    override lateinit var app: MyApp
+    override lateinit var titleStart: String
+
+    override lateinit var defaultDispatcher: CoroutineDispatcher
+    override lateinit var uiDispatcher: CoroutineDispatcher
+    override var coroutineJob: Job? = null
+
+    override lateinit var _title: MutableLiveData<String>
+    override lateinit var _loading: MutableLiveData<Boolean>
+    override lateinit var errorMsg_: MutableLiveData<String>
+
     val _incorrectPassword = MutableLiveData(false)
     val _corrupted = MutableLiveData(false)
     val _opened = MutableLiveData(false)
