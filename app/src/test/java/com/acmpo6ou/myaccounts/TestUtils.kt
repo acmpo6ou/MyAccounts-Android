@@ -61,8 +61,8 @@ private fun View.findSnackbarLayout(): Snackbar.SnackbarLayout? {
     return null
 }
 
-val account = Account(account="gmail",
-                      name="Tom",
+val account = Account(accountName="gmail",
+                      username="Tom",
                       email="tom@gmail.com",
                       password="123",
                       date="01.01.1990",

@@ -72,7 +72,7 @@ class AccountsFragment : ListFragment(), AccountsFragmentInter {
      * @param[i] - account index.
      */
     override fun confirmDelete(i: Int) {
-        val name = presenter.accountsList[i].account
+        val name = presenter.accountsList[i].accountName
         val message = resources.getString(R.string.confirm_account_delete, name)
         confirmDialog(message){ presenter.deleteAccount(i) }
     }

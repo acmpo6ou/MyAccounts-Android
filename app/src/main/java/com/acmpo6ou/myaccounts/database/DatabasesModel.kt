@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts.database
 
 import android.content.ContentResolver
 import android.net.Uri
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.kamranzafar.jtar.TarEntry
 import org.kamranzafar.jtar.TarOutputStream
@@ -32,18 +33,13 @@ import java.io.FileOutputStream
 /**
  * Represents account, it stores all account data such
  * as name, password, email, etc.
- *
- * @param[account] account name.
- * @param[name] account username.
- * @param[email] account email.
- * @param[password] account password.
- * @param[date] account date of birth.
- * @param[comment] account comment.
  */
 @Serializable
 data class Account(
-        val account: String,
-        val name: String,
+        @SerialName("account")
+        val accountName: String,
+        @SerialName("name")
+        val username: String,
         val email: String,
         val password: String,
         val date: String,

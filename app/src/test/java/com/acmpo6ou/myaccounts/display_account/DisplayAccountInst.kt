@@ -65,7 +65,7 @@ class DisplayAccountInst {
         scenario.onFragment{
             it.setAccount(account)
 
-            assertEquals("$usernameStr ${account.name}", it.b.accountUsername.text.toString())
+            assertEquals("$usernameStr ${account.username}", it.b.accountUsername.text.toString())
             assertEquals("$emailStr ${account.email}", it.b.accountEmail.text.toString())
             assertEquals("$passwordStr ${"•".repeat(16)}", it.b.accountPassword.text.toString())
             assertEquals(account.date, it.b.birthDate.text.toString())

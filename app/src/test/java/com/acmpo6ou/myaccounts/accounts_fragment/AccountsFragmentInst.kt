@@ -83,16 +83,16 @@ class AccountsFragmentInst {
         assertEquals("confirmDelete created dialog with incorrect title!",
                 warningTitle, title?.text)
         assertEquals("confirmDelete created dialog with incorrect message!",
-                String.format(confirmDeleteMsg, account.account), message?.text)
+                String.format(confirmDeleteMsg, account.accountName), message?.text)
     }
 
     @Test
     fun `navigateToEdit should pass appropriate account name`(){
         scenario.onFragment {
             mockNavController(it)
-            it.navigateToEdit(account.account)
+            it.navigateToEdit(account.accountName)
 
-            val expectedAction = actionEditAccount(account.account)
+            val expectedAction = actionEditAccount(account.accountName)
             verify(navController).navigate(expectedAction)
         }
     }
@@ -101,9 +101,9 @@ class AccountsFragmentInst {
     fun `navigateToDisplay should pass appropriate account name`(){
         scenario.onFragment {
             mockNavController(it)
-            it.navigateToDisplay(account.account)
+            it.navigateToDisplay(account.accountName)
 
-            val expectedAction = actionDisplayAccount(account.account)
+            val expectedAction = actionDisplayAccount(account.accountName)
             verify(navController).navigate(expectedAction)
         }
     }

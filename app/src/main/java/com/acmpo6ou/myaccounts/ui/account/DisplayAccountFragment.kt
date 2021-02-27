@@ -72,7 +72,7 @@ class DisplayAccountFragment : Fragment() {
     @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
     fun setAccount(account: Account){
         // set account name as app bar title
-        (activity as? AppCompatActivity)?.supportActionBar?.title = account.account
+        (activity as? AppCompatActivity)?.supportActionBar?.title = account.accountName
 
         // copy password when `Copy` FAB is pressed
         b.copyPassword.setOnClickListener {
@@ -88,7 +88,7 @@ class DisplayAccountFragment : Fragment() {
         val passwordStr = requireContext().resources.getString(R.string.password_)
         val commentStr = requireContext().resources.getString(R.string.comment_)
 
-        b.accountUsername.text = "$usernameStr ${account.name}"
+        b.accountUsername.text = "$usernameStr ${account.username}"
         b.accountEmail.text = "$emailStr ${account.email}"
         b.accountPassword.text = "$passwordStr ${"•".repeat(16)}"
         b.birthDate.text = account.date

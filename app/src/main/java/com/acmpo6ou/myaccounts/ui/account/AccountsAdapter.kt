@@ -53,7 +53,7 @@ class AccountsAdapter(val view: AccountsFragmentInter)
         val account = accountsList[position]
 
         // set account item name
-        holder.accountName.text = account.account
+        holder.accountName.text = account.accountName
 
         // set popup menu on item
         holder.menu.setOnClickListener { it ->
