@@ -19,12 +19,12 @@
 
 package com.acmpo6ou.myaccounts.ui.account
 
+import com.acmpo6ou.myaccounts.account.superclass.CreateEditAccountModel
 import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.core.superclass.CreateEditViewModel
 import com.acmpo6ou.myaccounts.database.Account
 import com.acmpo6ou.myaccounts.database.DbMap
 
-class CreateAccountViewModel : CreateEditViewModel() {
+class CreateAccountViewModel : CreateEditAccountModel() {
     override lateinit var app: MyApp
     var databaseIndex = 999
 
@@ -45,7 +45,7 @@ class CreateAccountViewModel : CreateEditViewModel() {
      * Called when user presses apply button.
      * Creates new account using information provided.
      */
-    fun applyPressed(accountName: String, username: String, email: String,
+    override fun applyPressed(accountName: String, username: String, email: String,
                      password: String, date: String, comment: String){
         accounts[accountName] = Account(accountName, username, email, password, date, comment)
         finished = true // notify about creation
