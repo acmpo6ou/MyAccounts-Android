@@ -32,7 +32,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.database.MainActivityInter
 import com.acmpo6ou.myaccounts.database.superclass.ErrorFragment
-import com.acmpo6ou.myaccounts.database.superclass.SuperViewModel
 import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
@@ -47,7 +46,7 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
 class TestFragment: Fragment(), ErrorFragment{
-    override val viewModel = SuperViewModel()
+    override val viewModel = TestDatabaseModel()
     override val mainActivity: MainActivityInter = mock()
     override lateinit var lifecycle: LifecycleOwner
 

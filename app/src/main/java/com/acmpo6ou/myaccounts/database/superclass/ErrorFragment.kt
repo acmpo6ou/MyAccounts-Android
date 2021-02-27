@@ -28,7 +28,7 @@ import com.acmpo6ou.myaccounts.database.MainActivityInter
  * Provides errorObserver to display error message.
  */
 interface ErrorFragment {
-    val viewModel: SuperViewModel
+    val viewModel: DatabaseViewModel
     val mainActivity: MainActivityInter
     val lifecycle: LifecycleOwner
 
