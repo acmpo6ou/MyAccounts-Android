@@ -29,7 +29,7 @@ open class AccountsListPresenter(val view: AccountsFragmentInter) : AccountsList
     // will typically work with indexes rather then Strings, so here we have a dynamic
     // property to convert [accounts] to sorted by account names list
     override val accountsList: List<Account>
-        get() = accounts.values.toList().sortedBy { it.name }
+        get() = accounts.values.toList().sortedBy { it.accountName }
 
     /**
      * Called when user selects item in accounts list.
@@ -38,7 +38,7 @@ open class AccountsListPresenter(val view: AccountsFragmentInter) : AccountsList
      * account name.
      * @param[i] index of account we want to display.
      */
-    override fun displayAccount(i: Int) = view.navigateToDisplay(accountsList[i].account)
+    override fun displayAccount(i: Int) = view.navigateToDisplay(accountsList[i].accountName)
 
     /**
      * Called when user selects `Edit` in account item popup menu.
@@ -46,7 +46,7 @@ open class AccountsListPresenter(val view: AccountsFragmentInter) : AccountsList
      * Using navigateToEdit navigates to EditAccountFragment passing through account name.
      * @param[i] index of account we want to edit.
      */
-    override fun editAccount(i: Int) = view.navigateToEdit(accountsList[i].account)
+    override fun editAccount(i: Int) = view.navigateToEdit(accountsList[i].accountName)
 
     /**
      * Called when user selects `Delete` in account item popup menu.
@@ -61,7 +61,7 @@ open class AccountsListPresenter(val view: AccountsFragmentInter) : AccountsList
      * @param[i] account index.
      */
     override fun deleteAccount(i: Int) {
-        accounts.remove(accountsList[i].account)
+        accounts.remove(accountsList[i].accountName)
         view.notifyRemoved(i)
     }
 }
