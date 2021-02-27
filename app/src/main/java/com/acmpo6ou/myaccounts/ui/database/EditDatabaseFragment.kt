@@ -22,9 +22,9 @@ package com.acmpo6ou.myaccounts.ui.database
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.database.superclass.CreateEditDatabase
+import com.acmpo6ou.myaccounts.database.superclass.CreateEditDatabaseFragment
 
-class EditDatabaseFragment : CreateEditDatabase() {
+class EditDatabaseFragment : CreateEditDatabaseFragment() {
     override lateinit var viewModel: EditDatabaseViewModel
     var args: EditDatabaseFragmentArgs? = null
 

@@ -24,15 +24,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.CreateEditFragment
+import com.acmpo6ou.myaccounts.database.MainActivityInter
 import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
 
 /**
  * Super class for CreateDatabaseFragment and EditDatabaseFragment.
  */
-abstract class CreateEditDatabase : CreateEditFragment() {
+abstract class CreateEditDatabaseFragment : CreateEditFragment(), ErrorFragment {
+    override val mainActivity: MainActivityInter get() = activity as MainActivity
+    override lateinit var lifecycle: LifecycleOwner
+    abstract override val viewModel: CreateEditDatabaseModel
+
     override val applyButton get() = b.applyButton
     override val buttonGenerate get() = b.databaseGenerate
 
@@ -70,21 +77,39 @@ abstract class CreateEditDatabase : CreateEditFragment() {
         binding = null
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        lifecycle = viewLifecycleOwner
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        // save context and app
         myContext = requireContext()
         app = context.applicationContext as MyApp
+    }
+
+    /**
+     * Used to initialize all fields and buttons of the create_edit_database form.
+     */
+    override fun initForm() {
+        super.initForm()
+
+        // call applyPressed when clicking on the apply button
+        applyButton.setOnClickListener {
+            viewModel.applyPressed(nameField.text.toString(),
+                                   passwordField.text.toString())
+        }
     }
 
     /**
      * This method initializes view model providing all needed resources.
      */
     override fun initModel() {
-        super.initModel()
-        viewModel._loading.observe(viewLifecycleOwner, loadingObserver)
-
         val SRC_DIR = myContext.getExternalFilesDir(null)?.path + "/src"
         viewModel.initialize(app, SRC_DIR)
+
+        super<CreateEditFragment>.initModel()
+        super<ErrorFragment>.initModel()
+        viewModel._loading.observe(viewLifecycleOwner, loadingObserver)
     }
 }

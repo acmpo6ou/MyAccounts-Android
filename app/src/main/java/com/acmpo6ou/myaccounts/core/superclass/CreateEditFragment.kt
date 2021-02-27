@@ -29,7 +29,6 @@ import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.GenPassDialog
 import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.database.superclass.CreateEditViewModel
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
@@ -47,17 +46,17 @@ abstract class CreateEditFragment : Fragment() {
     abstract val buttonGenerate: Button
     abstract val applyButton: Button
 
-    abstract val viewModel: CreateEditViewModel
     lateinit var app: MyApp
     lateinit var myContext: Context
+    abstract val viewModel: CreateEditViewModel
     private val superActivity get() = myContext as SuperActivity
 
-    // Hides/displays error tip about name.
+    // Hides/displays name error tip
     private val nameErrorObserver = Observer<String?> {
         parentName.error = it
     }
 
-    // Hides/displays error tip about password.
+    // Hides/displays password error tip
     private val passwordErrorObserver = Observer<String?> {
         parentPassword.error = it
     }
@@ -75,7 +74,7 @@ abstract class CreateEditFragment : Fragment() {
     }
 
     /**
-     * Used to initialize all fields and buttons of the create_edit_database form.
+     * Used to initialize all fields and buttons of the form.
      */
     open fun initForm(){
         // when name is changed validate it using model to display error in case
@@ -96,7 +95,7 @@ abstract class CreateEditFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) =
                     viewModel.validatePasswords(passwordField.text.toString(),
-                            repeatPasswordField.text.toString())
+                                                repeatPasswordField.text.toString())
         }
         passwordField.addTextChangedListener(passwordListener)
         repeatPasswordField.addTextChangedListener(passwordListener)
@@ -104,12 +103,6 @@ abstract class CreateEditFragment : Fragment() {
         // display generate password dialog when `Generate` button is pressed
         buttonGenerate.setOnClickListener {
             GenPassDialog(superActivity, passwordField, repeatPasswordField)
-        }
-
-        // call applyPressed when clicking on the apply button
-        applyButton.setOnClickListener {
-            viewModel.applyPressed(nameField.text.toString(),
-                    passwordField.text.toString())
         }
     }
 

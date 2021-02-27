@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.superclass
 
+import android.content.Context
 import android.os.Build
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
@@ -28,10 +29,7 @@ import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.create_edit_database.TestFragment
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
-import com.nhaarman.mockitokotlin2.doNothing
 import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
-import org.junit.Assert
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -45,7 +43,7 @@ import org.robolectric.annotation.LooperMode
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class CreateEditFragmentInst {
     lateinit var scenario: FragmentScenario<TestFragment>
-    val context = InstrumentationRegistry.getInstrumentation().targetContext
+    val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     val app = context.applicationContext as MyApp
 
     val faker = Faker()
@@ -90,7 +88,7 @@ class CreateEditFragmentInst {
             // name field is filled and contains name that isn't taken
             it.viewModel.emptyNameErr = false
             it.viewModel.existsNameErr = false
-            Assert.assertNull(it.parentName.error)
+            assertNull(it.parentName.error)
         }
     }
 
@@ -153,21 +151,6 @@ class CreateEditFragmentInst {
             it.viewModel.emptyPassErr = true
             it.viewModel.diffPassErr = false
             assertFalse(it.applyButton.isEnabled)
-        }
-    }
-
-    @Test
-    fun `press on applyButton should call applyPressed`(){
-        scenario.onFragment {
-            val pass = faker.str()
-            doNothing().whenever(it.viewModel).applyPressed(name, pass)
-
-            it.nameField.setText(name)
-            it.passwordField.setText(pass)
-            it.repeatPasswordField.setText(pass)
-
-            it.applyButton.performClick()
-            verify(it.viewModel).applyPressed(name, pass)
         }
     }
 }

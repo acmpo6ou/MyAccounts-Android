@@ -19,37 +19,51 @@
 
 package com.acmpo6ou.myaccounts.create_edit_database
 
+import android.content.Context
 import android.os.Build
 import android.view.View
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.database.superclass.CreateEditDatabase
-import com.acmpo6ou.myaccounts.database.superclass.CreateEditViewModel
+import com.acmpo6ou.myaccounts.database.superclass.CreateEditDatabaseFragment
+import com.acmpo6ou.myaccounts.database.superclass.CreateEditDatabaseModel
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
+import com.nhaarman.mockitokotlin2.doNothing
 import com.nhaarman.mockitokotlin2.spy
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
-// this is because CreateEditDatabase is abstract
-class TestFragment : CreateEditDatabase(){
-    override var viewModel: CreateEditViewModel = spy()
+class TestFragment : CreateEditDatabaseFragment(){
+    override var viewModel: TestModel = spy()
+}
+
+open class TestModel : CreateEditDatabaseModel(){
+    override suspend fun apply(name: String, password: String) {
+    }
 }
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
-class CreateEditDatabaseInst {
+class CreateEditDatabaseFragmentInst {
+    @get:Rule
+    val taskExecutorRule = InstantTaskExecutorRule()
+
     lateinit var scenario: FragmentScenario<TestFragment>
-    val context = InstrumentationRegistry.getInstrumentation().targetContext
+    lateinit var model: TestModel
+    val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     val app = context.applicationContext as MyApp
 
     val faker = Faker()
@@ -60,8 +74,11 @@ class CreateEditDatabaseInst {
         scenario = launchFragmentInContainer(themeResId= R.style.Theme_MyAccounts_NoActionBar)
         app.res = context.resources
 
+        model = TestModel()
+        model.initialize(app, faker.str())
+
         scenario.onFragment {
-            it.viewModel.initialize(app, faker.str())
+            it.viewModel = model
             it.initModel()
             it.initForm()
         }
@@ -79,6 +96,22 @@ class CreateEditDatabaseInst {
             it.viewModel._loading.value = false
             assertEquals(View.GONE, it.b.progressLoading.visibility)
             assertTrue(it.b.applyButton.isEnabled)
+        }
+    }
+
+    @Test
+    fun `press on applyButton should call applyPressed`(){
+        scenario.onFragment {
+            it.viewModel = spy(model)
+            val pass = faker.str()
+            doNothing().whenever(it.viewModel).applyPressed(name, pass)
+
+            it.nameField.setText(name)
+            it.passwordField.setText(pass)
+            it.repeatPasswordField.setText(pass)
+
+            it.applyButton.performClick()
+            verify(it.viewModel).applyPressed(name, pass)
         }
     }
 }
