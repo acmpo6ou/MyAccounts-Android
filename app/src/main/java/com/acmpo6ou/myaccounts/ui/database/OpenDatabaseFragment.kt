@@ -150,7 +150,11 @@ class OpenDatabaseFragment: Fragment(), ErrorFragment {
      * This method initializes view model providing all needed resources.
      */
     override fun initModel() {
+        val SRC_DIR = myContext.getExternalFilesDir(null)?.path + "/src"
+        val titleStart = myContext.resources.getString(R.string.open_db)
+        viewModel.initialize(app, SRC_DIR, titleStart, args?.databaseIndex)
         super.initModel()
+
         // init observers
         viewModel.apply {
             viewLifecycleOwner.let {
@@ -160,12 +164,6 @@ class OpenDatabaseFragment: Fragment(), ErrorFragment {
                 _opened.observe(it, openedObserver)
                 _loading.observe(it, loadingObserver)
             }
-        }
-
-        val SRC_DIR = myContext.getExternalFilesDir(null)?.path + "/src"
-        val titleStart = myContext.resources.getString(R.string.open_db)
-        args?.let{
-            viewModel.initialize(app, SRC_DIR, titleStart, it.databaseIndex)
         }
     }
 
