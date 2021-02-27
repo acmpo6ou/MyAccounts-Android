@@ -22,7 +22,6 @@ package com.acmpo6ou.myaccounts.create_edit_database
 import android.content.Context
 import android.os.Build
 import android.view.View
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.platform.app.InstrumentationRegistry
@@ -38,7 +37,6 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert.*
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -58,9 +56,6 @@ open class TestModel : CreateEditDatabaseModel(){
 @LooperMode(LooperMode.Mode.PAUSED)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class CreateEditDatabaseFragmentInst {
-    @get:Rule
-    val taskExecutorRule = InstantTaskExecutorRule()
-
     lateinit var scenario: FragmentScenario<TestFragment>
     lateinit var model: TestModel
     val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
