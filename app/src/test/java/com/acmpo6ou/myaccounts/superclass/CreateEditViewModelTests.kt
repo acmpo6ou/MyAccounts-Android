@@ -17,55 +17,38 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.create_edit_database
+package com.acmpo6ou.myaccounts.superclass
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.core.superclass.CreateEditViewModel
 import com.acmpo6ou.myaccounts.database.Database
-import com.acmpo6ou.myaccounts.database.superclass.CreateEditViewModel
 import com.acmpo6ou.myaccounts.str
-import com.nhaarman.mockitokotlin2.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import org.junit.Assert.*
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-// CreateDatabaseViewModel class is abstract and we can't instantiate it for tests
-open class TestModel : CreateEditViewModel(){
-    override suspend fun apply(name: String, password: String) {
-    }
+private open class TestModel : CreateEditViewModel() {
+    override val app: MyApp = MyApp()
+    override val itemNames: List<String> get() = app.databases.map{ it.name }
 }
 
 class CreateEditViewModelTests : ModelTest() {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 
-    val model = TestModel()
-    lateinit var spyModel: TestModel
-
-    private val name = faker.str()
+    private val model = TestModel()
+    private lateinit var spyModel: TestModel
     override val password = faker.str()
 
     @Before
     fun setup(){
-        val app = MyApp()
-        app.databases = mutableListOf(Database("main"),
-                                      Database("test", "123"))
-
-        model.initialize(app, SRC_DIR)
-        spyModel = spy(model){ on{generateSalt()} doReturn salt }
-
-        spyModel.uiDispatcher = Dispatchers.Unconfined
-        spyModel.defaultDispatcher = Dispatchers.Unconfined
-    }
-
-    @Test
-    fun `fixName should remove all unsupported characters`(){
-        val name = model.fixName("This is (test)/.\\-_-")
-        assertEquals("Thisis(test).-_-", name)
+        model.app.databases =
+            mutableListOf(Database("main"),
+                          Database("test", "123"))
     }
 
     @Test
@@ -84,29 +67,18 @@ class CreateEditViewModelTests : ModelTest() {
         model.validateName("main")
         assertTrue(model.existsNameErr)
 
-        // same should happen even if name contains unsupported characters
-        model.validateName("m/a/i/n/") // will become `main` when cleaned by fixName
-        assertTrue(model.existsNameErr)
-
         // and even if database is opened
         model.validateName("test") // test is opened
         assertTrue(model.existsNameErr)
     }
 
     @Test
-    fun `validateName should use fixName`(){
-        val name = " \\/%$" // this name will be empty when cleaned by fixName
-        model.validateName(name)
-        assertTrue(model.emptyNameErr)
-    }
-
-    @Test
     fun `validatePasswords should change emptyPassErr`(){
-        // if password is empty - emptyPassErr = true
+        // if passwords are empty - emptyPassErr = true
         model.validatePasswords("", "")
         assertTrue(model.emptyPassErr)
 
-        // if password isn't empty - emptyPassErr = false
+        // if passwords are empty - emptyPassErr = false
         model.validatePasswords(faker.str(), faker.str())
         assertFalse(model.emptyPassErr)
     }
@@ -123,34 +95,5 @@ class CreateEditViewModelTests : ModelTest() {
         // if passwords are same - diffPassErr = false
         model.validatePasswords(pass1, pass1)
         assertFalse(model.diffPassErr)
-    }
-
-    @Test
-    fun `applyPressed should not call apply if coroutineJob is active`(){
-        spyModel.coroutineJob = mock { on {isActive} doReturn true }
-        spyModel.applyPressed(name, password)
-
-        runBlocking {
-            verify(spyModel, never()).apply(name, password)
-        }
-    }
-
-    @Test
-    fun `applyPressed should call apply if coroutineJob isn't active`(){
-        spyModel.coroutineJob = mock { on {isActive} doReturn false }
-        spyModel.applyPressed(name, password)
-
-        runBlocking {
-            verify(spyModel).apply(name, password)
-        }
-    }
-
-    @Test
-    fun `applyPressed should call apply if coroutineJob is null`(){
-        spyModel.applyPressed(name, password)
-
-        runBlocking {
-            verify(spyModel).apply(name, password)
-        }
     }
 }
