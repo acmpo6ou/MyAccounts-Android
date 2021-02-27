@@ -20,20 +20,39 @@
 package com.acmpo6ou.myaccounts.superclass
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.MutableLiveData
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.database.Database
-import com.acmpo6ou.myaccounts.database.superclass.SuperViewModel
+import com.acmpo6ou.myaccounts.database.superclass.DatabaseViewModel
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
+import com.nhaarman.mockitokotlin2.mock
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Job
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 
-class SuperViewModelTests {
+open class TestDatabaseModel : DatabaseViewModel {
+    override var defaultDispatcher: CoroutineDispatcher = mock()
+    override var uiDispatcher: CoroutineDispatcher = mock()
+    override var coroutineJob: Job? = mock()
+
+    override var app: MyApp = MyApp()
+    override var titleStart: String = ""
+    override var SRC_DIR: String = ""
+    override var databaseIndex: Int = 0
+
+    override var _title: MutableLiveData<String> = mock()
+    override var _loading: MutableLiveData<Boolean> = mock()
+    override var errorMsg_: MutableLiveData<String> = MutableLiveData()
+}
+
+class DatabaseViewModelTests {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 
-    private val model = SuperViewModel()
+    private val model = TestDatabaseModel()
     private val faker = Faker()
 
     @Test
