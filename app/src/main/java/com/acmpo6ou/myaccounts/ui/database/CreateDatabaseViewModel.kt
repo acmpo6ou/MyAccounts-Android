@@ -21,10 +21,10 @@ package com.acmpo6ou.myaccounts.ui.database
 
 import androidx.lifecycle.viewModelScope
 import com.acmpo6ou.myaccounts.database.Database
-import com.acmpo6ou.myaccounts.database.superclass.CreateEditViewModel
+import com.acmpo6ou.myaccounts.database.superclass.CreateEditDatabaseModel
 import kotlinx.coroutines.async
 
-open class CreateDatabaseViewModel : CreateEditViewModel() {
+open class CreateDatabaseViewModel : CreateEditDatabaseModel() {
     open fun createDatabaseAsync(database: Database) =
         viewModelScope.async(defaultDispatcher){
             createDatabase(database, app)
