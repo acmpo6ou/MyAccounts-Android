@@ -17,16 +17,21 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.database.superclass
+package com.acmpo6ou.myaccounts.core.superclass
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.ViewModel
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.combineWith
-import kotlinx.coroutines.launch
-import java.security.SecureRandom
 
-abstract class CreateEditViewModel: SuperViewModel() {
+/**
+ * Super class for all view models that are responsible for creating/editing items.
+ */
+abstract class CreateEditViewModel: ViewModel() {
+    abstract val itemNames: List<String>
+    abstract val app: MyApp
+
     private val emptyNameErr_ = MutableLiveData(true)
     private val existsNameErr_ = MutableLiveData(false)
 
@@ -87,7 +92,7 @@ abstract class CreateEditViewModel: SuperViewModel() {
     }
 
     /**
-     * This LiveData property used to decide whether `Create` button should be enabled
+     * This LiveData property used to decide whether apply button should be enabled
      * or not. If there are any errors it should be disabled, if there are no - enabled.
      */
     val applyEnabled = nameErrors.combineWith(passwordErrors) {
@@ -96,30 +101,23 @@ abstract class CreateEditViewModel: SuperViewModel() {
     }
 
     /**
-     * This method removes all unsupported characters from given name.
-     *
-     * Supported characters are lower and upper ASCII letters, digits and .-_()
-     * @param[name] name to clean.
-     * @return cleaned from unsupported characters name.
+     * By default there will be no logic to clean the name, subclasses can override fixName
+     * if they need to clean [name].
      */
-    fun fixName(name: String): String{
-        val supported =
-                ( ('A'..'Z') + ('a'..'z') + ('0'..'9') ).joinToString("") + ".-_()"
-        return name.filter { it in supported }
-    }
+    open fun fixName(name: String): String = name
 
     /**
-     * This method validates given name, checks whether it's not empty and whether database
-     * with such name already exists.
+     * This method validates given name, checks whether it's not empty and whether
+     * it's taken yet.
      *
      * If name is empty [emptyNameErr] is set to true.
-     * If database with such name already exists [existsNameErr] is set to true.
+     * If name is taken [existsNameErr] is set to true.
      * @param[name] name to validate.
      */
     open fun validateName(name: String){
         val cleanedName = fixName(name)
         emptyNameErr = cleanedName.isEmpty()
-        existsNameErr = cleanedName in databases.map { it.name }
+        existsNameErr = cleanedName in itemNames
     }
 
     /**
@@ -135,29 +133,4 @@ abstract class CreateEditViewModel: SuperViewModel() {
         emptyPassErr = pass1.isEmpty()
         diffPassErr = pass1 != pass2
     }
-
-    /**
-     * This method generates purely random salt for encryption.
-     * @return salt for encryption.
-     */
-    open fun generateSalt(): ByteArray {
-        val random = SecureRandom()
-        val salt = ByteArray(16)
-        random.nextBytes(salt)
-        return salt
-    }
-
-    /**
-     * Called when user presses `Create` or `Save` button.
-     * Launches [apply] only if it's not already launched.
-     */
-    open fun applyPressed(name: String, password: String){
-        if(coroutineJob == null || !coroutineJob!!.isActive){
-            coroutineJob = viewModelScope.launch(uiDispatcher) {
-                apply(name, password)
-            }
-        }
-    }
-
-    abstract suspend fun apply(name: String, password: String)
 }
