@@ -20,7 +20,6 @@
 package com.acmpo6ou.myaccounts.database.superclass
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.acmpo6ou.myaccounts.core.DatabaseUtils
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.database.DbList
@@ -29,17 +28,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 
 /**
- * Super class for all view models.
+ * Super class for all database view models.
  */
-open class SuperViewModel: ViewModel(), DatabaseUtils {
-    var defaultDispatcher = Dispatchers.Default
-    var uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    var coroutineJob: Job? = null
+interface DatabaseViewModel: DatabaseUtils {
+    var defaultDispatcher: CoroutineDispatcher
+    var uiDispatcher: CoroutineDispatcher
+    var coroutineJob: Job?
 
-    var databaseIndex: Int = 0
-    override lateinit var SRC_DIR: String
-    lateinit var app: MyApp
-    lateinit var titleStart: String
+    var app: MyApp
+    var titleStart: String
+    var databaseIndex: Int
+    override var SRC_DIR: String
 
     var databases: DbList
         get() = app.databases
@@ -47,18 +46,17 @@ open class SuperViewModel: ViewModel(), DatabaseUtils {
             app.databases = value
         }
 
-    // app bar title
-    val _title = MutableLiveData<String>()
+    var _title: MutableLiveData<String>
     var title: String
         get() = _title.value!!
         set(value) {_title.value = value}
 
-    val _loading = MutableLiveData(false)
+    var _loading: MutableLiveData<Boolean>
     var loading
         get() = _loading.value!!
         set(value) {_loading.value = value}
 
-    val errorMsg_ = MutableLiveData<String>()
+    var errorMsg_: MutableLiveData<String>
     var errorMsg: String
         get() = errorMsg_.value!!
         set(value) {errorMsg_.value = value}
@@ -74,8 +72,15 @@ open class SuperViewModel: ViewModel(), DatabaseUtils {
      * Note not all ViewModels need [databaseIndex] and [titleStart] properties, example is
      * CreateDatabaseViewModel.
      */
-    open fun initialize(app: MyApp, SRC_DIR: String, titleStart: String? = null,
-                        databaseIndex: Int? = null) {
+    fun initialize(app: MyApp, SRC_DIR: String, titleStart: String? = null,
+                                                databaseIndex: Int? = null) {
+        _title = MutableLiveData()
+        _loading = MutableLiveData(false)
+        errorMsg_ = MutableLiveData()
+
+        defaultDispatcher = Dispatchers.Default
+        uiDispatcher = Dispatchers.Main
+
         this.app = app
         this.SRC_DIR = SRC_DIR
 
