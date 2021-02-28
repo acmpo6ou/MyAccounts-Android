@@ -34,7 +34,7 @@ open class CreateAccountViewModel : CreateEditViewModel() {
      * @param[app] application instance used to get resources.
      * @param[accounts] accounts map.
      */
-    fun initialize(app: MyApp, accounts: DbMap){
+    open fun initialize(app: MyApp, accounts: DbMap){
         this.app = app
         this.accounts = accounts
     }

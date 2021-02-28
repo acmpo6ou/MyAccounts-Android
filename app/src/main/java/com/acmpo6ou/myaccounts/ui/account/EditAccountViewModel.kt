@@ -19,8 +19,27 @@
 
 package com.acmpo6ou.myaccounts.ui.account
 
-import androidx.lifecycle.ViewModel
+import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.database.Account
+import com.acmpo6ou.myaccounts.database.DbMap
 
-class EditAccountViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+class EditAccountViewModel : CreateAccountViewModel() {
+    private var oldAccount: Account? = null
+
+    /**
+     * Initializes model with needed resources.
+     * @param[app] application instance used to get resources.
+     * @param[accounts] accounts map.
+     * @param[accountName] name of account being edited.
+     */
+    fun initialize(app: MyApp, accounts: DbMap, accountName: String) {
+        super.initialize(app, accounts)
+        oldAccount = accounts[accountName]
+    }
+
+    override fun applyPressed(accountName: String, username: String, email: String, password: String, date: String, comment: String) {
+        // remove old account and create new one
+        accounts.remove(oldAccount?.accountName)
+        super.applyPressed(accountName, username, email, password, date, comment)
+    }
 }
