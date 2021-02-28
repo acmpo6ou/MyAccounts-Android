@@ -115,4 +115,5 @@
     <string name="confirm_account_delete">Are you sure you want to delete account %1$s?</string>
     <string name="copied">Copied password!</string>
     <string name="name_exists">This name is already taken!</string>
+    <string name="pick_date">Pick date</string>
 </resources>

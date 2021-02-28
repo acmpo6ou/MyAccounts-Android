@@ -19,16 +19,24 @@
 
 package com.acmpo6ou.myaccounts.account.superclass
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.CreateEditFragment
 import com.acmpo6ou.myaccounts.databinding.CreateEditAccountFragmentBinding
 import com.acmpo6ou.myaccounts.ui.account.CreateAccountViewModel
+import com.google.android.material.datepicker.MaterialDatePicker
+import java.text.SimpleDateFormat
+import java.util.*
 
+/**
+ * Super class for all fragments that create/edit accounts.
+ */
 abstract class CreateEditAccountFragment : CreateEditFragment() {
     abstract override val viewModel: CreateAccountViewModel
 
@@ -65,6 +73,7 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
     /**
      * Used to initialize all fields and buttons of the create_edit_account form.
      */
+    @SuppressLint("SimpleDateFormat")
     override fun initForm() {
         super.initForm()
 
@@ -77,6 +86,20 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
                     b.accountPassword.text.toString(),
                     b.birthDate.text.toString(),
                     b.accountComment.text.toString())
+        }
+
+        // display date picker when clicking on date label
+        b.birthDate.setOnClickListener{
+            val builder = MaterialDatePicker.Builder.datePicker()
+            builder.setTitleText(R.string.pick_date)
+
+            val dialog = builder.build()
+            dialog.addOnPositiveButtonClickListener {
+                val date = Date(it)
+                val format = SimpleDateFormat("dd.MM.yyyy")
+                b.birthDate.text = format.format(date)
+            }
+            dialog.show(requireActivity().supportFragmentManager, dialog.toString())
         }
     }
 }
