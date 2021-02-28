@@ -19,33 +19,33 @@
 
 package com.acmpo6ou.myaccounts.ui.account
 
-import androidx.lifecycle.ViewModelProvider
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import com.acmpo6ou.myaccounts.R
+import android.view.inputmethod.InputMethodManager
+import androidx.lifecycle.ViewModelProvider
+import com.acmpo6ou.myaccounts.AccountsActivity
+import com.acmpo6ou.myaccounts.account.superclass.CreateEditAccountFragment
 
-class CreateAccountFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = CreateAccountFragment()
-    }
-
-    private lateinit var viewModel: CreateAccountViewModel
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.create_edit_account_fragment, container, false)
-    }
+class CreateAccountFragment : CreateEditAccountFragment() {
+    override lateinit var viewModel: CreateAccountViewModel
+    private val accountsActivity get() = activity as? AccountsActivity
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(CreateAccountViewModel::class.java)
-        // TODO: Use the ViewModel
+        accountsActivity?.database?.data?.let {
+            viewModel.initialize(app, it)
+        }
+
+        initModel()
+        initForm()
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // set focus on account name field and display keyboard
+        b.accountName.requestFocus()
+        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(b.accountName, InputMethodManager.SHOW_IMPLICIT)
+    }
 }
