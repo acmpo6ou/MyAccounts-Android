@@ -24,14 +24,17 @@ import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account.superclass.CreateEditAccountFragment
-import com.acmpo6ou.myaccounts.account.superclass.CreateEditAccountModel
 import com.acmpo6ou.myaccounts.str
+import com.acmpo6ou.myaccounts.ui.account.CreateAccountViewModel
 import com.github.javafaker.Faker
+import com.nhaarman.mockitokotlin2.doNothing
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers.anyString
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
@@ -41,7 +44,7 @@ import org.robolectric.annotation.LooperMode
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class CreateEditAccountInst {
     class TestFragment : CreateEditAccountFragment(){
-        override val viewModel: CreateEditAccountModel = mock()
+        override val viewModel: CreateAccountViewModel = mock()
     }
 
     private lateinit var scenario: FragmentScenario<TestFragment>
@@ -52,6 +55,8 @@ class CreateEditAccountInst {
         scenario = launchFragmentInContainer(themeResId= R.style.Theme_MyAccounts_NoActionBar)
         scenario.onFragment {
             it.initForm()
+            doNothing().whenever(it.viewModel).applyPressed(anyString(), anyString(),
+                    anyString(), anyString(), anyString(), anyString())
         }
     }
 
@@ -76,9 +81,5 @@ class CreateEditAccountInst {
             it.applyButton.performClick()
             verify(it.viewModel).applyPressed(accountName, username, email, pass, date, comment)
         }
-    }
-
-    @Test
-    fun `initModel should call viewModel initialize`(){
     }
 }

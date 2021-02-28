@@ -27,9 +27,10 @@ import android.view.ViewGroup
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.CreateEditFragment
 import com.acmpo6ou.myaccounts.databinding.CreateEditAccountFragmentBinding
+import com.acmpo6ou.myaccounts.ui.account.CreateAccountViewModel
 
 abstract class CreateEditAccountFragment : CreateEditFragment() {
-    abstract override val viewModel: CreateEditAccountModel
+    abstract override val viewModel: CreateAccountViewModel
 
     override val applyButton get() = b.applyButton
     override val buttonGenerate get() = b.accountGenerate

@@ -22,7 +22,7 @@ package com.acmpo6ou.myaccounts.create_edit_account
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.account
 import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.database.Database
+import com.acmpo6ou.myaccounts.databaseMap
 import com.acmpo6ou.myaccounts.ui.account.CreateAccountViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -38,9 +38,7 @@ class CreateAccountModelTests {
 
     @Before
     fun setup(){
-        val app = MyApp()
-        app.databases = mutableListOf( Database("") )
-        model.initialize(app, 0)
+        model.initialize(MyApp(), databaseMap.toMap().toMutableMap())
     }
 
     @Test
