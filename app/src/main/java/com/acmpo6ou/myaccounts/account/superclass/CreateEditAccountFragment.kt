@@ -33,6 +33,7 @@ import com.acmpo6ou.myaccounts.ui.account.CreateAccountViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 /**
  * Super class for all fragments that create/edit accounts.
@@ -92,6 +93,11 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
         b.birthDate.setOnClickListener{
             val builder = MaterialDatePicker.Builder.datePicker()
             builder.setTitleText(R.string.pick_date)
+
+            val currentlyPickedDate = SimpleDateFormat("dd.MM.yyyy")
+                    .parse(b.birthDate.text.toString())
+                    .time + TimeUnit.DAYS.toMillis(1)
+            builder.setSelection(currentlyPickedDate)
 
             val dialog = builder.build()
             dialog.addOnPositiveButtonClickListener {
