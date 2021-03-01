@@ -36,7 +36,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class AccountsActivityFunc {
+class SuperActivityFunc {
     lateinit var scenario: ActivityScenario<AccountsActivity>
     lateinit var presenter: AccountsPresenterInter
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext

@@ -63,7 +63,9 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
     lateinit var navView: NavigationView
     lateinit var drawerLayout: DrawerLayout
 
+    lateinit var navController: NavController
     lateinit var appBarConfiguration: AppBarConfiguration
+    abstract val confirmGoingBackMsg: Int
     abstract val presenter: SuperPresenterInter
 
     abstract val mainFragmentId: Int
@@ -72,10 +74,8 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
         return navHostFragment?.childFragmentManager?.fragments?.get(0) as ListFragment
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
+    override fun onSupportNavigateUp(): Boolean =
+        navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
 
     override fun onStart() {
         super.onStart()
@@ -84,7 +84,7 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
         setAppVersion()
 
         // setup navigation controller
-        val navController = findNavController(R.id.nav_host_fragment)
+        navController = findNavController(R.id.nav_host_fragment)
         appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
@@ -126,10 +126,33 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
         versionString.text = version
     }
 
+    /**
+     * Displays confirmation dialog asking user to confirm does he really wan't to go back
+     * with unsaved changes.
+     */
+    open fun confirmBack(){
+        MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.go_back_title)
+                .setMessage(confirmGoingBackMsg)
+                .setIcon(R.drawable.ic_warning)
+                .setPositiveButton("Ok") { _: DialogInterface, _: Int ->
+                    super.onBackPressed()
+                }
+                .setNegativeButton(R.string.save) { _: DialogInterface, _: Int ->
+                    presenter.saveSelected()
+                    super.onBackPressed()
+                }
+                .setNeutralButton(R.string.cancel) { _: DialogInterface, _: Int -> }
+                .show()
+    }
+
     override fun onBackPressed() {
         // close navigation drawer when Back button is pressed and if it is opened
         if(drawerLayout.isDrawerOpen(GravityCompat.START)){
             drawerLayout.closeDrawer(GravityCompat.START)
+        }
+        else if (navController.currentDestination?.id == mainFragmentId){
+            presenter.backPressed()
         }
         else{
             super.onBackPressed()

@@ -38,4 +38,7 @@ open class AccountsPresenter(override val view: AccountsActivityInter)
         if (!isDatabaseSaved(database, app)) saveDatabase(database.name, database, app)
         view.mainFragment.showSuccess()
     }
+
+    override fun backPressed() {
+    }
 }

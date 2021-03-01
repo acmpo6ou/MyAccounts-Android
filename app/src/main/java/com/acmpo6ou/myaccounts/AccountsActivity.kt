@@ -19,7 +19,6 @@
 
 package com.acmpo6ou.myaccounts
 
-import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
@@ -34,14 +33,14 @@ import com.acmpo6ou.myaccounts.account.AccountsPresenterInter
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
 import com.acmpo6ou.myaccounts.databinding.ActivityAccountsBinding
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 open class AccountsActivity : SuperActivity(), AccountsActivityInter {
-
     override lateinit var b: ActivityAccountsBinding
     override lateinit var prefs: SharedPreferences
     override lateinit var presenter: AccountsPresenterInter
+
     override val mainFragmentId = R.id.accountsFragment
+    override val confirmGoingBackMsg = R.string.confirm_going_back
 
     var index = 0
     override var database
@@ -68,7 +67,7 @@ open class AccountsActivity : SuperActivity(), AccountsActivityInter {
         }
         supportActionBar?.title = database.name
 
-        val navController = findNavController(R.id.nav_host_fragment)
+        navController = findNavController(R.id.nav_host_fragment)
         navController.addOnDestinationChangedListener {
             _: NavController, navDestination: NavDestination, _: Bundle? ->
             // change app bar title back to database name after navigating to main fragment
@@ -89,36 +88,5 @@ open class AccountsActivity : SuperActivity(), AccountsActivityInter {
         // close drawer when any item is selected
         drawerLayout.closeDrawer(GravityCompat.START)
         return false
-    }
-
-    /**
-     * Displays confirmation dialog asking user to confirm does he really wan't to go back
-     * from AccountsActivity with unsaved changes.
-     */
-    open fun confirmBack(){
-        MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.warning)
-                .setMessage(R.string.confirm_going_back)
-                .setIcon(R.drawable.ic_warning)
-                .setPositiveButton("Ok") { _: DialogInterface, _: Int ->
-                    super.onBackPressed()
-                }
-                .setNegativeButton(R.string.save) { _: DialogInterface, _: Int ->
-                    presenter.saveSelected()
-                    super.onBackPressed()
-                }
-                .setNeutralButton(R.string.cancel) { _: DialogInterface, _: Int -> }
-                .show()
-    }
-
-    override fun onBackPressed() {
-        // if database isn't saved display confirmation dialog when going back
-        // from AccountsActivity
-        if (presenter.isDatabaseSaved(database, app)){
-            super.onBackPressed()
-        }
-        else {
-            confirmBack()
-        }
     }
 }

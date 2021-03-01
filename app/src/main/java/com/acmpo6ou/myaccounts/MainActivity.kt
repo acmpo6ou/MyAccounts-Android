@@ -42,6 +42,8 @@ class MainActivity : SuperActivity(), MainActivityInter {
     override lateinit var b: ActivityMainBinding
     override lateinit var prefs: SharedPreferences
     override lateinit var presenter: MainPresenterInter
+
+    override val confirmGoingBackMsg = R.string.confirm_exit
     override val mainFragmentId = R.id.databaseFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {

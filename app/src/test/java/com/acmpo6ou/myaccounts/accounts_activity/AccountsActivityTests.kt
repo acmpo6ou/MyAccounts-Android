@@ -68,18 +68,4 @@ class AccountsActivityTests {
         selectNavigationItem(R.id.save_database, activity)
         verify(activity.drawerLayout).closeDrawer(GravityCompat.START)
     }
-
-    @Test
-    fun `back button should not call confirmBack if database is saved`() {
-        whenever(presenter.isDatabaseSaved(database, app)).thenReturn(true)
-        spyActivity.onBackPressed()
-        verify(spyActivity, never()).confirmBack()
-    }
-
-    @Test
-    fun `back button should call confirmBack if database isn't saved`() {
-        whenever(presenter.isDatabaseSaved(database, app)).thenReturn(false)
-        spyActivity.onBackPressed()
-        verify(spyActivity).confirmBack()
-    }
 }

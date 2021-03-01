@@ -157,4 +157,10 @@ open class MainPresenter(override var view: MainActivityInter) : SuperPresenter(
     override fun isTimeToUpdate(): Boolean {
         return false
     }
+
+    override fun backPressed() {
+    }
+
+    override fun saveSelected() {
+    }
 }

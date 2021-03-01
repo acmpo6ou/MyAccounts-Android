@@ -25,6 +25,7 @@ import android.os.Build
 import android.os.Looper
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.test.core.app.ActivityScenario
@@ -58,6 +59,8 @@ class SuperActivityInst {
 
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     private val noUpdatesMsg = context.resources.getString(R.string.no_updates)
+    private val goBackTitle = context.resources.getString(R.string.go_back_title)
+    private val confirmExit = context.resources.getString(R.string.confirm_exit)
 
     @Before
     fun setup(){
@@ -124,5 +127,17 @@ class SuperActivityInst {
             navController.navigate(it.mainFragmentId)
             verify(it.drawerLayout).setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         }
+    }
+
+    @Test
+    fun `confirmBack should display confirmation dialog`(){
+        scenario.onActivity { it.confirmBack() }
+
+        val dialog = ShadowAlertDialog.getLatestDialog() as AlertDialog
+        val title = dialog.findViewById<TextView>(R.id.alertTitle)
+        val message = dialog.findViewById<TextView>(android.R.id.message)
+
+        assertEquals(goBackTitle, title?.text)
+        assertEquals(confirmExit, message?.text)
     }
 }

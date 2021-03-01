@@ -39,7 +39,10 @@ interface SuperActivityInter : NavigationView.OnNavigationItemSelectedListener,
 }
 
 interface SuperPresenterInter{
+    fun backPressed()
+    fun saveSelected()
     fun checkUpdatesSelected()
+
     fun navigateToChangelog()
     fun navigateToSettings()
     fun navigateToAbout()

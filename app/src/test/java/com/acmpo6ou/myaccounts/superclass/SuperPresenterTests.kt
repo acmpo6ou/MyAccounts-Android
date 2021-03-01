@@ -26,14 +26,18 @@ import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
 
-// SuperPresenter is abstract
-open class TestPresenter : SuperPresenter() {
+private open class TestPresenter : SuperPresenter() {
     override val view: SuperActivityInter = mock()
+    override fun backPressed() {
+    }
+
+    override fun saveSelected() {
+    }
 }
 
 class SuperPresenterTests {
     private lateinit var spyPresenter: TestPresenter
-    lateinit var presenter: TestPresenter
+    private lateinit var presenter: TestPresenter
     val view get() = spyPresenter.view
 
     @Before

@@ -24,9 +24,7 @@ import com.acmpo6ou.myaccounts.core.superclass.SuperActivityInter
 import com.acmpo6ou.myaccounts.core.superclass.SuperPresenterInter
 import com.acmpo6ou.myaccounts.database.Database
 
-interface AccountsPresenterInter : SuperPresenterInter, DatabaseUtils {
-    fun saveSelected()
-}
+interface AccountsPresenterInter : SuperPresenterInter, DatabaseUtils
 
 interface AccountsActivityInter: SuperActivityInter{
     val database: Database

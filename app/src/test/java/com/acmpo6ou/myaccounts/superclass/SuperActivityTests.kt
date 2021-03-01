@@ -31,8 +31,9 @@ import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
 
-open class TestActivity : SuperActivity() {
+private open class TestActivity : SuperActivity() {
     override val b: ViewBinding = mock()
+    override val confirmGoingBackMsg = 0
     override var presenter: SuperPresenterInter = mock()
     override val mainFragmentId = 0
     override val prefs: SharedPreferences = mock()
@@ -49,6 +50,7 @@ class SuperActivityTests {
     fun setup(){
         activity = TestActivity()
         activity.presenter = mock()
+        activity.navController = mock()
     }
 
     // shortcut
