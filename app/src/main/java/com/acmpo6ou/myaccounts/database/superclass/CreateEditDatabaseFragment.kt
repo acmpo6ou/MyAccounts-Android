@@ -108,8 +108,8 @@ abstract class CreateEditDatabaseFragment : CreateEditFragment(), ErrorFragment 
         val SRC_DIR = myContext.getExternalFilesDir(null)?.path + "/src"
         viewModel.initialize(app, SRC_DIR)
 
-        super<CreateEditFragment>.initModel()
-        super<ErrorFragment>.initModel()
         viewModel._loading.observe(viewLifecycleOwner, loadingObserver)
+        super<ErrorFragment>.initModel()
+        super<CreateEditFragment>.initModel()
     }
 }
