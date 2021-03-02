@@ -39,6 +39,19 @@ open class AccountsPresenter(override val view: AccountsActivityInter)
         view.mainFragment.showSuccess()
     }
 
+    /**
+     * Called when user presses the back button.
+     *
+     * Here we decide whether to show a confirmation dialog about unsaved changes or not.
+     * If database is already saved – just go back, when database isn't saved – display
+     * confirmation dialog.
+     */
     override fun backPressed() {
+        if (isDatabaseSaved(database, app)) {
+            view.goBack()
+        }
+        else{
+            view.confirmBack()
+        }
     }
 }

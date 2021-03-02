@@ -130,7 +130,7 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
      * Displays confirmation dialog asking user to confirm does he really wan't to go back
      * with unsaved changes.
      */
-    open fun confirmBack(){
+    override fun confirmBack(){
         MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.go_back_title)
                 .setMessage(confirmGoingBackMsg)
@@ -158,6 +158,8 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
             super.onBackPressed()
         }
     }
+
+    override fun goBack() = super.onBackPressed()
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {

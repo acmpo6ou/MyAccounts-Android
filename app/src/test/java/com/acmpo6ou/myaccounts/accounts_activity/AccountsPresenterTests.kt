@@ -80,4 +80,22 @@ class AccountsPresenterTests {
         spyPresenter.saveSelected()
         verify(spyPresenter, never()).saveDatabase(db.name, db, app)
     }
+
+    @Test
+    fun `backPressed should call view confirmBack when isDatabaseSaved returns false`(){
+        doReturn(false).whenever(spyPresenter).isDatabaseSaved(db, app)
+        spyPresenter.backPressed()
+
+        verify(view).confirmBack()
+        verify(view, never()).goBack()
+    }
+
+    @Test
+    fun `backPressed should call view goBack when isDatabaseSaved returns true`(){
+        doReturn(true).whenever(spyPresenter).isDatabaseSaved(db, app)
+        spyPresenter.backPressed()
+
+        verify(view).goBack()
+        verify(view, never()).confirmBack()
+    }
 }

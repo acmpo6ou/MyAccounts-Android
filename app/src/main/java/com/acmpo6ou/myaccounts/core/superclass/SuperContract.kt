@@ -36,6 +36,9 @@ interface SuperActivityInter : NavigationView.OnNavigationItemSelectedListener,
 
     fun navigateTo(id: Int)
     fun showError(title: String, details: String)
+
+    fun goBack()
+    fun confirmBack()
 }
 
 interface SuperPresenterInter{
