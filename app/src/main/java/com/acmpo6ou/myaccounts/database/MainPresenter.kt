@@ -182,6 +182,13 @@ open class MainPresenter(override var view: MainActivityInter) : SuperPresenter(
         }
     }
 
+    /**
+     * Called when user chose `Save` in confirm going back dialog.
+     * Saves all unsaved databases.
+     */
     override fun saveSelected() {
+        databases.filter { it.isOpen }
+                 .filter { !model.isDatabaseSaved(it, view.app) }
+                 .forEach { model.saveDatabase(it.name, it, view.app) }
     }
 }

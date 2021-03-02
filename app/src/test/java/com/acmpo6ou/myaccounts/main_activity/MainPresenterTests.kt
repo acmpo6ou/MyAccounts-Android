@@ -176,4 +176,19 @@ class MainPresenterTests {
         verify(view, never()).showExitTip()
         verify(view, never()).confirmBack()
     }
+
+    @Test
+    fun `saveSelected should save all unsaved databases`(){
+        app.databases = mutableListOf(
+                Database("main"),
+                Database("test", "123"), // unsaved
+                Database("saved", "123"))
+        doReturn(false).whenever(model).isDatabaseSaved(app.databases[1], app)
+        doReturn(true).whenever(model).isDatabaseSaved(app.databases[2], app)
+
+        presenter.saveSelected()
+        verify(model).saveDatabase("test", app.databases[1], app)
+        verify(model, never()).saveDatabase("main", app.databases[0], app)
+        verify(model, never()).saveDatabase("saved", app.databases[2], app)
+    }
 }
