@@ -158,7 +158,28 @@ open class MainPresenter(override var view: MainActivityInter) : SuperPresenter(
         return false
     }
 
+    /**
+     * Called when user presses the back button.
+     *
+     * Here we decide whether to show a confirmation dialog or snackbar about unsaved
+     * changes or not.
+     * If all databases are closed – just go back (exiting the app), if there are opened
+     * databases that are saved – display snackbar, if there are opened databases that aren't
+     * saved - display confirmation dialog.
+     */
     override fun backPressed() {
+        val openedDatabases = databases.filter{ it.isOpen }
+        val unsavedDatabases = openedDatabases.filter { !model.isDatabaseSaved(it, view.app) }
+
+        if (unsavedDatabases.isNotEmpty()) {
+            view.confirmBack()
+        }
+        else if (openedDatabases.isNotEmpty()) {
+            view.showExitTip()
+        }
+        else {
+            view.goBack()
+        }
     }
 
     override fun saveSelected() {

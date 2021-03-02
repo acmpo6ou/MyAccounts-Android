@@ -117,6 +117,9 @@ class MainActivity : SuperActivity(), MainActivityInter {
         startActivityForResult(intent, IMPORT_RC)
     }
 
+    override fun showExitTip() {
+    }
+
     /**
      * This method calls notifyChanged on DatabaseFragment to rerender the list.
      * @param[i] index of Database that were added to databases list.

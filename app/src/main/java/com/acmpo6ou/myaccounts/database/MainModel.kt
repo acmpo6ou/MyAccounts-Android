@@ -34,6 +34,7 @@ import java.io.*
  */
 class MainModel(private val ACCOUNTS_DIR: String,
                 private val contentResolver: ContentResolver): MainModelInter {
+    override val SRC_DIR = "$ACCOUNTS_DIR/src"
     /**
      * This method is used to clean database name from .db or .bin extension and `src/` path.
      *

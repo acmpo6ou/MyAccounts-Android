@@ -43,13 +43,17 @@ class MainPresenterTests {
     lateinit var model: MainModelInter
 
     private val locationUri: Uri = mock()
-    val app = MyApp()
     private val accountsDir = "/dev/shm/accounts"
+    val app = MyApp()
 
     @Before
     fun setup(){
+        app.databases = mutableListOf( Database("test", "123") )
         val resolver: ContentResolver = mock()
         val context: Context = mock{ on{contentResolver} doReturn resolver }
+
+        model = mock()
+        doReturn(false).whenever(model).isDatabaseSaved(app.databases[0], app)
 
         view = mock{
             on{ACCOUNTS_DIR} doReturn accountsDir
@@ -58,6 +62,7 @@ class MainPresenterTests {
         }
 
         presenter = MainPresenter(view)
+        presenter.model = model
         spyPresenter = spy(presenter)
     }
 
@@ -140,5 +145,35 @@ class MainPresenterTests {
     fun `importDatabase should call notifyChanged`(){
         importMainDatabase()
         verify(view).notifyChanged(0)
+    }
+
+    @Test
+    fun `backPressed should call confirmBack when there are unsaved databases`(){
+        doReturn(false).whenever(model).isDatabaseSaved(any(), eq(app))
+        presenter.backPressed()
+
+        verify(view).confirmBack()
+        verify(view, never()).showExitTip()
+        verify(view, never()).goBack()
+    }
+
+    @Test
+    fun `backPressed should call showExitTip when there are opened databases`(){
+        doReturn(true).whenever(model).isDatabaseSaved(any(), eq(app))
+        presenter.backPressed()
+
+        verify(view).showExitTip()
+        verify(view, never()).confirmBack()
+        verify(view, never()).goBack()
+    }
+
+    @Test
+    fun `backPressed should call goBack when there are no opened databases`(){
+        app.databases = mutableListOf( Database("main") )
+        presenter.backPressed()
+
+        verify(view).goBack()
+        verify(view, never()).showExitTip()
+        verify(view, never()).confirmBack()
     }
 }

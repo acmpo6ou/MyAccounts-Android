@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.database
 
 import android.net.Uri
+import com.acmpo6ou.myaccounts.core.DatabaseUtils
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivityInter
 import com.acmpo6ou.myaccounts.core.superclass.SuperPresenterInter
 
@@ -31,10 +32,11 @@ interface MainPresenterInter : SuperPresenterInter {
 
 interface MainActivityInter : SuperActivityInter {
     fun importDialog()
+    fun showExitTip()
     fun notifyChanged(i: Int)
 }
 
-interface MainModelInter{
+interface MainModelInter : DatabaseUtils {
     fun countFiles(location: Uri): Int
     fun getNames(locationUri: Uri): List<String>
     fun getSizes(locationUri: Uri): List<Int>
