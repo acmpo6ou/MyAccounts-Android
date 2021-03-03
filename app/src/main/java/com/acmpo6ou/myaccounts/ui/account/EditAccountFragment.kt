@@ -19,31 +19,53 @@
 
 package com.acmpo6ou.myaccounts.ui.account
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
+import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.account.superclass.CreateEditAccountFragment
+import com.acmpo6ou.myaccounts.database.Account
+import com.acmpo6ou.myaccounts.database.DbMap
 
-class EditAccountFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = EditAccountFragment()
-    }
-
-    private lateinit var viewModel: EditAccountViewModel
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.create_edit_account_fragment, container, false)
-    }
+class EditAccountFragment : CreateEditAccountFragment() {
+    override lateinit var viewModel: EditAccountViewModel
+    private val accountsActivity get() = activity as? AccountsActivity
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(EditAccountViewModel::class.java)
-        // TODO: Use the ViewModel
+
+        val accounts = accountsActivity?.database?.data
+        val accountName = arguments?.getString("accountName")
+
+        if (accounts != null && accountName != null) {
+            viewModel.initialize(app, accounts, accountName)
+            initModel()
+            initForm()
+            setAccount(accounts, accountName)
+        }
     }
 
+    /**
+     * Fills all form fields with data from provided account.
+     * @param[accounts] database map of accounts.
+     * @param[accountName] name of account to retrieve it from [accounts] map.
+     */
+    fun setAccount(accounts: DbMap, accountName: String) {
+        val account: Account = accounts[accountName]!!
+
+        b.accountUsername.setText(account.username)
+        b.accountEmail.setText(account.email)
+        b.accountPassword.setText(account.password)
+        b.accountRepeatPassword.setText(account.password)
+        b.birthDate.text = account.date
+        b.accountComment.setText(account.comment)
+    }
+
+    override fun initForm() {
+        super.initForm()
+
+        // change text of apply button from `Create` to `Save`
+        b.applyButton.text = myContext.resources.getString(R.string.save)
+    }
 }
