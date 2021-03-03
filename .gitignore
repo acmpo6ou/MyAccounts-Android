@@ -108,3 +108,4 @@ lint/tmp/
 
 *.swp
 projectFilesBackup/*
+app/release/*
