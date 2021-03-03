@@ -33,7 +33,6 @@ import org.junit.Test
 class EditAccountModelTests {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
-
     val model = EditAccountViewModel()
 
     @Before
@@ -52,5 +51,13 @@ class EditAccountModelTests {
                 account.comment)
         assertFalse(account.accountName in model.accounts)
         assertTrue("habr" in model.accounts)
+    }
+
+    @Test
+    fun `validateName when name of Database didn't change through editing`(){
+        // account already exists but it's being edited, so that doesn't count
+        model.validateName(account.accountName)
+        assertFalse(model.existsNameErr)
+        assertFalse(model.emptyNameErr)
     }
 }

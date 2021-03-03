@@ -42,4 +42,25 @@ class EditAccountViewModel : CreateAccountViewModel() {
         accounts.remove(oldAccount?.accountName)
         super.applyPressed(accountName, username, email, password, date, comment)
     }
+
+    /**
+     * This method validates given name, checks whether it's not empty and whether account
+     * with such name already exists, but it's okay if name doesn't change through editing.
+     *
+     * If name is empty [emptyNameErr] is set to true.
+     * If account with such name already exists [existsNameErr] is set to true.
+     * @param[name] name to validate.
+     */
+    override fun validateName(name: String) {
+        val oldName = oldAccount?.accountName
+
+        // it's okay if name didn't change through editing
+        if(oldName == name){
+            existsNameErr = false
+            emptyNameErr = false
+        }
+        else{
+            super.validateName(name)
+        }
+    }
 }
