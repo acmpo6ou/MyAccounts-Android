@@ -52,6 +52,7 @@ class EditAccountFragmentInst {
         scenario.onFragment {
             it.setAccount(databaseMap, account.accountName)
 
+            assertEquals(account.accountName, it.b.accountName.text.toString())
             assertEquals(account.username, it.b.accountUsername.text.toString())
             assertEquals(account.email, it.b.accountEmail.text.toString())
             assertEquals(account.password, it.b.accountPassword.text.toString())

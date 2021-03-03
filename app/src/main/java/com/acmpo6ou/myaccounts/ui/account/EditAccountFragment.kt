@@ -54,6 +54,7 @@ class EditAccountFragment : CreateEditAccountFragment() {
     fun setAccount(accounts: DbMap, accountName: String) {
         val account: Account = accounts[accountName]!!
 
+        b.accountName.setText(account.accountName)
         b.accountUsername.setText(account.username)
         b.accountEmail.setText(account.email)
         b.accountPassword.setText(account.password)
