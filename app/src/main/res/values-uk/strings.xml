@@ -57,4 +57,13 @@
     <string name="small_english_letters">Маленькі англійські букви</string>
     <string name="punctuation">Пунктуація</string>
     <string name="edit_db">"Редагувати "</string>
+    <string name="confirm_going_back">Якщо  ви повністю закриєте програму всі не збережені зміни буде втрачено.</string>
+    <string name="cancel">Відміна</string>
+    <string name="confirm_account_delete">Ви певні що хочете видалити акаунт %1$s?</string>
+    <string name="copied">Пароль скопійовано!</string>
+    <string name="name_exists">Ім\'я вже зайнято!</string>
+    <string name="pick_date">Виберіть дату</string>
+    <string name="confirm_exit">Усі не збережені зміни буде втрачено!</string>
+    <string name="go_back_title">Ви певні що хочете повернутися назад?</string>
+    <string name="exit_tip">Натисніть назад знову аби вийти.</string>
 </resources>
