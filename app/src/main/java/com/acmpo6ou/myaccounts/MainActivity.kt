@@ -35,6 +35,7 @@ import com.acmpo6ou.myaccounts.database.MainPresenter
 import com.acmpo6ou.myaccounts.database.MainPresenterInter
 import com.acmpo6ou.myaccounts.databinding.ActivityMainBinding
 import com.acmpo6ou.myaccounts.ui.database.DatabaseFragment
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : SuperActivity(), MainActivityInter {
     val IMPORT_RC = 202
@@ -44,6 +45,7 @@ class MainActivity : SuperActivity(), MainActivityInter {
     override lateinit var presenter: MainPresenterInter
 
     override val confirmGoingBackMsg = R.string.confirm_exit
+    override var lastBackPressTime: Long = 0
     override val mainFragmentId = R.id.databaseFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -118,6 +120,11 @@ class MainActivity : SuperActivity(), MainActivityInter {
     }
 
     override fun showExitTip() {
+        Snackbar.make(mainFragment.b.coordinatorLayout,
+                R.string.exit_tip,
+                4000)
+                .setAction("HIDE"){}
+                .show()
     }
 
     /**

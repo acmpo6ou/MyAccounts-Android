@@ -174,7 +174,9 @@ open class MainPresenter(override var view: MainActivityInter) : SuperPresenter(
         if (unsavedDatabases.isNotEmpty()) {
             view.confirmBack()
         }
-        else if (openedDatabases.isNotEmpty()) {
+        else if (openedDatabases.isNotEmpty() &&
+                 view.lastBackPressTime < System.currentTimeMillis() - 4000) {
+            view.lastBackPressTime = System.currentTimeMillis()
             view.showExitTip()
         }
         else {

@@ -31,6 +31,8 @@ interface MainPresenterInter : SuperPresenterInter {
 }
 
 interface MainActivityInter : SuperActivityInter {
+    var lastBackPressTime: Long
+
     fun importDialog()
     fun showExitTip()
     fun notifyChanged(i: Int)

@@ -19,12 +19,17 @@
 
 package com.acmpo6ou.myaccounts.main_activity
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.os.Looper
+import android.view.View
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ActivityScenario.launch
+import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.findSnackbarTextView
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -40,6 +45,8 @@ import org.robolectric.annotation.LooperMode
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class MainActivityInst {
     lateinit var scenario: ActivityScenario<MainActivity>
+    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
+    private val exitTip = context.resources.getString(R.string.exit_tip)
 
     @Before
     fun setup(){
@@ -67,5 +74,22 @@ class MainActivityInst {
                 expectedCategory, intent.categories.first())
         assertEquals("importDialog: incorrect intent type!",
                 expectedType, intent.type)
+    }
+
+    @Test
+    fun `showExitTip should display snackbar`(){
+        scenario.onActivity {
+            it.showExitTip()
+
+            // this is because of some Robolectric main looper problems
+            shadowOf(Looper.getMainLooper()).idle()
+
+            // get the snackbar
+            val v: View = it.findViewById(android.R.id.content)
+            val snackbar = v.rootView.findSnackbarTextView()
+
+            // check the snackbar's message
+            assertEquals(exitTip, snackbar?.text)
+        }
     }
 }
