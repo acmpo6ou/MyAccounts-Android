@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.core.superclass
 
+import com.acmpo6ou.myaccounts.BuildConfig
 import com.acmpo6ou.myaccounts.R
 
 /**
@@ -27,15 +28,23 @@ import com.acmpo6ou.myaccounts.R
 abstract class SuperPresenter : SuperPresenterInter {
     abstract val view: SuperActivityInter
 
-    open fun checkForUpdates(): Boolean{
-        return false
-    }
-
     /**
      * This method is called when user clicks `Check for updates` in navigation drawer.
      */
-    override fun checkUpdatesSelected() {
-        if(checkForUpdates()) {
+    override fun checkUpdatesSelected(){
+    }
+
+    /**
+     * This methods determines whether there are updates available by given [latestVersion].
+     *
+     * If [latestVersion] is different then currently installed one, then there are updates
+     * available, otherwise they aren't.
+     * Depending on whether there are updates or not we launch UpdatesActivity or display a
+     * snackbar that there are no updates.
+     * @param[latestVersion] latest app version that is available on github releases.
+     */
+    fun checkForUpdates(latestVersion: String) {
+        if(BuildConfig.VERSION_NAME != latestVersion) {
             view.startUpdatesActivity()
         }
         else{

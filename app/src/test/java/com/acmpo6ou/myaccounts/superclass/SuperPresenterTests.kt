@@ -19,10 +19,16 @@
 
 package com.acmpo6ou.myaccounts.superclass
 
+import com.acmpo6ou.myaccounts.BuildConfig
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivityInter
 import com.acmpo6ou.myaccounts.core.superclass.SuperPresenter
-import com.nhaarman.mockitokotlin2.*
+import com.acmpo6ou.myaccounts.str
+import com.github.javafaker.Faker
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.spy
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
 
@@ -38,7 +44,9 @@ private open class TestPresenter : SuperPresenter() {
 class SuperPresenterTests {
     private lateinit var spyPresenter: TestPresenter
     private lateinit var presenter: TestPresenter
+
     val view get() = spyPresenter.view
+    private val latestVersion = Faker().str()
 
     @Before
     fun setup(){
@@ -47,19 +55,19 @@ class SuperPresenterTests {
     }
 
     @Test
-    fun `checkUpdatesSelected should call noUpdates when updates aren't available`(){
-        doReturn(false).`when`(spyPresenter).checkForUpdates()
-        spyPresenter.checkUpdatesSelected()
-
+    fun `checkForUpdates should call noUpdates when updates aren't available`(){
+        // here we pass version that is exactly the same as installed one, so there are
+        // no updates available
+        spyPresenter.checkForUpdates(BuildConfig.VERSION_NAME)
         verify(view).noUpdates()
         verify(view, never()).startUpdatesActivity()
     }
 
     @Test
-    fun `checkUpdatesSelected should call startUpdatesActivity when updates are available`(){
-        doReturn(true).`when`(spyPresenter).checkForUpdates()
-        spyPresenter.checkUpdatesSelected()
-
+    fun `checkForUpdates should call startUpdatesActivity when updates are available`(){
+        // here we pass different version then the installed one, so there are
+        // updates available
+        spyPresenter.checkForUpdates(latestVersion)
         verify(view).startUpdatesActivity()
         verify(view, never()).noUpdates()
     }

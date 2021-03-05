@@ -182,7 +182,6 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
     }
 
     override fun startUpdatesActivity() {
-
     }
 
     /**
