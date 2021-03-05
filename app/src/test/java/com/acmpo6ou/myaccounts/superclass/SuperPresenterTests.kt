@@ -22,14 +22,19 @@ package com.acmpo6ou.myaccounts.superclass
 import com.acmpo6ou.myaccounts.BuildConfig
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.core.superclass.GitHubService
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivityInter
 import com.acmpo6ou.myaccounts.core.superclass.SuperPresenter
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.*
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import retrofit2.Retrofit
+import kotlin.random.Random
 
 private val fakeApp = MyApp()
 
@@ -48,6 +53,9 @@ class SuperPresenterTests {
 
     val view get() = spyPresenter.view
     private val latestVersion = Faker().str()
+
+    lateinit var expectedVersion: String
+    lateinit var jsonStr: String
 
     @Before
     fun setup(){
@@ -77,6 +85,30 @@ class SuperPresenterTests {
     fun `checkForUpdates should save latestVersion to MyApp when updates are available`(){
         spyPresenter.checkForUpdates(latestVersion)
         assertEquals(latestVersion, fakeApp.latestVersion)
+    }
+
+    private fun generateVersion() {
+        val versionNums = List(10) { Random.nextInt(0, 100) }
+        expectedVersion = String.format("v%d.%d.%d", *versionNums.toTypedArray())
+        jsonStr = """{"name":"%s"}""".format(expectedVersion)
+    }
+
+    @Test
+    fun `checkUpdatesSelected should call checkForUpdates passing through version`(){
+        val mockWebServer = MockWebServer()
+        val service = Retrofit.Builder()
+                .baseUrl(mockWebServer.url("/"))
+                .build()
+                .create(GitHubService::class.java)
+        spyPresenter.service = service
+
+        generateVersion()
+        mockWebServer.enqueue(MockResponse()
+                .setBody(jsonStr)
+                .setResponseCode(200))
+
+        spyPresenter.checkUpdatesSelected()
+        verify(spyPresenter).checkForUpdates(expectedVersion)
     }
 
     @Test

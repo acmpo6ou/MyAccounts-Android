@@ -95,8 +95,10 @@ dependencies {
     kapt 'androidx.databinding:databinding-compiler-common:4.1.2'
     implementation 'org.jetbrains.kotlin:kotlin-reflect:1.4.31'
 
+    // internet
     implementation 'com.squareup.retrofit2:retrofit:2.7.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.7.2'
+    testImplementation "com.squareup.okhttp3:mockwebserver:3.12.0"
 
     // Coroutines
     final def coroutines_ver = "1.4.1"

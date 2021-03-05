@@ -21,12 +21,27 @@ package com.acmpo6ou.myaccounts.core.superclass
 
 import com.acmpo6ou.myaccounts.BuildConfig
 import com.acmpo6ou.myaccounts.R
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Retrofit
+import retrofit2.http.GET
+import retrofit2.http.Headers
 
+interface GitHubService {
+    @Headers("Accept: application/json")
+    @GET("repos/Acmpo6ou/MyAccounts/releases/latest")
+    fun getReleases(): Call<ResponseBody>
+}
 /**
  * Super class for MainPresenter and AccountsPresenter.
  */
 abstract class SuperPresenter : SuperPresenterInter {
     abstract val view: SuperActivityInter
+
+    private val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.github.com")
+            .build()
+    var service = retrofit.create(GitHubService::class.java)
 
     /**
      * This method is called when user clicks `Check for updates` in navigation drawer.
