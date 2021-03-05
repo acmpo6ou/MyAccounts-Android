@@ -109,3 +109,4 @@ lint/tmp/
 *.swp
 projectFilesBackup/*
 app/release/*
+release.myaccounts.jks
