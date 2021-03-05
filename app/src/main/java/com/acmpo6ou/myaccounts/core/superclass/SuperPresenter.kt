@@ -45,6 +45,7 @@ abstract class SuperPresenter : SuperPresenterInter {
      */
     fun checkForUpdates(latestVersion: String) {
         if(BuildConfig.VERSION_NAME != latestVersion) {
+            view.app.latestVersion = latestVersion // save latestVersion for UpdatesActivity
             view.startUpdatesActivity()
         }
         else{

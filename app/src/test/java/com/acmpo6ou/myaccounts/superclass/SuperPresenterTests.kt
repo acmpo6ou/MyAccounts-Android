@@ -21,22 +21,23 @@ package com.acmpo6ou.myaccounts.superclass
 
 import com.acmpo6ou.myaccounts.BuildConfig
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivityInter
 import com.acmpo6ou.myaccounts.core.superclass.SuperPresenter
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
+private val fakeApp = MyApp()
+
 private open class TestPresenter : SuperPresenter() {
-    override val view: SuperActivityInter = mock()
+    override val view: SuperActivityInter = mock{ on{app} doReturn fakeApp }
+
     override fun backPressed() {
     }
-
     override fun saveSelected() {
     }
 }
@@ -70,6 +71,12 @@ class SuperPresenterTests {
         spyPresenter.checkForUpdates(latestVersion)
         verify(view).startUpdatesActivity()
         verify(view, never()).noUpdates()
+    }
+
+    @Test
+    fun `checkForUpdates should save latestVersion to MyApp when updates are available`(){
+        spyPresenter.checkForUpdates(latestVersion)
+        assertEquals(latestVersion, fakeApp.latestVersion)
     }
 
     @Test
