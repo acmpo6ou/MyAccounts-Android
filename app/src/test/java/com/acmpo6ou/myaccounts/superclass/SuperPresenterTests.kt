@@ -22,25 +22,21 @@ package com.acmpo6ou.myaccounts.superclass
 import com.acmpo6ou.myaccounts.BuildConfig
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.core.superclass.GitHubService
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivityInter
 import com.acmpo6ou.myaccounts.core.superclass.SuperPresenter
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
-import com.nhaarman.mockitokotlin2.*
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
-import org.awaitility.kotlin.await
-import org.awaitility.kotlin.untilCallTo
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import retrofit2.Retrofit
-import kotlin.random.Random
 
-private val fakeApp = MyApp()
+val fakeApp = MyApp()
 
-private open class TestPresenter : SuperPresenter() {
+open class TestSuperPresenter : SuperPresenter() {
     override val view: SuperActivityInter = mock{ on{app} doReturn fakeApp }
 
     override fun backPressed() {
@@ -50,15 +46,12 @@ private open class TestPresenter : SuperPresenter() {
 }
 
 class SuperPresenterTests {
-    private lateinit var presenter: TestPresenter
+    private lateinit var presenter: TestSuperPresenter
     private val latestVersion = Faker().str()
-
-    lateinit var expectedVersion: String
-    lateinit var jsonStr: String
 
     @Before
     fun setup(){
-        presenter = TestPresenter()
+        presenter = TestSuperPresenter()
     }
 
     @Test
@@ -83,37 +76,6 @@ class SuperPresenterTests {
     fun `checkForUpdates should save latestVersion to MyApp when updates are available`(){
         presenter.checkForUpdates(latestVersion)
         assertEquals(latestVersion, fakeApp.latestVersion)
-    }
-
-    /**
-     * Helper method used by next test, it generates random version string and json
-     * containing this version string.
-     */
-    private fun generateVersion() {
-        val versionNums = List(10) { Random.nextInt(0, 100) }
-        expectedVersion = String.format("v%d.%d.%d", *versionNums.toTypedArray())
-        jsonStr = """ {"name":"%s"} """.format(expectedVersion)
-    }
-
-    @Test
-    fun `checkUpdatesSelected should call checkForUpdates passing through version`(){
-        val mockWebServer = MockWebServer()
-        val service = Retrofit.Builder()
-                .baseUrl(mockWebServer.url("/"))
-                .build()
-                .create(GitHubService::class.java)
-
-        val spyPresenter = spy(presenter)
-        spyPresenter.service = service
-
-        // mock response with random version name
-        generateVersion()
-        mockWebServer.enqueue(MockResponse()
-                .setBody(jsonStr)
-                .setResponseCode(200))
-
-        spyPresenter.checkUpdatesSelected()
-        await untilCallTo { spyPresenter.checkForUpdates(expectedVersion) }
     }
 
     @Test
