@@ -23,6 +23,8 @@ import com.acmpo6ou.myaccounts.BuildConfig
 import com.acmpo6ou.myaccounts.R
 import okhttp3.ResponseBody
 import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -47,6 +49,18 @@ abstract class SuperPresenter : SuperPresenterInter {
      * This method is called when user clicks `Check for updates` in navigation drawer.
      */
     override fun checkUpdatesSelected(){
+        service.getReleases().enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                val json = response.body()!!.string()
+                val regex = Regex("""name":"(v\d+\.\d+\.\d+)""")
+                val version = regex.find(json)!!.groupValues.last()
+                checkForUpdates(version)
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 
     /**
@@ -58,7 +72,7 @@ abstract class SuperPresenter : SuperPresenterInter {
      * snackbar that there are no updates.
      * @param[latestVersion] latest app version that is available on github releases.
      */
-    fun checkForUpdates(latestVersion: String) {
+    open fun checkForUpdates(latestVersion: String) {
         if(BuildConfig.VERSION_NAME != latestVersion) {
             view.app.latestVersion = latestVersion // save latestVersion for UpdatesActivity
             view.startUpdatesActivity()
