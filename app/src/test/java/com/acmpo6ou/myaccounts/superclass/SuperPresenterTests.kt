@@ -30,6 +30,8 @@ import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.*
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import org.awaitility.kotlin.await
+import org.awaitility.kotlin.untilCallTo
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -51,9 +53,7 @@ class SuperPresenterTests {
     private lateinit var spyPresenter: TestPresenter
     private lateinit var presenter: TestPresenter
 
-    val view get() = spyPresenter.view
     private val latestVersion = Faker().str()
-
     lateinit var expectedVersion: String
     lateinit var jsonStr: String
 
@@ -67,30 +67,30 @@ class SuperPresenterTests {
     fun `checkForUpdates should call noUpdates when updates aren't available`(){
         // here we pass version that is exactly the same as installed one, so there are
         // no updates available
-        spyPresenter.checkForUpdates(BuildConfig.VERSION_NAME)
-        verify(view).noUpdates()
-        verify(view, never()).startUpdatesActivity()
+        presenter.checkForUpdates(BuildConfig.VERSION_NAME)
+        verify(presenter.view).noUpdates()
+        verify(presenter.view, never()).startUpdatesActivity()
     }
 
     @Test
     fun `checkForUpdates should call startUpdatesActivity when updates are available`(){
         // here we pass different version then the installed one, so there are
         // updates available
-        spyPresenter.checkForUpdates(latestVersion)
-        verify(view).startUpdatesActivity()
-        verify(view, never()).noUpdates()
+        presenter.checkForUpdates(latestVersion)
+        verify(presenter.view).startUpdatesActivity()
+        verify(presenter.view, never()).noUpdates()
     }
 
     @Test
     fun `checkForUpdates should save latestVersion to MyApp when updates are available`(){
-        spyPresenter.checkForUpdates(latestVersion)
+        presenter.checkForUpdates(latestVersion)
         assertEquals(latestVersion, fakeApp.latestVersion)
     }
 
     private fun generateVersion() {
         val versionNums = List(10) { Random.nextInt(0, 100) }
         expectedVersion = String.format("v%d.%d.%d", *versionNums.toTypedArray())
-        jsonStr = """{"name":"%s"}""".format(expectedVersion)
+        jsonStr = """ {"name":"%s"} """.format(expectedVersion)
     }
 
     @Test
@@ -108,24 +108,24 @@ class SuperPresenterTests {
                 .setResponseCode(200))
 
         spyPresenter.checkUpdatesSelected()
-        verify(spyPresenter).checkForUpdates(expectedVersion)
+        await untilCallTo { spyPresenter.checkForUpdates(expectedVersion) }
     }
 
     @Test
     fun `navigateToChangelog should call navigateTo`(){
         presenter.navigateToChangelog()
-        verify(view).navigateTo(R.id.actionChangelog)
+        verify(presenter.view).navigateTo(R.id.actionChangelog)
     }
 
     @Test
     fun `navigateToSettings should call navigateTo`(){
         presenter.navigateToSettings()
-        verify(view).navigateTo(R.id.actionSettings)
+        verify(presenter.view).navigateTo(R.id.actionSettings)
     }
 
     @Test
     fun `navigateToAbout should call navigateTo`(){
         presenter.navigateToAbout()
-        verify(view).navigateTo(R.id.actionAbout)
+        verify(presenter.view).navigateTo(R.id.actionAbout)
     }
 }
