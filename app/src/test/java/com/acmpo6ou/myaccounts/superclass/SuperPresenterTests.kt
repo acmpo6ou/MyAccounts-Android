@@ -50,17 +50,15 @@ private open class TestPresenter : SuperPresenter() {
 }
 
 class SuperPresenterTests {
-    private lateinit var spyPresenter: TestPresenter
     private lateinit var presenter: TestPresenter
-
     private val latestVersion = Faker().str()
+
     lateinit var expectedVersion: String
     lateinit var jsonStr: String
 
     @Before
     fun setup(){
         presenter = TestPresenter()
-        spyPresenter = spy(presenter)
     }
 
     @Test
@@ -87,6 +85,10 @@ class SuperPresenterTests {
         assertEquals(latestVersion, fakeApp.latestVersion)
     }
 
+    /**
+     * Helper method used by next test, it generates random version string and json
+     * containing this version string.
+     */
     private fun generateVersion() {
         val versionNums = List(10) { Random.nextInt(0, 100) }
         expectedVersion = String.format("v%d.%d.%d", *versionNums.toTypedArray())
@@ -100,8 +102,11 @@ class SuperPresenterTests {
                 .baseUrl(mockWebServer.url("/"))
                 .build()
                 .create(GitHubService::class.java)
+
+        val spyPresenter = spy(presenter)
         spyPresenter.service = service
 
+        // mock response with random version name
         generateVersion()
         mockWebServer.enqueue(MockResponse()
                 .setBody(jsonStr)

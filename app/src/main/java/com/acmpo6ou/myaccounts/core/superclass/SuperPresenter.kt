@@ -29,11 +29,15 @@ import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Headers
 
+/**
+ * Retrofit service used to download latest release version from app's github repository.
+ */
 interface GitHubService {
     @Headers("Accept: application/json")
     @GET("repos/Acmpo6ou/MyAccounts/releases/latest")
-    fun getReleases(): Call<ResponseBody>
+    fun getLatestRelease(): Call<ResponseBody>
 }
+
 /**
  * Super class for MainPresenter and AccountsPresenter.
  */
@@ -47,9 +51,12 @@ abstract class SuperPresenter : SuperPresenterInter {
 
     /**
      * This method is called when user clicks `Check for updates` in navigation drawer.
+     *
+     * Uses [service] to get json of latest release from which it extracts app's latest
+     * version using regex.
      */
     override fun checkUpdatesSelected(){
-        service.getReleases().enqueue(object : Callback<ResponseBody> {
+        service.getLatestRelease().enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 val json = response.body()!!.string()
                 val regex = Regex("""name":"(v\d+\.\d+\.\d+)""")
