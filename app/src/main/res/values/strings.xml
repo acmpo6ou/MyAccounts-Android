@@ -119,4 +119,7 @@
     <string name="confirm_exit">Any unsaved changes will be lost!</string>
     <string name="go_back_title">Are you sure you want to go back?</string>
     <string name="exit_tip">Press back again to exit.</string>
+    <string name="update_notice">"Warning!
+        App will restart after update and any unsafe changes will be lost!"</string>
+    <string name="loading">Loading...</string>
 </resources>
