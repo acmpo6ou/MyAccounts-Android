@@ -37,7 +37,7 @@ import org.junit.Test
 val fakeApp = MyApp()
 
 open class TestSuperPresenter : SuperPresenter() {
-    override val view: SuperActivityInter = mock{ on{app} doReturn fakeApp }
+    override var view: SuperActivityInter = mock{ on{app} doReturn fakeApp }
 
     override fun backPressed() {
     }

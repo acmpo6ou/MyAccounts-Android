@@ -116,6 +116,9 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
                 .show()
     }
 
+    override fun updatesCheckFailed() {
+    }
+
     /**
      * This method obtains version name and sets it in navigation header.
      */

@@ -47,25 +47,32 @@ abstract class SuperPresenter : SuperPresenterInter {
     private val retrofit = Retrofit.Builder()
             .baseUrl("https://api.github.com")
             .build()
-    var service = retrofit.create(GitHubService::class.java)
+    var service: GitHubService = retrofit.create(GitHubService::class.java)
 
     /**
      * This method is called when user clicks `Check for updates` in navigation drawer.
      *
      * Uses [service] to get json of latest release from which it extracts app's latest
      * version using regex.
+     * If response is unsuccessful display snackbar about failure to check for updates.
      */
     override fun checkUpdatesSelected(){
         service.getLatestRelease().enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                val json = response.body()!!.string()
-                val regex = Regex("""name":"(v\d+\.\d+\.\d+)""")
-                val version = regex.find(json)!!.groupValues.last()
-                checkForUpdates(version)
+                if (response.isSuccessful) {
+                    val json = response.body()!!.string()
+                    val regex = Regex("""name":"(v\d+\.\d+\.\d+)""")
+                    val version = regex.find(json)!!.groupValues.last()
+                    checkForUpdates(version)
+                }
+                else {
+                    view.updatesCheckFailed()
+                }
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                TODO("Not yet implemented")
+                view.updatesCheckFailed()
+                t.printStackTrace()
             }
         })
     }
@@ -89,18 +96,12 @@ abstract class SuperPresenter : SuperPresenterInter {
         }
     }
 
-    /**
-     * Called when user clicks `Changelog` in navigation drawer.
-     */
+    // Called when user clicks `Changelog` in navigation drawer.
     override fun navigateToChangelog() = view.navigateTo(R.id.actionChangelog)
 
-    /**
-     * Called when user clicks `Settings` in navigation drawer.
-     */
+    // Called when user clicks `Settings` in navigation drawer.
     override fun navigateToSettings() = view.navigateTo(R.id.actionSettings)
 
-    /**
-     * Called when user clicks `About` in navigation drawer.
-     */
+    // Called when user clicks `About` in navigation drawer.
     override fun navigateToAbout() = view.navigateTo(R.id.actionAbout)
 }

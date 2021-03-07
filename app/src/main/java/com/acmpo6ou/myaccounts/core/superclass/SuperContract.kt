@@ -33,6 +33,7 @@ interface SuperActivityInter : NavigationView.OnNavigationItemSelectedListener,
 
     fun startUpdatesActivity()
     fun noUpdates()
+    fun updatesCheckFailed()
 
     fun navigateTo(id: Int)
     fun showError(title: String, details: String)

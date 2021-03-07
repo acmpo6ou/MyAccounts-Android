@@ -21,10 +21,10 @@ package com.acmpo6ou.myaccounts.superclass
 
 import com.acmpo6ou.myaccounts.core.superclass.GitHubService
 import com.nhaarman.mockitokotlin2.spy
+import com.nhaarman.mockitokotlin2.timeout
+import com.nhaarman.mockitokotlin2.verify
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-import org.awaitility.kotlin.await
-import org.awaitility.kotlin.untilCallTo
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -33,6 +33,14 @@ import kotlin.random.Random
 
 class SuperPresenterInst {
     @get:Rule val mockWebServer = MockWebServer()
+    private val service: GitHubService by lazy {
+        Retrofit.Builder()
+                .baseUrl(mockWebServer.url("/"))
+                .build()
+                .create(GitHubService::class.java)
+    }
+
+    private lateinit var presenter: TestSuperPresenter
     private lateinit var spyPresenter: TestSuperPresenter
 
     lateinit var expectedVersion: String
@@ -40,15 +48,9 @@ class SuperPresenterInst {
 
     @Before
     fun setup(){
-        val presenter = TestSuperPresenter()
-        val service = Retrofit.Builder()
-                .baseUrl(mockWebServer.url("/"))
-                .build()
-                .create(GitHubService::class.java)
-
+        presenter = TestSuperPresenter()
         spyPresenter = spy(presenter)
         spyPresenter.service = service
-
     }
 
     /**
@@ -70,6 +72,16 @@ class SuperPresenterInst {
                 .setResponseCode(200))
 
         spyPresenter.checkUpdatesSelected()
-        await untilCallTo { spyPresenter.checkForUpdates(expectedVersion) }
+        verify(spyPresenter, timeout(3000)).checkForUpdates(expectedVersion)
+    }
+
+    @Test
+    fun `checkUpdatesSelected should handle failure`(){
+        // mock failure response
+        mockWebServer.enqueue(MockResponse()
+                .setResponseCode(500))
+
+        spyPresenter.checkUpdatesSelected()
+        verify(spyPresenter.view, timeout(3000)).updatesCheckFailed()
     }
 }
