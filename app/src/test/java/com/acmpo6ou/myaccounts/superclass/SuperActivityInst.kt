@@ -55,10 +55,12 @@ class SuperActivityInst {
     // here we use MainActivity instead of SuperActivity because SuperActivity is abstract
     // and MainActivity inherits from SuperActivity
     lateinit var scenario: ActivityScenario<MainActivity>
+    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     private val faker = Faker()
 
-    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     private val noUpdatesMsg = context.resources.getString(R.string.no_updates)
+    private val updatesCheckFailedMsg = context.resources.getString(R.string.updates_check_failed)
+
     private val goBackTitle = context.resources.getString(R.string.go_back_title)
     private val confirmExit = context.resources.getString(R.string.confirm_exit)
 
@@ -102,8 +104,24 @@ class SuperActivityInst {
             val snackbar = v.rootView.findSnackbarTextView()
 
             // check the snackbar's message
-            assertEquals("noUpdates snackbar has incorrect message!",
-                    noUpdatesMsg, snackbar?.text)
+            assertEquals(noUpdatesMsg, snackbar?.text)
+        }
+    }
+
+    @Test
+    fun `updatesCheckFailed should display snackbar`(){
+        scenario.onActivity {
+            it.updatesCheckFailed()
+
+            // this is because of some Robolectric main looper problems
+            Shadows.shadowOf(Looper.getMainLooper()).idle()
+
+            // get the snackbar
+            val v: View = it.findViewById(android.R.id.content)
+            val snackbar = v.rootView.findSnackbarTextView()
+
+            // check the snackbar's message
+            assertEquals(updatesCheckFailedMsg, snackbar?.text)
         }
     }
 

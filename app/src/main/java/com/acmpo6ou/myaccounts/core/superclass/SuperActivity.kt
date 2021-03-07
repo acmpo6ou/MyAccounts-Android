@@ -116,7 +116,15 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
                 .show()
     }
 
+    /**
+     * Displays snackbar to tell user that check for updates has failed.
+     */
     override fun updatesCheckFailed() {
+        Snackbar.make(mainFragment.b.coordinatorLayout,
+                R.string.updates_check_failed,
+                Snackbar.LENGTH_LONG)
+                .setAction("HIDE"){}
+                .show()
     }
 
     /**
