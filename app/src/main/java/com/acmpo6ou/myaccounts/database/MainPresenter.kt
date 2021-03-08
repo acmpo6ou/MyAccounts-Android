@@ -24,6 +24,7 @@ import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.superclass.SuperPresenter
 import java.io.File
 import java.io.IOException
+import java.time.LocalDate
 
 open class MainPresenter(override var view: MainActivityInter) : SuperPresenter(),
                                                                  MainPresenterInter {
@@ -155,7 +156,9 @@ open class MainPresenter(override var view: MainActivityInter) : SuperPresenter(
      * @return boolean value indicating whether it is time to check for updates.
      */
     override fun isTimeToUpdate(): Boolean {
-        return false
+        val lastCheck = LocalDate.ofEpochDay(
+            view.prefs.getLong("last_update_check", LocalDate.MIN.toEpochDay()))
+        return lastCheck < LocalDate.now()
     }
 
     /**

@@ -30,6 +30,7 @@ import com.acmpo6ou.myaccounts.database.MainModelInter
 import com.acmpo6ou.myaccounts.database.MainPresenter
 import com.acmpo6ou.myaccounts.randomIntExcept
 import com.acmpo6ou.myaccounts.str
+import com.github.ivanshafran.sharedpreferencesmock.SPMockBuilder
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
@@ -63,9 +64,11 @@ class MainPresenterInst {
 
     @Before
     fun setup(){
+        val mockPrefs = SPMockBuilder().createSharedPreferences()
         view = mock{
             on{myContext} doReturn context
             on{ACCOUNTS_DIR} doReturn ""
+            on{prefs} doReturn mockPrefs
         }
         model = mock()
 
