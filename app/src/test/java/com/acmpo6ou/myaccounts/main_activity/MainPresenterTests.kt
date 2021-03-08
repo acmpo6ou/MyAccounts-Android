@@ -30,8 +30,7 @@ import com.acmpo6ou.myaccounts.database.MainModelInter
 import com.acmpo6ou.myaccounts.database.MainPresenter
 import com.github.ivanshafran.sharedpreferencesmock.SPMockBuilder
 import com.nhaarman.mockitokotlin2.*
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyString
@@ -120,6 +119,21 @@ class MainPresenterTests {
         val date = LocalDate.now().toEpochDay()
         mockPrefs.edit().putLong("last_update_check", date).commit()
         assertFalse(presenter.isTimeToUpdate())
+    }
+
+    @Test
+    fun `isTimeToUpdate should set last_update_check`(){
+        // last time we checked for updates was long time ago
+        val date = LocalDate.MIN.toEpochDay()
+        mockPrefs.edit().putLong("last_update_check", date).commit()
+        presenter.isTimeToUpdate()
+
+        // last_update_check should be set to today date because last time we checked for
+        // updates were today
+        val today = LocalDate.now()
+        val lastCheck = LocalDate.ofEpochDay(
+                mockPrefs.getLong("last_update_check", 0L))
+        assertEquals(today, lastCheck)
     }
 
     @Test
