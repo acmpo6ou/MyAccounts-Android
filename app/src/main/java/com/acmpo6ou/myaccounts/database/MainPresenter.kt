@@ -156,6 +156,8 @@ open class MainPresenter(override var view: MainActivityInter) : SuperPresenter(
      * @return boolean value indicating whether it is time to check for updates.
      */
     override fun isTimeToUpdate(): Boolean {
+        if (view.app.testing) return false // do not check for updates during testing
+
         // get last time we checked for updates
         val lastCheck = LocalDate.ofEpochDay(
             view.prefs.getLong("last_update_check", LocalDate.MIN.toEpochDay()))

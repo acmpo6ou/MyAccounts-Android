@@ -24,7 +24,9 @@ import android.content.res.Resources
 import android.net.Uri
 import android.os.Build
 import androidx.test.platform.app.InstrumentationRegistry
+import com.acmpo6ou.myaccounts.InstTest
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.database.MainActivityInter
 import com.acmpo6ou.myaccounts.database.MainModelInter
 import com.acmpo6ou.myaccounts.database.MainPresenter
@@ -46,7 +48,7 @@ import java.io.IOException
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
-class MainPresenterInst {
+class MainPresenterInst : InstTest {
     lateinit var presenter: MainPresenter
     lateinit var model: MainModelInter
     private lateinit var view: MainActivityInter
@@ -69,6 +71,7 @@ class MainPresenterInst {
             on{myContext} doReturn context
             on{ACCOUNTS_DIR} doReturn ""
             on{prefs} doReturn mockPrefs
+            on{app} doReturn context.applicationContext as MyApp
         }
         model = mock()
 

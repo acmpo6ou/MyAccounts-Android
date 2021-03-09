@@ -46,4 +46,8 @@ open class MyApp: Application() {
     // This property exists to avoid double retrieval of latest app version and prevent
     // the version from caching.
     lateinit var latestVersion: String
+
+    // this should be set to true for some tests to work, specifically for those that don't
+    // want to check for updates
+    var testing = false
 }
