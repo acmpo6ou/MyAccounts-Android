@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.core.superclass
 
+import android.util.Log
 import com.acmpo6ou.myaccounts.BuildConfig
 import com.acmpo6ou.myaccounts.R
 import okhttp3.ResponseBody
@@ -67,6 +68,7 @@ abstract class SuperPresenter : SuperPresenterInter {
                 }
                 else {
                     view.updatesCheckFailed()
+                    Log.i("APP", response.errorBody()!!.string())
                 }
             }
 
