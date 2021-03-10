@@ -22,22 +22,12 @@ package com.acmpo6ou.myaccounts.core.superclass
 import android.util.Log
 import com.acmpo6ou.myaccounts.BuildConfig
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.core.GitHubService
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.http.GET
-import retrofit2.http.Headers
-
-/**
- * Retrofit service used to download latest release version from app's github repository.
- */
-interface GitHubService {
-    @Headers("Accept: application/json")
-    @GET("repos/Acmpo6ou/MyAccounts/releases/latest")
-    fun getLatestRelease(): Call<ResponseBody>
-}
 
 /**
  * Super class for MainPresenter and AccountsPresenter.

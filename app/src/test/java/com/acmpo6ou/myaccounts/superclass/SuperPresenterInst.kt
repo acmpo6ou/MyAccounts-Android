@@ -19,7 +19,7 @@
 
 package com.acmpo6ou.myaccounts.superclass
 
-import com.acmpo6ou.myaccounts.core.superclass.GitHubService
+import com.acmpo6ou.myaccounts.core.GitHubService
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.timeout
 import com.nhaarman.mockitokotlin2.verify
