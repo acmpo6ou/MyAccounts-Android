@@ -30,10 +30,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
-import com.acmpo6ou.myaccounts.MainActivity
-import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.findSnackbarTextView
-import com.acmpo6ou.myaccounts.str
+import com.acmpo6ou.myaccounts.*
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -47,22 +44,19 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 import org.robolectric.shadows.ShadowAlertDialog
 
-
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
-class SuperActivityInst {
+class SuperActivityInst : InstTest {
     // here we use MainActivity instead of SuperActivity because SuperActivity is abstract
     // and MainActivity inherits from SuperActivity
     lateinit var scenario: ActivityScenario<MainActivity>
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     private val faker = Faker()
 
-    private val noUpdatesMsg = context.resources.getString(R.string.no_updates)
-    private val updatesCheckFailedMsg = context.resources.getString(R.string.updates_check_failed)
-
     private val goBackTitle = context.resources.getString(R.string.go_back_title)
     private val confirmExit = context.resources.getString(R.string.confirm_exit)
+    private val noUpdatesMsg = context.resources.getString(R.string.no_updates)
 
     @Before
     fun setup(){
@@ -92,9 +86,10 @@ class SuperActivityInst {
     }
 
     @Test
-    fun `noUpdates should display snackbar`(){
+    fun `updatesSnackbar should display snackbar`(){
         scenario.onActivity {
-            it.noUpdates()
+            val msg = R.string.no_updates
+            it.updatesSnackbar(msg)
 
             // this is because of some Robolectric main looper problems
             Shadows.shadowOf(Looper.getMainLooper()).idle()
@@ -105,23 +100,6 @@ class SuperActivityInst {
 
             // check the snackbar's message
             assertEquals(noUpdatesMsg, snackbar?.text)
-        }
-    }
-
-    @Test
-    fun `updatesCheckFailed should display snackbar`(){
-        scenario.onActivity {
-            it.updatesCheckFailed()
-
-            // this is because of some Robolectric main looper problems
-            Shadows.shadowOf(Looper.getMainLooper()).idle()
-
-            // get the snackbar
-            val v: View = it.findViewById(android.R.id.content)
-            val snackbar = v.rootView.findSnackbarTextView()
-
-            // check the snackbar's message
-            assertEquals(updatesCheckFailedMsg, snackbar?.text)
         }
     }
 

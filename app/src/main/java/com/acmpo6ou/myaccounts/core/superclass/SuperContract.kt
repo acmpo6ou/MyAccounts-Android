@@ -34,6 +34,7 @@ interface SuperActivityInter : NavigationView.OnNavigationItemSelectedListener,
     fun startUpdatesActivity()
     fun noUpdates()
     fun updatesCheckFailed()
+    fun noInternetConnection()
 
     fun navigateTo(id: Int)
     fun showError(title: String, details: String)

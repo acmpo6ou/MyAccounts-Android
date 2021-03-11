@@ -106,26 +106,19 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
     }
 
     /**
-     * Displays snackbar to tell user that there are no updates available.
+     * Helper method to display a snackbar about updates.
      */
-    override fun noUpdates(){
+    fun updatesSnackbar(message: Int){
         Snackbar.make(mainFragment.b.coordinatorLayout,
-                R.string.no_updates,
-                Snackbar.LENGTH_LONG)
-                .setAction("HIDE"){}
-                .show()
+            message,
+            Snackbar.LENGTH_LONG)
+            .setAction("HIDE"){}
+            .show()
     }
 
-    /**
-     * Displays snackbar to tell user that check for updates has failed.
-     */
-    override fun updatesCheckFailed() {
-        Snackbar.make(mainFragment.b.coordinatorLayout,
-                R.string.updates_check_failed,
-                Snackbar.LENGTH_LONG)
-                .setAction("HIDE"){}
-                .show()
-    }
+    override fun noUpdates() = updatesSnackbar(R.string.no_updates)
+    override fun updatesCheckFailed() = updatesSnackbar(R.string.updates_check_failed)
+    override fun noInternetConnection() = updatesSnackbar(R.string.no_intenet_connection)
 
     /**
      * This method obtains version name and sets it in navigation header.
