@@ -107,18 +107,27 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
 
     /**
      * Helper method to display a snackbar about updates.
+     *
+     * @param[isAutoCheck] if true do not display the snackbar because we should not
+     * display it when auto checking for updates.
      */
-    fun updatesSnackbar(message: Int){
-        Snackbar.make(mainFragment.b.coordinatorLayout,
-            message,
-            Snackbar.LENGTH_LONG)
-            .setAction("HIDE"){}
-            .show()
+    fun updatesSnackbar(message: Int, isAutoCheck: Boolean){
+        if (!isAutoCheck) {
+            Snackbar.make(mainFragment.b.coordinatorLayout,
+                    message,
+                    Snackbar.LENGTH_LONG)
+                    .setAction("HIDE") {}
+                    .show()
+        }
     }
 
-    override fun noUpdates() = updatesSnackbar(R.string.no_updates)
-    override fun updatesCheckFailed() = updatesSnackbar(R.string.updates_check_failed)
-    override fun noInternetConnection() = updatesSnackbar(R.string.no_intenet_connection)
+    // updates snackbars
+    override fun noUpdates(isAutoCheck: Boolean) =
+            updatesSnackbar(R.string.no_updates, isAutoCheck)
+    override fun updatesCheckFailed(isAutoCheck: Boolean) =
+            updatesSnackbar(R.string.updates_check_failed, isAutoCheck)
+    override fun noInternetConnection(isAutoCheck: Boolean) =
+            updatesSnackbar(R.string.no_intenet_connection, isAutoCheck)
 
     /**
      * This method obtains version name and sets it in navigation header.

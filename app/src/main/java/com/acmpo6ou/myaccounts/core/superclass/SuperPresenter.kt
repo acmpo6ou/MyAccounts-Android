@@ -41,30 +41,34 @@ abstract class SuperPresenter : SuperPresenterInter {
     var service: GitHubService = retrofit.create(GitHubService::class.java)
 
     /**
-     * This method is called when user clicks `Check for updates` in navigation drawer.
+     * This method is called when user clicks `Check for updates` in navigation drawer
+     * or when auto checking for updates.
      *
      * Uses [service] to get json of latest release from which it extracts app's latest
      * version using regex.
      * If response is unsuccessful display snackbar about failure to check for updates.
+     *
+     * @param[isAutoCheck] set this to true when auto checking for updates to avoid displaying
+     * of updates snackbars.
      */
-    override fun checkUpdatesSelected(){
+    override fun checkUpdatesSelected(isAutoCheck: Boolean){
         service.getLatestRelease().enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     val json = response.body()!!.string()
                     val regex = Regex("""name":"(v\d+\.\d+\.\d+)""")
                     val version = regex.find(json)!!.groupValues.last()
-                    checkForUpdates(version)
+                    checkForUpdates(version, isAutoCheck)
                 }
                 else {
-                    view.updatesCheckFailed()
                     Log.i("APP", response.errorBody()!!.string())
+                    view.updatesCheckFailed(isAutoCheck)
                 }
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                view.updatesCheckFailed()
                 t.printStackTrace()
+                view.updatesCheckFailed(isAutoCheck)
             }
         })
     }
@@ -76,15 +80,18 @@ abstract class SuperPresenter : SuperPresenterInter {
      * available, otherwise they aren't.
      * Depending on whether there are updates or not we launch UpdatesActivity or display a
      * snackbar that there are no updates.
+     *
      * @param[latestVersion] latest app version that is available on github releases.
+     * @param[isAutoCheck] set this to true when auto checking for updates to avoid displaying
+     * of updates snackbars.
      */
-    open fun checkForUpdates(latestVersion: String) {
-        if(BuildConfig.VERSION_NAME != latestVersion) {
+    open fun checkForUpdates(latestVersion: String, isAutoCheck: Boolean = false) {
+        if (BuildConfig.VERSION_NAME != latestVersion) {
             view.app.latestVersion = latestVersion // save latestVersion for UpdatesActivity
             view.startUpdatesActivity()
         }
-        else{
-            view.noUpdates()
+        else {
+            view.noUpdates(isAutoCheck)
         }
     }
 

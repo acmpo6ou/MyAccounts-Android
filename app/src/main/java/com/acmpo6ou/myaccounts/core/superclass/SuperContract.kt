@@ -32,9 +32,9 @@ interface SuperActivityInter : NavigationView.OnNavigationItemSelectedListener,
     var app: MyApp
 
     fun startUpdatesActivity()
-    fun noUpdates()
-    fun updatesCheckFailed()
-    fun noInternetConnection()
+    fun noUpdates(isAutoCheck: Boolean = false)
+    fun updatesCheckFailed(isAutoCheck: Boolean = false)
+    fun noInternetConnection(isAutoCheck: Boolean = false)
 
     fun navigateTo(id: Int)
     fun showError(title: String, details: String)
@@ -46,7 +46,7 @@ interface SuperActivityInter : NavigationView.OnNavigationItemSelectedListener,
 interface SuperPresenterInter{
     fun backPressed()
     fun saveSelected()
-    fun checkUpdatesSelected()
+    fun checkUpdatesSelected(isAutoCheck: Boolean = false)
 
     fun navigateToChangelog()
     fun navigateToSettings()

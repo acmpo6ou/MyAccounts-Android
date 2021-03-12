@@ -33,6 +33,7 @@ import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
+import org.mockito.ArgumentMatchers.anyBoolean
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito.spy
 import java.io.File
@@ -97,13 +98,14 @@ class MainPresenterTests {
     fun `autocheckForUpdates should call checkUpdatesSelected if it's time to autocheck`(){
         doReturn(true).whenever(spyPresenter).isTimeToUpdate()
         spyPresenter.autocheckForUpdates()
-        verify(spyPresenter).checkUpdatesSelected()
+        verify(spyPresenter).checkUpdatesSelected(true)
     }
 
     @Test
     fun `autocheckForUpdates should not call checkUpdatesSelected if it's not time to autocheck`(){
         doReturn(false).whenever(spyPresenter).isTimeToUpdate()
         spyPresenter.autocheckForUpdates()
+        verify(spyPresenter, never()).checkUpdatesSelected(anyBoolean())
         verify(spyPresenter, never()).checkUpdatesSelected()
     }
 

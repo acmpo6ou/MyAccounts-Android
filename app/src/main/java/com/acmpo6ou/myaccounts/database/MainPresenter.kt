@@ -46,7 +46,7 @@ open class MainPresenter(override var view: MainActivityInter) : SuperPresenter(
      * This method is called on app startup, it checks for updates if it's time to.
      */
     fun autocheckForUpdates() {
-        if(isTimeToUpdate()) checkUpdatesSelected()
+        if(isTimeToUpdate()) checkUpdatesSelected(true)
     }
 
     /**

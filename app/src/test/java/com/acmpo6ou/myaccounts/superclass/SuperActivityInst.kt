@@ -35,6 +35,7 @@ import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -86,10 +87,10 @@ class SuperActivityInst : InstTest {
     }
 
     @Test
-    fun `updatesSnackbar should display snackbar`(){
+    fun `updatesSnackbar should display snackbar when isAutoCheck is false`(){
         scenario.onActivity {
             val msg = R.string.no_updates
-            it.updatesSnackbar(msg)
+            it.updatesSnackbar(msg, false)
 
             // this is because of some Robolectric main looper problems
             Shadows.shadowOf(Looper.getMainLooper()).idle()
@@ -100,6 +101,24 @@ class SuperActivityInst : InstTest {
 
             // check the snackbar's message
             assertEquals(noUpdatesMsg, snackbar?.text)
+        }
+    }
+
+    @Test
+    fun `updatesSnackbar should not display snackbar when isAutoCheck is true`(){
+        scenario.onActivity {
+            val msg = R.string.no_updates
+            it.updatesSnackbar(msg, true)
+
+            // this is because of some Robolectric main looper problems
+            Shadows.shadowOf(Looper.getMainLooper()).idle()
+
+            // try to get the snackbar
+            val v: View = it.findViewById(android.R.id.content)
+            val snackbar = v.rootView.findSnackbarTextView()
+
+            // but it should be null
+            assertNull(snackbar)
         }
     }
 
