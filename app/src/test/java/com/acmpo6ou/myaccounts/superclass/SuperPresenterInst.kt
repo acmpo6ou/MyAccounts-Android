@@ -20,9 +20,7 @@
 package com.acmpo6ou.myaccounts.superclass
 
 import com.acmpo6ou.myaccounts.core.GitHubService
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.timeout
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Before
@@ -50,7 +48,9 @@ class SuperPresenterInst {
     fun setup(){
         presenter = TestSuperPresenter()
         spyPresenter = spy(presenter)
+
         spyPresenter.service = service
+        doReturn(true).whenever(presenter.view).isInternetAvailable()
     }
 
     /**
