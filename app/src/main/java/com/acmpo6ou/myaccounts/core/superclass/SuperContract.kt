@@ -32,6 +32,8 @@ interface SuperActivityInter : NavigationView.OnNavigationItemSelectedListener,
     var app: MyApp
 
     fun startUpdatesActivity()
+    fun isInternetAvailable(): Boolean
+
     fun noUpdates(isAutoCheck: Boolean = false)
     fun updatesCheckFailed(isAutoCheck: Boolean = false)
     fun noInternetConnection(isAutoCheck: Boolean = false)

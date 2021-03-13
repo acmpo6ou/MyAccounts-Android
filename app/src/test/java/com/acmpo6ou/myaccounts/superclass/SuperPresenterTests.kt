@@ -26,13 +26,12 @@ import com.acmpo6ou.myaccounts.core.superclass.SuperActivityInter
 import com.acmpo6ou.myaccounts.core.superclass.SuperPresenter
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
+import okhttp3.ResponseBody
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import retrofit2.Call
 
 val fakeApp = MyApp()
 
@@ -52,6 +51,8 @@ class SuperPresenterTests {
     @Before
     fun setup(){
         presenter = TestSuperPresenter()
+        val callback: Call<ResponseBody> = mock()
+        presenter.service = mock{ on{getLatestRelease()} doReturn callback }
     }
 
     @Test
@@ -76,6 +77,34 @@ class SuperPresenterTests {
     fun `checkForUpdates should save latestVersion to MyApp when updates are available`(){
         presenter.checkForUpdates(latestVersion)
         assertEquals(latestVersion, fakeApp.latestVersion)
+    }
+
+    @Test
+    fun `checkUpdatesSelected should not get release version when there is no internet`(){
+        doReturn(false).whenever(presenter.view).isInternetAvailable()
+        presenter.checkUpdatesSelected()
+        verify(presenter.service, never()).getLatestRelease()
+    }
+
+    @Test
+    fun `checkUpdatesSelected should get latest release when there is internet`(){
+        doReturn(true).whenever(presenter.view).isInternetAvailable()
+        presenter.checkUpdatesSelected()
+        verify(presenter.service).getLatestRelease()
+    }
+
+    @Test
+    fun `checkUpdatesSelected should call noInternetConnection when there is no internet`(){
+        doReturn(false).whenever(presenter.view).isInternetAvailable()
+        presenter.checkUpdatesSelected()
+        verify(presenter.view).noInternetConnection()
+    }
+
+    @Test
+    fun `checkUpdatesSelected should not call noInternetConnection when there is internet`(){
+        doReturn(true).whenever(presenter.view).isInternetAvailable()
+        presenter.checkUpdatesSelected()
+        verify(presenter.view, never()).noInternetConnection()
     }
 
     @Test

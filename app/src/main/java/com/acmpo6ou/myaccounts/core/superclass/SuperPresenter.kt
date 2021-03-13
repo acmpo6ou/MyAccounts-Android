@@ -52,6 +52,11 @@ abstract class SuperPresenter : SuperPresenterInter {
      * of updates snackbars.
      */
     override fun checkUpdatesSelected(isAutoCheck: Boolean){
+        if (!view.isInternetAvailable()) {
+            view.noInternetConnection()
+            return
+        }
+
         service.getLatestRelease().enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
