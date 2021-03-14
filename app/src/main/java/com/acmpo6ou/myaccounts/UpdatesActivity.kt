@@ -21,11 +21,19 @@ package com.acmpo6ou.myaccounts
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import com.acmpo6ou.myaccounts.databinding.UpdatesActivityBinding
+import com.acmpo6ou.myaccounts.ui.UpdatesViewModel
 
 class UpdatesActivity : AppCompatActivity() {
+    private var binding: UpdatesActivityBinding? = null
+    val b: UpdatesActivityBinding get() = binding!!
+    lateinit var viewModel: UpdatesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.updates_activity)
+        binding = UpdatesActivityBinding.inflate(layoutInflater)
+        setContentView(b.root)
+        viewModel = ViewModelProvider(this).get(UpdatesViewModel::class.java)
     }
 }
