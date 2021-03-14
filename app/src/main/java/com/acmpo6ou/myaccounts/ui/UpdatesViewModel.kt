@@ -19,8 +19,22 @@
 
 package com.acmpo6ou.myaccounts.ui
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import java.net.URL
 
 class UpdatesViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+    val changelog = MutableLiveData<String>()
+
+    /**
+     * Downloads latest changelog from github repository.
+     */
+    fun getChangelog(){
+        URL("https://raw.githubusercontent.com/Acmpo6ou/MyAccounts/" +
+                "master/app/src/main/res/raw/changelog")
+                .openStream()
+                .use {
+                    changelog.value = String( it.readBytes() )
+                }
+    }
 }
