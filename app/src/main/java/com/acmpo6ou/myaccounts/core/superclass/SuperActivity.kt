@@ -23,6 +23,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Rect
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -106,15 +108,49 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
     }
 
     /**
-     * Displays snackbar to tell user that there are no updates available.
+     * Checks whether internet is available.
+     * Note: this method is completely copied from StackOverflow, please see
+     * https://stackoverflow.com/a/53532456/11004423 for more details.
      */
-    override fun noUpdates(){
-        Snackbar.make(mainFragment.b.coordinatorLayout,
-                R.string.no_updates,
-                Snackbar.LENGTH_LONG)
-                .setAction("HIDE"){}
-                .show()
+    override fun isInternetAvailable(): Boolean {
+        var result = false
+        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkCapabilities = cm.activeNetwork ?: return false
+        val actNw = cm.getNetworkCapabilities(networkCapabilities) ?: return false
+
+        result = when {
+            actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            else -> false
+        }
+
+        return result
     }
+
+    /**
+     * Helper method to display a snackbar about updates.
+     *
+     * @param[isAutoCheck] if true do not display the snackbar because we should not
+     * display it when auto checking for updates.
+     */
+    fun updatesSnackbar(message: Int, isAutoCheck: Boolean){
+        if (!isAutoCheck) {
+            Snackbar.make(mainFragment.b.coordinatorLayout,
+                    message,
+                    Snackbar.LENGTH_LONG)
+                    .setAction("HIDE") {}
+                    .show()
+        }
+    }
+
+    // updates snackbars
+    override fun noUpdates(isAutoCheck: Boolean) =
+            updatesSnackbar(R.string.no_updates, isAutoCheck)
+    override fun updatesCheckFailed(isAutoCheck: Boolean) =
+            updatesSnackbar(R.string.updates_check_failed, isAutoCheck)
+    override fun noInternetConnection(isAutoCheck: Boolean) =
+            updatesSnackbar(R.string.no_intenet_connection, isAutoCheck)
 
     /**
      * This method obtains version name and sets it in navigation header.
@@ -182,7 +218,6 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
     }
 
     override fun startUpdatesActivity() {
-
     }
 
     /**

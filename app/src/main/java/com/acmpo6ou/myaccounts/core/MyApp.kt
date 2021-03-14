@@ -40,4 +40,14 @@ open class MyApp: Application() {
     // Used to access resources of MainActivity.
     // Because resources from MainActivity are correctly translated.
     lateinit var res: Resources
+
+    // Latest app version that is available on github releases.
+    // Used by UpdatesActivity and is set by SuperPresenter when checking for updates.
+    // This property exists to avoid double retrieval of latest app version and prevent
+    // the version from caching.
+    lateinit var latestVersion: String
+
+    // this should be set to true for some tests to work, specifically for those that don't
+    // want to check for updates
+    var testing = false
 }

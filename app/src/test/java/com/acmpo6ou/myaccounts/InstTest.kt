@@ -19,21 +19,19 @@
 
 package com.acmpo6ou.myaccounts
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import com.acmpo6ou.myaccounts.databinding.UpdatesActivityBinding
-import com.acmpo6ou.myaccounts.ui.UpdatesViewModel
+import android.content.Context
+import androidx.test.platform.app.InstrumentationRegistry
+import com.acmpo6ou.myaccounts.core.MyApp
+import org.junit.Before
 
-class UpdatesActivity : AppCompatActivity() {
-    private var binding: UpdatesActivityBinding? = null
-    val b: UpdatesActivityBinding get() = binding!!
-    lateinit var viewModel: UpdatesViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = UpdatesActivityBinding.inflate(layoutInflater)
-        setContentView(b.root)
-        viewModel = ViewModelProvider(this).get(UpdatesViewModel::class.java)
+/**
+ * Used by some instrumentation tests to, for example, avoid checking for updates.
+ */
+interface InstTest {
+    @Before
+    fun setupApp(){
+        val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
+        val app = context.applicationContext as MyApp
+        app.testing = true
     }
 }

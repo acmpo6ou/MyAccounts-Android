@@ -30,14 +30,12 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
-import com.acmpo6ou.myaccounts.MainActivity
-import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.findSnackbarTextView
-import com.acmpo6ou.myaccounts.str
+import com.acmpo6ou.myaccounts.*
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -47,20 +45,19 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 import org.robolectric.shadows.ShadowAlertDialog
 
-
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
-class SuperActivityInst {
+class SuperActivityInst : InstTest {
     // here we use MainActivity instead of SuperActivity because SuperActivity is abstract
     // and MainActivity inherits from SuperActivity
     lateinit var scenario: ActivityScenario<MainActivity>
+    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     private val faker = Faker()
 
-    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
-    private val noUpdatesMsg = context.resources.getString(R.string.no_updates)
     private val goBackTitle = context.resources.getString(R.string.go_back_title)
     private val confirmExit = context.resources.getString(R.string.confirm_exit)
+    private val noUpdatesMsg = context.resources.getString(R.string.no_updates)
 
     @Before
     fun setup(){
@@ -90,9 +87,10 @@ class SuperActivityInst {
     }
 
     @Test
-    fun `noUpdates should display snackbar`(){
+    fun `updatesSnackbar should display snackbar when isAutoCheck is false`(){
         scenario.onActivity {
-            it.noUpdates()
+            val msg = R.string.no_updates
+            it.updatesSnackbar(msg, false)
 
             // this is because of some Robolectric main looper problems
             Shadows.shadowOf(Looper.getMainLooper()).idle()
@@ -102,8 +100,25 @@ class SuperActivityInst {
             val snackbar = v.rootView.findSnackbarTextView()
 
             // check the snackbar's message
-            assertEquals("noUpdates snackbar has incorrect message!",
-                    noUpdatesMsg, snackbar?.text)
+            assertEquals(noUpdatesMsg, snackbar?.text)
+        }
+    }
+
+    @Test
+    fun `updatesSnackbar should not display snackbar when isAutoCheck is true`(){
+        scenario.onActivity {
+            val msg = R.string.no_updates
+            it.updatesSnackbar(msg, true)
+
+            // this is because of some Robolectric main looper problems
+            Shadows.shadowOf(Looper.getMainLooper()).idle()
+
+            // try to get the snackbar
+            val v: View = it.findViewById(android.R.id.content)
+            val snackbar = v.rootView.findSnackbarTextView()
+
+            // but it should be null
+            assertNull(snackbar)
         }
     }
 

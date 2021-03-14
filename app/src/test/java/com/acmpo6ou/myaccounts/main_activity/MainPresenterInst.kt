@@ -24,12 +24,15 @@ import android.content.res.Resources
 import android.net.Uri
 import android.os.Build
 import androidx.test.platform.app.InstrumentationRegistry
+import com.acmpo6ou.myaccounts.InstTest
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.database.MainActivityInter
 import com.acmpo6ou.myaccounts.database.MainModelInter
 import com.acmpo6ou.myaccounts.database.MainPresenter
 import com.acmpo6ou.myaccounts.randomIntExcept
 import com.acmpo6ou.myaccounts.str
+import com.github.ivanshafran.sharedpreferencesmock.SPMockBuilder
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
@@ -45,7 +48,7 @@ import java.io.IOException
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
-class MainPresenterInst {
+class MainPresenterInst : InstTest {
     lateinit var presenter: MainPresenter
     lateinit var model: MainModelInter
     private lateinit var view: MainActivityInter
@@ -63,9 +66,12 @@ class MainPresenterInst {
 
     @Before
     fun setup(){
+        val mockPrefs = SPMockBuilder().createSharedPreferences()
         view = mock{
             on{myContext} doReturn context
             on{ACCOUNTS_DIR} doReturn ""
+            on{prefs} doReturn mockPrefs
+            on{app} doReturn context.applicationContext as MyApp
         }
         model = mock()
 

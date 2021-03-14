@@ -38,7 +38,7 @@ private open class TestActivity : SuperActivity() {
     override val mainFragmentId = 0
     override val prefs: SharedPreferences = mock()
 
-    override fun noUpdates() {
+    override fun noUpdates(isAutoCheck: Boolean) {
     }
 }
 

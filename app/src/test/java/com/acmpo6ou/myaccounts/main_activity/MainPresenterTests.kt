@@ -21,19 +21,24 @@ package com.acmpo6ou.myaccounts.main_activity
 
 import android.content.ContentResolver
 import android.content.Context
+import android.content.SharedPreferences
 import android.net.Uri
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.database.MainActivityInter
 import com.acmpo6ou.myaccounts.database.MainModelInter
 import com.acmpo6ou.myaccounts.database.MainPresenter
+import com.github.ivanshafran.sharedpreferencesmock.SPMockBuilder
 import com.nhaarman.mockitokotlin2.*
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
+import org.mockito.ArgumentMatchers.anyBoolean
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito.spy
 import java.io.File
+import java.time.LocalDate
+import java.util.*
 
 class MainPresenterTests {
     lateinit var presenter: MainPresenter
@@ -41,6 +46,7 @@ class MainPresenterTests {
 
     lateinit var view: MainActivityInter
     lateinit var model: MainModelInter
+    lateinit var mockPrefs: SharedPreferences
 
     private val locationUri: Uri = mock()
     private val accountsDir = "/dev/shm/accounts"
@@ -52,6 +58,7 @@ class MainPresenterTests {
         val resolver: ContentResolver = mock()
         val context: Context = mock{ on{contentResolver} doReturn resolver }
 
+        mockPrefs = SPMockBuilder().createSharedPreferences()
         model = mock()
         doReturn(false).whenever(model).isDatabaseSaved(app.databases[0], app)
 
@@ -59,6 +66,7 @@ class MainPresenterTests {
             on{ACCOUNTS_DIR} doReturn accountsDir
             on{app} doReturn MainPresenterTests@app
             on{myContext} doReturn context
+            on{prefs} doReturn mockPrefs
         }
 
         presenter = MainPresenter(view)
@@ -90,14 +98,44 @@ class MainPresenterTests {
     fun `autocheckForUpdates should call checkUpdatesSelected if it's time to autocheck`(){
         doReturn(true).whenever(spyPresenter).isTimeToUpdate()
         spyPresenter.autocheckForUpdates()
-        verify(spyPresenter).checkUpdatesSelected()
+        verify(spyPresenter).checkUpdatesSelected(true)
     }
 
     @Test
     fun `autocheckForUpdates should not call checkUpdatesSelected if it's not time to autocheck`(){
         doReturn(false).whenever(spyPresenter).isTimeToUpdate()
         spyPresenter.autocheckForUpdates()
+        verify(spyPresenter, never()).checkUpdatesSelected(anyBoolean())
         verify(spyPresenter, never()).checkUpdatesSelected()
+    }
+
+    @Test
+    fun `isTimeToUpdate should return true if app didn't check for updates today`(){
+        val date = LocalDate.MIN.toEpochDay()
+        mockPrefs.edit().putLong("last_update_check", date).commit()
+        assertTrue(presenter.isTimeToUpdate())
+    }
+
+    @Test
+    fun `isTimeToUpdate should return false if app did check for updates today`(){
+        val date = LocalDate.now().toEpochDay()
+        mockPrefs.edit().putLong("last_update_check", date).commit()
+        assertFalse(presenter.isTimeToUpdate())
+    }
+
+    @Test
+    fun `isTimeToUpdate should set last_update_check`(){
+        // last time we checked for updates was long time ago
+        val date = LocalDate.MIN.toEpochDay()
+        mockPrefs.edit().putLong("last_update_check", date).commit()
+        presenter.isTimeToUpdate()
+
+        // last_update_check should be set to today date because last time we checked for
+        // updates were today
+        val today = LocalDate.now()
+        val lastCheck = LocalDate.ofEpochDay(
+                mockPrefs.getLong("last_update_check", 0L))
+        assertEquals(today, lastCheck)
     }
 
     @Test
