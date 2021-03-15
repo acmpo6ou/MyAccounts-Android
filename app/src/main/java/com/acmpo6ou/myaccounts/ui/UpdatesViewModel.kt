@@ -21,6 +21,10 @@ package com.acmpo6ou.myaccounts.ui
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.net.URL
 
 class UpdatesViewModel : ViewModel() {
@@ -29,12 +33,14 @@ class UpdatesViewModel : ViewModel() {
     /**
      * Downloads latest changelog from github repository.
      */
-    fun getChangelog(){
-        URL("https://raw.githubusercontent.com/Acmpo6ou/MyAccounts/" +
-                "master/app/src/main/res/raw/changelog")
+    fun getChangelog() = viewModelScope.launch(Dispatchers.Main){
+        changelog.value = viewModelScope.async(Dispatchers.Default) {
+            URL("https://raw.githubusercontent.com/Acmpo6ou/MyAccounts/" +
+                    "master/app/src/main/res/raw/changelog")
                 .openStream()
                 .use {
-                    changelog.value = String( it.readBytes() )
+                    return@async String( it.readBytes() )
                 }
+        }.await()
     }
 }
