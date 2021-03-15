@@ -70,6 +70,7 @@ class MainActivity : SuperActivity(), MainActivityInter {
         checkPermissions()
 
         val intent = Intent(this, UpdatesActivity::class.java)
+        intent.putExtra("version", "v1.0.2")
         startActivity(intent)
     }
 

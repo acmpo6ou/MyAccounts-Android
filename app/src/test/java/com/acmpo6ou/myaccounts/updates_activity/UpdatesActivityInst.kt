@@ -51,10 +51,10 @@ class UpdatesActivityInst {
     fun `changelogObserver should set changelogText when changelog is downloaded`(){
         scenario.onActivity {
             val changelog = Faker().str()
-            assertEquals(loadingText, it.b.changelogText.text)
+            assertEquals(loadingText, it.b.changelogText.text.toString())
 
             it.viewModel.changelog.value = changelog
-            assertEquals(changelog, it.b.changelogText.text)
+            assertEquals(changelog, it.b.changelogText.text.toString())
         }
     }
 }

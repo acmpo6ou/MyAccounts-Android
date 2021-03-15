@@ -20,7 +20,10 @@
 package com.acmpo6ou.myaccounts
 
 import android.os.Bundle
+import android.view.Gravity
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.text.HtmlCompat
+import androidx.core.text.HtmlCompat.fromHtml
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.acmpo6ou.myaccounts.databinding.UpdatesActivityBinding
@@ -32,7 +35,8 @@ class UpdatesActivity : AppCompatActivity() {
     lateinit var viewModel: UpdatesViewModel
 
     private val changelogObserver = Observer<String>{
-        b.changelogText.text = it
+        b.changelogText.text = fromHtml(it, HtmlCompat.FROM_HTML_MODE_COMPACT)
+        b.changelogText.gravity = Gravity.START
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +46,10 @@ class UpdatesActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(UpdatesViewModel::class.java)
         viewModel.changelog.observe(this, changelogObserver)
-//        viewModel.getChangelog()
+
+        // get update version and changelog and set them on appropriate text views
+        val extras = intent.extras ?: return
+        b.updateVersion.text = extras.getString("version")
+        viewModel.getChangelog()
     }
 }
