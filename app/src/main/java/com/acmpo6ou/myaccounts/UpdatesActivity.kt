@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.acmpo6ou.myaccounts.databinding.UpdatesActivityBinding
 import com.acmpo6ou.myaccounts.ui.UpdatesViewModel
@@ -30,10 +31,16 @@ class UpdatesActivity : AppCompatActivity() {
     val b: UpdatesActivityBinding get() = binding!!
     lateinit var viewModel: UpdatesViewModel
 
+    private val changelogObserver = Observer<String>{
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = UpdatesActivityBinding.inflate(layoutInflater)
         setContentView(b.root)
+
         viewModel = ViewModelProvider(this).get(UpdatesViewModel::class.java)
+        viewModel.changelog.observe(this, changelogObserver)
+        viewModel.getChangelog()
     }
 }

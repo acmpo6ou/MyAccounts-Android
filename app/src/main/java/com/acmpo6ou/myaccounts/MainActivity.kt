@@ -68,6 +68,9 @@ class MainActivity : SuperActivity(), MainActivityInter {
         setSupportActionBar(b.appbar.toolbar)
 
         checkPermissions()
+
+        val intent = Intent(this, UpdatesActivity::class.java)
+        startActivity(intent)
     }
 
     /**
