@@ -32,6 +32,7 @@ class UpdatesActivity : AppCompatActivity() {
     lateinit var viewModel: UpdatesViewModel
 
     private val changelogObserver = Observer<String>{
+        b.changelogText.text = it
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +42,6 @@ class UpdatesActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(UpdatesViewModel::class.java)
         viewModel.changelog.observe(this, changelogObserver)
-        viewModel.getChangelog()
+//        viewModel.getChangelog()
     }
 }
