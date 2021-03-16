@@ -219,7 +219,7 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
         navHostFragment.navController.navigate(id)
     }
 
-    override fun startUpdatesActivity() {
+    override fun startUpdatesActivity(latestVersion: String) {
     }
 
     /**

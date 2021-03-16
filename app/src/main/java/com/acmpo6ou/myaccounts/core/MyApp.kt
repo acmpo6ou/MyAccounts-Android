@@ -28,7 +28,7 @@ import com.macasaet.fernet.Key
  * Application instance, used to store data that needs to be shared by different
  * activities or fragments.
  */
-open class MyApp: Application() {
+open class MyApp : Application() {
     // list of Databases that is used almost by every fragment and activity
     var databases = mutableListOf<Database>()
 
@@ -40,10 +40,4 @@ open class MyApp: Application() {
     // Used to access resources of MainActivity.
     // Because resources from MainActivity are correctly translated.
     lateinit var res: Resources
-
-    // Latest app version that is available on github releases.
-    // Used by UpdatesActivity and is set by SuperPresenter when checking for updates.
-    // This property exists to avoid double retrieval of latest app version and prevent
-    // the version from caching.
-    lateinit var latestVersion: String
 }

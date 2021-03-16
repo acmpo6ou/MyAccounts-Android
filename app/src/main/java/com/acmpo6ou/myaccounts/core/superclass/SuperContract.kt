@@ -24,14 +24,15 @@ import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.SettingsUtils
 import com.google.android.material.navigation.NavigationView
 
-interface SuperActivityInter : NavigationView.OnNavigationItemSelectedListener,
-                               SettingsUtils {
+interface SuperActivityInter :
+    NavigationView.OnNavigationItemSelectedListener,
+    SettingsUtils {
     val mainFragment: ListFragmentInter
     val ACCOUNTS_DIR: String
     val myContext: Context
     var app: MyApp
 
-    fun startUpdatesActivity()
+    fun startUpdatesActivity(latestVersion: String)
     fun isInternetAvailable(): Boolean
 
     fun noUpdates(isAutoCheck: Boolean = false)
@@ -45,7 +46,7 @@ interface SuperActivityInter : NavigationView.OnNavigationItemSelectedListener,
     fun confirmBack()
 }
 
-interface SuperPresenterInter{
+interface SuperPresenterInter {
     fun backPressed()
     fun saveSelected()
     fun checkUpdatesSelected(isAutoCheck: Boolean = false)
