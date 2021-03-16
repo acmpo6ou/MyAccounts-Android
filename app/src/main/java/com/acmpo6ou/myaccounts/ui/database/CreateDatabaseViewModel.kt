@@ -26,7 +26,7 @@ import kotlinx.coroutines.async
 
 open class CreateDatabaseViewModel : CreateEditDatabaseModel() {
     open fun createDatabaseAsync(database: Database) =
-        viewModelScope.async(defaultDispatcher){
+        viewModelScope.async(defaultDispatcher) {
             createDatabase(database, app)
         }
 
@@ -39,7 +39,7 @@ open class CreateDatabaseViewModel : CreateEditDatabaseModel() {
      * @param[name] name for the database.
      * @param[password] password for the database.
      */
-    override suspend fun apply(name: String, password: String){
+    override suspend fun apply(name: String, password: String) {
         try {
             // display loading progress bar
             loading = true
@@ -54,8 +54,7 @@ open class CreateDatabaseViewModel : CreateEditDatabaseModel() {
             databases.add(database)
             databases.sortBy { it.name }
             finished = true
-        }
-        catch (e: Exception){
+        } catch (e: Exception) {
             // notify about error and hide loading progress bar
             errorMsg = e.toString()
             loading = false

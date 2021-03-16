@@ -37,7 +37,14 @@ class EditAccountViewModel : CreateAccountViewModel() {
         oldAccount = accounts[accountName]
     }
 
-    override fun applyPressed(accountName: String, username: String, email: String, password: String, date: String, comment: String) {
+    override fun applyPressed(
+        accountName: String,
+        username: String,
+        email: String,
+        password: String,
+        date: String,
+        comment: String
+    ) {
         // remove old account and create new one
         accounts.remove(oldAccount?.accountName)
         super.applyPressed(accountName, username, email, password, date, comment)
@@ -55,11 +62,10 @@ class EditAccountViewModel : CreateAccountViewModel() {
         val oldName = oldAccount?.accountName
 
         // it's okay if name didn't change through editing
-        if(oldName == name){
+        if (oldName == name) {
             existsNameErr = false
             emptyNameErr = false
-        }
-        else{
+        } else {
             super.validateName(name)
         }
     }

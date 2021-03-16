@@ -128,6 +128,9 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
         return result
     }
 
+    override fun startUpdatesActivity(latestVersion: String) {
+    }
+
     /**
      * Helper method to display a snackbar about updates.
      *
@@ -217,9 +220,6 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navHostFragment.navController.navigate(id)
-    }
-
-    override fun startUpdatesActivity(latestVersion: String) {
     }
 
     /**

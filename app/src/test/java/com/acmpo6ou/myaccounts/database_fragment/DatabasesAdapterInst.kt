@@ -59,9 +59,11 @@ class DatabasesAdapterInst {
         scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
 
         // mock the list of databases for test
-        val mockDatabases = mutableListOf(Database("main"), // locked
-                                          Database("test", "123")) // opened
-        presenter = mock{ on{databases} doReturn mockDatabases }
+        val mockDatabases = mutableListOf(
+            Database("main"), // locked
+            Database("test", "123")
+        ) // opened
+        presenter = mock { on { databases } doReturn mockDatabases }
 
         scenario.onFragment {
             it.presenter = presenter
@@ -77,65 +79,69 @@ class DatabasesAdapterInst {
     }
 
     @Test
-    fun `click on recycler item should call openDatabase`(){
+    fun `click on recycler item should call openDatabase`() {
         itemLayout?.performClick()
         verify(presenter).openDatabase(0)
     }
 
     @Test
-    fun `database item should have appropriate name`(){
+    fun `database item should have appropriate name`() {
         val databaseName = itemLayout?.findViewById<TextView>(R.id.itemName)
         assertEquals("main", databaseName?.text)
     }
 
     @Test
-    fun `database item should have locked icon when isOpen of Database is false`(){
+    fun `database item should have locked icon when isOpen of Database is false`() {
         // the first database in the list above is closed
         val itemLock = itemLayout?.findViewById<ImageView>(R.id.itemIcon)
-        assertEquals("database item has unlocked icon when isOpen of Database is false!",
-                R.drawable.ic_locked, itemLock?.tag)
+        assertEquals(
+            "database item has unlocked icon when isOpen of Database is false!",
+            R.drawable.ic_locked, itemLock?.tag
+        )
     }
 
     @Test
-    fun `database item should have opened icon when isOpen of Database is true`(){
+    fun `database item should have opened icon when isOpen of Database is true`() {
         // the second database in the list above is opened
         val itemLock = itemLayout2?.findViewById<ImageView>(R.id.itemIcon)
-        assertEquals("database item has locked icon when isOpen of Database is true!",
-                R.drawable.ic_opened, itemLock?.tag)
+        assertEquals(
+            "database item has locked icon when isOpen of Database is true!",
+            R.drawable.ic_opened, itemLock?.tag
+        )
     }
 
     @Test
-    fun `clicking on 'Close' should call closeSelected`(){
+    fun `clicking on 'Close' should call closeSelected`() {
         clickMenuItem(itemLayout2, R.id.close_database_item)
         verify(presenter).closeSelected(1)
     }
 
     @Test
-    fun `clicking on 'Close' should not call closeSelected when database is already closed`(){
+    fun `clicking on 'Close' should not call closeSelected when database is already closed`() {
         clickMenuItem(itemLayout, R.id.close_database_item)
         verify(presenter, never()).closeSelected(0)
     }
 
     @Test
-    fun `clicking on 'Delete' should call deleteSelected`(){
+    fun `clicking on 'Delete' should call deleteSelected`() {
         clickMenuItem(itemLayout, R.id.delete_database_item)
         verify(presenter).deleteSelected(0)
     }
 
     @Test
-    fun `clicking on 'Export' should call exportSelected`(){
+    fun `clicking on 'Export' should call exportSelected`() {
         clickMenuItem(itemLayout, R.id.export_database_item)
         verify(presenter).exportSelected(0)
     }
 
     @Test
-    fun `clicking on 'Edit' should call editSelected`(){
+    fun `clicking on 'Edit' should call editSelected`() {
         clickMenuItem(itemLayout2, R.id.edit_database_item)
         verify(presenter).editSelected(1)
     }
 
     @Test
-    fun `clicking on 'Edit' should not call editSelected when database is closed`(){
+    fun `clicking on 'Edit' should not call editSelected when database is closed`() {
         clickMenuItem(itemLayout, R.id.edit_database_item)
         verify(presenter, never()).editSelected(0)
     }

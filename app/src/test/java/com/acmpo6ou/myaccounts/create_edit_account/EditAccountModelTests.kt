@@ -36,25 +36,26 @@ class EditAccountModelTests {
     val model = EditAccountViewModel()
 
     @Before
-    fun setup(){
+    fun setup() {
         model.initialize(MyApp(), databaseMap.toMap().toMutableMap(), account.accountName)
     }
 
     @Test
-    fun `applyPressed should delete old account`(){
+    fun `applyPressed should delete old account`() {
         model.applyPressed(
-                "habr",
-                account.username,
-                account.email,
-                account.password,
-                account.date,
-                account.comment)
+            "habr",
+            account.username,
+            account.email,
+            account.password,
+            account.date,
+            account.comment
+        )
         assertFalse(account.accountName in model.accounts)
         assertTrue("habr" in model.accounts)
     }
 
     @Test
-    fun `validateName when name of Database didn't change through editing`(){
+    fun `validateName when name of Database didn't change through editing`() {
         // account already exists but it's being edited, so that doesn't count
         model.validateName(account.accountName)
         assertFalse(model.existsNameErr)

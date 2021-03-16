@@ -69,33 +69,35 @@ abstract class CreateEditFragment : Fragment() {
 
     // This observer invoked when database/account is successfully created/edited.
     // It navigates back to the main fragment.
-    private val finishedObserver = Observer<Boolean>{
+    private val finishedObserver = Observer<Boolean> {
         superActivity.findNavController(R.id.nav_host_fragment).navigateUp()
     }
 
     /**
      * Used to initialize all fields and buttons of the form.
      */
-    open fun initForm(){
+    open fun initForm() {
         // when name is changed validate it using model to display error in case
         // such name already exists or the name is empty
-        nameField.addTextChangedListener(object: TextWatcher {
+        nameField.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) =
-                    viewModel.validateName(s.toString())
+                viewModel.validateName(s.toString())
         })
 
         // text changed listener for password fields to validate them and display error
         // in case of problems
-        val passwordListener = object: TextWatcher {
+        val passwordListener = object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) =
-                    viewModel.validatePasswords(passwordField.text.toString(),
-                                                repeatPasswordField.text.toString())
+                viewModel.validatePasswords(
+                    passwordField.text.toString(),
+                    repeatPasswordField.text.toString()
+                )
         }
         passwordField.addTextChangedListener(passwordListener)
         repeatPasswordField.addTextChangedListener(passwordListener)

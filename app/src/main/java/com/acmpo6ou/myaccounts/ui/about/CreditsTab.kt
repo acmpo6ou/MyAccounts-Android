@@ -27,8 +27,11 @@ import androidx.fragment.app.Fragment
 import com.acmpo6ou.myaccounts.R
 
 class CreditsTab : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.credits_tab, container, false)
     }
 }

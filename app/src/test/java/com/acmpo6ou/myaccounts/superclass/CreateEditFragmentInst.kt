@@ -51,7 +51,7 @@ class CreateEditFragmentInst {
 
     @Before
     fun setup() {
-        scenario = launchFragmentInContainer(themeResId= R.style.Theme_MyAccounts_NoActionBar)
+        scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
         app.res = context.resources
 
         scenario.onFragment {
@@ -62,7 +62,7 @@ class CreateEditFragmentInst {
     }
 
     @Test
-    fun `should call validateName when text in nameField changes`(){
+    fun `should call validateName when text in nameField changes`() {
         scenario.onFragment {
             it.nameField.setText(name)
             verify(it.viewModel).validateName(name)
@@ -70,7 +70,7 @@ class CreateEditFragmentInst {
     }
 
     @Test
-    fun `should hide or display error tip according to emptyNameErr and existsNameErr`(){
+    fun `should hide or display error tip according to emptyNameErr and existsNameErr`() {
         val nameEmpty = context.resources.getString(R.string.name_empty)
         val nameExists = context.resources.getString(R.string.name_exists)
 
@@ -93,7 +93,7 @@ class CreateEditFragmentInst {
     }
 
     @Test
-    fun `should call validatePasswords when password in either password fields changes`(){
+    fun `should call validatePasswords when password in either password fields changes`() {
         scenario.onFragment {
             val str = faker.str()
 
@@ -106,7 +106,7 @@ class CreateEditFragmentInst {
     }
 
     @Test
-    fun `should hide or display error tip according to emptyPassErr and diffPassErr`(){
+    fun `should hide or display error tip according to emptyPassErr and diffPassErr`() {
         val emptyPassword = context.resources.getString(R.string.empty_password)
         val diffPasswords = context.resources.getString(R.string.diff_passwords)
 
@@ -129,7 +129,7 @@ class CreateEditFragmentInst {
     }
 
     @Test
-    fun `applyButton should change according to nameErrors and passwordErrors`(){
+    fun `applyButton should change according to nameErrors and passwordErrors`() {
         scenario.onFragment {
             // there are no errors
             it.viewModel.emptyNameErr = false

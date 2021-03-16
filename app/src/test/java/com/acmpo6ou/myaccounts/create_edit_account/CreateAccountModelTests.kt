@@ -37,31 +37,33 @@ class CreateAccountModelTests {
     val model = CreateAccountViewModel()
 
     @Before
-    fun setup(){
+    fun setup() {
         model.initialize(MyApp(), databaseMap.toMap().toMutableMap())
     }
 
     @Test
-    fun `applyPressed should create new account`(){
+    fun `applyPressed should create new account`() {
         model.applyPressed(
-                account.accountName,
-                account.username,
-                account.email,
-                account.password,
-                account.date,
-                account.comment)
+            account.accountName,
+            account.username,
+            account.email,
+            account.password,
+            account.date,
+            account.comment
+        )
         assertEquals(account, model.accounts[account.accountName])
     }
 
     @Test
-    fun `applyPressed should set finished to true`(){
+    fun `applyPressed should set finished to true`() {
         model.applyPressed(
-                account.accountName,
-                account.username,
-                account.email,
-                account.password,
-                account.date,
-                account.comment)
+            account.accountName,
+            account.username,
+            account.email,
+            account.password,
+            account.date,
+            account.comment
+        )
         assertTrue(model.finished)
     }
 }

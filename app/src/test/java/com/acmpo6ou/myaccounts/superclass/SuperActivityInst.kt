@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts.superclass
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Looper
 import android.view.View
@@ -40,7 +41,9 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows
+import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 import org.robolectric.shadows.ShadowAlertDialog
@@ -158,5 +161,13 @@ class SuperActivityInst : NoInternet {
 
         assertEquals(goBackTitle, title?.text)
         assertEquals(confirmExit, message?.text)
+    }
+
+    @Test
+    fun `startUpdatesActivity should start appropriate intent`() {
+        val latestVersion = faker.str()
+        scenario.onActivity { it.startUpdatesActivity(latestVersion) }
+
+        val intent: Intent = shadowOf(RuntimeEnvironment.application).nextStartedActivity
     }
 }

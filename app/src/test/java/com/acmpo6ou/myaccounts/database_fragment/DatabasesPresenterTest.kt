@@ -31,7 +31,7 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import org.junit.Before
 
-open class DatabasesPresenterTest : DatabaseUtils{
+open class DatabasesPresenterTest : DatabaseUtils {
     lateinit var view: DatabaseFragmentInter
     lateinit var model: DatabasesModelInter
     lateinit var presenter: DatabasesPresenter
@@ -45,28 +45,29 @@ open class DatabasesPresenterTest : DatabaseUtils{
     val faker = Faker()
     val salt = "0123456789abcdef".toByteArray()
 
-    fun setupPresenter(){
+    fun setupPresenter() {
         model = mock()
         presenter = DatabasesPresenter(view)
         presenter.model = model
         presenter.databases = mutableListOf(
-                Database("main"),
-                Database("test", "123", salt, mutableMapOf()))
+            Database("main"),
+            Database("test", "123", salt, mutableMapOf())
+        )
     }
 
-    fun callExportDatabase(){
+    fun callExportDatabase() {
         presenter.exportIndex = 1
         presenter.exportDatabase(locationUri)
     }
 
     @Before
-    fun setUp(){
+    fun setUp() {
         app = MyApp()
         app.keyCache = mutableMapOf("123" to deriveKey("123", salt))
 
-        view = mock{
-            on{ACCOUNTS_DIR} doReturn ""
-            on{app} doReturn DatabasesPresenterTest@app
+        view = mock {
+            on { ACCOUNTS_DIR } doReturn ""
+            on { app } doReturn DatabasesPresenterTest@app
         }
     }
 }

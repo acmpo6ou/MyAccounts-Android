@@ -44,11 +44,11 @@ class EditAccountFragmentInst {
 
     @Before
     fun setup() {
-        scenario = launchFragmentInContainer(themeResId= R.style.Theme_MyAccounts_NoActionBar)
+        scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
     }
 
     @Test
-    fun `setAccount should fill all fields`(){
+    fun `setAccount should fill all fields`() {
         scenario.onFragment {
             it.setAccount(databaseMap, account.accountName)
 
@@ -63,7 +63,7 @@ class EditAccountFragmentInst {
     }
 
     @Test
-    fun `initForm should change text of apply button`(){
+    fun `initForm should change text of apply button`() {
         val saveText = context.resources.getString(R.string.save)
         scenario.onFragment {
             it.initForm()

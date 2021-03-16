@@ -24,11 +24,13 @@ import com.acmpo6ou.myaccounts.R
 import java.io.FileNotFoundException
 import java.io.IOException
 
-open class DatabasesPresenter(private val view: DatabaseFragmentInter)
-                             : DatabasesPresenterInter {
+open class DatabasesPresenter(private val view: DatabaseFragmentInter) :
+    DatabasesPresenterInter {
 
-    var model: DatabasesModelInter = DatabasesModel(view.ACCOUNTS_DIR,
-                                                    view.myContext.contentResolver)
+    var model: DatabasesModelInter = DatabasesModel(
+        view.ACCOUNTS_DIR,
+        view.myContext.contentResolver
+    )
     override val SRC_DIR: String get() = model.SRC_DIR
     var exportIndex: Int? = null
 
@@ -77,22 +79,20 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
             view.showSuccess()
         }
         // handle all possible errors
-        catch (e: FileNotFoundException){
+        catch (e: FileNotFoundException) {
             errorDetails = resources.getString(R.string.export_file_not_found_details)
             e.printStackTrace()
-        }
-        catch (e: IOException){
+        } catch (e: IOException) {
             errorDetails = resources.getString(R.string.io_error)
             e.printStackTrace()
-        }
-        catch (e: Exception){
+        } catch (e: Exception) {
             errorDetails = e.toString()
             e.printStackTrace()
         }
 
         // if there are any errors errorDetails will be filled with appropriate details string
         // if so, display error dialog
-        if(errorDetails.isNotEmpty()){
+        if (errorDetails.isNotEmpty()) {
             val errorTitle = resources.getString(R.string.export_error_title)
             view.showError(errorTitle, errorDetails)
         }
@@ -120,10 +120,9 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
 
             databases.removeAt(i)
             view.notifyRemoved(i)
-        }
-        catch (e: Exception){
+        } catch (e: Exception) {
             val errorTitle = view.myContext.resources
-                    .getString(R.string.delete_error_title)
+                .getString(R.string.delete_error_title)
             val errorDetails = e.toString()
 
             view.showError(errorTitle, errorDetails)
@@ -140,10 +139,9 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
      * @param[i] index of database we want to close.
      */
     override fun closeSelected(i: Int) {
-        if(isDatabaseSaved(databases[i], view.app)) {
+        if (isDatabaseSaved(databases[i], view.app)) {
             closeDatabase(i)
-        }
-        else{
+        } else {
             view.confirmClose(i)
         }
     }
@@ -174,12 +172,10 @@ open class DatabasesPresenter(private val view: DatabaseFragmentInter)
      * is open - call view.startDatabase() passing through database index.
      */
     override fun openDatabase(i: Int) {
-        if(databases[i].isOpen){
+        if (databases[i].isOpen) {
             view.startDatabase(i)
-        }
-        else {
+        } else {
             view.navigateToOpen(i)
         }
     }
-
 }

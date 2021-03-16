@@ -50,14 +50,12 @@ abstract class CreateEditDatabaseFragment : CreateEditFragment(), ErrorFragment 
     override val parentName get() = b.parentName
     override val parentPassword get() = b.parentPassword
 
-
     // Hides/displays loading progress bar of apply button.
     private val loadingObserver = Observer<Boolean> {
-        if(it) {
+        if (it) {
             b.progressLoading.visibility = View.VISIBLE
             b.applyButton.isEnabled = false
-        }
-        else{
+        } else {
             b.progressLoading.visibility = View.GONE
             b.applyButton.isEnabled = true
         }
@@ -66,8 +64,11 @@ abstract class CreateEditDatabaseFragment : CreateEditFragment(), ErrorFragment 
     private var binding: CreateEditDatabaseFragmentBinding? = null
     val b: CreateEditDatabaseFragmentBinding get() = binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = CreateEditDatabaseFragmentBinding.inflate(layoutInflater, container, false)
         return b.root
     }
@@ -96,8 +97,10 @@ abstract class CreateEditDatabaseFragment : CreateEditFragment(), ErrorFragment 
 
         // call applyPressed when clicking on the apply button
         applyButton.setOnClickListener {
-            viewModel.applyPressed(nameField.text.toString(),
-                                   passwordField.text.toString())
+            viewModel.applyPressed(
+                nameField.text.toString(),
+                passwordField.text.toString()
+            )
         }
     }
 

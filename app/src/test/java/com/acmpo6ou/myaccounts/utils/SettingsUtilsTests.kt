@@ -53,35 +53,35 @@ class SettingsUtilsTests {
 
     @Before
     fun setup() {
-        mockResources = mock{
-            on{configuration} doReturn mockConfig
-            on{displayMetrics} doReturn displayMetrics
+        mockResources = mock {
+            on { configuration } doReturn mockConfig
+            on { displayMetrics } doReturn displayMetrics
         }
 
         testActivity = TestActivity()
-        testActivity.activity = mock{
-            on{resources} doReturn mockResources
-            on{window} doReturn mockWindow
+        testActivity.activity = mock {
+            on { resources } doReturn mockResources
+            on { window } doReturn mockWindow
         }
         spyActivity = spy(testActivity)
     }
 
     @Test
-    fun `setLocale should change locale of resources configuration`(){
+    fun `setLocale should change locale of resources configuration`() {
         testActivity.setLocale(languageCode)
         verify(mockConfig).setLocale(expectedLocale)
     }
 
     @Test
-    fun `setLocale should update configuration of resources`(){
+    fun `setLocale should update configuration of resources`() {
         testActivity.setLocale(languageCode)
         verify(mockResources).updateConfiguration(mockConfig, displayMetrics)
     }
 
     @Test
-    fun `loadSettings should not call setLocale if 'language' setting is set to 'default'`(){
-        spyActivity.prefs = mock{
-            on{ getString("language", "default") } doReturn "default"
+    fun `loadSettings should not call setLocale if 'language' setting is set to 'default'`() {
+        spyActivity.prefs = mock {
+            on { getString("language", "default") } doReturn "default"
         }
 
         spyActivity.loadSettings()
@@ -89,9 +89,9 @@ class SettingsUtilsTests {
     }
 
     @Test
-    fun `loadSettings should call setLocale if 'language' setting is other then 'default'`(){
-        spyActivity.prefs = mock{
-            on{ getString("language", "default") } doReturn languageCode
+    fun `loadSettings should call setLocale if 'language' setting is other then 'default'`() {
+        spyActivity.prefs = mock {
+            on { getString("language", "default") } doReturn languageCode
         }
 
         spyActivity.loadSettings()
@@ -99,10 +99,10 @@ class SettingsUtilsTests {
     }
 
     @Test
-    fun `loadSettings should block screen capture when 'block_screen_capture' is true`(){
-        testActivity.prefs = mock{
-            on{ getString(anyString(), anyString()) } doReturn "default"
-            on{ getBoolean("block_screen_capture", true) } doReturn true
+    fun `loadSettings should block screen capture when 'block_screen_capture' is true`() {
+        testActivity.prefs = mock {
+            on { getString(anyString(), anyString()) } doReturn "default"
+            on { getBoolean("block_screen_capture", true) } doReturn true
         }
 
         testActivity.loadSettings()
@@ -110,10 +110,10 @@ class SettingsUtilsTests {
     }
 
     @Test
-    fun `loadSettings should not block screen capture when 'block_screen_capture' is false`(){
-        testActivity.prefs = mock{
-            on{ getString(anyString(), anyString()) } doReturn "default"
-            on{ getBoolean("block_screen_capture", true) } doReturn false
+    fun `loadSettings should not block screen capture when 'block_screen_capture' is false`() {
+        testActivity.prefs = mock {
+            on { getString(anyString(), anyString()) } doReturn "default"
+            on { getBoolean("block_screen_capture", true) } doReturn false
         }
 
         testActivity.loadSettings()

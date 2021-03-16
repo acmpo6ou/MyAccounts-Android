@@ -51,13 +51,13 @@ class OpenDatabaseFragmentInst {
 
     @Before
     fun setUp() {
-        scenario = launchFragmentInContainer(themeResId=R.style.Theme_MyAccounts_NoActionBar)
+        scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
         model.uiDispatcher = Dispatchers.Unconfined
         model.defaultDispatcher = Dispatchers.Unconfined
     }
 
     @Test
-    fun `'Open database' button should call startPasswordCheck`(){
+    fun `'Open database' button should call startPasswordCheck`() {
         scenario.onFragment {
             it.viewModel = model
             val txt = faker.str()
@@ -69,7 +69,7 @@ class OpenDatabaseFragmentInst {
     }
 
     @Test
-    fun `error tip should change when incorrectPassword changes`(){
+    fun `error tip should change when incorrectPassword changes`() {
         scenario.onFragment {
             val errorMsg = it.myContext.resources.getString(R.string.password_error)
 
@@ -84,7 +84,7 @@ class OpenDatabaseFragmentInst {
     }
 
     @Test
-    fun `should display or hide progress bar depending on 'loading' of view model`(){
+    fun `should display or hide progress bar depending on 'loading' of view model`() {
         scenario.onFragment {
             // when loading is true progress bar should be displayed and button - disabled
             it.viewModel._loading.value = true

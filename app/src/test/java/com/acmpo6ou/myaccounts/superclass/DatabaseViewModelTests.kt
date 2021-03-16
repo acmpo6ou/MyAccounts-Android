@@ -56,7 +56,7 @@ class DatabaseViewModelTests {
     private val faker = Faker()
 
     @Test
-    fun `initialize should set title`(){
+    fun `initialize should set title`() {
         val titleStart = faker.str()
         val app = MyApp()
         app.databases = mutableListOf(Database("main"))

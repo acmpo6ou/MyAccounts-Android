@@ -47,7 +47,7 @@ class SuperActivityTests {
     private val presenter get() = activity.presenter
 
     @Before
-    fun setup(){
+    fun setup() {
         activity = TestActivity()
         activity.presenter = mock()
         activity.navController = mock()
@@ -57,7 +57,7 @@ class SuperActivityTests {
     private fun selectItem(itemId: Int) = selectNavigationItem(itemId, activity)
 
     @Test
-    fun `'Check for updates' should call presenter checkUpdatesSelected`(){
+    fun `'Check for updates' should call presenter checkUpdatesSelected`() {
         selectItem(R.id.check_for_updates)
         verify(presenter).checkUpdatesSelected()
 
@@ -66,7 +66,7 @@ class SuperActivityTests {
     }
 
     @Test
-    fun `'Changelog' should call presenter navigateToChangelog`(){
+    fun `'Changelog' should call presenter navigateToChangelog`() {
         selectItem(R.id.changelog)
         verify(presenter).navigateToChangelog()
 
@@ -75,7 +75,7 @@ class SuperActivityTests {
     }
 
     @Test
-    fun `'Settings' should call presenter navigateToSettings`(){
+    fun `'Settings' should call presenter navigateToSettings`() {
         selectItem(R.id.settings)
         verify(presenter).navigateToSettings()
 
@@ -84,7 +84,7 @@ class SuperActivityTests {
     }
 
     @Test
-    fun `'About' should call presenter navigateToAbout`(){
+    fun `'About' should call presenter navigateToAbout`() {
         selectItem(R.id.about)
         verify(presenter).navigateToAbout()
 
@@ -93,9 +93,9 @@ class SuperActivityTests {
     }
 
     @Test
-    fun `back button should close nav drawer if it is opened`(){
-        val mockDrawer: DrawerLayout = mock{
-            on{isDrawerOpen(GravityCompat.START)} doReturn true
+    fun `back button should close nav drawer if it is opened`() {
+        val mockDrawer: DrawerLayout = mock {
+            on { isDrawerOpen(GravityCompat.START) } doReturn true
         }
         activity.drawerLayout = mockDrawer
 
@@ -104,9 +104,9 @@ class SuperActivityTests {
     }
 
     @Test
-    fun `back button should not close nav drawer if it isn't opened`(){
-        val mockDrawer: DrawerLayout = mock{
-            on{isDrawerOpen(GravityCompat.START)} doReturn false
+    fun `back button should not close nav drawer if it isn't opened`() {
+        val mockDrawer: DrawerLayout = mock {
+            on { isDrawerOpen(GravityCompat.START) } doReturn false
         }
         activity.drawerLayout = mockDrawer
 

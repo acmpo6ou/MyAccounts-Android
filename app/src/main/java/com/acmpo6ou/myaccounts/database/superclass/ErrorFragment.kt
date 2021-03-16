@@ -32,9 +32,9 @@ interface ErrorFragment {
     val mainActivity: MainActivityInter
     val lifecycle: LifecycleOwner
 
-    fun initModel(){
+    fun initModel() {
         // Observer to display error dialog when errorMsg of ViewModel changes.
-        val errorObserver = Observer<String>{
+        val errorObserver = Observer<String> {
             val errorTitle = mainActivity.myContext.resources.getString(R.string.error_title)
             mainActivity.showError(errorTitle, it)
         }

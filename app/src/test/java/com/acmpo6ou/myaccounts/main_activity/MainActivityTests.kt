@@ -33,19 +33,19 @@ import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import org.junit.Before
 import org.junit.Test
 
-class MainActivityTests: DatabaseViewTest() {
+class MainActivityTests : DatabaseViewTest() {
     private lateinit var activity: MainActivity
     private lateinit var presenter: MainPresenterInter
 
     @Before
-    fun setup(){
+    fun setup() {
         activity = MainActivity()
         presenter = mock()
         activity.presenter = presenter
     }
 
     @Test
-    fun `'Import database' should call presenter importSelected`(){
+    fun `'Import database' should call presenter importSelected`() {
         selectNavigationItem(import_database, activity)
         verify(presenter).importSelected()
 
@@ -54,14 +54,14 @@ class MainActivityTests: DatabaseViewTest() {
     }
 
     @Test
-    fun `navigation drawer should be closed when any of it's items is selected`(){
+    fun `navigation drawer should be closed when any of it's items is selected`() {
         activity.drawerLayout = mock()
         selectNavigationItem(import_database, activity)
         verify(activity.drawerLayout).closeDrawer(GravityCompat.START)
     }
 
     @Test
-    fun `onActivityResult should call checkTarFile when code is IMPORT_RC`(){
+    fun `onActivityResult should call checkTarFile when code is IMPORT_RC`() {
         // call onActivityResult passing import request code, result OK and intent with
         // location where to import database
         activity.onActivityResult(activity.IMPORT_RC, Activity.RESULT_OK, intent)
@@ -69,14 +69,14 @@ class MainActivityTests: DatabaseViewTest() {
     }
 
     @Test
-    fun `onActivityResult should not call checkTarFile when code is other than EXPORT_RC`(){
+    fun `onActivityResult should not call checkTarFile when code is other than EXPORT_RC`() {
         // call onActivityResult passing other request code, result OK and intent
         activity.onActivityResult(OTHER_RC, Activity.RESULT_OK, intent)
         verify(presenter, never()).checkTarFile(locationUri)
     }
 
     @Test
-    fun `onActivityResult should not call checkTarFile when result code is CANCELED`(){
+    fun `onActivityResult should not call checkTarFile when result code is CANCELED`() {
         // call onActivityResult passing other request code, result CANCELED and intent
         activity.onActivityResult(activity.IMPORT_RC, Activity.RESULT_CANCELED, intent)
         verify(presenter, never()).checkTarFile(locationUri)

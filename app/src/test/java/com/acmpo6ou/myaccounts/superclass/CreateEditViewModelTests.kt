@@ -33,7 +33,7 @@ import org.junit.Test
 
 private open class TestModel : CreateEditViewModel() {
     override val app: MyApp = MyApp()
-    override val itemNames: List<String> get() = app.databases.map{ it.name }
+    override val itemNames: List<String> get() = app.databases.map { it.name }
 }
 
 class CreateEditViewModelTests : ModelTest() {
@@ -45,14 +45,16 @@ class CreateEditViewModelTests : ModelTest() {
     override val password = faker.str()
 
     @Before
-    fun setup(){
+    fun setup() {
         model.app.databases =
-            mutableListOf(Database("main"),
-                          Database("test", "123"))
+            mutableListOf(
+                Database("main"),
+                Database("test", "123")
+            )
     }
 
     @Test
-    fun `validateName should change emptyNameErr`(){
+    fun `validateName should change emptyNameErr`() {
         // if name isn't empty emptyNameErr should be false
         model.validateName(faker.str())
         assertFalse(model.emptyNameErr)
@@ -63,7 +65,7 @@ class CreateEditViewModelTests : ModelTest() {
     }
 
     @Test
-    fun `validateName should set existsNameErr to true when Database with such name exists`(){
+    fun `validateName should set existsNameErr to true when Database with such name exists`() {
         model.validateName("main")
         assertTrue(model.existsNameErr)
 
@@ -73,7 +75,7 @@ class CreateEditViewModelTests : ModelTest() {
     }
 
     @Test
-    fun `validatePasswords should change emptyPassErr`(){
+    fun `validatePasswords should change emptyPassErr`() {
         // if passwords are empty - emptyPassErr = true
         model.validatePasswords("", "")
         assertTrue(model.emptyPassErr)
@@ -84,7 +86,7 @@ class CreateEditViewModelTests : ModelTest() {
     }
 
     @Test
-    fun `validatePasswords should change diffPassErr`(){
+    fun `validatePasswords should change diffPassErr`() {
         val pass1 = faker.str()
         val pass2 = faker.str()
 

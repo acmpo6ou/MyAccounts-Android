@@ -24,7 +24,7 @@ import com.acmpo6ou.myaccounts.core.superclass.ListPresenter
 import com.acmpo6ou.myaccounts.database.Account
 import com.acmpo6ou.myaccounts.database.DbMap
 
-interface AccountsFragmentInter : ListFragmentInter{
+interface AccountsFragmentInter : ListFragmentInter {
     val presenter: AccountsListPresenterInter
     val accountsActivity: AccountsActivityInter?
 

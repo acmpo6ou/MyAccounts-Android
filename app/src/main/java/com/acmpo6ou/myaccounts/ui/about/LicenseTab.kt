@@ -28,13 +28,16 @@ import androidx.fragment.app.Fragment
 import com.acmpo6ou.myaccounts.R
 
 class LicenseTab : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.license_tab, container, false)
     }
 
     val license =
-            """
+        """
         GNU GENERAL PUBLIC LICENSE
                Version 3, 29 June 2007
 
@@ -708,7 +711,7 @@ may consider it more useful to permit linking proprietary applications with
 the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <https://www.gnu.org/licenses/why-not-lgpl.html>.
-            """.trimIndent()
+        """.trimIndent()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         requireView().findViewById<TextView>(R.id.licenseText).text = license

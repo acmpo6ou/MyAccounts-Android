@@ -34,18 +34,20 @@ class UpdatesViewModel : ViewModel() {
      * Downloads latest changelog from github repository.
      */
     private fun getChangelogAsync() = viewModelScope.async(Dispatchers.Default) {
-        URL("https://raw.githubusercontent.com/Acmpo6ou/MyAccounts/" +
-                "master/app/src/main/res/raw/changelog")
-                .openStream()
-                .use {
-                    return@async String( it.readBytes() )
-                }
+        URL(
+            "https://raw.githubusercontent.com/Acmpo6ou/MyAccounts/" +
+                "master/app/src/main/res/raw/changelog"
+        )
+            .openStream()
+            .use {
+                return@async String(it.readBytes())
+            }
     }
 
     /**
      * Launches and awaits [getChangelogAsync] coroutine.
      */
-    fun getChangelog() = viewModelScope.launch(Dispatchers.Main){
+    fun getChangelog() = viewModelScope.launch(Dispatchers.Main) {
         changelog.value = getChangelogAsync().await()
     }
 }

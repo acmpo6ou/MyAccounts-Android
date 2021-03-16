@@ -31,7 +31,7 @@ import com.nhaarman.mockitokotlin2.mock
  */
 open class DatabaseViewTest {
     var locationUri: Uri = mock()
-    var intent: Intent = mock{on{data} doReturn locationUri}
+    var intent: Intent = mock { on { data } doReturn locationUri }
 
     val faker = Faker()
     val OTHER_RC = faker.number().digit().toInt()

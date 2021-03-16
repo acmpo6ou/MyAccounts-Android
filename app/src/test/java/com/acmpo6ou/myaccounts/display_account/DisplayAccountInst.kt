@@ -61,8 +61,8 @@ class DisplayAccountInst {
     }
 
     @Test
-    fun `setAccount should fill all text views with data`(){
-        scenario.onFragment{
+    fun `setAccount should fill all text views with data`() {
+        scenario.onFragment {
             it.setAccount(account)
 
             assertEquals("$usernameStr ${account.username}", it.b.accountUsername.text.toString())
@@ -74,7 +74,7 @@ class DisplayAccountInst {
     }
 
     @Test
-    fun `press on copy FAB should copy password`(){
+    fun `press on copy FAB should copy password`() {
         scenario.onFragment {
             it.setAccount(account)
             it.b.copyPassword.performClick()
@@ -85,7 +85,7 @@ class DisplayAccountInst {
     }
 
     @Test
-    fun `press on copy FAB should display snackbar`(){
+    fun `press on copy FAB should display snackbar`() {
         scenario.onFragment {
             val copyMessage = context.resources.getString(R.string.copied)
             it.setAccount(account)
@@ -100,25 +100,35 @@ class DisplayAccountInst {
     }
 
     @Test
-    fun `should hide display or hide password when pressing and releasing password label`(){
+    fun `should hide display or hide password when pressing and releasing password label`() {
         scenario.onFragment {
             it.setAccount(account)
 
             // when touching password label password should be displayed
             it.b.accountPassword.dispatchTouchEvent(
-                            MotionEvent.obtain(SystemClock.uptimeMillis(),
-                            SystemClock.uptimeMillis(),
-                            MotionEvent.ACTION_DOWN, 0F, 0F, 0))
-            assertEquals("$passwordStr ${account.password}",
-                         it.b.accountPassword.text.toString())
+                MotionEvent.obtain(
+                    SystemClock.uptimeMillis(),
+                    SystemClock.uptimeMillis(),
+                    MotionEvent.ACTION_DOWN, 0F, 0F, 0
+                )
+            )
+            assertEquals(
+                "$passwordStr ${account.password}",
+                it.b.accountPassword.text.toString()
+            )
 
             // when releasing password label password should be hidden
             it.b.accountPassword.dispatchTouchEvent(
-                            MotionEvent.obtain(SystemClock.uptimeMillis(),
-                            SystemClock.uptimeMillis(),
-                            MotionEvent.ACTION_UP, 0F, 0F, 0))
-            assertEquals("$passwordStr ${"•".repeat(16)}",
-                    it.b.accountPassword.text.toString())
+                MotionEvent.obtain(
+                    SystemClock.uptimeMillis(),
+                    SystemClock.uptimeMillis(),
+                    MotionEvent.ACTION_UP, 0F, 0F, 0
+                )
+            )
+            assertEquals(
+                "$passwordStr ${"•".repeat(16)}",
+                it.b.accountPassword.text.toString()
+            )
         }
     }
 }

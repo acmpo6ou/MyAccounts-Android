@@ -35,8 +35,11 @@ import com.shawnlin.numberpicker.NumberPicker
  * Dialog that contains number picker to choose password length and checkboxes to choose what
  * characters to use to generate password (i.e. digits, letters, etc.).
  */
-open class GenPassDialog(activity: AppCompatActivity,
-                         pass1: TextInputEditText, pass2: TextInputEditText) {
+open class GenPassDialog(
+    activity: AppCompatActivity,
+    pass1: TextInputEditText,
+    pass2: TextInputEditText
+) {
     val dialog: Dialog = Dialog(activity)
     val generateButton: Button
     val cancelButton: Button
@@ -54,7 +57,7 @@ open class GenPassDialog(activity: AppCompatActivity,
     val punctuation = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
     val allChars = listOf(digits, lower, upper, punctuation)
 
-    init{
+    init {
         dialog.setContentView(R.layout.generate_password)
         generateButton = dialog.findViewById(R.id.generateButton)
         cancelButton = dialog.findViewById(R.id.cancelButton)
@@ -75,16 +78,16 @@ open class GenPassDialog(activity: AppCompatActivity,
         generateButton.setOnClickListener {
             // get all selected checkboxes
             val chars = mutableListOf<String>()
-            for (box in checkBoxes){
+            for (box in checkBoxes) {
                 // add characters of corresponding check box if it is checked
-                if (box.isChecked){
+                if (box.isChecked) {
                     val index = checkBoxes.indexOf(box)
                     chars.add(allChars[index])
                 }
             }
 
             // do not proceed if no checkboxes are checked
-            if(chars.isEmpty()){
+            if (chars.isEmpty()) {
                 dialog.dismiss()
                 return@setOnClickListener
             }
@@ -113,15 +116,15 @@ open class GenPassDialog(activity: AppCompatActivity,
     open fun genPass(len: Int, chars: List<String>): String {
         // here we generate the password using [len] parameter and strings
         // that are passed to genPass and packed to [chars]
-        val password =  (1..len)
-                .map{ chars.joinToString("").random() }
-                .joinToString("")
+        val password = (1..len)
+            .map { chars.joinToString("").random() }
+            .joinToString("")
 
         // because password generates randomly it not necessary will contain all characters that are
         // specified in [chars], so here we check that generated password contains at least one
         // character from each string specified in [chars] and if not we generate password again
-        for(seq in chars){
-            if (!(password hasoneof seq)){
+        for (seq in chars) {
+            if (!(password hasoneof seq)) {
                 return genPass(len, chars)
             }
         }
@@ -137,8 +140,8 @@ open class GenPassDialog(activity: AppCompatActivity,
  * at least one character from string on the right.
  */
 infix fun String.hasoneof(other: String): Boolean {
-    for(c in other){
-        if ( c in this ){
+    for (c in other) {
+        if (c in this) {
             return true
         }
     }

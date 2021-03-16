@@ -37,7 +37,7 @@ import com.acmpo6ou.myaccounts.ui.database.DatabaseFragmentDirections.actionOpen
 /**
  * Fragment representing a list of Databases.
  */
-class DatabaseFragment: ListFragment(), DatabaseFragmentInter {
+class DatabaseFragment : ListFragment(), DatabaseFragmentInter {
     override lateinit var ACCOUNTS_DIR: String
     val EXPORT_RC = 101
     override val actionCreateItem = R.id.actionCreateDatabase
@@ -47,7 +47,7 @@ class DatabaseFragment: ListFragment(), DatabaseFragmentInter {
 
     var databases
         get() = app.databases
-        set(value){
+        set(value) {
             app.databases = value
         }
     override val items get() = databases
@@ -141,7 +141,7 @@ class DatabaseFragment: ListFragment(), DatabaseFragmentInter {
         // do nothing if activity was canceled
         if (resultCode != Activity.RESULT_OK) return
 
-        if(requestCode == EXPORT_RC) presenter.exportDatabase(data?.data!!)
+        if (requestCode == EXPORT_RC) presenter.exportDatabase(data?.data!!)
     }
 
     override fun startDatabase(index: Int) = startDatabaseUtil(index, myContext)

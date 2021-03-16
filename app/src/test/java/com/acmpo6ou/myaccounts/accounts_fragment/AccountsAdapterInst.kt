@@ -71,25 +71,25 @@ class AccountsAdapterInst {
     }
 
     @Test
-    fun `click on recycler item should call displayAccount`(){
+    fun `click on recycler item should call displayAccount`() {
         itemLayout?.performClick()
         verify(spyPresenter).displayAccount(0)
     }
 
     @Test
-    fun `account item should have appropriate name`(){
+    fun `account item should have appropriate name`() {
         val accountName = itemLayout?.findViewById<TextView>(R.id.itemName)
         assertEquals("gmail", accountName?.text)
     }
 
     @Test
-    fun `clicking on 'Edit' should call editAccount`(){
+    fun `clicking on 'Edit' should call editAccount`() {
         clickMenuItem(itemLayout, R.id.edit_account_item)
         verify(spyPresenter).editAccount(0)
     }
 
     @Test
-    fun `clicking on 'Delete' should call deleteSelected`(){
+    fun `clicking on 'Delete' should call deleteSelected`() {
         clickMenuItem(itemLayout, R.id.delete_account_item)
         verify(spyPresenter).deleteSelected(0)
     }

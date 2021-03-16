@@ -34,7 +34,7 @@ open class CreateAccountViewModel : CreateEditViewModel() {
      * @param[app] application instance used to get resources.
      * @param[accounts] accounts map.
      */
-    open fun initialize(app: MyApp, accounts: DbMap){
+    open fun initialize(app: MyApp, accounts: DbMap) {
         this.app = app
         this.accounts = accounts
     }
@@ -43,8 +43,14 @@ open class CreateAccountViewModel : CreateEditViewModel() {
      * Called when user presses apply button.
      * Creates new account using information provided.
      */
-    open fun applyPressed(accountName: String, username: String, email: String,
-                     password: String, date: String, comment: String){
+    open fun applyPressed(
+        accountName: String,
+        username: String,
+        email: String,
+        password: String,
+        date: String,
+        comment: String
+    ) {
         accounts[accountName] = Account(accountName, username, email, password, date, comment)
         finished = true // notify about creation
     }

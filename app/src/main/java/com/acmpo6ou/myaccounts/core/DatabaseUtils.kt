@@ -53,7 +53,7 @@ interface DatabaseUtils {
     fun loads(jsonStr: String): DbMap {
         var map = mutableMapOf<String, Account>()
         if (jsonStr.isNotEmpty()) {
-            map = Json{ ignoreUnknownKeys = true }.decodeFromString(jsonStr)
+            map = Json { ignoreUnknownKeys = true }.decodeFromString(jsonStr)
         }
         return map
     }
@@ -143,12 +143,11 @@ interface DatabaseUtils {
      * can determine whether to show confirmation dialog about unsaved data to user or not.
      * @param[database] database we want to check (the one that resides in memory).
      */
-    fun isDatabaseSaved(database: Database, app: MyApp): Boolean{
+    fun isDatabaseSaved(database: Database, app: MyApp): Boolean {
         val diskDatabase: Database
         try {
             diskDatabase = openDatabase(database.copy(), app)
-        }
-        catch (e: FileNotFoundException){
+        } catch (e: FileNotFoundException) {
             // if database on disk doesn't exist then it definitely
             // differs from the one in memory
             e.printStackTrace()
@@ -221,7 +220,7 @@ interface DatabaseUtils {
      * @param[database] new Database to be created, replacing the old one.
      * @param[app] application instance containing cache of cryptography keys.
      */
-    fun saveDatabase(oldName: String, database: Database, app: MyApp){
+    fun saveDatabase(oldName: String, database: Database, app: MyApp) {
         deleteDatabase(oldName)
         createDatabase(database, app)
     }

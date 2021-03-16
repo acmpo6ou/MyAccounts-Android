@@ -54,8 +54,11 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
     private var binding: CreateEditAccountFragmentBinding? = null
     val b: CreateEditAccountFragmentBinding get() = binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = CreateEditAccountFragmentBinding.inflate(layoutInflater, container, false)
         return b.root
     }
@@ -81,22 +84,23 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
         // call applyPressed when clicking on the apply button
         applyButton.setOnClickListener {
             viewModel.applyPressed(
-                    b.accountName.text.toString(),
-                    b.accountUsername.text.toString(),
-                    b.accountEmail.text.toString(),
-                    b.accountPassword.text.toString(),
-                    b.birthDate.text.toString(),
-                    b.accountComment.text.toString())
+                b.accountName.text.toString(),
+                b.accountUsername.text.toString(),
+                b.accountEmail.text.toString(),
+                b.accountPassword.text.toString(),
+                b.birthDate.text.toString(),
+                b.accountComment.text.toString()
+            )
         }
 
         // display date picker when clicking on date label
-        b.birthDate.setOnClickListener{
+        b.birthDate.setOnClickListener {
             val builder = MaterialDatePicker.Builder.datePicker()
             builder.setTitleText(R.string.pick_date)
 
             val currentlyPickedDate = SimpleDateFormat("dd.MM.yyyy")
-                    .parse(b.birthDate.text.toString())
-                    .time + TimeUnit.DAYS.toMillis(1)
+                .parse(b.birthDate.text.toString())
+                .time + TimeUnit.DAYS.toMillis(1)
             builder.setSelection(currentlyPickedDate)
 
             val dialog = builder.build()

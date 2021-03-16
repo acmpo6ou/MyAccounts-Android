@@ -43,12 +43,12 @@ class UpdatesActivityInst {
     private val loadingText = context.resources.getString(R.string.loading)
 
     @Before
-    fun setup(){
+    fun setup() {
         scenario = ActivityScenario.launch(UpdatesActivity::class.java)
     }
 
     @Test
-    fun `changelogObserver should set changelogText when changelog is downloaded`(){
+    fun `changelogObserver should set changelogText when changelog is downloaded`() {
         scenario.onActivity {
             val changelog = Faker().str()
             assertEquals(loadingText, it.b.changelogText.text.toString())

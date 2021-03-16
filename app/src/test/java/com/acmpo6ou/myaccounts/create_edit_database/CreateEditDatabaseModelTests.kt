@@ -50,38 +50,40 @@ class CreateEditDatabaseModelTests : ModelTest() {
     override val password = faker.str()
 
     @Before
-    fun setup(){
+    fun setup() {
         model.app = MyApp()
-        model.app.databases = mutableListOf(Database("main"),
-                                            Database("test", "123"))
+        model.app.databases = mutableListOf(
+            Database("main"),
+            Database("test", "123")
+        )
         model.defaultDispatcher = Dispatchers.Unconfined
         model.uiDispatcher = Dispatchers.Unconfined
         spyModel = spy(model)
     }
 
     @Test
-    fun `fixName should remove all unsupported characters`(){
+    fun `fixName should remove all unsupported characters`() {
         val name = model.fixName("This is (test)/.\\-_-")
         assertEquals("Thisis(test).-_-", name)
     }
 
     @Test
-    fun `validateName should set existsNameErr to true when Database with such name exists`(){
+    fun `validateName should set existsNameErr to true when Database with such name exists`() {
         // even if name contains unsupported characters
         model.validateName("m/a/i/n/") // will become `main` when cleaned by fixName
-       assertTrue(model.existsNameErr)
+        assertTrue(model.existsNameErr)
     }
 
     @Test
-    fun `validateName should use fixName`(){
+    fun `validateName should use fixName`() {
         val name = " \\/%$" // this name will be empty when cleaned by fixName
         model.validateName(name)
         assertTrue(model.emptyNameErr)
     }
 
     @Test
-    fun `applyPressed should not call apply if coroutineJob is active`(){
-        spyModel.coroutineJob = mock { on {isActive} doReturn true }
+    fun `applyPressed should not call apply if coroutineJob is active`() {
+        spyModel.coroutineJob = mock { on { isActive } doReturn true }
         spyModel.applyPressed(name, password)
 
         runBlocking {
@@ -90,8 +92,8 @@ class CreateEditDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `applyPressed should call apply if coroutineJob isn't active`(){
-        spyModel.coroutineJob = mock { on {isActive} doReturn false }
+    fun `applyPressed should call apply if coroutineJob isn't active`() {
+        spyModel.coroutineJob = mock { on { isActive } doReturn false }
         spyModel.applyPressed(name, password)
 
         runBlocking {
@@ -100,7 +102,7 @@ class CreateEditDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `applyPressed should call apply if coroutineJob is null`(){
+    fun `applyPressed should call apply if coroutineJob is null`() {
         spyModel.applyPressed(name, password)
 
         runBlocking {

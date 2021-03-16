@@ -29,19 +29,19 @@ import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
 
-class DatabaseFragmentTests: DatabaseViewTest() {
+class DatabaseFragmentTests : DatabaseViewTest() {
     lateinit var fragment: DatabaseFragment
     lateinit var presenter: DatabasesPresenterInter
 
     @Before
-    fun setUp(){
+    fun setUp() {
         presenter = mock()
         fragment = DatabaseFragment()
         fragment.presenter = presenter
     }
 
     @Test
-    fun `onActivityResult should call exportDatabase when code is EXPORT_RC`(){
+    fun `onActivityResult should call exportDatabase when code is EXPORT_RC`() {
         // call onActivityResult passing EXPORT_RC request code, result OK and intent with
         // location where to export database
         fragment.onActivityResult(fragment.EXPORT_RC, Activity.RESULT_OK, intent)
@@ -49,14 +49,14 @@ class DatabaseFragmentTests: DatabaseViewTest() {
     }
 
     @Test
-    fun `onActivityResult should not call exportDatabase when code is other than EXPORT_RC`(){
+    fun `onActivityResult should not call exportDatabase when code is other than EXPORT_RC`() {
         // call onActivityResult passing OTHER request code, result OK and intent
         fragment.onActivityResult(OTHER_RC, Activity.RESULT_OK, intent)
         verify(presenter, never()).exportDatabase(locationUri)
     }
 
     @Test
-    fun `onActivityResult should not call exportDatabase when result code is canceled`(){
+    fun `onActivityResult should not call exportDatabase when result code is canceled`() {
         // call onActivityResult passing EXPORT_RC request code, result canceled and intent
         fragment.onActivityResult(fragment.EXPORT_RC, Activity.RESULT_CANCELED, intent)
         verify(presenter, never()).exportDatabase(locationUri)

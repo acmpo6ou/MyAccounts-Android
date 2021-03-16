@@ -21,14 +21,14 @@ package com.acmpo6ou.myaccounts.database
 
 import android.content.ContentResolver
 import android.net.Uri
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import org.kamranzafar.jtar.TarEntry
-import org.kamranzafar.jtar.TarOutputStream
 import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import org.kamranzafar.jtar.TarEntry
+import org.kamranzafar.jtar.TarOutputStream
 
 /**
  * Represents account, it stores all account data such
@@ -36,14 +36,14 @@ import java.io.FileOutputStream
  */
 @Serializable
 data class Account(
-        @SerialName("account")
-        val accountName: String,
-        @SerialName("name")
-        val username: String,
-        val email: String,
-        val password: String,
-        val date: String,
-        val comment: String,
+    @SerialName("account")
+    val accountName: String,
+    @SerialName("name")
+    val username: String,
+    val email: String,
+    val password: String,
+    val date: String,
+    val comment: String,
 )
 
 typealias DbMap = MutableMap<String, Account>
@@ -59,10 +59,12 @@ typealias DbList = MutableList<Database>
  * @property isOpen dynamically returns whether database is open or not, the database is
  * considered open when [password] is not null.
  */
-data class Database(val name: String,
-                    var password: String? = null,
-                    var salt: ByteArray? = null,
-                    var data: DbMap = mutableMapOf()){
+data class Database(
+    val name: String,
+    var password: String? = null,
+    var salt: ByteArray? = null,
+    var data: DbMap = mutableMapOf()
+) {
     val isOpen get() = password != null
 }
 
@@ -72,8 +74,10 @@ data class Database(val name: String,
  *
  * @param[ACCOUNTS_DIR] path to directory that contains src folder.
  */
-class DatabasesModel(private val ACCOUNTS_DIR: String,
-                     private val contentResolver: ContentResolver) : DatabasesModelInter {
+class DatabasesModel(
+    private val ACCOUNTS_DIR: String,
+    private val contentResolver: ContentResolver
+) : DatabasesModelInter {
     // path to directory that contains databases
     override val SRC_DIR = "$ACCOUNTS_DIR/src/"
 
@@ -91,7 +95,7 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
         // add corresponding Database instance to [databases] list passing through
         // as a parameter name of that file without .db extension
         src.list()?.forEach {
-            if(it.endsWith(".db")){
+            if (it.endsWith(".db")) {
                 val name = it.removeSuffix(".db")
                 val database = Database(name)
                 databases.add(database)
@@ -119,15 +123,17 @@ class DatabasesModel(private val ACCOUNTS_DIR: String,
         val destination = FileOutputStream(descriptor?.fileDescriptor)
 
         // create tar file
-        val outStream = TarOutputStream( BufferedOutputStream(destination) )
+        val outStream = TarOutputStream(BufferedOutputStream(destination))
 
         // salt and database files to compress to the tar file
-        val dbFiles = listOf(File("$SRC_DIR$name.db"),
-                             File("$SRC_DIR$name.bin"))
+        val dbFiles = listOf(
+            File("$SRC_DIR$name.db"),
+            File("$SRC_DIR$name.bin")
+        )
 
         // each file is added to tar file
-        for(f in dbFiles){
-            if(!f.exists()) throw FileNotFoundException(f.name)
+        for (f in dbFiles) {
+            if (!f.exists()) throw FileNotFoundException(f.name)
 
             val entry = TarEntry(f, "src/${f.name}")
             outStream.putNextEntry(entry)

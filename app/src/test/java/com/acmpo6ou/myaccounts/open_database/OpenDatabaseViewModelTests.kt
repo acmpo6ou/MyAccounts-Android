@@ -50,7 +50,7 @@ class OpenDatabaseViewModelTests {
     lateinit var app: MyApp
 
     @Before
-    fun setup(){
+    fun setup() {
         app = MyApp()
         app.databases = mutableListOf(Database("main"))
 
@@ -62,8 +62,8 @@ class OpenDatabaseViewModelTests {
     }
 
     @Test
-    fun `verifyPassword should set incorrectPassword to true if there is TokenValidation error`(){
-        doAnswer{
+    fun `verifyPassword should set incorrectPassword to true if there is TokenValidation error`() {
+        doAnswer {
             throw TokenValidationException("")
         }.whenever(spyModel).openDatabaseAsync(app.databases[0])
 
@@ -74,8 +74,8 @@ class OpenDatabaseViewModelTests {
     }
 
     @Test
-    fun `verifyPassword should remove key from cache if password is incorrect`(){
-        doAnswer{
+    fun `verifyPassword should remove key from cache if password is incorrect`() {
+        doAnswer {
             throw TokenValidationException("")
         }.whenever(spyModel).openDatabaseAsync(app.databases[0])
 
@@ -86,8 +86,8 @@ class OpenDatabaseViewModelTests {
     }
 
     @Test
-    fun `verifyPassword should set corrupted to true if there is deserialization error`(){
-        doAnswer{
+    fun `verifyPassword should set corrupted to true if there is deserialization error`() {
+        doAnswer {
             // here we throw Exception instead of JsonDecodingException because
             // JsonDecodingException is private
             throw Exception("JsonDecodingException")
@@ -100,7 +100,7 @@ class OpenDatabaseViewModelTests {
     }
 
     @Test
-    fun `verifyPassword should save deserialized Database to the list`(){
+    fun `verifyPassword should save deserialized Database to the list`() {
         val expectedDatabase = Database("main", password, salt, databaseMap)
 
         runBlocking {
@@ -110,7 +110,7 @@ class OpenDatabaseViewModelTests {
     }
 
     @Test
-    fun `verifyPassword should set isOpened to true after successful deserialization`(){
+    fun `verifyPassword should set isOpened to true after successful deserialization`() {
         runBlocking {
             spyModel.verifyPassword(password)
         }
@@ -118,7 +118,7 @@ class OpenDatabaseViewModelTests {
     }
 
     @Test
-    fun `verifyPassword should set loading to true`(){
+    fun `verifyPassword should set loading to true`() {
         runBlocking {
             spyModel.verifyPassword(password)
         }
@@ -126,8 +126,8 @@ class OpenDatabaseViewModelTests {
     }
 
     @Test
-    fun `verifyPassword should set loading to false when password is incorrect`(){
-        doAnswer{
+    fun `verifyPassword should set loading to false when password is incorrect`() {
+        doAnswer {
             throw TokenValidationException("")
         }.whenever(spyModel).openDatabaseAsync(app.databases[0])
 
@@ -138,8 +138,8 @@ class OpenDatabaseViewModelTests {
     }
 
     @Test
-    fun `startPasswordCheck should not start verifyPassword if passwordJob already active`(){
-        spyModel.coroutineJob = mock { on {isActive} doReturn true }
+    fun `startPasswordCheck should not start verifyPassword if passwordJob already active`() {
+        spyModel.coroutineJob = mock { on { isActive } doReturn true }
         spyModel.startPasswordCheck(password)
 
         runBlocking {
@@ -148,7 +148,7 @@ class OpenDatabaseViewModelTests {
     }
 
     @Test
-    fun `startPasswordCheck should not start verifyPassword if password is empty`(){
+    fun `startPasswordCheck should not start verifyPassword if password is empty`() {
         spyModel.startPasswordCheck("")
 
         runBlocking {
@@ -157,8 +157,8 @@ class OpenDatabaseViewModelTests {
     }
 
     @Test
-    fun `startPasswordCheck should start verifyPassword if passwordJob isn't active`(){
-        spyModel.coroutineJob = mock { on {isActive} doReturn false }
+    fun `startPasswordCheck should start verifyPassword if passwordJob isn't active`() {
+        spyModel.coroutineJob = mock { on { isActive } doReturn false }
         spyModel.startPasswordCheck(password)
 
         runBlocking {
@@ -167,7 +167,7 @@ class OpenDatabaseViewModelTests {
     }
 
     @Test
-    fun `startPasswordCheck should start verifyPassword if passwordJob is null`(){
+    fun `startPasswordCheck should start verifyPassword if passwordJob is null`() {
         spyModel.startPasswordCheck(password)
 
         runBlocking {
@@ -176,10 +176,10 @@ class OpenDatabaseViewModelTests {
     }
 
     @Test
-    fun `verifyPassword should handle any error`(){
+    fun `verifyPassword should handle any error`() {
         val msg = faker.str()
         val exception = Exception(msg)
-        doAnswer{
+        doAnswer {
             throw exception
         }.whenever(spyModel).openDatabaseAsync(any())
 

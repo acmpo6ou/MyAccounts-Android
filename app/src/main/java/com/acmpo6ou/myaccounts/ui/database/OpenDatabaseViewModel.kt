@@ -59,9 +59,10 @@ open class OpenDatabaseViewModel : ViewModel(), DatabaseViewModel {
      * password is not empty.
      * @param[password] password needed by verifyPassword coroutine.
      */
-    open fun startPasswordCheck(password: String){
-        if((coroutineJob == null || !coroutineJob!!.isActive) &&
-            password.isNotEmpty()) {
+    open fun startPasswordCheck(password: String) {
+        if ((coroutineJob == null || !coroutineJob!!.isActive) &&
+            password.isNotEmpty()
+        ) {
             coroutineJob = viewModelScope.launch(uiDispatcher) {
                 verifyPassword(password)
             }
@@ -96,8 +97,7 @@ open class OpenDatabaseViewModel : ViewModel(), DatabaseViewModel {
             // database deserialization
             _opened.value = true
             _incorrectPassword.value = false
-        }
-        catch (e: TokenValidationException){
+        } catch (e: TokenValidationException) {
             _incorrectPassword.value = true
             _loading.value = false
             e.printStackTrace()
@@ -105,16 +105,14 @@ open class OpenDatabaseViewModel : ViewModel(), DatabaseViewModel {
             // remove cached key to avoid memory leak, because we don't need to cache
             // keys generated from incorrect passwords
             app.keyCache.remove(password)
-        }
-        catch (e: Exception){
+        } catch (e: Exception) {
             // Here we catch Exception because JsonDecodingException is private.
             // Then we verify that this is the JsonDecodingException by looking at the
             // error message
-            if ("JsonDecodingException" in e.toString()){
+            if ("JsonDecodingException" in e.toString()) {
                 _incorrectPassword.value = false
                 _corrupted.value = true
-            }
-            else{
+            } else {
                 // notify about error and hide loading progress bar
                 errorMsg = e.toString()
                 loading = false
@@ -138,7 +136,7 @@ open class OpenDatabaseViewModel : ViewModel(), DatabaseViewModel {
      * database map.
      */
     open fun openDatabaseAsync(database: Database) =
-    viewModelScope.async(defaultDispatcher) {
-        openDatabase(database, app)
-    }
+        viewModelScope.async(defaultDispatcher) {
+            openDatabase(database, app)
+        }
 }

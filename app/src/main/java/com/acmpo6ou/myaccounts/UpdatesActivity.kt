@@ -34,7 +34,7 @@ class UpdatesActivity : AppCompatActivity() {
     val b: UpdatesActivityBinding get() = binding!!
     lateinit var viewModel: UpdatesViewModel
 
-    private val changelogObserver = Observer<String>{
+    private val changelogObserver = Observer<String> {
         b.changelogText.text = fromHtml(it, HtmlCompat.FROM_HTML_MODE_COMPACT)
         b.changelogText.gravity = Gravity.START
     }

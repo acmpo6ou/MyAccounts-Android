@@ -43,11 +43,11 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
-class TestFragment : CreateEditDatabaseFragment(){
+class TestFragment : CreateEditDatabaseFragment() {
     override var viewModel: TestModel = spy()
 }
 
-open class TestModel : CreateEditDatabaseModel(){
+open class TestModel : CreateEditDatabaseModel() {
     override suspend fun apply(name: String, password: String) {
     }
 }
@@ -66,7 +66,7 @@ class CreateEditDatabaseFragmentInst {
 
     @Before
     fun setup() {
-        scenario = launchFragmentInContainer(themeResId= R.style.Theme_MyAccounts_NoActionBar)
+        scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
         app.res = context.resources
 
         model = TestModel()
@@ -80,7 +80,7 @@ class CreateEditDatabaseFragmentInst {
     }
 
     @Test
-    fun `should display or hide progress bar depending on 'loading' of view model`(){
+    fun `should display or hide progress bar depending on 'loading' of view model`() {
         scenario.onFragment {
             // when loading is true progress bar should be displayed and button - disabled
             it.viewModel._loading.value = true
@@ -95,7 +95,7 @@ class CreateEditDatabaseFragmentInst {
     }
 
     @Test
-    fun `press on applyButton should call applyPressed`(){
+    fun `press on applyButton should call applyPressed`() {
         scenario.onFragment {
             it.viewModel = spy(model)
             val pass = faker.str()
