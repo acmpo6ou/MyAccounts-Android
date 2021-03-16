@@ -71,10 +71,11 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
     abstract val presenter: SuperPresenterInter
 
     abstract val mainFragmentId: Int
-    override val mainFragment: ListFragment get(){
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
-        return navHostFragment?.childFragmentManager?.fragments?.get(0) as ListFragment
-    }
+    override val mainFragment: ListFragment
+        get() {
+            val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
+            return navHostFragment?.childFragmentManager?.fragments?.get(0) as ListFragment
+        }
 
     override fun onSupportNavigateUp(): Boolean =
         navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
@@ -96,12 +97,11 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
 
         // navigation drawer should be unlocked only on mainFragment and locked
         // everywhere else
-        navController.addOnDestinationChangedListener{
+        navController.addOnDestinationChangedListener {
             _: NavController, navDestination: NavDestination, _: Bundle? ->
-            if(navDestination.id == mainFragmentId){
+            if (navDestination.id == mainFragmentId) {
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-            }
-            else{
+            } else {
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             }
         }
@@ -134,23 +134,27 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
      * @param[isAutoCheck] if true do not display the snackbar because we should not
      * display it when auto checking for updates.
      */
-    fun updatesSnackbar(message: Int, isAutoCheck: Boolean){
+    fun updatesSnackbar(message: Int, isAutoCheck: Boolean) {
         if (!isAutoCheck) {
-            Snackbar.make(mainFragment.b.coordinatorLayout,
-                    message,
-                    Snackbar.LENGTH_LONG)
-                    .setAction("HIDE") {}
-                    .show()
+            Snackbar.make(
+                mainFragment.b.coordinatorLayout,
+                message,
+                Snackbar.LENGTH_LONG
+            )
+                .setAction("HIDE") {}
+                .show()
         }
     }
 
     // updates snackbars
     override fun noUpdates(isAutoCheck: Boolean) =
-            updatesSnackbar(R.string.no_updates, isAutoCheck)
+        updatesSnackbar(R.string.no_updates, isAutoCheck)
+
     override fun updatesCheckFailed(isAutoCheck: Boolean) =
-            updatesSnackbar(R.string.updates_check_failed, isAutoCheck)
+        updatesSnackbar(R.string.updates_check_failed, isAutoCheck)
+
     override fun noInternetConnection(isAutoCheck: Boolean) =
-            updatesSnackbar(R.string.no_intenet_connection, isAutoCheck)
+        updatesSnackbar(R.string.no_intenet_connection, isAutoCheck)
 
     /**
      * This method obtains version name and sets it in navigation header.
@@ -166,31 +170,29 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
      * Displays confirmation dialog asking user to confirm does he really wan't to go back
      * with unsaved changes.
      */
-    override fun confirmBack(){
+    override fun confirmBack() {
         MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.go_back_title)
-                .setMessage(confirmGoingBackMsg)
-                .setIcon(R.drawable.ic_warning)
-                .setPositiveButton("Ok") { _: DialogInterface, _: Int ->
-                    super.onBackPressed()
-                }
-                .setNegativeButton(R.string.save) { _: DialogInterface, _: Int ->
-                    presenter.saveSelected()
-                    super.onBackPressed()
-                }
-                .setNeutralButton(R.string.cancel) { _: DialogInterface, _: Int -> }
-                .show()
+            .setTitle(R.string.go_back_title)
+            .setMessage(confirmGoingBackMsg)
+            .setIcon(R.drawable.ic_warning)
+            .setPositiveButton("Ok") { _: DialogInterface, _: Int ->
+                super.onBackPressed()
+            }
+            .setNegativeButton(R.string.save) { _: DialogInterface, _: Int ->
+                presenter.saveSelected()
+                super.onBackPressed()
+            }
+            .setNeutralButton(R.string.cancel) { _: DialogInterface, _: Int -> }
+            .show()
     }
 
     override fun onBackPressed() {
         // close navigation drawer when Back button is pressed and if it is opened
-        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
-        }
-        else if (navController.currentDestination?.id == mainFragmentId){
+        } else if (navController.currentDestination?.id == mainFragmentId) {
             presenter.backPressed()
-        }
-        else{
+        } else {
             super.onBackPressed()
         }
     }
@@ -198,7 +200,7 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
     override fun goBack() = super.onBackPressed()
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
+        when (item.itemId) {
             R.id.check_for_updates -> presenter.checkUpdatesSelected()
             R.id.changelog -> presenter.navigateToChangelog()
             R.id.settings -> presenter.navigateToSettings()
@@ -213,7 +215,7 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
      */
     override fun navigateTo(id: Int) {
         val navHostFragment = supportFragmentManager
-                .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navHostFragment.navController.navigate(id)
     }
 
@@ -256,10 +258,10 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
      */
     override fun showError(title: String, details: String) {
         MaterialAlertDialogBuilder(this)
-                .setTitle(title)
-                .setIcon(R.drawable.ic_error)
-                .setNeutralButton("Ok"){ _: DialogInterface, _: Int -> }
-                .setMessage(details)
-                .show()
+            .setTitle(title)
+            .setIcon(R.drawable.ic_error)
+            .setNeutralButton("Ok") { _: DialogInterface, _: Int -> }
+            .setMessage(details)
+            .show()
     }
 }

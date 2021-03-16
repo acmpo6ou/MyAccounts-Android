@@ -79,16 +79,15 @@ class MainActivity : SuperActivity(), MainActivityInter {
      */
     private fun checkPermissions() {
         val isGranted = checkCallingOrSelfPermission(permission.WRITE_EXTERNAL_STORAGE)
-        if(isGranted != PackageManager.PERMISSION_GRANTED){
+        if (isGranted != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(permission.WRITE_EXTERNAL_STORAGE), 300)
         }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.import_database){
+        if (item.itemId == R.id.import_database) {
             presenter.importSelected()
-        }
-        else{
+        } else {
             super.onNavigationItemSelected(item)
         }
 
@@ -97,12 +96,12 @@ class MainActivity : SuperActivity(), MainActivityInter {
         return false
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?){
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
         super.onActivityResult(requestCode, resultCode, resultData)
         // do nothing if activity was canceled
         if (resultCode != Activity.RESULT_OK) return
 
-        if(requestCode == IMPORT_RC) {
+        if (requestCode == IMPORT_RC) {
             val locationUri = resultData?.data!!
             presenter.checkTarFile(locationUri)
         }
@@ -124,18 +123,20 @@ class MainActivity : SuperActivity(), MainActivityInter {
     }
 
     override fun showExitTip() {
-        Snackbar.make(mainFragment.b.coordinatorLayout,
-                R.string.exit_tip,
-                4000)
-                .setAction("HIDE"){}
-                .show()
+        Snackbar.make(
+            mainFragment.b.coordinatorLayout,
+            R.string.exit_tip,
+            4000
+        )
+            .setAction("HIDE") {}
+            .show()
     }
 
     /**
      * This method calls notifyChanged on DatabaseFragment to rerender the list.
      * @param[i] index of Database that were added to databases list.
      */
-    override fun notifyChanged(i: Int){
+    override fun notifyChanged(i: Int) {
         val databaseFragment = mainFragment as DatabaseFragment
         databaseFragment.notifyChanged(i)
     }
