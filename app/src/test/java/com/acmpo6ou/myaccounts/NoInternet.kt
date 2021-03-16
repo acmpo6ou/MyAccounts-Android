@@ -20,18 +20,24 @@
 package com.acmpo6ou.myaccounts
 
 import android.content.Context
+import android.net.ConnectivityManager
 import androidx.test.platform.app.InstrumentationRegistry
-import com.acmpo6ou.myaccounts.core.MyApp
 import org.junit.Before
+import org.robolectric.Shadows.shadowOf
+import org.robolectric.shadows.ShadowNetworkCapabilities
 
 /**
  * Used by some instrumentation tests to, for example, avoid checking for updates.
  */
-interface InstTest {
+interface NoInternet {
     @Before
-    fun setupApp(){
+    fun setupNoInternet() {
+        // here we set an empty NetworkCapabilities instance on ConnectivityManager
+        // in this way we simulate internet unavailability
         val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
-        val app = context.applicationContext as MyApp
-        app.testing = true
+        val cm = context.applicationContext
+            .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkCapabilities = ShadowNetworkCapabilities.newInstance()
+        shadowOf(cm).setNetworkCapabilities(cm.activeNetwork, networkCapabilities)
     }
 }

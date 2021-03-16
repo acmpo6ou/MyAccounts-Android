@@ -48,7 +48,7 @@ import org.robolectric.shadows.ShadowAlertDialog
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
-class SuperActivityInst : InstTest {
+class SuperActivityInst : NoInternet {
     // here we use MainActivity instead of SuperActivity because SuperActivity is abstract
     // and MainActivity inherits from SuperActivity
     lateinit var scenario: ActivityScenario<MainActivity>
@@ -60,7 +60,7 @@ class SuperActivityInst : InstTest {
     private val noUpdatesMsg = context.resources.getString(R.string.no_updates)
 
     @Before
-    fun setup(){
+    fun setup() {
         scenario = ActivityScenario.launch(MainActivity::class.java)
         scenario.onActivity {
             it.myContext.setTheme(R.style.Theme_MyAccounts_NoActionBar)
@@ -68,7 +68,7 @@ class SuperActivityInst : InstTest {
     }
 
     @Test
-    fun `showError should create dialog with appropriate title and message`(){
+    fun `showError should create dialog with appropriate title and message`() {
         val expectedTitle = faker.str()
         val expectedMsg = faker.str()
 
@@ -80,14 +80,18 @@ class SuperActivityInst : InstTest {
         val title = dialog.findViewById<TextView>(R.id.alertTitle)
         val message = dialog.findViewById<TextView>(android.R.id.message)
 
-        assertEquals("showError created dialog with incorrect title!",
-                expectedTitle, title.text)
-        assertEquals("showError created dialog with incorrect message!",
-                expectedMsg, message.text)
+        assertEquals(
+            "showError created dialog with incorrect title!",
+            expectedTitle, title.text
+        )
+        assertEquals(
+            "showError created dialog with incorrect message!",
+            expectedMsg, message.text
+        )
     }
 
     @Test
-    fun `updatesSnackbar should display snackbar when isAutoCheck is false`(){
+    fun `updatesSnackbar should display snackbar when isAutoCheck is false`() {
         scenario.onActivity {
             val msg = R.string.no_updates
             it.updatesSnackbar(msg, false)
@@ -105,7 +109,7 @@ class SuperActivityInst : InstTest {
     }
 
     @Test
-    fun `updatesSnackbar should not display snackbar when isAutoCheck is true`(){
+    fun `updatesSnackbar should not display snackbar when isAutoCheck is true`() {
         scenario.onActivity {
             val msg = R.string.no_updates
             it.updatesSnackbar(msg, true)
@@ -123,7 +127,7 @@ class SuperActivityInst : InstTest {
     }
 
     @Test
-    fun `navigation drawer should be locked when current fragment is not mainFragment`(){
+    fun `navigation drawer should be locked when current fragment is not mainFragment`() {
         scenario.onActivity {
             it.drawerLayout = mock()
             val navController = it.findNavController(R.id.nav_host_fragment)
@@ -134,7 +138,7 @@ class SuperActivityInst : InstTest {
     }
 
     @Test
-    fun `navigation drawer should not be locked when current fragment is mainFragment`(){
+    fun `navigation drawer should not be locked when current fragment is mainFragment`() {
         scenario.onActivity {
             it.drawerLayout = mock()
             val navController = it.findNavController(R.id.nav_host_fragment)
@@ -145,7 +149,7 @@ class SuperActivityInst : InstTest {
     }
 
     @Test
-    fun `confirmBack should display confirmation dialog`(){
+    fun `confirmBack should display confirmation dialog`() {
         scenario.onActivity { it.confirmBack() }
 
         val dialog = ShadowAlertDialog.getLatestDialog() as AlertDialog
