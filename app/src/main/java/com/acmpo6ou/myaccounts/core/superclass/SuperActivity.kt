@@ -22,6 +22,7 @@ package com.acmpo6ou.myaccounts.core.superclass
 import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Rect
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -46,6 +47,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.viewbinding.ViewBinding
 import com.acmpo6ou.myaccounts.BuildConfig
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.UpdatesActivity
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.getProperty
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -128,7 +130,14 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
         return result
     }
 
-    override fun startUpdatesActivity(latestVersion: String) {
+    /**
+     * Starts UpdatesActivity passing [version] as extra.
+     * @param[version] update version.
+     */
+    override fun startUpdatesActivity(version: String) {
+        val intent = Intent(this, UpdatesActivity::class.java)
+        intent.putExtra("version", version)
+        startActivity(intent)
     }
 
     /**

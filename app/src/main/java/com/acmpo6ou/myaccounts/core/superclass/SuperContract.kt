@@ -32,7 +32,7 @@ interface SuperActivityInter :
     val myContext: Context
     var app: MyApp
 
-    fun startUpdatesActivity(latestVersion: String)
+    fun startUpdatesActivity(version: String)
     fun isInternetAvailable(): Boolean
 
     fun noUpdates(isAutoCheck: Boolean = false)

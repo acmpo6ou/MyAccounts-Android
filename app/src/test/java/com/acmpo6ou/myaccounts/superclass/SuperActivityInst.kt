@@ -42,7 +42,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
-import org.robolectric.Shadows
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
@@ -100,7 +99,7 @@ class SuperActivityInst : NoInternet {
             it.updatesSnackbar(msg, false)
 
             // this is because of some Robolectric main looper problems
-            Shadows.shadowOf(Looper.getMainLooper()).idle()
+            shadowOf(Looper.getMainLooper()).idle()
 
             // get the snackbar
             val v: View = it.findViewById(android.R.id.content)
@@ -118,7 +117,7 @@ class SuperActivityInst : NoInternet {
             it.updatesSnackbar(msg, true)
 
             // this is because of some Robolectric main looper problems
-            Shadows.shadowOf(Looper.getMainLooper()).idle()
+            shadowOf(Looper.getMainLooper()).idle()
 
             // try to get the snackbar
             val v: View = it.findViewById(android.R.id.content)
@@ -169,5 +168,6 @@ class SuperActivityInst : NoInternet {
         scenario.onActivity { it.startUpdatesActivity(latestVersion) }
 
         val intent: Intent = shadowOf(RuntimeEnvironment.application).nextStartedActivity
+        assertEquals(latestVersion, intent.getStringExtra("version"))
     }
 }
