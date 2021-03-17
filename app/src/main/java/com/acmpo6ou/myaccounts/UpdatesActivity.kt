@@ -44,6 +44,11 @@ class UpdatesActivity : AppCompatActivity() {
         binding = UpdatesActivityBinding.inflate(layoutInflater)
         setContentView(b.root)
 
+        // go back when clicking the `Later` button
+        b.updateLater.setOnClickListener {
+            super.onBackPressed()
+        }
+
         viewModel = ViewModelProvider(this).get(UpdatesViewModel::class.java)
         viewModel.changelog.observe(this, changelogObserver)
 

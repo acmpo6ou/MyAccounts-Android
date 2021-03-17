@@ -22,10 +22,10 @@ package com.acmpo6ou.myaccounts.ui
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import java.net.URL
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import java.net.URL
 
 class UpdatesViewModel : ViewModel() {
     val changelog = MutableLiveData<String>()
