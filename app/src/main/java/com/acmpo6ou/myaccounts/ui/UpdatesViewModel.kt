@@ -22,10 +22,10 @@ package com.acmpo6ou.myaccounts.ui
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import java.net.URL
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import java.net.URL
 
 class UpdatesViewModel : ViewModel() {
     val changelog = MutableLiveData<String>()
@@ -45,9 +45,19 @@ class UpdatesViewModel : ViewModel() {
     }
 
     /**
-     * Launches and awaits [getChangelogAsync] coroutine.
+     * Launches and awaits [getChangelogAsync] coroutine handling any errors.
+     *
+     * In case of errors, message saying `Failed to load changelog` with additional
+     * details about the error, will appear.
      */
-    fun getChangelog() = viewModelScope.launch(Dispatchers.Main) {
-        changelog.value = getChangelogAsync().await()
+    fun getChangelog(errorMsg: String) = viewModelScope.launch(Dispatchers.Main) {
+        var text = "<h6>$errorMsg</h6>"
+        try {
+            text = getChangelogAsync().await()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            text += e.toString()
+        }
+        changelog.value = text
     }
 }

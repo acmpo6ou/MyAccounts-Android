@@ -166,7 +166,7 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
         updatesSnackbar(R.string.updates_check_failed, isAutoCheck)
 
     override fun noInternetConnection(isAutoCheck: Boolean) =
-        updatesSnackbar(R.string.no_intenet_connection, isAutoCheck)
+        updatesSnackbar(R.string.no_internet_connection, isAutoCheck)
 
     /**
      * This method obtains version name and sets it in navigation header.
