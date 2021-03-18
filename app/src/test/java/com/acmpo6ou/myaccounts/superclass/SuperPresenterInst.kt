@@ -59,8 +59,8 @@ class SuperPresenterInst {
      */
     private fun generateVersion() {
         val versionNums = List(10) { Random.nextInt(0, 100) }
-        expectedVersion = String.format("v%d.%d.%d", *versionNums.toTypedArray())
-        jsonStr = """ {"name":"%s"} """.format(expectedVersion)
+        expectedVersion = String.format("%d.%d.%d", *versionNums.toTypedArray())
+        jsonStr = """ {"name":"v%s"} """.format(expectedVersion)
     }
 
     @Test
@@ -81,8 +81,7 @@ class SuperPresenterInst {
     fun `checkUpdatesSelected should handle failure`() {
         // mock failure response
         mockWebServer.enqueue(
-            MockResponse()
-                .setResponseCode(500)
+            MockResponse().setResponseCode(500)
         )
 
         spyPresenter.checkUpdatesSelected()

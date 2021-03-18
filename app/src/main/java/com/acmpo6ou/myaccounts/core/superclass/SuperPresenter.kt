@@ -61,7 +61,7 @@ abstract class SuperPresenter : SuperPresenterInter {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     val json = response.body()!!.string()
-                    val regex = Regex("""name":"(v\d+\.\d+\.\d+)""")
+                    val regex = Regex("""name":"v(\d+\.\d+\.\d+)""")
                     val version = regex.find(json)!!.groupValues.last()
                     checkForUpdates(version, isAutoCheck)
                 } else {
