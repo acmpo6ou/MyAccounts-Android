@@ -26,6 +26,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.preference.PreferenceManager
 import com.acmpo6ou.myaccounts.core.MyApp
@@ -51,6 +52,7 @@ class MainActivity : SuperActivity(), MainActivityInter {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_MyAccounts_NoActionBar)
         super.onCreate(savedInstanceState)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
         myContext = this
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
