@@ -25,10 +25,21 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import java.io.File
 import java.net.URL
 
 class UpdatesViewModel : ViewModel() {
+    var DOWNLOAD_DIR = "/storage/emulated/0/Download/"
     val changelog = MutableLiveData<String>()
+
+    /**
+     * Removes old myaccounts-release.apk file from Download directory.
+     * We need to do this before downloading new update apk file.
+     */
+    fun removeOldApk() {
+        val oldApk = File("$DOWNLOAD_DIR/myaccounts-release.apk")
+        if (oldApk.exists()) oldApk.delete()
+    }
 
     /**
      * Downloads latest changelog from github repository.
