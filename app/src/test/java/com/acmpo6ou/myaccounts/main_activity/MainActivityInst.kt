@@ -28,6 +28,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.MainActivity
+import com.acmpo6ou.myaccounts.NoInternet
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.findSnackbarTextView
 import org.junit.Assert.assertEquals
@@ -43,7 +44,7 @@ import org.robolectric.annotation.LooperMode
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
-class MainActivityInst {
+class MainActivityInst : NoInternet {
     lateinit var scenario: ActivityScenario<MainActivity>
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     private val exitTip = context.resources.getString(R.string.exit_tip)

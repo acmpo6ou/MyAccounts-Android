@@ -51,8 +51,8 @@ class MainActivity : SuperActivity(), MainActivityInter {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_MyAccounts_NoActionBar)
-        super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        super.onCreate(savedInstanceState)
 
         myContext = this
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
