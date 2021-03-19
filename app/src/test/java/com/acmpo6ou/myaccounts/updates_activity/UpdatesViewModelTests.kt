@@ -36,7 +36,7 @@ class UpdatesViewModelTests : ModelTest() {
 
     @Test
     fun `removeOldApk should delete myaccounts-release apk file from Download folder`() {
-        model.DOWNLOAD_DIR = SRC_DIR
+        model.DOWNLOAD_DIR_FULL = SRC_DIR
         val oldApk = File("$SRC_DIR/myaccounts-release.apk")
         oldApk.createNewFile()
 

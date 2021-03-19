@@ -19,6 +19,10 @@
 
 package com.acmpo6ou.myaccounts.ui
 
+import android.app.DownloadManager
+import android.app.DownloadManager.Request.NETWORK_MOBILE
+import android.app.DownloadManager.Request.NETWORK_WIFI
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -29,16 +33,38 @@ import java.io.File
 import java.net.URL
 
 class UpdatesViewModel : ViewModel() {
-    var DOWNLOAD_DIR = "/storage/emulated/0/Download/"
+    var DOWNLOAD_DIR_FULL = "/storage/emulated/0/Download/"
+    private val apkName = "myaccounts-release.apk"
     val changelog = MutableLiveData<String>()
 
     /**
      * Removes old myaccounts-release.apk file from Download directory.
-     * We need to do this before downloading new update apk file.
+     *
+     * We need to do this before downloading new update apk file to avoid piling up of
+     * update apk files in the Download directory.
      */
-    fun removeOldApk() {
-        val oldApk = File("$DOWNLOAD_DIR/myaccounts-release.apk")
-        if (oldApk.exists()) oldApk.delete()
+    fun removeOldApk() = File("$DOWNLOAD_DIR_FULL/$apkName").delete()
+
+    /**
+     * Using DownloadManager downloads latest apk file from github repository.
+     *
+     * @param[updateVersion] latest app version available on github repository.
+     * @param[manager] DownloadManager instance used to download the apk file.
+     * @param[downloadDir] path to Download directory where to download the apk file.
+     */
+    fun downloadUpdate(updateVersion: String, manager: DownloadManager, downloadDir: String) {
+        val uri = Uri.parse(
+        "https://github.com/Acmpo6ou/MyAccounts/releases/download/" +
+                "v$updateVersion/$apkName"
+        )
+        manager.enqueue(
+            DownloadManager.Request(uri)
+                .setAllowedNetworkTypes(NETWORK_WIFI or NETWORK_MOBILE)
+                .setAllowedOverRoaming(false)
+                .setTitle("MyAccounts")
+                .setDescription("Downloading update.")
+                .setDestinationInExternalPublicDir(downloadDir, apkName)
+        )
     }
 
     /**
