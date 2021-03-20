@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.net.URL
 
-class UpdatesViewModel : ViewModel() {
+open class UpdatesViewModel : ViewModel() {
     var DOWNLOAD_DIR_FULL = "/storage/emulated/0/Download/"
     private val apkName = "myaccounts-release.apk"
     val changelog = MutableLiveData<String>()
@@ -46,7 +46,7 @@ class UpdatesViewModel : ViewModel() {
      * We need to do this before downloading new update apk file to avoid piling up of
      * update apk files in the Download directory.
      */
-    fun removeOldApk() = File("$DOWNLOAD_DIR_FULL/$apkName").delete()
+    open fun removeOldApk() = File("$DOWNLOAD_DIR_FULL/$apkName").delete()
 
     /**
      * Using DownloadManager downloads latest apk file from github repository.
@@ -55,7 +55,7 @@ class UpdatesViewModel : ViewModel() {
      * @param[manager] DownloadManager instance used to download the apk file.
      * @param[downloadDir] path to Download directory where to download the apk file.
      */
-    fun downloadUpdate(updateVersion: String, manager: DownloadManager, downloadDir: String) {
+    open fun downloadUpdate(updateVersion: String, manager: DownloadManager, downloadDir: String) {
         val uri = Uri.parse(
             "https://github.com/Acmpo6ou/MyAccounts/releases/download/" +
                 "v$updateVersion/$apkName"

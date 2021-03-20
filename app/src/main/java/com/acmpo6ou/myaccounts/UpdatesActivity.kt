@@ -19,7 +19,9 @@
 
 package com.acmpo6ou.myaccounts
 
+import android.app.DownloadManager
 import android.os.Bundle
+import android.os.Environment
 import android.view.Gravity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
@@ -32,7 +34,9 @@ import com.acmpo6ou.myaccounts.ui.UpdatesViewModel
 class UpdatesActivity : AppCompatActivity() {
     private var binding: UpdatesActivityBinding? = null
     val b: UpdatesActivityBinding get() = binding!!
+
     lateinit var viewModel: UpdatesViewModel
+    lateinit var updateVersion: String
 
     private val changelogObserver = Observer<String> {
         b.changelogText.text = fromHtml(it, HtmlCompat.FROM_HTML_MODE_COMPACT)
@@ -47,6 +51,15 @@ class UpdatesActivity : AppCompatActivity() {
         // go back when clicking the `Later` button
         b.updateLater.setOnClickListener {
             super.onBackPressed()
+        }
+
+        b.downloadUpdate.setOnClickListener {
+            val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+            viewModel.removeOldApk()
+            viewModel.downloadUpdate(
+                updateVersion, downloadManager,
+                Environment.DIRECTORY_DOWNLOADS
+            )
         }
 
         viewModel = ViewModelProvider(this).get(UpdatesViewModel::class.java)
