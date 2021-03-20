@@ -22,7 +22,10 @@ package com.acmpo6ou.myaccounts.ui
 import android.app.DownloadManager
 import android.app.DownloadManager.Request.NETWORK_MOBILE
 import android.app.DownloadManager.Request.NETWORK_WIFI
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
+import androidx.core.content.FileProvider
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -54,7 +57,7 @@ class UpdatesViewModel : ViewModel() {
      */
     fun downloadUpdate(updateVersion: String, manager: DownloadManager, downloadDir: String) {
         val uri = Uri.parse(
-        "https://github.com/Acmpo6ou/MyAccounts/releases/download/" +
+            "https://github.com/Acmpo6ou/MyAccounts/releases/download/" +
                 "v$updateVersion/$apkName"
         )
         manager.enqueue(
@@ -68,8 +71,23 @@ class UpdatesViewModel : ViewModel() {
     }
 
     /**
+     * Launches intent to install the update apk file.
+     */
+    fun installUpdate(context: Context) {
+        val uri = FileProvider.getUriForFile(
+            context, context.applicationContext.packageName + ".provider",
+            File(DOWNLOAD_DIR_FULL + apkName)
+        )
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_GRANT_READ_URI_PERMISSION
+        intent.setDataAndType(uri, "application/vnd.android.package-archive")
+        context.startActivity(intent)
+    }
+
+    /**
      * Downloads latest changelog from github repository.
      */
+    @Suppress("BlockingMethodInNonBlockingContext")
     private fun getChangelogAsync() = viewModelScope.async(Dispatchers.Default) {
         URL(
             "https://raw.githubusercontent.com/Acmpo6ou/MyAccounts/" +
