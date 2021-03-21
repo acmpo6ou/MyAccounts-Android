@@ -32,7 +32,6 @@
     <string name="create">Створити</string>
     <string name="save">Зберегти</string>
 
-    <string name="version">"Версія: "</string>
     <!-- Preference Titles -->
     <string name="language">Мова</string>
     <string name="block_screen_capture">Блокувати захоплення екрану</string>

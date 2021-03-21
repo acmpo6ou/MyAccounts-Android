@@ -66,4 +66,10 @@
     <string name="confirm_exit">Усі не збережені зміни буде втрачено!</string>
     <string name="go_back_title">Ви певні що хочете повернутися назад?</string>
     <string name="exit_tip">Натисніть назад знову аби вийти.</string>
+    <string name="update_notice">Увага! Програма перезапуститься після оновлення і всі незбережені зміни буде втрачено!</string>
+    <string name="loading">Завантаження</string>
+    <string name="updates_check_failed">Не вийшло перевірити оновлення.</string>
+    <string name="no_internet_connection">Немає інтернет з\'єднання.</string>
+    <string name="failed_to_load_changelog">Не вдалося завантажити</string>
+    <string name="empty">Порожньо</string>
 </resources>
