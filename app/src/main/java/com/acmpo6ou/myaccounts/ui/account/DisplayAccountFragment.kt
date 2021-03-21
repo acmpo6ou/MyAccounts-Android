@@ -42,14 +42,17 @@ class DisplayAccountFragment : Fragment() {
     private var binding: FragmentDisplayAccountBinding? = null
     val b: FragmentDisplayAccountBinding get() = binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentDisplayAccountBinding.inflate(layoutInflater, container, false)
         return b.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        arguments?.getString("accountName")?.let{
+        arguments?.getString("accountName")?.let {
             val accountsActivity = activity as AccountsActivity
             setAccount(accountsActivity.database.data[it]!!)
         }
@@ -58,19 +61,21 @@ class DisplayAccountFragment : Fragment() {
     /**
      * Displays snackbar saying that password is copied.
      */
-    private fun successCopy(){
-        Snackbar.make(b.displayAccountLayout,
-                R.string.copied,
-                Snackbar.LENGTH_LONG)
-                .setAction("HIDE"){}
-                .show()
+    private fun successCopy() {
+        Snackbar.make(
+            b.displayAccountLayout,
+            R.string.copied,
+            Snackbar.LENGTH_LONG
+        )
+            .setAction("HIDE") {}
+            .show()
     }
 
     /**
      * Initializes display account form with data provided from [account].
      */
     @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
-    fun setAccount(account: Account){
+    fun setAccount(account: Account) {
         // set account name as app bar title
         (activity as? AppCompatActivity)?.supportActionBar?.title = account.accountName
 
@@ -99,8 +104,7 @@ class DisplayAccountFragment : Fragment() {
             val view = v as TextView
             if (event.action == ACTION_DOWN) {
                 view.text = "$passwordStr ${account.password}"
-            }
-            else if (event.action == ACTION_UP){
+            } else if (event.action == ACTION_UP) {
                 view.text = "$passwordStr ${"•".repeat(16)}"
             }
             true

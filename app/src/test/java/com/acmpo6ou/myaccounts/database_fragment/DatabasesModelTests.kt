@@ -33,31 +33,35 @@ class DatabasesTests {
     private val faker = Faker()
 
     @Test
-    fun `Database should have isOpen property set to false when password is null`(){
+    fun `Database should have isOpen property set to false when password is null`() {
         // we didn't  pass the password so it will be null by default
         val database = Database(faker.str())
 
         // if password is null then database should be closed
-        assertFalse("Password of Database is null but isOpen is true!",
-                database.isOpen)
+        assertFalse(
+            "Password of Database is null but isOpen is true!",
+            database.isOpen
+        )
     }
 
     @Test
-    fun `Database should have isOpen property set to true when password is NOT null`(){
+    fun `Database should have isOpen property set to true when password is NOT null`() {
         // we passed the password, so it is not null
         val database = Database(faker.str(), faker.str())
 
         // when password is not null database should be opened
-        assertTrue("Password of Database is NOT null but isOpen is false!",
-                database.isOpen)
+        assertTrue(
+            "Password of Database is NOT null but isOpen is false!",
+            database.isOpen
+        )
     }
 }
 
-class DatabasesModelTests: ModelTest() {
+class DatabasesModelTests : ModelTest() {
     var model = DatabasesModel(accountsDir, contentResolver)
 
     @Test
-    fun `getDatabases should return list of Databases that reside in SRC_DIR`(){
+    fun `getDatabases should return list of Databases that reside in SRC_DIR`() {
         // first we copy some database to our fake file system
         copyDatabase("main")
         copyDatabase("crypt")
@@ -65,15 +69,19 @@ class DatabasesModelTests: ModelTest() {
 
         // then we get databases and check the result
         val databases = model.getDatabases()
-        val expectedDatabases = listOf(Database("crypt"),   // note that list is sorted
-                                       Database("database"),
-                                       Database("main"))
-        assertEquals("getDatabases returns incorrect list of Databases!",
-                expectedDatabases, databases)
+        val expectedDatabases = listOf(
+            Database("crypt"), // note that list is sorted
+            Database("database"),
+            Database("main")
+        )
+        assertEquals(
+            "getDatabases returns incorrect list of Databases!",
+            expectedDatabases, databases
+        )
     }
 
     @Test
-    fun `exportDatabase should export database tar to given location`(){
+    fun `exportDatabase should export database tar to given location`() {
         setupOutputResolver()
         copyDatabase("main")
 
@@ -82,35 +90,45 @@ class DatabasesModelTests: ModelTest() {
 
         // check that database tar file was exported properly
         val exportedTar = String(
-                File("$accountsDir/main.tar").readBytes())
+            File("$accountsDir/main.tar").readBytes()
+        )
         val expectedDb = String(
-                File("$SRC_DIR/main.db").readBytes())
+            File("$SRC_DIR/main.db").readBytes()
+        )
         val expectedBin = String(
-                File("$SRC_DIR/main.bin").readBytes())
+            File("$SRC_DIR/main.bin").readBytes()
+        )
 
         // check that files are present and they reside in `src` folder
-        assertTrue("exportDatabase incorrect export: tar file doesn't contain .db file!",
-                "src/main.db" in exportedTar)
-        assertTrue("exportDatabase incorrect export: tar file doesn't contain .bin file!",
-                "src/main.bin" in exportedTar)
+        assertTrue(
+            "exportDatabase incorrect export: tar file doesn't contain .db file!",
+            "src/main.db" in exportedTar
+        )
+        assertTrue(
+            "exportDatabase incorrect export: tar file doesn't contain .bin file!",
+            "src/main.bin" in exportedTar
+        )
 
         // check that files have appropriate content
-        assertTrue("exportDatabase incorrect export: content of .db file is incorrect!",
-                expectedDb in exportedTar)
-        assertTrue("exportDatabase incorrect export: content of .bin file is incorrect!",
-                expectedBin in exportedTar)
+        assertTrue(
+            "exportDatabase incorrect export: content of .db file is incorrect!",
+            expectedDb in exportedTar
+        )
+        assertTrue(
+            "exportDatabase incorrect export: content of .bin file is incorrect!",
+            expectedBin in exportedTar
+        )
     }
 
     @Test
-    fun `exportDatabase should throw FileNotFoundException if there are no db or bin files`(){
+    fun `exportDatabase should throw FileNotFoundException if there are no db or bin files`() {
         setupOutputResolver()
         // there is no database named `testing` so we can't export it, because there are no
         // testing.db and testing.bin files
         try {
             model.exportDatabase("testing", destinationUri)
             assert(false) // if there is no exception thrown the test will fail
-        }
-        catch (e: FileNotFoundException){
+        } catch (e: FileNotFoundException) {
             // if this exception were thrown its okay, test should pass
         }
     }

@@ -37,8 +37,8 @@ open class ModelTest : DatabaseUtils {
     open val password = "123"
     var salt = "0123456789abcdef".toByteArray() // 16 bytes of salt
     val jsonDatabase =
-            "{\"gmail\":{\"account\":\"gmail\",\"name\":\"Tom\",\"email\":"+
-            "\"tom@gmail.com\",\"password\":\"123\",\"date\":\"01.01.1990\","+
+        "{\"gmail\":{\"account\":\"gmail\",\"name\":\"Tom\",\"email\":" +
+            "\"tom@gmail.com\",\"password\":\"123\",\"date\":\"01.01.1990\"," +
             "\"comment\":\"My gmail account.\"}}"
 
     // this is where model will create delete and edit databases during testing
@@ -60,13 +60,13 @@ open class ModelTest : DatabaseUtils {
      * directory will be empty.
      */
     @Before
-    fun setupSrcFolder(){
+    fun setupSrcFolder() {
         val srcFolder = File(SRC_DIR)
         val accountsFolder = File(accountsDir)
 
         // here we delete accounts folder if it already exists to ensure that it will
         // be empty as is needed for our tests
-        if(accountsFolder.exists()){
+        if (accountsFolder.exists()) {
             accountsFolder.deleteRecursively()
         }
 
@@ -74,20 +74,20 @@ open class ModelTest : DatabaseUtils {
         srcFolder.mkdirs()
     }
 
-    fun setupOutputResolver(){
+    fun setupOutputResolver() {
         // to simulate the Android Storage Access Framework
-        val fos = FileOutputStream( File(destination) )
+        val fos = FileOutputStream(File(destination))
         whenever(descriptor.fileDescriptor).thenReturn(fos.fd)
         whenever(contentResolver.openFileDescriptor(destinationUri, "w"))
-                .thenReturn(descriptor)
+            .thenReturn(descriptor)
     }
 
-    fun setupInputResolver(){
+    fun setupInputResolver() {
         // to simulate the Android Storage Access Framework
-        val fis = FileInputStream( File(location) )
+        val fis = FileInputStream(File(location))
         whenever(descriptor.fileDescriptor).thenReturn(fis.fd)
         whenever(contentResolver.openFileDescriptor(locationUri, "r"))
-                .thenReturn(descriptor)
+            .thenReturn(descriptor)
     }
 
     /**
@@ -96,7 +96,7 @@ open class ModelTest : DatabaseUtils {
      *
      * @param[name] name of the database that we want to copy to the fake file system
      */
-    fun copyDatabase(name: String = "database"){
+    fun copyDatabase(name: String = "database") {
         // this are were we want to copy database .bin and .db files
         val binDestination = File("$SRC_DIR$name.bin")
         val dbDestination = File("$SRC_DIR$name.db")

@@ -45,7 +45,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
-class TestFragment: Fragment(), ErrorFragment{
+class TestFragment : Fragment(), ErrorFragment {
     override val viewModel = TestDatabaseModel()
     override val mainActivity: MainActivityInter = mock()
     override lateinit var lifecycle: LifecycleOwner
@@ -56,10 +56,13 @@ class TestFragment: Fragment(), ErrorFragment{
     }
 
     // dummy onCreateView method
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         val b = CreateEditDatabaseFragmentBinding
-                .inflate(layoutInflater, container, false)
+            .inflate(layoutInflater, container, false)
         return b.root
     }
 }
@@ -81,7 +84,7 @@ class ErrorFragmentInst {
     }
 
     @Test
-    fun `should display call showError when errorMsg changes`(){
+    fun `should display call showError when errorMsg changes`() {
         scenario.onFragment {
             val errorTitle = context.resources.getString(R.string.error_title)
             val msg = faker.str()

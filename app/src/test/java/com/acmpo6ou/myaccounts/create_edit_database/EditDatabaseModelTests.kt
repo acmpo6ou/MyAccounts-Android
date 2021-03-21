@@ -49,13 +49,13 @@ class EditDatabaseModelTests : ModelTest() {
     private val db = Database(name, password, salt)
 
     @Before
-    fun setup(){
+    fun setup() {
         app = MyApp()
-        app.databases = mutableListOf( Database(oldName, password, salt) )
+        app.databases = mutableListOf(Database(oldName, password, salt))
         app.keyCache = mutableMapOf(password to deriveKey(password, salt))
 
         model.initialize(app, SRC_DIR, faker.str(), 0)
-        spyModel = spy(model){ on{generateSalt()} doReturn salt }
+        spyModel = spy(model) { on { generateSalt() } doReturn salt }
 
         doNothing().whenever(spyModel).deleteDatabase(anyString())
         doNothing().whenever(spyModel).createDatabase(any(), eq(app))
@@ -65,7 +65,7 @@ class EditDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `validateName when name of Database didn't change through editing`(){
+    fun `validateName when name of Database didn't change through editing`() {
         // database `main` already exists but it's being edited, so that doesn't count
         model.validateName(oldName)
         assertFalse(model.existsNameErr)
@@ -73,14 +73,14 @@ class EditDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `validateName should use fixName when Database name didn't change through editing`(){
+    fun `validateName should use fixName when Database name didn't change through editing`() {
         model.validateName("m/a/i/n/") // will become `main` when cleaned by fixName
         assertFalse(model.existsNameErr)
         assertFalse(model.emptyNameErr)
     }
 
     @Test
-    fun `apply should call saveDatabase`(){
+    fun `apply should call saveDatabase`() {
         runBlocking {
             spyModel.apply(name, password)
         }
@@ -88,7 +88,7 @@ class EditDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `apply should use fixName`(){
+    fun `apply should use fixName`() {
         runBlocking {
             // will become `clean_name` when cleaned by fixName
             spyModel.apply("c/lea  %\$n_name/", password)
@@ -97,7 +97,7 @@ class EditDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `apply should handle any error`(){
+    fun `apply should handle any error`() {
         val msg = faker.str()
         val exception = Exception(msg)
         doAnswer { throw exception }.whenever(spyModel).deleteDatabase(anyString())
@@ -110,7 +110,7 @@ class EditDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `apply should replace old Database with created one`(){
+    fun `apply should replace old Database with created one`() {
         runBlocking {
             spyModel.apply(name, password)
         }
@@ -120,7 +120,7 @@ class EditDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `apply should remove cached cryptography key if password has changed`(){
+    fun `apply should remove cached cryptography key if password has changed`() {
         runBlocking {
             spyModel.apply(name, "123") // now password is 123
         }
@@ -128,7 +128,7 @@ class EditDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `apply should set finished to true after successful save of database`(){
+    fun `apply should set finished to true after successful save of database`() {
         runBlocking {
             spyModel.apply(name, password)
         }
@@ -136,7 +136,7 @@ class EditDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `apply should set loading to true`(){
+    fun `apply should set loading to true`() {
         runBlocking {
             spyModel.apply(name, password)
         }

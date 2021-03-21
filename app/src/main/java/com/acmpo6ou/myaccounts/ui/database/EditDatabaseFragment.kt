@@ -60,7 +60,7 @@ class EditDatabaseFragment : CreateEditDatabaseFragment() {
         val SRC_DIR = myContext.getExternalFilesDir(null)?.path + "/src"
         val titleStart = myContext.resources.getString(R.string.edit_db)
 
-        arguments?.let{
+        arguments?.let {
             args = EditDatabaseFragmentArgs.fromBundle(it)
             val databaseIndex = args!!.databaseIndex
             viewModel.initialize(app, SRC_DIR, titleStart, databaseIndex)

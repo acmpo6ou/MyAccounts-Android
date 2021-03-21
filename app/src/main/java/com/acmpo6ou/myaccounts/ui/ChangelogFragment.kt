@@ -30,8 +30,11 @@ import androidx.fragment.app.Fragment
 import com.acmpo6ou.myaccounts.R
 
 class ChangelogFragment : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_changelog, container, false)
     }
 
@@ -41,9 +44,12 @@ class ChangelogFragment : Fragment() {
 
         // load changelog from `raw/changelog`
         val changelog =
-                resources.openRawResource(
-                resources.getIdentifier("changelog", "raw",
-                        requireActivity().packageName))
+            resources.openRawResource(
+                resources.getIdentifier(
+                    "changelog", "raw",
+                    requireActivity().packageName
+                )
+            )
         changelog.bufferedReader().use {
             changelogLabel.text = fromHtml(it.readText(), HtmlCompat.FROM_HTML_MODE_COMPACT)
         }

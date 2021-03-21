@@ -34,12 +34,11 @@ import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.database.DatabaseFragmentInter
 import com.acmpo6ou.myaccounts.database.DatabasesPresenterInter
 
-
 /**
  * [RecyclerView.Adapter] that can display a [Database].
  */
-class DatabasesAdapter(val view: DatabaseFragmentInter)
-    : RecyclerView.Adapter<DatabasesAdapter.ViewHolder>() {
+class DatabasesAdapter(val view: DatabaseFragmentInter) :
+    RecyclerView.Adapter<DatabasesAdapter.ViewHolder>() {
 
     val presenter: DatabasesPresenterInter get() = view.presenter
     private val databases: List<Database> get() = presenter.databases
@@ -59,11 +58,10 @@ class DatabasesAdapter(val view: DatabaseFragmentInter)
         // set appropriate lock icon according to isOpen property
         // note: we also set tag on lock icon so later we can determine what image is set
         // on icon
-        if(database.isOpen){
+        if (database.isOpen) {
             holder.lockImage.setImageResource(R.drawable.ic_opened)
             holder.lockImage.tag = R.drawable.ic_opened
-        }
-        else{
+        } else {
             holder.lockImage.setImageResource(R.drawable.ic_locked)
             holder.lockImage.tag = R.drawable.ic_locked
         }
@@ -82,13 +80,13 @@ class DatabasesAdapter(val view: DatabaseFragmentInter)
             }
 
             // if database isn't open then we can't edit or close it
-            if(!database.isOpen){
+            if (!database.isOpen) {
                 popup.menu.findItem(R.id.edit_database_item).isEnabled = false
                 popup.menu.findItem(R.id.close_database_item).isEnabled = false
             }
 
             popup.setOnMenuItemClickListener {
-                when(it.itemId){
+                when (it.itemId) {
                     R.id.close_database_item -> presenter.closeSelected(position)
                     R.id.delete_database_item -> presenter.deleteSelected(position)
                     R.id.export_database_item -> presenter.exportSelected(position)
@@ -111,11 +109,11 @@ class DatabasesAdapter(val view: DatabaseFragmentInter)
         var databaseName: TextView = view.findViewById(R.id.itemName)
         var menu: TextView = view.findViewById(R.id.dots_menu)
 
-        init{
+        init {
             // when click is performed on database item we should display open database form
             // or start AccountsActivity for given database, this behaviour is decided in
             // openDatabase method of presenter
-            view.setOnClickListener{
+            view.setOnClickListener {
                 presenter.openDatabase(adapterPosition)
             }
         }

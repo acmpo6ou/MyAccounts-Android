@@ -37,8 +37,10 @@ class AboutFragment : Fragment() {
     lateinit var mainActivity: Activity
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View? {
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_about, container, false)
     }
 
@@ -49,8 +51,10 @@ class AboutFragment : Fragment() {
         // set app version
         val versionLabel = myView.findViewById<TextView>(R.id.versionLabel)
         val versionStr =
-                String.format(requireActivity().resources.getString(R.string.version),
-                              BuildConfig.VERSION_NAME)
+            String.format(
+                requireActivity().resources.getString(R.string.version),
+                BuildConfig.VERSION_NAME
+            )
         versionLabel.text = versionStr
 
         configureTabLayout()
@@ -67,7 +71,7 @@ class AboutFragment : Fragment() {
         pager.adapter = adapter
         TabLayoutMediator(tabLayout, pager) { tab: TabLayout.Tab, i: Int ->
             // set tab titles
-            when(i){
+            when (i) {
                 0 -> tab.text = "About" // using hardcoded string because it shouldn't be translated
                 1 -> tab.text = mainActivity.resources.getString(R.string.license)
                 else -> tab.text = mainActivity.resources.getString(R.string.credits)

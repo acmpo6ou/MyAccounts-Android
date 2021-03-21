@@ -42,10 +42,10 @@ class AccountsFragmentFunc {
     lateinit var presenter: AccountsListPresenterInter
 
     @Before
-    fun setUp(){
+    fun setUp() {
         scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
         val account = Account("", "", "", "", "", "")
-        presenter = mock{ on{accountsList} doReturn listOf(account) }
+        presenter = mock { on { accountsList } doReturn listOf(account) }
 
         scenario.onFragment {
             it.presenter = presenter

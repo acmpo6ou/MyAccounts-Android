@@ -71,17 +71,16 @@ open class AccountsActivity : SuperActivity(), AccountsActivityInter {
         navController.addOnDestinationChangedListener {
             _: NavController, navDestination: NavDestination, _: Bundle? ->
             // change app bar title back to database name after navigating to main fragment
-            if(navDestination.id == mainFragmentId){
+            if (navDestination.id == mainFragmentId) {
                 supportActionBar?.title = database.name
             }
         }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.save_database){
+        if (item.itemId == R.id.save_database) {
             presenter.saveSelected()
-        }
-        else{
+        } else {
             super.onNavigationItemSelected(item)
         }
 

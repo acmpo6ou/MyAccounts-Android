@@ -17,21 +17,30 @@
  *
  */
 
-package com.acmpo6ou.myaccounts
+package com.acmpo6ou.myaccounts.updates_activity
 
-import android.content.Context
-import androidx.test.platform.app.InstrumentationRegistry
-import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.ModelTest
+import com.acmpo6ou.myaccounts.ui.UpdatesViewModel
+import org.junit.Assert.assertFalse
 import org.junit.Before
+import org.junit.Test
+import java.io.File
 
-/**
- * Used by some instrumentation tests to, for example, avoid checking for updates.
- */
-interface InstTest {
+class UpdatesViewModelTests : ModelTest() {
+    lateinit var model: UpdatesViewModel
+
     @Before
-    fun setupApp(){
-        val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
-        val app = context.applicationContext as MyApp
-        app.testing = true
+    fun setup() {
+        model = UpdatesViewModel()
+    }
+
+    @Test
+    fun `removeOldApk should delete myaccounts-release apk file from Download folder`() {
+        model.DOWNLOAD_DIR_FULL = SRC_DIR
+        val oldApk = File("$SRC_DIR/myaccounts-release.apk")
+        oldApk.createNewFile()
+
+        model.removeOldApk()
+        assertFalse(oldApk.exists())
     }
 }

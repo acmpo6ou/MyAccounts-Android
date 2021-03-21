@@ -57,8 +57,11 @@ abstract class ListFragment : Fragment(), ListFragmentInter {
         app = context.applicationContext as MyApp
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentListBinding.inflate(layoutInflater, container, false)
         return b.root
     }
@@ -71,7 +74,7 @@ abstract class ListFragment : Fragment(), ListFragmentInter {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         checkListPlaceholder()
         // when clicking on (+) FAB navigate to fragment where item will be created
-        b.addItem.setOnClickListener{
+        b.addItem.setOnClickListener {
             view.findNavController().navigate(actionCreateItem)
         }
 
@@ -86,12 +89,11 @@ abstract class ListFragment : Fragment(), ListFragmentInter {
      * If there are items in the list it hides placeholder, if there aren't it displays
      * the placeholder.
      */
-    fun checkListPlaceholder(){
+    fun checkListPlaceholder() {
         if (items.isEmpty()) {
             b.itemsList.visibility = View.GONE
             b.noItems.visibility = View.VISIBLE
-        }
-        else{
+        } else {
             b.itemsList.visibility = View.VISIBLE
             b.noItems.visibility = View.GONE
         }
@@ -101,11 +103,13 @@ abstract class ListFragment : Fragment(), ListFragmentInter {
      * Used to display a snackbar with success message.
      */
     override fun showSuccess() {
-        Snackbar.make(b.coordinatorLayout,
-                R.string.success_message,
-                Snackbar.LENGTH_LONG)
-                .setAction("HIDE"){}
-                .show()
+        Snackbar.make(
+            b.coordinatorLayout,
+            R.string.success_message,
+            Snackbar.LENGTH_LONG
+        )
+            .setAction("HIDE") {}
+            .show()
     }
 
     /**
@@ -115,16 +119,16 @@ abstract class ListFragment : Fragment(), ListFragmentInter {
      * @param[positiveAction] function to invoke when user confirms an action (i.e. presses
      * the `Yes` button).
      */
-    inline fun confirmDialog(message: String, crossinline positiveAction: ()->Unit) {
+    inline fun confirmDialog(message: String, crossinline positiveAction: () -> Unit) {
         MaterialAlertDialogBuilder(myContext)
-                .setTitle(R.string.warning)
-                .setMessage(message)
-                .setIcon(R.drawable.ic_warning)
-                .setNegativeButton(R.string.no) { _: DialogInterface, _: Int -> }
-                .setPositiveButton(R.string.yes){ _: DialogInterface, _: Int ->
-                    positiveAction()
-                }
-                .show()
+            .setTitle(R.string.warning)
+            .setMessage(message)
+            .setIcon(R.drawable.ic_warning)
+            .setNegativeButton(R.string.no) { _: DialogInterface, _: Int -> }
+            .setPositiveButton(R.string.yes) { _: DialogInterface, _: Int ->
+                positiveAction()
+            }
+            .show()
     }
 
     /**

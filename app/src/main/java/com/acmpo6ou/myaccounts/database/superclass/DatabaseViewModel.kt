@@ -30,7 +30,7 @@ import kotlinx.coroutines.Job
 /**
  * Super class for all database view models.
  */
-interface DatabaseViewModel: DatabaseUtils {
+interface DatabaseViewModel : DatabaseUtils {
     var defaultDispatcher: CoroutineDispatcher
     var uiDispatcher: CoroutineDispatcher
     var coroutineJob: Job?
@@ -49,17 +49,17 @@ interface DatabaseViewModel: DatabaseUtils {
     var _title: MutableLiveData<String>
     var title: String
         get() = _title.value!!
-        set(value) {_title.value = value}
+        set(value) { _title.value = value }
 
     var _loading: MutableLiveData<Boolean>
     var loading
         get() = _loading.value!!
-        set(value) {_loading.value = value}
+        set(value) { _loading.value = value }
 
     var errorMsg_: MutableLiveData<String>
     var errorMsg: String
         get() = errorMsg_.value!!
-        set(value) {errorMsg_.value = value}
+        set(value) { errorMsg_.value = value }
 
     /**
      * This method is called by fragment to initialize ViewModel.
@@ -72,8 +72,12 @@ interface DatabaseViewModel: DatabaseUtils {
      * Note not all ViewModels need [databaseIndex] and [titleStart] properties, example is
      * CreateDatabaseViewModel.
      */
-    fun initialize(app: MyApp, SRC_DIR: String, titleStart: String? = null,
-                                                databaseIndex: Int? = null) {
+    fun initialize(
+        app: MyApp,
+        SRC_DIR: String,
+        titleStart: String? = null,
+        databaseIndex: Int? = null
+    ) {
         _title = MutableLiveData()
         _loading = MutableLiveData(false)
         errorMsg_ = MutableLiveData()

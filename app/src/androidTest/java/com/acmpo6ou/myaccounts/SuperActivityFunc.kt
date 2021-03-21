@@ -44,7 +44,7 @@ class SuperActivityFunc {
     @Before
     fun setup() {
         val app = context.applicationContext as MyApp
-        app.databases = mutableListOf( Database("main") )
+        app.databases = mutableListOf(Database("main"))
 
         presenter = mock()
         doNothing().whenever(presenter).saveSelected()
@@ -56,7 +56,7 @@ class SuperActivityFunc {
     }
 
     @Test
-    fun confirmBack_should_call_presenter_saveSelected_when_Save_is_chosen_in_dialog(){
+    fun confirmBack_should_call_presenter_saveSelected_when_Save_is_chosen_in_dialog() {
         scenario.onActivity {
             it.confirmBack()
         }
@@ -65,14 +65,14 @@ class SuperActivityFunc {
 
         // choose Save
         onView(withText(R.string.save))
-                .inRoot(isDialog())
-                .perform(click())
+            .inRoot(isDialog())
+            .perform(click())
 
         verify(presenter).saveSelected()
     }
 
     @Test
-    fun confirmBack_should_not_call_presenter_saveSelected_when_Ok_is_chosen_in_dialog(){
+    fun confirmBack_should_not_call_presenter_saveSelected_when_Ok_is_chosen_in_dialog() {
         scenario.onActivity {
             it.confirmBack()
         }
@@ -81,14 +81,14 @@ class SuperActivityFunc {
 
         // choose Ok
         onView(withText("Ok"))
-                .inRoot(isDialog())
-                .perform(click())
+            .inRoot(isDialog())
+            .perform(click())
 
         verify(presenter, never()).saveSelected()
     }
 
     @Test
-    fun confirmBack_should_not_call_presenter_saveSelected_when_Cancel_is_chosen_in_dialog(){
+    fun confirmBack_should_not_call_presenter_saveSelected_when_Cancel_is_chosen_in_dialog() {
         scenario.onActivity {
             it.confirmBack()
         }
@@ -97,8 +97,8 @@ class SuperActivityFunc {
 
         // choose Cancel
         onView(withText(R.string.cancel))
-                .inRoot(isDialog())
-                .perform(click())
+            .inRoot(isDialog())
+            .perform(click())
 
         verify(presenter, never()).saveSelected()
     }

@@ -27,7 +27,7 @@ import com.acmpo6ou.myaccounts.core.superclass.ListFragmentInter
 import com.acmpo6ou.myaccounts.core.superclass.ListPresenter
 import com.acmpo6ou.myaccounts.ui.database.DatabasesAdapter
 
-interface DatabasesPresenterInter : DatabaseUtils, ListPresenter{
+interface DatabasesPresenterInter : DatabaseUtils, ListPresenter {
     var databases: DbList
 
     fun exportSelected(i: Int)
@@ -43,7 +43,7 @@ interface DatabasesPresenterInter : DatabaseUtils, ListPresenter{
     fun openDatabase(i: Int)
 }
 
-interface DatabaseFragmentInter : ListFragmentInter{
+interface DatabaseFragmentInter : ListFragmentInter {
     val presenter: DatabasesPresenterInter
     val adapter: DatabasesAdapter
 
@@ -63,7 +63,7 @@ interface DatabaseFragmentInter : ListFragmentInter{
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
 }
 
-interface DatabasesModelInter : DatabaseUtils{
+interface DatabasesModelInter : DatabaseUtils {
     fun getDatabases(): DbList
     fun exportDatabase(name: String, destinationUri: Uri)
 }

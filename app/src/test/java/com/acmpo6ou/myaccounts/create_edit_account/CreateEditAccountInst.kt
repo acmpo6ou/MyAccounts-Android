@@ -43,7 +43,7 @@ import org.robolectric.annotation.LooperMode
 @LooperMode(LooperMode.Mode.PAUSED)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class CreateEditAccountInst {
-    class TestFragment : CreateEditAccountFragment(){
+    class TestFragment : CreateEditAccountFragment() {
         override val viewModel: CreateAccountViewModel = mock()
     }
 
@@ -51,17 +51,19 @@ class CreateEditAccountInst {
     val faker = Faker()
 
     @Before
-    fun setup(){
-        scenario = launchFragmentInContainer(themeResId= R.style.Theme_MyAccounts_NoActionBar)
+    fun setup() {
+        scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
         scenario.onFragment {
             it.initForm()
-            doNothing().whenever(it.viewModel).applyPressed(anyString(), anyString(),
-                    anyString(), anyString(), anyString(), anyString())
+            doNothing().whenever(it.viewModel).applyPressed(
+                anyString(), anyString(),
+                anyString(), anyString(), anyString(), anyString()
+            )
         }
     }
 
     @Test
-    fun `press on applyButton should call applyPressed`(){
+    fun `press on applyButton should call applyPressed`() {
         scenario.onFragment {
             val accountName = faker.str()
             val username = faker.str()

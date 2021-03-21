@@ -44,7 +44,7 @@ abstract class CreateEditDatabaseModel : CreateEditViewModel(), DatabaseViewMode
     override lateinit var SRC_DIR: String
     override lateinit var titleStart: String
 
-    override val itemNames get() = app.databases.map{ it.name }
+    override val itemNames get() = app.databases.map { it.name }
     override var databaseIndex: Int = 0
 
     /**
@@ -66,9 +66,9 @@ abstract class CreateEditDatabaseModel : CreateEditViewModel(), DatabaseViewMode
      * @param[name] name to clean.
      * @return cleaned from unsupported characters name.
      */
-    override fun fixName(name: String): String{
+    override fun fixName(name: String): String {
         val supported =
-                ( ('A'..'Z') + ('a'..'z') + ('0'..'9') ).joinToString("") + ".-_()"
+            (('A'..'Z') + ('a'..'z') + ('0'..'9')).joinToString("") + ".-_()"
         return name.filter { it in supported }
     }
 
@@ -76,8 +76,8 @@ abstract class CreateEditDatabaseModel : CreateEditViewModel(), DatabaseViewMode
      * Called when user presses apply button.
      * Launches [apply] only if it's not already launched.
      */
-    open fun applyPressed(name: String, password: String){
-        if(coroutineJob == null || !coroutineJob!!.isActive){
+    open fun applyPressed(name: String, password: String) {
+        if (coroutineJob == null || !coroutineJob!!.isActive) {
             coroutineJob = viewModelScope.launch(uiDispatcher) {
                 apply(name, password)
             }

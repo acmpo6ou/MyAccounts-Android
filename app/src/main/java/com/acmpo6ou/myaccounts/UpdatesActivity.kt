@@ -19,8 +19,18 @@
 
 package com.acmpo6ou.myaccounts
 
+import android.app.DownloadManager
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
+import android.os.Environment
+import android.view.Gravity
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.text.HtmlCompat
+import androidx.core.text.HtmlCompat.fromHtml
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.acmpo6ou.myaccounts.databinding.UpdatesActivityBinding
 import com.acmpo6ou.myaccounts.ui.UpdatesViewModel
@@ -28,12 +38,50 @@ import com.acmpo6ou.myaccounts.ui.UpdatesViewModel
 class UpdatesActivity : AppCompatActivity() {
     private var binding: UpdatesActivityBinding? = null
     val b: UpdatesActivityBinding get() = binding!!
+
     lateinit var viewModel: UpdatesViewModel
+    lateinit var updateVersion: String
+
+    private val changelogObserver = Observer<String> {
+        b.changelogText.text = fromHtml(it, HtmlCompat.FROM_HTML_MODE_COMPACT)
+        b.changelogText.gravity = Gravity.START
+    }
+
+    // install update when it is downloaded
+    val onComplete = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            viewModel.installUpdate(context)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = UpdatesActivityBinding.inflate(layoutInflater)
         setContentView(b.root)
+
+        // go back when clicking the `Later` button
+        b.updateLater.setOnClickListener {
+            super.onBackPressed()
+        }
+
+        b.downloadUpdate.setOnClickListener {
+            val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+            viewModel.removeOldApk()
+            viewModel.downloadUpdate(
+                updateVersion, downloadManager,
+                Environment.DIRECTORY_DOWNLOADS
+            )
+        }
+
         viewModel = ViewModelProvider(this).get(UpdatesViewModel::class.java)
+        viewModel.changelog.observe(this, changelogObserver)
+        registerReceiver(onComplete, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
+
+        // get update version and changelog and set them on appropriate text views
+        val extras = intent.extras ?: return
+        updateVersion = extras.getString("version")!!
+
+        b.updateVersion.text = updateVersion
+        viewModel.getChangelog(resources.getString(R.string.failed_to_load_changelog))
     }
 }

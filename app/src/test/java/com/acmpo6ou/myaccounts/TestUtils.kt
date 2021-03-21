@@ -31,7 +31,6 @@ import com.google.android.material.snackbar.SnackbarContentLayout
 import org.robolectric.fakes.RoboMenuItem
 import org.robolectric.shadows.ShadowPopupMenu
 
-
 // This two extensions used to find a snackbar during tests
 /**
  * NOTE: calling Snackbar.make() does not create a snackbar. Only calling #show() will create it.
@@ -41,7 +40,7 @@ import org.robolectric.shadows.ShadowPopupMenu
 fun View.findSnackbarTextView(): TextView? {
     val possibleSnackbarContentLayout = findSnackbarLayout()?.getChildAt(0) as? SnackbarContentLayout
     return possibleSnackbarContentLayout
-            ?.getChildAt(0) as? TextView
+        ?.getChildAt(0) as? TextView
 }
 
 private fun View.findSnackbarLayout(): Snackbar.SnackbarLayout? {
@@ -61,12 +60,14 @@ private fun View.findSnackbarLayout(): Snackbar.SnackbarLayout? {
     return null
 }
 
-val account = Account(accountName="gmail",
-                      username="Tom",
-                      email="tom@gmail.com",
-                      password="123",
-                      date="01.01.1990",
-                      comment="My gmail account.")
+val account = Account(
+    accountName = "gmail",
+    username = "Tom",
+    email = "tom@gmail.com",
+    password = "123",
+    date = "01.01.1990",
+    comment = "My gmail account."
+)
 val databaseMap = mutableMapOf("gmail" to account)
 
 /**
@@ -82,13 +83,13 @@ val databaseMap = mutableMapOf("gmail" to account)
  * @param[end] right bound of number range.
  * @return generated random number.
  */
-fun randomIntExcept(exception: Int, start: Int=0, end: Int=20): Int{
+fun randomIntExcept(exception: Int, start: Int = 0, end: Int = 20): Int {
     val faker = Faker()
     var res: Int
 
     while (true) {
         res = faker.number().numberBetween(start, end)
-        if(res != exception){
+        if (res != exception) {
             break
         }
     }
@@ -103,13 +104,12 @@ fun Faker.str(): String = this.lorem().sentence()
  * @param[id] item id.
  * @param[view] system under test.
  */
-fun selectNavigationItem(id: Int, view: NavigationView.OnNavigationItemSelectedListener){
+fun selectNavigationItem(id: Int, view: NavigationView.OnNavigationItemSelectedListener) {
     // here we using try-catch to avoid UninitializedPropertyAccessException
     // that occurs because of view bindings
     try {
         view.onNavigationItemSelected(RoboMenuItem(id))
-    }
-    catch (e: UninitializedPropertyAccessException){}
+    } catch (e: UninitializedPropertyAccessException) {}
 }
 
 /**
@@ -117,7 +117,7 @@ fun selectNavigationItem(id: Int, view: NavigationView.OnNavigationItemSelectedL
  * @param[itemLayout] layout containing 3 dots to open the popup menu.
  * @param[itemId] id of the item we want to click.
  */
-fun clickMenuItem(itemLayout: View?, itemId: Int){
+fun clickMenuItem(itemLayout: View?, itemId: Int) {
     // click on 3 dots to display popup menu
     val dotsMenu = itemLayout?.findViewById<TextView>(R.id.dots_menu)
     dotsMenu?.performClick()

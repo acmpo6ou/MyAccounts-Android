@@ -32,8 +32,10 @@ import java.io.*
  * @param[ACCOUNTS_DIR] path to directory that contains src folder.
  * @param[contentResolver] used to read tar file using location URI.
  */
-class MainModel(private val ACCOUNTS_DIR: String,
-                private val contentResolver: ContentResolver): MainModelInter {
+class MainModel(
+    private val ACCOUNTS_DIR: String,
+    private val contentResolver: ContentResolver
+) : MainModelInter {
     override val SRC_DIR = "$ACCOUNTS_DIR/src"
     /**
      * This method is used to clean database name from .db or .bin extension and `src/` path.
@@ -78,17 +80,18 @@ class MainModel(private val ACCOUNTS_DIR: String,
         val location = FileInputStream(descriptor?.fileDescriptor)
 
         // open tar file
-        val inputStream = TarInputStream( BufferedInputStream(location) )
+        val inputStream = TarInputStream(BufferedInputStream(location))
 
         // get first file from tar
         var entry: TarEntry? = inputStream.nextEntry
 
-        while (entry != null){
+        while (entry != null) {
             var name = entry.name
             // Extract only files with .db or .bin extensions and if they start with `src/`.
             // Skip all other files such as tar headers
-            if ( name.startsWith("src/") &&
-                (name.endsWith(".db") || name.endsWith(".bin")) ) {
+            if (name.startsWith("src/") &&
+                (name.endsWith(".db") || name.endsWith(".bin"))
+            ) {
                 name = cleanName(name)
                 list.add(name)
             }
@@ -112,7 +115,7 @@ class MainModel(private val ACCOUNTS_DIR: String,
         val location = FileInputStream(descriptor?.fileDescriptor)
 
         // open tar file
-        val inputStream = TarInputStream( BufferedInputStream(location) )
+        val inputStream = TarInputStream(BufferedInputStream(location))
 
         // get first file from tar
         var entry: TarEntry? = inputStream.nextEntry
@@ -121,8 +124,9 @@ class MainModel(private val ACCOUNTS_DIR: String,
             val name = entry.name
             // extract only files with .db or .bin extensions and if they start with `src/`
             // skip all other files such as tar headers
-            if ( name.startsWith("src/") &&
-                (name.endsWith(".db") || name.endsWith(".bin")) ) {
+            if (name.startsWith("src/") &&
+                (name.endsWith(".db") || name.endsWith(".bin"))
+            ) {
                 list.add(entry.size.toInt())
             }
             entry = inputStream.nextEntry
@@ -145,7 +149,7 @@ class MainModel(private val ACCOUNTS_DIR: String,
         val location = FileInputStream(descriptor?.fileDescriptor)
 
         // open tar file
-        val inputStream = TarInputStream( BufferedInputStream(location) )
+        val inputStream = TarInputStream(BufferedInputStream(location))
 
         // get first file from tar
         var entry: TarEntry? = inputStream.nextEntry
@@ -154,17 +158,18 @@ class MainModel(private val ACCOUNTS_DIR: String,
         // extract database files from tar archive
         while (entry != null) {
             // extract only .db and .bin files, skip all other such as tar headers
-            if(!(
+            if (!(
                 entry.name.endsWith(".db") ||
-                entry.name.endsWith(".bin")
-            )){
+                    entry.name.endsWith(".bin")
+                )
+            ) {
                 entry = inputStream.nextEntry
                 continue
             }
 
             // check if the file with such name already exist
             val file = File("$ACCOUNTS_DIR${entry.name}")
-            if(file.exists()) throw FileAlreadyExistsException(file)
+            if (file.exists()) throw FileAlreadyExistsException(file)
 
             name = cleanName(entry.name)
 

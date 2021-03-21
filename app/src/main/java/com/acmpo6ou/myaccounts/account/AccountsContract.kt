@@ -26,6 +26,6 @@ import com.acmpo6ou.myaccounts.database.Database
 
 interface AccountsPresenterInter : SuperPresenterInter, DatabaseUtils
 
-interface AccountsActivityInter: SuperActivityInter{
+interface AccountsActivityInter : SuperActivityInter {
     val database: Database
 }

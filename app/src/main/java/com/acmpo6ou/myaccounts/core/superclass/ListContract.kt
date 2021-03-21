@@ -23,7 +23,7 @@ import android.content.Context
 
 interface ListPresenter
 
-interface ListFragmentInter{
+interface ListFragmentInter {
     var myContext: Context
 
     fun showSuccess()

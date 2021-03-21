@@ -38,7 +38,6 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
-
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
@@ -50,7 +49,7 @@ class GenPassDialogInst {
     val pass2: TextInputEditText = mock()
 
     @Before
-    fun setup(){
+    fun setup() {
         scenario = ActivityScenario.launch(MainActivity::class.java)
         scenario.onActivity {
             it.myContext.setTheme(R.style.Theme_MyAccounts_NoActionBar)
@@ -59,7 +58,7 @@ class GenPassDialogInst {
     }
 
     @Test
-    fun `click on generateButton should generate password of correct length`(){
+    fun `click on generateButton should generate password of correct length`() {
         scenario.onActivity {
             // default length should be 16
             assertEquals(16, dialog.length.value)
@@ -70,14 +69,14 @@ class GenPassDialogInst {
     }
 
     @Test
-    fun `click on generateButton should generate password using correct characters`(){
+    fun `click on generateButton should generate password using correct characters`() {
         scenario.onActivity {
             // password should contain only upper letters and digits
             dialog.lowerBox.isChecked = false
             dialog.punctBox.isChecked = false
 
             dialog.generateButton.performClick()
-            argumentCaptor<String>{
+            argumentCaptor<String> {
                 verify(pass1).setText(capture())
 
                 assertTrue(firstValue hasoneof dialog.digits)
@@ -89,7 +88,7 @@ class GenPassDialogInst {
     }
 
     @Test
-    fun `generated password should be set on password fields`(){
+    fun `generated password should be set on password fields`() {
         // passwords from both fields
         var text1 = ""
         var text2 = ""
@@ -97,11 +96,11 @@ class GenPassDialogInst {
         dialog.generateButton.performClick()
 
         // get passwords from fields
-        argumentCaptor<String>{
+        argumentCaptor<String> {
             verify(pass1).setText(capture())
             text1 = firstValue
         }
-        argumentCaptor<String>{
+        argumentCaptor<String> {
             verify(pass2).setText(capture())
             text2 = firstValue
         }
@@ -111,7 +110,7 @@ class GenPassDialogInst {
     }
 
     @Test
-    fun `should not set password if no character check boxes selected`(){
+    fun `should not set password if no character check boxes selected`() {
         // all checkboxes are unchecked
         dialog.lowerBox.isChecked = false
         dialog.upperBox.isChecked = false
@@ -124,7 +123,7 @@ class GenPassDialogInst {
     }
 
     @Test
-    fun `genPass should generate password from passed characters only`(){
+    fun `genPass should generate password from passed characters only`() {
         val password = dialog.genPass(16, listOf(dialog.digits, dialog.lower))
         assertTrue(password hasoneof dialog.digits)
         assertTrue(password hasoneof dialog.lower)
@@ -133,7 +132,7 @@ class GenPassDialogInst {
     }
 
     @Test
-    fun `genPass should generate password of specified length`(){
+    fun `genPass should generate password of specified length`() {
         val password = dialog.genPass(16, dialog.allChars)
         assertEquals(16, password.length)
     }

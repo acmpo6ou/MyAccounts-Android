@@ -24,7 +24,7 @@ import android.content.res.Resources
 import android.net.Uri
 import android.os.Build
 import androidx.test.platform.app.InstrumentationRegistry
-import com.acmpo6ou.myaccounts.InstTest
+import com.acmpo6ou.myaccounts.NoInternet
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.database.MainActivityInter
@@ -48,7 +48,7 @@ import java.io.IOException
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
-class MainPresenterInst : InstTest {
+class MainPresenterInst : NoInternet {
     lateinit var presenter: MainPresenter
     lateinit var model: MainModelInter
     private lateinit var view: MainActivityInter
@@ -65,13 +65,13 @@ class MainPresenterInst : InstTest {
     private val ioError = resources.getString(R.string.io_error)
 
     @Before
-    fun setup(){
+    fun setup() {
         val mockPrefs = SPMockBuilder().createSharedPreferences()
-        view = mock{
-            on{myContext} doReturn context
-            on{ACCOUNTS_DIR} doReturn ""
-            on{prefs} doReturn mockPrefs
-            on{app} doReturn context.applicationContext as MyApp
+        view = mock {
+            on { myContext } doReturn context
+            on { ACCOUNTS_DIR } doReturn ""
+            on { prefs } doReturn mockPrefs
+            on { app } doReturn context.applicationContext as MyApp
         }
         model = mock()
 
@@ -80,7 +80,7 @@ class MainPresenterInst : InstTest {
     }
 
     @Test
-    fun `checkTarFile should check number of files in tar file`(){
+    fun `checkTarFile should check number of files in tar file`() {
         // correct tar file would have 2 files
         // here we return anything but 2 as is needed for test
         whenever(model.countFiles(locationUri)).thenReturn(randomIntExcept(2))
@@ -90,28 +90,32 @@ class MainPresenterInst : InstTest {
     }
 
     @Test
-    fun `checkTarFile should check names of files`(){
+    fun `checkTarFile should check names of files`() {
         // mock model to return fake names and correct files count
-        val filesList = listOf(faker.name().name(),
-                               faker.name().name())
+        val filesList = listOf(
+            faker.name().name(),
+            faker.name().name()
+        )
         whenever(model.getNames(locationUri)).thenReturn(filesList)
         whenever(model.countFiles(locationUri)).thenReturn(2)
 
         presenter.checkTarFile(locationUri)
         val importDifferentNamesMsg = resources.getString(
-                R.string.import_diff_names, filesList[0], filesList[1])
+            R.string.import_diff_names, filesList[0], filesList[1]
+        )
         verify(view).showError(importErrorTitle, importDifferentNamesMsg)
     }
 
     @Test
-    fun `checkTarFile should check bin file size`(){
+    fun `checkTarFile should check bin file size`() {
         // mock model to return fake sizes, correct files count and file names
         val filesList = listOf("main", "main")
         val sizesList = listOf(
-                // size of db file should be not less then 100
-                100,
-                // size of bin file should be exactly 16
-                randomIntExcept(16, 0, 200))
+            // size of db file should be not less then 100
+            100,
+            // size of bin file should be exactly 16
+            randomIntExcept(16, 0, 200)
+        )
 
         whenever(model.getNames(locationUri)).thenReturn(filesList)
         whenever(model.countFiles(locationUri)).thenReturn(2)
@@ -123,13 +127,14 @@ class MainPresenterInst : InstTest {
     }
 
     @Test
-    fun `checkTarFile should check db file size`(){
+    fun `checkTarFile should check db file size`() {
         // mock model to return fake sizes, correct files count and file names
         val filesList = listOf("main", "main")
         val sizesList = listOf(
-                // size of db file should be not less then 100
-                faker.number().numberBetween(0, 90),
-                16) // size of bin file should be exactly 16
+            // size of db file should be not less then 100
+            faker.number().numberBetween(0, 90),
+            16
+        ) // size of bin file should be exactly 16
 
         whenever(model.getNames(locationUri)).thenReturn(filesList)
         whenever(model.countFiles(locationUri)).thenReturn(2)
@@ -141,8 +146,8 @@ class MainPresenterInst : InstTest {
     }
 
     @Test
-    fun `importDatabase should handle IOException`(){
-        whenever(model.importDatabase(locationUri)).thenAnswer{
+    fun `importDatabase should handle IOException`() {
+        whenever(model.importDatabase(locationUri)).thenAnswer {
             throw IOException()
         }
         presenter.importDatabase(locationUri)
@@ -151,8 +156,8 @@ class MainPresenterInst : InstTest {
     }
 
     @Test
-    fun `importDatabase should handle FileAlreadyExistsException`(){
-        whenever(model.importDatabase(locationUri)).thenAnswer{
+    fun `importDatabase should handle FileAlreadyExistsException`() {
+        whenever(model.importDatabase(locationUri)).thenAnswer {
             throw FileAlreadyExistsException(File(""))
         }
         presenter.importDatabase(locationUri)
@@ -161,10 +166,10 @@ class MainPresenterInst : InstTest {
     }
 
     @Test
-    fun `importDatabase should handle any other Exception`(){
+    fun `importDatabase should handle any other Exception`() {
         val msg = faker.str()
         val exception = Exception(msg)
-        whenever(model.importDatabase(locationUri)).thenAnswer{
+        whenever(model.importDatabase(locationUri)).thenAnswer {
             throw exception
         }
         presenter.importDatabase(locationUri)

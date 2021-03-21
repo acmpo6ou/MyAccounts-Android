@@ -46,18 +46,18 @@ class CreateDatabaseModelTests : ModelTest() {
     private val db = Database(name, password, salt)
 
     @Before
-    fun setup(){
+    fun setup() {
         val app = MyApp()
         app.databases = mutableListOf(Database("main"))
 
         model.initialize(app, SRC_DIR)
-        spyModel = spy(model){ on{ generateSalt() } doReturn salt }
+        spyModel = spy(model) { on { generateSalt() } doReturn salt }
         spyModel.uiDispatcher = Dispatchers.Unconfined
         spyModel.defaultDispatcher = Dispatchers.Unconfined
     }
 
     @Test
-    fun `apply should call createDatabaseAsync`(){
+    fun `apply should call createDatabaseAsync`() {
         runBlocking {
             spyModel.apply(name, password)
         }
@@ -65,7 +65,7 @@ class CreateDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `apply should use fixName`(){
+    fun `apply should use fixName`() {
         runBlocking {
             // will become `clean_name` when cleaned by fixName
             spyModel.apply("c/lea  %\$n_name/", password)
@@ -74,13 +74,13 @@ class CreateDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `apply should handle any error`(){
+    fun `apply should handle any error`() {
         val msg = faker.str()
         val exception = Exception(msg)
         whenever(spyModel.createDatabaseAsync(db))
-                .doAnswer{
-                    throw exception
-                }
+            .doAnswer {
+                throw exception
+            }
 
         runBlocking {
             spyModel.apply(name, password)
@@ -90,7 +90,7 @@ class CreateDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `apply should add created Database to the list`(){
+    fun `apply should add created Database to the list`() {
         runBlocking {
             spyModel.apply(name, password)
         }
@@ -98,7 +98,7 @@ class CreateDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `apply should set finished to true`(){
+    fun `apply should set finished to true`() {
         runBlocking {
             spyModel.apply(name, password)
         }
@@ -106,7 +106,7 @@ class CreateDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `apply should set loading to true`(){
+    fun `apply should set loading to true`() {
         runBlocking {
             spyModel.apply(name, password)
         }

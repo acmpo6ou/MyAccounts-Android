@@ -37,42 +37,44 @@ class AccountsListPresenterTests {
     lateinit var presenter: AccountsListPresenter
 
     @Before
-    fun setup(){
-        val mockActivity: AccountsActivityInter = mock{
-            on{database} doReturn Database("",
-                    data = databaseMap.toMap().toMutableMap()) // we need to do this to clone
-                                                               // the mutable map
+    fun setup() {
+        val mockActivity: AccountsActivityInter = mock {
+            on { database } doReturn Database(
+                "",
+                data = databaseMap.toMap().toMutableMap()
+            ) // we need to do this to clone
+            // the mutable map
         }
-        view = mock{ on{accountsActivity} doReturn mockActivity }
+        view = mock { on { accountsActivity } doReturn mockActivity }
         presenter = AccountsListPresenter(view)
     }
 
     @Test
-    fun `displayAccount should call view navigateToDisplay`(){
+    fun `displayAccount should call view navigateToDisplay`() {
         presenter.displayAccount(0)
         verify(view).navigateToDisplay(account.accountName)
     }
 
     @Test
-    fun `editAccount should call view navigateToDisplay`(){
+    fun `editAccount should call view navigateToDisplay`() {
         presenter.editAccount(0)
         verify(view).navigateToEdit(account.accountName)
     }
 
     @Test
-    fun `deleteSelected should call view confirmDelete`(){
+    fun `deleteSelected should call view confirmDelete`() {
         presenter.deleteSelected(0)
         verify(view).confirmDelete(0)
     }
 
     @Test
-    fun `deleteAccount should call view notifyRemoved`(){
+    fun `deleteAccount should call view notifyRemoved`() {
         presenter.deleteAccount(0)
         verify(view).notifyRemoved(0)
     }
 
     @Test
-    fun `deleteAccount should remove account from 'accounts' map`(){
+    fun `deleteAccount should remove account from 'accounts' map`() {
         presenter.deleteAccount(0)
         assertFalse(account in presenter.accountsList)
     }

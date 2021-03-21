@@ -17,21 +17,31 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.ui.about
+package com.acmpo6ou.myaccounts.updates_activity
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import com.acmpo6ou.myaccounts.R
+import android.content.Context
+import android.content.Intent
+import com.acmpo6ou.myaccounts.UpdatesActivity
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import org.junit.Before
+import org.junit.Test
 
-class CreditsTab : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.credits_tab, container, false)
+class UpdatesActivityTests {
+    lateinit var activity: UpdatesActivity
+
+    @Before
+    fun setup() {
+        activity = UpdatesActivity()
+        activity.viewModel = mock()
+    }
+
+    @Test
+    fun `onComplete should call viewModel installUpdate`(){
+        val context: Context = mock()
+        val intent: Intent = mock()
+
+        activity.onComplete.onReceive(context, intent)
+        verify(activity.viewModel).installUpdate(context)
     }
 }

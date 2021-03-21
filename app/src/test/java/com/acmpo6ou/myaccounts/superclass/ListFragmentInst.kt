@@ -63,14 +63,14 @@ class ListFragmentInst {
     private val successMessage = context.resources.getString(R.string.success_message)
 
     @Before
-    fun setup(){
+    fun setup() {
         scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
     }
 
     @Test
-    fun `checkListPlaceholder should hide placeholder when list has items`(){
+    fun `checkListPlaceholder should hide placeholder when list has items`() {
         scenario.onFragment {
-            it.items = listOf( Faker().str() )
+            it.items = listOf(Faker().str())
             it.checkListPlaceholder()
 
             // placeholder should be invisible
@@ -84,7 +84,7 @@ class ListFragmentInst {
     }
 
     @Test
-    fun `checkListPlaceholder should display placeholder when list has no items`(){
+    fun `checkListPlaceholder should display placeholder when list has no items`() {
         scenario.onFragment {
             it.items = listOf()
             it.checkListPlaceholder()
@@ -113,7 +113,7 @@ class ListFragmentInst {
     }
 
     @Test
-    fun `showSuccess should display snackbar`(){
+    fun `showSuccess should display snackbar`() {
         scenario.onFragment {
             it.showSuccess()
 
@@ -121,8 +121,10 @@ class ListFragmentInst {
             Shadows.shadowOf(Looper.getMainLooper()).idle()
 
             val snackbar: TextView? = it.view?.findSnackbarTextView()
-            assertEquals("showSuccess snackbar has incorrect message!",
-                    successMessage, snackbar?.text)
+            assertEquals(
+                "showSuccess snackbar has incorrect message!",
+                successMessage, snackbar?.text
+            )
         }
     }
 }

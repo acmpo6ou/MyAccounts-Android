@@ -33,12 +33,11 @@ import com.acmpo6ou.myaccounts.account.AccountsFragmentInter
 import com.acmpo6ou.myaccounts.account.AccountsListPresenterInter
 import com.acmpo6ou.myaccounts.database.Account
 
-
 /**
  * [RecyclerView.Adapter] that can display an [Account].
  */
-class AccountsAdapter(val view: AccountsFragmentInter)
-    : RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
+class AccountsAdapter(val view: AccountsFragmentInter) :
+    RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
 
     val presenter: AccountsListPresenterInter get() = view.presenter
     private val accountsList: List<Account> get() = presenter.accountsList
@@ -69,9 +68,9 @@ class AccountsAdapter(val view: AccountsFragmentInter)
             }
 
             popup.setOnMenuItemClickListener {
-                when(it.itemId){
+                when (it.itemId) {
                     R.id.delete_account_item -> presenter.deleteSelected(position)
-                    R.id.edit_account_item-> presenter.editAccount(position)
+                    R.id.edit_account_item -> presenter.editAccount(position)
                     else -> return@setOnMenuItemClickListener false
                 }
                 true
@@ -91,7 +90,7 @@ class AccountsAdapter(val view: AccountsFragmentInter)
 
         init {
             // navigate to DisplayAccountFragment when account item is selected
-            view.setOnClickListener{
+            view.setOnClickListener {
                 presenter.displayAccount(adapterPosition)
             }
         }

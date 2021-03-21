@@ -21,22 +21,19 @@ package com.acmpo6ou.myaccounts.superclass
 
 import com.acmpo6ou.myaccounts.BuildConfig
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivityInter
 import com.acmpo6ou.myaccounts.core.superclass.SuperPresenter
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.*
 import okhttp3.ResponseBody
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.mockito.ArgumentMatchers.anyString
 import retrofit2.Call
 
-val fakeApp = MyApp()
-
 open class TestSuperPresenter : SuperPresenter() {
-    override var view: SuperActivityInter = mock{ on{app} doReturn fakeApp }
+    override var view: SuperActivityInter = mock()
 
     override fun backPressed() {
     }
@@ -49,78 +46,72 @@ class SuperPresenterTests {
     private val latestVersion = Faker().str()
 
     @Before
-    fun setup(){
+    fun setup() {
         presenter = TestSuperPresenter()
         val callback: Call<ResponseBody> = mock()
-        presenter.service = mock{ on{getLatestRelease()} doReturn callback }
+        presenter.service = mock { on { getLatestRelease() } doReturn callback }
     }
 
     @Test
-    fun `checkForUpdates should call noUpdates when updates aren't available`(){
+    fun `checkForUpdates should call noUpdates when updates aren't available`() {
         // here we pass version that is exactly the same as installed one, so there are
         // no updates available
         presenter.checkForUpdates(BuildConfig.VERSION_NAME)
         verify(presenter.view).noUpdates()
-        verify(presenter.view, never()).startUpdatesActivity()
+        verify(presenter.view, never()).startUpdatesActivity(anyString())
     }
 
     @Test
-    fun `checkForUpdates should call startUpdatesActivity when updates are available`(){
+    fun `checkForUpdates should call startUpdatesActivity when updates are available`() {
         // here we pass different version then the installed one, so there are
         // updates available
         presenter.checkForUpdates(latestVersion)
-        verify(presenter.view).startUpdatesActivity()
+        verify(presenter.view).startUpdatesActivity(latestVersion)
         verify(presenter.view, never()).noUpdates()
     }
 
     @Test
-    fun `checkForUpdates should save latestVersion to MyApp when updates are available`(){
-        presenter.checkForUpdates(latestVersion)
-        assertEquals(latestVersion, fakeApp.latestVersion)
-    }
-
-    @Test
-    fun `checkUpdatesSelected should not get release version when there is no internet`(){
+    fun `checkUpdatesSelected should not get release version when there is no internet`() {
         doReturn(false).whenever(presenter.view).isInternetAvailable()
         presenter.checkUpdatesSelected()
         verify(presenter.service, never()).getLatestRelease()
     }
 
     @Test
-    fun `checkUpdatesSelected should get latest release when there is internet`(){
+    fun `checkUpdatesSelected should get latest release when there is internet`() {
         doReturn(true).whenever(presenter.view).isInternetAvailable()
         presenter.checkUpdatesSelected()
         verify(presenter.service).getLatestRelease()
     }
 
     @Test
-    fun `checkUpdatesSelected should call noInternetConnection when there is no internet`(){
+    fun `checkUpdatesSelected should call noInternetConnection when there is no internet`() {
         doReturn(false).whenever(presenter.view).isInternetAvailable()
         presenter.checkUpdatesSelected()
         verify(presenter.view).noInternetConnection()
     }
 
     @Test
-    fun `checkUpdatesSelected should not call noInternetConnection when there is internet`(){
+    fun `checkUpdatesSelected should not call noInternetConnection when there is internet`() {
         doReturn(true).whenever(presenter.view).isInternetAvailable()
         presenter.checkUpdatesSelected()
         verify(presenter.view, never()).noInternetConnection()
     }
 
     @Test
-    fun `navigateToChangelog should call navigateTo`(){
+    fun `navigateToChangelog should call navigateTo`() {
         presenter.navigateToChangelog()
         verify(presenter.view).navigateTo(R.id.actionChangelog)
     }
 
     @Test
-    fun `navigateToSettings should call navigateTo`(){
+    fun `navigateToSettings should call navigateTo`() {
         presenter.navigateToSettings()
         verify(presenter.view).navigateTo(R.id.actionSettings)
     }
 
     @Test
-    fun `navigateToAbout should call navigateTo`(){
+    fun `navigateToAbout should call navigateTo`() {
         presenter.navigateToAbout()
         verify(presenter.view).navigateTo(R.id.actionAbout)
     }

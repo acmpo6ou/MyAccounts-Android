@@ -28,6 +28,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.MainActivity
+import com.acmpo6ou.myaccounts.NoInternet
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.findSnackbarTextView
 import org.junit.Assert.assertEquals
@@ -43,13 +44,13 @@ import org.robolectric.annotation.LooperMode
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
-class MainActivityInst {
+class MainActivityInst : NoInternet {
     lateinit var scenario: ActivityScenario<MainActivity>
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     private val exitTip = context.resources.getString(R.string.exit_tip)
 
     @Before
-    fun setup(){
+    fun setup() {
         scenario = launch(MainActivity::class.java)
         scenario.onActivity {
             it.myContext.setTheme(R.style.Theme_MyAccounts_NoActionBar)
@@ -57,7 +58,7 @@ class MainActivityInst {
     }
 
     @Test
-    fun `importDialog should start appropriate intent`(){
+    fun `importDialog should start appropriate intent`() {
         val expectedAction = Intent.ACTION_OPEN_DOCUMENT
         val expectedCategory = Intent.CATEGORY_OPENABLE
         val expectedType = "application/x-tar"
@@ -66,18 +67,24 @@ class MainActivityInst {
 
         // check all intent properties
         val intent: Intent =
-                shadowOf(RuntimeEnvironment.application).nextStartedActivity
+            shadowOf(RuntimeEnvironment.application).nextStartedActivity
 
-        assertEquals("importDialog: incorrect intent action!",
-                expectedAction, intent.action)
-        assertEquals("importDialog: incorrect intent category!",
-                expectedCategory, intent.categories.first())
-        assertEquals("importDialog: incorrect intent type!",
-                expectedType, intent.type)
+        assertEquals(
+            "importDialog: incorrect intent action!",
+            expectedAction, intent.action
+        )
+        assertEquals(
+            "importDialog: incorrect intent category!",
+            expectedCategory, intent.categories.first()
+        )
+        assertEquals(
+            "importDialog: incorrect intent type!",
+            expectedType, intent.type
+        )
     }
 
     @Test
-    fun `showExitTip should display snackbar`(){
+    fun `showExitTip should display snackbar`() {
         scenario.onActivity {
             it.showExitTip()
 

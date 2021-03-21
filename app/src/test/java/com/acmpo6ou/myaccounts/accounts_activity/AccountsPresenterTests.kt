@@ -42,18 +42,18 @@ class AccountsPresenterTests {
     lateinit var app: MyApp
 
     @Before
-    fun setup(){
+    fun setup() {
         app = MyApp()
 
         mockFragment = mock()
-        val context: Context = mock{
-                on{getExternalFilesDir(null)} doReturn File("")
-            }
-        view = mock{
-            on{app} doReturn app
-            on{database} doReturn db
-            on{myContext} doReturn context
-            on{mainFragment} doReturn mockFragment
+        val context: Context = mock {
+            on { getExternalFilesDir(null) } doReturn File("")
+        }
+        view = mock {
+            on { app } doReturn app
+            on { database } doReturn db
+            on { myContext } doReturn context
+            on { mainFragment } doReturn mockFragment
         }
 
         presenter = AccountsPresenter(view)
@@ -62,27 +62,27 @@ class AccountsPresenterTests {
     }
 
     @Test
-    fun `saveSelected should call showSuccess`(){
+    fun `saveSelected should call showSuccess`() {
         spyPresenter.saveSelected()
         verify(mockFragment).showSuccess()
     }
 
     @Test
-    fun `saveSelected should call saveDatabase when isDatabaseSaved returns false`(){
+    fun `saveSelected should call saveDatabase when isDatabaseSaved returns false`() {
         doReturn(false).whenever(spyPresenter).isDatabaseSaved(db, app)
         spyPresenter.saveSelected()
         verify(spyPresenter).saveDatabase(db.name, db, app)
     }
 
     @Test
-    fun `saveSelected should not call saveDatabase when isDatabaseSaved returns true`(){
+    fun `saveSelected should not call saveDatabase when isDatabaseSaved returns true`() {
         doReturn(true).whenever(spyPresenter).isDatabaseSaved(db, app)
         spyPresenter.saveSelected()
         verify(spyPresenter, never()).saveDatabase(db.name, db, app)
     }
 
     @Test
-    fun `backPressed should call view confirmBack when isDatabaseSaved returns false`(){
+    fun `backPressed should call view confirmBack when isDatabaseSaved returns false`() {
         doReturn(false).whenever(spyPresenter).isDatabaseSaved(db, app)
         spyPresenter.backPressed()
 
@@ -91,7 +91,7 @@ class AccountsPresenterTests {
     }
 
     @Test
-    fun `backPressed should call view goBack when isDatabaseSaved returns true`(){
+    fun `backPressed should call view goBack when isDatabaseSaved returns true`() {
         doReturn(true).whenever(spyPresenter).isDatabaseSaved(db, app)
         spyPresenter.backPressed()
 

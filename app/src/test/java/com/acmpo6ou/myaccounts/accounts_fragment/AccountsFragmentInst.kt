@@ -61,17 +61,17 @@ class AccountsFragmentInst {
     fun setUp() {
         scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
         scenario.onFragment {
-            it.presenter = mock{ on{accountsList} doReturn databaseMap.values.toList()}
+            it.presenter = mock { on { accountsList } doReturn databaseMap.values.toList() }
         }
     }
 
-    private fun mockNavController(fragment: AccountsFragment){
+    private fun mockNavController(fragment: AccountsFragment) {
         navController = mock()
         setViewNavController(fragment.requireView(), navController)
     }
 
     @Test
-    fun `confirmDelete should create dialog with appropriate message and title`(){
+    fun `confirmDelete should create dialog with appropriate message and title`() {
         scenario.onFragment {
             it.confirmDelete(0)
         }
@@ -80,14 +80,18 @@ class AccountsFragmentInst {
         val title = dialog.findViewById<TextView>(R.id.alertTitle)
         val message = dialog.findViewById<TextView>(android.R.id.message)
 
-        assertEquals("confirmDelete created dialog with incorrect title!",
-                warningTitle, title?.text)
-        assertEquals("confirmDelete created dialog with incorrect message!",
-                String.format(confirmDeleteMsg, account.accountName), message?.text)
+        assertEquals(
+            "confirmDelete created dialog with incorrect title!",
+            warningTitle, title?.text
+        )
+        assertEquals(
+            "confirmDelete created dialog with incorrect message!",
+            String.format(confirmDeleteMsg, account.accountName), message?.text
+        )
     }
 
     @Test
-    fun `navigateToEdit should pass appropriate account name`(){
+    fun `navigateToEdit should pass appropriate account name`() {
         scenario.onFragment {
             mockNavController(it)
             it.navigateToEdit(account.accountName)
@@ -98,7 +102,7 @@ class AccountsFragmentInst {
     }
 
     @Test
-    fun `navigateToDisplay should pass appropriate account name`(){
+    fun `navigateToDisplay should pass appropriate account name`() {
         scenario.onFragment {
             mockNavController(it)
             it.navigateToDisplay(account.accountName)

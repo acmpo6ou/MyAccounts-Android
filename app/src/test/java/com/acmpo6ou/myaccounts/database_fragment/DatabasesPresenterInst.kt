@@ -38,7 +38,7 @@ import java.io.IOException
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
-class DatabasesPresenterInst: DatabasesPresenterTest() {
+class DatabasesPresenterInst : DatabasesPresenterTest() {
     // get string resources
     val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     val resources = context.resources
@@ -49,56 +49,56 @@ class DatabasesPresenterInst: DatabasesPresenterTest() {
     private val ioError = resources.getString(R.string.io_error)
 
     @Before
-    fun setup(){
+    fun setup() {
         whenever(view.myContext).thenReturn(context)
         setupPresenter()
     }
 
     @Test
-    fun `exportDatabase should handle FileNotFoundException`(){
+    fun `exportDatabase should handle FileNotFoundException`() {
         whenever(model.exportDatabase(anyString(), eq(locationUri)))
-                .thenAnswer{
-                    throw FileNotFoundException("")
-                }
+            .thenAnswer {
+                throw FileNotFoundException("")
+            }
         callExportDatabase()
 
         verify(view).showError(exportErrorTitle, exportFileNotFoundDetails)
     }
 
     @Test
-    fun `exportDatabase should handle IOException`(){
+    fun `exportDatabase should handle IOException`() {
         whenever(model.exportDatabase(anyString(), eq(locationUri)))
-                .thenAnswer{
-                    throw IOException()
-                }
+            .thenAnswer {
+                throw IOException()
+            }
         callExportDatabase()
 
         verify(view).showError(exportErrorTitle, ioError)
     }
 
     @Test
-    fun `exportDatabase should handle any other exception`(){
+    fun `exportDatabase should handle any other exception`() {
         val msg = faker.str()
         val exception = Exception(msg)
 
         whenever(model.exportDatabase(anyString(), eq(locationUri)))
-                .thenAnswer{
-                    throw exception
-                }
+            .thenAnswer {
+                throw exception
+            }
         callExportDatabase()
 
         verify(view).showError(exportErrorTitle, exception.toString())
     }
 
     @Test
-    fun `deleteDatabase should handle any exception`(){
+    fun `deleteDatabase should handle any exception`() {
         val msg = faker.str()
         val exception = Exception(msg)
 
         whenever(model.deleteDatabase(anyString()))
-                .thenAnswer{
-                    throw exception
-                }
+            .thenAnswer {
+                throw exception
+            }
         presenter.deleteDatabase(0)
 
         verify(view).showError(deleteErrorTitle, exception.toString())

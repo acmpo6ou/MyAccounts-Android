@@ -52,17 +52,17 @@ class EditDatabaseFragmentInst {
         app.databases = mutableListOf(db)
         app.res = context.resources
 
-        scenario = launchFragmentInContainer(themeResId= R.style.Theme_MyAccounts_NoActionBar)
+        scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
         scenario.onFragment {
             it.app = app
             it.initModel()
-            it.args = mock{on{databaseIndex} doReturn 0}
+            it.args = mock { on { databaseIndex } doReturn 0 }
             it.initForm()
         }
     }
 
     @Test
-    fun `initForm should fill name and password fields`(){
+    fun `initForm should fill name and password fields`() {
         scenario.onFragment {
             assertEquals(db.name, it.b.databaseName.text.toString())
             assertEquals(db.password, it.b.databasePassword.text.toString())
@@ -71,7 +71,7 @@ class EditDatabaseFragmentInst {
     }
 
     @Test
-    fun `initForm should change text of apply button`(){
+    fun `initForm should change text of apply button`() {
         val saveText = context.resources.getString(R.string.save)
         scenario.onFragment {
             assertEquals(saveText, it.b.applyButton.text)

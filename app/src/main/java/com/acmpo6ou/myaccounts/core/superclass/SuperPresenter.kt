@@ -36,8 +36,8 @@ abstract class SuperPresenter : SuperPresenterInter {
     abstract val view: SuperActivityInter
 
     private val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.github.com")
-            .build()
+        .baseUrl("https://api.github.com")
+        .build()
     var service: GitHubService = retrofit.create(GitHubService::class.java)
 
     /**
@@ -51,9 +51,9 @@ abstract class SuperPresenter : SuperPresenterInter {
      * @param[isAutoCheck] set this to true when auto checking for updates to avoid displaying
      * of updates snackbars.
      */
-    override fun checkUpdatesSelected(isAutoCheck: Boolean){
+    override fun checkUpdatesSelected(isAutoCheck: Boolean) {
         if (!view.isInternetAvailable()) {
-            view.noInternetConnection()
+            view.noInternetConnection(isAutoCheck)
             return
         }
 
@@ -61,11 +61,10 @@ abstract class SuperPresenter : SuperPresenterInter {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     val json = response.body()!!.string()
-                    val regex = Regex("""name":"(v\d+\.\d+\.\d+)""")
+                    val regex = Regex("""name":"v(\d+\.\d+\.\d+)""")
                     val version = regex.find(json)!!.groupValues.last()
                     checkForUpdates(version, isAutoCheck)
-                }
-                else {
+                } else {
                     Log.i("APP", response.errorBody()!!.string())
                     view.updatesCheckFailed(isAutoCheck)
                 }
@@ -92,10 +91,8 @@ abstract class SuperPresenter : SuperPresenterInter {
      */
     open fun checkForUpdates(latestVersion: String, isAutoCheck: Boolean = false) {
         if (BuildConfig.VERSION_NAME != latestVersion) {
-            view.app.latestVersion = latestVersion // save latestVersion for UpdatesActivity
-            view.startUpdatesActivity()
-        }
-        else {
+            view.startUpdatesActivity(latestVersion)
+        } else {
             view.noUpdates(isAutoCheck)
         }
     }

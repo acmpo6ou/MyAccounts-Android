@@ -53,20 +53,20 @@ class MainPresenterTests {
     val app = MyApp()
 
     @Before
-    fun setup(){
-        app.databases = mutableListOf( Database("test", "123") )
+    fun setup() {
+        app.databases = mutableListOf(Database("test", "123"))
         val resolver: ContentResolver = mock()
-        val context: Context = mock{ on{contentResolver} doReturn resolver }
+        val context: Context = mock { on { contentResolver } doReturn resolver }
 
         mockPrefs = SPMockBuilder().createSharedPreferences()
         model = mock()
         doReturn(false).whenever(model).isDatabaseSaved(app.databases[0], app)
 
-        view = mock{
-            on{ACCOUNTS_DIR} doReturn accountsDir
-            on{app} doReturn MainPresenterTests@app
-            on{myContext} doReturn context
-            on{prefs} doReturn mockPrefs
+        view = mock {
+            on { ACCOUNTS_DIR } doReturn accountsDir
+            on { app } doReturn MainPresenterTests@app
+            on { myContext } doReturn context
+            on { prefs } doReturn mockPrefs
         }
 
         presenter = MainPresenter(view)
@@ -74,35 +74,36 @@ class MainPresenterTests {
         spyPresenter = spy(presenter)
     }
 
-    private fun mockCorrectModel(){
+    private fun mockCorrectModel() {
         val filesList = listOf("main", "main")
         val sizesList = listOf(
-                100, // size of db file should be not less then 100
-                16) // size of bin file should be exactly 16
+            100, // size of db file should be not less then 100
+            16
+        ) // size of bin file should be exactly 16
 
         // mock model to return correct file sizes, count and names
-        model = mock{
-            on{getNames(locationUri)} doReturn filesList
-            on{countFiles(locationUri)} doReturn 2
-            on{getSizes(locationUri)} doReturn sizesList
+        model = mock {
+            on { getNames(locationUri) } doReturn filesList
+            on { countFiles(locationUri) } doReturn 2
+            on { getSizes(locationUri) } doReturn sizesList
         }
     }
 
     @Test
-    fun `importSelected should call view importDialog`(){
+    fun `importSelected should call view importDialog`() {
         presenter.importSelected()
         verify(view).importDialog()
     }
 
     @Test
-    fun `autocheckForUpdates should call checkUpdatesSelected if it's time to autocheck`(){
+    fun `autocheckForUpdates should call checkUpdatesSelected if it's time to autocheck`() {
         doReturn(true).whenever(spyPresenter).isTimeToUpdate()
         spyPresenter.autocheckForUpdates()
         verify(spyPresenter).checkUpdatesSelected(true)
     }
 
     @Test
-    fun `autocheckForUpdates should not call checkUpdatesSelected if it's not time to autocheck`(){
+    fun `autocheckForUpdates should not call checkUpdatesSelected if it's not time to autocheck`() {
         doReturn(false).whenever(spyPresenter).isTimeToUpdate()
         spyPresenter.autocheckForUpdates()
         verify(spyPresenter, never()).checkUpdatesSelected(anyBoolean())
@@ -110,21 +111,21 @@ class MainPresenterTests {
     }
 
     @Test
-    fun `isTimeToUpdate should return true if app didn't check for updates today`(){
+    fun `isTimeToUpdate should return true if app didn't check for updates today`() {
         val date = LocalDate.MIN.toEpochDay()
         mockPrefs.edit().putLong("last_update_check", date).commit()
         assertTrue(presenter.isTimeToUpdate())
     }
 
     @Test
-    fun `isTimeToUpdate should return false if app did check for updates today`(){
+    fun `isTimeToUpdate should return false if app did check for updates today`() {
         val date = LocalDate.now().toEpochDay()
         mockPrefs.edit().putLong("last_update_check", date).commit()
         assertFalse(presenter.isTimeToUpdate())
     }
 
     @Test
-    fun `isTimeToUpdate should set last_update_check`(){
+    fun `isTimeToUpdate should set last_update_check`() {
         // last time we checked for updates was long time ago
         val date = LocalDate.MIN.toEpochDay()
         mockPrefs.edit().putLong("last_update_check", date).commit()
@@ -134,12 +135,13 @@ class MainPresenterTests {
         // updates were today
         val today = LocalDate.now()
         val lastCheck = LocalDate.ofEpochDay(
-                mockPrefs.getLong("last_update_check", 0L))
+            mockPrefs.getLong("last_update_check", 0L)
+        )
         assertEquals(today, lastCheck)
     }
 
     @Test
-    fun `checkTarFile should call importDatabase if there are no errors`(){
+    fun `checkTarFile should call importDatabase if there are no errors`() {
         mockCorrectModel()
         spyPresenter.model = model
         doNothing().`when`(spyPresenter).importDatabase(locationUri)
@@ -150,11 +152,11 @@ class MainPresenterTests {
     }
 
     @Test
-    fun `fixSrcFolder should create SRC_DIR if it doesn't exist`(){
+    fun `fixSrcFolder should create SRC_DIR if it doesn't exist`() {
         // here we delete accounts folder if it already exists to ensure that it will
         // be empty as is needed for our tests
         val accountsFolder = File(accountsDir)
-        if(accountsFolder.exists()) accountsFolder.deleteRecursively()
+        if (accountsFolder.exists()) accountsFolder.deleteRecursively()
 
         presenter.fixSrcFolder()
 
@@ -166,7 +168,7 @@ class MainPresenterTests {
     /**
      * Helper method used by next 2 tests. Simulates importing of database named `main`.
      */
-    private fun importMainDatabase(){
+    private fun importMainDatabase() {
         mockCorrectModel()
         doReturn("main").whenever(model).importDatabase(locationUri)
         presenter.model = model
@@ -174,19 +176,19 @@ class MainPresenterTests {
     }
 
     @Test
-    fun `importDatabase should add imported database to the list`(){
+    fun `importDatabase should add imported database to the list`() {
         importMainDatabase()
         assertTrue(Database("main") in presenter.databases)
     }
 
     @Test
-    fun `importDatabase should call notifyChanged`(){
+    fun `importDatabase should call notifyChanged`() {
         importMainDatabase()
         verify(view).notifyChanged(0)
     }
 
     @Test
-    fun `backPressed should call confirmBack when there are unsaved databases`(){
+    fun `backPressed should call confirmBack when there are unsaved databases`() {
         doReturn(false).whenever(model).isDatabaseSaved(any(), eq(app))
         presenter.backPressed()
 
@@ -196,7 +198,7 @@ class MainPresenterTests {
     }
 
     @Test
-    fun `backPressed should call showExitTip when there are opened databases`(){
+    fun `backPressed should call showExitTip when there are opened databases`() {
         doReturn(true).whenever(model).isDatabaseSaved(any(), eq(app))
         presenter.backPressed()
 
@@ -206,8 +208,8 @@ class MainPresenterTests {
     }
 
     @Test
-    fun `backPressed should call goBack when there are no opened databases`(){
-        app.databases = mutableListOf( Database("main") )
+    fun `backPressed should call goBack when there are no opened databases`() {
+        app.databases = mutableListOf(Database("main"))
         presenter.backPressed()
 
         verify(view).goBack()
@@ -216,11 +218,12 @@ class MainPresenterTests {
     }
 
     @Test
-    fun `saveSelected should save all unsaved databases`(){
+    fun `saveSelected should save all unsaved databases`() {
         app.databases = mutableListOf(
-                Database("main"),
-                Database("test", "123"), // unsaved
-                Database("saved", "123"))
+            Database("main"),
+            Database("test", "123"), // unsaved
+            Database("saved", "123")
+        )
         doReturn(false).whenever(model).isDatabaseSaved(app.databases[1], app)
         doReturn(true).whenever(model).isDatabaseSaved(app.databases[2], app)
 

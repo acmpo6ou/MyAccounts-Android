@@ -37,7 +37,7 @@ import com.acmpo6ou.myaccounts.core.startDatabaseUtil
 import com.acmpo6ou.myaccounts.database.superclass.ErrorFragment
 import com.acmpo6ou.myaccounts.databinding.OpenDatabaseFragmentBinding
 
-class OpenDatabaseFragment: Fragment(), ErrorFragment {
+class OpenDatabaseFragment : Fragment(), ErrorFragment {
     override lateinit var viewModel: OpenDatabaseViewModel
     var args: OpenDatabaseFragmentArgs? = null
 
@@ -50,24 +50,23 @@ class OpenDatabaseFragment: Fragment(), ErrorFragment {
     val b: OpenDatabaseFragmentBinding get() = binding!!
 
     // This observer sets app bar title to `Open <database name>`.
-    private val titleObserver = Observer<String>{
+    private val titleObserver = Observer<String> {
         mainActivity.supportActionBar?.title = it
     }
 
     // This observer displays and hides error tip of password field
-    private val passwordObserver = Observer<Boolean>{
-        if(it) {
+    private val passwordObserver = Observer<Boolean> {
+        if (it) {
             val passwordError = myContext.resources.getString(R.string.password_error)
             b.parentPassword.error = passwordError
-        }
-        else{
+        } else {
             b.parentPassword.error = null
         }
     }
 
     // This observer displays error dialog when user tries to open corrupted database.
     private val corruptedObserver = Observer<Boolean> {
-        if(!it) return@Observer
+        if (!it) return@Observer
 
         val index = args!!.databaseIndex
         val dbName = app.databases[index].name
@@ -79,16 +78,15 @@ class OpenDatabaseFragment: Fragment(), ErrorFragment {
 
     // This observer starts AccountsActivity when corresponding Database is opened.
     private val openedObserver = Observer<Boolean> {
-        if(it) startDatabase(args!!.databaseIndex)
+        if (it) startDatabase(args!!.databaseIndex)
     }
 
     // This observer hides/displays loading progress bar of `Open database` button
     private val loadingObserver = Observer<Boolean> {
-        if(it) {
+        if (it) {
             b.progressLoading.visibility = View.VISIBLE
             b.openDatabase.isEnabled = false
-        }
-        else{
+        } else {
             b.progressLoading.visibility = View.GONE
             b.openDatabase.isEnabled = true
         }
@@ -104,8 +102,11 @@ class OpenDatabaseFragment: Fragment(), ErrorFragment {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = OpenDatabaseFragmentBinding.inflate(layoutInflater, container, false)
         return b.root
     }
@@ -129,17 +130,18 @@ class OpenDatabaseFragment: Fragment(), ErrorFragment {
         initModel()
 
         // open database when `Open database` button is pressed
-        b.openDatabase.setOnClickListener{
+        b.openDatabase.setOnClickListener {
             viewModel.startPasswordCheck(b.databasePassword.text.toString())
         }
 
         // open database when Enter is pressed in password field
-        b.databasePassword.setOnEditorActionListener{
+        b.databasePassword.setOnEditorActionListener {
             _: TextView, action: Int, keyEvent: KeyEvent? ->
 
             if (keyEvent?.keyCode == KeyEvent.KEYCODE_ENTER ||
                 action == EditorInfo.IME_ACTION_DONE ||
-                action == EditorInfo.IME_ACTION_NEXT) {
+                action == EditorInfo.IME_ACTION_NEXT
+            ) {
                 b.openDatabase.performClick()
             }
             false

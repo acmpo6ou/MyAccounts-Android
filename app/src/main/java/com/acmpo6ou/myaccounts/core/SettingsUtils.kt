@@ -59,8 +59,10 @@ interface SettingsUtils {
         // get screen capture preference and block screen capture if needed
         val screenCapture = prefs.getBoolean("block_screen_capture", true)
         if (screenCapture) {
-            activity.window.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
-                    WindowManager.LayoutParams.FLAG_SECURE)
+            activity.window.setFlags(
+                WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE
+            )
         }
     }
 }

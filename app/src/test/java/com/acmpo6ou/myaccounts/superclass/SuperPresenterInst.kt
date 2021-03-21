@@ -33,9 +33,9 @@ class SuperPresenterInst {
     @get:Rule val mockWebServer = MockWebServer()
     private val service: GitHubService by lazy {
         Retrofit.Builder()
-                .baseUrl(mockWebServer.url("/"))
-                .build()
-                .create(GitHubService::class.java)
+            .baseUrl(mockWebServer.url("/"))
+            .build()
+            .create(GitHubService::class.java)
     }
 
     private lateinit var presenter: TestSuperPresenter
@@ -45,7 +45,7 @@ class SuperPresenterInst {
     lateinit var jsonStr: String
 
     @Before
-    fun setup(){
+    fun setup() {
         presenter = TestSuperPresenter()
         spyPresenter = spy(presenter)
 
@@ -59,27 +59,30 @@ class SuperPresenterInst {
      */
     private fun generateVersion() {
         val versionNums = List(10) { Random.nextInt(0, 100) }
-        expectedVersion = String.format("v%d.%d.%d", *versionNums.toTypedArray())
-        jsonStr = """ {"name":"%s"} """.format(expectedVersion)
+        expectedVersion = String.format("%d.%d.%d", *versionNums.toTypedArray())
+        jsonStr = """ {"name":"v%s"} """.format(expectedVersion)
     }
 
     @Test
-    fun `checkUpdatesSelected should call checkForUpdates passing through version`(){
+    fun `checkUpdatesSelected should call checkForUpdates passing through version`() {
         // mock successful response with random version name
         generateVersion()
-        mockWebServer.enqueue(MockResponse()
+        mockWebServer.enqueue(
+            MockResponse()
                 .setBody(jsonStr)
-                .setResponseCode(200))
+                .setResponseCode(200)
+        )
 
         spyPresenter.checkUpdatesSelected()
         verify(spyPresenter, timeout(3000)).checkForUpdates(expectedVersion)
     }
 
     @Test
-    fun `checkUpdatesSelected should handle failure`(){
+    fun `checkUpdatesSelected should handle failure`() {
         // mock failure response
-        mockWebServer.enqueue(MockResponse()
-                .setResponseCode(500))
+        mockWebServer.enqueue(
+            MockResponse().setResponseCode(500)
+        )
 
         spyPresenter.checkUpdatesSelected()
         verify(spyPresenter.view, timeout(3000)).updatesCheckFailed()

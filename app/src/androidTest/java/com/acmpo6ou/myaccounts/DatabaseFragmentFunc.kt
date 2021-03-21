@@ -42,7 +42,7 @@ class DatabaseFragmentFunc {
     lateinit var presenter: DatabasesPresenterInter
 
     @Before
-    fun setUp(){
+    fun setUp() {
         scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
 
         val app = MyApp()

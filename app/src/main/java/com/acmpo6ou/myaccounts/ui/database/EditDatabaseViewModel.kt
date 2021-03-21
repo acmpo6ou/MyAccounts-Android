@@ -26,9 +26,9 @@ import kotlinx.coroutines.async
 
 open class EditDatabaseViewModel : CreateEditDatabaseModel() {
     open fun saveDatabaseAsync(oldName: String, database: Database) =
-    viewModelScope.async (defaultDispatcher) {
-        saveDatabase(oldName, database, app)
-    }
+        viewModelScope.async(defaultDispatcher) {
+            saveDatabase(oldName, database, app)
+        }
 
     /**
      * This method saves new Database using [saveDatabaseAsync].
@@ -45,12 +45,14 @@ open class EditDatabaseViewModel : CreateEditDatabaseModel() {
             // save database
             val cleanedName = fixName(name)
             val oldDatabase = databases[databaseIndex]
-            val newDatabase = Database(cleanedName, password,
-                                       oldDatabase.salt, oldDatabase.data)
+            val newDatabase = Database(
+                cleanedName, password,
+                oldDatabase.salt, oldDatabase.data
+            )
             saveDatabaseAsync(oldDatabase.name, newDatabase).await()
 
             // if password has changed remove old cryptography key from cache
-            if(oldDatabase.password != password) {
+            if (oldDatabase.password != password) {
                 app.keyCache.remove(oldDatabase.password)
             }
 
@@ -58,8 +60,7 @@ open class EditDatabaseViewModel : CreateEditDatabaseModel() {
             databases[databaseIndex] = newDatabase
             databases.sortBy { it.name }
             finished = true
-        }
-        catch (e: Exception){
+        } catch (e: Exception) {
             // notify about error and hide loading progress bar
             errorMsg = e.toString()
             loading = false
@@ -80,11 +81,10 @@ open class EditDatabaseViewModel : CreateEditDatabaseModel() {
         val newName = fixName(name)
 
         // it's okay if name didn't change through editing
-        if(oldName == newName){
+        if (oldName == newName) {
             existsNameErr = false
             emptyNameErr = false
-        }
-        else{
+        } else {
             super.validateName(newName)
         }
     }

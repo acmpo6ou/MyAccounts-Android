@@ -65,7 +65,7 @@ class DatabaseFragmentInst {
     private val confirmCloseMsg = context.resources.getString(R.string.confirm_close)
 
     @Before
-    fun setUp(){
+    fun setUp() {
         scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
 
         val app = MyApp()
@@ -73,13 +73,13 @@ class DatabaseFragmentInst {
         scenario.onFragment { it.app = app }
     }
 
-    private fun mockNavController(fragment: DatabaseFragment){
+    private fun mockNavController(fragment: DatabaseFragment) {
         navController = mock()
         setViewNavController(fragment.requireView(), navController)
     }
 
     @Test
-    fun `exportDialog should start appropriate intent`(){
+    fun `exportDialog should start appropriate intent`() {
         val expectedAction = Intent.ACTION_CREATE_DOCUMENT
         val expectedCategory = Intent.CATEGORY_OPENABLE
         val expectedType = "application/x-tar"
@@ -92,18 +92,26 @@ class DatabaseFragmentInst {
         // check all intent properties
         val intent: Intent = shadowOf(RuntimeEnvironment.application).nextStartedActivity
 
-        assertEquals("exportDatabase: incorrect intent action!",
-                expectedAction, intent.action)
-        assertEquals("exportDatabase: incorrect intent category!",
-                expectedCategory, intent.categories.first())
-        assertEquals("exportDatabase: incorrect intent type!",
-                expectedType, intent.type)
-        assertEquals("exportDatabase: incorrect intent title!",
-                expectedTitle, intent.getStringExtra(Intent.EXTRA_TITLE))
+        assertEquals(
+            "exportDatabase: incorrect intent action!",
+            expectedAction, intent.action
+        )
+        assertEquals(
+            "exportDatabase: incorrect intent category!",
+            expectedCategory, intent.categories.first()
+        )
+        assertEquals(
+            "exportDatabase: incorrect intent type!",
+            expectedType, intent.type
+        )
+        assertEquals(
+            "exportDatabase: incorrect intent title!",
+            expectedTitle, intent.getStringExtra(Intent.EXTRA_TITLE)
+        )
     }
 
     @Test
-    fun `navigateToEdit should pass appropriate database index`(){
+    fun `navigateToEdit should pass appropriate database index`() {
         scenario.onFragment {
             mockNavController(it)
             it.navigateToEdit(0)
@@ -114,7 +122,7 @@ class DatabaseFragmentInst {
     }
 
     @Test
-    fun `navigateToOpen should pass appropriate database index`(){
+    fun `navigateToOpen should pass appropriate database index`() {
         scenario.onFragment {
             mockNavController(it)
             it.navigateToOpen(0)
@@ -125,7 +133,7 @@ class DatabaseFragmentInst {
     }
 
     @Test
-    fun `confirmDelete should create dialog with appropriate message and title`(){
+    fun `confirmDelete should create dialog with appropriate message and title`() {
         scenario.onFragment {
             it.confirmDelete(0)
         }
@@ -134,14 +142,18 @@ class DatabaseFragmentInst {
         val title = dialog.findViewById<TextView>(R.id.alertTitle)
         val message = dialog.findViewById<TextView>(android.R.id.message)
 
-        assertEquals("confirmDelete created dialog with incorrect title!",
-                warningTitle, title?.text)
-        assertEquals("confirmDelete created dialog with incorrect message!",
-                String.format(confirmDeleteMsg, "main"), message?.text)
+        assertEquals(
+            "confirmDelete created dialog with incorrect title!",
+            warningTitle, title?.text
+        )
+        assertEquals(
+            "confirmDelete created dialog with incorrect message!",
+            String.format(confirmDeleteMsg, "main"), message?.text
+        )
     }
 
     @Test
-    fun `confirmClose should create dialog with appropriate message and title`(){
+    fun `confirmClose should create dialog with appropriate message and title`() {
         scenario.onFragment {
             it.confirmClose(0)
         }
@@ -150,10 +162,14 @@ class DatabaseFragmentInst {
         val title = dialog.findViewById<TextView>(R.id.alertTitle)
         val message = dialog.findViewById<TextView>(android.R.id.message)
 
-        assertEquals("confirmClose created dialog with incorrect title!",
-                warningTitle, title?.text)
-        assertEquals("confirmClose created dialog with incorrect message!",
-                String.format(confirmCloseMsg, "main"), message?.text)
+        assertEquals(
+            "confirmClose created dialog with incorrect title!",
+            warningTitle, title?.text
+        )
+        assertEquals(
+            "confirmClose created dialog with incorrect message!",
+            String.format(confirmCloseMsg, "main"), message?.text
+        )
     }
 
     /**
@@ -161,11 +177,12 @@ class DatabaseFragmentInst {
      * how does DatabasesPresenter and DatabaseFragment are integrated.
      * @param[fragment] DatabaseFragment for which we will setup DatabasesPresenter.
      */
-    private fun setupRealPresenter(fragment: DatabaseFragment){
+    private fun setupRealPresenter(fragment: DatabaseFragment) {
         // list of databases for test
         val databases = mutableListOf(
-                Database("main"), // locked
-                Database("test", "123") /* opened*/)
+            Database("main"), // locked
+            Database("test", "123") /* opened*/
+        )
 
         val presenter = DatabasesPresenter(fragment)
         presenter.databases = databases
@@ -185,7 +202,7 @@ class DatabaseFragmentInst {
     }
 
     @Test
-    fun `when closing database lock icon should change`(){
+    fun `when closing database lock icon should change`() {
         scenario.onFragment {
             setupRealPresenter(it)
             it.presenter.closeDatabase(1)
@@ -199,7 +216,7 @@ class DatabaseFragmentInst {
     }
 
     @Test
-    fun `when deleting database it should disappear from recycler`(){
+    fun `when deleting database it should disappear from recycler`() {
         scenario.onFragment {
             setupRealPresenter(it)
             it.presenter.deleteDatabase(0)
