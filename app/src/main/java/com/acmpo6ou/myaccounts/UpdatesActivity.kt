@@ -79,7 +79,9 @@ class UpdatesActivity : AppCompatActivity() {
 
         // get update version and changelog and set them on appropriate text views
         val extras = intent.extras ?: return
-        b.updateVersion.text = extras.getString("version")
+        updateVersion = extras.getString("version")!!
+
+        b.updateVersion.text = updateVersion
         viewModel.getChangelog(resources.getString(R.string.failed_to_load_changelog))
     }
 }
