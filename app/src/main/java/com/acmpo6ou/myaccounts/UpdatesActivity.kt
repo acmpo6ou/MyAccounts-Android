@@ -20,6 +20,10 @@
 package com.acmpo6ou.myaccounts
 
 import android.app.DownloadManager
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Environment
 import android.view.Gravity
@@ -43,6 +47,13 @@ class UpdatesActivity : AppCompatActivity() {
         b.changelogText.gravity = Gravity.START
     }
 
+    // install update when it is downloaded
+    val onComplete = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            viewModel.installUpdate(context)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = UpdatesActivityBinding.inflate(layoutInflater)
@@ -64,6 +75,7 @@ class UpdatesActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(UpdatesViewModel::class.java)
         viewModel.changelog.observe(this, changelogObserver)
+        registerReceiver(onComplete, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
 
         // get update version and changelog and set them on appropriate text views
         val extras = intent.extras ?: return

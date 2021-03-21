@@ -73,7 +73,7 @@ open class UpdatesViewModel : ViewModel() {
     /**
      * Launches intent to install the update apk file.
      */
-    fun installUpdate(context: Context) {
+    open fun installUpdate(context: Context) {
         val uri = FileProvider.getUriForFile(
             context, context.applicationContext.packageName + ".provider",
             File(DOWNLOAD_DIR_FULL + apkName)
