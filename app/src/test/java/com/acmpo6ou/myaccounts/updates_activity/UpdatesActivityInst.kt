@@ -32,7 +32,7 @@ import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.Assert.assertEquals
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -79,6 +79,18 @@ class UpdatesActivityInst {
                 it.updateVersion, downloadManager,
                 Environment.DIRECTORY_DOWNLOADS
             )
+        }
+    }
+
+    @Test
+    fun `downloadEnabledObserver should disable downloadUpdate button`() {
+        scenario.onActivity {
+            // at first downloadUpdate should be enabled
+            assertTrue(it.b.downloadUpdate.isEnabled)
+
+            // then – disabled
+            it.viewModel.downloadEnabled.value = false
+            assertFalse(it.b.downloadUpdate.isEnabled)
         }
     }
 }

@@ -48,6 +48,10 @@ class UpdatesActivity : AppCompatActivity(), NetUtils {
         b.changelogText.text = fromHtml(it, HtmlCompat.FROM_HTML_MODE_COMPACT)
     }
 
+    private val downloadEnabledObserver = Observer<Boolean> {
+        b.downloadUpdate.isEnabled = it
+    }
+
     // install update when it is downloaded
     val onComplete = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -81,9 +85,11 @@ class UpdatesActivity : AppCompatActivity(), NetUtils {
             )
         }
 
-        viewModel = ViewModelProvider(this).get(UpdatesViewModel::class.java)
-        viewModel.changelog.observe(this, changelogObserver)
         registerReceiver(onComplete, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
+        viewModel = ViewModelProvider(this).get(UpdatesViewModel::class.java)
+
+        viewModel.changelog.observe(this, changelogObserver)
+        viewModel.downloadEnabled.observe(this, downloadEnabledObserver)
 
         // get update version and changelog and set them on appropriate text views
         val extras = intent.extras ?: return
