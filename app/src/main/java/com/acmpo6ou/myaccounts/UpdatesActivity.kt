@@ -26,20 +26,23 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Environment
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
 import androidx.core.text.HtmlCompat.fromHtml
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.acmpo6ou.myaccounts.core.NetUtils
 import com.acmpo6ou.myaccounts.databinding.UpdatesActivityBinding
 import com.acmpo6ou.myaccounts.ui.UpdatesViewModel
 
-class UpdatesActivity : AppCompatActivity() {
+class UpdatesActivity : AppCompatActivity(), NetUtils {
     private var binding: UpdatesActivityBinding? = null
     val b: UpdatesActivityBinding get() = binding!!
 
     lateinit var viewModel: UpdatesViewModel
     lateinit var updateVersion: String
+    override lateinit var myContext: Context
 
     private val changelogObserver = Observer<String> {
         b.changelogText.text = fromHtml(it, HtmlCompat.FROM_HTML_MODE_COMPACT)
@@ -56,6 +59,7 @@ class UpdatesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = UpdatesActivityBinding.inflate(layoutInflater)
         setContentView(b.root)
+        myContext = this
 
         // go back when clicking the `Later` button
         b.updateLater.setOnClickListener {
@@ -63,6 +67,12 @@ class UpdatesActivity : AppCompatActivity() {
         }
 
         b.downloadUpdate.setOnClickListener {
+            if (!isInternetAvailable()) {
+                Toast.makeText(this, R.string.no_internet_connection, Toast.LENGTH_LONG)
+                    .show()
+                return@setOnClickListener
+            }
+
             val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
             viewModel.removeOldApk()
             viewModel.downloadUpdate(

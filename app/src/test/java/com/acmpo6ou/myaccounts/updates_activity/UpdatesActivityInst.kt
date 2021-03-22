@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.updates_activity
 
 import android.app.DownloadManager
+import android.content.Context
 import android.os.Build
 import android.os.Environment
 import androidx.appcompat.app.AppCompatActivity
@@ -44,7 +45,7 @@ import org.robolectric.annotation.LooperMode
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class UpdatesActivityInst {
     lateinit var scenario: ActivityScenario<UpdatesActivity>
-    val context = InstrumentationRegistry.getInstrumentation().targetContext
+    val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     private val loadingText = context.resources.getString(R.string.loading)
 
     @Before
