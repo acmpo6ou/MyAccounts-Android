@@ -26,7 +26,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Environment
-import android.view.Gravity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
 import androidx.core.text.HtmlCompat.fromHtml
@@ -44,7 +43,6 @@ class UpdatesActivity : AppCompatActivity() {
 
     private val changelogObserver = Observer<String> {
         b.changelogText.text = fromHtml(it, HtmlCompat.FROM_HTML_MODE_COMPACT)
-        b.changelogText.gravity = Gravity.START
     }
 
     // install update when it is downloaded
