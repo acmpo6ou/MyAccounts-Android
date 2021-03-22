@@ -24,8 +24,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Rect
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -107,27 +105,6 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             }
         }
-    }
-
-    /**
-     * Checks whether internet is available.
-     * Note: this method is completely copied from StackOverflow, please see
-     * https://stackoverflow.com/a/53532456/11004423 for more details.
-     */
-    override fun isInternetAvailable(): Boolean {
-        var result = false
-        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkCapabilities = cm.activeNetwork ?: return false
-        val actNw = cm.getNetworkCapabilities(networkCapabilities) ?: return false
-
-        result = when {
-            actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-            actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-            actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-            else -> false
-        }
-
-        return result
     }
 
     /**

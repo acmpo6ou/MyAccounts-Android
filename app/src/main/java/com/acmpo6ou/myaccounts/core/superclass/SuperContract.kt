@@ -19,22 +19,20 @@
 
 package com.acmpo6ou.myaccounts.core.superclass
 
-import android.content.Context
 import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.core.NetUtils
 import com.acmpo6ou.myaccounts.core.SettingsUtils
 import com.google.android.material.navigation.NavigationView
 
 interface SuperActivityInter :
     NavigationView.OnNavigationItemSelectedListener,
-    SettingsUtils {
+    SettingsUtils,
+    NetUtils {
     val mainFragment: ListFragmentInter
     val ACCOUNTS_DIR: String
-    val myContext: Context
     var app: MyApp
 
     fun startUpdatesActivity(version: String)
-    fun isInternetAvailable(): Boolean
-
     fun noUpdates(isAutoCheck: Boolean = false)
     fun updatesCheckFailed(isAutoCheck: Boolean = false)
     fun noInternetConnection(isAutoCheck: Boolean = false)
