@@ -41,14 +41,14 @@ class LicenseTab : Fragment() {
         val resources = requireActivity().resources
 
         // load license from `raw/license`
-        val changelog =
+        val license =
             resources.openRawResource(
                 resources.getIdentifier(
                     "license", "raw",
                     requireActivity().packageName
                 )
             )
-        changelog.bufferedReader().use {
+        license.bufferedReader().use {
             licenseLabel.text = it.readText()
         }
     }
