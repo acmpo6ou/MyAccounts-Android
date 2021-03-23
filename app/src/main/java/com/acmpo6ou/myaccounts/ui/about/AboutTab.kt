@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.ui.about
 
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,6 +41,7 @@ class AboutTab : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val aboutLabel = view.findViewById<TextView>(R.id.aboutText)
+        aboutLabel.movementMethod = LinkMovementMethod.getInstance()
         val resources = requireActivity().resources
 
         // load changelog from `raw/about`
