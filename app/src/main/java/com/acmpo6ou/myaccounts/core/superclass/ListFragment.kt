@@ -80,6 +80,18 @@ abstract class ListFragment : Fragment(), ListFragmentInter {
 
         b.itemsList.layoutManager = LinearLayoutManager(myContext)
         b.itemsList.adapter = adapter
+
+        // listener to hide/display FAB when scrolling, so that the FAB doesn't prevent from
+        // accessing items of the list
+        b.itemsList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(v: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 0) {
+                    b.addItem.hide()
+                } else if (dy < 0) {
+                    b.addItem.show()
+                }
+            }
+        })
     }
 
     /**
