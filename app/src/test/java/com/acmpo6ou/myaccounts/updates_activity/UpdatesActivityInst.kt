@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.updates_activity
 
 import android.app.DownloadManager
+import android.content.Context
 import android.os.Build
 import android.os.Environment
 import androidx.appcompat.app.AppCompatActivity
@@ -31,7 +32,7 @@ import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.Assert.assertEquals
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -44,7 +45,7 @@ import org.robolectric.annotation.LooperMode
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class UpdatesActivityInst {
     lateinit var scenario: ActivityScenario<UpdatesActivity>
-    val context = InstrumentationRegistry.getInstrumentation().targetContext
+    val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     private val loadingText = context.resources.getString(R.string.loading)
 
     @Before
@@ -78,6 +79,18 @@ class UpdatesActivityInst {
                 it.updateVersion, downloadManager,
                 Environment.DIRECTORY_DOWNLOADS
             )
+        }
+    }
+
+    @Test
+    fun `downloadEnabledObserver should disable downloadUpdate button`() {
+        scenario.onActivity {
+            // at first downloadUpdate should be enabled
+            assertTrue(it.b.downloadUpdate.isEnabled)
+
+            // then – disabled
+            it.viewModel.downloadEnabled.value = false
+            assertFalse(it.b.downloadUpdate.isEnabled)
         }
     }
 }

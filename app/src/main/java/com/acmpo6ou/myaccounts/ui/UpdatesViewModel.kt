@@ -38,7 +38,9 @@ import java.net.URL
 open class UpdatesViewModel : ViewModel() {
     var DOWNLOAD_DIR_FULL = "/storage/emulated/0/Download/"
     private val apkName = "myaccounts-release.apk"
+
     val changelog = MutableLiveData<String>()
+    val downloadEnabled = MutableLiveData(true)
 
     /**
      * Removes old myaccounts-release.apk file from Download directory.
@@ -68,6 +70,9 @@ open class UpdatesViewModel : ViewModel() {
                 .setDescription("Downloading update.")
                 .setDestinationInExternalPublicDir(downloadDir, apkName)
         )
+
+        // disable `Download` button, to avoid queuing more then one download
+        downloadEnabled.value = false
     }
 
     /**

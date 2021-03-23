@@ -45,18 +45,7 @@
     <string name="copyright" translatable="false">© Bohdan Kolvakh</string>
     <string name="version" translatable="false">Version: %1$s</string>
     <string name="license" translatable="false">License</string>
-    <string name="credits" translatable="false">Credits</string>
-    <string name="about_text" translatable="false">
-        <p><b>MyAccounts </b>— is simple account database manager.</p><br />
-        <p>It is an android version of <a href="https://github.com/Acmpo6ou/PyQtAccounts">PyQtAccounts.</a></p><br />
-        <p>You can easily manage your accounts and store them safely in encrypted databases.</p><br />
-        <p>The interface of MyAccounts is common and easy to use.</p><br />
-        <p>MyAccounts is completely free and open source project (see our license).</p><br />
-        <p>Also here you can see MyAccounts source code
-        <a href="https://github.com/Acmpo6ou/MyAccounts">GitHub</a></p><br />
-        <p>According to our privacy policy you must know that we do not saving nor do we sharing
-        any of your private data such as your account passwords or databases.</p>
-    </string>
+
     <!-- Preference Titles -->
     <string name="language">Language</string>
     <string name="block_screen_capture">Block screen capture</string>

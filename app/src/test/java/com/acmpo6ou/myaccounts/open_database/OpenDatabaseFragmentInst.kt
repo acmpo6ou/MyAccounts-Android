@@ -84,6 +84,17 @@ class OpenDatabaseFragmentInst {
     }
 
     @Test
+    fun `error tip should be hidden when password changes`() {
+        scenario.onFragment {
+            it.viewModel._incorrectPassword.value = true
+            assertNotNull(it.b.parentPassword.error)
+
+            it.b.databasePassword.setText(faker.str())
+            assertNull(it.b.parentPassword.error)
+        }
+    }
+
+    @Test
     fun `should display or hide progress bar depending on 'loading' of view model`() {
         scenario.onFragment {
             // when loading is true progress bar should be displayed and button - disabled
