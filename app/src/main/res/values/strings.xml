@@ -45,7 +45,6 @@
     <string name="copyright" translatable="false">© Bohdan Kolvakh</string>
     <string name="version" translatable="false">Version: %1$s</string>
     <string name="license" translatable="false">License</string>
-    <string name="credits" translatable="false">Credits</string>
 
     <!-- Preference Titles -->
     <string name="language">Language</string>

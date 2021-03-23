@@ -72,9 +72,8 @@ class AboutFragment : Fragment() {
         TabLayoutMediator(tabLayout, pager) { tab: TabLayout.Tab, i: Int ->
             // set tab titles
             when (i) {
-                0 -> tab.text = "About" // using hardcoded string because it shouldn't be translated
-                1 -> tab.text = mainActivity.resources.getString(R.string.license)
-                else -> tab.text = mainActivity.resources.getString(R.string.credits)
+                0 -> tab.text = mainActivity.resources.getString(R.string.about)
+                else -> tab.text = mainActivity.resources.getString(R.string.license)
             }
         }.attach()
     }
