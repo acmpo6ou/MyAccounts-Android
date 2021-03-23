@@ -23,6 +23,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.text.HtmlCompat
+import androidx.core.text.HtmlCompat.fromHtml
 import androidx.fragment.app.Fragment
 import com.acmpo6ou.myaccounts.R
 
@@ -33,5 +36,22 @@ class AboutTab : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.about_tab, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val aboutLabel = view.findViewById<TextView>(R.id.aboutText)
+        val resources = requireActivity().resources
+
+        // load changelog from `raw/about`
+        val about =
+            resources.openRawResource(
+                resources.getIdentifier(
+                    "about", "raw",
+                    requireActivity().packageName
+                )
+            )
+        about.bufferedReader().use {
+            aboutLabel.text = fromHtml(it.readText(), HtmlCompat.FROM_HTML_MODE_COMPACT)
+        }
     }
 }
