@@ -21,6 +21,8 @@ package com.acmpo6ou.myaccounts.ui.database
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -146,6 +148,17 @@ class OpenDatabaseFragment : Fragment(), ErrorFragment {
             }
             false
         }
+
+        // listener to hide the password error when password changes, for user to be able
+        // to hide/display the password using eye button
+        b.databasePassword.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                b.parentPassword.error = null
+            }
+        })
     }
 
     /**
