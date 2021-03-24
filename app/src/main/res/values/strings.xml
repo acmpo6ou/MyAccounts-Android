@@ -108,7 +108,7 @@
     <string name="confirm_exit">Any unsaved changes will be lost!</string>
     <string name="go_back_title">Are you sure you want to go back?</string>
     <string name="exit_tip">Press back again to exit.</string>
-    <string name="update_notice">"Warning!\nApp will restart after update and any unsafe changes will be lost!"</string>
+    <string name="update_notice">"Warning!\nApp will restart after update and any unsaved changes will be lost!"</string>
     <string name="loading">Loading…</string>
     <string name="updates_check_failed">Failed to check for updates.</string>
     <string name="no_internet_connection">No internet connection.</string>
