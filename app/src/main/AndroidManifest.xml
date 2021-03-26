@@ -38,7 +38,7 @@
         android:theme="@style/Theme.MyAccounts">
 
         <service
-            android:name=".MyAutofillService"
+            android:name=".autofill.MyAutofillService"
             android:label="MyAccounts Autofill Service"
             android:permission="android.permission.BIND_AUTOFILL_SERVICE">
             <intent-filter>

@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts
+package com.acmpo6ou.myaccounts.autofill
 
 import android.app.assist.AssistStructure
 import android.os.CancellationSignal
