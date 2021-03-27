@@ -134,6 +134,7 @@ class StructureParser {
         listOf(emailValues, usernameValues, passwordValues).forEach {
             // we will autofill only first fields of each type
             if (it.isNotEmpty()) values.add(it.first())
+            it.clear() // we have to clear the list for next search
         }
         return values
     }
