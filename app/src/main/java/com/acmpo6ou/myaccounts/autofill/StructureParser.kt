@@ -21,14 +21,51 @@ package com.acmpo6ou.myaccounts.autofill
 
 import android.app.assist.AssistStructure
 import android.view.View
+import android.view.autofill.AutofillId
+import com.acmpo6ou.myaccounts.database.Account
+
+abstract class AccountValue(val id: AutofillId) {
+    lateinit var text: String
+    lateinit var presentationText: String
+
+    /**
+     * Initializes [text] and [presentationText] properties using given [account].
+     *
+     * Because instances of AccountValue class will be created when traversing the AssistStructure
+     * and at that moment [text] and [presentationText] properties can't be initialized because
+     * we don't have the account that contains needed email, username or password.
+     */
+    abstract fun setTextFrom(account: Account)
+}
+
+class EmailValue(id: AutofillId) : AccountValue(id) {
+    override fun setTextFrom(account: Account) {
+        text = account.email
+        presentationText = "${account.accountName} email"
+    }
+}
+
+class UsernameValue(id: AutofillId) : AccountValue(id) {
+    override fun setTextFrom(account: Account) {
+        text = account.username
+        presentationText = "${account.accountName} username"
+    }
+}
+
+class PasswordValue(id: AutofillId) : AccountValue(id) {
+    override fun setTextFrom(account: Account) {
+        text = account.password
+        presentationText = "${account.accountName} password"
+    }
+}
 
 /**
  * Used to find email, username and password fields that need autofill in the given AssistStructure.
  */
 class StructureParser {
-    private val emailFields = mutableListOf<AssistStructure.ViewNode>()
-    private val usernameFields = mutableListOf<AssistStructure.ViewNode>()
-    private val passwordFields = mutableListOf<AssistStructure.ViewNode>()
+    private val emailValues = mutableListOf<EmailValue>()
+    private val usernameValues = mutableListOf<UsernameValue>()
+    private val passwordValues = mutableListOf<PasswordValue>()
 
     /**
      * Used to traverse nodes of AssistStructure searching for fields that require autofill.
@@ -41,20 +78,26 @@ class StructureParser {
             if (viewNode.autofillHints?.isNotEmpty() == true) {
                 val autofillHints = viewNode.autofillHints!!
                 if (View.AUTOFILL_HINT_EMAIL_ADDRESS in autofillHints) {
-                    emailFields.add(viewNode)
+                    val value = EmailValue(viewNode.autofillId!!)
+                    emailValues.add(value)
                 } else if (View.AUTOFILL_HINT_USERNAME in autofillHints) {
-                    usernameFields.add(viewNode)
+                    val value = UsernameValue(viewNode.autofillId!!)
+                    usernameValues.add(value)
                 } else if (View.AUTOFILL_HINT_PASSWORD in autofillHints) {
-                    passwordFields.add(viewNode)
+                    val value = PasswordValue(viewNode.autofillId!!)
+                    passwordValues.add(value)
                 }
             } else {
                 val id = viewNode.idEntry?.toLowerCase() ?: ""
                 if ("email" in id) {
-                    emailFields.add(viewNode)
+                    val value = EmailValue(viewNode.autofillId!!)
+                    emailValues.add(value)
                 } else if ("username" in id) {
-                    usernameFields.add(viewNode)
+                    val value = UsernameValue(viewNode.autofillId!!)
+                    usernameValues.add(value)
                 } else if ("password" in id) {
-                    passwordFields.add(viewNode)
+                    val value = PasswordValue(viewNode.autofillId!!)
+                    passwordValues.add(value)
                 }
             }
         }
@@ -74,8 +117,9 @@ class StructureParser {
      *
      * Note: this method is completely copied from android documentation,
      * see [https://developer.android.com/guide/topics/text/autofill-services] for more details.
+     * @return list of account values that need to be autofilled.
      */
-    fun traverseStructure(structure: AssistStructure) {
+    fun traverseStructure(structure: AssistStructure): MutableList<AccountValue> {
         val windowNodes: List<AssistStructure.WindowNode> =
             structure.run {
                 (0 until windowNodeCount).map { getWindowNodeAt(it) }
@@ -85,5 +129,12 @@ class StructureParser {
             val viewNode: AssistStructure.ViewNode? = windowNode.rootViewNode
             traverseNode(viewNode)
         }
+
+        val values = mutableListOf<AccountValue>()
+        listOf(emailValues, usernameValues, passwordValues).forEach {
+            // we will autofill only first fields of each type
+            if (it.isNotEmpty()) values.add(it.first())
+        }
+        return values
     }
 }
