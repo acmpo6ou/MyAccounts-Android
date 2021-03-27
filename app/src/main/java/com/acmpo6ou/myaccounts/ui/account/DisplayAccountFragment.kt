@@ -20,9 +20,6 @@
 package com.acmpo6ou.myaccounts.ui.account
 
 import android.annotation.SuppressLint
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent.ACTION_DOWN
@@ -36,7 +33,6 @@ import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.database.Account
 import com.acmpo6ou.myaccounts.databinding.FragmentDisplayAccountBinding
-import com.google.android.material.snackbar.Snackbar
 
 class DisplayAccountFragment : Fragment() {
     private var binding: FragmentDisplayAccountBinding? = null
@@ -59,33 +55,12 @@ class DisplayAccountFragment : Fragment() {
     }
 
     /**
-     * Displays snackbar saying that password is copied.
-     */
-    private fun successCopy() {
-        Snackbar.make(
-            b.displayAccountLayout,
-            R.string.copied,
-            Snackbar.LENGTH_LONG
-        )
-            .setAction("HIDE") {}
-            .show()
-    }
-
-    /**
      * Initializes display account form with data provided from [account].
      */
     @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
     fun setAccount(account: Account) {
         // set account name as app bar title
         (activity as? AppCompatActivity)?.supportActionBar?.title = account.accountName
-
-        // copy password when `Copy` FAB is pressed
-        b.copyPassword.setOnClickListener {
-            val clipboard = context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("password", account.password)
-            clipboard.setPrimaryClip(clip)
-            successCopy()
-        }
 
         // set text on all of the form account labels
         val usernameStr = requireContext().resources.getString(R.string.username_)

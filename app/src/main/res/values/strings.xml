@@ -113,4 +113,5 @@
     <string name="updates_check_failed">Failed to check for updates.</string>
     <string name="no_internet_connection">No internet connection.</string>
     <string name="failed_to_load_changelog">Failed to load changelog</string>
+    <string name="attached_files_label">Attached files:</string>
 </resources>

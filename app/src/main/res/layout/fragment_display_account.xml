@@ -27,115 +27,143 @@
     android:layout_margin="16dp"
     tools:context=".ui.account.DisplayAccountFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <TextView
-            android:id="@+id/accountUsername"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:enabled="true"
-            android:focusable="true"
-            android:fontFamily="@font/ubuntu_mono"
-            android:longClickable="true"
-            android:text="@string/username_"
-            android:textAlignment="textStart"
-            android:textIsSelectable="true"
-            android:textSize="26sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/accountEmail"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:enabled="true"
-            android:focusable="true"
-            android:fontFamily="@font/ubuntu_mono"
-            android:longClickable="true"
-            android:text="@string/e_mail_"
-            android:textAlignment="textStart"
-            android:textIsSelectable="true"
-            android:textSize="26sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/accountUsername" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/accountPassword"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:enabled="true"
-            android:focusable="true"
-            android:fontFamily="@font/ubuntu_mono"
-            android:longClickable="true"
-            android:text="@string/password_"
-            android:textAlignment="textStart"
-            android:textIsSelectable="true"
-            android:textSize="26sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/accountEmail" />
+                <TextView
+                    android:id="@+id/accountUsername"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:enabled="true"
+                    android:focusable="true"
+                    android:fontFamily="@font/ubuntu_mono"
+                    android:longClickable="true"
+                    android:text="@string/username_"
+                    android:textAlignment="textStart"
+                    android:textIsSelectable="true"
+                    android:textSize="26sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:enabled="true"
-            android:focusable="true"
-            android:fontFamily="@font/ubuntu_mono"
-            android:longClickable="true"
-            android:text="@string/date_of_birth_"
-            android:textAlignment="textStart"
-            android:textIsSelectable="true"
-            android:textSize="26sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/accountPassword" />
+                <TextView
+                    android:id="@+id/accountEmail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:enabled="true"
+                    android:focusable="true"
+                    android:fontFamily="@font/ubuntu_mono"
+                    android:longClickable="true"
+                    android:text="@string/e_mail_"
+                    android:textAlignment="textStart"
+                    android:textIsSelectable="true"
+                    android:textSize="26sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/accountUsername" />
 
-        <TextView
-            android:id="@+id/birthDate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:enabled="true"
-            android:focusable="true"
-            android:fontFamily="@font/ubuntu_mono"
-            android:longClickable="true"
-            android:textAlignment="textEnd"
-            android:textIsSelectable="true"
-            android:textSize="26sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/accountPassword" />
+                <TextView
+                    android:id="@+id/accountPassword"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:enabled="true"
+                    android:focusable="true"
+                    android:fontFamily="@font/ubuntu_mono"
+                    android:longClickable="true"
+                    android:text="@string/password_"
+                    android:textAlignment="textStart"
+                    android:textIsSelectable="true"
+                    android:textSize="26sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/accountEmail" />
 
-        <TextView
-            android:id="@+id/accountComment"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:enabled="true"
-            android:focusable="true"
-            android:fontFamily="@font/ubuntu_mono"
-            android:longClickable="true"
-            android:text="@string/comment_"
-            android:textAlignment="textStart"
-            android:textIsSelectable="true"
-            android:textSize="26sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/birthDate" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:enabled="true"
+                    android:focusable="true"
+                    android:fontFamily="@font/ubuntu_mono"
+                    android:longClickable="true"
+                    android:text="@string/date_of_birth_"
+                    android:textAlignment="textStart"
+                    android:textIsSelectable="true"
+                    android:textSize="26sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/accountPassword" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/birthDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:enabled="true"
+                    android:focusable="true"
+                    android:fontFamily="@font/ubuntu_mono"
+                    android:longClickable="true"
+                    android:textAlignment="textEnd"
+                    android:textIsSelectable="true"
+                    android:textSize="26sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/accountPassword" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/copyPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/green"
-        android:clickable="true"
-        android:focusable="true"
-        android:src="@drawable/ic_copy"
-        app:tint="@color/white" />
+                <TextView
+                    android:id="@+id/accountComment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:enabled="true"
+                    android:focusable="true"
+                    android:fontFamily="@font/ubuntu_mono"
+                    android:longClickable="true"
+                    android:text="@string/comment_"
+                    android:textAlignment="textStart"
+                    android:textIsSelectable="true"
+                    android:textSize="26sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/birthDate" />
+
+                <TextView
+                    android:id="@+id/attachedFilesLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:enabled="true"
+                    android:focusable="true"
+                    android:fontFamily="@font/ubuntu_mono"
+                    android:longClickable="true"
+                    android:text="@string/attached_files_label"
+                    android:textAlignment="textStart"
+                    android:textIsSelectable="true"
+                    android:textSize="26sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/accountComment" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/attachedFilesLabel" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

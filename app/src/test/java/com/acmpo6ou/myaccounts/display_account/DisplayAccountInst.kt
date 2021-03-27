@@ -19,27 +19,21 @@
 
 package com.acmpo6ou.myaccounts.display_account
 
-import android.content.ClipboardManager
 import android.content.Context
-import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Build
-import android.os.Looper
 import android.os.SystemClock
 import android.view.MotionEvent
-import android.widget.TextView
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account
-import com.acmpo6ou.myaccounts.findSnackbarTextView
 import com.acmpo6ou.myaccounts.ui.account.DisplayAccountFragment
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.Shadows
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
@@ -70,32 +64,6 @@ class DisplayAccountInst {
             assertEquals("$passwordStr ${"•".repeat(16)}", it.b.accountPassword.text.toString())
             assertEquals(account.date, it.b.birthDate.text.toString())
             assertEquals("$commentStr\n${account.comment}", it.b.accountComment.text.toString())
-        }
-    }
-
-    @Test
-    fun `press on copy FAB should copy password`() {
-        scenario.onFragment {
-            it.setAccount(account)
-            it.b.copyPassword.performClick()
-
-            val clipboard = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-            assertEquals(account.password, clipboard.primaryClip!!.getItemAt(0).text)
-        }
-    }
-
-    @Test
-    fun `press on copy FAB should display snackbar`() {
-        scenario.onFragment {
-            val copyMessage = context.resources.getString(R.string.copied)
-            it.setAccount(account)
-            it.b.copyPassword.performClick()
-
-            // this is because of some Robolectric main looper problems
-            Shadows.shadowOf(Looper.getMainLooper()).idle()
-
-            val snackbar: TextView? = it.view?.findSnackbarTextView()
-            assertEquals(copyMessage, snackbar?.text)
         }
     }
 
