@@ -32,7 +32,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.database.DatabaseFragmentInter
-import com.acmpo6ou.myaccounts.database.DatabasesPresenterInter
 
 /**
  * [RecyclerView.Adapter] that can display a [Database].
@@ -40,7 +39,7 @@ import com.acmpo6ou.myaccounts.database.DatabasesPresenterInter
 class DatabasesAdapter(val view: DatabaseFragmentInter) :
     RecyclerView.Adapter<DatabasesAdapter.ViewHolder>() {
 
-    val presenter: DatabasesPresenterInter get() = view.presenter
+    val presenter get() = view.presenter
     private val databases: List<Database> get() = presenter.databases
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
