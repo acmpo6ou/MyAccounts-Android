@@ -31,12 +31,22 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.account.DisplayAccountFragmentInter
+import com.acmpo6ou.myaccounts.account.DisplayAccountPresenterInter
 import com.acmpo6ou.myaccounts.database.Account
 import com.acmpo6ou.myaccounts.databinding.FragmentDisplayAccountBinding
 
-class DisplayAccountFragment : Fragment() {
+class DisplayAccountFragment : Fragment(), DisplayAccountFragmentInter {
     private var binding: FragmentDisplayAccountBinding? = null
     val b: FragmentDisplayAccountBinding get() = binding!!
+
+    override lateinit var presenter: DisplayAccountPresenterInter
+    lateinit var adapter: DisplayAccountAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        adapter = DisplayAccountAdapter(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
