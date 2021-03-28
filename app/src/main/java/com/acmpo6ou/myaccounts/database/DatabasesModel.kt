@@ -21,18 +21,20 @@ package com.acmpo6ou.myaccounts.database
 
 import android.content.ContentResolver
 import android.net.Uri
-import java.io.BufferedOutputStream
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.kamranzafar.jtar.TarEntry
 import org.kamranzafar.jtar.TarOutputStream
+import java.io.BufferedOutputStream
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
 
 /**
- * Represents account, it stores all account data such
- * as name, password, email, etc.
+ * Represents account, it stores all account data such as name, password, email, etc.
+ *
+ * Note: the [copyEmail] property is not used by MyAccounts but it's used by PyQtAccounts,
+ * so we have to list it here.
  */
 @Serializable
 data class Account(
@@ -44,6 +46,10 @@ data class Account(
     val password: String,
     val date: String,
     val comment: String,
+    @SerialName("copy_email")
+    val copyEmail: Boolean = true,
+    @SerialName("attached_files")
+    val attachedFiles: MutableMap<String, String> = mutableMapOf()
 )
 
 typealias DbMap = MutableMap<String, Account>
