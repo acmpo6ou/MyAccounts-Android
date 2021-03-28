@@ -74,7 +74,7 @@ class DisplayAccountFragment : Fragment() {
         b.birthDate.text = account.date
         b.accountComment.text = "$commentStr\n${account.comment}"
 
-        // display password only when password label is held, otherwise hide the password
+        // display password only when password label is held, otherwise hide it
         b.accountPassword.setOnTouchListener { v, event ->
             val view = v as TextView
             if (event.action == ACTION_DOWN) {
