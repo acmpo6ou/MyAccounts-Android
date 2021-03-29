@@ -52,8 +52,8 @@ open class ModelTest : DatabaseUtils {
     val locationUri: Uri = mock()
     val destinationUri: Uri = mock()
 
-    private val location = "sampledata/tar/main.tar"
-    private val destination = "$accountsDir/main.tar"
+    val location = "sampledata/tar/main.tar"
+    open val destination = "$accountsDir/main.tar"
 
     /**
      * This method creates empty src folder in a fake file system, it ensures that
