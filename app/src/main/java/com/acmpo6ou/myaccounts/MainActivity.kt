@@ -96,13 +96,8 @@ class MainActivity : SuperActivity(), MainActivityInter {
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
         super.onActivityResult(requestCode, resultCode, resultData)
-        // do nothing if activity was canceled
         if (resultCode != Activity.RESULT_OK) return
-
-        if (requestCode == IMPORT_RC) {
-            val locationUri = resultData?.data!!
-            presenter.checkTarFile(locationUri)
-        }
+        if (requestCode == IMPORT_RC) resultData?.data?.let { presenter.checkTarFile(it) }
     }
 
     /**
