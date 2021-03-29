@@ -42,6 +42,9 @@ class DisplayAccountAdapter(val view: DisplayAccountFragmentInter) :
         }
 
     override fun onBindViewHolder(holder: DisplayAccountAdapter.ViewHolder, position: Int) {
+        holder.fileName.text = attachedFiles[position]
+        holder.attachImage.setImageResource(R.drawable.ic_attached_file)
+        holder.menu.visibility = View.GONE // we don't need the dots menu
     }
 
     override fun getItemCount(): Int = attachedFiles.size
@@ -55,10 +58,8 @@ class DisplayAccountAdapter(val view: DisplayAccountFragmentInter) :
         var menu: TextView = view.findViewById(R.id.dots_menu)
 
         init {
-            attachImage.setImageResource(R.drawable.ic_attached_file)
-            menu.visibility = View.GONE // we don't need the dots menu
-
             view.setOnClickListener {
+                presenter.fileSelected(fileName.text.toString())
             }
         }
     }
