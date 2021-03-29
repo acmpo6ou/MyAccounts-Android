@@ -45,7 +45,7 @@ import org.robolectric.annotation.LooperMode
 class DisplayAccountAdapterInst {
     lateinit var scenario: FragmentScenario<DisplayAccountFragment>
     lateinit var presenter: DisplayAccountPresenterInter
-    lateinit var fileName: String
+    private val fileName = Faker().str()
 
     var recycler: RecyclerView? = null
     var itemLayout: View? = null
@@ -54,14 +54,14 @@ class DisplayAccountAdapterInst {
     fun setUp() {
         scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
 
-        fileName = Faker().str()
         presenter = mock {
             on { attachedFilesList } doReturn listOf(fileName)
         }
 
         scenario.onFragment {
             it.presenter = presenter
-            recycler = it.view?.findViewById(R.id.itemsList)
+            it.adapter.notifyDataSetChanged()
+            recycler = it.view?.findViewById(R.id.attachedFilesList)
         }
 
         // measure and lay recycler out as is needed so we can obtain its items

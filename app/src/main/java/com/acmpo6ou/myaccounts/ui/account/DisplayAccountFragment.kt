@@ -29,9 +29,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account.DisplayAccountFragmentInter
+import com.acmpo6ou.myaccounts.account.DisplayAccountPresenter
 import com.acmpo6ou.myaccounts.account.DisplayAccountPresenterInter
 import com.acmpo6ou.myaccounts.database.Account
 import com.acmpo6ou.myaccounts.databinding.FragmentDisplayAccountBinding
@@ -46,6 +48,7 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentInter {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         adapter = DisplayAccountAdapter(this)
+        presenter = DisplayAccountPresenter()
     }
 
     override fun onCreateView(
@@ -62,6 +65,9 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentInter {
             val accountsActivity = activity as AccountsActivity
             setAccount(accountsActivity.database.data[it]!!)
         }
+
+        b.attachedFilesList.layoutManager = LinearLayoutManager(context)
+        b.attachedFilesList.adapter = adapter
     }
 
     /**
