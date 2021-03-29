@@ -19,12 +19,16 @@
 
 package com.acmpo6ou.myaccounts.account
 
+import android.net.Uri
+
 interface DisplayAccountFragmentInter {
     val presenter: DisplayAccountPresenterInter
 }
 
 interface DisplayAccountPresenterInter {
     val attachedFilesList: List<String>
+
     fun fileSelected(fileName: String)
+    fun saveFile(destinationUri: Uri)
 }
 interface DisplayAccountModelInter

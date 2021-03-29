@@ -19,10 +19,16 @@
 
 package com.acmpo6ou.myaccounts.account
 
+import android.net.Uri
+
 class DisplayAccountPresenter : DisplayAccountPresenterInter {
     override val attachedFilesList: List<String> = listOf()
 
     override fun fileSelected(fileName: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun saveFile(destinationUri: Uri) {
         TODO("Not yet implemented")
     }
 }

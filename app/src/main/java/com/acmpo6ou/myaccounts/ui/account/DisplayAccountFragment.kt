@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.ui.account
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -117,5 +118,11 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentInter {
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.putExtra(Intent.EXTRA_TITLE, fileName)
         startActivityForResult(intent, SAVE_FILE_RC)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
+        super.onActivityResult(requestCode, resultCode, resultData)
+        if (resultCode != Activity.RESULT_OK) return
+        if (requestCode == SAVE_FILE_RC) resultData?.data?.let { presenter.saveFile(it) }
     }
 }
