@@ -21,7 +21,7 @@ package com.acmpo6ou.myaccounts.main_activity
 
 import android.app.Activity
 import androidx.core.view.GravityCompat
-import com.acmpo6ou.myaccounts.DatabaseViewTest
+import com.acmpo6ou.myaccounts.ActivityResultTest
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R.id.import_database
 import com.acmpo6ou.myaccounts.database.MainPresenterInter
@@ -33,7 +33,7 @@ import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import org.junit.Before
 import org.junit.Test
 
-class MainActivityTests : DatabaseViewTest() {
+class MainActivityTests : ActivityResultTest() {
     private lateinit var activity: MainActivity
     private lateinit var presenter: MainPresenterInter
 
@@ -62,8 +62,7 @@ class MainActivityTests : DatabaseViewTest() {
 
     @Test
     fun `onActivityResult should call checkTarFile when code is IMPORT_RC`() {
-        // call onActivityResult passing import request code, result OK and intent with
-        // location where to import database
+        // call onActivityResult passing import request code, result OK and intent
         activity.onActivityResult(activity.IMPORT_RC, Activity.RESULT_OK, intent)
         verify(presenter).checkTarFile(locationUri)
     }
@@ -77,7 +76,7 @@ class MainActivityTests : DatabaseViewTest() {
 
     @Test
     fun `onActivityResult should not call checkTarFile when result code is CANCELED`() {
-        // call onActivityResult passing other request code, result CANCELED and intent
+        // call onActivityResult passing import request code, result CANCELED and intent
         activity.onActivityResult(activity.IMPORT_RC, Activity.RESULT_CANCELED, intent)
         verify(presenter, never()).checkTarFile(locationUri)
     }
