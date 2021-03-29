@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.ui.account
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent.ACTION_DOWN
@@ -44,6 +45,7 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentInter {
 
     override lateinit var presenter: DisplayAccountPresenterInter
     lateinit var adapter: DisplayAccountAdapter
+    val SAVE_FILE_RC = 303
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,5 +102,20 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentInter {
             }
             true
         }
+    }
+
+    /**
+     * Used to display save file dialog, so that user can chose location where to save
+     * attached file.
+     *
+     * Starts intent with [SAVE_FILE_RC] request code.
+     * Shows dialog to choose location using Storage Access Framework.
+     * @param[fileName] name of the file we want to save.
+     */
+    fun saveFileDialog(fileName: String) {
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.putExtra(Intent.EXTRA_TITLE, fileName)
+        startActivityForResult(intent, SAVE_FILE_RC)
     }
 }

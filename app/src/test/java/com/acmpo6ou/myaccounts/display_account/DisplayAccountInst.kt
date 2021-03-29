@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.display_account
 
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.SystemClock
 import android.view.MotionEvent
@@ -28,12 +29,16 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account
+import com.acmpo6ou.myaccounts.str
 import com.acmpo6ou.myaccounts.ui.account.DisplayAccountFragment
+import com.github.javafaker.Faker
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
+import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
@@ -98,5 +103,19 @@ class DisplayAccountInst {
                 it.b.accountPassword.text.toString()
             )
         }
+    }
+
+    @Test
+    fun `saveFileDialog should start appropriate intent`() {
+        val expectedAction = Intent.ACTION_CREATE_DOCUMENT
+        val expectedCategory = Intent.CATEGORY_OPENABLE
+        val expectedTitle = Faker().str()
+
+        scenario.onFragment { it.saveFileDialog(expectedTitle) }
+        val intent: Intent = shadowOf(RuntimeEnvironment.application).nextStartedActivity
+
+        assertEquals(expectedAction, intent.action)
+        assertEquals(expectedCategory, intent.categories.first())
+        assertEquals(expectedTitle, intent.getStringExtra(Intent.EXTRA_TITLE))
     }
 }
