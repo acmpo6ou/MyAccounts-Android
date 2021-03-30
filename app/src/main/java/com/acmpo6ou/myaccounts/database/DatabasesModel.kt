@@ -48,7 +48,7 @@ data class Account(
     val comment: String,
     @SerialName("copy_email")
     val copyEmail: Boolean = true,
-    @SerialName("attached_files")
+    @SerialName("attach_files")
     var attachedFiles: MutableMap<String, String> = mutableMapOf()
 )
 
