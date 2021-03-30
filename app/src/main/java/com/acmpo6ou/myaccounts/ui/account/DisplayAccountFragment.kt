@@ -51,12 +51,6 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentInter {
     lateinit var adapter: DisplayAccountAdapter
     val SAVE_FILE_RC = 303
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        adapter = DisplayAccountAdapter(this)
-        presenter = DisplayAccountPresenter()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -69,7 +63,11 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentInter {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         arguments?.getString("accountName")?.let {
             val accountsActivity = activity as AccountsActivity
-            setAccount(accountsActivity.database.data[it]!!)
+            val account = accountsActivity.database.data[it]!!
+
+            setAccount(account)
+            adapter = DisplayAccountAdapter(this)
+            presenter = DisplayAccountPresenter(this, account)
         }
 
         b.attachedFilesList.layoutManager = LinearLayoutManager(context)
@@ -116,7 +114,7 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentInter {
      * Shows dialog to choose location using Storage Access Framework.
      * @param[fileName] name of the file we want to save.
      */
-    fun saveFileDialog(fileName: String) {
+    override fun saveFileDialog(fileName: String) {
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.putExtra(Intent.EXTRA_TITLE, fileName)

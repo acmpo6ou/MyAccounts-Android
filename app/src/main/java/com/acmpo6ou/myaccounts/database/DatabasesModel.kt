@@ -49,7 +49,7 @@ data class Account(
     @SerialName("copy_email")
     val copyEmail: Boolean = true,
     @SerialName("attached_files")
-    val attachedFiles: MutableMap<String, String> = mutableMapOf()
+    var attachedFiles: MutableMap<String, String> = mutableMapOf()
 )
 
 typealias DbMap = MutableMap<String, Account>

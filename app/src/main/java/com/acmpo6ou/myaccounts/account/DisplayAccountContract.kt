@@ -23,6 +23,7 @@ import android.net.Uri
 
 interface DisplayAccountFragmentInter {
     val presenter: DisplayAccountPresenterInter
+    fun saveFileDialog(fileName: String)
 }
 
 interface DisplayAccountPresenterInter {

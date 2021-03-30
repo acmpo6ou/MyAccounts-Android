@@ -20,15 +20,31 @@
 package com.acmpo6ou.myaccounts.account
 
 import android.net.Uri
+import com.acmpo6ou.myaccounts.database.Account
 
-class DisplayAccountPresenter : DisplayAccountPresenterInter {
-    override val attachedFilesList: List<String> = listOf()
+class DisplayAccountPresenter(
+    val view: DisplayAccountFragmentInter,
+    val account: Account
+) : DisplayAccountPresenterInter {
 
+    lateinit var selectedFile: String
+
+    private val attachedFiles = account.attachedFiles
+    override val attachedFilesList: List<String>
+        get() = attachedFiles.keys.sorted().map { attachedFiles[it]!! }
+
+    /**
+     * Called when user selects attached file from the list.
+     *
+     * Saves given [fileName] so that later, when saving the file, we could obtain content
+     * associated with that file.
+     * @param[fileName] name of selected attached file.
+     */
     override fun fileSelected(fileName: String) {
-        TODO("Not yet implemented")
+        selectedFile = fileName
+        view.saveFileDialog(fileName)
     }
 
     override fun saveFile(destinationUri: Uri) {
-        TODO("Not yet implemented")
     }
 }
