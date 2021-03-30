@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts.ui.account
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -49,6 +50,8 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentInter {
 
     override lateinit var presenter: DisplayAccountPresenterInter
     lateinit var adapter: DisplayAccountAdapter
+
+    override lateinit var myContext: Context
     val SAVE_FILE_RC = 303
 
     override fun onCreateView(
@@ -61,6 +64,7 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentInter {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        myContext = requireContext()
         arguments?.getString("accountName")?.let {
             val accountsActivity = activity as AccountsActivity
             val account = accountsActivity.database.data[it]!!
@@ -130,7 +134,7 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentInter {
     /**
      * Used to display a snackbar with success message.
      */
-    fun showSuccess() {
+    override fun showSuccess() {
         Snackbar.make(
             b.displayAccountLayout,
             R.string.success_message,
@@ -142,12 +146,11 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentInter {
 
     /**
      * Used to display dialog saying that the error has occurred.
-     * @param[title] title of error dialog.
      * @param[details] details about the error.
      */
-    fun showError(title: String, details: String) {
+    override fun showError(details: String) {
         MaterialAlertDialogBuilder(this.requireContext())
-            .setTitle(title)
+            .setTitle(R.string.error_title)
             .setIcon(R.drawable.ic_error)
             .setNeutralButton("Ok") { _: DialogInterface, _: Int -> }
             .setMessage(details)
@@ -157,7 +160,7 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentInter {
     /**
      * Displays error dialog saying that the file is corrupted.
      */
-    fun fileCorrupted() {
+    override fun fileCorrupted() {
         MaterialAlertDialogBuilder(this.requireContext())
             .setTitle(R.string.error_title)
             .setIcon(R.drawable.ic_error)

@@ -27,6 +27,7 @@ class DisplayAccountPresenter(
     val account: Account
 ) : DisplayAccountPresenterInter {
 
+    var model: DisplayAccountModelInter = DisplayAccountModel(view.myContext.contentResolver)
     lateinit var selectedFile: String
 
     private val attachedFiles = account.attachedFiles
@@ -45,6 +46,23 @@ class DisplayAccountPresenter(
         view.saveFileDialog(fileName)
     }
 
+    /**
+     * Calls model.saveFile() to save selected file handling all errors.
+     *
+     * If attached file is encoded in invalid Base64 scheme calls view.fileCorrupted()
+     * If there are any other errors calls view.showError()
+     * @param[destinationUri] uri containing path where to save attached file.
+     */
     override fun saveFile(destinationUri: Uri) {
+        try {
+            model.saveFile(destinationUri, attachedFiles[selectedFile]!!)
+            view.showSuccess()
+        } catch (e: IllegalArgumentException) {
+            e.printStackTrace()
+            view.fileCorrupted()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            view.showError(e.toString())
+        }
     }
 }

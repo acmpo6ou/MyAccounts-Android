@@ -31,7 +31,7 @@ class DisplayAccountModel(var contentResolver: ContentResolver) : DisplayAccount
      * @param[destinationUri] uri containing file path.
      * @param[content] base64 encoded string, that is a content of the file.
      */
-    fun saveFile(destinationUri: Uri, content: String) {
+    override fun saveFile(destinationUri: Uri, content: String) {
         val descriptor = contentResolver.openFileDescriptor(destinationUri, "w")
         val destination = FileOutputStream(descriptor?.fileDescriptor)
 

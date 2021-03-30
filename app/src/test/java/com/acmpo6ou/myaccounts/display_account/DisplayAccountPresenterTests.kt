@@ -19,27 +19,39 @@
 
 package com.acmpo6ou.myaccounts.display_account
 
+import android.content.Context
+import android.net.Uri
 import com.acmpo6ou.myaccounts.account.DisplayAccountFragmentInter
+import com.acmpo6ou.myaccounts.account.DisplayAccountModelInter
 import com.acmpo6ou.myaccounts.account.DisplayAccountPresenter
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.mockito.ArgumentMatchers.anyString
 
 class DisplayAccountPresenterTests {
     lateinit var presenter: DisplayAccountPresenter
     lateinit var view: DisplayAccountFragmentInter
+    lateinit var model: DisplayAccountModelInter
+
     private val fileName = Faker().str()
+    private val content = Faker().str()
+    private val destinationUri: Uri = mock()
 
     @Before
     fun setup() {
-        view = mock()
+        val mockContext: Context = mock { on { contentResolver } doReturn mock() }
+        view = mock { on { myContext } doReturn mockContext }
+        model = mock()
+
         val account = com.acmpo6ou.myaccounts.account
-        account.attachedFiles = mutableMapOf("somefile.txt" to "This is some file.")
+        account.attachedFiles = mutableMapOf(fileName to content)
+
         presenter = DisplayAccountPresenter(view, account)
+        presenter.model = model
     }
 
     @Test
@@ -52,5 +64,48 @@ class DisplayAccountPresenterTests {
     fun `fileSelected should call view saveFileDialog`() {
         presenter.fileSelected(fileName)
         verify(view).saveFileDialog(fileName)
+    }
+
+    @Test
+    fun `saveFile should call model saveFile`() {
+        presenter.selectedFile = fileName
+        presenter.saveFile(destinationUri)
+        verify(model).saveFile(destinationUri, content)
+    }
+
+    @Test
+    fun `saveFile should call view showSuccess`() {
+        presenter.selectedFile = fileName
+        presenter.saveFile(destinationUri)
+
+        verify(view).showSuccess()
+        verify(view, never()).fileCorrupted()
+        verify(view, never()).showError(anyString())
+    }
+
+    @Test
+    fun `saveFile should handle IllegalArgumentException`() {
+        whenever(model.saveFile(destinationUri, content))
+            .doAnswer { throw IllegalArgumentException() }
+        presenter.selectedFile = fileName
+
+        presenter.saveFile(destinationUri)
+        verify(view).fileCorrupted()
+        verify(view, never()).showError(anyString())
+        verify(view, never()).showSuccess()
+    }
+
+    @Test
+    fun `saveFile should handle any Exception`() {
+        val msg = Faker().str()
+        val exception = Exception(msg)
+        whenever(model.saveFile(destinationUri, content))
+            .doAnswer { throw exception }
+        presenter.selectedFile = fileName
+
+        presenter.saveFile(destinationUri)
+        verify(view).showError(exception.toString())
+        verify(view, never()).fileCorrupted()
+        verify(view, never()).showSuccess()
     }
 }

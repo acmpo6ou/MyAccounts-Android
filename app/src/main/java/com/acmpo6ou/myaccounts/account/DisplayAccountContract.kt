@@ -19,11 +19,17 @@
 
 package com.acmpo6ou.myaccounts.account
 
+import android.content.Context
 import android.net.Uri
 
 interface DisplayAccountFragmentInter {
+    val myContext: Context
     val presenter: DisplayAccountPresenterInter
+
     fun saveFileDialog(fileName: String)
+    fun fileCorrupted()
+    fun showError(details: String)
+    fun showSuccess()
 }
 
 interface DisplayAccountPresenterInter {
@@ -32,4 +38,6 @@ interface DisplayAccountPresenterInter {
     fun fileSelected(fileName: String)
     fun saveFile(destinationUri: Uri)
 }
-interface DisplayAccountModelInter
+interface DisplayAccountModelInter {
+    fun saveFile(destinationUri: Uri, content: String)
+}
