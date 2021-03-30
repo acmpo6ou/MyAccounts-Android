@@ -114,4 +114,5 @@
     <string name="no_internet_connection">No internet connection.</string>
     <string name="failed_to_load_changelog">Failed to load changelog</string>
     <string name="attached_files_label">Attached files:</string>
+    <string name="file_is_corrupted">The file is probably corrupted.</string>
 </resources>

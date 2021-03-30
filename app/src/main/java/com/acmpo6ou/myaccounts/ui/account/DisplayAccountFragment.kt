@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts.ui.account
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -39,6 +40,8 @@ import com.acmpo6ou.myaccounts.account.DisplayAccountPresenter
 import com.acmpo6ou.myaccounts.account.DisplayAccountPresenterInter
 import com.acmpo6ou.myaccounts.database.Account
 import com.acmpo6ou.myaccounts.databinding.FragmentDisplayAccountBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 
 class DisplayAccountFragment : Fragment(), DisplayAccountFragmentInter {
     private var binding: FragmentDisplayAccountBinding? = null
@@ -124,5 +127,44 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentInter {
         super.onActivityResult(requestCode, resultCode, resultData)
         if (resultCode != Activity.RESULT_OK) return
         if (requestCode == SAVE_FILE_RC) resultData?.data?.let { presenter.saveFile(it) }
+    }
+
+    /**
+     * Used to display a snackbar with success message.
+     */
+    fun showSuccess() {
+        Snackbar.make(
+            b.displayAccountLayout,
+            R.string.success_message,
+            Snackbar.LENGTH_LONG
+        )
+            .setAction("HIDE") {}
+            .show()
+    }
+
+    /**
+     * Used to display dialog saying that the error has occurred.
+     * @param[title] title of error dialog.
+     * @param[details] details about the error.
+     */
+    fun showError(title: String, details: String) {
+        MaterialAlertDialogBuilder(this.requireContext())
+            .setTitle(title)
+            .setIcon(R.drawable.ic_error)
+            .setNeutralButton("Ok") { _: DialogInterface, _: Int -> }
+            .setMessage(details)
+            .show()
+    }
+
+    /**
+     * Displays error dialog saying that the file is corrupted.
+     */
+    fun fileCorrupted() {
+        MaterialAlertDialogBuilder(this.requireContext())
+            .setTitle(R.string.error_title)
+            .setIcon(R.drawable.ic_error)
+            .setNeutralButton("Ok") { _: DialogInterface, _: Int -> }
+            .setMessage(R.string.file_is_corrupted)
+            .show()
     }
 }
