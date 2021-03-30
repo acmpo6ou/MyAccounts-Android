@@ -51,6 +51,7 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentInter {
     override lateinit var presenter: DisplayAccountPresenterInter
     lateinit var adapter: DisplayAccountAdapter
 
+    override var account = Account("", "", "", "", "", "", true, mutableMapOf())
     override lateinit var myContext: Context
     val SAVE_FILE_RC = 303
 
@@ -69,10 +70,12 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentInter {
             val accountsActivity = activity as AccountsActivity
             val account = accountsActivity.database.data[it]!!
 
-            setAccount(account)
-            adapter = DisplayAccountAdapter(this)
-            presenter = DisplayAccountPresenter(this, account)
+            this.account = account
+            initForm(account)
         }
+
+        presenter = DisplayAccountPresenter(this)
+        adapter = DisplayAccountAdapter(this)
 
         b.attachedFilesList.layoutManager = LinearLayoutManager(context)
         b.attachedFilesList.adapter = adapter
@@ -82,7 +85,7 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentInter {
      * Initializes display account form with data provided from [account].
      */
     @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
-    fun setAccount(account: Account) {
+    fun initForm(account: Account) {
         // set account name as app bar title
         (activity as? AppCompatActivity)?.supportActionBar?.title = account.accountName
 
@@ -119,10 +122,13 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentInter {
      * @param[fileName] name of the file we want to save.
      */
     override fun saveFileDialog(fileName: String) {
-        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.putExtra(Intent.EXTRA_TITLE, fileName)
-        startActivityForResult(intent, SAVE_FILE_RC)
+        Intent(Intent.ACTION_CREATE_DOCUMENT)
+            .apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "*/*"
+                putExtra(Intent.EXTRA_TITLE, fileName)
+                startActivityForResult(this, SAVE_FILE_RC)
+            }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {

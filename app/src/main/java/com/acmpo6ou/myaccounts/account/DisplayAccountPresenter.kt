@@ -20,19 +20,15 @@
 package com.acmpo6ou.myaccounts.account
 
 import android.net.Uri
-import com.acmpo6ou.myaccounts.database.Account
 
-class DisplayAccountPresenter(
-    val view: DisplayAccountFragmentInter,
-    val account: Account
-) : DisplayAccountPresenterInter {
+class DisplayAccountPresenter(val view: DisplayAccountFragmentInter) :
+    DisplayAccountPresenterInter {
 
     var model: DisplayAccountModelInter = DisplayAccountModel(view.myContext.contentResolver)
     lateinit var selectedFile: String
 
-    private val attachedFiles = account.attachedFiles
-    override val attachedFilesList: List<String>
-        get() = attachedFiles.keys.sorted().map { attachedFiles[it]!! }
+    private val attachedFiles = view.account.attachedFiles
+    override val attachedFilesList get() = attachedFiles.keys.sorted()
 
     /**
      * Called when user selects attached file from the list.

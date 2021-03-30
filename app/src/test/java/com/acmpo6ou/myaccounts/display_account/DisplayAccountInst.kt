@@ -49,10 +49,10 @@ class DisplayAccountInst {
     lateinit var scenario: FragmentScenario<DisplayAccountFragment>
     val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
 
-    val usernameStr = context.resources.getString(R.string.username_)
-    val emailStr = context.resources.getString(R.string.e_mail_)
-    val passwordStr = context.resources.getString(R.string.password_)
-    val commentStr = context.resources.getString(R.string.comment_)
+    private val usernameStr = context.resources.getString(R.string.username_)
+    private val emailStr = context.resources.getString(R.string.e_mail_)
+    private val passwordStr = context.resources.getString(R.string.password_)
+    private val commentStr = context.resources.getString(R.string.comment_)
 
     @Before
     fun setUp() {
@@ -60,9 +60,9 @@ class DisplayAccountInst {
     }
 
     @Test
-    fun `setAccount should fill all text views with data`() {
+    fun `initForm should fill all text views with data`() {
         scenario.onFragment {
-            it.setAccount(account)
+            it.initForm(account)
 
             assertEquals("$usernameStr ${account.username}", it.b.accountUsername.text.toString())
             assertEquals("$emailStr ${account.email}", it.b.accountEmail.text.toString())
@@ -75,7 +75,7 @@ class DisplayAccountInst {
     @Test
     fun `should hide display or hide password when pressing and releasing password label`() {
         scenario.onFragment {
-            it.setAccount(account)
+            it.initForm(account)
 
             // when touching password label password should be displayed
             it.b.accountPassword.dispatchTouchEvent(
@@ -109,12 +109,14 @@ class DisplayAccountInst {
     fun `saveFileDialog should start appropriate intent`() {
         val expectedAction = Intent.ACTION_CREATE_DOCUMENT
         val expectedCategory = Intent.CATEGORY_OPENABLE
+        val expectedType = "*/*"
         val expectedTitle = Faker().str()
 
         scenario.onFragment { it.saveFileDialog(expectedTitle) }
         val intent: Intent = shadowOf(RuntimeEnvironment.application).nextStartedActivity
 
         assertEquals(expectedAction, intent.action)
+        assertEquals(expectedType, intent.type)
         assertEquals(expectedCategory, intent.categories.first())
         assertEquals(expectedTitle, intent.getStringExtra(Intent.EXTRA_TITLE))
     }

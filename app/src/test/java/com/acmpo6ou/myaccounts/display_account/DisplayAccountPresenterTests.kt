@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts.display_account
 
 import android.content.Context
 import android.net.Uri
+import com.acmpo6ou.myaccounts.account
 import com.acmpo6ou.myaccounts.account.DisplayAccountFragmentInter
 import com.acmpo6ou.myaccounts.account.DisplayAccountModelInter
 import com.acmpo6ou.myaccounts.account.DisplayAccountPresenter
@@ -44,13 +45,16 @@ class DisplayAccountPresenterTests {
     @Before
     fun setup() {
         val mockContext: Context = mock { on { contentResolver } doReturn mock() }
-        view = mock { on { myContext } doReturn mockContext }
+        val mockAccount = account
+        mockAccount.attachedFiles = mutableMapOf(fileName to content)
+
+        view = mock {
+            on { myContext } doReturn mockContext
+            on { account } doReturn mockAccount
+        }
         model = mock()
 
-        val account = com.acmpo6ou.myaccounts.account
-        account.attachedFiles = mutableMapOf(fileName to content)
-
-        presenter = DisplayAccountPresenter(view, account)
+        presenter = DisplayAccountPresenter(view)
         presenter.model = model
     }
 
