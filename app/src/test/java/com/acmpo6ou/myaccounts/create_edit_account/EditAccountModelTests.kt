@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts.create_edit_account
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.account
+import com.acmpo6ou.myaccounts.copy
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.databaseMap
 import com.acmpo6ou.myaccounts.ui.account.EditAccountViewModel
@@ -37,7 +38,7 @@ class EditAccountModelTests {
 
     @Before
     fun setup() {
-        model.initialize(MyApp(), databaseMap.toMap().toMutableMap(), account.accountName)
+        model.initialize(MyApp(), databaseMap.copy(), account.accountName)
     }
 
     @Test
