@@ -37,12 +37,11 @@ class CreateAccountFragment : CreateEditAccountFragment() {
         viewModel = ViewModelProvider(this).get(CreateAccountViewModel::class.java)
         accountsActivity?.database?.data?.let {
             viewModel.initialize(app, it)
+            initModel()
         }
-
-        initModel()
         initForm()
 
-        val adapter = AttachedFilesAdapter(viewModel)
+        val adapter = AttachedFilesAdapter(this)
         b.attachedFilesList.layoutManager = LinearLayoutManager(context)
         b.attachedFilesList.adapter = adapter
     }

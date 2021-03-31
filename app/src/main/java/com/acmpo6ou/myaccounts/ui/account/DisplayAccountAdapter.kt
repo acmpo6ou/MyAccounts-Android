@@ -32,7 +32,7 @@ class DisplayAccountAdapter(val view: DisplayAccountFragmentInter) :
     RecyclerView.Adapter<DisplayAccountAdapter.ViewHolder>() {
 
     val presenter get() = view.presenter
-    val attachedFiles get() = presenter.attachedFilesList
+    private val attachedFiles get() = presenter.attachedFilesList
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
         DisplayAccountAdapter.ViewHolder {

@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.ui.account
 
+import androidx.lifecycle.MutableLiveData
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.CreateEditViewModel
 import com.acmpo6ou.myaccounts.database.Account
@@ -27,7 +28,12 @@ import com.acmpo6ou.myaccounts.database.DbMap
 open class CreateAccountViewModel : CreateEditViewModel() {
     override lateinit var app: MyApp
     lateinit var accounts: DbMap
+
     override val itemNames get() = accounts.values.toList().map { it.accountName }
+    open val attachedFilesList: List<String> = listOf()
+
+    val notifyAdded = MutableLiveData<Int>()
+    val notifyRemoved = MutableLiveData<Int>()
 
     /**
      * Initializes model with needed resources.
@@ -37,6 +43,9 @@ open class CreateAccountViewModel : CreateEditViewModel() {
     open fun initialize(app: MyApp, accounts: DbMap) {
         this.app = app
         this.accounts = accounts
+    }
+
+    open fun removeFile(position: Int) {
     }
 
     /**
