@@ -172,6 +172,23 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/parentRepeatPassword" />
 
+                <TextView
+                    android:id="@+id/attachedFilesLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/attached_files_label"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toTopOf="@+id/shipper_layout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/birthDate" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/attachedFilesList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintTop_toBottomOf="@+id/attachedFilesLabel" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/shipper_layout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -182,7 +199,7 @@
                     app:layout_constraintBottom_toTopOf="@+id/accountGenerate"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/birthLabel">
+                    app:layout_constraintTop_toBottomOf="@+id/attachedFilesList">
 
                     <EditText
                         android:id="@+id/accountComment"
