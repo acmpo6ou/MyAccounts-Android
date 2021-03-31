@@ -60,7 +60,6 @@ class DisplayAccountAdapterInst {
 
         scenario.onFragment {
             it.presenter = presenter
-            it.adapter.notifyDataSetChanged()
             recycler = it.view?.findViewById(R.id.attachedFilesList)
         }
 
