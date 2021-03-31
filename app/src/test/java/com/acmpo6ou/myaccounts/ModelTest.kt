@@ -52,7 +52,7 @@ open class ModelTest : DatabaseUtils {
     val locationUri: Uri = mock()
     val destinationUri: Uri = mock()
 
-    val location = "sampledata/tar/main.tar"
+    open val location = "sampledata/tar/main.tar"
     open val destination = "$accountsDir/main.tar"
 
     /**
