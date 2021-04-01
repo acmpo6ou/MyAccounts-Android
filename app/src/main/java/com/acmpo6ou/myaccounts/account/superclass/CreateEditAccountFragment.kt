@@ -79,6 +79,16 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
         app = context.applicationContext as MyApp
     }
 
+    /**
+     * Displays dialog to choose file to attach.
+     */
+    private fun loadFileDialog() =
+        Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "*/*"
+            startActivityForResult(this, LOAD_FILE_RC)
+        }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_OK) return
@@ -114,6 +124,10 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
                 b.birthDate.text.toString(),
                 b.accountComment.text.toString()
             )
+        }
+
+        b.addFile.setOnClickListener {
+            loadFileDialog()
         }
 
         // display date picker when clicking on date label
