@@ -19,13 +19,14 @@
 
 package com.acmpo6ou.myaccounts.database
 
+import android.content.Intent
 import android.net.Uri
 import com.acmpo6ou.myaccounts.core.DatabaseUtils
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivityInter
 import com.acmpo6ou.myaccounts.core.superclass.SuperPresenterInter
 
 interface MainPresenterInter : SuperPresenterInter {
-    fun importSelected()
+    fun importSelected(): Intent
     fun checkTarFile(location: Uri)
     fun isTimeToUpdate(): Boolean
 }
@@ -33,7 +34,7 @@ interface MainPresenterInter : SuperPresenterInter {
 interface MainActivityInter : SuperActivityInter {
     var lastBackPressTime: Long
 
-    fun importDialog()
+    fun importDialog(): Intent
     fun showExitTip()
     fun notifyChanged(i: Int)
 }

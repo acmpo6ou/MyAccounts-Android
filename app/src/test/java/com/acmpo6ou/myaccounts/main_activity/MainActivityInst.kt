@@ -66,8 +66,7 @@ class MainActivityInst : NoInternet {
         scenario.onActivity { it.importDialog() }
 
         // check all intent properties
-        val intent: Intent =
-            shadowOf(RuntimeEnvironment.application).nextStartedActivity
+        val intent: Intent = shadowOf(RuntimeEnvironment.application).nextStartedActivity
 
         assertEquals(
             "importDialog: incorrect intent action!",
