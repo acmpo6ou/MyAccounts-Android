@@ -20,7 +20,9 @@
 package com.acmpo6ou.myaccounts.account.superclass
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -42,6 +44,7 @@ import java.util.concurrent.TimeUnit
  */
 abstract class CreateEditAccountFragment : CreateEditFragment() {
     abstract override val viewModel: CreateAccountViewModel
+    val LOAD_FILE_RC = 808
 
     override val applyButton get() = b.applyButton
     override val buttonGenerate get() = b.accountGenerate
@@ -74,6 +77,12 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
         super.onAttach(context)
         myContext = requireContext()
         app = context.applicationContext as MyApp
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode != Activity.RESULT_OK) return
+        if (requestCode == LOAD_FILE_RC) data?.data?.let { viewModel.addFile(it) }
     }
 
     /**

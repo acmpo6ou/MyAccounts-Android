@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.ui.account
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.CreateEditViewModel
@@ -43,6 +44,9 @@ open class CreateAccountViewModel : CreateEditViewModel() {
     open fun initialize(app: MyApp, accounts: DbMap) {
         this.app = app
         this.accounts = accounts
+    }
+
+    open fun addFile(locationUri: Uri) {
     }
 
     open fun removeFile(position: Int) {
