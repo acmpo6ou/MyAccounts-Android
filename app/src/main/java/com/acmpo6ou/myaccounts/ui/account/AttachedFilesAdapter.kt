@@ -28,6 +28,7 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account.superclass.CreateEditAccountFragment
@@ -37,6 +38,15 @@ class AttachedFilesAdapter(val view: CreateEditAccountFragment) :
 
     val viewModel get() = view.viewModel
     private val attachedFiles get() = viewModel.attachedFilesList
+
+    val addedObserver = Observer<Int> {
+        notifyItemChanged(it)
+        notifyItemRangeChanged(it, 1)
+    }
+    val removedObserver = Observer<Int> {
+        notifyItemRemoved(it)
+        notifyItemRangeRemoved(it, 1)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
