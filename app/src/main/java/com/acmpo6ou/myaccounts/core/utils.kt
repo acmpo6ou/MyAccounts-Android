@@ -19,11 +19,15 @@
 
 package com.acmpo6ou.myaccounts.core
 
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.provider.OpenableColumns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.acmpo6ou.myaccounts.AccountsActivity
+import java.io.File
 import kotlin.reflect.KProperty1
 
 /**
@@ -68,3 +72,32 @@ fun startDatabaseUtil(index: Int, context: Context) {
     intent.putExtra("databaseIndex", index)
     context.startActivity(intent)
 }
+
+// next 2 extension functions are used to get file name from Uri
+// Note: they are completely copied from StackOverflow
+
+fun Context.getFileName(uri: Uri): String? {
+    when (uri.scheme) {
+        ContentResolver.SCHEME_FILE -> {
+            val filePath = uri.path
+            if (!filePath.isNullOrEmpty()) {
+                return File(filePath).name
+            }
+        }
+
+        ContentResolver.SCHEME_CONTENT -> {
+            return contentResolver.getCursorContent(uri)
+        }
+    }
+
+    return null
+}
+
+private fun ContentResolver.getCursorContent(uri: Uri): String? = kotlin.runCatching {
+    query(uri, null, null, null, null)?.use { cursor ->
+        val nameColumnIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+        if (cursor.moveToFirst()) {
+            cursor.getString(nameColumnIndex)
+        } else null
+    }
+}.getOrNull()

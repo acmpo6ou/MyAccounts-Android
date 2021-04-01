@@ -23,11 +23,13 @@ import android.app.Activity
 import com.acmpo6ou.myaccounts.ActivityResultTest
 import com.acmpo6ou.myaccounts.account.superclass.CreateEditAccountFragment
 import com.acmpo6ou.myaccounts.ui.account.CreateAccountViewModel
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
+import org.mockito.ArgumentMatchers.anyString
 
 class TestFragment : CreateEditAccountFragment() {
     override val viewModel: CreateAccountViewModel = mock()
@@ -40,6 +42,7 @@ class CreateEditAccountTests : ActivityResultTest() {
     @Before
     fun setup() {
         fragment = TestFragment()
+        fragment.myContext = mock()
         viewModel = fragment.viewModel
     }
 
@@ -47,20 +50,20 @@ class CreateEditAccountTests : ActivityResultTest() {
     fun `onActivityResult should call addFile when code is LOAD_FILE_RC`() {
         // call onActivityResult passing load file request code, result OK and intent
         fragment.onActivityResult(fragment.LOAD_FILE_RC, Activity.RESULT_OK, intent)
-        verify(viewModel).addFile(locationUri)
+        verify(viewModel).addFile(locationUri, "")
     }
 
     @Test
     fun `onActivityResult should not call addFile when code is other than LOAD_FILE_RC`() {
         // call onActivityResult passing other request code, result OK and intent
         fragment.onActivityResult(OTHER_RC, Activity.RESULT_OK, intent)
-        verify(viewModel, never()).addFile(locationUri)
+        verify(viewModel, never()).addFile(eq(locationUri), anyString())
     }
 
     @Test
     fun `onActivityResult should not call addFile when result code is CANCELED`() {
         // call onActivityResult passing load file request code, result CANCELED and intent
         fragment.onActivityResult(fragment.LOAD_FILE_RC, Activity.RESULT_CANCELED, intent)
-        verify(viewModel, never()).addFile(locationUri)
+        verify(viewModel, never()).addFile(eq(locationUri), anyString())
     }
 }

@@ -30,6 +30,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.core.getFileName
 import com.acmpo6ou.myaccounts.core.superclass.CreateEditFragment
 import com.acmpo6ou.myaccounts.databinding.CreateEditAccountFragmentBinding
 import com.acmpo6ou.myaccounts.ui.account.AttachedFilesAdapter
@@ -92,7 +93,10 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_OK) return
-        if (requestCode == LOAD_FILE_RC) data?.data?.let { viewModel.addFile(it) }
+        if (requestCode == LOAD_FILE_RC) data?.data?.let {
+            val fileName = myContext.getFileName(it) ?: ""
+            viewModel.addFile(it, fileName)
+        }
     }
 
     /**
