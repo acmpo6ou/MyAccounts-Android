@@ -25,10 +25,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.CreateEditFragment
 import com.acmpo6ou.myaccounts.databinding.CreateEditAccountFragmentBinding
+import com.acmpo6ou.myaccounts.ui.account.AttachedFilesAdapter
 import com.acmpo6ou.myaccounts.ui.account.CreateAccountViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
@@ -72,6 +74,18 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
         super.onAttach(context)
         myContext = requireContext()
         app = context.applicationContext as MyApp
+    }
+
+    /**
+     * Initializes AttachedFilesAdapter for attachedFilesList recycler view.
+     */
+    fun initAdapter() {
+        val adapter = AttachedFilesAdapter(this)
+        viewModel.notifyAdded.observe(viewLifecycleOwner, adapter.addedObserver)
+        viewModel.notifyRemoved.observe(viewLifecycleOwner, adapter.removedObserver)
+
+        b.attachedFilesList.layoutManager = LinearLayoutManager(context)
+        b.attachedFilesList.adapter = adapter
     }
 
     /**

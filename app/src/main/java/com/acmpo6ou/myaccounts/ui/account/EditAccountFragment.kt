@@ -41,6 +41,8 @@ class EditAccountFragment : CreateEditAccountFragment() {
         if (accounts != null && accountName != null) {
             viewModel.initialize(app, accounts, accountName)
             initModel()
+            initAdapter()
+
             initForm()
             setAccount(accounts, accountName)
         }
