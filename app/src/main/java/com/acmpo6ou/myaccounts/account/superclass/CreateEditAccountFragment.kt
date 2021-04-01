@@ -100,8 +100,8 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
      */
     fun initAdapter() {
         val adapter = AttachedFilesAdapter(this)
-        viewModel.notifyAdded.observe(viewLifecycleOwner, adapter.addedObserver)
-        viewModel.notifyRemoved.observe(viewLifecycleOwner, adapter.removedObserver)
+        viewModel.notifyAdded?.observe(viewLifecycleOwner, adapter.addedObserver)
+        viewModel.notifyRemoved?.observe(viewLifecycleOwner, adapter.removedObserver)
 
         b.attachedFilesList.layoutManager = LinearLayoutManager(context)
         b.attachedFilesList.adapter = adapter

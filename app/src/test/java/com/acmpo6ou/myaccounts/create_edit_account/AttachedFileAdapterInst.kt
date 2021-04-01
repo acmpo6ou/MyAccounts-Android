@@ -63,6 +63,7 @@ class AttachedFileAdapterInst {
 
         scenario.onFragment {
             it.viewModel = viewModel
+            it.initAdapter()
             recycler = it.view?.findViewById(R.id.attachedFilesList)
         }
 
