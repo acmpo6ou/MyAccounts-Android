@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts.ui.account
 
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
+import com.acmpo6ou.myaccounts.account.LoadFileModel
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.CreateEditViewModel
 import com.acmpo6ou.myaccounts.database.Account
@@ -28,10 +29,12 @@ import com.acmpo6ou.myaccounts.database.DbMap
 
 open class CreateAccountViewModel : CreateEditViewModel() {
     override lateinit var app: MyApp
+    lateinit var model: LoadFileModel
     lateinit var accounts: DbMap
 
     override val itemNames get() = accounts.values.toList().map { it.accountName }
-    open val attachedFilesList: List<String> = listOf()
+    val filePaths = mutableMapOf<String, Uri>()
+    open val attachedFilesList get() = filePaths.keys.toList()
 
     val notifyAdded = MutableLiveData<Int>()
     val notifyRemoved = MutableLiveData<Int>()
@@ -44,12 +47,29 @@ open class CreateAccountViewModel : CreateEditViewModel() {
     open fun initialize(app: MyApp, accounts: DbMap) {
         this.app = app
         this.accounts = accounts
+        model = LoadFileModel(app.contentResolver)
     }
 
-    open fun addFile(locationUri: Uri) {
+    /**
+     * Adds given [locationUri] to [filePaths] and notifies about addition.
+     *
+     * @param[locationUri] uri containing path to file that needs to be attached.
+     * @param[fileName] name of the file that needs to be attached.
+     */
+    open fun addFile(locationUri: Uri, fileName: String) {
+        filePaths[fileName] = locationUri
+        val i = attachedFilesList.indexOf(fileName)
+        notifyAdded.value = i
     }
 
+    /**
+     * Removes uri of attached file from [filePaths] and notifies about removal.
+     * @param[position] index of name of the file in [attachedFilesList].
+     */
     open fun removeFile(position: Int) {
+        val fileName = attachedFilesList[position]
+        filePaths.remove(fileName)
+        notifyRemoved.value = position
     }
 
     /**

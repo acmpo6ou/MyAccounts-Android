@@ -20,26 +20,28 @@
 package com.acmpo6ou.myaccounts.create_edit_account
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.acmpo6ou.myaccounts.account
-import com.acmpo6ou.myaccounts.copy
+import com.acmpo6ou.myaccounts.*
 import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.databaseMap
 import com.acmpo6ou.myaccounts.ui.account.CreateAccountViewModel
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import com.github.javafaker.Faker
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class CreateAccountModelTests {
+class CreateAccountModelTests : ModelTest() {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 
     val model = CreateAccountViewModel()
+    val fileName = Faker().str()
 
     @Before
     fun setup() {
-        model.initialize(MyApp(), databaseMap.copy())
+        val app: MyApp = mock { on { contentResolver } doReturn contentResolver }
+        model.initialize(app, databaseMap.copy())
     }
 
     @Test
@@ -66,5 +68,32 @@ class CreateAccountModelTests {
             account.comment
         )
         assertTrue(model.finished)
+    }
+
+    @Test
+    fun `addFile should add file to filePaths`() {
+        model.addFile(locationUri, fileName)
+        assertTrue(fileName in model.filePaths)
+        assertEquals(locationUri, model.filePaths[fileName])
+    }
+
+    @Test
+    fun `addFile should notify about addition`() {
+        model.addFile(locationUri, fileName)
+        assertEquals(0, model.notifyAdded.value)
+    }
+
+    @Test
+    fun `removeFile should remove file from filePaths`() {
+        model.filePaths[fileName] = locationUri
+        model.removeFile(0)
+        assertFalse(fileName in model.filePaths)
+    }
+
+    @Test
+    fun `removeFile should notify about removal`() {
+        model.filePaths[fileName] = locationUri
+        model.removeFile(0)
+        assertEquals(0, model.notifyRemoved.value)
     }
 }
