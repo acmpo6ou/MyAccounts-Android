@@ -22,11 +22,13 @@ package com.acmpo6ou.myaccounts.account.superclass
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MyApp
@@ -36,6 +38,7 @@ import com.acmpo6ou.myaccounts.databinding.CreateEditAccountFragmentBinding
 import com.acmpo6ou.myaccounts.ui.account.AttachedFilesAdapter
 import com.acmpo6ou.myaccounts.ui.account.CreateAccountViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -59,6 +62,16 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
 
     private var binding: CreateEditAccountFragmentBinding? = null
     val b: CreateEditAccountFragmentBinding get() = binding!!
+
+    // displays error dialog if there is and error loading attached files
+    val errorObserver = Observer<String> {
+        MaterialAlertDialogBuilder(myContext)
+            .setTitle(R.string.error_loading)
+            .setIcon(R.drawable.ic_error)
+            .setNeutralButton("Ok") { _: DialogInterface, _: Int -> }
+            .setMessage(it)
+            .show()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -109,6 +122,11 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
 
         b.attachedFilesList.layoutManager = LinearLayoutManager(context)
         b.attachedFilesList.adapter = adapter
+    }
+
+    override fun initModel() {
+        super.initModel()
+        viewModel.errorMsg.observe(viewLifecycleOwner, errorObserver)
     }
 
     /**

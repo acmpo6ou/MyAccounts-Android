@@ -19,10 +19,13 @@
 
 package com.acmpo6ou.myaccounts.create_edit_account
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Build
+import android.widget.TextView
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account.superclass.CreateEditAccountFragment
 import com.acmpo6ou.myaccounts.str
@@ -42,11 +45,13 @@ import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
+import org.robolectric.shadows.ShadowAlertDialog
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class CreateEditAccountInst {
+    val context = InstrumentationRegistry.getInstrumentation().targetContext
     class TestFragment : CreateEditAccountFragment() {
         override val viewModel: CreateAccountViewModel = mock()
     }
@@ -103,5 +108,22 @@ class CreateEditAccountInst {
         assertEquals(expectedAction, intent.action)
         assertEquals(expectedCategory, intent.categories.first())
         assertEquals(expectedType, intent.type)
+    }
+
+    @Test
+    fun `errorObserver should display error dialog`() {
+        val expectedTitle = context.resources.getString(R.string.error_loading)
+        val expectedMsg = faker.str()
+
+        scenario.onFragment {
+            it.errorObserver.onChanged(expectedMsg)
+        }
+
+        val dialog: Dialog = ShadowAlertDialog.getLatestDialog()
+        val title = dialog.findViewById<TextView>(R.id.alertTitle)
+        val message = dialog.findViewById<TextView>(android.R.id.message)
+
+        assertEquals(expectedTitle, title.text)
+        assertEquals(expectedMsg, message.text)
     }
 }
