@@ -24,7 +24,7 @@ import android.net.Uri
 import java.io.FileInputStream
 import java.util.*
 
-class LoadFileModel(val contentResolver: ContentResolver) {
+open class LoadFileModel(val contentResolver: ContentResolver) {
 
     /**
      * Loads file from given [locationUri] and encodes it in Base64 format.
@@ -32,7 +32,7 @@ class LoadFileModel(val contentResolver: ContentResolver) {
      * @param[locationUri] uri containing path to file.
      * @return Base64 encoded file content.
      */
-    fun loadFile(locationUri: Uri): String {
+    open fun loadFile(locationUri: Uri): String {
         val descriptor = contentResolver.openFileDescriptor(locationUri, "r")
         val location = FileInputStream(descriptor?.fileDescriptor)
 

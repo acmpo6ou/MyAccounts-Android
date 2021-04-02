@@ -24,19 +24,28 @@ import com.acmpo6ou.myaccounts.*
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.ui.account.CreateAccountViewModel
 import com.github.javafaker.Faker
+import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.io.File
 
 class CreateAccountModelTests : ModelTest() {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 
     val model = CreateAccountViewModel()
-    val fileName = Faker().str()
+    private val fileName = Faker().str()
+
+    private val attachedFileName = "test.txt"
+    override val location = "$accountsDir/$attachedFileName"
+    private val decodedContent = "This is a simple file.\nTo test PyQtAccounts.\nHello World!\n"
+    val encodedContent =
+        "VGhpcyBpcyBhIHNpbXBsZSBmaWxlLgpUbyB0ZXN0IFB5UXRBY2NvdW50cy4KSGVsbG8gV29ybGQhCg=="
 
     @Before
     fun setup() {
@@ -46,6 +55,16 @@ class CreateAccountModelTests : ModelTest() {
 
     @Test
     fun `applyPressed should create new account`() {
+        model.filePaths[attachedFileName] = locationUri
+        File(location).apply {
+            createNewFile()
+            writeText(decodedContent)
+        }
+        setupInputResolver()
+
+        val expectedAccount = account.copy()
+        expectedAccount.attachedFiles = mutableMapOf(attachedFileName to encodedContent)
+
         model.applyPressed(
             account.accountName,
             account.username,
@@ -54,7 +73,22 @@ class CreateAccountModelTests : ModelTest() {
             account.date,
             account.comment
         )
-        assertEquals(account, model.accounts[account.accountName])
+        assertEquals(expectedAccount, model.accounts[account.accountName])
+    }
+
+    @Test
+    fun `applyPressed should handle any exception`() {
+        val msg = faker.str()
+        val exception = Exception(msg)
+
+        model.model = mock()
+        doAnswer { throw exception }.whenever(model.model).loadFile(locationUri)
+
+        model.filePaths[fileName] = locationUri
+        model.applyPressed("", "", "", "", "", "")
+
+        assertEquals(exception.toString(), model.errorMsg.value)
+        assertNotEquals(true, model._finished.value)
     }
 
     @Test

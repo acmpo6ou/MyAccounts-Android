@@ -38,6 +38,7 @@ open class CreateAccountViewModel : CreateEditViewModel() {
 
     val notifyAdded = MutableLiveData<Int>()
     val notifyRemoved = MutableLiveData<Int>()
+    val errorMsg = MutableLiveData<String>()
 
     /**
      * Initializes model with needed resources.
@@ -75,6 +76,7 @@ open class CreateAccountViewModel : CreateEditViewModel() {
     /**
      * Called when user presses apply button.
      * Creates new account using information provided.
+     * Handles any errors when loading attached files.
      */
     open fun applyPressed(
         accountName: String,
@@ -84,7 +86,21 @@ open class CreateAccountViewModel : CreateEditViewModel() {
         date: String,
         comment: String
     ) {
-        accounts[accountName] = Account(accountName, username, email, password, date, comment)
-        finished = true // notify about creation
+        val attachedFiles = mutableMapOf<String, String>()
+        try {
+            // load all attached files
+            for ((fileName, uri) in filePaths) {
+                val content = model.loadFile(uri)
+                attachedFiles[fileName] = content
+            }
+
+            accounts[accountName] = Account(
+                accountName, username, email, password, date, comment,
+                true, attachedFiles
+            )
+            finished = true // notify about creation
+        } catch (e: Exception) {
+            errorMsg.value = e.toString()
+        }
     }
 }
