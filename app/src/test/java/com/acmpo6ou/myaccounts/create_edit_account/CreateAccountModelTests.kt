@@ -55,6 +55,7 @@ class CreateAccountModelTests : ModelTest() {
 
     @Test
     fun `applyPressed should create new account`() {
+        // prepare attached file to load
         model.filePaths[attachedFileName] = locationUri
         File(location).apply {
             createNewFile()

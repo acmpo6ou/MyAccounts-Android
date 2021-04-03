@@ -24,7 +24,7 @@ import com.acmpo6ou.myaccounts.database.Account
 import com.acmpo6ou.myaccounts.database.DbMap
 
 class EditAccountViewModel : CreateAccountViewModel() {
-    private var oldAccount: Account? = null
+    var oldAccount: Account? = null
 
     /**
      * Initializes model with needed resources.
@@ -50,25 +50,31 @@ class EditAccountViewModel : CreateAccountViewModel() {
         date: String,
         comment: String
     ) {
-        val attachedFiles = mutableMapOf<String, String>()
-        for ((fileName, uri) in filePaths) {
-            if (uri != null) {
-                // load all attached files
-                val content = model.loadFile(uri)
-                attachedFiles[fileName] = content
-            } else {
-                // and add existing ones
-                attachedFiles[fileName] = oldAccount!!.attachedFiles[fileName] as String
+        try {
+            val attachedFiles = mutableMapOf<String, String>()
+            for ((fileName, uri) in filePaths) {
+                if (uri != null) {
+                    // load all attached files
+                    val content = model.loadFile(uri)
+                    attachedFiles[fileName] = content
+                } else {
+                    // and add existing ones
+                    attachedFiles[fileName] = oldAccount!!.attachedFiles[fileName] as String
+                }
             }
+
+            // remove old account and create new one
+            accounts.remove(oldAccount?.accountName)
+            accounts[accountName] = Account(
+                accountName, username, email, password, date, comment,
+                oldAccount!!.copyEmail, attachedFiles
+            )
+
+            finished = true // notify about successful edition
+        } catch (e: Exception) {
+            e.printStackTrace()
+            errorMsg.value = e.toString()
         }
-
-        // remove old account and create new one
-        accounts.remove(oldAccount?.accountName)
-
-        accounts[accountName] = Account(
-            accountName, username, email, password, date, comment,
-            oldAccount!!.copyEmail, attachedFiles
-        )
     }
 
     /**

@@ -101,6 +101,7 @@ open class CreateAccountViewModel : CreateEditViewModel() {
             )
             finished = true // notify about creation
         } catch (e: Exception) {
+            e.printStackTrace()
             errorMsg.value = e.toString()
         }
     }

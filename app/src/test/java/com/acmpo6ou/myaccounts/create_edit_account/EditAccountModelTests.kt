@@ -28,8 +28,10 @@ import com.acmpo6ou.myaccounts.database.DbMap
 import com.acmpo6ou.myaccounts.str
 import com.acmpo6ou.myaccounts.ui.account.EditAccountViewModel
 import com.github.javafaker.Faker
+import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
@@ -69,6 +71,7 @@ class EditAccountModelTests : ModelTest() {
 
     @Test
     fun `applyPressed should create new account`() {
+        // prepare attached file to load
         model.filePaths[attachedFileName] = locationUri
         File(location).apply {
             createNewFile()
@@ -76,6 +79,7 @@ class EditAccountModelTests : ModelTest() {
         }
         setupInputResolver()
 
+        // new account should have old attached files and new ones
         val expectedAccount = account.copy()
         expectedAccount.attachedFiles = (
             mutableMapOf(attachedFileName to encodedContent) +
@@ -91,6 +95,22 @@ class EditAccountModelTests : ModelTest() {
             account.comment
         )
         assertEquals(expectedAccount, model.accounts[account.accountName])
+        assertTrue(model.finished)
+    }
+
+    @Test
+    fun `applyPressed should handle any exception`() {
+        val msg = faker.str()
+        val exception = Exception(msg)
+
+        model.model = mock()
+        doAnswer { throw exception }.whenever(model.model).loadFile(locationUri)
+
+        model.filePaths[fileName] = locationUri
+        model.applyPressed("", "", "", "", "", "")
+
+        assertEquals(exception.toString(), model.errorMsg.value)
+        assertNotEquals(true, model._finished.value)
     }
 
     @Test
@@ -105,6 +125,17 @@ class EditAccountModelTests : ModelTest() {
         )
         assertFalse(account.accountName in model.accounts)
         assertTrue("habr" in model.accounts)
+    }
+
+    @Test
+    fun `applyPressed should not delete old account if there is an error`() {
+        model.model = mock()
+        doAnswer { throw Exception() }.whenever(model.model).loadFile(locationUri)
+
+        model.filePaths[fileName] = locationUri
+        model.applyPressed("", "", "", "", "", "")
+
+        assertTrue(account.accountName in model.accounts)
     }
 
     @Test
