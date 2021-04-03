@@ -111,6 +111,10 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentInter {
             }
             true
         }
+
+        if (account.attachedFiles.isEmpty()) {
+            b.attachedFilesLabel.visibility = View.GONE
+        }
     }
 
     /**
