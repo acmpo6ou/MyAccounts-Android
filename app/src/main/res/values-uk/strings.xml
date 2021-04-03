@@ -72,4 +72,9 @@
     <string name="no_internet_connection">Немає інтернет з\'єднання.</string>
     <string name="failed_to_load_changelog">Не вдалося завантажити</string>
     <string name="empty">Порожньо</string>
+    <string name="attached_files_label">Прикріплені файли:</string>
+    <string name="file_is_corrupted">Файл скоріш за все пошкоджено.</string>
+    <string name="remove">Вилучити</string>
+    <string name="attach_file">Прикріпити файл</string>
+    <string name="error_loading">Помилка завантаження прикріплених файлів!</string>
 </resources>
