@@ -96,13 +96,8 @@ class MainActivity : SuperActivity(), MainActivityInter {
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
         super.onActivityResult(requestCode, resultCode, resultData)
-        // do nothing if activity was canceled
         if (resultCode != Activity.RESULT_OK) return
-
-        if (requestCode == IMPORT_RC) {
-            val locationUri = resultData?.data!!
-            presenter.checkTarFile(locationUri)
-        }
+        if (requestCode == IMPORT_RC) resultData?.data?.let { presenter.checkTarFile(it) }
     }
 
     /**
@@ -111,14 +106,12 @@ class MainActivity : SuperActivity(), MainActivityInter {
      * Starts intent with [IMPORT_RC] request code.
      * Shows dialog to choose location using Storage Access Framework.
      */
-    override fun importDialog() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-        intent.apply {
+    override fun importDialog() =
+        Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
             type = "application/x-tar"
+            startActivityForResult(this, IMPORT_RC)
         }
-        startActivityForResult(intent, IMPORT_RC)
-    }
 
     override fun showExitTip() {
         Snackbar.make(

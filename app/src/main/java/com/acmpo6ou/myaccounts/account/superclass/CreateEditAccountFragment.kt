@@ -20,17 +20,25 @@
 package com.acmpo6ou.myaccounts.account.superclass
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.core.getFileName
 import com.acmpo6ou.myaccounts.core.superclass.CreateEditFragment
 import com.acmpo6ou.myaccounts.databinding.CreateEditAccountFragmentBinding
+import com.acmpo6ou.myaccounts.ui.account.AttachedFilesAdapter
 import com.acmpo6ou.myaccounts.ui.account.CreateAccountViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -40,6 +48,7 @@ import java.util.concurrent.TimeUnit
  */
 abstract class CreateEditAccountFragment : CreateEditFragment() {
     abstract override val viewModel: CreateAccountViewModel
+    val LOAD_FILE_RC = 808
 
     override val applyButton get() = b.applyButton
     override val buttonGenerate get() = b.accountGenerate
@@ -53,6 +62,16 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
 
     private var binding: CreateEditAccountFragmentBinding? = null
     val b: CreateEditAccountFragmentBinding get() = binding!!
+
+    // displays error dialog if there is and error loading attached files
+    val errorObserver = Observer<String> {
+        MaterialAlertDialogBuilder(myContext)
+            .setTitle(R.string.error_loading)
+            .setIcon(R.drawable.ic_error)
+            .setNeutralButton("Ok") { _: DialogInterface, _: Int -> }
+            .setMessage(it)
+            .show()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,6 +94,42 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
     }
 
     /**
+     * Displays dialog to choose file to attach.
+     */
+    private fun loadFileDialog() =
+        Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "*/*"
+            startActivityForResult(this, LOAD_FILE_RC)
+        }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode != Activity.RESULT_OK) return
+        if (requestCode == LOAD_FILE_RC) data?.data?.let {
+            val fileName = myContext.getFileName(it) ?: ""
+            viewModel.addFile(it, fileName)
+        }
+    }
+
+    /**
+     * Initializes AttachedFilesAdapter for attachedFilesList recycler view.
+     */
+    fun initAdapter() {
+        val adapter = AttachedFilesAdapter(this)
+        viewModel.notifyAdded?.observe(viewLifecycleOwner, adapter.addedObserver)
+        viewModel.notifyRemoved?.observe(viewLifecycleOwner, adapter.removedObserver)
+
+        b.attachedFilesList.layoutManager = LinearLayoutManager(context)
+        b.attachedFilesList.adapter = adapter
+    }
+
+    override fun initModel() {
+        super.initModel()
+        viewModel.errorMsg.observe(viewLifecycleOwner, errorObserver)
+    }
+
+    /**
      * Used to initialize all fields and buttons of the create_edit_account form.
      */
     @SuppressLint("SimpleDateFormat")
@@ -91,6 +146,10 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
                 b.birthDate.text.toString(),
                 b.accountComment.text.toString()
             )
+        }
+
+        b.addFile.setOnClickListener {
+            loadFileDialog()
         }
 
         // display date picker when clicking on date label

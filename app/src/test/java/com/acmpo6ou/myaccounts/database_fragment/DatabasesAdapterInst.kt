@@ -67,7 +67,7 @@ class DatabasesAdapterInst {
 
         scenario.onFragment {
             it.presenter = presenter
-            recycler = it.view?.findViewById(R.id.itemsList) // find recycler
+            recycler = it.view?.findViewById(R.id.itemsList)
         }
         // measure and lay recycler out as is needed so we can later obtain its items
         recycler?.measure(0, 0)

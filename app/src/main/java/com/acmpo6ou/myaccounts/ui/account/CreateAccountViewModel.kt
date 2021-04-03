@@ -19,6 +19,9 @@
 
 package com.acmpo6ou.myaccounts.ui.account
 
+import android.net.Uri
+import androidx.lifecycle.MutableLiveData
+import com.acmpo6ou.myaccounts.account.LoadFileModel
 import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.CreateEditViewModel
 import com.acmpo6ou.myaccounts.database.Account
@@ -26,8 +29,17 @@ import com.acmpo6ou.myaccounts.database.DbMap
 
 open class CreateAccountViewModel : CreateEditViewModel() {
     override lateinit var app: MyApp
+    lateinit var model: LoadFileModel
+
     lateinit var accounts: DbMap
     override val itemNames get() = accounts.values.toList().map { it.accountName }
+
+    open val filePaths = mutableMapOf<String, Uri?>()
+    open val attachedFilesList get() = filePaths.keys.toList()
+
+    val notifyAdded = MutableLiveData<Int>()
+    val notifyRemoved = MutableLiveData<Int>()
+    val errorMsg = MutableLiveData<String>()
 
     /**
      * Initializes model with needed resources.
@@ -37,11 +49,35 @@ open class CreateAccountViewModel : CreateEditViewModel() {
     open fun initialize(app: MyApp, accounts: DbMap) {
         this.app = app
         this.accounts = accounts
+        model = LoadFileModel(app.contentResolver)
+    }
+
+    /**
+     * Adds given [locationUri] to [filePaths] and notifies about addition.
+     *
+     * @param[locationUri] uri containing path to file that needs to be attached.
+     * @param[fileName] name of the file that needs to be attached.
+     */
+    open fun addFile(locationUri: Uri, fileName: String) {
+        filePaths[fileName] = locationUri
+        val i = attachedFilesList.indexOf(fileName)
+        notifyAdded.value = i
+    }
+
+    /**
+     * Removes uri of attached file from [filePaths] and notifies about removal.
+     * @param[position] index of name of the file in [attachedFilesList].
+     */
+    open fun removeFile(position: Int) {
+        val fileName = attachedFilesList[position]
+        filePaths.remove(fileName)
+        notifyRemoved.value = position
     }
 
     /**
      * Called when user presses apply button.
      * Creates new account using information provided.
+     * Handles any errors when loading attached files.
      */
     open fun applyPressed(
         accountName: String,
@@ -51,7 +87,22 @@ open class CreateAccountViewModel : CreateEditViewModel() {
         date: String,
         comment: String
     ) {
-        accounts[accountName] = Account(accountName, username, email, password, date, comment)
-        finished = true // notify about creation
+        val attachedFiles = mutableMapOf<String, String>()
+        try {
+            // load all attached files
+            for ((fileName, uri) in filePaths) {
+                val content = model.loadFile(uri!!)
+                attachedFiles[fileName] = content
+            }
+
+            accounts[accountName] = Account(
+                accountName, username, email, password, date, comment,
+                true, attachedFiles
+            )
+            finished = true // notify about creation
+        } catch (e: Exception) {
+            e.printStackTrace()
+            errorMsg.value = e.toString()
+        }
     }
 }

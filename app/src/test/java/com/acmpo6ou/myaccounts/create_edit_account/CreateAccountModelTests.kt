@@ -20,29 +20,52 @@
 package com.acmpo6ou.myaccounts.create_edit_account
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.acmpo6ou.myaccounts.account
+import com.acmpo6ou.myaccounts.*
 import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.databaseMap
 import com.acmpo6ou.myaccounts.ui.account.CreateAccountViewModel
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import com.github.javafaker.Faker
+import com.nhaarman.mockitokotlin2.doAnswer
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.whenever
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.io.File
 
-class CreateAccountModelTests {
+class CreateAccountModelTests : ModelTest() {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 
     val model = CreateAccountViewModel()
+    private val fileName = Faker().str()
+
+    private val attachedFileName = "test.txt"
+    override val location = "$accountsDir/$attachedFileName"
+    private val decodedContent = "This is a simple file.\nTo test PyQtAccounts.\nHello World!\n"
+    private val encodedContent =
+        "VGhpcyBpcyBhIHNpbXBsZSBmaWxlLgpUbyB0ZXN0IFB5UXRBY2NvdW50cy4KSGVsbG8gV29ybGQhCg=="
 
     @Before
     fun setup() {
-        model.initialize(MyApp(), databaseMap.toMap().toMutableMap())
+        val app: MyApp = mock { on { contentResolver } doReturn contentResolver }
+        model.initialize(app, databaseMap.copy())
     }
 
     @Test
     fun `applyPressed should create new account`() {
+        // prepare attached file to load
+        model.filePaths[attachedFileName] = locationUri
+        File(location).apply {
+            createNewFile()
+            writeText(decodedContent)
+        }
+        setupInputResolver()
+
+        val expectedAccount = account.copy()
+        expectedAccount.attachedFiles = mutableMapOf(attachedFileName to encodedContent)
+
         model.applyPressed(
             account.accountName,
             account.username,
@@ -51,7 +74,22 @@ class CreateAccountModelTests {
             account.date,
             account.comment
         )
-        assertEquals(account, model.accounts[account.accountName])
+        assertEquals(expectedAccount, model.accounts[account.accountName])
+    }
+
+    @Test
+    fun `applyPressed should handle any exception`() {
+        val msg = faker.str()
+        val exception = Exception(msg)
+
+        model.model = mock()
+        doAnswer { throw exception }.whenever(model.model).loadFile(locationUri)
+
+        model.filePaths[fileName] = locationUri
+        model.applyPressed("", "", "", "", "", "")
+
+        assertEquals(exception.toString(), model.errorMsg.value)
+        assertNotEquals(true, model._finished.value)
     }
 
     @Test
@@ -65,5 +103,32 @@ class CreateAccountModelTests {
             account.comment
         )
         assertTrue(model.finished)
+    }
+
+    @Test
+    fun `addFile should add file to filePaths`() {
+        model.addFile(locationUri, fileName)
+        assertTrue(fileName in model.filePaths)
+        assertEquals(locationUri, model.filePaths[fileName])
+    }
+
+    @Test
+    fun `addFile should notify about addition`() {
+        model.addFile(locationUri, fileName)
+        assertEquals(0, model.notifyAdded.value)
+    }
+
+    @Test
+    fun `removeFile should remove file from filePaths`() {
+        model.filePaths[fileName] = locationUri
+        model.removeFile(0)
+        assertFalse(fileName in model.filePaths)
+    }
+
+    @Test
+    fun `removeFile should notify about removal`() {
+        model.filePaths[fileName] = locationUri
+        model.removeFile(0)
+        assertEquals(0, model.notifyRemoved.value)
     }
 }

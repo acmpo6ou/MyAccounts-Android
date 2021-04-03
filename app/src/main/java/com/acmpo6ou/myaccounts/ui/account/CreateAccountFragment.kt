@@ -36,9 +36,9 @@ class CreateAccountFragment : CreateEditAccountFragment() {
         viewModel = ViewModelProvider(this).get(CreateAccountViewModel::class.java)
         accountsActivity?.database?.data?.let {
             viewModel.initialize(app, it)
+            initModel()
+            initAdapter()
         }
-
-        initModel()
         initForm()
     }
 

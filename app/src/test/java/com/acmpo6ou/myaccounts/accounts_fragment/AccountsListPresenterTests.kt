@@ -23,6 +23,7 @@ import com.acmpo6ou.myaccounts.account
 import com.acmpo6ou.myaccounts.account.AccountsActivityInter
 import com.acmpo6ou.myaccounts.account.AccountsFragmentInter
 import com.acmpo6ou.myaccounts.account.AccountsListPresenter
+import com.acmpo6ou.myaccounts.copy
 import com.acmpo6ou.myaccounts.database.Database
 import com.acmpo6ou.myaccounts.databaseMap
 import com.nhaarman.mockitokotlin2.doReturn
@@ -41,7 +42,7 @@ class AccountsListPresenterTests {
         val mockActivity: AccountsActivityInter = mock {
             on { database } doReturn Database(
                 "",
-                data = databaseMap.toMap().toMutableMap()
+                data = databaseMap.copy()
             ) // we need to do this to clone
             // the mutable map
         }

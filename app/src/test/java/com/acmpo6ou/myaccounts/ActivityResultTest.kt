@@ -26,13 +26,11 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 
 /**
- * Super class test for DatabaseFragmentInst and MainActivityInst.
+ * Super class test for tests testing onActivityResult method.
  * Contains some helper methods and properties.
  */
-open class DatabaseViewTest {
+open class ActivityResultTest {
     var locationUri: Uri = mock()
     var intent: Intent = mock { on { data } doReturn locationUri }
-
-    val faker = Faker()
-    val OTHER_RC = faker.number().digit().toInt()
+    val OTHER_RC = Faker().number().digit().toInt()
 }

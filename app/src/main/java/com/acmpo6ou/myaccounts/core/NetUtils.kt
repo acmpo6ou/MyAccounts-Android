@@ -29,8 +29,8 @@ interface NetUtils {
     /**
      * Checks whether internet is available.
      *
-     * Note: this method is completely copied from StackOverflow, please see
-     * https://stackoverflow.com/a/53532456/11004423 for more details.
+     * Note: this method is completely copied from StackOverflow, see
+     * [https://stackoverflow.com/a/53532456/11004423] for more details.
      */
     fun isInternetAvailable(): Boolean {
         var result = false

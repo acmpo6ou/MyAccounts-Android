@@ -19,9 +19,13 @@
 
 package com.acmpo6ou.myaccounts.create_edit_account
 
+import android.app.Dialog
+import android.content.Intent
 import android.os.Build
+import android.widget.TextView
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account.superclass.CreateEditAccountFragment
 import com.acmpo6ou.myaccounts.str
@@ -31,18 +35,23 @@ import com.nhaarman.mockitokotlin2.doNothing
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyString
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
+import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
+import org.robolectric.shadows.ShadowAlertDialog
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class CreateEditAccountInst {
+    val context = InstrumentationRegistry.getInstrumentation().targetContext
     class TestFragment : CreateEditAccountFragment() {
         override val viewModel: CreateAccountViewModel = mock()
     }
@@ -83,5 +92,38 @@ class CreateEditAccountInst {
             it.applyButton.performClick()
             verify(it.viewModel).applyPressed(accountName, username, email, pass, date, comment)
         }
+    }
+
+    @Test
+    fun `click on addFile button should start appropriate intent`() {
+        val expectedAction = Intent.ACTION_OPEN_DOCUMENT
+        val expectedCategory = Intent.CATEGORY_OPENABLE
+        val expectedType = "*/*"
+
+        scenario.onFragment { it.b.addFile.performClick() }
+
+        // check all intent properties
+        val intent: Intent = shadowOf(RuntimeEnvironment.application).nextStartedActivity
+
+        assertEquals(expectedAction, intent.action)
+        assertEquals(expectedCategory, intent.categories.first())
+        assertEquals(expectedType, intent.type)
+    }
+
+    @Test
+    fun `errorObserver should display error dialog`() {
+        val expectedTitle = context.resources.getString(R.string.error_loading)
+        val expectedMsg = faker.str()
+
+        scenario.onFragment {
+            it.errorObserver.onChanged(expectedMsg)
+        }
+
+        val dialog: Dialog = ShadowAlertDialog.getLatestDialog()
+        val title = dialog.findViewById<TextView>(R.id.alertTitle)
+        val message = dialog.findViewById<TextView>(android.R.id.message)
+
+        assertEquals(expectedTitle, title.text)
+        assertEquals(expectedMsg, message.text)
     }
 }

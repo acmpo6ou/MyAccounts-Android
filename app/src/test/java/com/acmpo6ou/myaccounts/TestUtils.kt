@@ -38,7 +38,8 @@ import org.robolectric.shadows.ShadowPopupMenu
  * @return a TextView if a snackbar is shown anywhere in the view hierarchy.
  */
 fun View.findSnackbarTextView(): TextView? {
-    val possibleSnackbarContentLayout = findSnackbarLayout()?.getChildAt(0) as? SnackbarContentLayout
+    val possibleSnackbarContentLayout =
+        findSnackbarLayout()?.getChildAt(0) as? SnackbarContentLayout
     return possibleSnackbarContentLayout
         ?.getChildAt(0) as? TextView
 }
@@ -68,7 +69,9 @@ val account = Account(
     date = "01.01.1990",
     comment = "My gmail account."
 )
-val databaseMap = mutableMapOf("gmail" to account)
+val databaseMap = mutableMapOf("gmail" to account.copy())
+
+fun MutableMap<String, Account>.copy() = this.toMap().toMutableMap()
 
 /**
  * Helper function that generates random Int in specified range, but excluding number
@@ -109,7 +112,8 @@ fun selectNavigationItem(id: Int, view: NavigationView.OnNavigationItemSelectedL
     // that occurs because of view bindings
     try {
         view.onNavigationItemSelected(RoboMenuItem(id))
-    } catch (e: UninitializedPropertyAccessException) {}
+    } catch (e: UninitializedPropertyAccessException) {
+    }
 }
 
 /**
