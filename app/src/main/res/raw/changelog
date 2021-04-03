@@ -1,3 +1,7 @@
+<h4>v1.2.1</h4>
+<p>  •  fix decoding of attached files</p>
+<br/>
+
 <h4>v1.2.0</h4>
 <p>  •  remove `Copy password` button because it's unsafe to copy password to clipboard</p>
 <p>  •  add support for attached files</p>
