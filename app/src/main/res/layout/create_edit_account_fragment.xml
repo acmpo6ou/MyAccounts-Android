@@ -240,6 +240,7 @@
         android:id="@+id/accountGenerate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:backgroundTint="@color/blue"
         android:text="@string/generate"
         app:layout_constraintBottom_toBottomOf="parent"
