@@ -44,7 +44,7 @@ class CreateAccountModelTests : ModelTest() {
     private val attachedFileName = "test.txt"
     override val location = "$accountsDir/$attachedFileName"
     private val decodedContent = "This is a simple file.\nTo test PyQtAccounts.\nHello World!\n"
-    val encodedContent =
+    private val encodedContent =
         "VGhpcyBpcyBhIHNpbXBsZSBmaWxlLgpUbyB0ZXN0IFB5UXRBY2NvdW50cy4KSGVsbG8gV29ybGQhCg=="
 
     @Before

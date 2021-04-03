@@ -23,6 +23,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.account
 import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.database.Account
+import com.acmpo6ou.myaccounts.database.DbMap
 import com.acmpo6ou.myaccounts.str
 import com.acmpo6ou.myaccounts.ui.account.EditAccountViewModel
 import com.github.javafaker.Faker
@@ -32,26 +34,63 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.io.File
 
 class EditAccountModelTests : ModelTest() {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 
     val model = EditAccountViewModel()
+
+    lateinit var myAccount: Account
+    lateinit var dbMap: DbMap
+
     private val fileName = Faker().str()
     private val fileName2 = Faker().str()
 
+    private val attachedFileName = "test.txt"
+    override val location = "$accountsDir/$attachedFileName"
+    private val decodedContent = "This is a simple file.\nTo test PyQtAccounts.\nHello World!\n"
+    private val encodedContent =
+        "VGhpcyBpcyBhIHNpbXBsZSBmaWxlLgpUbyB0ZXN0IFB5UXRBY2NvdW50cy4KSGVsbG8gV29ybGQhCg=="
+
     @Before
     fun setup() {
-        val myAccount = account.copy()
+        myAccount = account.copy()
         myAccount.attachedFiles = mutableMapOf(
             fileName to Faker().str(),
             fileName2 to Faker().str(),
         )
-        val dbMap = mutableMapOf(account.accountName to myAccount)
+        dbMap = mutableMapOf(account.accountName to myAccount)
 
         val app: MyApp = mock { on { contentResolver } doReturn contentResolver }
         model.initialize(app, dbMap, account.accountName)
+    }
+
+    @Test
+    fun `applyPressed should create new account`() {
+        model.filePaths[attachedFileName] = locationUri
+        File(location).apply {
+            createNewFile()
+            writeText(decodedContent)
+        }
+        setupInputResolver()
+
+        val expectedAccount = account.copy()
+        expectedAccount.attachedFiles = (
+            mutableMapOf(attachedFileName to encodedContent) +
+                myAccount.attachedFiles.toMutableMap()
+            ) as MutableMap<String, String>
+
+        model.applyPressed(
+            account.accountName,
+            account.username,
+            account.email,
+            account.password,
+            account.date,
+            account.comment
+        )
+        assertEquals(expectedAccount, model.accounts[account.accountName])
     }
 
     @Test

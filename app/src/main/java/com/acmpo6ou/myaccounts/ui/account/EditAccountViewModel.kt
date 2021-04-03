@@ -50,9 +50,25 @@ class EditAccountViewModel : CreateAccountViewModel() {
         date: String,
         comment: String
     ) {
+        val attachedFiles = mutableMapOf<String, String>()
+        for ((fileName, uri) in filePaths) {
+            if (uri != null) {
+                // load all attached files
+                val content = model.loadFile(uri)
+                attachedFiles[fileName] = content
+            } else {
+                // and add existing ones
+                attachedFiles[fileName] = oldAccount!!.attachedFiles[fileName] as String
+            }
+        }
+
         // remove old account and create new one
         accounts.remove(oldAccount?.accountName)
-        super.applyPressed(accountName, username, email, password, date, comment)
+
+        accounts[accountName] = Account(
+            accountName, username, email, password, date, comment,
+            oldAccount!!.copyEmail, attachedFiles
+        )
     }
 
     /**
