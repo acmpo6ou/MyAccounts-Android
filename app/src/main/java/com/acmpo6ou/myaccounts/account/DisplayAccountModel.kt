@@ -35,7 +35,7 @@ class DisplayAccountModel(var contentResolver: ContentResolver) : DisplayAccount
         val descriptor = contentResolver.openFileDescriptor(destinationUri, "w")
         val destination = FileOutputStream(descriptor?.fileDescriptor)
 
-        val data = Base64.getUrlDecoder().decode(content.toByteArray())
+        val data = Base64.getDecoder().decode(content.toByteArray())
         destination.write(data)
     }
 }
