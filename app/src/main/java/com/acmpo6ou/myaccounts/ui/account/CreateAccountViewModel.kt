@@ -30,10 +30,11 @@ import com.acmpo6ou.myaccounts.database.DbMap
 open class CreateAccountViewModel : CreateEditViewModel() {
     override lateinit var app: MyApp
     lateinit var model: LoadFileModel
-    lateinit var accounts: DbMap
 
+    lateinit var accounts: DbMap
     override val itemNames get() = accounts.values.toList().map { it.accountName }
-    val filePaths = mutableMapOf<String, Uri>()
+
+    open val filePaths = mutableMapOf<String, Uri?>()
     open val attachedFilesList get() = filePaths.keys.toList()
 
     val notifyAdded = MutableLiveData<Int>()
@@ -90,7 +91,7 @@ open class CreateAccountViewModel : CreateEditViewModel() {
         try {
             // load all attached files
             for ((fileName, uri) in filePaths) {
-                val content = model.loadFile(uri)
+                val content = model.loadFile(uri!!)
                 attachedFiles[fileName] = content
             }
 

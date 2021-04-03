@@ -35,6 +35,11 @@ class EditAccountViewModel : CreateAccountViewModel() {
     fun initialize(app: MyApp, accounts: DbMap, accountName: String) {
         super.initialize(app, accounts)
         oldAccount = accounts[accountName]
+
+        // fill filePaths with existing attached files
+        oldAccount?.attachedFiles?.keys?.forEach {
+            filePaths[it] = null
+        }
     }
 
     override fun applyPressed(

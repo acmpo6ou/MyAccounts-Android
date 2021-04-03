@@ -20,25 +20,38 @@
 package com.acmpo6ou.myaccounts.create_edit_account
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.account
-import com.acmpo6ou.myaccounts.copy
 import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.databaseMap
+import com.acmpo6ou.myaccounts.str
 import com.acmpo6ou.myaccounts.ui.account.EditAccountViewModel
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import com.github.javafaker.Faker
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class EditAccountModelTests {
+class EditAccountModelTests : ModelTest() {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
+
     val model = EditAccountViewModel()
+    private val fileName = Faker().str()
+    private val fileName2 = Faker().str()
 
     @Before
     fun setup() {
-        model.initialize(MyApp(), databaseMap.copy(), account.accountName)
+        val myAccount = account.copy()
+        myAccount.attachedFiles = mutableMapOf(
+            fileName to Faker().str(),
+            fileName2 to Faker().str(),
+        )
+        val dbMap = mutableMapOf(account.accountName to myAccount)
+
+        val app: MyApp = mock { on { contentResolver } doReturn contentResolver }
+        model.initialize(app, dbMap, account.accountName)
     }
 
     @Test
@@ -61,5 +74,13 @@ class EditAccountModelTests {
         model.validateName(account.accountName)
         assertFalse(model.existsNameErr)
         assertFalse(model.emptyNameErr)
+    }
+
+    @Test
+    fun `initialize should fill filePaths with existing attached files`() {
+        assertTrue(fileName in model.filePaths)
+        assertNull(model.filePaths[fileName])
+        assertTrue(fileName2 in model.filePaths)
+        assertNull(model.filePaths[fileName2])
     }
 }
