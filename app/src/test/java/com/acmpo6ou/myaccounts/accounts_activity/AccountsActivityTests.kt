@@ -23,8 +23,8 @@ import androidx.core.view.GravityCompat
 import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account.AccountsPresenterInter
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.database.Database
+import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.selectNavigationItem
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before

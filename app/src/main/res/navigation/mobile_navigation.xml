@@ -25,7 +25,7 @@
     app:startDestination="@id/databaseFragment">
     <fragment
         android:id="@+id/databaseFragment"
-        android:name="com.acmpo6ou.myaccounts.ui.database.DatabaseFragment"
+        android:name="com.acmpo6ou.myaccounts.database.databases_list.DatabaseFragment"
         android:label="MyAccounts"
         tools:layout="@layout/fragment_list" >
         <action
@@ -75,12 +75,12 @@
 
     <fragment
         android:id="@+id/createDatabaseFragment"
-        android:name="com.acmpo6ou.myaccounts.ui.database.CreateDatabaseFragment"
+        android:name="com.acmpo6ou.myaccounts.database.create_edit_database.CreateDatabaseFragment"
         android:label="Create database"
         tools:layout="@layout/create_edit_database_fragment" />
     <fragment
         android:id="@+id/editDatabaseFragment"
-        android:name="com.acmpo6ou.myaccounts.ui.database.EditDatabaseFragment"
+        android:name="com.acmpo6ou.myaccounts.database.create_edit_database.EditDatabaseFragment"
         android:label="Edit database"
         tools:layout="@layout/create_edit_database_fragment" >
         <argument
@@ -89,7 +89,7 @@
     </fragment>
     <fragment
         android:id="@+id/openDatabaseFragment"
-        android:name="com.acmpo6ou.myaccounts.ui.database.OpenDatabaseFragment"
+        android:name="com.acmpo6ou.myaccounts.database.open_database.OpenDatabaseFragment"
         tools:layout="@layout/open_database_fragment" >
         <argument
             android:name="databaseIndex"
@@ -98,16 +98,16 @@
 
     <fragment
         android:id="@+id/changelogFragment"
-        android:name="com.acmpo6ou.myaccounts.ui.ChangelogFragment"
+        android:name="com.acmpo6ou.myaccounts.core.ChangelogFragment"
         android:label="Changelog"
         tools:layout="@layout/fragment_changelog" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.acmpo6ou.myaccounts.ui.SettingsFragment"
+        android:name="com.acmpo6ou.myaccounts.core.SettingsFragment"
         android:label="Settings" />
     <fragment
         android:id="@+id/aboutFragment"
-        android:name="com.acmpo6ou.myaccounts.ui.about.AboutFragment"
+        android:name="com.acmpo6ou.myaccounts.about.AboutFragment"
         android:label="About"
         tools:layout="@layout/fragment_about" />
 </navigation>

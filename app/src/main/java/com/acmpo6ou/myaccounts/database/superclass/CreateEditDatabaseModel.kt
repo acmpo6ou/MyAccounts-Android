@@ -21,7 +21,7 @@ package com.acmpo6ou.myaccounts.database.superclass
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.CreateEditViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job

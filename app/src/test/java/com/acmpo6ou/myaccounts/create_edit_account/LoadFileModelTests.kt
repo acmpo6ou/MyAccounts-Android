@@ -20,7 +20,7 @@
 package com.acmpo6ou.myaccounts.create_edit_account
 
 import com.acmpo6ou.myaccounts.ModelTest
-import com.acmpo6ou.myaccounts.account.LoadFileModel
+import com.acmpo6ou.myaccounts.account.create_edit_account.LoadFileModel
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.io.File

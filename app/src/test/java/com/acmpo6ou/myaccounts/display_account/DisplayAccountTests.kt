@@ -21,8 +21,8 @@ package com.acmpo6ou.myaccounts.display_account
 
 import android.app.Activity
 import com.acmpo6ou.myaccounts.ActivityResultTest
-import com.acmpo6ou.myaccounts.account.DisplayAccountPresenterInter
-import com.acmpo6ou.myaccounts.ui.account.DisplayAccountFragment
+import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountPresenterInter
+import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountFragment
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify

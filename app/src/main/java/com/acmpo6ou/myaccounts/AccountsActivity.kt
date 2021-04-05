@@ -30,7 +30,6 @@ import androidx.preference.PreferenceManager
 import com.acmpo6ou.myaccounts.account.AccountsActivityInter
 import com.acmpo6ou.myaccounts.account.AccountsPresenter
 import com.acmpo6ou.myaccounts.account.AccountsPresenterInter
-import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
 import com.acmpo6ou.myaccounts.databinding.ActivityAccountsBinding
 

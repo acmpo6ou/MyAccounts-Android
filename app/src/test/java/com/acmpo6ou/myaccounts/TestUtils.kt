@@ -23,7 +23,7 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.acmpo6ou.myaccounts.database.Account
+import com.acmpo6ou.myaccounts.database.databases_list.Account
 import com.github.javafaker.Faker
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar

@@ -19,9 +19,9 @@
 
 package com.acmpo6ou.myaccounts.account
 
-import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.SuperPresenter
-import com.acmpo6ou.myaccounts.database.Database
+import com.acmpo6ou.myaccounts.database.databases_list.Database
 
 open class AccountsPresenter(override val view: AccountsActivityInter) :
     SuperPresenter(), AccountsPresenterInter {

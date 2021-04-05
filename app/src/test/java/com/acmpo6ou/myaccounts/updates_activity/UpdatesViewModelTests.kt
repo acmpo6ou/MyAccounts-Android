@@ -20,7 +20,7 @@
 package com.acmpo6ou.myaccounts.updates_activity
 
 import com.acmpo6ou.myaccounts.ModelTest
-import com.acmpo6ou.myaccounts.ui.UpdatesViewModel
+import com.acmpo6ou.myaccounts.core.UpdatesViewModel
 import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Test

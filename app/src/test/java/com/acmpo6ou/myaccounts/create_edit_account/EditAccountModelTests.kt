@@ -22,11 +22,11 @@ package com.acmpo6ou.myaccounts.create_edit_account
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.account
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.database.Account
-import com.acmpo6ou.myaccounts.database.DbMap
+import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.database.databases_list.Account
+import com.acmpo6ou.myaccounts.database.databases_list.DbMap
 import com.acmpo6ou.myaccounts.str
-import com.acmpo6ou.myaccounts.ui.account.EditAccountViewModel
+import com.acmpo6ou.myaccounts.account.create_edit_account.EditAccountViewModel
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.doReturn

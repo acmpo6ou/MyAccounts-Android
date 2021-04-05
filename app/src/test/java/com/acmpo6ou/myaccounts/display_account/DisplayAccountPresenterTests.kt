@@ -22,9 +22,9 @@ package com.acmpo6ou.myaccounts.display_account
 import android.content.Context
 import android.net.Uri
 import com.acmpo6ou.myaccounts.account
-import com.acmpo6ou.myaccounts.account.DisplayAccountFragmentInter
-import com.acmpo6ou.myaccounts.account.DisplayAccountModelInter
-import com.acmpo6ou.myaccounts.account.DisplayAccountPresenter
+import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountFragmentInter
+import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountModelInter
+import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountPresenter
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.*

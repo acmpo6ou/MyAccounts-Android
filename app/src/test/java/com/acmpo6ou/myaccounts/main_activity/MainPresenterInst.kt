@@ -26,10 +26,10 @@ import android.os.Build
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.NoInternet
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.database.MainActivityInter
-import com.acmpo6ou.myaccounts.database.MainModelInter
-import com.acmpo6ou.myaccounts.database.MainPresenter
+import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityInter
+import com.acmpo6ou.myaccounts.database.main_activity.MainModelInter
+import com.acmpo6ou.myaccounts.database.main_activity.MainPresenter
 import com.acmpo6ou.myaccounts.randomIntExcept
 import com.acmpo6ou.myaccounts.str
 import com.github.ivanshafran.sharedpreferencesmock.SPMockBuilder

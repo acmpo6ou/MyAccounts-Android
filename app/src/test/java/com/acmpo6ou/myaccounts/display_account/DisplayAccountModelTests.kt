@@ -20,7 +20,7 @@
 package com.acmpo6ou.myaccounts.display_account
 
 import com.acmpo6ou.myaccounts.ModelTest
-import com.acmpo6ou.myaccounts.account.DisplayAccountModel
+import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountModel
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.io.File

@@ -32,9 +32,9 @@ import androidx.core.text.HtmlCompat
 import androidx.core.text.HtmlCompat.fromHtml
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.acmpo6ou.myaccounts.core.NetUtils
+import com.acmpo6ou.myaccounts.core.utils.NetUtils
 import com.acmpo6ou.myaccounts.databinding.UpdatesActivityBinding
-import com.acmpo6ou.myaccounts.ui.UpdatesViewModel
+import com.acmpo6ou.myaccounts.core.UpdatesViewModel
 
 class UpdatesActivity : AppCompatActivity(), NetUtils {
     private var binding: UpdatesActivityBinding? = null

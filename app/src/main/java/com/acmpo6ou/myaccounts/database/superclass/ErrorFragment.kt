@@ -22,7 +22,7 @@ package com.acmpo6ou.myaccounts.database.superclass
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.database.MainActivityInter
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityInter
 
 /**
  * Provides errorObserver to display error message.

@@ -25,7 +25,7 @@
     app:startDestination="@id/accountsFragment">
     <fragment
         android:id="@+id/accountsFragment"
-        android:name="com.acmpo6ou.myaccounts.ui.account.AccountsFragment"
+        android:name="com.acmpo6ou.myaccounts.account.accounts_list.AccountsFragment"
         tools:layout="@layout/fragment_list" >
         <action
             android:id="@+id/actionCreateAccount"
@@ -74,12 +74,12 @@
 
     <fragment
         android:id="@+id/createAccountFragment"
-        android:name="com.acmpo6ou.myaccounts.ui.account.CreateAccountFragment"
+        android:name="com.acmpo6ou.myaccounts.account.create_edit_account.CreateAccountFragment"
         android:label="Create account"
         tools:layout="@layout/create_edit_account_fragment" />
     <fragment
         android:id="@+id/editAccountFragment"
-        android:name="com.acmpo6ou.myaccounts.ui.account.EditAccountFragment"
+        android:name="com.acmpo6ou.myaccounts.account.create_edit_account.EditAccountFragment"
         android:label="Edit account"
         tools:layout="@layout/create_edit_account_fragment" >
         <argument
@@ -88,7 +88,7 @@
     </fragment>
     <fragment
         android:id="@+id/displayAccountFragment"
-        android:name="com.acmpo6ou.myaccounts.ui.account.DisplayAccountFragment"
+        android:name="com.acmpo6ou.myaccounts.account.display_account.DisplayAccountFragment"
         tools:layout="@layout/fragment_display_account" >
         <argument
             android:name="accountName"
@@ -97,16 +97,16 @@
 
     <fragment
         android:id="@+id/changelogFragment"
-        android:name="com.acmpo6ou.myaccounts.ui.ChangelogFragment"
+        android:name="com.acmpo6ou.myaccounts.core.ChangelogFragment"
         android:label="Changelog"
         tools:layout="@layout/fragment_changelog" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.acmpo6ou.myaccounts.ui.SettingsFragment"
+        android:name="com.acmpo6ou.myaccounts.core.SettingsFragment"
         android:label="Settings" />
     <fragment
         android:id="@+id/aboutFragment"
-        android:name="com.acmpo6ou.myaccounts.ui.about.AboutFragment"
+        android:name="com.acmpo6ou.myaccounts.about.AboutFragment"
         android:label="About"
         tools:layout="@layout/fragment_about" />
 </navigation>

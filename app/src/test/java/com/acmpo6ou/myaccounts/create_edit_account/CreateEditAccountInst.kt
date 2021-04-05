@@ -27,9 +27,9 @@ import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.account.superclass.CreateEditAccountFragment
+import com.acmpo6ou.myaccounts.account.create_edit_account.CreateEditAccountFragment
 import com.acmpo6ou.myaccounts.str
-import com.acmpo6ou.myaccounts.ui.account.CreateAccountViewModel
+import com.acmpo6ou.myaccounts.account.create_edit_account.CreateAccountViewModel
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.doNothing
 import com.nhaarman.mockitokotlin2.mock

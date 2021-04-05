@@ -26,7 +26,7 @@ import android.content.res.Resources
 import android.util.DisplayMetrics
 import android.view.Window
 import android.view.WindowManager
-import com.acmpo6ou.myaccounts.core.SettingsUtils
+import com.acmpo6ou.myaccounts.core.utils.SettingsUtils
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test

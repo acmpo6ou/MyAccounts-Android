@@ -27,8 +27,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.clickMenuItem
 import com.acmpo6ou.myaccounts.str
-import com.acmpo6ou.myaccounts.ui.account.CreateAccountFragment
-import com.acmpo6ou.myaccounts.ui.account.CreateAccountViewModel
+import com.acmpo6ou.myaccounts.account.create_edit_account.CreateAccountFragment
+import com.acmpo6ou.myaccounts.account.create_edit_account.CreateAccountViewModel
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock

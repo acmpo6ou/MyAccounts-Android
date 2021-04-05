@@ -21,8 +21,8 @@ package com.acmpo6ou.myaccounts.create_edit_account
 
 import android.app.Activity
 import com.acmpo6ou.myaccounts.ActivityResultTest
-import com.acmpo6ou.myaccounts.account.superclass.CreateEditAccountFragment
-import com.acmpo6ou.myaccounts.ui.account.CreateAccountViewModel
+import com.acmpo6ou.myaccounts.account.create_edit_account.CreateEditAccountFragment
+import com.acmpo6ou.myaccounts.account.create_edit_account.CreateAccountViewModel
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never

@@ -29,13 +29,12 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.preference.PreferenceManager
-import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
-import com.acmpo6ou.myaccounts.database.MainActivityInter
-import com.acmpo6ou.myaccounts.database.MainPresenter
-import com.acmpo6ou.myaccounts.database.MainPresenterInter
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityInter
+import com.acmpo6ou.myaccounts.database.main_activity.MainPresenter
+import com.acmpo6ou.myaccounts.database.main_activity.MainPresenterInter
 import com.acmpo6ou.myaccounts.databinding.ActivityMainBinding
-import com.acmpo6ou.myaccounts.ui.database.DatabaseFragment
+import com.acmpo6ou.myaccounts.database.databases_list.DatabaseFragment
 import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : SuperActivity(), MainActivityInter {

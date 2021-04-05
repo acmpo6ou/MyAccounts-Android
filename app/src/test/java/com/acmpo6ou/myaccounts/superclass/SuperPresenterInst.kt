@@ -19,7 +19,7 @@
 
 package com.acmpo6ou.myaccounts.superclass
 
-import com.acmpo6ou.myaccounts.core.GitHubService
+import com.acmpo6ou.myaccounts.core.utils.GitHubService
 import com.nhaarman.mockitokotlin2.*
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer

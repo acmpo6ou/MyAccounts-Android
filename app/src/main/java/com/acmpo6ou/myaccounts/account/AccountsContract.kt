@@ -19,10 +19,10 @@
 
 package com.acmpo6ou.myaccounts.account
 
-import com.acmpo6ou.myaccounts.core.DatabaseUtils
+import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivityInter
 import com.acmpo6ou.myaccounts.core.superclass.SuperPresenterInter
-import com.acmpo6ou.myaccounts.database.Database
+import com.acmpo6ou.myaccounts.database.databases_list.Database
 
 interface AccountsPresenterInter : SuperPresenterInter, DatabaseUtils
 

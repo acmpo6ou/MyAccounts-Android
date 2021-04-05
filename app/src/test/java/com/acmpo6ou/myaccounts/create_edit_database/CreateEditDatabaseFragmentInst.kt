@@ -26,7 +26,7 @@ import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.database.superclass.CreateEditDatabaseFragment
 import com.acmpo6ou.myaccounts.database.superclass.CreateEditDatabaseModel
 import com.acmpo6ou.myaccounts.str

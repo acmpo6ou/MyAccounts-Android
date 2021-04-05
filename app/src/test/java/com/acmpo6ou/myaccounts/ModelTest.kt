@@ -22,7 +22,7 @@ package com.acmpo6ou.myaccounts
 import android.content.ContentResolver
 import android.net.Uri
 import android.os.ParcelFileDescriptor
-import com.acmpo6ou.myaccounts.core.DatabaseUtils
+import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever

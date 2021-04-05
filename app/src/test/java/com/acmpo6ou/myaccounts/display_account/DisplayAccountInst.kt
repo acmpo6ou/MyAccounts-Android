@@ -30,7 +30,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account
 import com.acmpo6ou.myaccounts.str
-import com.acmpo6ou.myaccounts.ui.account.DisplayAccountFragment
+import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountFragment
 import com.github.javafaker.Faker
 import org.junit.Assert.assertEquals
 import org.junit.Before

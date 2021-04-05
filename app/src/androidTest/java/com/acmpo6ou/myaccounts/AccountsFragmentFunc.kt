@@ -25,9 +25,9 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.acmpo6ou.myaccounts.account.AccountsListPresenterInter
-import com.acmpo6ou.myaccounts.database.Account
-import com.acmpo6ou.myaccounts.ui.account.AccountsFragment
+import com.acmpo6ou.myaccounts.account.accounts_list.AccountsListPresenterInter
+import com.acmpo6ou.myaccounts.database.databases_list.Account
+import com.acmpo6ou.myaccounts.account.accounts_list.AccountsFragment
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never

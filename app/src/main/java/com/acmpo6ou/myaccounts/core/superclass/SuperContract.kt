@@ -19,9 +19,9 @@
 
 package com.acmpo6ou.myaccounts.core.superclass
 
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.core.NetUtils
-import com.acmpo6ou.myaccounts.core.SettingsUtils
+import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.core.utils.NetUtils
+import com.acmpo6ou.myaccounts.core.utils.SettingsUtils
 import com.google.android.material.navigation.NavigationView
 
 interface SuperActivityInter :

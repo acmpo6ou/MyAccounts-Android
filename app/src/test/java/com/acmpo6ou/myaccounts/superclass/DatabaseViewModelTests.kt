@@ -21,8 +21,8 @@ package com.acmpo6ou.myaccounts.superclass
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.database.Database
+import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.superclass.DatabaseViewModel
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker

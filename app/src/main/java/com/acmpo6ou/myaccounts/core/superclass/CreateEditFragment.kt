@@ -27,8 +27,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.GenPassDialog
-import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.core.utils.GenPassDialog
+import com.acmpo6ou.myaccounts.MyApp
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 

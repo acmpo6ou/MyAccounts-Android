@@ -22,7 +22,7 @@ package com.acmpo6ou.myaccounts.core.superclass
 import android.util.Log
 import com.acmpo6ou.myaccounts.BuildConfig
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.GitHubService
+import com.acmpo6ou.myaccounts.core.utils.GitHubService
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback

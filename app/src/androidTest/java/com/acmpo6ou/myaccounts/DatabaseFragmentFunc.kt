@@ -25,10 +25,9 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.database.Database
-import com.acmpo6ou.myaccounts.database.DatabasesPresenterInter
-import com.acmpo6ou.myaccounts.ui.database.DatabaseFragment
+import com.acmpo6ou.myaccounts.database.databases_list.Database
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesPresenterInter
+import com.acmpo6ou.myaccounts.database.databases_list.DatabaseFragment
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify

@@ -20,10 +20,10 @@
 package com.acmpo6ou.myaccounts.utils
 
 import com.acmpo6ou.myaccounts.ModelTest
-import com.acmpo6ou.myaccounts.core.DatabaseUtils
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.database.Database
-import com.acmpo6ou.myaccounts.database.DbMap
+import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
+import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.database.databases_list.Database
+import com.acmpo6ou.myaccounts.database.databases_list.DbMap
 import com.acmpo6ou.myaccounts.databaseMap
 import com.acmpo6ou.myaccounts.str
 import com.macasaet.fernet.StringValidator

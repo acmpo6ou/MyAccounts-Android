@@ -25,9 +25,9 @@ import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.account.DisplayAccountPresenterInter
+import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountPresenterInter
 import com.acmpo6ou.myaccounts.str
-import com.acmpo6ou.myaccounts.ui.account.DisplayAccountFragment
+import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountFragment
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock

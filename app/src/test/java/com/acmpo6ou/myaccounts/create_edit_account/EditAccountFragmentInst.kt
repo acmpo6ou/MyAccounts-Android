@@ -26,7 +26,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account
 import com.acmpo6ou.myaccounts.databaseMap
-import com.acmpo6ou.myaccounts.ui.account.EditAccountFragment
+import com.acmpo6ou.myaccounts.account.create_edit_account.EditAccountFragment
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test

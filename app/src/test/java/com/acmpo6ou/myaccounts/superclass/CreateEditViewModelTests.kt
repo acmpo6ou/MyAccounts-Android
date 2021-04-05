@@ -21,9 +21,9 @@ package com.acmpo6ou.myaccounts.superclass
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.ModelTest
-import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.CreateEditViewModel
-import com.acmpo6ou.myaccounts.database.Database
+import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.str
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

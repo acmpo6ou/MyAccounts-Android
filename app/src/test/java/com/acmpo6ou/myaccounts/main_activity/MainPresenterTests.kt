@@ -23,11 +23,11 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.database.Database
-import com.acmpo6ou.myaccounts.database.MainActivityInter
-import com.acmpo6ou.myaccounts.database.MainModelInter
-import com.acmpo6ou.myaccounts.database.MainPresenter
+import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.database.databases_list.Database
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityInter
+import com.acmpo6ou.myaccounts.database.main_activity.MainModelInter
+import com.acmpo6ou.myaccounts.database.main_activity.MainPresenter
 import com.github.ivanshafran.sharedpreferencesmock.SPMockBuilder
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.*

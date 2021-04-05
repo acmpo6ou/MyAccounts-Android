@@ -24,9 +24,9 @@ import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.database.Database
-import com.acmpo6ou.myaccounts.ui.database.EditDatabaseFragment
+import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.database.databases_list.Database
+import com.acmpo6ou.myaccounts.database.create_edit_database.EditDatabaseFragment
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import org.junit.Assert.assertEquals

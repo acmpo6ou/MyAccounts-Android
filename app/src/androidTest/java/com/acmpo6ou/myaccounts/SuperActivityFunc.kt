@@ -28,8 +28,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.account.AccountsPresenterInter
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.database.Database
+import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test

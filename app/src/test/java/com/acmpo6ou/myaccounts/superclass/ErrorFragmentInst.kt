@@ -30,7 +30,7 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.LifecycleOwner
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.database.MainActivityInter
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityInter
 import com.acmpo6ou.myaccounts.database.superclass.ErrorFragment
 import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
 import com.acmpo6ou.myaccounts.str

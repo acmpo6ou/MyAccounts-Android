@@ -23,8 +23,8 @@ import android.os.Build
 import androidx.test.core.app.ActivityScenario
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.GenPassDialog
-import com.acmpo6ou.myaccounts.core.hasoneof
+import com.acmpo6ou.myaccounts.core.utils.GenPassDialog
+import com.acmpo6ou.myaccounts.core.utils.hasoneof
 import com.google.android.material.textfield.TextInputEditText
 import com.nhaarman.mockitokotlin2.*
 import junit.framework.TestCase.assertTrue

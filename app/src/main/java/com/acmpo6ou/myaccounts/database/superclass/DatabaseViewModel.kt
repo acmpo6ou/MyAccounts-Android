@@ -20,9 +20,9 @@
 package com.acmpo6ou.myaccounts.database.superclass
 
 import androidx.lifecycle.MutableLiveData
-import com.acmpo6ou.myaccounts.core.DatabaseUtils
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.database.DbList
+import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
+import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.database.databases_list.DbList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

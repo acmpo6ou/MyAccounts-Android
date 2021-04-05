@@ -22,8 +22,8 @@ package com.acmpo6ou.myaccounts.core.superclass
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.core.combineWith
+import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.core.utils.combineWith
 
 /**
  * Super class for all view models that are responsible for creating/editing items.

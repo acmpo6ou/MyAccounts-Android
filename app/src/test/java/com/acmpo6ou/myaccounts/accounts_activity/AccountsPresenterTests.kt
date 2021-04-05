@@ -23,9 +23,9 @@ import android.content.Context
 import com.acmpo6ou.myaccounts.account.AccountsActivityInter
 import com.acmpo6ou.myaccounts.account.AccountsPresenter
 import com.acmpo6ou.myaccounts.account.AccountsPresenterInter
-import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.ListFragmentInter
-import com.acmpo6ou.myaccounts.database.Database
+import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test

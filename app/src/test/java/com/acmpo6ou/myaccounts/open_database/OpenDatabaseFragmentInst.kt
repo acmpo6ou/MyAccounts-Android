@@ -25,8 +25,8 @@ import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.str
-import com.acmpo6ou.myaccounts.ui.database.OpenDatabaseFragment
-import com.acmpo6ou.myaccounts.ui.database.OpenDatabaseViewModel
+import com.acmpo6ou.myaccounts.database.open_database.OpenDatabaseFragment
+import com.acmpo6ou.myaccounts.database.open_database.OpenDatabaseViewModel
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify

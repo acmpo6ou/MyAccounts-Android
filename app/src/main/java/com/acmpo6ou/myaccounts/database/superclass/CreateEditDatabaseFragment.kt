@@ -27,9 +27,9 @@ import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.acmpo6ou.myaccounts.MainActivity
-import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.CreateEditFragment
-import com.acmpo6ou.myaccounts.database.MainActivityInter
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityInter
 import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
 
 /**
