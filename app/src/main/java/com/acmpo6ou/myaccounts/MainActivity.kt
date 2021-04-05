@@ -30,11 +30,11 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.preference.PreferenceManager
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragment
 import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
 import com.acmpo6ou.myaccounts.database.main_activity.MainPresenter
 import com.acmpo6ou.myaccounts.database.main_activity.MainPresenterI
 import com.acmpo6ou.myaccounts.databinding.ActivityMainBinding
-import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragment
 import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : SuperActivity(), MainActivityI {
@@ -106,7 +106,7 @@ class MainActivity : SuperActivity(), MainActivityI {
      * Shows dialog to choose location using Storage Access Framework.
      */
     override fun importDialog() =
-        Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+        with(Intent(Intent.ACTION_OPEN_DOCUMENT)) {
             addCategory(Intent.CATEGORY_OPENABLE)
             type = "application/x-tar"
             startActivityForResult(this, IMPORT_RC)

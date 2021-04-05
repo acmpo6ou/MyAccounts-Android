@@ -32,8 +32,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.utils.getFileName
 import com.acmpo6ou.myaccounts.core.superclass.CreateEditFragment
+import com.acmpo6ou.myaccounts.core.utils.getFileName
 import com.acmpo6ou.myaccounts.databinding.CreateEditAccountFragmentBinding
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -95,7 +95,7 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
      * Displays dialog to choose file to attach.
      */
     private fun loadFileDialog() =
-        Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+        with(Intent(Intent.ACTION_OPEN_DOCUMENT)) {
             addCategory(Intent.CATEGORY_OPENABLE)
             type = "*/*"
             startActivityForResult(this, LOAD_FILE_RC)

@@ -26,7 +26,7 @@ import com.acmpo6ou.myaccounts.core.superclass.SuperActivityI
 import com.acmpo6ou.myaccounts.core.superclass.SuperPresenterI
 
 interface MainPresenterI : SuperPresenterI {
-    fun importSelected(): Intent
+    fun importSelected()
     fun checkTarFile(location: Uri)
     fun isTimeToUpdate(): Boolean
 }
@@ -34,7 +34,7 @@ interface MainPresenterI : SuperPresenterI {
 interface MainActivityI : SuperActivityI {
     var lastBackPressTime: Long
 
-    fun importDialog(): Intent
+    fun importDialog()
     fun showExitTip()
     fun notifyChanged(i: Int)
 }
