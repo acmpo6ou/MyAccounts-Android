@@ -34,7 +34,7 @@ import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
 import com.acmpo6ou.myaccounts.database.main_activity.MainPresenter
 import com.acmpo6ou.myaccounts.database.main_activity.MainPresenterI
 import com.acmpo6ou.myaccounts.databinding.ActivityMainBinding
-import com.acmpo6ou.myaccounts.database.databases_list.DatabaseFragment
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragment
 import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : SuperActivity(), MainActivityI {
@@ -123,11 +123,11 @@ class MainActivity : SuperActivity(), MainActivityI {
     }
 
     /**
-     * This method calls notifyChanged on DatabaseFragment to rerender the list.
+     * This method calls notifyChanged on DatabasesFragment to rerender the list.
      * @param[i] index of Database that were added to databases list.
      */
     override fun notifyChanged(i: Int) {
-        val databaseFragment = mainFragment as DatabaseFragment
+        val databaseFragment = mainFragment as DatabasesFragment
         databaseFragment.notifyChanged(i)
     }
 }

@@ -22,21 +22,21 @@ package com.acmpo6ou.myaccounts.databases_list
 import android.app.Activity
 import com.acmpo6ou.myaccounts.ActivityResultTest
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesPresenterI
-import com.acmpo6ou.myaccounts.database.databases_list.DatabaseFragment
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragment
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
 
-class DatabaseFragmentTests : ActivityResultTest() {
-    lateinit var fragment: DatabaseFragment
+class DatabasesFragmentTests : ActivityResultTest() {
+    lateinit var fragment: DatabasesFragment
     lateinit var presenter: DatabasesPresenterI
 
     @Before
     fun setUp() {
         presenter = mock()
-        fragment = DatabaseFragment()
+        fragment = DatabasesFragment()
         fragment.presenter = presenter
     }
 

@@ -188,7 +188,7 @@ class OpenDatabaseFragment : Fragment(), ErrorFragment {
      */
     private fun startDatabase(index: Int) {
         startDatabaseUtil(index, myContext)
-        // navigate back to DatabaseFragment
+        // navigate back to DatabasesFragment
         mainActivity.findNavController(R.id.nav_host_fragment).navigateUp()
     }
 }

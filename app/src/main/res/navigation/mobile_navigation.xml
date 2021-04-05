@@ -25,7 +25,7 @@
     app:startDestination="@id/databaseFragment">
     <fragment
         android:id="@+id/databaseFragment"
-        android:name="com.acmpo6ou.myaccounts.database.databases_list.DatabaseFragment"
+        android:name="com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragment"
         android:label="MyAccounts"
         tools:layout="@layout/fragment_list" >
         <action

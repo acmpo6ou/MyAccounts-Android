@@ -27,7 +27,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesPresenterI
-import com.acmpo6ou.myaccounts.database.databases_list.DatabaseFragment
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragment
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
@@ -36,8 +36,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class DatabaseFragmentFunc {
-    lateinit var scenario: FragmentScenario<DatabaseFragment>
+class DatabasesFragmentFunc {
+    lateinit var scenario: FragmentScenario<DatabasesFragment>
     lateinit var presenter: DatabasesPresenterI
 
     @Before

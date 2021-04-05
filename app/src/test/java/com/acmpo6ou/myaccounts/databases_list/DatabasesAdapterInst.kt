@@ -30,7 +30,7 @@ import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.clickMenuItem
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesPresenterI
-import com.acmpo6ou.myaccounts.database.databases_list.DatabaseFragment
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragment
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
@@ -47,7 +47,7 @@ import org.robolectric.annotation.LooperMode
 @LooperMode(LooperMode.Mode.PAUSED)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class DatabasesAdapterInst {
-    lateinit var scenario: FragmentScenario<DatabaseFragment>
+    lateinit var scenario: FragmentScenario<DatabasesFragment>
     lateinit var presenter: DatabasesPresenterI
 
     var recycler: RecyclerView? = null

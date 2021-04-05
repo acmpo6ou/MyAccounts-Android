@@ -34,9 +34,9 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.database.databases_list.Database
-import com.acmpo6ou.myaccounts.database.databases_list.DatabaseFragment
-import com.acmpo6ou.myaccounts.database.databases_list.DatabaseFragmentDirections.actionEditDatabase
-import com.acmpo6ou.myaccounts.database.databases_list.DatabaseFragmentDirections.actionOpenDatabase
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragment
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentDirections.actionEditDatabase
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentDirections.actionOpenDatabase
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesPresenter
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -54,8 +54,8 @@ import org.robolectric.shadows.ShadowAlertDialog
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
-class DatabaseFragmentInst {
-    lateinit var scenario: FragmentScenario<DatabaseFragment>
+class DatabasesFragmentInst {
+    lateinit var scenario: FragmentScenario<DatabasesFragment>
     private lateinit var navController: NavController
 
     // get string resources
@@ -73,7 +73,7 @@ class DatabaseFragmentInst {
         scenario.onFragment { it.app = app }
     }
 
-    private fun mockNavController(fragment: DatabaseFragment) {
+    private fun mockNavController(fragment: DatabasesFragment) {
         navController = mock()
         setViewNavController(fragment.requireView(), navController)
     }
@@ -174,10 +174,10 @@ class DatabaseFragmentInst {
 
     /**
      * Used in tests to setup real (non mocked) DatabasesPresenter to test
-     * how does DatabasesPresenter and DatabaseFragment are integrated.
-     * @param[fragment] DatabaseFragment for which we will setup DatabasesPresenter.
+     * how does DatabasesPresenter and DatabasesFragment are integrated.
+     * @param[fragment] DatabasesFragment for which we will setup DatabasesPresenter.
      */
-    private fun setupRealPresenter(fragment: DatabaseFragment) {
+    private fun setupRealPresenter(fragment: DatabasesFragment) {
         // list of databases for test
         val databases = mutableListOf(
             Database("main"), // locked
@@ -191,9 +191,9 @@ class DatabaseFragmentInst {
 
     /**
      * Used in tests to get measured and laid out recyclerview.
-     * @param[fragment] DatabaseFragment from which we will get the recyclerview.
+     * @param[fragment] DatabasesFragment from which we will get the recyclerview.
      */
-    private fun getRecycler(fragment: DatabaseFragment): RecyclerView {
+    private fun getRecycler(fragment: DatabasesFragment): RecyclerView {
         // find recycler, measure and lay it out, so that later we can obtain its items
         val recycler: RecyclerView = fragment.view!!.findViewById(R.id.itemsList)
         recycler.measure(0, 0)

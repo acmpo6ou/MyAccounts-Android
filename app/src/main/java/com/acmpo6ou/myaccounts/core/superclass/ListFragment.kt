@@ -36,7 +36,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 
 /**
- * Super class for DatabaseFragment and AccountsFragment – fragments that contain
+ * Super class for DatabasesFragment and AccountsFragment – fragments that contain
  * lists of items.
  */
 abstract class ListFragment : Fragment(), ListFragmentI {

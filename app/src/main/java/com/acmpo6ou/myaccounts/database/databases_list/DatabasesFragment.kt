@@ -28,13 +28,13 @@ import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.superclass.ListFragment
 import com.acmpo6ou.myaccounts.core.utils.startDatabaseUtil
-import com.acmpo6ou.myaccounts.database.databases_list.DatabaseFragmentDirections.actionEditDatabase
-import com.acmpo6ou.myaccounts.database.databases_list.DatabaseFragmentDirections.actionOpenDatabase
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentDirections.actionEditDatabase
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentDirections.actionOpenDatabase
 
 /**
  * Fragment representing a list of Databases.
  */
-class DatabaseFragment : ListFragment(), DatabaseFragmentI {
+class DatabasesFragment : ListFragment(), DatabaseFragmentI {
     override lateinit var ACCOUNTS_DIR: String
     val EXPORT_RC = 101
     override val actionCreateItem = R.id.actionCreateDatabase
