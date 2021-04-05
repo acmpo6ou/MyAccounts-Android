@@ -24,7 +24,7 @@ import androidx.core.view.GravityCompat
 import com.acmpo6ou.myaccounts.ActivityResultTest
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R.id.import_database
-import com.acmpo6ou.myaccounts.database.main_activity.MainPresenterInter
+import com.acmpo6ou.myaccounts.database.main_activity.MainPresenterI
 import com.acmpo6ou.myaccounts.selectNavigationItem
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
@@ -35,7 +35,7 @@ import org.junit.Test
 
 class MainActivityTests : ActivityResultTest() {
     private lateinit var activity: MainActivity
-    private lateinit var presenter: MainPresenterInter
+    private lateinit var presenter: MainPresenterI
 
     @Before
     fun setup() {

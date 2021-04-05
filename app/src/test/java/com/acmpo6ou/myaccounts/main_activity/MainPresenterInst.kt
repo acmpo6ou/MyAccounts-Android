@@ -27,8 +27,8 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.NoInternet
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.MyApp
-import com.acmpo6ou.myaccounts.database.main_activity.MainActivityInter
-import com.acmpo6ou.myaccounts.database.main_activity.MainModelInter
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
+import com.acmpo6ou.myaccounts.database.main_activity.MainModelI
 import com.acmpo6ou.myaccounts.database.main_activity.MainPresenter
 import com.acmpo6ou.myaccounts.randomIntExcept
 import com.acmpo6ou.myaccounts.str
@@ -50,8 +50,8 @@ import java.io.IOException
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class MainPresenterInst : NoInternet {
     lateinit var presenter: MainPresenter
-    lateinit var model: MainModelInter
-    private lateinit var view: MainActivityInter
+    lateinit var model: MainModelI
+    private lateinit var view: MainActivityI
 
     private val faker = Faker()
     private val locationUri: Uri = mock()

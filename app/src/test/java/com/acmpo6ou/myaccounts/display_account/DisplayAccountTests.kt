@@ -21,7 +21,7 @@ package com.acmpo6ou.myaccounts.display_account
 
 import android.app.Activity
 import com.acmpo6ou.myaccounts.ActivityResultTest
-import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountPresenterInter
+import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountPresenterI
 import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountFragment
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
@@ -31,7 +31,7 @@ import org.junit.Test
 
 class DisplayAccountTests : ActivityResultTest() {
     lateinit var fragment: DisplayAccountFragment
-    lateinit var presenter: DisplayAccountPresenterInter
+    lateinit var presenter: DisplayAccountPresenterI
 
     @Before
     fun setup() {

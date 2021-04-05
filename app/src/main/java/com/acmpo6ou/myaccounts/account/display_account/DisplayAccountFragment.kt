@@ -41,11 +41,11 @@ import com.acmpo6ou.myaccounts.databinding.FragmentDisplayAccountBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 
-class DisplayAccountFragment : Fragment(), DisplayAccountFragmentInter {
+class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
     private var binding: FragmentDisplayAccountBinding? = null
     val b: FragmentDisplayAccountBinding get() = binding!!
 
-    override lateinit var presenter: DisplayAccountPresenterInter
+    override lateinit var presenter: DisplayAccountPresenterI
     lateinit var adapter: DisplayAccountAdapter
 
     override var account = Account("", "", "", "", "", "", true, mutableMapOf())

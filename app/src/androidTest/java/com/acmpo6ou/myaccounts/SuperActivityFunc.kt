@@ -27,7 +27,7 @@ import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.acmpo6ou.myaccounts.account.AccountsPresenterInter
+import com.acmpo6ou.myaccounts.account.AccountsPresenterI
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
@@ -37,7 +37,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class SuperActivityFunc {
     lateinit var scenario: ActivityScenario<AccountsActivity>
-    lateinit var presenter: AccountsPresenterInter
+    lateinit var presenter: AccountsPresenterI
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
 
     @Before

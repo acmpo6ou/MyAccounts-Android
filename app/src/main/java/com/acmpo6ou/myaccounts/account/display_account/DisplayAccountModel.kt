@@ -24,7 +24,7 @@ import android.net.Uri
 import java.io.FileOutputStream
 import java.util.*
 
-class DisplayAccountModel(var contentResolver: ContentResolver) : DisplayAccountModelInter {
+class DisplayAccountModel(var contentResolver: ContentResolver) : DisplayAccountModelI {
     /**
      * Decodes given base64 [content] string and writes it to a file.
      *

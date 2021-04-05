@@ -22,14 +22,14 @@ package com.acmpo6ou.myaccounts.database.superclass
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.database.main_activity.MainActivityInter
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
 
 /**
  * Provides errorObserver to display error message.
  */
 interface ErrorFragment {
     val viewModel: DatabaseViewModel
-    val mainActivity: MainActivityInter
+    val mainActivity: MainActivityI
     val lifecycle: LifecycleOwner
 
     fun initModel() {

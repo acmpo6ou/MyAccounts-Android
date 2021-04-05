@@ -19,13 +19,13 @@
 
 package com.acmpo6ou.myaccounts.account
 
+import com.acmpo6ou.myaccounts.core.superclass.SuperActivityI
+import com.acmpo6ou.myaccounts.core.superclass.SuperPresenterI
 import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
-import com.acmpo6ou.myaccounts.core.superclass.SuperActivityInter
-import com.acmpo6ou.myaccounts.core.superclass.SuperPresenterInter
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 
-interface AccountsPresenterInter : SuperPresenterInter, DatabaseUtils
+interface AccountsPresenterI : SuperPresenterI, DatabaseUtils
 
-interface AccountsActivityInter : SuperActivityInter {
+interface AccountsActivityI : SuperActivityI {
     val database: Database
 }

@@ -83,7 +83,7 @@ data class Database(
 class DatabasesModel(
     private val ACCOUNTS_DIR: String,
     private val contentResolver: ContentResolver
-) : DatabasesModelInter {
+) : DatabasesModelI {
     // path to directory that contains databases
     override val SRC_DIR = "$ACCOUNTS_DIR/src/"
 

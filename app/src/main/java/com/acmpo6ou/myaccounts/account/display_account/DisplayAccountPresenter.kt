@@ -21,10 +21,10 @@ package com.acmpo6ou.myaccounts.account.display_account
 
 import android.net.Uri
 
-class DisplayAccountPresenter(val view: DisplayAccountFragmentInter) :
-    DisplayAccountPresenterInter {
+class DisplayAccountPresenter(val view: DisplayAccountFragmentI) :
+    DisplayAccountPresenterI {
 
-    var model: DisplayAccountModelInter = DisplayAccountModel(view.myContext.contentResolver)
+    var model: DisplayAccountModelI = DisplayAccountModel(view.myContext.contentResolver)
     lateinit var selectedFile: String
 
     private val attachedFiles = view.account.attachedFiles

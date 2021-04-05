@@ -24,11 +24,11 @@ import com.acmpo6ou.myaccounts.core.utils.NetUtils
 import com.acmpo6ou.myaccounts.core.utils.SettingsUtils
 import com.google.android.material.navigation.NavigationView
 
-interface SuperActivityInter :
+interface SuperActivityI :
     NavigationView.OnNavigationItemSelectedListener,
     SettingsUtils,
     NetUtils {
-    val mainFragment: ListFragmentInter
+    val mainFragment: ListFragmentI
     val ACCOUNTS_DIR: String
     var app: MyApp
 
@@ -44,7 +44,7 @@ interface SuperActivityInter :
     fun confirmBack()
 }
 
-interface SuperPresenterInter {
+interface SuperPresenterI {
     fun backPressed()
     fun saveSelected()
     fun checkUpdatesSelected(isAutoCheck: Boolean = false)

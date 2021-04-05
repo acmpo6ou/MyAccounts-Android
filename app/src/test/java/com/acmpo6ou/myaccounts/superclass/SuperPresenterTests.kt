@@ -21,7 +21,7 @@ package com.acmpo6ou.myaccounts.superclass
 
 import com.acmpo6ou.myaccounts.BuildConfig
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.superclass.SuperActivityInter
+import com.acmpo6ou.myaccounts.core.superclass.SuperActivityI
 import com.acmpo6ou.myaccounts.core.superclass.SuperPresenter
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
@@ -33,7 +33,7 @@ import org.mockito.ArgumentMatchers.anyString
 import retrofit2.Call
 
 open class TestSuperPresenter : SuperPresenter() {
-    override var view: SuperActivityInter = mock()
+    override var view: SuperActivityI = mock()
 
     override fun backPressed() {
     }

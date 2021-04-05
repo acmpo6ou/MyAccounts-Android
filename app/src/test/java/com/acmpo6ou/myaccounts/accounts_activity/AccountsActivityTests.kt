@@ -22,7 +22,7 @@ package com.acmpo6ou.myaccounts.accounts_activity
 import androidx.core.view.GravityCompat
 import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.account.AccountsPresenterInter
+import com.acmpo6ou.myaccounts.account.AccountsPresenterI
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.selectNavigationItem
@@ -33,7 +33,7 @@ import org.junit.Test
 class AccountsActivityTests {
     private lateinit var activity: AccountsActivity
     lateinit var spyActivity: AccountsActivity
-    private lateinit var presenter: AccountsPresenterInter
+    private lateinit var presenter: AccountsPresenterI
 
     val database = Database("main")
     lateinit var app: MyApp

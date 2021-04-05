@@ -29,7 +29,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.clickMenuItem
 import com.acmpo6ou.myaccounts.database.databases_list.Database
-import com.acmpo6ou.myaccounts.database.databases_list.DatabasesPresenterInter
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesPresenterI
 import com.acmpo6ou.myaccounts.database.databases_list.DatabaseFragment
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
@@ -48,7 +48,7 @@ import org.robolectric.annotation.LooperMode
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class DatabasesAdapterInst {
     lateinit var scenario: FragmentScenario<DatabaseFragment>
-    lateinit var presenter: DatabasesPresenterInter
+    lateinit var presenter: DatabasesPresenterI
 
     var recycler: RecyclerView? = null
     var itemLayout: View? = null

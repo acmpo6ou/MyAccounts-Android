@@ -34,7 +34,7 @@ import com.acmpo6ou.myaccounts.R
 /**
  * [RecyclerView.Adapter] that can display a [Database].
  */
-class DatabasesAdapter(val view: DatabaseFragmentInter) :
+class DatabasesAdapter(val view: DatabaseFragmentI) :
     RecyclerView.Adapter<DatabasesAdapter.ViewHolder>() {
 
     val presenter get() = view.presenter

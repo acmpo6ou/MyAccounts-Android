@@ -34,10 +34,10 @@ import com.acmpo6ou.myaccounts.database.databases_list.Account
 /**
  * [RecyclerView.Adapter] that can display an [Account].
  */
-class AccountsAdapter(val view: AccountsFragmentInter) :
+class AccountsAdapter(val view: AccountsFragmentI) :
     RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
 
-    val presenter: AccountsListPresenterInter get() = view.presenter
+    val presenter: AccountsListPresenterI get() = view.presenter
     private val accountsList: List<Account> get() = presenter.accountsList
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

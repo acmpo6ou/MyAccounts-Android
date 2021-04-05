@@ -30,19 +30,19 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.preference.PreferenceManager
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
-import com.acmpo6ou.myaccounts.database.main_activity.MainActivityInter
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
 import com.acmpo6ou.myaccounts.database.main_activity.MainPresenter
-import com.acmpo6ou.myaccounts.database.main_activity.MainPresenterInter
+import com.acmpo6ou.myaccounts.database.main_activity.MainPresenterI
 import com.acmpo6ou.myaccounts.databinding.ActivityMainBinding
 import com.acmpo6ou.myaccounts.database.databases_list.DatabaseFragment
 import com.google.android.material.snackbar.Snackbar
 
-class MainActivity : SuperActivity(), MainActivityInter {
+class MainActivity : SuperActivity(), MainActivityI {
     val IMPORT_RC = 202
 
     override lateinit var b: ActivityMainBinding
     override lateinit var prefs: SharedPreferences
-    override lateinit var presenter: MainPresenterInter
+    override lateinit var presenter: MainPresenterI
 
     override val confirmGoingBackMsg = R.string.confirm_exit
     override var lastBackPressTime: Long = 0

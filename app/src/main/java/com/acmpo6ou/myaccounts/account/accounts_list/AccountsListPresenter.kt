@@ -22,7 +22,7 @@ package com.acmpo6ou.myaccounts.account.accounts_list
 import com.acmpo6ou.myaccounts.database.databases_list.Account
 import com.acmpo6ou.myaccounts.database.databases_list.DbMap
 
-open class AccountsListPresenter(val view: AccountsFragmentInter) : AccountsListPresenterInter {
+open class AccountsListPresenter(val view: AccountsFragmentI) : AccountsListPresenterI {
     override val accounts: DbMap get() = view.accountsActivity?.database?.data ?: mutableMapOf()
 
     // [accounts] is a map of [String] to [Account], but AccountsAdapter

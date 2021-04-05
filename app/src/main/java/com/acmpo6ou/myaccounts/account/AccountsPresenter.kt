@@ -23,8 +23,8 @@ import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.SuperPresenter
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 
-open class AccountsPresenter(override val view: AccountsActivityInter) :
-    SuperPresenter(), AccountsPresenterInter {
+open class AccountsPresenter(override val view: AccountsActivityI) :
+    SuperPresenter(), AccountsPresenterI {
 
     override val SRC_DIR = view.myContext.getExternalFilesDir(null)?.path + "/src"
     val database: Database get() = view.database

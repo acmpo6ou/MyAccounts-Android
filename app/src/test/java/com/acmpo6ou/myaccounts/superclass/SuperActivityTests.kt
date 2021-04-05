@@ -25,7 +25,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewbinding.ViewBinding
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
-import com.acmpo6ou.myaccounts.core.superclass.SuperPresenterInter
+import com.acmpo6ou.myaccounts.core.superclass.SuperPresenterI
 import com.acmpo6ou.myaccounts.selectNavigationItem
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
@@ -34,7 +34,7 @@ import org.junit.Test
 private open class TestActivity : SuperActivity() {
     override val b: ViewBinding = mock()
     override val confirmGoingBackMsg = 0
-    override var presenter: SuperPresenterInter = mock()
+    override var presenter: SuperPresenterI = mock()
     override val mainFragmentId = 0
     override val prefs: SharedPreferences = mock()
 

@@ -25,7 +25,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.acmpo6ou.myaccounts.account.accounts_list.AccountsListPresenterInter
+import com.acmpo6ou.myaccounts.account.accounts_list.AccountsListPresenterI
 import com.acmpo6ou.myaccounts.database.databases_list.Account
 import com.acmpo6ou.myaccounts.account.accounts_list.AccountsFragment
 import com.nhaarman.mockitokotlin2.doReturn
@@ -39,7 +39,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class AccountsFragmentFunc {
     lateinit var scenario: FragmentScenario<AccountsFragment>
-    lateinit var presenter: AccountsListPresenterInter
+    lateinit var presenter: AccountsListPresenterI
 
     @Before
     fun setUp() {

@@ -27,7 +27,7 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.account.accounts_list.AccountsListPresenterInter
+import com.acmpo6ou.myaccounts.account.accounts_list.AccountsListPresenterI
 import com.acmpo6ou.myaccounts.clickMenuItem
 import com.acmpo6ou.myaccounts.databaseMap
 import com.acmpo6ou.myaccounts.account.accounts_list.AccountsFragment
@@ -45,7 +45,7 @@ import org.robolectric.annotation.LooperMode
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class AccountsAdapterInst {
     lateinit var scenario: FragmentScenario<AccountsFragment>
-    lateinit var spyPresenter: AccountsListPresenterInter
+    lateinit var spyPresenter: AccountsListPresenterI
 
     var recycler: RecyclerView? = null
     var itemLayout: View? = null

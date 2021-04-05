@@ -25,8 +25,8 @@ import android.content.SharedPreferences
 import android.net.Uri
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.database.databases_list.Database
-import com.acmpo6ou.myaccounts.database.main_activity.MainActivityInter
-import com.acmpo6ou.myaccounts.database.main_activity.MainModelInter
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
+import com.acmpo6ou.myaccounts.database.main_activity.MainModelI
 import com.acmpo6ou.myaccounts.database.main_activity.MainPresenter
 import com.github.ivanshafran.sharedpreferencesmock.SPMockBuilder
 import com.nhaarman.mockitokotlin2.*
@@ -44,8 +44,8 @@ class MainPresenterTests {
     lateinit var presenter: MainPresenter
     lateinit var spyPresenter: MainPresenter
 
-    lateinit var view: MainActivityInter
-    lateinit var model: MainModelInter
+    lateinit var view: MainActivityI
+    lateinit var model: MainModelI
     lateinit var mockPrefs: SharedPreferences
 
     private val locationUri: Uri = mock()

@@ -27,7 +27,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
 
-class DisplayAccountAdapter(val view: DisplayAccountFragmentInter) :
+class DisplayAccountAdapter(val view: DisplayAccountFragmentI) :
     RecyclerView.Adapter<DisplayAccountAdapter.ViewHolder>() {
 
     val presenter get() = view.presenter

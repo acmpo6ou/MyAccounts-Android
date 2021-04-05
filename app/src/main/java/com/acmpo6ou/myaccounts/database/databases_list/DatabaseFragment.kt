@@ -34,13 +34,13 @@ import com.acmpo6ou.myaccounts.database.databases_list.DatabaseFragmentDirection
 /**
  * Fragment representing a list of Databases.
  */
-class DatabaseFragment : ListFragment(), DatabaseFragmentInter {
+class DatabaseFragment : ListFragment(), DatabaseFragmentI {
     override lateinit var ACCOUNTS_DIR: String
     val EXPORT_RC = 101
     override val actionCreateItem = R.id.actionCreateDatabase
 
     override lateinit var adapter: DatabasesAdapter
-    override lateinit var presenter: DatabasesPresenterInter
+    override lateinit var presenter: DatabasesPresenterI
 
     var databases
         get() = app.databases

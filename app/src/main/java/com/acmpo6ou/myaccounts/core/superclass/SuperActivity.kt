@@ -55,7 +55,7 @@ import com.google.android.material.snackbar.Snackbar
 /**
  * Super class for MainActivity and AccountsActivity.
  */
-abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
+abstract class SuperActivity : AppCompatActivity(), SuperActivityI {
     override lateinit var ACCOUNTS_DIR: String
     override lateinit var myContext: Context
     override lateinit var app: MyApp
@@ -68,7 +68,7 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
     lateinit var navController: NavController
     lateinit var appBarConfiguration: AppBarConfiguration
     abstract val confirmGoingBackMsg: Int
-    abstract val presenter: SuperPresenterInter
+    abstract val presenter: SuperPresenterI
 
     abstract val mainFragmentId: Int
     override val mainFragment: ListFragment

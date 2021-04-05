@@ -29,14 +29,14 @@ import androidx.lifecycle.Observer
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.CreateEditFragment
-import com.acmpo6ou.myaccounts.database.main_activity.MainActivityInter
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
 import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
 
 /**
  * Super class for CreateDatabaseFragment and EditDatabaseFragment.
  */
 abstract class CreateEditDatabaseFragment : CreateEditFragment(), ErrorFragment {
-    override val mainActivity: MainActivityInter get() = activity as MainActivity
+    override val mainActivity: MainActivityI get() = activity as MainActivity
     override lateinit var lifecycle: LifecycleOwner
     abstract override val viewModel: CreateEditDatabaseModel
 

@@ -23,10 +23,10 @@ import android.content.Intent
 import android.net.Uri
 import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
 import com.acmpo6ou.myaccounts.MyApp
-import com.acmpo6ou.myaccounts.core.superclass.ListFragmentInter
+import com.acmpo6ou.myaccounts.core.superclass.ListFragmentI
 import com.acmpo6ou.myaccounts.core.superclass.ListPresenter
 
-interface DatabasesPresenterInter : DatabaseUtils, ListPresenter {
+interface DatabasesPresenterI : DatabaseUtils, ListPresenter {
     var databases: DbList
 
     fun exportSelected(i: Int)
@@ -42,8 +42,8 @@ interface DatabasesPresenterInter : DatabaseUtils, ListPresenter {
     fun openDatabase(i: Int)
 }
 
-interface DatabaseFragmentInter : ListFragmentInter {
-    val presenter: DatabasesPresenterInter
+interface DatabaseFragmentI : ListFragmentI {
+    val presenter: DatabasesPresenterI
     val adapter: DatabasesAdapter
 
     val ACCOUNTS_DIR: String
@@ -62,7 +62,7 @@ interface DatabaseFragmentInter : ListFragmentInter {
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
 }
 
-interface DatabasesModelInter : DatabaseUtils {
+interface DatabasesModelI : DatabaseUtils {
     fun getDatabases(): DbList
     fun exportDatabase(name: String, destinationUri: Uri)
 }

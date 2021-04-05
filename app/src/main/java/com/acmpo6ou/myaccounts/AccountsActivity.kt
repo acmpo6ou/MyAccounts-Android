@@ -27,16 +27,16 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.preference.PreferenceManager
-import com.acmpo6ou.myaccounts.account.AccountsActivityInter
+import com.acmpo6ou.myaccounts.account.AccountsActivityI
 import com.acmpo6ou.myaccounts.account.AccountsPresenter
-import com.acmpo6ou.myaccounts.account.AccountsPresenterInter
+import com.acmpo6ou.myaccounts.account.AccountsPresenterI
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
 import com.acmpo6ou.myaccounts.databinding.ActivityAccountsBinding
 
-open class AccountsActivity : SuperActivity(), AccountsActivityInter {
+open class AccountsActivity : SuperActivity(), AccountsActivityI {
     override lateinit var b: ActivityAccountsBinding
     override lateinit var prefs: SharedPreferences
-    override lateinit var presenter: AccountsPresenterInter
+    override lateinit var presenter: AccountsPresenterI
 
     override val mainFragmentId = R.id.accountsFragment
     override val confirmGoingBackMsg = R.string.confirm_going_back

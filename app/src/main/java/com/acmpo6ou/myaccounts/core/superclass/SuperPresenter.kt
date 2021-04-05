@@ -32,8 +32,8 @@ import retrofit2.Retrofit
 /**
  * Super class for MainPresenter and AccountsPresenter.
  */
-abstract class SuperPresenter : SuperPresenterInter {
-    abstract val view: SuperActivityInter
+abstract class SuperPresenter : SuperPresenterI {
+    abstract val view: SuperActivityI
 
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://api.github.com")

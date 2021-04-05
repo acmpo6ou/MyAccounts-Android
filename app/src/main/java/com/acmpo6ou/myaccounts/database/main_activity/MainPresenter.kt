@@ -28,10 +28,10 @@ import java.io.File
 import java.io.IOException
 import java.time.LocalDate
 
-open class MainPresenter(override var view: MainActivityInter) :
+open class MainPresenter(override var view: MainActivityI) :
     SuperPresenter(),
-    MainPresenterInter {
-    var model: MainModelInter = MainModel(
+    MainPresenterI {
+    var model: MainModelI = MainModel(
         view.ACCOUNTS_DIR,
         view.myContext.contentResolver
     )

@@ -24,10 +24,10 @@ import com.acmpo6ou.myaccounts.R
 import java.io.FileNotFoundException
 import java.io.IOException
 
-open class DatabasesPresenter(private val view: DatabaseFragmentInter) :
-    DatabasesPresenterInter {
+open class DatabasesPresenter(private val view: DatabaseFragmentI) :
+    DatabasesPresenterI {
 
-    var model: DatabasesModelInter = DatabasesModel(
+    var model: DatabasesModelI = DatabasesModel(
         view.ACCOUNTS_DIR,
         view.myContext.contentResolver
     )

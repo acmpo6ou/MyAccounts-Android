@@ -25,8 +25,8 @@ import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.*
 import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
 import com.acmpo6ou.myaccounts.database.databases_list.Database
-import com.acmpo6ou.myaccounts.database.databases_list.DatabaseFragmentInter
-import com.acmpo6ou.myaccounts.database.databases_list.DatabasesModelInter
+import com.acmpo6ou.myaccounts.database.databases_list.DatabaseFragmentI
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesModelI
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesPresenter
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.doReturn
@@ -34,8 +34,8 @@ import com.nhaarman.mockitokotlin2.mock
 import org.junit.Before
 
 open class DatabasesPresenterTest : DatabaseUtils {
-    lateinit var view: DatabaseFragmentInter
-    lateinit var model: DatabasesModelInter
+    lateinit var view: DatabaseFragmentI
+    lateinit var model: DatabasesModelI
     lateinit var presenter: DatabasesPresenter
 
     lateinit var app: MyApp

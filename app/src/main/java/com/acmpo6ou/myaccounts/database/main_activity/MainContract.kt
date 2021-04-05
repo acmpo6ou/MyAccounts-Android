@@ -22,16 +22,16 @@ package com.acmpo6ou.myaccounts.database.main_activity
 import android.content.Intent
 import android.net.Uri
 import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
-import com.acmpo6ou.myaccounts.core.superclass.SuperActivityInter
-import com.acmpo6ou.myaccounts.core.superclass.SuperPresenterInter
+import com.acmpo6ou.myaccounts.core.superclass.SuperActivityI
+import com.acmpo6ou.myaccounts.core.superclass.SuperPresenterI
 
-interface MainPresenterInter : SuperPresenterInter {
+interface MainPresenterI : SuperPresenterI {
     fun importSelected(): Intent
     fun checkTarFile(location: Uri)
     fun isTimeToUpdate(): Boolean
 }
 
-interface MainActivityInter : SuperActivityInter {
+interface MainActivityI : SuperActivityI {
     var lastBackPressTime: Long
 
     fun importDialog(): Intent
@@ -39,7 +39,7 @@ interface MainActivityInter : SuperActivityInter {
     fun notifyChanged(i: Int)
 }
 
-interface MainModelInter : DatabaseUtils {
+interface MainModelI : DatabaseUtils {
     fun countFiles(location: Uri): Int
     fun getNames(locationUri: Uri): List<String>
     fun getSizes(locationUri: Uri): List<Int>

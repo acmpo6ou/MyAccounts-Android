@@ -21,7 +21,7 @@ package com.acmpo6ou.myaccounts.databases_list
 
 import android.app.Activity
 import com.acmpo6ou.myaccounts.ActivityResultTest
-import com.acmpo6ou.myaccounts.database.databases_list.DatabasesPresenterInter
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesPresenterI
 import com.acmpo6ou.myaccounts.database.databases_list.DatabaseFragment
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
@@ -31,7 +31,7 @@ import org.junit.Test
 
 class DatabaseFragmentTests : ActivityResultTest() {
     lateinit var fragment: DatabaseFragment
-    lateinit var presenter: DatabasesPresenterInter
+    lateinit var presenter: DatabasesPresenterI
 
     @Before
     fun setUp() {

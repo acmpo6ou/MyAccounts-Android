@@ -22,7 +22,7 @@ package com.acmpo6ou.myaccounts.account.accounts_list
 import android.os.Bundle
 import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.account.AccountsActivityInter
+import com.acmpo6ou.myaccounts.account.AccountsActivityI
 import com.acmpo6ou.myaccounts.account.accounts_list.AccountsFragmentDirections.actionDisplayAccount
 import com.acmpo6ou.myaccounts.account.accounts_list.AccountsFragmentDirections.actionEditAccount
 import com.acmpo6ou.myaccounts.core.superclass.ListFragment
@@ -30,11 +30,11 @@ import com.acmpo6ou.myaccounts.core.superclass.ListFragment
 /**
  * Fragment representing a list of Accounts.
  */
-class AccountsFragment : ListFragment(), AccountsFragmentInter {
+class AccountsFragment : ListFragment(), AccountsFragmentI {
     override lateinit var adapter: AccountsAdapter
-    override lateinit var presenter: AccountsListPresenterInter
+    override lateinit var presenter: AccountsListPresenterI
 
-    override val accountsActivity get() = activity as? AccountsActivityInter
+    override val accountsActivity get() = activity as? AccountsActivityI
     override val items get() = presenter.accountsList
     override val actionCreateItem = R.id.actionCreateAccount
 

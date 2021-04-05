@@ -20,8 +20,8 @@
 package com.acmpo6ou.myaccounts.accounts_list
 
 import com.acmpo6ou.myaccounts.account
-import com.acmpo6ou.myaccounts.account.AccountsActivityInter
-import com.acmpo6ou.myaccounts.account.accounts_list.AccountsFragmentInter
+import com.acmpo6ou.myaccounts.account.AccountsActivityI
+import com.acmpo6ou.myaccounts.account.accounts_list.AccountsFragmentI
 import com.acmpo6ou.myaccounts.account.accounts_list.AccountsListPresenter
 import com.acmpo6ou.myaccounts.copy
 import com.acmpo6ou.myaccounts.database.databases_list.Database
@@ -34,12 +34,12 @@ import org.junit.Before
 import org.junit.Test
 
 class AccountsListPresenterTests {
-    lateinit var view: AccountsFragmentInter
+    lateinit var view: AccountsFragmentI
     lateinit var presenter: AccountsListPresenter
 
     @Before
     fun setup() {
-        val mockActivity: AccountsActivityInter = mock {
+        val mockActivity: AccountsActivityI = mock {
             on { database } doReturn Database(
                 "",
                 data = databaseMap.copy()

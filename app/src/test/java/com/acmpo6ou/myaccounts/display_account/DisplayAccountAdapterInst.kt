@@ -25,7 +25,7 @@ import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountPresenterInter
+import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountPresenterI
 import com.acmpo6ou.myaccounts.str
 import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountFragment
 import com.github.javafaker.Faker
@@ -44,7 +44,7 @@ import org.robolectric.annotation.LooperMode
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class DisplayAccountAdapterInst {
     lateinit var scenario: FragmentScenario<DisplayAccountFragment>
-    lateinit var presenter: DisplayAccountPresenterInter
+    lateinit var presenter: DisplayAccountPresenterI
     private val fileName = Faker().str()
 
     var recycler: RecyclerView? = null

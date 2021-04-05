@@ -30,7 +30,7 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.LifecycleOwner
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.database.main_activity.MainActivityInter
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
 import com.acmpo6ou.myaccounts.database.superclass.ErrorFragment
 import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
 import com.acmpo6ou.myaccounts.str
@@ -47,7 +47,7 @@ import org.robolectric.annotation.LooperMode
 
 class TestFragment : Fragment(), ErrorFragment {
     override val viewModel = TestDatabaseModel()
-    override val mainActivity: MainActivityInter = mock()
+    override val mainActivity: MainActivityI = mock()
     override lateinit var lifecycle: LifecycleOwner
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

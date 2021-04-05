@@ -39,7 +39,7 @@ import com.google.android.material.snackbar.Snackbar
  * Super class for DatabaseFragment and AccountsFragment – fragments that contain
  * lists of items.
  */
-abstract class ListFragment : Fragment(), ListFragmentInter {
+abstract class ListFragment : Fragment(), ListFragmentI {
     private var binding: FragmentListBinding? = null
     val b: FragmentListBinding get() = binding!!
 
