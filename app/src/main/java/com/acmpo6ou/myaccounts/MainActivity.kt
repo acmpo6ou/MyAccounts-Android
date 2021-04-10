@@ -36,7 +36,9 @@ import com.acmpo6ou.myaccounts.database.main_activity.MainPresenter
 import com.acmpo6ou.myaccounts.database.main_activity.MainPresenterI
 import com.acmpo6ou.myaccounts.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : SuperActivity(), MainActivityI {
     val IMPORT_RC = 202
 

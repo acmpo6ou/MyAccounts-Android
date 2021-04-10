@@ -19,7 +19,6 @@
 
 package com.acmpo6ou.myaccounts.core.superclass
 
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -30,7 +29,6 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.databinding.FragmentListBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -47,15 +45,6 @@ abstract class ListFragment : Fragment(), ListFragmentI {
     abstract val adapter: RecyclerView.Adapter<*>
     abstract val presenter: ListPresenter
     abstract val actionCreateItem: Int
-
-    override lateinit var myContext: Context
-    lateinit var app: MyApp
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        myContext = context
-        app = context.applicationContext as MyApp
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -78,7 +67,7 @@ abstract class ListFragment : Fragment(), ListFragmentI {
             view.findNavController().navigate(actionCreateItem)
         }
 
-        b.itemsList.layoutManager = LinearLayoutManager(myContext)
+        b.itemsList.layoutManager = LinearLayoutManager(context)
         b.itemsList.adapter = adapter
 
         // listener to hide/display FAB when scrolling, so that the FAB doesn't prevent from
@@ -132,7 +121,7 @@ abstract class ListFragment : Fragment(), ListFragmentI {
      * the `Yes` button).
      */
     inline fun confirmDialog(message: String, crossinline positiveAction: () -> Unit) {
-        MaterialAlertDialogBuilder(myContext)
+        MaterialAlertDialogBuilder(context!!)
             .setTitle(R.string.warning)
             .setMessage(message)
             .setIcon(R.drawable.ic_warning)

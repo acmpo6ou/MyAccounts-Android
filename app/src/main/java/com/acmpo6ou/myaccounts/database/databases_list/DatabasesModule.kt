@@ -20,7 +20,7 @@
 package com.acmpo6ou.myaccounts.database.databases_list
 
 import android.content.Context
-import com.acmpo6ou.myaccounts.MainActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.acmpo6ou.myaccounts.R
 import dagger.Binds
 import dagger.Module
@@ -44,9 +44,11 @@ interface DatabasesBindings {
 class DatabasesModule {
     @Provides
     fun databasesFragment(@ActivityContext activity: Context): DatabaseFragmentI {
-        return (activity as MainActivity)
+        return (activity as AppCompatActivity)
             .supportFragmentManager
-            .findFragmentById(R.id.databaseFragment)
+            .findFragmentById(R.id.nav_host_fragment)!!
+            .childFragmentManager
+            .fragments.first()
             as DatabasesFragment
     }
 }

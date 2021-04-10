@@ -21,7 +21,6 @@ package com.acmpo6ou.myaccounts.database.databases_list
 
 import android.content.Intent
 import android.net.Uri
-import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.ListFragmentI
 import com.acmpo6ou.myaccounts.core.superclass.ListPresenter
 import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
@@ -43,7 +42,6 @@ interface DatabasesPresenterI : DatabaseUtils, ListPresenter {
 interface DatabaseFragmentI : ListFragmentI {
     val presenter: DatabasesPresenterI
     val adapter: DatabasesAdapter
-    var app: MyApp
 
     fun exportDialog(i: Int)
     fun showError(title: String, details: String)

@@ -23,6 +23,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.MainActivity
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.superclass.ListFragment
 import com.acmpo6ou.myaccounts.core.utils.startDatabaseUtil
@@ -36,14 +37,18 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class DatabasesFragment : ListFragment(), DatabaseFragmentI {
-    val EXPORT_RC = 101
-    override val actionCreateItem = R.id.actionCreateDatabase
-    override val items by app::databases
+    @Inject
+    lateinit var app: MyApp
 
     @Inject
     override lateinit var adapter: DatabasesAdapter
+
     @Inject
     override lateinit var presenter: DatabasesPresenterI
+
+    val EXPORT_RC = 101
+    override val actionCreateItem = R.id.actionCreateDatabase
+    override val items get() = app.databases
 
     /**
      * Used to display export dialog so that user can choose location where to export database.
@@ -124,5 +129,5 @@ class DatabasesFragment : ListFragment(), DatabaseFragmentI {
         if (requestCode == EXPORT_RC) presenter.exportDatabase(data?.data!!)
     }
 
-    override fun startDatabase(index: Int) = startDatabaseUtil(index, myContext)
+    override fun startDatabase(index: Int) = startDatabaseUtil(index, requireContext())
 }

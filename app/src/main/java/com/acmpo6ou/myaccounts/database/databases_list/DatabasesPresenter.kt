@@ -22,6 +22,7 @@ package com.acmpo6ou.myaccounts.database.databases_list
 import android.net.Uri
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
+import dagger.Lazy
 import dagger.hilt.android.scopes.FragmentScoped
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -29,12 +30,13 @@ import javax.inject.Inject
 
 @FragmentScoped
 open class DatabasesPresenter @Inject constructor(
-    private val view: DatabaseFragmentI,
+    private val fragment: Lazy<DatabaseFragmentI>,
     private val model: DatabasesModelI,
     private val app: MyApp,
 ) : DatabasesPresenterI {
 
     override val SRC_DIR: String get() = model.SRC_DIR
+    val view: DatabaseFragmentI get() = fragment.get()
     var exportIndex: Int? = null
     var databases by app::databases
 
