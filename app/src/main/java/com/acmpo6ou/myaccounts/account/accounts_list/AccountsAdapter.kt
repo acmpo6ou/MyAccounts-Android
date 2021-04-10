@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.account.accounts_list
 
+import android.content.Context
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
@@ -30,14 +31,14 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.database.databases_list.Account
+import dagger.hilt.android.qualifiers.ActivityContext
+import javax.inject.Inject
 
-/**
- * [RecyclerView.Adapter] that can display an [Account].
- */
-class AccountsAdapter(val view: AccountsFragmentI) :
-    RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
+class AccountsAdapter @Inject constructor(
+    private val presenter: AccountsListPresenterI,
+    @ActivityContext private val context: Context,
+) : RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
 
-    val presenter: AccountsListPresenterI get() = view.presenter
     private val accountsList: List<Account> get() = presenter.accountsList
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -54,13 +55,13 @@ class AccountsAdapter(val view: AccountsFragmentI) :
 
         // set popup menu on item
         holder.menu.setOnClickListener { it ->
-            val popup = PopupMenu(view.myContext, it)
+            val popup = PopupMenu(context, it)
             popup.inflate(R.menu.accounts_item_menu)
 
             // set color of `Delete` item to red
             popup.menu.findItem(R.id.delete_account_item).let {
                 val spanStr = SpannableString(it.title)
-                val redColor = ContextCompat.getColor(view.myContext, R.color.red)
+                val redColor = ContextCompat.getColor(context, R.color.red)
                 spanStr.setSpan(ForegroundColorSpan(redColor), 0, it.title.length, 0)
                 it.title = spanStr
             }

@@ -19,30 +19,23 @@
 
 package com.acmpo6ou.myaccounts.account.accounts_list
 
-import android.os.Bundle
 import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.account.AccountsActivityI
 import com.acmpo6ou.myaccounts.account.accounts_list.AccountsFragmentDirections.actionDisplayAccount
 import com.acmpo6ou.myaccounts.account.accounts_list.AccountsFragmentDirections.actionEditAccount
 import com.acmpo6ou.myaccounts.core.superclass.ListFragment
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-/**
- * Fragment representing a list of Accounts.
- */
+@AndroidEntryPoint
 class AccountsFragment : ListFragment(), AccountsFragmentI {
+    @Inject
     override lateinit var adapter: AccountsAdapter
+    @Inject
     override lateinit var presenter: AccountsListPresenterI
 
-    override val accountsActivity get() = activity as? AccountsActivityI
     override val items get() = presenter.accountsList
     override val actionCreateItem = R.id.actionCreateAccount
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        adapter = AccountsAdapter(this)
-        presenter = AccountsListPresenter(this)
-    }
 
     /**
      * Navigates to DisplayAccountFragment passing account name.

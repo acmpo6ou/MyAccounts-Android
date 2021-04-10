@@ -19,7 +19,6 @@
 
 package com.acmpo6ou.myaccounts.account.accounts_list
 
-import com.acmpo6ou.myaccounts.account.AccountsActivityI
 import com.acmpo6ou.myaccounts.core.superclass.ListFragmentI
 import com.acmpo6ou.myaccounts.core.superclass.ListPresenter
 import com.acmpo6ou.myaccounts.database.databases_list.Account
@@ -27,7 +26,6 @@ import com.acmpo6ou.myaccounts.database.databases_list.DbMap
 
 interface AccountsFragmentI : ListFragmentI {
     val presenter: AccountsListPresenterI
-    val accountsActivity: AccountsActivityI?
 
     fun navigateToDisplay(name: String)
     fun navigateToEdit(name: String)

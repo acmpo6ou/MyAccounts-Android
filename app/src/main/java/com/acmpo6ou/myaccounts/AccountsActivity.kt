@@ -32,7 +32,9 @@ import com.acmpo6ou.myaccounts.account.AccountsPresenter
 import com.acmpo6ou.myaccounts.account.AccountsPresenterI
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
 import com.acmpo6ou.myaccounts.databinding.ActivityAccountsBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 open class AccountsActivity : SuperActivity(), AccountsActivityI {
     override lateinit var b: ActivityAccountsBinding
     override lateinit var prefs: SharedPreferences
