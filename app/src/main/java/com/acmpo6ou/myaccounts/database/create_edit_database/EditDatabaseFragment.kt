@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.database.create_edit_database
 
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.database.superclass.CreateEditDatabaseFragment
@@ -28,8 +29,8 @@ class EditDatabaseFragment : CreateEditDatabaseFragment() {
     override lateinit var viewModel: EditDatabaseViewModel
     var args: EditDatabaseFragmentArgs? = null
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(EditDatabaseViewModel::class.java)
         initModel()
         initForm()

@@ -116,7 +116,7 @@ class DatabasesAdapter @Inject constructor(
             // or start AccountsActivity for given database, this behaviour is decided in
             // openDatabase method of presenter
             view.setOnClickListener {
-                presenter.openDatabase(adapterPosition)
+                presenter.openDatabase(bindingAdapterPosition)
             }
         }
     }

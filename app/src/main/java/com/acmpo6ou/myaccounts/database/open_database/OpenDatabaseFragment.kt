@@ -33,8 +33,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.MainActivity
-import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.utils.startDatabaseUtil
 import com.acmpo6ou.myaccounts.database.superclass.ErrorFragment
 import com.acmpo6ou.myaccounts.databinding.OpenDatabaseFragmentBinding
@@ -113,20 +113,13 @@ class OpenDatabaseFragment : Fragment(), ErrorFragment {
         return b.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // set focus on password field and display keyboard
-        b.databasePassword.requestFocus()
-        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(b.databasePassword, InputMethodManager.SHOW_IMPLICIT)
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         lifecycle = viewLifecycleOwner
         viewModel = ViewModelProvider(this).get(OpenDatabaseViewModel::class.java)
         initModel()
@@ -159,6 +152,11 @@ class OpenDatabaseFragment : Fragment(), ErrorFragment {
                 b.parentPassword.error = null
             }
         })
+
+        // set focus on password field and display keyboard
+        b.databasePassword.requestFocus()
+        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(b.databasePassword, InputMethodManager.SHOW_IMPLICIT)
     }
 
     /**

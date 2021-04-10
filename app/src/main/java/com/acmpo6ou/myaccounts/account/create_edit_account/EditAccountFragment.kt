@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.account.create_edit_account
 
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.R
@@ -30,8 +31,8 @@ class EditAccountFragment : CreateEditAccountFragment() {
     override lateinit var viewModel: EditAccountViewModel
     private val accountsActivity get() = activity as? AccountsActivity
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(EditAccountViewModel::class.java)
 
         val accounts = accountsActivity?.database?.data

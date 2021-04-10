@@ -90,7 +90,7 @@ class AccountsAdapter @Inject constructor(
         init {
             // navigate to DisplayAccountFragment when account item is selected
             view.setOnClickListener {
-                presenter.displayAccount(adapterPosition)
+                presenter.displayAccount(bindingAdapterPosition)
             }
         }
     }

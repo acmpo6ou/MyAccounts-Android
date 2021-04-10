@@ -30,8 +30,8 @@ class CreateAccountFragment : CreateEditAccountFragment() {
     override lateinit var viewModel: CreateAccountViewModel
     private val accountsActivity get() = activity as? AccountsActivity
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(CreateAccountViewModel::class.java)
         accountsActivity?.database?.data?.let {
             viewModel.initialize(app, it)
@@ -39,9 +39,7 @@ class CreateAccountFragment : CreateEditAccountFragment() {
             initAdapter()
         }
         initForm()
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // set focus on account name field and display keyboard
         b.accountName.requestFocus()
         val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

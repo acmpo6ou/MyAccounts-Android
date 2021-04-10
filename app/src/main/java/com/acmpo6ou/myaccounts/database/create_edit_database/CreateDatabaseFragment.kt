@@ -29,14 +29,12 @@ import com.acmpo6ou.myaccounts.database.superclass.CreateEditDatabaseFragment
 class CreateDatabaseFragment : CreateEditDatabaseFragment() {
     override lateinit var viewModel: CreateDatabaseViewModel
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(CreateDatabaseViewModel::class.java)
         initModel()
         initForm()
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // set focus on database name field and display keyboard
         b.databaseName.requestFocus()
         val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
