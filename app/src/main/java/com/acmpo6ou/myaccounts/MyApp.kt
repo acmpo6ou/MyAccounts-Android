@@ -23,11 +23,9 @@ import android.app.Application
 import android.content.res.Resources
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.macasaet.fernet.Key
+import dagger.hilt.android.HiltAndroidApp
 
-/**
- * Application instance, used to store data that needs to be shared by different
- * activities or fragments.
- */
+@HiltAndroidApp
 open class MyApp : Application() {
     // list of Databases that is used almost by every fragment and activity
     var databases = mutableListOf<Database>()

@@ -20,25 +20,23 @@
 package com.acmpo6ou.myaccounts.database.databases_list
 
 import android.net.Uri
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
+import dagger.hilt.android.scopes.FragmentScoped
 import java.io.FileNotFoundException
 import java.io.IOException
+import javax.inject.Inject
 
-open class DatabasesPresenter(private val view: DatabaseFragmentI) :
-    DatabasesPresenterI {
+@FragmentScoped
+open class DatabasesPresenter @Inject constructor(
+    private val view: DatabaseFragmentI,
+    private val model: DatabasesModelI,
+    private val app: MyApp,
+) : DatabasesPresenterI {
 
-    var model: DatabasesModelI = DatabasesModel(
-        view.ACCOUNTS_DIR,
-        view.myContext.contentResolver
-    )
     override val SRC_DIR: String get() = model.SRC_DIR
     var exportIndex: Int? = null
-
-    override var databases: DbList
-        get() = view.app.databases
-        set(value) {
-            view.app.databases = value
-        }
+    var databases by app::databases
 
     init {
         databases = model.getDatabases()
@@ -66,7 +64,7 @@ open class DatabasesPresenter(private val view: DatabaseFragmentI) :
      * If there are no errors - displays snackbar with success message.
      */
     override fun exportDatabase(locationUri: Uri) {
-        val resources = view.myContext?.resources
+        val resources = app?.res
         var errorDetails = ""
 
         try {
@@ -113,7 +111,7 @@ open class DatabasesPresenter(private val view: DatabaseFragmentI) :
     override fun deleteDatabase(i: Int) {
         try {
             // remove cryptography key of database from cache
-            view.app.keyCache.remove(databases[i].password)
+            app.keyCache.remove(databases[i].password)
 
             // remove database from disk
             model.deleteDatabase(databases[i].name)
@@ -121,7 +119,7 @@ open class DatabasesPresenter(private val view: DatabaseFragmentI) :
             databases.removeAt(i)
             view.notifyRemoved(i)
         } catch (e: Exception) {
-            val errorTitle = view.myContext.resources
+            val errorTitle = app.res
                 .getString(R.string.delete_error_title)
             val errorDetails = e.toString()
 
@@ -139,7 +137,7 @@ open class DatabasesPresenter(private val view: DatabaseFragmentI) :
      * @param[i] index of database we want to close.
      */
     override fun closeSelected(i: Int) {
-        if (isDatabaseSaved(databases[i], view.app)) {
+        if (isDatabaseSaved(databases[i], app)) {
             closeDatabase(i)
         } else {
             view.confirmClose(i)
@@ -160,7 +158,7 @@ open class DatabasesPresenter(private val view: DatabaseFragmentI) :
      * @param[i] - database index.
      */
     override fun closeDatabase(i: Int) {
-        view.app.keyCache.remove(databases[i].password)
+        app.keyCache.remove(databases[i].password)
         databases[i].password = null
         view.notifyChanged(i)
     }

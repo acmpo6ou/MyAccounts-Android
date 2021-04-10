@@ -19,8 +19,11 @@
 
 package com.acmpo6ou.myaccounts.database.databases_list
 
-import android.content.ContentResolver
+import android.content.Context
 import android.net.Uri
+import com.acmpo6ou.myaccounts.MyApp
+import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.scopes.FragmentScoped
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.kamranzafar.jtar.TarEntry
@@ -29,6 +32,7 @@ import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
+import javax.inject.Inject
 
 /**
  * Represents account, it stores all account data such as name, password, email, etc.
@@ -77,13 +81,15 @@ data class Database(
 /**
  * Class that contains various functions related to database operations such as encrypting,
  * decrypting, deleting and creating databases.
- *
- * @param[ACCOUNTS_DIR] path to directory that contains src folder.
  */
-class DatabasesModel(
-    private val ACCOUNTS_DIR: String,
-    private val contentResolver: ContentResolver
+@FragmentScoped
+class DatabasesModel @Inject constructor(
+    @ActivityContext private val context: Context,
+    private val app: MyApp,
 ) : DatabasesModelI {
+
+    // path to directory that contains src folder
+    private val ACCOUNTS_DIR = context.getExternalFilesDir(null)!!.path + "/"
     // path to directory that contains databases
     override val SRC_DIR = "$ACCOUNTS_DIR/src/"
 
@@ -125,7 +131,7 @@ class DatabasesModel(
      */
     override fun exportDatabase(name: String, destinationUri: Uri) {
         // get tar file
-        val descriptor = contentResolver.openFileDescriptor(destinationUri, "w")
+        val descriptor = context.contentResolver.openFileDescriptor(destinationUri, "w")
         val destination = FileOutputStream(descriptor?.fileDescriptor)
 
         // create tar file

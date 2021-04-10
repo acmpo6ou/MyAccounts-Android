@@ -29,16 +29,21 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
+import dagger.hilt.android.scopes.FragmentScoped
+import javax.inject.Inject
 
 /**
  * [RecyclerView.Adapter] that can display a [Database].
  */
-class DatabasesAdapter(val view: DatabaseFragmentI) :
-    RecyclerView.Adapter<DatabasesAdapter.ViewHolder>() {
+@FragmentScoped
+class DatabasesAdapter @Inject constructor(
+    private val presenter: DatabasesPresenterI,
+    private val app: MyApp
+) : RecyclerView.Adapter<DatabasesAdapter.ViewHolder>() {
 
-    val presenter get() = view.presenter
-    private val databases: List<Database> get() = presenter.databases
+    private val databases: List<Database> get() = app.databases
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -65,13 +70,13 @@ class DatabasesAdapter(val view: DatabaseFragmentI) :
 
         // set popup menu on item
         holder.menu.setOnClickListener { it ->
-            val popup = PopupMenu(view.myContext, it)
+            val popup = PopupMenu(app, it)
             popup.inflate(R.menu.database_item_menu)
 
             // set color of `Delete` item to red
             popup.menu.findItem(R.id.delete_database_item).let {
                 val spanStr = SpannableString(it.title)
-                val redColor = ContextCompat.getColor(view.myContext, R.color.red)
+                val redColor = ContextCompat.getColor(app, R.color.red)
                 spanStr.setSpan(ForegroundColorSpan(redColor), 0, it.title.length, 0)
                 it.title = spanStr
             }

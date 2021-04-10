@@ -20,9 +20,7 @@
 package com.acmpo6ou.myaccounts.database.databases_list
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R
@@ -30,35 +28,22 @@ import com.acmpo6ou.myaccounts.core.superclass.ListFragment
 import com.acmpo6ou.myaccounts.core.utils.startDatabaseUtil
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentDirections.actionEditDatabase
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentDirections.actionOpenDatabase
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * Fragment representing a list of Databases.
  */
+@AndroidEntryPoint
 class DatabasesFragment : ListFragment(), DatabaseFragmentI {
-    override lateinit var ACCOUNTS_DIR: String
     val EXPORT_RC = 101
     override val actionCreateItem = R.id.actionCreateDatabase
+    override val items by app::databases
 
+    @Inject
     override lateinit var adapter: DatabasesAdapter
+    @Inject
     override lateinit var presenter: DatabasesPresenterI
-
-    var databases
-        get() = app.databases
-        set(value) {
-            app.databases = value
-        }
-    override val items get() = databases
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        ACCOUNTS_DIR = context.getExternalFilesDir(null)!!.path + "/"
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        adapter = DatabasesAdapter(this)
-        presenter = DatabasesPresenter(this)
-    }
 
     /**
      * Used to display export dialog so that user can choose location where to export database.
@@ -70,7 +55,7 @@ class DatabasesFragment : ListFragment(), DatabaseFragmentI {
      * default in export dialog.
      */
     override fun exportDialog(i: Int) {
-        val name = databases[i].name
+        val name = items[i].name
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
         intent.apply {
             addCategory(Intent.CATEGORY_OPENABLE)
@@ -87,7 +72,7 @@ class DatabasesFragment : ListFragment(), DatabaseFragmentI {
      * @param[i] - database index.
      */
     override fun confirmDelete(i: Int) {
-        val name = databases[i].name
+        val name = items[i].name
         val message = resources.getString(R.string.confirm_delete, name)
         confirmDialog(message) { presenter.deleteDatabase(i) }
     }
@@ -99,7 +84,7 @@ class DatabasesFragment : ListFragment(), DatabaseFragmentI {
      * @param[i] - database index.
      */
     override fun confirmClose(i: Int) {
-        val name = databases[i].name
+        val name = items[i].name
         val message = resources.getString(R.string.confirm_close, name)
         confirmDialog(message) { presenter.closeDatabase(i) }
     }
@@ -135,9 +120,7 @@ class DatabasesFragment : ListFragment(), DatabaseFragmentI {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        // do nothing if activity was canceled
         if (resultCode != Activity.RESULT_OK) return
-
         if (requestCode == EXPORT_RC) presenter.exportDatabase(data?.data!!)
     }
 
