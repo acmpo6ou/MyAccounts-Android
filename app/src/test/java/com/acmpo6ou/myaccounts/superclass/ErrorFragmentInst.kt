@@ -51,7 +51,7 @@ class TestFragment : Fragment(), ErrorFragment {
     override lateinit var lifecycle: LifecycleOwner
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState))
+        super.onViewCreated(view, savedInstanceState)
         lifecycle = viewLifecycleOwner
     }
 
