@@ -25,7 +25,9 @@ import com.acmpo6ou.myaccounts.core.superclass.ListFragmentI
 import com.acmpo6ou.myaccounts.core.superclass.ListPresenter
 import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
 
-interface DatabasesPresenterI : DatabaseUtils, ListPresenter {
+interface DatabasesPresenterI : ListPresenter {
+    val databases: DbList
+
     fun exportSelected(i: Int)
     fun exportDatabase(locationUri: Uri)
 

@@ -35,10 +35,9 @@ open class DatabasesPresenter @Inject constructor(
     private val app: MyApp,
 ) : DatabasesPresenterI {
 
-    override val SRC_DIR: String get() = model.SRC_DIR
     val view: DatabaseFragmentI get() = fragment.get()
     var exportIndex: Int? = null
-    var databases by app::databases
+    override var databases by app::databases
 
     init {
         databases = model.getDatabases()
@@ -64,13 +63,12 @@ open class DatabasesPresenter @Inject constructor(
      * When error occurred calls view.showError() passing through appropriate error
      * details to display dialog about error.
      * If there are no errors - displays snackbar with success message.
+     * @param[locationUri] uri containing path where to export database.
      */
     override fun exportDatabase(locationUri: Uri) {
-        val resources = app?.res
-        var errorDetails = ""
+        var errorDetails: String? = null
 
         try {
-            // export database
             exportIndex?.let {
                 val name = databases[it].name
                 model.exportDatabase(name, locationUri)
@@ -80,10 +78,10 @@ open class DatabasesPresenter @Inject constructor(
         }
         // handle all possible errors
         catch (e: FileNotFoundException) {
-            errorDetails = resources.getString(R.string.export_file_not_found_details)
+            errorDetails = app.res.getString(R.string.export_file_not_found_details)
             e.printStackTrace()
         } catch (e: IOException) {
-            errorDetails = resources.getString(R.string.io_error)
+            errorDetails = app.res.getString(R.string.io_error)
             e.printStackTrace()
         } catch (e: Exception) {
             errorDetails = e.toString()
@@ -92,8 +90,8 @@ open class DatabasesPresenter @Inject constructor(
 
         // if there are any errors errorDetails will be filled with appropriate details string
         // if so, display error dialog
-        if (errorDetails.isNotEmpty()) {
-            val errorTitle = resources.getString(R.string.export_error_title)
+        if (errorDetails != null) {
+            val errorTitle = app.res.getString(R.string.export_error_title)
             view.showError(errorTitle, errorDetails)
         }
     }
@@ -121,28 +119,9 @@ open class DatabasesPresenter @Inject constructor(
             databases.removeAt(i)
             view.notifyRemoved(i)
         } catch (e: Exception) {
-            val errorTitle = app.res
-                .getString(R.string.delete_error_title)
-            val errorDetails = e.toString()
-
-            view.showError(errorTitle, errorDetails)
+            val errorTitle = app.res.getString(R.string.delete_error_title)
+            view.showError(errorTitle, e.toString())
             e.printStackTrace()
-        }
-    }
-
-    /**
-     * Called when user selects `Close` in database item popup menu.
-     *
-     * Checks whether database we want to close is saved, if it is –
-     * calls closeDatabase to close the database, if it's not – calls confirmClose to ask
-     * user for confirmation.
-     * @param[i] index of database we want to close.
-     */
-    override fun closeSelected(i: Int) {
-        if (isDatabaseSaved(databases[i], app)) {
-            closeDatabase(i)
-        } else {
-            view.confirmClose(i)
         }
     }
 
@@ -155,7 +134,23 @@ open class DatabasesPresenter @Inject constructor(
     override fun editSelected(i: Int) = view.navigateToEdit(i)
 
     /**
-     * Used to reset database password in this way 'closing' it.
+     * Called when user selects `Close` in database item popup menu.
+     *
+     * Checks whether database we want to close is saved, if it is –
+     * calls closeDatabase to close the database, if it's not – calls confirmClose to ask
+     * user for confirmation.
+     * @param[i] index of database we want to close.
+     */
+    override fun closeSelected(i: Int) {
+        if (model.isDatabaseSaved(databases[i], app)) {
+            closeDatabase(i)
+        } else {
+            view.confirmClose(i)
+        }
+    }
+
+    /**
+     * Used to reset database password in this way "closing" the database.
      * It also removes cryptography key of database from cache.
      * @param[i] - database index.
      */
@@ -169,7 +164,7 @@ open class DatabasesPresenter @Inject constructor(
      * Called when user selects item in database list.
      *
      * If selected database is closed should navigate to OpenDatabaseFragment, if it
-     * is open - call view.startDatabase() passing through database index.
+     * is opened - call view.startDatabase() passing through database index.
      */
     override fun openDatabase(i: Int) {
         if (databases[i].isOpen) {
