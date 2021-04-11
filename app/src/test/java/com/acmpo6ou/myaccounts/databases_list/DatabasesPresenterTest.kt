@@ -19,17 +19,14 @@
 
 package com.acmpo6ou.myaccounts.databases_list
 
-import android.content.ContentResolver
 import android.net.Uri
 import com.acmpo6ou.myaccounts.MyApp
-import com.acmpo6ou.myaccounts.core.*
 import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.databases_list.DatabaseFragmentI
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesModelI
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesPresenter
 import com.github.javafaker.Faker
-import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import org.junit.Before
 
@@ -42,15 +39,15 @@ open class DatabasesPresenterTest : DatabaseUtils {
     override lateinit var SRC_DIR: String
 
     var locationUri: Uri = mock()
-    val contextResolver: ContentResolver = mock()
 
     val faker = Faker()
     val salt = "0123456789abcdef".toByteArray()
 
     fun setupPresenter() {
+        view = mock()
         model = mock()
-        presenter = DatabasesPresenter(view)
-        presenter.model = model
+
+        presenter = DatabasesPresenter({ view }, model, app)
         presenter.databases = mutableListOf(
             Database("main"),
             Database("test", "123", salt, mutableMapOf())
@@ -63,13 +60,8 @@ open class DatabasesPresenterTest : DatabaseUtils {
     }
 
     @Before
-    fun setUp() {
+    fun setupApp() {
         app = MyApp()
         app.keyCache = mutableMapOf("123" to deriveKey("123", salt))
-
-        view = mock {
-            on { ACCOUNTS_DIR } doReturn ""
-            on { app } doReturn DatabasesPresenterTest@app
-        }
     }
 }

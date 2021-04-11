@@ -19,7 +19,6 @@
 
 package com.acmpo6ou.myaccounts.databases_list
 
-import android.content.Context
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.*
 import org.junit.Before
@@ -27,12 +26,8 @@ import org.junit.Test
 import org.mockito.ArgumentMatchers.anyInt
 
 class DatabasesPresenterTests : DatabasesPresenterTest() {
-    private val context: Context = mock()
-
     @Before
     fun setup() {
-        whenever(context.contentResolver).thenReturn(contextResolver)
-        whenever(view.myContext).thenReturn(context)
         setupPresenter()
     }
 
@@ -49,33 +44,37 @@ class DatabasesPresenterTests : DatabasesPresenterTest() {
     }
 
     @Test
-    fun `deleteSelected should call confirmDelete`() {
-        presenter.deleteSelected(0)
-        verify(view).confirmDelete(0)
+    fun `exportDatabase should call model exportDatabase passing name and location`() {
+        callExportDatabase()
+        verify(model).exportDatabase("test", locationUri)
     }
 
     @Test
-    fun `closeSelected should call closeDatabase when database is saved`() {
-        val presenterSpy = spy(presenter)
-        doReturn(true).`when`(presenterSpy).isDatabaseSaved(any(), eq(app))
-
-        presenterSpy.closeSelected(0)
-        verify(presenterSpy).closeDatabase(0)
-    }
-
-    @Test
-    fun `closeSelected should call confirmClose when database isn't saved`() {
-        val presenterSpy = spy(presenter)
-        doReturn(false).`when`(presenterSpy).isDatabaseSaved(any(), eq(app))
-
-        presenterSpy.closeSelected(0)
-        verify(view).confirmClose(0)
+    fun `exportDatabase should call showSuccess when there are no errors`() {
+        callExportDatabase()
+        verify(view).showSuccess()
     }
 
     @Test
     fun `editSelected should call navigateToEdit passing through database index`() {
         presenter.editSelected(0)
         verify(view).navigateToEdit(0)
+    }
+
+    @Test
+    fun `closeSelected should call closeDatabase when database is saved`() {
+        val spyPresenter = spy(presenter)
+        doReturn(true).`when`(model).isDatabaseSaved(any(), eq(app))
+
+        spyPresenter.closeSelected(0)
+        verify(spyPresenter).closeDatabase(0)
+    }
+
+    @Test
+    fun `closeSelected should call view confirmClose when database isn't saved`() {
+        doReturn(false).`when`(model).isDatabaseSaved(any(), eq(app))
+        presenter.closeSelected(0)
+        verify(view).confirmClose(0)
     }
 
     @Test
@@ -97,51 +96,6 @@ class DatabasesPresenterTests : DatabasesPresenterTest() {
     }
 
     @Test
-    fun `exportDatabase should call model exportDatabase passing name and location`() {
-        callExportDatabase()
-        verify(model).exportDatabase("test", locationUri)
-    }
-
-    @Test
-    fun `exportDatabase should call showSuccess when there are no errors`() {
-        callExportDatabase()
-        verify(view).showSuccess()
-    }
-
-    @Test
-    fun `deleteDatabase should call model deleteDatabase passing name`() {
-        presenter.deleteDatabase(0)
-        verify(model).deleteDatabase("main")
-    }
-
-    @Test
-    fun `deleteDatabase should remove database from list`() {
-        presenter.deleteDatabase(0)
-        // first database should no longer be `main`
-        assertEquals("test", presenter.databases[0].name)
-    }
-
-    @Test
-    fun `deleteDatabase should call notifyRemoved`() {
-        presenter.deleteDatabase(0)
-        verify(view).notifyRemoved(0)
-    }
-
-    @Test
-    fun `deleteDatabase should remove corresponding key from cache if it there`() {
-        // there is a key for second database (it's opened) and it has to be removed
-        presenter.deleteDatabase(1)
-        assertTrue(app.keyCache.isEmpty())
-    }
-
-    @Test
-    fun `deleteDatabase should not remove anything from cache if there is no key to remove`() {
-        // there is no key for first database (it's closed), so nothing should be removed
-        presenter.deleteDatabase(0)
-        assertEquals(1, app.keyCache.size)
-    }
-
-    @Test
     fun `openDatabase should navigate to OpenDatabaseFragment if database is closed`() {
         // first database is closed
         presenter.openDatabase(0)
@@ -158,6 +112,45 @@ class DatabasesPresenterTests : DatabasesPresenterTest() {
         verify(view).startDatabase(1)
 
         // navigateToOpen should not be called
-        verify(view, never()).navigateToOpen(1)
+        verify(view, never()).navigateToOpen(anyInt())
+    }
+
+    @Test
+    fun `deleteSelected should call confirmDelete`() {
+        presenter.deleteSelected(0)
+        verify(view).confirmDelete(0)
+    }
+
+    @Test
+    fun `deleteDatabase should call model deleteDatabase passing name`() {
+        presenter.deleteDatabase(0)
+        verify(model).deleteDatabase("main")
+    }
+
+    @Test
+    fun `deleteDatabase should remove database from list`() {
+        presenter.deleteDatabase(0)
+        assertEquals("test", presenter.databases[0].name)
+        assertEquals(1, presenter.databases.size)
+    }
+
+    @Test
+    fun `deleteDatabase should call notifyRemoved`() {
+        presenter.deleteDatabase(0)
+        verify(view).notifyRemoved(0)
+    }
+
+    @Test
+    fun `deleteDatabase should remove corresponding key from cache if it is there`() {
+        // there is a key for second database (it's opened) and it has to be removed
+        presenter.deleteDatabase(1)
+        assertTrue(app.keyCache.isEmpty())
+    }
+
+    @Test
+    fun `deleteDatabase should not remove anything from cache if there is no key to remove`() {
+        // there is no key for first database (it's closed), so nothing should be removed
+        presenter.deleteDatabase(0)
+        assertEquals(1, app.keyCache.size)
     }
 }
