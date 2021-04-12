@@ -28,14 +28,17 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.FragmentComponent
 import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.scopes.FragmentScoped
 
 @Module
 @InstallIn(FragmentComponent::class)
 interface DatabasesBindings {
     @Binds
+    @FragmentScoped
     fun databasesPresenter(impl: DatabasesPresenter): DatabasesPresenterI
 
     @Binds
+    @FragmentScoped
     fun databasesModel(impl: DatabasesModel): DatabasesModelI
 }
 
@@ -43,6 +46,7 @@ interface DatabasesBindings {
 @InstallIn(FragmentComponent::class)
 class DatabasesModule {
     @Provides
+    @FragmentScoped
     fun databasesFragment(@ActivityContext activity: Context): DatabaseFragmentI {
         return (activity as AppCompatActivity)
             .supportFragmentManager
