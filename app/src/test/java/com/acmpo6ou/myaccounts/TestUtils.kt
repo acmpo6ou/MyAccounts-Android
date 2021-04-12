@@ -19,10 +19,19 @@
 
 package com.acmpo6ou.myaccounts
 
+import android.content.ComponentName
+import android.content.Intent
+import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.StyleRes
+import androidx.core.util.Preconditions
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.testing.FragmentScenario
+import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import com.acmpo6ou.myaccounts.database.databases_list.Account
 import com.github.javafaker.Faker
 import com.google.android.material.navigation.NavigationView
@@ -104,6 +113,7 @@ fun Faker.str(): String = this.lorem().sentence()
 
 /**
  * Helper method to simulate selecting an item in navigation drawer.
+ *
  * @param[id] item id.
  * @param[view] system under test.
  */
@@ -118,15 +128,52 @@ fun selectNavigationItem(id: Int, view: NavigationView.OnNavigationItemSelectedL
 
 /**
  * Helper method to click on the popup menu item.
+ *
  * @param[itemLayout] layout containing 3 dots to open the popup menu.
  * @param[itemId] id of the item we want to click.
  */
-fun clickMenuItem(itemLayout: View?, itemId: Int) {
+fun clickMenuItem(itemLayout: View, itemId: Int) {
     // click on 3 dots to display popup menu
-    val dotsMenu = itemLayout?.findViewById<TextView>(R.id.dots_menu)
-    dotsMenu?.performClick()
+    val dotsMenu = itemLayout.findViewById<TextView>(R.id.dots_menu)
+    dotsMenu.performClick()
 
     // find the popup menu and click on the item
     val menu = ShadowPopupMenu.getLatestPopupMenu().menu
     menu.performIdentifierAction(itemId, Menu.FLAG_ALWAYS_PERFORM_CLOSE)
+}
+
+/**
+ * launchFragmentInContainer from the androidx.fragment:fragment-testing library
+ * is NOT possible to use right now as it uses a hardcoded Activity under the hood
+ * (i.e. [EmptyFragmentActivity]) which is not annotated with @AndroidEntryPoint.
+ *
+ * As a workaround, use this function that is equivalent. It requires you to add
+ * [HiltTestActivity] in the debug folder and include it in the debug AndroidManifest.xml file
+ * as can be found in this project.
+ */
+inline fun <reified T : Fragment> launchFragmentInHiltContainer(
+    fragmentArgs: Bundle? = null,
+    @StyleRes themeResId: Int = R.style.Theme_MyAccounts_NoActionBar,
+    crossinline action: Fragment.() -> Unit = {}
+) {
+    val startActivityIntent = Intent.makeMainActivity(
+        ComponentName(
+            ApplicationProvider.getApplicationContext(),
+            HiltActivityForTest::class.java
+        )
+    ).putExtra(FragmentScenario.EmptyFragmentActivity.THEME_EXTRAS_BUNDLE_KEY, themeResId)
+
+    ActivityScenario.launch<HiltActivityForTest>(startActivityIntent).onActivity { activity ->
+        val fragment: Fragment = activity.supportFragmentManager.fragmentFactory.instantiate(
+            Preconditions.checkNotNull(T::class.java.classLoader),
+            T::class.java.name
+        )
+        fragment.arguments = fragmentArgs
+        activity.supportFragmentManager
+            .beginTransaction()
+            .add(android.R.id.content, fragment, "")
+            .commitNow()
+
+        fragment.action()
+    }
 }
