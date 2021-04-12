@@ -19,95 +19,103 @@
 
 package com.acmpo6ou.myaccounts.databases_list
 
-import android.os.Build
+import android.content.Context
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.fragment.app.testing.FragmentScenario
-import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.platform.app.InstrumentationRegistry
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.clickMenuItem
+import com.acmpo6ou.myaccounts.core.AppModule
 import com.acmpo6ou.myaccounts.database.databases_list.Database
-import com.acmpo6ou.myaccounts.database.databases_list.DatabasesPresenterI
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesBindings
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragment
-import com.nhaarman.mockitokotlin2.doReturn
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesPresenterI
+import com.acmpo6ou.myaccounts.launchFragmentInHiltContainer
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
+import dagger.hilt.android.testing.BindValue
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
+@HiltAndroidTest
 @RunWith(RobolectricTestRunner::class)
+@UninstallModules(DatabasesBindings::class, AppModule::class)
 @LooperMode(LooperMode.Mode.PAUSED)
-@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class DatabasesAdapterInst {
-    lateinit var scenario: FragmentScenario<DatabasesFragment>
-    lateinit var presenter: DatabasesPresenterI
+    @get:Rule
+    var hiltAndroidRule = HiltAndroidRule(this)
 
-    var recycler: RecyclerView? = null
-    var itemLayout: View? = null
-    var itemLayout2: View? = null
+    val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
+    private val mockDatabases = mutableListOf(
+        Database("main"),
+        Database("test", "123")
+    )
+
+    @BindValue
+    @JvmField
+    val app = MyApp()
+
+    @BindValue
+    val presenter: DatabasesPresenterI = mock()
+
+    private lateinit var recycler: RecyclerView
+    private lateinit var itemLayout: View
+    private lateinit var itemLayout2: View
 
     @Before
     fun setUp() {
-        scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
+        app.databases = mockDatabases
+        hiltAndroidRule.inject()
 
-        // mock the list of databases for test
-        val mockDatabases = mutableListOf(
-            Database("main"), // locked
-            Database("test", "123")
-        ) // opened
-        presenter = mock { on { databases } doReturn mockDatabases }
-
-        scenario.onFragment {
-            it.presenter = presenter
-            recycler = it.view?.findViewById(R.id.itemsList)
+        launchFragmentInHiltContainer<DatabasesFragment> {
+            recycler = this.view!!.findViewById(R.id.itemsList)
         }
+
         // measure and lay recycler out as is needed so we can later obtain its items
-        recycler?.measure(0, 0)
-        recycler?.layout(0, 0, 100, 10000)
+        recycler.measure(0, 0)
+        recycler.layout(0, 0, 100, 10000)
 
         // get item layouts from recycler
-        itemLayout = recycler?.getChildAt(0)
-        itemLayout2 = recycler?.getChildAt(1)
+        itemLayout = recycler.getChildAt(0)
+        itemLayout2 = recycler.getChildAt(1)
     }
 
     @Test
     fun `click on recycler item should call openDatabase`() {
-        itemLayout?.performClick()
+        itemLayout.performClick()
         verify(presenter).openDatabase(0)
     }
 
     @Test
     fun `database item should have appropriate name`() {
-        val databaseName = itemLayout?.findViewById<TextView>(R.id.itemName)
+        val databaseName = itemLayout.findViewById<TextView>(R.id.itemName)
         assertEquals("main", databaseName?.text)
     }
 
     @Test
     fun `database item should have locked icon when isOpen of Database is false`() {
         // the first database in the list above is closed
-        val itemLock = itemLayout?.findViewById<ImageView>(R.id.itemIcon)
-        assertEquals(
-            "database item has unlocked icon when isOpen of Database is false!",
-            R.drawable.ic_locked, itemLock?.tag
-        )
+        val itemLock = itemLayout.findViewById<ImageView>(R.id.itemIcon)
+        assertEquals(R.drawable.ic_locked, itemLock?.tag)
     }
 
     @Test
     fun `database item should have opened icon when isOpen of Database is true`() {
         // the second database in the list above is opened
-        val itemLock = itemLayout2?.findViewById<ImageView>(R.id.itemIcon)
-        assertEquals(
-            "database item has locked icon when isOpen of Database is true!",
-            R.drawable.ic_opened, itemLock?.tag
-        )
+        val itemLock = itemLayout2.findViewById<ImageView>(R.id.itemIcon)
+        assertEquals(R.drawable.ic_opened, itemLock?.tag)
     }
 
     @Test

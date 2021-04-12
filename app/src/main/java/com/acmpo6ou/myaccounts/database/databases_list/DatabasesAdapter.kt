@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.database.databases_list
 
+import android.content.Context
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
@@ -31,19 +32,19 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
 
-/**
- * [RecyclerView.Adapter] that can display a [Database].
- */
 @FragmentScoped
 class DatabasesAdapter @Inject constructor(
     private val presenter: DatabasesPresenterI,
+    @ActivityContext private val context: Context,
     private val app: MyApp
 ) : RecyclerView.Adapter<DatabasesAdapter.ViewHolder>() {
 
     private val databases: List<Database> get() = app.databases
+    override fun getItemCount() = databases.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -58,8 +59,8 @@ class DatabasesAdapter @Inject constructor(
         holder.databaseName.text = database.name
 
         // set appropriate lock icon according to isOpen property
-        // note: we also set tag on lock icon so later we can determine what image is set
-        // on icon
+        // note: we also set tag on lock icon so during tests we can determine what image
+        // is set on icon
         if (database.isOpen) {
             holder.lockImage.setImageResource(R.drawable.ic_opened)
             holder.lockImage.tag = R.drawable.ic_opened
@@ -70,13 +71,13 @@ class DatabasesAdapter @Inject constructor(
 
         // set popup menu on item
         holder.menu.setOnClickListener { it ->
-            val popup = PopupMenu(app, it)
+            val popup = PopupMenu(context, it)
             popup.inflate(R.menu.database_item_menu)
 
             // set color of `Delete` item to red
             popup.menu.findItem(R.id.delete_database_item).let {
                 val spanStr = SpannableString(it.title)
-                val redColor = ContextCompat.getColor(app, R.color.red)
+                val redColor = ContextCompat.getColor(context, R.color.red)
                 spanStr.setSpan(ForegroundColorSpan(redColor), 0, it.title.length, 0)
                 it.title = spanStr
             }
@@ -89,10 +90,10 @@ class DatabasesAdapter @Inject constructor(
 
             popup.setOnMenuItemClickListener {
                 when (it.itemId) {
-                    R.id.close_database_item -> presenter.closeSelected(position)
-                    R.id.delete_database_item -> presenter.deleteSelected(position)
                     R.id.export_database_item -> presenter.exportSelected(position)
+                    R.id.delete_database_item -> presenter.deleteSelected(position)
                     R.id.edit_database_item -> presenter.editSelected(position)
+                    R.id.close_database_item -> presenter.closeSelected(position)
                     else -> return@setOnMenuItemClickListener false
                 }
                 true
@@ -100,8 +101,6 @@ class DatabasesAdapter @Inject constructor(
             popup.show()
         }
     }
-
-    override fun getItemCount(): Int = databases.size
 
     /**
      * Represents ViewHolder for item of databases list.
