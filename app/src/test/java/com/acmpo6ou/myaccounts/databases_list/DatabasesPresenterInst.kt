@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.databases_list
 
 import android.content.Context
+import android.content.res.Resources
 import android.os.Build
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
@@ -41,16 +42,17 @@ import java.io.IOException
 class DatabasesPresenterInst : DatabasesPresenterTest() {
     // get string resources
     val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
-    val resources = context.resources
+    val resources: Resources = context.resources
 
     private val exportErrorTitle = resources.getString(R.string.export_error_title)
     private val deleteErrorTitle = resources.getString(R.string.delete_error_title)
-    private val exportFileNotFoundDetails = resources.getString(R.string.export_file_not_found_details)
+    private val exportFileNotFoundDetails =
+        resources.getString(R.string.export_file_not_found_details)
     private val ioError = resources.getString(R.string.io_error)
 
     @Before
     fun setup() {
-        whenever(view.myContext).thenReturn(context)
+        app.res = resources
         setupPresenter()
     }
 

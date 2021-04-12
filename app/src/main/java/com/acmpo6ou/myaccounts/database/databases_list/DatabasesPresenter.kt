@@ -78,14 +78,14 @@ open class DatabasesPresenter @Inject constructor(
         }
         // handle all possible errors
         catch (e: FileNotFoundException) {
+            e.printStackTrace()
             errorDetails = app.res.getString(R.string.export_file_not_found_details)
-            e.printStackTrace()
         } catch (e: IOException) {
+            e.printStackTrace()
             errorDetails = app.res.getString(R.string.io_error)
-            e.printStackTrace()
         } catch (e: Exception) {
-            errorDetails = e.toString()
             e.printStackTrace()
+            errorDetails = e.toString()
         }
 
         // if there are any errors errorDetails will be filled with appropriate details string
@@ -119,9 +119,9 @@ open class DatabasesPresenter @Inject constructor(
             databases.removeAt(i)
             view.notifyRemoved(i)
         } catch (e: Exception) {
+            e.printStackTrace()
             val errorTitle = app.res.getString(R.string.delete_error_title)
             view.showError(errorTitle, e.toString())
-            e.printStackTrace()
         }
     }
 

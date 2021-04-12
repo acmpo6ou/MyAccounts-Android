@@ -39,7 +39,6 @@ open class DatabasesPresenterTest : DatabaseUtils {
     override lateinit var SRC_DIR: String
 
     var locationUri: Uri = mock()
-
     val faker = Faker()
     val salt = "0123456789abcdef".toByteArray()
 
