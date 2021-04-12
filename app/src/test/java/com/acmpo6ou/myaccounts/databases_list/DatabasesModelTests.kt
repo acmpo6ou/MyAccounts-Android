@@ -20,11 +20,15 @@
 package com.acmpo6ou.myaccounts.databases_list
 
 import com.acmpo6ou.myaccounts.ModelTest
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesModel
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
 import org.junit.Assert.*
+import org.junit.Before
 import org.junit.Test
 import java.io.File
 import java.io.FileNotFoundException
@@ -38,10 +42,7 @@ class DatabasesTests {
         val database = Database(faker.str())
 
         // if password is null then database should be closed
-        assertFalse(
-            "Password of Database is null but isOpen is true!",
-            database.isOpen
-        )
+        assertFalse(database.isOpen)
     }
 
     @Test
@@ -50,34 +51,37 @@ class DatabasesTests {
         val database = Database(faker.str(), faker.str())
 
         // when password is not null database should be opened
-        assertTrue(
-            "Password of Database is NOT null but isOpen is false!",
-            database.isOpen
-        )
+        assertTrue(database.isOpen)
     }
 }
 
 class DatabasesModelTests : ModelTest() {
-    var model = DatabasesModel(accountsDir, contentResolver)
+    lateinit var model: DatabasesModel
+
+    @Before
+    fun setup() {
+        val file: File = mock { on { path } doReturn accountsDir }
+        val app = mock<MyApp> {
+            on { getExternalFilesDir(null) } doReturn file
+            on { contentResolver } doReturn contentResolver
+        }
+        model = DatabasesModel(app)
+    }
 
     @Test
     fun `getDatabases should return list of Databases that reside in SRC_DIR`() {
-        // first we copy some database to our fake file system
+        // first we copy some databases to our fake file system
         copyDatabase("main")
         copyDatabase("crypt")
         copyDatabase("database")
 
-        // then we get databases and check the result
         val databases = model.getDatabases()
-        val expectedDatabases = listOf(
-            Database("crypt"), // note that list is sorted
+        val expectedDatabases = listOf( // note that list is sorted
+            Database("crypt"),
             Database("database"),
             Database("main")
         )
-        assertEquals(
-            "getDatabases returns incorrect list of Databases!",
-            expectedDatabases, databases
-        )
+        assertEquals(expectedDatabases, databases)
     }
 
     @Test

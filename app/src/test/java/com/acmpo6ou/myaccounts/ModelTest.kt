@@ -93,7 +93,6 @@ open class ModelTest : DatabaseUtils {
     /**
      * This is a helper method that will copy our test databases from sampledata folder to
      * the fake file system.
-     *
      * @param[name] name of the database that we want to copy to the fake file system
      */
     fun copyDatabase(name: String = "database") {

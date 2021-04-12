@@ -19,10 +19,8 @@
 
 package com.acmpo6ou.myaccounts.database.databases_list
 
-import android.content.Context
 import android.net.Uri
 import com.acmpo6ou.myaccounts.MyApp
-import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.scopes.FragmentScoped
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -84,18 +82,16 @@ data class Database(
  */
 @FragmentScoped
 class DatabasesModel @Inject constructor(
-    @ActivityContext private val context: Context,
     private val app: MyApp,
 ) : DatabasesModelI {
 
     // path to directory that contains src folder
-    private val ACCOUNTS_DIR = context.getExternalFilesDir(null)!!.path + "/"
+    private val ACCOUNTS_DIR = app.getExternalFilesDir(null)!!.path + "/"
     // path to directory that contains databases
     override val SRC_DIR = "$ACCOUNTS_DIR/src/"
 
     /**
-     * Used to get a list of Database instances – databases that reside in SRC_DIR directory.
-     *
+     * Used to get a list of Database instances – databases that reside in [SRC_DIR] directory.
      * @return list of databases that are found in src directory.
      */
     override fun getDatabases(): DbList {
@@ -131,7 +127,7 @@ class DatabasesModel @Inject constructor(
      */
     override fun exportDatabase(name: String, destinationUri: Uri) {
         // get tar file
-        val descriptor = context.contentResolver.openFileDescriptor(destinationUri, "w")
+        val descriptor = app.contentResolver.openFileDescriptor(destinationUri, "w")
         val destination = FileOutputStream(descriptor?.fileDescriptor)
 
         // create tar file
@@ -140,7 +136,7 @@ class DatabasesModel @Inject constructor(
         // salt and database files to compress to the tar file
         val dbFiles = listOf(
             File("$SRC_DIR$name.db"),
-            File("$SRC_DIR$name.bin")
+            File("$SRC_DIR$name.bin"),
         )
 
         // each file is added to tar file
