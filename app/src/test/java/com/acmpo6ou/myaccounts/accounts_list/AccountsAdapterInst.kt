@@ -27,10 +27,10 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.account.accounts_list.AccountsFragment
 import com.acmpo6ou.myaccounts.account.accounts_list.AccountsListPresenterI
 import com.acmpo6ou.myaccounts.clickMenuItem
 import com.acmpo6ou.myaccounts.databaseMap
-import com.acmpo6ou.myaccounts.account.accounts_list.AccountsFragment
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -47,8 +47,8 @@ class AccountsAdapterInst {
     lateinit var scenario: FragmentScenario<AccountsFragment>
     lateinit var spyPresenter: AccountsListPresenterI
 
-    var recycler: RecyclerView? = null
-    var itemLayout: View? = null
+    private lateinit var recycler: RecyclerView
+    private lateinit var itemLayout: View
 
     @Before
     fun setUp() {
@@ -59,26 +59,26 @@ class AccountsAdapterInst {
             whenever(spyPresenter.accounts).doReturn(databaseMap)
             it.presenter = spyPresenter
 
-            recycler = it.view?.findViewById(R.id.itemsList)
+            recycler = it.view!!.findViewById(R.id.itemsList)
             Navigation.setViewNavController(it.requireView(), mock())
         }
         // measure and lay recycler out as is needed so we can later obtain its items
-        recycler?.measure(0, 0)
-        recycler?.layout(0, 0, 100, 10000)
+        recycler.measure(0, 0)
+        recycler.layout(0, 0, 100, 10000)
 
         // get item layout from recycler
-        itemLayout = recycler?.getChildAt(0)
+        itemLayout = recycler.getChildAt(0)
     }
 
     @Test
     fun `click on recycler item should call displayAccount`() {
-        itemLayout?.performClick()
+        itemLayout.performClick()
         verify(spyPresenter).displayAccount(0)
     }
 
     @Test
     fun `account item should have appropriate name`() {
-        val accountName = itemLayout?.findViewById<TextView>(R.id.itemName)
+        val accountName = itemLayout.findViewById<TextView>(R.id.itemName)
         assertEquals("gmail", accountName?.text)
     }
 

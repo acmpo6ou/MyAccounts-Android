@@ -50,9 +50,9 @@ class AttachedFileAdapterInst {
     private val fileName = Faker().str()
     private val fileName2 = Faker().str()
 
-    var recycler: RecyclerView? = null
-    var itemLayout: View? = null
-    var itemLayout2: View? = null
+    private lateinit var recycler: RecyclerView
+    private lateinit var itemLayout: View
+    private lateinit var itemLayout2: View
 
     @Before
     fun setUp() {
@@ -64,15 +64,15 @@ class AttachedFileAdapterInst {
         scenario.onFragment {
             it.viewModel = viewModel
             it.initAdapter()
-            recycler = it.view?.findViewById(R.id.attachedFilesList)
+            recycler = it.view!!.findViewById(R.id.attachedFilesList)
         }
 
         // measure and lay recycler out as is needed so we can obtain its items
-        recycler?.measure(0, 0)
-        recycler?.layout(0, 0, 100, 10000)
+        recycler.measure(0, 0)
+        recycler.layout(0, 0, 100, 10000)
 
-        itemLayout = recycler?.getChildAt(0)
-        itemLayout2 = recycler?.getChildAt(1)
+        itemLayout = recycler.getChildAt(0)
+        itemLayout2 = recycler.getChildAt(1)
     }
 
     @Test
