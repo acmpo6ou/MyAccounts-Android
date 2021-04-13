@@ -155,7 +155,7 @@ inline fun <reified T : Fragment> launchFragmentInHiltContainer(
     fragmentArgs: Bundle? = null,
     @StyleRes themeResId: Int = R.style.Theme_MyAccounts_NoActionBar,
     crossinline action: Fragment.() -> Unit = {}
-) {
+): T {
     val startActivityIntent = Intent.makeMainActivity(
         ComponentName(
             ApplicationProvider.getApplicationContext(),
@@ -163,17 +163,19 @@ inline fun <reified T : Fragment> launchFragmentInHiltContainer(
         )
     ).putExtra(FragmentScenario.EmptyFragmentActivity.THEME_EXTRAS_BUNDLE_KEY, themeResId)
 
+    var fragment: Fragment? = null
     ActivityScenario.launch<HiltActivityForTest>(startActivityIntent).onActivity { activity ->
-        val fragment: Fragment = activity.supportFragmentManager.fragmentFactory.instantiate(
+        fragment = activity.supportFragmentManager.fragmentFactory.instantiate(
             Preconditions.checkNotNull(T::class.java.classLoader),
             T::class.java.name
         )
-        fragment.arguments = fragmentArgs
+        fragment!!.arguments = fragmentArgs
         activity.supportFragmentManager
             .beginTransaction()
-            .add(android.R.id.content, fragment, "")
+            .add(android.R.id.content, fragment!!, "")
             .commitNow()
 
-        fragment.action()
+        fragment!!.action()
     }
+    return fragment as T
 }
