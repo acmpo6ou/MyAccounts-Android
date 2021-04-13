@@ -19,12 +19,10 @@
 
 package com.acmpo6ou.myaccounts.databases_list
 
-import android.content.Context
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.clickMenuItem
@@ -54,10 +52,8 @@ import org.robolectric.annotation.LooperMode
 @UninstallModules(DatabasesBindings::class, AppModule::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 class DatabasesAdapterInst {
-    @get:Rule
-    var hiltAndroidRule = HiltAndroidRule(this)
+    @get:Rule var hiltAndroidRule = HiltAndroidRule(this)
 
-    val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     private val mockDatabases = mutableListOf(
         Database("main"),
         Database("test", "123")
@@ -68,6 +64,7 @@ class DatabasesAdapterInst {
     val app = MyApp()
 
     @BindValue
+    @JvmField
     val presenter: DatabasesPresenterI = mock()
 
     private lateinit var recycler: RecyclerView
