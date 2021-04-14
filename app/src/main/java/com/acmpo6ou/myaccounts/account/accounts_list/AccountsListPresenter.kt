@@ -19,20 +19,20 @@
 
 package com.acmpo6ou.myaccounts.account.accounts_list
 
-import android.content.Context
 import com.acmpo6ou.myaccounts.account.AccountsActivityI
 import com.acmpo6ou.myaccounts.database.databases_list.Account
 import com.acmpo6ou.myaccounts.database.databases_list.DbMap
 import dagger.Lazy
-import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
 
+@FragmentScoped
 open class AccountsListPresenter @Inject constructor(
     private val fragment: Lazy<AccountsFragmentI>,
-    @ActivityContext private val context: Context,
+    private val accountsActivity: AccountsActivityI,
 ) : AccountsListPresenterI {
 
-    override val accounts: DbMap get() = (context as AccountsActivityI).database.data
+    override val accounts: DbMap get() = accountsActivity.database.data
     val view: AccountsFragmentI get() = fragment.get()
 
     // [accounts] is a map of [String] to [Account], but AccountsAdapter

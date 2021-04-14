@@ -22,17 +22,20 @@ package com.acmpo6ou.myaccounts.account.accounts_list
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.account.AccountsActivityI
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.FragmentComponent
 import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.scopes.FragmentScoped
 
 @Module
 @InstallIn(FragmentComponent::class)
 interface AccountsListBindings {
     @Binds
+    @FragmentScoped
     fun accountsListPresenter(impl: AccountsListPresenter): AccountsListPresenterI
 }
 
@@ -40,6 +43,7 @@ interface AccountsListBindings {
 @InstallIn(FragmentComponent::class)
 object AccountsListModule {
     @Provides
+    @FragmentScoped
     fun accountsFragment(@ActivityContext activity: Context): AccountsFragmentI {
         return (activity as AppCompatActivity)
             .supportFragmentManager
@@ -47,5 +51,11 @@ object AccountsListModule {
             .childFragmentManager
             .fragments.first()
             as AccountsFragment
+    }
+
+    @Provides
+    @FragmentScoped
+    fun accountsActivity(@ActivityContext activity: Context): AccountsActivityI {
+        return activity as AccountsActivityI
     }
 }

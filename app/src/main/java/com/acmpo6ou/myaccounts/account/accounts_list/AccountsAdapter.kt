@@ -32,8 +32,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.database.databases_list.Account
 import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
 
+@FragmentScoped
 class AccountsAdapter @Inject constructor(
     private val presenter: AccountsListPresenterI,
     @ActivityContext private val context: Context,
