@@ -23,13 +23,13 @@ import android.app.Activity
 import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.findNavController
-import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.superclass.ListFragment
 import com.acmpo6ou.myaccounts.core.utils.startDatabaseUtil
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentDirections.actionEditDatabase
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentDirections.actionOpenDatabase
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -43,6 +43,9 @@ class DatabasesFragment : ListFragment(), DatabaseFragmentI {
 
     @Inject
     override lateinit var presenter: DatabasesPresenterI
+
+    @Inject
+    lateinit var mainActivity: MainActivityI
 
     override val actionCreateItem = R.id.actionCreateDatabase
     override val items get() = app.databases
@@ -72,8 +75,6 @@ class DatabasesFragment : ListFragment(), DatabaseFragmentI {
 
     /**
      * Displays a dialog for user to confirm deletion of database.
-     *
-     * If user is choosing No – we will do nothing, if Yes – delete database.
      * @param[i] - database index.
      */
     override fun confirmDelete(i: Int) {
@@ -84,8 +85,6 @@ class DatabasesFragment : ListFragment(), DatabaseFragmentI {
 
     /**
      * Displays a dialog for user to confirm closing of database.
-     *
-     * If user is choosing No – we will do nothing, if Yes – close database.
      * @param[i] - database index.
      */
     override fun confirmClose(i: Int) {
@@ -118,10 +117,7 @@ class DatabasesFragment : ListFragment(), DatabaseFragmentI {
      * @param[title] title of error dialog.
      * @param[details] details about the error.
      */
-    override fun showError(title: String, details: String) {
-        val mainActivity = activity as MainActivity
-        mainActivity.showError(title, details)
-    }
+    override fun showError(title: String, details: String) = mainActivity.showError(title, details)
 
     override fun startDatabase(index: Int) = startDatabaseUtil(index, requireContext())
 }

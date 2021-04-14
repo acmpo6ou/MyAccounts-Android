@@ -27,14 +27,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.setViewNavController
 import androidx.test.platform.app.InstrumentationRegistry
-import com.acmpo6ou.myaccounts.MyApp
-import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.*
 import com.acmpo6ou.myaccounts.core.AppModule
 import com.acmpo6ou.myaccounts.database.databases_list.*
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentDirections.actionEditDatabase
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentDirections.actionOpenDatabase
-import com.acmpo6ou.myaccounts.getRecycler
-import com.acmpo6ou.myaccounts.launchFragmentInHiltContainer
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
+import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import dagger.hilt.android.scopes.FragmentScoped
@@ -56,7 +55,7 @@ import javax.inject.Singleton
 
 @HiltAndroidTest
 @RunWith(RobolectricTestRunner::class)
-@UninstallModules(AppModule::class, DatabasesBindings::class)
+@UninstallModules(AppModule::class, DatabasesBindings::class, DatabasesModule::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 class DatabasesFragmentInst {
     @get:Rule
@@ -74,6 +73,11 @@ class DatabasesFragmentInst {
     @JvmField
     @FragmentScoped
     val presenter: DatabasesPresenterI = mock()
+
+    @BindValue
+    @JvmField
+    @FragmentScoped
+    val mainActivity: MainActivityI = mock()
 
     // get string resources
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -124,24 +128,6 @@ class DatabasesFragmentInst {
     }
 
     @Test
-    fun `navigateToEdit should pass appropriate database index`() {
-        mockNavController()
-        fragment.navigateToEdit(0)
-
-        val expectedAction = actionEditDatabase(0)
-        verify(navController).navigate(expectedAction)
-    }
-
-    @Test
-    fun `navigateToOpen should pass appropriate database index`() {
-        mockNavController()
-        fragment.navigateToOpen(0)
-
-        val expectedAction = actionOpenDatabase(0)
-        verify(navController).navigate(expectedAction)
-    }
-
-    @Test
     fun `confirmDelete should create dialog with appropriate message and title`() {
         fragment.confirmDelete(0)
 
@@ -163,6 +149,33 @@ class DatabasesFragmentInst {
 
         assertEquals(warningTitle, title?.text)
         assertEquals(String.format(confirmCloseMsg, "main"), message?.text)
+    }
+
+    @Test
+    fun `navigateToEdit should pass appropriate database index`() {
+        mockNavController()
+        fragment.navigateToEdit(0)
+
+        val expectedAction = actionEditDatabase(0)
+        verify(navController).navigate(expectedAction)
+    }
+
+    @Test
+    fun `navigateToOpen should pass appropriate database index`() {
+        mockNavController()
+        fragment.navigateToOpen(0)
+
+        val expectedAction = actionOpenDatabase(0)
+        verify(navController).navigate(expectedAction)
+    }
+
+    @Test
+    fun `showError should call mainActivity showError`() {
+        val title = Faker().str()
+        val details = Faker().str()
+
+        fragment.showError(title, details)
+        verify(mainActivity).showError(title, details)
     }
 
     private fun setupPresenterAndAdapter() {
