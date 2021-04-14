@@ -25,9 +25,10 @@ import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountPresenterI
-import com.acmpo6ou.myaccounts.str
 import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountFragment
+import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountPresenterI
+import com.acmpo6ou.myaccounts.getRecycler
+import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
@@ -47,8 +48,8 @@ class DisplayAccountAdapterInst {
     lateinit var presenter: DisplayAccountPresenterI
     private val fileName = Faker().str()
 
-    var recycler: RecyclerView? = null
-    var itemLayout: View? = null
+    private lateinit var recycler: RecyclerView
+    private lateinit var itemLayout: View
 
     @Before
     fun setUp() {
@@ -60,18 +61,14 @@ class DisplayAccountAdapterInst {
 
         scenario.onFragment {
             it.presenter = presenter
-            recycler = it.view?.findViewById(R.id.attachedFilesList)
+            recycler = it.getRecycler()
         }
-
-        // measure and lay recycler out as is needed so we can obtain its items
-        recycler?.measure(0, 0)
-        recycler?.layout(0, 0, 100, 10000)
-        itemLayout = recycler?.getChildAt(0)
+        itemLayout = recycler.getChildAt(0)
     }
 
     @Test
     fun `should call presenter fileSelected when item is selected`() {
-        itemLayout?.performClick()
+        itemLayout.performClick()
         verify(presenter).fileSelected(fileName)
     }
 }

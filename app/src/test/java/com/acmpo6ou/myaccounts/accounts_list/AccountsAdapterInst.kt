@@ -31,6 +31,7 @@ import com.acmpo6ou.myaccounts.account.accounts_list.AccountsFragment
 import com.acmpo6ou.myaccounts.account.accounts_list.AccountsListPresenterI
 import com.acmpo6ou.myaccounts.clickMenuItem
 import com.acmpo6ou.myaccounts.databaseMap
+import com.acmpo6ou.myaccounts.getRecycler
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -59,12 +60,9 @@ class AccountsAdapterInst {
             whenever(spyPresenter.accounts).doReturn(databaseMap)
             it.presenter = spyPresenter
 
-            recycler = it.view!!.findViewById(R.id.itemsList)
+            recycler = it.getRecycler()
             Navigation.setViewNavController(it.requireView(), mock())
         }
-        // measure and lay recycler out as is needed so we can later obtain its items
-        recycler.measure(0, 0)
-        recycler.layout(0, 0, 100, 10000)
 
         // get item layout from recycler
         itemLayout = recycler.getChildAt(0)

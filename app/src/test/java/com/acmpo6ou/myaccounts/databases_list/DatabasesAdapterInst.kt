@@ -23,15 +23,12 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.acmpo6ou.myaccounts.MyApp
-import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.clickMenuItem
+import com.acmpo6ou.myaccounts.*
 import com.acmpo6ou.myaccounts.core.AppModule
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesBindings
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragment
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesPresenterI
-import com.acmpo6ou.myaccounts.launchFragmentInHiltContainer
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
@@ -77,12 +74,8 @@ class DatabasesAdapterInst {
         hiltAndroidRule.inject()
 
         launchFragmentInHiltContainer<DatabasesFragment> {
-            recycler = this.view!!.findViewById(R.id.itemsList)
+            recycler = this.getRecycler()
         }
-
-        // measure and lay recycler out as is needed so we can later obtain its items
-        recycler.measure(0, 0)
-        recycler.layout(0, 0, 100, 10000)
 
         // get item layouts from recycler
         itemLayout = recycler.getChildAt(0)
