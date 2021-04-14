@@ -30,6 +30,7 @@ import androidx.annotation.StyleRes
 import androidx.core.util.Preconditions
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.testing.FragmentScenario
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import com.acmpo6ou.myaccounts.database.databases_list.Account
@@ -178,4 +179,15 @@ inline fun <reified T : Fragment> launchFragmentInHiltContainer(
         fragment!!.action()
     }
     return fragment as T
+}
+
+/**
+ * Used in tests to get measured and laid out recyclerview.
+ * It finds recycler, measures and lays it out, so that later we can obtain its items.
+ */
+fun Fragment.getRecycler(): RecyclerView {
+    val recycler: RecyclerView = this.view!!.findViewById(R.id.itemsList)
+    recycler.measure(0, 0)
+    recycler.layout(0, 0, 100, 10000)
+    return recycler
 }
