@@ -81,6 +81,12 @@ val account = Account(
 )
 val databaseMap = mutableMapOf("gmail" to account.copy())
 
+/**
+ * Helper method to clone the mutable map.
+ *
+ * We need it because the map is *mutable* and changes made to the map will persist between
+ * tests.
+ */
 fun MutableMap<String, Account>.copy() = this.toMap().toMutableMap()
 
 /**
