@@ -59,7 +59,8 @@ import javax.inject.Singleton
 @UninstallModules(AppModule::class, DatabasesBindings::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 class DatabasesFragmentInst {
-    @get:Rule var hiltAndroidRule = HiltAndroidRule(this)
+    @get:Rule
+    var hiltAndroidRule = HiltAndroidRule(this)
 
     lateinit var fragment: DatabasesFragment
     private lateinit var navController: NavController
@@ -121,6 +122,7 @@ class DatabasesFragmentInst {
             expectedTitle, intent.getStringExtra(Intent.EXTRA_TITLE)
         )
     }
+
     @Test
     fun `navigateToEdit should pass appropriate database index`() {
         mockNavController()

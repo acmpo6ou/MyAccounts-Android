@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts.database.databases_list
 
 import android.app.Activity
 import android.content.Intent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
@@ -32,9 +33,6 @@ import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentDirectio
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-/**
- * Fragment representing a list of Databases.
- */
 @AndroidEntryPoint
 class DatabasesFragment : ListFragment(), DatabaseFragmentI {
     @Inject
@@ -46,28 +44,30 @@ class DatabasesFragment : ListFragment(), DatabaseFragmentI {
     @Inject
     override lateinit var presenter: DatabasesPresenterI
 
-    val EXPORT_RC = 101
     override val actionCreateItem = R.id.actionCreateDatabase
     override val items get() = app.databases
 
+    private val exportLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.data?.let { presenter.exportDatabase(it) }
+            }
+        }
+
     /**
-     * Used to display export dialog so that user can choose location where to export database.
-     *
-     * Starts intent with [EXPORT_RC] request code.
-     * Shows dialog to choose location using Storage Access Framework.
+     * Displays export dialog so that user can choose location where to export database.
      *
      * @param[i] index of database we want to export, used to get database name that will be
      * default in export dialog.
      */
     override fun exportDialog(i: Int) {
         val name = items[i].name
-        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
-        intent.apply {
+        Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
             type = "application/x-tar"
             putExtra(Intent.EXTRA_TITLE, "$name.tar")
+            exportLauncher.launch(this)
         }
-        startActivityForResult(intent, EXPORT_RC)
     }
 
     /**
@@ -121,12 +121,6 @@ class DatabasesFragment : ListFragment(), DatabaseFragmentI {
     override fun showError(title: String, details: String) {
         val mainActivity = activity as MainActivity
         mainActivity.showError(title, details)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != Activity.RESULT_OK) return
-        if (requestCode == EXPORT_RC) presenter.exportDatabase(data?.data!!)
     }
 
     override fun startDatabase(index: Int) = startDatabaseUtil(index, requireContext())
