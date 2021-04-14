@@ -26,7 +26,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.setViewNavController
-import androidx.recyclerview.widget.RecyclerView
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
@@ -34,6 +33,7 @@ import com.acmpo6ou.myaccounts.core.AppModule
 import com.acmpo6ou.myaccounts.database.databases_list.*
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentDirections.actionEditDatabase
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentDirections.actionOpenDatabase
+import com.acmpo6ou.myaccounts.getRecycler
 import com.acmpo6ou.myaccounts.launchFragmentInHiltContainer
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -177,22 +177,11 @@ class DatabasesFragmentInst {
         fragment.adapter = adapter
     }
 
-    /**
-     * Used in tests to get measured and laid out recyclerview.
-     */
-    private fun getRecycler(): RecyclerView {
-        // find recycler, measure and lay it out, so that later we can obtain its items
-        val recycler: RecyclerView = fragment.view!!.findViewById(R.id.itemsList)
-        recycler.measure(0, 0)
-        recycler.layout(0, 0, 100, 10000)
-        return recycler
-    }
-
     @Test
     fun `when closing database lock icon should change`() {
         setupPresenterAndAdapter()
         fragment.presenter.closeDatabase(1)
-        val recycler = getRecycler()
+        val recycler = fragment.getRecycler()
 
         // check that lock icon changed to locked
         val itemLayout = recycler.getChildAt(1)
@@ -204,7 +193,7 @@ class DatabasesFragmentInst {
     fun `when deleting database it should disappear from recycler`() {
         setupPresenterAndAdapter()
         fragment.presenter.deleteDatabase(0)
-        val recycler = getRecycler()
+        val recycler = fragment.getRecycler()
 
         // check that the first database is `test` as `main` was deleted
         val itemLayout = recycler.getChildAt(0)
