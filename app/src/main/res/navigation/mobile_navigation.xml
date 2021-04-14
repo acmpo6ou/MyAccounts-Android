@@ -22,9 +22,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/databaseFragment">
+    app:startDestination="@id/databasesFragment">
     <fragment
-        android:id="@+id/databaseFragment"
+        android:id="@+id/databasesFragment"
         android:name="com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragment"
         android:label="MyAccounts"
         tools:layout="@layout/fragment_list" >

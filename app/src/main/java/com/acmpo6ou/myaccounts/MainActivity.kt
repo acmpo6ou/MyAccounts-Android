@@ -48,7 +48,7 @@ class MainActivity : SuperActivity(), MainActivityI {
 
     override val confirmGoingBackMsg = R.string.confirm_exit
     override var lastBackPressTime: Long = 0
-    override val mainFragmentId = R.id.databaseFragment
+    override val mainFragmentId = R.id.databasesFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_MyAccounts_NoActionBar)
@@ -129,7 +129,7 @@ class MainActivity : SuperActivity(), MainActivityI {
      * @param[i] index of Database that were added to databases list.
      */
     override fun notifyChanged(i: Int) {
-        val databaseFragment = mainFragment as DatabasesFragment
-        databaseFragment.notifyChanged(i)
+        val databasesFragment = mainFragment as DatabasesFragment
+        databasesFragment.notifyChanged(i)
     }
 }
