@@ -19,21 +19,18 @@
 
 package com.acmpo6ou.myaccounts.main_activity
 
-import android.app.Activity
 import androidx.core.view.GravityCompat
-import com.acmpo6ou.myaccounts.ActivityResultTest
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.R.id.import_database
 import com.acmpo6ou.myaccounts.database.main_activity.MainPresenterI
 import com.acmpo6ou.myaccounts.selectNavigationItem
 import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import org.junit.Before
 import org.junit.Test
 
-class MainActivityTests : ActivityResultTest() {
+class MainActivityTests {
     private lateinit var activity: MainActivity
     private lateinit var presenter: MainPresenterI
 
@@ -58,26 +55,5 @@ class MainActivityTests : ActivityResultTest() {
         activity.drawerLayout = mock()
         selectNavigationItem(import_database, activity)
         verify(activity.drawerLayout).closeDrawer(GravityCompat.START)
-    }
-
-    @Test
-    fun `onActivityResult should call checkTarFile when code is IMPORT_RC`() {
-        // call onActivityResult passing import request code, result OK and intent
-        activity.onActivityResult(activity.IMPORT_RC, Activity.RESULT_OK, intent)
-        verify(presenter).checkTarFile(locationUri)
-    }
-
-    @Test
-    fun `onActivityResult should not call checkTarFile when code is other than EXPORT_RC`() {
-        // call onActivityResult passing other request code, result OK and intent
-        activity.onActivityResult(OTHER_RC, Activity.RESULT_OK, intent)
-        verify(presenter, never()).checkTarFile(locationUri)
-    }
-
-    @Test
-    fun `onActivityResult should not call checkTarFile when result code is CANCELED`() {
-        // call onActivityResult passing import request code, result CANCELED and intent
-        activity.onActivityResult(activity.IMPORT_RC, Activity.RESULT_CANCELED, intent)
-        verify(presenter, never()).checkTarFile(locationUri)
     }
 }
