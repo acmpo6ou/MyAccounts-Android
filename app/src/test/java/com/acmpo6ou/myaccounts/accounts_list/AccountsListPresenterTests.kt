@@ -43,11 +43,10 @@ class AccountsListPresenterTests {
             on { database } doReturn Database(
                 "",
                 data = databaseMap.copy()
-            ) // we need to do this to clone
-            // the mutable map
+            )
         }
-        view = mock { on { accountsActivity } doReturn mockActivity }
-        presenter = AccountsListPresenter(view)
+        view = mock()
+        presenter = AccountsListPresenter({ view }, mockActivity)
     }
 
     @Test
@@ -57,7 +56,7 @@ class AccountsListPresenterTests {
     }
 
     @Test
-    fun `editAccount should call view navigateToDisplay`() {
+    fun `editAccount should call view navigateToEdit`() {
         presenter.editAccount(0)
         verify(view).navigateToEdit(account.accountName)
     }
@@ -69,14 +68,14 @@ class AccountsListPresenterTests {
     }
 
     @Test
-    fun `deleteAccount should call view notifyRemoved`() {
-        presenter.deleteAccount(0)
-        verify(view).notifyRemoved(0)
-    }
-
-    @Test
     fun `deleteAccount should remove account from 'accounts' map`() {
         presenter.deleteAccount(0)
         assertFalse(account in presenter.accountsList)
+    }
+
+    @Test
+    fun `deleteAccount should call view notifyRemoved`() {
+        presenter.deleteAccount(0)
+        verify(view).notifyRemoved(0)
     }
 }
