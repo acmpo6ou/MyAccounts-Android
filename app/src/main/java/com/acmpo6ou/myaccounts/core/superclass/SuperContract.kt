@@ -29,7 +29,6 @@ interface SuperActivityI :
     SettingsUtils,
     NetUtils {
     val mainFragment: ListFragmentI
-    val ACCOUNTS_DIR: String
     var app: MyApp
 
     fun startUpdatesActivity(version: String)

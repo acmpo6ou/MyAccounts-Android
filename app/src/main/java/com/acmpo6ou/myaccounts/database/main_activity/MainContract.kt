@@ -19,11 +19,10 @@
 
 package com.acmpo6ou.myaccounts.database.main_activity
 
-import android.content.Intent
 import android.net.Uri
-import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivityI
 import com.acmpo6ou.myaccounts.core.superclass.SuperPresenterI
+import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
 
 interface MainPresenterI : SuperPresenterI {
     fun importSelected()

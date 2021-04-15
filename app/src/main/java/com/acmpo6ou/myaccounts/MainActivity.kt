@@ -28,48 +28,43 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
-import androidx.preference.PreferenceManager
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
-import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragment
+import com.acmpo6ou.myaccounts.database.databases_list.DatabaseFragmentI
 import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
-import com.acmpo6ou.myaccounts.database.main_activity.MainPresenter
 import com.acmpo6ou.myaccounts.database.main_activity.MainPresenterI
 import com.acmpo6ou.myaccounts.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : SuperActivity(), MainActivityI {
     val IMPORT_RC = 202
 
-    override lateinit var b: ActivityMainBinding
+    @Inject
     override lateinit var prefs: SharedPreferences
+
+    @Inject
     override lateinit var presenter: MainPresenterI
+
+    override lateinit var b: ActivityMainBinding
+    override val mainFragmentId = R.id.databasesFragment
 
     override val confirmGoingBackMsg = R.string.confirm_exit
     override var lastBackPressTime: Long = 0
-    override val mainFragmentId = R.id.databasesFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_MyAccounts_NoActionBar)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         super.onCreate(savedInstanceState)
 
-        myContext = this
-        prefs = PreferenceManager.getDefaultSharedPreferences(this)
         loadSettings()
+        app.res = resources
 
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
 
-        ACCOUNTS_DIR = getExternalFilesDir(null)!!.path + "/"
-        app = applicationContext as MyApp
-        app.res = resources
-
-        // setup presenter and action bar
-        presenter = MainPresenter(this)
         setSupportActionBar(b.appbar.toolbar)
-
         checkPermissions()
     }
 
@@ -129,7 +124,7 @@ class MainActivity : SuperActivity(), MainActivityI {
      * @param[i] index of Database that were added to databases list.
      */
     override fun notifyChanged(i: Int) {
-        val databasesFragment = mainFragment as DatabasesFragment
+        val databasesFragment = mainFragment as DatabaseFragmentI
         databasesFragment.notifyChanged(i)
     }
 }

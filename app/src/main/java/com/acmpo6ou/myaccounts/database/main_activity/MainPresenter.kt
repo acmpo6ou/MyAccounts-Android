@@ -19,27 +19,32 @@
 
 package com.acmpo6ou.myaccounts.database.main_activity
 
+import android.content.SharedPreferences
 import android.net.Uri
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.superclass.SuperPresenter
 import com.acmpo6ou.myaccounts.database.databases_list.Database
-import com.acmpo6ou.myaccounts.database.databases_list.DbList
+import dagger.Lazy
+import dagger.hilt.android.scopes.ActivityScoped
 import java.io.File
 import java.io.IOException
 import java.time.LocalDate
+import javax.inject.Inject
 
-open class MainPresenter(override var view: MainActivityI) :
-    SuperPresenter(),
-    MainPresenterI {
-    var model: MainModelI = MainModel(
-        view.ACCOUNTS_DIR,
-        view.myContext.contentResolver
-    )
-    var databases: DbList
-        get() = view.app.databases
-        set(value) {
-            view.app.databases = value
-        }
+@ActivityScoped
+open class MainPresenter @Inject constructor(
+    private val activity: Lazy<MainActivityI>,
+    private val model: MainModelI,
+    private val app: MyApp,
+    private val prefs: SharedPreferences,
+) : SuperPresenter(), MainPresenterI {
+
+    var databases by app::databases
+    override val view: MainActivityI get() = activity.get()
+
+    // path to directory that contains src folder
+    private val ACCOUNTS_DIR = app.getExternalFilesDir(null)!!.path + "/"
 
     init {
         // This methods are called on app startup
@@ -58,7 +63,7 @@ open class MainPresenter(override var view: MainActivityI) :
      * This method is called on app startup, if src folder doesn't exist method will create it.
      */
     fun fixSrcFolder() {
-        val srcDir = File("${view.ACCOUNTS_DIR}/src")
+        val srcDir = File("$ACCOUNTS_DIR/src")
         if (!srcDir.exists()) srcDir.mkdirs()
     }
 
@@ -161,11 +166,11 @@ open class MainPresenter(override var view: MainActivityI) :
     override fun isTimeToUpdate(): Boolean {
         // get last time we checked for updates
         val lastCheck = LocalDate.ofEpochDay(
-            view.prefs.getLong("last_update_check", LocalDate.MIN.toEpochDay())
+            prefs.getLong("last_update_check", LocalDate.MIN.toEpochDay())
         )
 
         // now last time when we checked for updates is today
-        view.prefs.edit()
+        prefs.edit()
             .putLong("last_update_check", LocalDate.now().toEpochDay())
             .apply()
         return lastCheck < LocalDate.now()

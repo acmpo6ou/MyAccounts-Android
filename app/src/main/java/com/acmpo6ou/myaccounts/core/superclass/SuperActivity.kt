@@ -44,22 +44,28 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.viewbinding.ViewBinding
 import com.acmpo6ou.myaccounts.BuildConfig
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.UpdatesActivity
-import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.utils.getProperty
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.qualifiers.ActivityContext
+import javax.inject.Inject
 
 /**
  * Super class for MainActivity and AccountsActivity.
  */
 abstract class SuperActivity : AppCompatActivity(), SuperActivityI {
-    override lateinit var ACCOUNTS_DIR: String
-    override lateinit var myContext: Context
-    override lateinit var app: MyApp
     override val activity get() = myContext as Activity
+
+    @Inject
+    override lateinit var app: MyApp
+
+    @Inject
+    @ActivityContext
+    override lateinit var myContext: Context
 
     abstract val b: ViewBinding
     lateinit var navView: NavigationView
@@ -97,8 +103,7 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityI {
 
         // navigation drawer should be unlocked only on mainFragment and locked
         // everywhere else
-        navController.addOnDestinationChangedListener {
-            _: NavController, navDestination: NavDestination, _: Bundle? ->
+        navController.addOnDestinationChangedListener { _: NavController, navDestination: NavDestination, _: Bundle? ->
             if (navDestination.id == mainFragmentId) {
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             } else {

@@ -19,24 +19,28 @@
 
 package com.acmpo6ou.myaccounts.database.main_activity
 
-import android.content.ContentResolver
 import android.net.Uri
+import com.acmpo6ou.myaccounts.MyApp
+import dagger.hilt.android.scopes.ActivityScoped
 import org.kamranzafar.jtar.TarEntry
 import org.kamranzafar.jtar.TarInputStream
 import java.io.*
+import javax.inject.Inject
 
 /**
  * Contains various methods for working with database tar files. Methods for importing
  * database, counting files in database tar file etc.
- *
- * @param[ACCOUNTS_DIR] path to directory that contains src folder.
- * @param[contentResolver] used to read tar file using location URI.
  */
-class MainModel(
-    private val ACCOUNTS_DIR: String,
-    private val contentResolver: ContentResolver
+@ActivityScoped
+class MainModel @Inject constructor(
+    private val app: MyApp,
 ) : MainModelI {
-    override val SRC_DIR = "$ACCOUNTS_DIR/src"
+
+    // path to directory that contains src folder
+    private val ACCOUNTS_DIR = app.getExternalFilesDir(null)!!.path + "/"
+    // path to directory that contains databases
+    override val SRC_DIR = "$ACCOUNTS_DIR/src/"
+
     /**
      * This method is used to clean database name from .db or .bin extension and `src/` path.
      *
@@ -76,7 +80,7 @@ class MainModel(
         val list = mutableListOf<String>()
 
         // get tar file
-        val descriptor = contentResolver.openFileDescriptor(locationUri, "r")
+        val descriptor = app.contentResolver.openFileDescriptor(locationUri, "r")
         val location = FileInputStream(descriptor?.fileDescriptor)
 
         // open tar file
@@ -111,7 +115,7 @@ class MainModel(
         val list = mutableListOf<Int>()
 
         // get tar file
-        val descriptor = contentResolver.openFileDescriptor(locationUri, "r")
+        val descriptor = app.contentResolver.openFileDescriptor(locationUri, "r")
         val location = FileInputStream(descriptor?.fileDescriptor)
 
         // open tar file
@@ -145,7 +149,7 @@ class MainModel(
      */
     override fun importDatabase(locationUri: Uri): String {
         // get tar file
-        val descriptor = contentResolver.openFileDescriptor(locationUri, "r")
+        val descriptor = app.contentResolver.openFileDescriptor(locationUri, "r")
         val location = FileInputStream(descriptor?.fileDescriptor)
 
         // open tar file
