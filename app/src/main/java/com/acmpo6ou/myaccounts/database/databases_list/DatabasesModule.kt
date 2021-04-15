@@ -22,7 +22,6 @@ package com.acmpo6ou.myaccounts.database.databases_list
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -55,11 +54,5 @@ class DatabasesModule {
             .childFragmentManager
             .fragments.first()
             as DatabasesFragment
-    }
-
-    @Provides
-    @FragmentScoped
-    fun mainActivity(@ActivityContext activity: Context): MainActivityI {
-        return activity as MainActivityI
     }
 }
