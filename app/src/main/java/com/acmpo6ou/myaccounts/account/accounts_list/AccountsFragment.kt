@@ -31,6 +31,7 @@ import javax.inject.Inject
 class AccountsFragment : ListFragment(), AccountsFragmentI {
     @Inject
     override lateinit var adapter: AccountsAdapter
+
     @Inject
     override lateinit var presenter: AccountsListPresenterI
 
@@ -57,8 +58,6 @@ class AccountsFragment : ListFragment(), AccountsFragmentI {
 
     /**
      * Displays a dialog for user to confirm deletion of account.
-     *
-     * If user is choosing No – we will do nothing, if Yes – delete account.
      * @param[i] - account index.
      */
     override fun confirmDelete(i: Int) {
