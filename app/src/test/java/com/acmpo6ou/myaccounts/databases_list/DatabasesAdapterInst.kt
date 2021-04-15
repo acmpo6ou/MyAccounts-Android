@@ -49,7 +49,8 @@ import org.robolectric.annotation.LooperMode
 @UninstallModules(DatabasesBindings::class, AppModule::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 class DatabasesAdapterInst {
-    @get:Rule var hiltAndroidRule = HiltAndroidRule(this)
+    @get:Rule
+    var hiltAndroidRule = HiltAndroidRule(this)
 
     private val mockDatabases = mutableListOf(
         Database("main"),

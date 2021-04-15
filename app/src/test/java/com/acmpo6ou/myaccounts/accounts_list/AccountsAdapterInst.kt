@@ -19,49 +19,55 @@
 
 package com.acmpo6ou.myaccounts.accounts_list
 
-import android.os.Build
 import android.view.View
 import android.widget.TextView
-import androidx.fragment.app.testing.FragmentScenario
-import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
-import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.*
 import com.acmpo6ou.myaccounts.account.accounts_list.AccountsFragment
+import com.acmpo6ou.myaccounts.account.accounts_list.AccountsListBindings
 import com.acmpo6ou.myaccounts.account.accounts_list.AccountsListPresenterI
-import com.acmpo6ou.myaccounts.clickMenuItem
-import com.acmpo6ou.myaccounts.databaseMap
-import com.acmpo6ou.myaccounts.getRecycler
-import com.nhaarman.mockitokotlin2.*
+import com.acmpo6ou.myaccounts.core.AppModule
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import dagger.hilt.android.testing.BindValue
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
+@HiltAndroidTest
 @RunWith(RobolectricTestRunner::class)
+@UninstallModules(AppModule::class, AccountsListBindings::class)
 @LooperMode(LooperMode.Mode.PAUSED)
-@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class AccountsAdapterInst {
-    lateinit var scenario: FragmentScenario<AccountsFragment>
-    lateinit var spyPresenter: AccountsListPresenterI
+    @get:Rule
+    var hiltAndroidRule = HiltAndroidRule(this)
+
+    @BindValue
+    @JvmField
+    val app = MyApp()
+
+    @BindValue
+    @JvmField
+    val presenter: AccountsListPresenterI = mock { on { accountsList } doReturn listOf(account) }
 
     private lateinit var recycler: RecyclerView
     private lateinit var itemLayout: View
 
     @Before
     fun setUp() {
-        scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
-
-        scenario.onFragment {
-            spyPresenter = spy(it.presenter)
-            whenever(spyPresenter.accounts).doReturn(databaseMap)
-            it.presenter = spyPresenter
-
-            recycler = it.getRecycler()
-            Navigation.setViewNavController(it.requireView(), mock())
+        hiltAndroidRule.inject()
+        launchFragmentInHiltContainer<AccountsFragment> {
+            recycler = this.getRecycler()
+            Navigation.setViewNavController(this.requireView(), mock())
         }
 
         // get item layout from recycler
@@ -69,26 +75,26 @@ class AccountsAdapterInst {
     }
 
     @Test
-    fun `click on recycler item should call displayAccount`() {
-        itemLayout.performClick()
-        verify(spyPresenter).displayAccount(0)
-    }
-
-    @Test
     fun `account item should have appropriate name`() {
         val accountName = itemLayout.findViewById<TextView>(R.id.itemName)
-        assertEquals("gmail", accountName?.text)
+        assertEquals(account.accountName, accountName?.text)
     }
 
     @Test
     fun `clicking on 'Edit' should call editAccount`() {
         clickMenuItem(itemLayout, R.id.edit_account_item)
-        verify(spyPresenter).editAccount(0)
+        verify(presenter).editAccount(0)
     }
 
     @Test
     fun `clicking on 'Delete' should call deleteSelected`() {
         clickMenuItem(itemLayout, R.id.delete_account_item)
-        verify(spyPresenter).deleteSelected(0)
+        verify(presenter).deleteSelected(0)
+    }
+
+    @Test
+    fun `click on recycler item should call displayAccount`() {
+        itemLayout.performClick()
+        verify(presenter).displayAccount(0)
     }
 }
