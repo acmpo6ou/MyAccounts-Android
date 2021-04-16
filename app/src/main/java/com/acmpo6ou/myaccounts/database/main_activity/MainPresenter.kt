@@ -35,16 +35,13 @@ import javax.inject.Inject
 @ActivityScoped
 open class MainPresenter @Inject constructor(
     private val activity: Lazy<MainActivityI>,
-    private val model: MainModelI,
+    var model: MainModelI,
     private val app: MyApp,
     private val prefs: SharedPreferences,
 ) : SuperPresenter(), MainPresenterI {
 
     var databases by app::databases
     override val view: MainActivityI get() = activity.get()
-
-    // path to directory that contains src folder
-    private val ACCOUNTS_DIR = app.getExternalFilesDir(null)!!.path + "/"
 
     init {
         // This methods are called on app startup
@@ -53,109 +50,16 @@ open class MainPresenter @Inject constructor(
     }
 
     /**
-     * This method is called on app startup, it checks for updates if it's time to.
+     * Checks for updates if it's time to.
      */
     fun autocheckForUpdates() {
         if (isTimeToUpdate()) checkUpdatesSelected(true)
     }
 
     /**
-     * This method is called on app startup, if src folder doesn't exist method will create it.
+     * Creates src folder if it doesn't exist.
      */
-    fun fixSrcFolder() {
-        val srcDir = File("$ACCOUNTS_DIR/src")
-        if (!srcDir.exists()) srcDir.mkdirs()
-    }
-
-    /**
-     * This method is called when user clicks `Import database` in navigation drawer.
-     */
-    override fun importSelected() = view.importDialog()
-
-    /**
-     * This method checks given tar file on validity.
-     *
-     * It checks whether the tar file has appropriate files, does it have appropriate
-     * number of them and so on.
-     * @param[location] uri containing tar file that we need to check.
-     */
-    override fun checkTarFile(location: Uri) {
-        // get everything we need (file names and sizes etc.)
-        val resources = view.myContext?.resources
-        var errorDetails = ""
-
-        val fileCount = model.countFiles(location)
-        val fileNames = model.getNames(location)
-        val fileSizes = model.getSizes(location)
-
-        // check that there are only 2 files
-        if (fileCount != 2) {
-            errorDetails = resources.getString(R.string.import_2_files)
-        }
-        // check that files have the same name
-        else if (fileNames[0] != fileNames[1]) {
-            errorDetails = resources.getString(
-                R.string.import_diff_names, fileNames[0], fileNames[1]
-            )
-        }
-        // check that .bin file has exactly 16 bytes of salt in it
-        else if (fileSizes[1] != 16) {
-            errorDetails = resources.getString(R.string.import_bin_size, fileSizes[1])
-        }
-        // check that .db file has at least 100 bytes in it
-        else if (fileSizes[0] < 100) {
-            errorDetails = resources.getString(R.string.import_db_size, fileSizes[0])
-        }
-        // if there are no errors - call importDatabase
-        else {
-            importDatabase(location)
-        }
-
-        // if there are any errors display error dialog
-        if (errorDetails.isNotEmpty()) {
-            val errorTitle = resources.getString(R.string.import_error_title)
-            view.showError(errorTitle, errorDetails)
-        }
-    }
-
-    /**
-     * This method calls model.importDatabase() handling all errors.
-     *
-     * After import, it adds database to the list which then sorts and
-     * notifies about changes.
-     * If there are any errors during this process it displays error dialog.
-     */
-    open fun importDatabase(location: Uri) {
-        val resources = view.myContext?.resources
-        var errorDetails = ""
-
-        try {
-            // add Database and sort the databases list
-            val name = model.importDatabase(location)
-            val db = Database(name)
-            databases.add(db)
-            databases.sortBy { it.name }
-
-            // notify about changes in the list
-            val i = databases.indexOf(db)
-            view.notifyChanged(i)
-        } catch (e: FileAlreadyExistsException) {
-            errorDetails = resources.getString(R.string.db_exists)
-            e.printStackTrace()
-        } catch (e: IOException) {
-            errorDetails = resources.getString(R.string.io_error)
-            e.printStackTrace()
-        } catch (e: Exception) {
-            errorDetails = e.toString()
-            e.printStackTrace()
-        }
-
-        // if there are any errors display error dialog
-        if (errorDetails.isNotEmpty()) {
-            val errorTitle = resources.getString(R.string.import_error_title)
-            view.showError(errorTitle, errorDetails)
-        }
-    }
+    fun fixSrcFolder() = File(model.SRC_DIR).mkdirs()
 
     /**
      * This method checks whether it's time to check for updates.
@@ -177,6 +81,94 @@ open class MainPresenter @Inject constructor(
     }
 
     /**
+     * Called when user clicks `Import database` in navigation drawer.
+     */
+    override fun importSelected() = view.importDialog()
+
+    /**
+     * This method checks given tar file on validity.
+     *
+     * It checks whether the tar file has appropriate files, does it have appropriate
+     * number of them and so on.
+     * @param[location] uri containing tar file that we need to check.
+     */
+    override fun checkTarFile(location: Uri) {
+        var errorDetails: String? = null
+
+        // get everything we need (file names and sizes etc.)
+        val fileCount = model.countFiles(location)
+        val fileNames = model.getNames(location)
+        val fileSizes = model.getSizes(location)
+
+        // check that there are only 2 files
+        if (fileCount != 2) {
+            errorDetails = app.res.getString(R.string.import_2_files)
+        }
+        // check that files have the same name
+        else if (fileNames[0] != fileNames[1]) {
+            errorDetails = app.res.getString(
+                R.string.import_diff_names, fileNames[0], fileNames[1]
+            )
+        }
+        // check that .bin file has exactly 16 bytes of salt in it
+        else if (fileSizes[1] != 16) {
+            errorDetails = app.res.getString(R.string.import_bin_size, fileSizes[1])
+        }
+        // check that .db file has at least 100 bytes in it
+        else if (fileSizes[0] < 100) {
+            errorDetails = app.res.getString(R.string.import_db_size, fileSizes[0])
+        }
+        // if there are no errors - call importDatabase
+        else {
+            importDatabase(location)
+        }
+
+        // if there are any errors display error dialog
+        if (errorDetails != null) {
+            val errorTitle = app.res.getString(R.string.import_error_title)
+            view.showError(errorTitle, errorDetails)
+        }
+    }
+
+    /**
+     * This method calls model.importDatabase() handling all errors.
+     *
+     * After import, it adds database to the list which then sorts and
+     * notifies about changes.
+     * If there are any errors during this process it displays error dialog.
+     */
+    open fun importDatabase(location: Uri) {
+        var errorDetails: String? = null
+
+        try {
+            // add Database and sort the databases list
+            val name = model.importDatabase(location)
+            val db = Database(name)
+            databases.add(db)
+            databases.sortBy { it.name }
+
+            // notify about changes in the list
+            val i = databases.indexOf(db)
+            view.notifyChanged(i)
+        } catch (e: FileAlreadyExistsException) {
+            errorDetails = app.res.getString(R.string.db_exists)
+            e.printStackTrace()
+        } catch (e: IOException) {
+            errorDetails = app.res.getString(R.string.io_error)
+            e.printStackTrace()
+        } catch (e: Exception) {
+            errorDetails = e.toString()
+            e.printStackTrace()
+        }
+
+        // if there are any errors display error dialog
+        if (errorDetails != null) {
+            val errorTitle = app.res.getString(R.string.import_error_title)
+            view.showError(errorTitle, errorDetails)
+        }
+    }
+
+    /**
      * Called when user presses the back button.
      *
      * Here we decide whether to show a confirmation dialog or snackbar about unsaved
@@ -187,7 +179,7 @@ open class MainPresenter @Inject constructor(
      */
     override fun backPressed() {
         val openedDatabases = databases.filter { it.isOpen }
-        val unsavedDatabases = openedDatabases.filter { !model.isDatabaseSaved(it, view.app) }
+        val unsavedDatabases = openedDatabases.filter { !model.isDatabaseSaved(it, app) }
 
         if (unsavedDatabases.isNotEmpty()) {
             view.confirmBack()
@@ -205,9 +197,9 @@ open class MainPresenter @Inject constructor(
      * Called when user chose `Save` in confirm going back dialog.
      * Saves all unsaved databases.
      */
-    override fun saveSelected() {
-        databases.filter { it.isOpen }
-            .filter { !model.isDatabaseSaved(it, view.app) }
-            .forEach { model.saveDatabase(it.name, it, view.app) }
-    }
+    override fun saveSelected() =
+        databases
+            .filter { it.isOpen }
+            .filter { !model.isDatabaseSaved(it, app) }
+            .forEach { model.saveDatabase(it.name, it, app) }
 }

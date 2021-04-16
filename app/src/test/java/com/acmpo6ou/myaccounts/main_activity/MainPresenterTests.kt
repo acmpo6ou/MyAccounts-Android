@@ -19,8 +19,6 @@
 
 package com.acmpo6ou.myaccounts.main_activity
 
-import android.content.ContentResolver
-import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import com.acmpo6ou.myaccounts.MyApp
@@ -38,39 +36,31 @@ import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito.spy
 import java.io.File
 import java.time.LocalDate
-import java.util.*
 
 class MainPresenterTests {
     lateinit var presenter: MainPresenter
     lateinit var spyPresenter: MainPresenter
 
+    lateinit var app: MyApp
     lateinit var view: MainActivityI
     lateinit var model: MainModelI
     lateinit var mockPrefs: SharedPreferences
 
     private val locationUri: Uri = mock()
     private val accountsDir = "/dev/shm/accounts"
-    val app = MyApp()
+    private val srcDir = "$accountsDir/src"
 
     @Before
     fun setup() {
-        app.databases = mutableListOf(Database("test", "123"))
-        val resolver: ContentResolver = mock()
-        val context: Context = mock { on { contentResolver } doReturn resolver }
-
-        mockPrefs = SPMockBuilder().createSharedPreferences()
-        model = mock()
-        doReturn(false).whenever(model).isDatabaseSaved(app.databases[0], app)
-
-        view = mock {
-            on { ACCOUNTS_DIR } doReturn accountsDir
-            on { app } doReturn MainPresenterTests@app
-            on { myContext } doReturn context
-            on { prefs } doReturn mockPrefs
+        app = mock {
+            on { databases } doReturn mutableListOf(Database("test", "123"))
         }
 
-        presenter = MainPresenter(view)
-        presenter.model = model
+        view = mock()
+        model = mock { on { SRC_DIR } doReturn srcDir }
+        mockPrefs = SPMockBuilder().createSharedPreferences()
+
+        presenter = MainPresenter({ view }, model, app, mockPrefs)
         spyPresenter = spy(presenter)
     }
 
@@ -78,8 +68,8 @@ class MainPresenterTests {
         val filesList = listOf("main", "main")
         val sizesList = listOf(
             100, // size of db file should be not less then 100
-            16
-        ) // size of bin file should be exactly 16
+            16, // size of bin file should be exactly 16
+        )
 
         // mock model to return correct file sizes, count and names
         model = mock {
@@ -87,12 +77,6 @@ class MainPresenterTests {
             on { countFiles(locationUri) } doReturn 2
             on { getSizes(locationUri) } doReturn sizesList
         }
-    }
-
-    @Test
-    fun `importSelected should call view importDialog`() {
-        presenter.importSelected()
-        verify(view).importDialog()
     }
 
     @Test
@@ -107,7 +91,6 @@ class MainPresenterTests {
         doReturn(false).whenever(spyPresenter).isTimeToUpdate()
         spyPresenter.autocheckForUpdates()
         verify(spyPresenter, never()).checkUpdatesSelected(anyBoolean())
-        verify(spyPresenter, never()).checkUpdatesSelected()
     }
 
     @Test
@@ -141,6 +124,26 @@ class MainPresenterTests {
     }
 
     @Test
+    fun `fixSrcFolder should create SRC_DIR if it doesn't exist`() {
+        // here we delete accounts folder if it already exists to ensure that it will
+        // be empty as is needed for our test
+        val accountsFolder = File(accountsDir)
+        accountsFolder.deleteRecursively()
+
+        presenter.fixSrcFolder()
+
+        // the src folder should be created
+        val srcDir = File(srcDir)
+        assertTrue(srcDir.exists())
+    }
+
+    @Test
+    fun `importSelected should call view importDialog`() {
+        presenter.importSelected()
+        verify(view).importDialog()
+    }
+
+    @Test
     fun `checkTarFile should call importDatabase if there are no errors`() {
         mockCorrectModel()
         spyPresenter.model = model
@@ -151,23 +154,6 @@ class MainPresenterTests {
         verify(view, never()).showError(anyString(), anyString())
     }
 
-    @Test
-    fun `fixSrcFolder should create SRC_DIR if it doesn't exist`() {
-        // here we delete accounts folder if it already exists to ensure that it will
-        // be empty as is needed for our tests
-        val accountsFolder = File(accountsDir)
-        if (accountsFolder.exists()) accountsFolder.deleteRecursively()
-
-        presenter.fixSrcFolder()
-
-        // the src folder should be created
-        val srcDir = File("$accountsDir/src")
-        assertTrue(srcDir.exists())
-    }
-
-    /**
-     * Helper method used by next 2 tests. Simulates importing of database named `main`.
-     */
     private fun importMainDatabase() {
         mockCorrectModel()
         doReturn("main").whenever(model).importDatabase(locationUri)
@@ -209,7 +195,7 @@ class MainPresenterTests {
 
     @Test
     fun `backPressed should call goBack when there are no opened databases`() {
-        app.databases = mutableListOf(Database("main"))
+        whenever(app.databases).thenReturn(mutableListOf(Database("main")))
         presenter.backPressed()
 
         verify(view).goBack()
@@ -219,13 +205,15 @@ class MainPresenterTests {
 
     @Test
     fun `saveSelected should save all unsaved databases`() {
-        app.databases = mutableListOf(
-            Database("main"),
-            Database("test", "123"), // unsaved
-            Database("saved", "123")
+        whenever(app.databases).doReturn(
+            mutableListOf(
+                Database("main"),
+                Database("test", "123"), // unsaved
+                Database("saved", "123")
+            )
         )
-        doReturn(false).whenever(model).isDatabaseSaved(app.databases[1], app)
-        doReturn(true).whenever(model).isDatabaseSaved(app.databases[2], app)
+        whenever(model.isDatabaseSaved(app.databases[1], app)).thenReturn(false)
+        whenever(model.isDatabaseSaved(app.databases[2], app)).thenReturn(true)
 
         presenter.saveSelected()
         verify(model).saveDatabase("test", app.databases[1], app)
