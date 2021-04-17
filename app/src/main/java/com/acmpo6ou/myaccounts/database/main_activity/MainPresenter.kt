@@ -151,14 +151,14 @@ open class MainPresenter @Inject constructor(
             val i = databases.indexOf(db)
             view.notifyChanged(i)
         } catch (e: FileAlreadyExistsException) {
+            e.printStackTrace()
             errorDetails = app.res.getString(R.string.db_exists)
-            e.printStackTrace()
         } catch (e: IOException) {
+            e.printStackTrace()
             errorDetails = app.res.getString(R.string.io_error)
-            e.printStackTrace()
         } catch (e: Exception) {
-            errorDetails = e.toString()
             e.printStackTrace()
+            errorDetails = e.toString()
         }
 
         // if there are any errors display error dialog

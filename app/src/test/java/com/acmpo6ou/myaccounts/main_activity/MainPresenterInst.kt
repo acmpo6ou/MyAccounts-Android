@@ -103,7 +103,8 @@ class MainPresenterInst : NoInternet {
         val sizesList = listOf(
             // size of db file should be not less then 100
             100,
-            // size of bin file should be exactly 16
+            // size of bin file should be exactly 16, here we return anything but 16
+            // as is needed for the test
             randomIntExcept(16, 0, 200)
         )
 
@@ -121,10 +122,11 @@ class MainPresenterInst : NoInternet {
         // mock model to return fake sizes, correct files count and file names
         val filesList = listOf("main", "main")
         val sizesList = listOf(
-            // size of db file should be not less then 100
+            // size of db file should be not less then 100, here we return number lower
+            // then 100 as is needed for our test
             faker.number().numberBetween(0, 90),
-            16
-        ) // size of bin file should be exactly 16
+            16 // size of bin file should be exactly 16
+        )
 
         whenever(model.getNames(locationUri)).thenReturn(filesList)
         whenever(model.countFiles(locationUri)).thenReturn(2)
@@ -136,23 +138,23 @@ class MainPresenterInst : NoInternet {
     }
 
     @Test
-    fun `importDatabase should handle IOException`() {
-        whenever(model.importDatabase(locationUri)).thenAnswer {
-            throw IOException()
-        }
-        presenter.importDatabase(locationUri)
-
-        verify(view).showError(importErrorTitle, ioError)
-    }
-
-    @Test
     fun `importDatabase should handle FileAlreadyExistsException`() {
         whenever(model.importDatabase(locationUri)).thenAnswer {
             throw FileAlreadyExistsException(File(""))
         }
-        presenter.importDatabase(locationUri)
 
+        presenter.importDatabase(locationUri)
         verify(view).showError(importErrorTitle, importExistsMsg)
+    }
+
+    @Test
+    fun `importDatabase should handle IOException`() {
+        whenever(model.importDatabase(locationUri)).thenAnswer {
+            throw IOException()
+        }
+
+        presenter.importDatabase(locationUri)
+        verify(view).showError(importErrorTitle, ioError)
     }
 
     @Test
@@ -162,8 +164,8 @@ class MainPresenterInst : NoInternet {
         whenever(model.importDatabase(locationUri)).thenAnswer {
             throw exception
         }
-        presenter.importDatabase(locationUri)
 
+        presenter.importDatabase(locationUri)
         verify(view).showError(importErrorTitle, exception.toString())
     }
 }
