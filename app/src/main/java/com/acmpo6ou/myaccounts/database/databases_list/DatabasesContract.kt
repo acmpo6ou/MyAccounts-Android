@@ -41,7 +41,7 @@ interface DatabasesPresenterI : ListPresenter {
     fun openDatabase(i: Int)
 }
 
-interface DatabaseFragmentI : ListFragmentI {
+interface DatabasesFragmentI : ListFragmentI {
     val presenter: DatabasesPresenterI
     val adapter: DatabasesAdapter
 

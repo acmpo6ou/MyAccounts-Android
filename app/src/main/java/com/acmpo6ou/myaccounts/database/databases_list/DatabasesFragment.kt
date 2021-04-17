@@ -34,7 +34,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class DatabasesFragment : ListFragment(), DatabaseFragmentI {
+class DatabasesFragment : ListFragment(), DatabasesFragmentI {
     @Inject
     lateinit var app: MyApp
 

@@ -47,7 +47,7 @@ interface DatabasesBindings {
 class DatabasesModule {
     @Provides
     @FragmentScoped
-    fun databasesFragment(@ActivityContext activity: Context): DatabaseFragmentI {
+    fun databasesFragment(@ActivityContext activity: Context): DatabasesFragmentI {
         return (activity as AppCompatActivity)
             .supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment)!!

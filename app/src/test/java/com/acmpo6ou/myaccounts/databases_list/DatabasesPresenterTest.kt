@@ -23,7 +23,7 @@ import android.net.Uri
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
 import com.acmpo6ou.myaccounts.database.databases_list.Database
-import com.acmpo6ou.myaccounts.database.databases_list.DatabaseFragmentI
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentI
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesModelI
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesPresenter
 import com.github.javafaker.Faker
@@ -31,7 +31,7 @@ import com.nhaarman.mockitokotlin2.mock
 import org.junit.Before
 
 open class DatabasesPresenterTest : DatabaseUtils {
-    lateinit var view: DatabaseFragmentI
+    lateinit var view: DatabasesFragmentI
     lateinit var model: DatabasesModelI
     lateinit var presenter: DatabasesPresenter
 

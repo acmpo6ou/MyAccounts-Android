@@ -29,7 +29,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
-import com.acmpo6ou.myaccounts.database.databases_list.DatabaseFragmentI
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentI
 import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
 import com.acmpo6ou.myaccounts.database.main_activity.MainPresenterI
 import com.acmpo6ou.myaccounts.databinding.ActivityMainBinding
@@ -124,7 +124,7 @@ class MainActivity : SuperActivity(), MainActivityI {
      * @param[i] index of Database that were added to databases list.
      */
     override fun notifyChanged(i: Int) {
-        val databasesFragment = mainFragment as DatabaseFragmentI
+        val databasesFragment = mainFragment as DatabasesFragmentI
         databasesFragment.notifyChanged(i)
     }
 }

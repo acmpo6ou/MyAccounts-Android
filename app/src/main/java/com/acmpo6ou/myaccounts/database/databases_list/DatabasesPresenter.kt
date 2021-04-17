@@ -30,12 +30,12 @@ import javax.inject.Inject
 
 @FragmentScoped
 open class DatabasesPresenter @Inject constructor(
-    private val fragment: Lazy<DatabaseFragmentI>,
+    private val fragment: Lazy<DatabasesFragmentI>,
     private val model: DatabasesModelI,
     private val app: MyApp,
 ) : DatabasesPresenterI {
 
-    val view: DatabaseFragmentI get() = fragment.get()
+    val view: DatabasesFragmentI get() = fragment.get()
     var exportIndex: Int? = null
     override var databases by app::databases
 
