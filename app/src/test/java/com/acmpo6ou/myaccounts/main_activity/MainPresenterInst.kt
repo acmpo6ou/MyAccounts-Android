@@ -22,16 +22,11 @@ package com.acmpo6ou.myaccounts.main_activity
 import android.content.Context
 import android.content.res.Resources
 import android.net.Uri
-import android.os.Build
 import androidx.test.platform.app.InstrumentationRegistry
-import com.acmpo6ou.myaccounts.NoInternet
-import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.*
 import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
 import com.acmpo6ou.myaccounts.database.main_activity.MainModelI
 import com.acmpo6ou.myaccounts.database.main_activity.MainPresenter
-import com.acmpo6ou.myaccounts.randomIntExcept
-import com.acmpo6ou.myaccounts.str
 import com.github.ivanshafran.sharedpreferencesmock.SPMockBuilder
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.doReturn
@@ -42,12 +37,10 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 import java.io.File
 import java.io.IOException
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class MainPresenterInst : NoInternet {
     lateinit var presenter: MainPresenter
     lateinit var model: MainModelI
@@ -59,6 +52,7 @@ class MainPresenterInst : NoInternet {
     // get string resources
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     private val resources: Resources = context.resources
+
     private val importErrorTitle = resources.getString(R.string.import_error_title)
     private val import2FilesMsg = resources.getString(R.string.import_2_files)
     private val importExistsMsg = resources.getString(R.string.db_exists)
@@ -66,17 +60,13 @@ class MainPresenterInst : NoInternet {
 
     @Before
     fun setup() {
+        val app = MyApp()
+        app.res = resources
         val mockPrefs = SPMockBuilder().createSharedPreferences()
-        view = mock {
-            on { myContext } doReturn context
-            on { ACCOUNTS_DIR } doReturn ""
-            on { prefs } doReturn mockPrefs
-            on { app } doReturn context.applicationContext as MyApp
-        }
-        model = mock()
 
-        presenter = MainPresenter(view)
-        presenter.model = model
+        view = mock()
+        model = mock { on { SRC_DIR } doReturn "" }
+        presenter = MainPresenter({ view }, model, app, mockPrefs)
     }
 
     @Test
@@ -84,8 +74,8 @@ class MainPresenterInst : NoInternet {
         // correct tar file would have 2 files
         // here we return anything but 2 as is needed for test
         whenever(model.countFiles(locationUri)).thenReturn(randomIntExcept(2))
-        presenter.checkTarFile(locationUri)
 
+        presenter.checkTarFile(locationUri)
         verify(view).showError(importErrorTitle, import2FilesMsg)
     }
 
