@@ -21,30 +21,72 @@ package com.acmpo6ou.myaccounts.main_activity
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Looper
 import android.view.View
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.platform.app.InstrumentationRegistry
-import com.acmpo6ou.myaccounts.MainActivity
-import com.acmpo6ou.myaccounts.NoInternet
-import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.findSnackbarTextView
+import com.acmpo6ou.myaccounts.*
+import com.acmpo6ou.myaccounts.core.AppModule
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesBindings
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesModelI
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesPresenterI
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityBindings
+import com.acmpo6ou.myaccounts.database.main_activity.MainModelI
+import com.acmpo6ou.myaccounts.database.main_activity.MainPresenterI
+import com.nhaarman.mockitokotlin2.mock
+import dagger.hilt.android.scopes.ActivityScoped
+import dagger.hilt.android.testing.BindValue
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
-import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
+import javax.inject.Singleton
 
+@HiltAndroidTest
+@UninstallModules(
+    AppModule::class,
+    MainActivityBindings::class, DatabasesBindings::class
+)
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
-@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class MainActivityInst : NoInternet {
+    @get:Rule
+    var hiltAndroidRule = HiltAndroidRule(this)
+
+    @BindValue
+    @JvmField
+    @Singleton
+    val app = MyApp()
+
+    @BindValue
+    @JvmField
+    @ActivityScoped
+    val mainPresenter: MainPresenterI = mock()
+
+    @BindValue
+    @JvmField
+    @ActivityScoped
+    val mainModel: MainModelI = mock()
+
+    @BindValue
+    @JvmField
+    @ActivityScoped
+    val databasesPresenter: DatabasesPresenterI = mock()
+
+    @BindValue
+    @JvmField
+    @ActivityScoped
+    val databasesModel: DatabasesModelI = mock()
+
     lateinit var scenario: ActivityScenario<MainActivity>
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     private val exitTip = context.resources.getString(R.string.exit_tip)
