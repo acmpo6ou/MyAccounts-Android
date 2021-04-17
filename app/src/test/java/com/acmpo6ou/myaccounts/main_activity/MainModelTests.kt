@@ -20,18 +20,26 @@
 package com.acmpo6ou.myaccounts.main_activity
 
 import com.acmpo6ou.myaccounts.ModelTest
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.database.main_activity.MainModel
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import java.io.File
 
 class MainModelTests : ModelTest() {
-    private var model = MainModel(accountsDir, contentResolver)
+    lateinit var model: MainModel
 
     @Before
     fun setup() {
         setupInputResolver()
+        val app: MyApp = mock {
+            on { contentResolver } doReturn contentResolver
+            on { getExternalFilesDir(null) } doReturn File(accountsDir)
+        }
+        model = MainModel(app)
     }
 
     @Test
