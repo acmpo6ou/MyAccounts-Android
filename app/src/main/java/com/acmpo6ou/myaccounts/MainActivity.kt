@@ -26,6 +26,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
@@ -39,8 +40,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : SuperActivity(), MainActivityI {
-    val IMPORT_RC = 202
-
     @Inject
     override lateinit var prefs: SharedPreferences
 
@@ -90,23 +89,21 @@ class MainActivity : SuperActivity(), MainActivityI {
         return false
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
-        super.onActivityResult(requestCode, resultCode, resultData)
-        if (resultCode != Activity.RESULT_OK) return
-        if (requestCode == IMPORT_RC) resultData?.data?.let { presenter.checkTarFile(it) }
-    }
+    private val importLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.data?.let { presenter.checkTarFile(it) }
+            }
+        }
 
     /**
-     * Used to display import dialog where user can choose database that he wants to import.
-     *
-     * Starts intent with [IMPORT_RC] request code.
-     * Shows dialog to choose location using Storage Access Framework.
+     * Displays import dialog where user can choose database that he wants to import.
      */
     override fun importDialog() =
         with(Intent(Intent.ACTION_OPEN_DOCUMENT)) {
             addCategory(Intent.CATEGORY_OPENABLE)
             type = "application/x-tar"
-            startActivityForResult(this, IMPORT_RC)
+            importLauncher.launch(this)
         }
 
     override fun showExitTip() {
