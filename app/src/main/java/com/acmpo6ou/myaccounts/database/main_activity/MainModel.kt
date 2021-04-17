@@ -32,17 +32,16 @@ import javax.inject.Inject
  * database, counting files in database tar file etc.
  */
 @ActivityScoped
-class MainModel @Inject constructor(
-    private val app: MyApp,
-) : MainModelI {
+class MainModel @Inject constructor(private val app: MyApp) : MainModelI {
 
     // path to directory that contains src folder
     private val ACCOUNTS_DIR = app.getExternalFilesDir(null)!!.path + "/"
+
     // path to directory that contains databases
     override val SRC_DIR = "$ACCOUNTS_DIR/src/"
 
     /**
-     * This method is used to clean database name from .db or .bin extension and `src/` path.
+     * Cleans database name from .db or .bin extension and `src/` path.
      *
      * @param[databaseName] database name to clean.
      * @return database name cleaned from `.db` or `.bin` and `src/`.
@@ -61,7 +60,7 @@ class MainModel @Inject constructor(
     }
 
     /**
-     * This method counts number of files that present in given tar file.
+     * Counts number of files that present in given tar file.
      *
      * @param[location] uri containing tar file.
      * @return number of counted files in tar file.
@@ -71,7 +70,7 @@ class MainModel @Inject constructor(
     }
 
     /**
-     * This method returns a list of names of files from tar file.
+     * Gets a list of names of files from tar file.
      *
      * @param[locationUri] uri containing tar file.
      * @return list of file names from tar file.
@@ -106,7 +105,7 @@ class MainModel @Inject constructor(
     }
 
     /**
-     * This method returns file sizes of given tar file.
+     * Gets file sizes of given tar file.
      *
      * @param[locationUri] uri containing tar file.
      * @return list of file sizes.
@@ -126,7 +125,7 @@ class MainModel @Inject constructor(
 
         while (entry != null) {
             val name = entry.name
-            // extract only files with .db or .bin extensions and if they start with `src/`
+            // we need only files with .db or .bin extensions and if they start with `src/`
             // skip all other files such as tar headers
             if (name.startsWith("src/") &&
                 (name.endsWith(".db") || name.endsWith(".bin"))
@@ -140,9 +139,9 @@ class MainModel @Inject constructor(
     }
 
     /**
-     * Used to import database from given tar archive.
+     * Imports database from given tar archive.
      *
-     * Extracts .db and .bin files from given tar archive to `src` directory.
+     * Extracts .db and .bin files from given tar archive to src directory.
      * @param[locationUri] uri containing tar archive that in turn contains database files
      * we need to extract.
      * @return name of imported database that is later used by presenter.
@@ -163,8 +162,7 @@ class MainModel @Inject constructor(
         while (entry != null) {
             // extract only .db and .bin files, skip all other such as tar headers
             if (!(
-                entry.name.endsWith(".db") ||
-                    entry.name.endsWith(".bin")
+                entry.name.endsWith(".db") || entry.name.endsWith(".bin")
                 )
             ) {
                 entry = inputStream.nextEntry
