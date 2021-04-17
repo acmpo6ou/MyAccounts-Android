@@ -23,6 +23,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Looper
 import android.view.View
+import androidx.core.view.GravityCompat
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.platform.app.InstrumentationRegistry
@@ -35,6 +36,8 @@ import com.acmpo6ou.myaccounts.database.main_activity.MainActivityBindings
 import com.acmpo6ou.myaccounts.database.main_activity.MainModelI
 import com.acmpo6ou.myaccounts.database.main_activity.MainPresenterI
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import dagger.hilt.android.scopes.ActivityScoped
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -70,12 +73,12 @@ class MainActivityInst : NoInternet {
     @BindValue
     @JvmField
     @ActivityScoped
-    val mainPresenter: MainPresenterI = mock()
+    val presenter: MainPresenterI = mock()
 
     @BindValue
     @JvmField
     @ActivityScoped
-    val mainModel: MainModelI = mock()
+    val model: MainModelI = mock()
 
     @BindValue
     @JvmField
@@ -96,6 +99,26 @@ class MainActivityInst : NoInternet {
         scenario = launch(MainActivity::class.java)
         scenario.onActivity {
             it.myContext.setTheme(R.style.Theme_MyAccounts_NoActionBar)
+        }
+    }
+
+    @Test
+    fun `'Import database' should call presenter importSelected`() {
+        scenario.onActivity {
+            selectNavigationItem(R.id.import_database, it)
+            verify(presenter).importSelected()
+
+            // all other methods should not be called
+            verifyNoMoreInteractions(presenter)
+        }
+    }
+
+    @Test
+    fun `navigation drawer should be closed when any of it's items is selected`() {
+        scenario.onActivity {
+            it.drawerLayout = mock()
+            selectNavigationItem(R.id.import_database, it)
+            verify(it.drawerLayout).closeDrawer(GravityCompat.START)
         }
     }
 
