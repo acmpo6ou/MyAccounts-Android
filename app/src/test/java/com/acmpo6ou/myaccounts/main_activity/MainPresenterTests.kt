@@ -175,7 +175,7 @@ class MainPresenterTests {
 
     @Test
     fun `backPressed should call confirmBack when there are unsaved databases`() {
-        doReturn(false).whenever(model).isDatabaseSaved(any(), eq(app))
+        doReturn(false).whenever(model).isDatabaseSaved(any())
         presenter.backPressed()
 
         verify(view).confirmBack()
@@ -185,7 +185,7 @@ class MainPresenterTests {
 
     @Test
     fun `backPressed should call showExitTip when there are opened databases`() {
-        doReturn(true).whenever(model).isDatabaseSaved(any(), eq(app))
+        doReturn(true).whenever(model).isDatabaseSaved(any())
         presenter.backPressed()
 
         verify(view).showExitTip()
@@ -212,12 +212,12 @@ class MainPresenterTests {
                 Database("saved", "123")
             )
         )
-        whenever(model.isDatabaseSaved(app.databases[1], app)).thenReturn(false)
-        whenever(model.isDatabaseSaved(app.databases[2], app)).thenReturn(true)
+        whenever(model.isDatabaseSaved(app.databases[1])).thenReturn(false)
+        whenever(model.isDatabaseSaved(app.databases[2])).thenReturn(true)
 
         presenter.saveSelected()
-        verify(model).saveDatabase("test", app.databases[1], app)
-        verify(model, never()).saveDatabase("main", app.databases[0], app)
-        verify(model, never()).saveDatabase("saved", app.databases[2], app)
+        verify(model).saveDatabase("test", app.databases[1])
+        verify(model, never()).saveDatabase("main", app.databases[0])
+        verify(model, never()).saveDatabase("saved", app.databases[2])
     }
 }

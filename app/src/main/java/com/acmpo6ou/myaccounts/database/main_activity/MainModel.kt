@@ -32,10 +32,7 @@ import javax.inject.Inject
  * database, counting files in database tar file etc.
  */
 @ActivityScoped
-class MainModel @Inject constructor(private val app: MyApp) : MainModelI {
-
-    // path to directory that contains databases
-    override val SRC_DIR = ""
+class MainModel @Inject constructor(override val app: MyApp) : MainModelI {
 
     /**
      * Cleans database name from .db or .bin extension and `src/` path.

@@ -27,7 +27,7 @@ import kotlinx.coroutines.async
 open class EditDatabaseViewModel : CreateEditDatabaseModel() {
     open fun saveDatabaseAsync(oldName: String, database: Database) =
         viewModelScope.async(defaultDispatcher) {
-            saveDatabase(oldName, database, app)
+            saveDatabase(oldName, database)
         }
 
     /**

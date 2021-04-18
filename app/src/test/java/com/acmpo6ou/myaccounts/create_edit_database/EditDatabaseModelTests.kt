@@ -58,7 +58,7 @@ class EditDatabaseModelTests : ModelTest() {
         spyModel = spy(model) { on { generateSalt() } doReturn salt }
 
         doNothing().whenever(spyModel).deleteDatabase(anyString())
-        doNothing().whenever(spyModel).createDatabase(any(), eq(app))
+        doNothing().whenever(spyModel).createDatabase(any())
 
         spyModel.uiDispatcher = Dispatchers.Unconfined
         spyModel.defaultDispatcher = Dispatchers.Unconfined

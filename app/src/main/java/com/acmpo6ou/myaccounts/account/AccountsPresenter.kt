@@ -26,16 +26,15 @@ import com.acmpo6ou.myaccounts.database.databases_list.Database
 open class AccountsPresenter(override val view: AccountsActivityI) :
     SuperPresenter(), AccountsPresenterI {
 
-    override val SRC_DIR = view.myContext.getExternalFilesDir(null)?.path + "/src"
     val database: Database get() = view.database
-    val app: MyApp get() = view.app
+    override val app: MyApp get() = view.app
 
     /**
      * Called when user clicks `Save` in navigation drawer.
      * Saves database only if it has changed.
      */
     override fun saveSelected() {
-        if (!isDatabaseSaved(database, app)) saveDatabase(database.name, database, app)
+        if (!isDatabaseSaved(database)) saveDatabase(database.name, database)
         view.mainFragment.showSuccess()
     }
 
@@ -47,7 +46,7 @@ open class AccountsPresenter(override val view: AccountsActivityI) :
      * confirmation dialog.
      */
     override fun backPressed() {
-        if (isDatabaseSaved(database, app)) {
+        if (isDatabaseSaved(database)) {
             view.goBack()
         } else {
             view.confirmBack()

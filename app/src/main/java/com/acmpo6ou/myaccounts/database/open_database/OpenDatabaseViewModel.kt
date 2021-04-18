@@ -137,6 +137,6 @@ open class OpenDatabaseViewModel : ViewModel(), DatabaseViewModel {
      */
     open fun openDatabaseAsync(database: Database) =
         viewModelScope.async(defaultDispatcher) {
-            openDatabase(database, app)
+            openDatabase(database)
         }
 }

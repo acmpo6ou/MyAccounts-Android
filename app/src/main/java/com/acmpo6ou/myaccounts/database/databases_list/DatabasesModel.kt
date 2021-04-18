@@ -81,19 +81,18 @@ data class Database(
  * decrypting, deleting and creating databases.
  */
 @FragmentScoped
-class DatabasesModel @Inject constructor(private val app: MyApp) : DatabasesModelI {
-
-    // path to directory that contains databases
-    override val SRC_DIR = app.SRC_DIR
+class DatabasesModel @Inject constructor(
+    override val app: MyApp
+) : DatabasesModelI {
 
     /**
-     * Used to get a list of Database instances – databases that reside in [SRC_DIR] directory.
+     * Used to get a list of Database instances – databases that reside in src directory.
      * @return list of databases that are found in src directory.
      */
     override fun getDatabases(): DbList {
         val databases = mutableListOf<Database>()
         // src folder where all database files are stored
-        val src = File(SRC_DIR)
+        val src = File(app.SRC_DIR)
 
         // walk through all files in src directory, for each file whose extension is .db
         // add corresponding Database instance to [databases] list passing through
@@ -131,8 +130,8 @@ class DatabasesModel @Inject constructor(private val app: MyApp) : DatabasesMode
 
         // salt and database files to compress to the tar file
         val dbFiles = listOf(
-            File("$SRC_DIR$name.db"),
-            File("$SRC_DIR$name.bin"),
+            File("${app.SRC_DIR}$name.db"),
+            File("${app.SRC_DIR}$name.bin"),
         )
 
         // each file is added to tar file

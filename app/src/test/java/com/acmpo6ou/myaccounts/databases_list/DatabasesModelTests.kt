@@ -61,7 +61,7 @@ class DatabasesModelTests : ModelTest() {
     @Before
     fun setup() {
         val app = mock<MyApp> {
-            on { getExternalFilesDir(null) } doReturn File(accountsDir)
+            on { ACCOUNTS_DIR } doReturn accountsDir
             on { contentResolver } doReturn contentResolver
         }
         model = DatabasesModel(app)

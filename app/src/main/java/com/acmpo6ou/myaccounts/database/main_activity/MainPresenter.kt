@@ -59,7 +59,7 @@ open class MainPresenter @Inject constructor(
     /**
      * Creates src folder if it doesn't exist.
      */
-    fun fixSrcFolder() = File(model.SRC_DIR).mkdirs()
+    fun fixSrcFolder() = File(app.SRC_DIR).mkdirs()
 
     /**
      * This method checks whether it's time to check for updates.
@@ -179,7 +179,7 @@ open class MainPresenter @Inject constructor(
      */
     override fun backPressed() {
         val openedDatabases = databases.filter { it.isOpen }
-        val unsavedDatabases = openedDatabases.filter { !model.isDatabaseSaved(it, app) }
+        val unsavedDatabases = openedDatabases.filter { !model.isDatabaseSaved(it) }
 
         if (unsavedDatabases.isNotEmpty()) {
             view.confirmBack()
@@ -200,6 +200,6 @@ open class MainPresenter @Inject constructor(
     override fun saveSelected() =
         databases
             .filter { it.isOpen }
-            .filter { !model.isDatabaseSaved(it, app) }
-            .forEach { model.saveDatabase(it.name, it, app) }
+            .filter { !model.isDatabaseSaved(it) }
+            .forEach { model.saveDatabase(it.name, it) }
 }

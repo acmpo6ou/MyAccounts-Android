@@ -64,7 +64,7 @@ class DatabasesPresenterTests : DatabasesPresenterTest() {
     @Test
     fun `closeSelected should call closeDatabase when database is saved`() {
         val spyPresenter = spy(presenter)
-        doReturn(true).`when`(model).isDatabaseSaved(any(), eq(app))
+        doReturn(true).`when`(model).isDatabaseSaved(any())
 
         spyPresenter.closeSelected(0)
         verify(spyPresenter).closeDatabase(0)
@@ -72,7 +72,7 @@ class DatabasesPresenterTests : DatabasesPresenterTest() {
 
     @Test
     fun `closeSelected should call view confirmClose when database isn't saved`() {
-        doReturn(false).`when`(model).isDatabaseSaved(any(), eq(app))
+        doReturn(false).`when`(model).isDatabaseSaved(any())
         presenter.closeSelected(0)
         verify(view).confirmClose(0)
     }

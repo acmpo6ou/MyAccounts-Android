@@ -20,8 +20,8 @@
 package com.acmpo6ou.myaccounts.database.superclass
 
 import androidx.lifecycle.MutableLiveData
-import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
 import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
 import com.acmpo6ou.myaccounts.database.databases_list.DbList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -35,10 +35,10 @@ interface DatabaseViewModel : DatabaseUtils {
     var uiDispatcher: CoroutineDispatcher
     var coroutineJob: Job?
 
-    var app: MyApp
+    override var app: MyApp
     var titleStart: String
     var databaseIndex: Int
-    override var SRC_DIR: String
+    var SRC_DIR: String
 
     var databases: DbList
         get() = app.databases

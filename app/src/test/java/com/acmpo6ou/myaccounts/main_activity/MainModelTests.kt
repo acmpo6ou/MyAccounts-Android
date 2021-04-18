@@ -37,7 +37,7 @@ class MainModelTests : ModelTest() {
         setupInputResolver()
         val app: MyApp = mock {
             on { contentResolver } doReturn contentResolver
-            on { getExternalFilesDir(null) } doReturn File(accountsDir)
+            on { ACCOUNTS_DIR } doReturn accountsDir
         }
         model = MainModel(app)
     }

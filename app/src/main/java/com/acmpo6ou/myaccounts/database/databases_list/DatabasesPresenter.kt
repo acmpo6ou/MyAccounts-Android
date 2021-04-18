@@ -142,7 +142,7 @@ open class DatabasesPresenter @Inject constructor(
      * @param[i] index of database we want to close.
      */
     override fun closeSelected(i: Int) {
-        if (model.isDatabaseSaved(databases[i], app)) {
+        if (model.isDatabaseSaved(databases[i])) {
             closeDatabase(i)
         } else {
             view.confirmClose(i)

@@ -42,7 +42,7 @@ import javax.crypto.spec.PBEKeySpec
  * Provides some helper methods to work with databases.
  */
 interface DatabaseUtils {
-    val SRC_DIR: String
+    val app: MyApp
 
     /**
      * Used to deserialize json string to database map.
@@ -99,10 +99,9 @@ interface DatabaseUtils {
      * @param[jsonString] encrypted json string to decrypt.
      * @param[password] password for decryption.
      * @param[salt] salt for decryption.
-     * @param[app] application instance containing cache of cryptography keys.
      * @return decrypted database map.
      */
-    fun decryptDatabase(jsonString: String, password: String, salt: ByteArray, app: MyApp): DbMap {
+    fun decryptDatabase(jsonString: String, password: String, salt: ByteArray): DbMap {
         // Get key from cache if it's there, if not add the key to cache.
         // This is needed because generating cryptography key using deriveKey involves
         // 100 000 iterations which takes a long time, so the keys have to be cached and
@@ -126,10 +125,9 @@ interface DatabaseUtils {
      * This method is for database serialization and encryption.
      *
      * @param[db] Database instance to encrypt.
-     * @param[app] application instance containing cache of cryptography keys.
      * @return encrypted json string.
      */
-    fun encryptDatabase(db: Database, app: MyApp): String {
+    fun encryptDatabase(db: Database): String {
         val key = app.keyCache.getOrPut(db.password!!) { deriveKey(db.password!!, db.salt!!) }
         val data = dumps(db.data)
         val token = Token.generate(key, data)
@@ -144,10 +142,10 @@ interface DatabaseUtils {
      * can determine whether to show confirmation dialog about unsaved data to user or not.
      * @param[database] database we want to check (the one that resides in memory).
      */
-    fun isDatabaseSaved(database: Database, app: MyApp): Boolean {
+    fun isDatabaseSaved(database: Database): Boolean {
         val diskDatabase: Database
         try {
-            diskDatabase = openDatabase(database.copy(), app)
+            diskDatabase = openDatabase(database.copy())
         } catch (e: FileNotFoundException) {
             // if database on disk doesn't exist then it definitely
             // differs from the one in memory
@@ -165,13 +163,12 @@ interface DatabaseUtils {
      * property of given Database.
      *
      * @param[database] Database instance with password, name and salt to open database.
-     * @param[app] application instance containing cache of cryptography keys.
      * @return same Database instance but with `data` property filled with deserialized
      * database map.
      */
-    fun openDatabase(database: Database, app: MyApp): Database {
-        val jsonStr = File("$SRC_DIR/${database.name}.db").readText()
-        val data = decryptDatabase(jsonStr, database.password!!, database.salt!!, app)
+    fun openDatabase(database: Database): Database {
+        val jsonStr = File("${app.SRC_DIR}/${database.name}.db").readText()
+        val data = decryptDatabase(jsonStr, database.password!!, database.salt!!)
         database.data = data
         return database
     }
@@ -181,22 +178,21 @@ interface DatabaseUtils {
      *
      * @param[database] Database instance from which database name, password and salt are
      * extracted for database files creation.
-     * @param[app] application instance containing cache of cryptography keys.
      */
-    fun createDatabase(database: Database, app: MyApp) {
+    fun createDatabase(database: Database) {
         val name = database.name
 
         // create salt file
-        val saltFile = File("$SRC_DIR/$name.bin")
+        val saltFile = File("${app.SRC_DIR}/$name.bin")
         saltFile.createNewFile()
         saltFile.writeBytes(database.salt!!)
 
         // create database file
-        val databaseFile = File("$SRC_DIR/$name.db")
+        val databaseFile = File("${app.SRC_DIR}/$name.db")
         databaseFile.createNewFile()
 
         // encrypt and write database to .db file
-        val token = encryptDatabase(database, app)
+        val token = encryptDatabase(database)
         databaseFile.writeText(token)
     }
 
@@ -205,10 +201,10 @@ interface DatabaseUtils {
      * @param[name] name of database to delete.
      */
     fun deleteDatabase(name: String) {
-        val binFile = File("$SRC_DIR/$name.bin")
+        val binFile = File("${app.SRC_DIR}/$name.bin")
         binFile.delete()
 
-        val dbFile = File("$SRC_DIR/$name.db")
+        val dbFile = File("${app.SRC_DIR}/$name.db")
         dbFile.delete()
     }
 
@@ -219,10 +215,9 @@ interface DatabaseUtils {
      *
      * @param[oldName] name of the old database that is to be replaced.
      * @param[database] new Database to be created, replacing the old one.
-     * @param[app] application instance containing cache of cryptography keys.
      */
-    fun saveDatabase(oldName: String, database: Database, app: MyApp) {
+    fun saveDatabase(oldName: String, database: Database) {
         deleteDatabase(oldName)
-        createDatabase(database, app)
+        createDatabase(database)
     }
 }

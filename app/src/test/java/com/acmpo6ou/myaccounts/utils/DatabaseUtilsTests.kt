@@ -99,7 +99,7 @@ class DatabaseUtilsTests : ModelTest() {
         // create corresponding Database instance
         val db = Database("main", password, salt)
 
-        val actualDatabase = openDatabase(db, app)
+        val actualDatabase = openDatabase(db)
         val expectedDatabase = Database("main", password, salt, databaseMap)
 
         assertEquals(expectedDatabase, actualDatabase)
@@ -111,7 +111,7 @@ class DatabaseUtilsTests : ModelTest() {
         val expectedMap = databaseMap
         val encryptedJson = encryptStr(expectedMap)
 
-        val map = decryptDatabase(encryptedJson, password, salt, app)
+        val map = decryptDatabase(encryptedJson, password, salt)
         assertEquals(
             "Incorrect decryption! decryptDatabase method",
             expectedMap, map
@@ -127,7 +127,7 @@ class DatabaseUtilsTests : ModelTest() {
         val expectedMap = databaseMap
         val encryptedJson = encryptStr(expectedMap)
 
-        decryptDatabase(encryptedJson, password, salt, app)
+        decryptDatabase(encryptedJson, password, salt)
 
         // check that key was cached
         val expectedKey = deriveKey(password, salt)
@@ -140,7 +140,7 @@ class DatabaseUtilsTests : ModelTest() {
         app = MyApp()
 
         val database = Database(faker.str(), password, salt, databaseMap)
-        encryptDatabase(database, app)
+        encryptDatabase(database)
 
         // check that key was cached
         val expectedKey = deriveKey(password, salt)
@@ -152,7 +152,7 @@ class DatabaseUtilsTests : ModelTest() {
         val database = Database(faker.str(), faker.str(), salt, databaseMap)
 
         // get encrypted json string
-        val jsonStr = encryptDatabase(database, app)
+        val jsonStr = encryptDatabase(database)
 
         // here we decrypt the json string using salt and password we defined earlier
         // to check if it were encrypted correctly
@@ -198,7 +198,7 @@ class DatabaseUtilsTests : ModelTest() {
     @Test
     fun `createDatabase should create db file given Database instance`() {
         val database = Database("main", "123", salt, databaseMap)
-        createDatabase(database, app)
+        createDatabase(database)
 
         // this is a .db file that createDatabase should create for us
         val actualDb = File("$SRC_DIR/main.db").readBytes()
@@ -214,7 +214,7 @@ class DatabaseUtilsTests : ModelTest() {
     @Test
     fun `createDatabase should create salt file given Database instance`() {
         val database = Database("main", "123", salt)
-        createDatabase(database, app)
+        createDatabase(database)
 
         // this is a salt file that createDatabase should create for us
         val actualBin = File("$SRC_DIR/main.bin").readBytes()
@@ -229,7 +229,7 @@ class DatabaseUtilsTests : ModelTest() {
     fun `deleteDatabase should remove db and bin files from disk`() {
         // create empty database so that we can delete it using deleteDatabase
         val database = Database("main", "123", salt)
-        createDatabase(database, MyApp())
+        createDatabase(database)
 
         deleteDatabase("main")
 
@@ -251,23 +251,23 @@ class DatabaseUtilsTests : ModelTest() {
     fun `isDatabaseSaved should return false`() {
         // here database on disk is different then in-memory database
         val diskDatabase = Database("test", "123", salt, databaseMap)
-        doReturn(diskDatabase).`when`(spyUtils).openDatabase(database, app)
+        doReturn(diskDatabase).`when`(spyUtils).openDatabase(database)
 
-        assertFalse(spyUtils.isDatabaseSaved(database, app))
+        assertFalse(spyUtils.isDatabaseSaved(database))
     }
 
     @Test
     fun `isDatabaseSaved should return true`() {
         // here database on disk is exactly the same as database in memory
-        doReturn(database).`when`(spyUtils).openDatabase(database, app)
-        assertTrue(spyUtils.isDatabaseSaved(database, app))
+        doReturn(database).`when`(spyUtils).openDatabase(database)
+        assertTrue(spyUtils.isDatabaseSaved(database))
     }
 
     @Test
     fun `isDatabaseSaved should return false when FileNotFoundException occurred`() {
         doAnswer {
             throw FileNotFoundException("")
-        }.whenever(spyUtils).openDatabase(database, app)
-        assertFalse(spyUtils.isDatabaseSaved(database, app))
+        }.whenever(spyUtils).openDatabase(database)
+        assertFalse(spyUtils.isDatabaseSaved(database))
     }
 }

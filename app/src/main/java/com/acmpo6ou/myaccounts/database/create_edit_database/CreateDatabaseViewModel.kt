@@ -27,7 +27,7 @@ import kotlinx.coroutines.async
 open class CreateDatabaseViewModel : CreateEditDatabaseModel() {
     open fun createDatabaseAsync(database: Database) =
         viewModelScope.async(defaultDispatcher) {
-            createDatabase(database, app)
+            createDatabase(database)
         }
 
     /**
