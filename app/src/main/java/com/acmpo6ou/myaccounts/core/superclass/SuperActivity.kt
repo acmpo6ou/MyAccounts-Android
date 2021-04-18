@@ -58,14 +58,13 @@ import javax.inject.Inject
  * Super class for MainActivity and AccountsActivity.
  */
 abstract class SuperActivity : AppCompatActivity(), SuperActivityI {
-    override val activity get() = myContext as Activity
-
     @Inject
     override lateinit var app: MyApp
 
     @Inject
     @ActivityContext
     override lateinit var myContext: Context
+    override val activity get() = myContext as Activity
 
     abstract val b: ViewBinding
     lateinit var navView: NavigationView
@@ -103,7 +102,8 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityI {
 
         // navigation drawer should be unlocked only on mainFragment and locked
         // everywhere else
-        navController.addOnDestinationChangedListener { _: NavController, navDestination: NavDestination, _: Bundle? ->
+        navController.addOnDestinationChangedListener {
+            _: NavController, navDestination: NavDestination, _: Bundle? ->
             if (navDestination.id == mainFragmentId) {
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             } else {
