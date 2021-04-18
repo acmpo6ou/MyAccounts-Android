@@ -34,11 +34,8 @@ import javax.inject.Inject
 @ActivityScoped
 class MainModel @Inject constructor(private val app: MyApp) : MainModelI {
 
-    // path to directory that contains src folder
-    private val ACCOUNTS_DIR = app.getExternalFilesDir(null)!!.path + "/"
-
     // path to directory that contains databases
-    override val SRC_DIR = "$ACCOUNTS_DIR/src/"
+    override val SRC_DIR = "${app.ACCOUNTS_DIR}/src/"
 
     /**
      * Cleans database name from .db or .bin extension and `src/` path.
@@ -170,13 +167,13 @@ class MainModel @Inject constructor(private val app: MyApp) : MainModelI {
             }
 
             // check if the file with such name already exist
-            val file = File("$ACCOUNTS_DIR${entry.name}")
+            val file = File("${app.ACCOUNTS_DIR}${entry.name}")
             if (file.exists()) throw FileAlreadyExistsException(file)
 
             name = cleanName(entry.name)
 
             // create file we want to extract
-            val outStream = FileOutputStream("$ACCOUNTS_DIR${entry.name}")
+            val outStream = FileOutputStream("${app.ACCOUNTS_DIR}${entry.name}")
             val dest = BufferedOutputStream(outStream)
 
             // write data into previously created file

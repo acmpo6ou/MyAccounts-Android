@@ -77,18 +77,14 @@ data class Database(
 }
 
 /**
- * Class that contains various functions related to database operations such as encrypting,
+ * Contains various methods related to database operations such as encrypting,
  * decrypting, deleting and creating databases.
  */
 @FragmentScoped
-class DatabasesModel @Inject constructor(
-    private val app: MyApp,
-) : DatabasesModelI {
+class DatabasesModel @Inject constructor(private val app: MyApp) : DatabasesModelI {
 
-    // path to directory that contains src folder
-    private val ACCOUNTS_DIR = app.getExternalFilesDir(null)!!.path + "/"
     // path to directory that contains databases
-    override val SRC_DIR = "$ACCOUNTS_DIR/src/"
+    override val SRC_DIR = "${app.ACCOUNTS_DIR}/src/"
 
     /**
      * Used to get a list of Database instances – databases that reside in [SRC_DIR] directory.
