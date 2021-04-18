@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.databases_list
 
+import android.content.SharedPreferences
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -29,9 +30,12 @@ import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesBindings
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragment
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesPresenterI
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityModule
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
+import dagger.hilt.android.scopes.FragmentScoped
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -43,19 +47,18 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.LooperMode
+import javax.inject.Singleton
 
 @HiltAndroidTest
 @RunWith(RobolectricTestRunner::class)
-@UninstallModules(DatabasesBindings::class, AppModule::class)
+@UninstallModules(
+    DatabasesBindings::class, AppModule::class,
+    MainActivityModule::class
+)
 @LooperMode(LooperMode.Mode.PAUSED)
 class DatabasesAdapterInst {
     @get:Rule
     var hiltAndroidRule = HiltAndroidRule(this)
-
-    private val mockDatabases = mutableListOf(
-        Database("main"),
-        Database("test", "123")
-    )
 
     @BindValue
     @JvmField
@@ -64,6 +67,21 @@ class DatabasesAdapterInst {
     @BindValue
     @JvmField
     val presenter: DatabasesPresenterI = mock()
+
+    @BindValue
+    @JvmField
+    @FragmentScoped
+    val mainActivity: MainActivityI = mock()
+
+    @BindValue
+    @JvmField
+    @Singleton
+    val sharedPreferences: SharedPreferences = mock()
+
+    private val mockDatabases = mutableListOf(
+        Database("main"),
+        Database("test", "123")
+    )
 
     private lateinit var recycler: RecyclerView
     private lateinit var itemLayout: View

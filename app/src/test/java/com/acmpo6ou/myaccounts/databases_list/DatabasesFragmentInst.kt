@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts.databases_list
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -33,6 +34,7 @@ import com.acmpo6ou.myaccounts.database.databases_list.*
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentDirections.actionEditDatabase
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentDirections.actionOpenDatabase
 import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityModule
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -54,8 +56,12 @@ import org.robolectric.shadows.ShadowAlertDialog
 import javax.inject.Singleton
 
 @HiltAndroidTest
+@UninstallModules(
+    AppModule::class,
+    DatabasesBindings::class, DatabasesModule::class,
+    MainActivityModule::class,
+)
 @RunWith(RobolectricTestRunner::class)
-@UninstallModules(AppModule::class, DatabasesBindings::class, DatabasesModule::class)
 @LooperMode(LooperMode.Mode.PAUSED)
 class DatabasesFragmentInst {
     @get:Rule
@@ -68,6 +74,11 @@ class DatabasesFragmentInst {
     @JvmField
     @Singleton
     val app = MyApp()
+
+    @BindValue
+    @JvmField
+    @Singleton
+    val sharedPreferences: SharedPreferences = mock()
 
     @BindValue
     @JvmField
