@@ -41,4 +41,7 @@ open class MyApp : Application() {
 
     // path to directory that contains src folder
     open val ACCOUNTS_DIR get() = getExternalFilesDir(null)?.path + "/"
+
+    // path to directory that contains databases
+    val SRC_DIR get() = "$ACCOUNTS_DIR/src/"
 }

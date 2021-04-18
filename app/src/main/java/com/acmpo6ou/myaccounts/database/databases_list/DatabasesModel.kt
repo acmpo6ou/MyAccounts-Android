@@ -84,7 +84,7 @@ data class Database(
 class DatabasesModel @Inject constructor(private val app: MyApp) : DatabasesModelI {
 
     // path to directory that contains databases
-    override val SRC_DIR = "${app.ACCOUNTS_DIR}/src/"
+    override val SRC_DIR = app.SRC_DIR
 
     /**
      * Used to get a list of Database instances – databases that reside in [SRC_DIR] directory.

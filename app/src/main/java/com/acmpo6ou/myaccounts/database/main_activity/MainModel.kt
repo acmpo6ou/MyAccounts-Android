@@ -35,7 +35,7 @@ import javax.inject.Inject
 class MainModel @Inject constructor(private val app: MyApp) : MainModelI {
 
     // path to directory that contains databases
-    override val SRC_DIR = "${app.ACCOUNTS_DIR}/src/"
+    override val SRC_DIR = ""
 
     /**
      * Cleans database name from .db or .bin extension and `src/` path.
