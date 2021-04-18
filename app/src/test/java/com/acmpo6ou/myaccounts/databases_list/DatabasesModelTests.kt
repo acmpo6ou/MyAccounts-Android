@@ -20,15 +20,13 @@
 package com.acmpo6ou.myaccounts.databases_list
 
 import com.acmpo6ou.myaccounts.ModelTest
-import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.SRC_DIR
+import com.acmpo6ou.myaccounts.accountsDir
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesModel
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
 import org.junit.Assert.*
-import org.junit.Before
 import org.junit.Test
 import java.io.File
 import java.io.FileNotFoundException
@@ -56,16 +54,7 @@ class DatabasesTests {
 }
 
 class DatabasesModelTests : ModelTest() {
-    lateinit var model: DatabasesModel
-
-    @Before
-    fun setup() {
-        val app = mock<MyApp> {
-            on { ACCOUNTS_DIR } doReturn accountsDir
-            on { contentResolver } doReturn contentResolver
-        }
-        model = DatabasesModel(app)
-    }
+    val model = DatabasesModel(app)
 
     @Test
     fun `getDatabases should return list of Databases that reside in SRC_DIR`() {

@@ -20,11 +20,9 @@
 package com.acmpo6ou.myaccounts.create_edit_database
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.acmpo6ou.myaccounts.ModelTest
-import com.acmpo6ou.myaccounts.MyApp
-import com.acmpo6ou.myaccounts.database.databases_list.Database
-import com.acmpo6ou.myaccounts.str
+import com.acmpo6ou.myaccounts.*
 import com.acmpo6ou.myaccounts.database.create_edit_database.CreateDatabaseViewModel
+import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking

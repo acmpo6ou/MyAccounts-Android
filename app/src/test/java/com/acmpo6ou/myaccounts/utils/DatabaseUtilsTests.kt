@@ -19,13 +19,10 @@
 
 package com.acmpo6ou.myaccounts.utils
 
-import com.acmpo6ou.myaccounts.ModelTest
+import com.acmpo6ou.myaccounts.*
 import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
-import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.databases_list.DbMap
-import com.acmpo6ou.myaccounts.databaseMap
-import com.acmpo6ou.myaccounts.str
 import com.macasaet.fernet.StringValidator
 import com.macasaet.fernet.Token
 import com.macasaet.fernet.Validator
@@ -42,19 +39,16 @@ import java.time.Duration
 import java.time.Instant
 import java.time.temporal.TemporalAmount
 
-open class DbUtils : DatabaseUtils {
-    override val SRC_DIR = ""
-}
+open class DbUtils(override val app: MyApp) : DatabaseUtils
 
 class DatabaseUtilsTests : ModelTest() {
-    var app = MyApp()
     private lateinit var databaseUtils: DatabaseUtils
     lateinit var spyUtils: DatabaseUtils
     val database = Database("test", "123", salt, mutableMapOf())
 
     @Before
     fun setup() {
-        databaseUtils = DbUtils()
+        databaseUtils = DbUtils(app)
         spyUtils = spy(databaseUtils)
     }
 

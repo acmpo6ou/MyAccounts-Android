@@ -19,8 +19,7 @@
 
 package com.acmpo6ou.myaccounts.main_activity
 
-import com.acmpo6ou.myaccounts.ModelTest
-import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.*
 import com.acmpo6ou.myaccounts.database.main_activity.MainModel
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock

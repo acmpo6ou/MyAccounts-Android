@@ -24,6 +24,7 @@ import android.net.Uri
 import android.os.ParcelFileDescriptor
 import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
 import com.github.javafaker.Faker
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
@@ -35,17 +36,12 @@ open class ModelTest : DatabaseUtils {
     val faker = Faker()
 
     open val password = "123"
-    var salt = "0123456789abcdef".toByteArray() // 16 bytes of salt
     val jsonDatabase =
         "{\"gmail\":{\"account\":\"gmail\",\"name\":\"Tom\",\"email\":" +
             "\"tom@gmail.com\",\"password\":\"123\",\"date\":\"01.01.1990\"," +
             "\"comment\":\"My gmail account.\"}}"
 
-    // this is where model will create delete and edit databases during testing
-    // /dev/shm/ is a fake in-memory file system
-    val accountsDir = "/dev/shm/accounts/"
-    override val SRC_DIR = "${accountsDir}src/"
-
+    override lateinit var app: MyApp
     val contentResolver: ContentResolver = mock()
     private val descriptor: ParcelFileDescriptor = mock()
 
@@ -54,6 +50,15 @@ open class ModelTest : DatabaseUtils {
 
     open val location = "sampledata/tar/main.tar"
     open val destination = "$accountsDir/main.tar"
+
+    @Before
+    fun setupApp() {
+        app = mock {
+            on { ACCOUNTS_DIR } doReturn accountsDir
+            on { SRC_DIR } doReturn SRC_DIR
+            on { contentResolver } doReturn contentResolver
+        }
+    }
 
     /**
      * This method creates empty src folder in a fake file system, it ensures that

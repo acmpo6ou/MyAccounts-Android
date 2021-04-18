@@ -20,11 +20,8 @@
 package com.acmpo6ou.myaccounts.open_database
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.acmpo6ou.myaccounts.copy
-import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.*
 import com.acmpo6ou.myaccounts.database.databases_list.Database
-import com.acmpo6ou.myaccounts.databaseMap
-import com.acmpo6ou.myaccounts.str
 import com.acmpo6ou.myaccounts.database.open_database.OpenDatabaseViewModel
 import com.github.javafaker.Faker
 import com.macasaet.fernet.TokenValidationException
@@ -47,7 +44,6 @@ class OpenDatabaseViewModelTests {
 
     val SRC_DIR = "sampledata/src/"
     private val titleStart = faker.str()
-    private val salt = "0123456789abcdef".toByteArray()
     lateinit var app: MyApp
 
     @Before

@@ -26,6 +26,7 @@ import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentI
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesModelI
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesPresenter
+import com.acmpo6ou.myaccounts.salt
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
 import org.junit.Before
@@ -34,13 +35,10 @@ open class DatabasesPresenterTest : DatabaseUtils {
     lateinit var view: DatabasesFragmentI
     lateinit var model: DatabasesModelI
     lateinit var presenter: DatabasesPresenter
-
-    lateinit var app: MyApp
-    override lateinit var SRC_DIR: String
+    override lateinit var app: MyApp
 
     var locationUri: Uri = mock()
     val faker = Faker()
-    val salt = "0123456789abcdef".toByteArray()
 
     fun setupPresenter() {
         view = mock()

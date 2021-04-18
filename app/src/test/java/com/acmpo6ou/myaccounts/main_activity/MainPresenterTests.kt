@@ -22,6 +22,8 @@ package com.acmpo6ou.myaccounts.main_activity
 import android.content.SharedPreferences
 import android.net.Uri
 import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.SRC_DIR
+import com.acmpo6ou.myaccounts.accountsDir
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
 import com.acmpo6ou.myaccounts.database.main_activity.MainModelI
@@ -44,20 +46,19 @@ class MainPresenterTests {
     lateinit var app: MyApp
     lateinit var view: MainActivityI
     lateinit var model: MainModelI
-    lateinit var mockPrefs: SharedPreferences
 
+    lateinit var mockPrefs: SharedPreferences
     private val locationUri: Uri = mock()
-    private val accountsDir = "/dev/shm/accounts"
-    private val srcDir = "$accountsDir/src"
 
     @Before
     fun setup() {
         app = mock {
+            on { SRC_DIR } doReturn SRC_DIR
             on { databases } doReturn mutableListOf(Database("test", "123"))
         }
 
         view = mock()
-        model = mock { on { SRC_DIR } doReturn srcDir }
+        model = mock()
         mockPrefs = SPMockBuilder().createSharedPreferences()
 
         presenter = MainPresenter({ view }, model, app, mockPrefs)
@@ -133,7 +134,7 @@ class MainPresenterTests {
         presenter.fixSrcFolder()
 
         // the src folder should be created
-        val srcDir = File(srcDir)
+        val srcDir = File(SRC_DIR)
         assertTrue(srcDir.exists())
     }
 
