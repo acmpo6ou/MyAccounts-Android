@@ -22,7 +22,6 @@ package com.acmpo6ou.myaccounts
 import android.Manifest.permission
 import android.app.Activity
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.MenuItem
@@ -40,9 +39,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : SuperActivity(), MainActivityI {
-    @Inject
-    override lateinit var prefs: SharedPreferences
-
     @Inject
     override lateinit var presenter: MainPresenterI
 

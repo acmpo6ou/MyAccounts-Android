@@ -19,25 +19,24 @@
 
 package com.acmpo6ou.myaccounts
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.core.view.GravityCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
-import androidx.preference.PreferenceManager
 import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsActivityI
-import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsPresenter
 import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsPresenterI
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
 import com.acmpo6ou.myaccounts.databinding.ActivityAccountsBinding
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 open class AccountsActivity : SuperActivity(), AccountsActivityI {
     override lateinit var b: ActivityAccountsBinding
-    override lateinit var prefs: SharedPreferences
+
+    @Inject
     override lateinit var presenter: AccountsPresenterI
 
     override val mainFragmentId = R.id.accountsFragment
@@ -52,11 +51,7 @@ open class AccountsActivity : SuperActivity(), AccountsActivityI {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        app = applicationContext as MyApp
         myContext = this
-        presenter = AccountsPresenter(this)
-
-        prefs = PreferenceManager.getDefaultSharedPreferences(this)
         loadSettings()
 
         b = ActivityAccountsBinding.inflate(layoutInflater)

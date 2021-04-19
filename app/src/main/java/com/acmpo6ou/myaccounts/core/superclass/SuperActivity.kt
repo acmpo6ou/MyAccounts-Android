@@ -23,6 +23,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.MenuItem
@@ -60,6 +61,9 @@ import javax.inject.Inject
 abstract class SuperActivity : AppCompatActivity(), SuperActivityI {
     @Inject
     override lateinit var app: MyApp
+
+    @Inject
+    override lateinit var prefs: SharedPreferences
 
     @Inject
     @ActivityContext

@@ -17,38 +17,29 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.account.accounts_list
+package com.acmpo6ou.myaccounts.account.accounts_activity
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
-import com.acmpo6ou.myaccounts.R
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.FragmentComponent
+import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.qualifiers.ActivityContext
-import dagger.hilt.android.scopes.FragmentScoped
+import dagger.hilt.android.scopes.ActivityScoped
 
 @Module
-@InstallIn(FragmentComponent::class)
-interface AccountsListBindings {
+@InstallIn(ActivityComponent::class)
+interface AccountsBindings {
     @Binds
-    @FragmentScoped
-    fun accountsListPresenter(impl: AccountsListPresenter): AccountsListPresenterI
+    @ActivityScoped
+    fun accountsPresenter(impl: AccountsPresenter): AccountsPresenterI
 }
 
 @Module
-@InstallIn(FragmentComponent::class)
-object AccountsListModule {
+@InstallIn(ActivityComponent::class)
+object AccountsModule {
     @Provides
-    @FragmentScoped
-    fun accountsFragment(@ActivityContext activity: Context): AccountsFragmentI {
-        return (activity as AppCompatActivity)
-            .supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment)!!
-            .childFragmentManager
-            .fragments.first()
-            as AccountsFragment
-    }
+    @ActivityScoped
+    fun accountsActivity(@ActivityContext activity: Context) = activity as AccountsActivityI
 }

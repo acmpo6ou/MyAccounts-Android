@@ -19,7 +19,7 @@
 
 package com.acmpo6ou.myaccounts.account.accounts_list
 
-import com.acmpo6ou.myaccounts.account.AccountsActivityI
+import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsActivityI
 import com.acmpo6ou.myaccounts.database.databases_list.Account
 import com.acmpo6ou.myaccounts.database.databases_list.DbMap
 import dagger.Lazy

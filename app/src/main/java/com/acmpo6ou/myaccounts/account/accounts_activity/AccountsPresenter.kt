@@ -22,12 +22,18 @@ package com.acmpo6ou.myaccounts.account.accounts_activity
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.SuperPresenter
 import com.acmpo6ou.myaccounts.database.databases_list.Database
+import dagger.Lazy
+import dagger.hilt.android.scopes.ActivityScoped
+import javax.inject.Inject
 
-open class AccountsPresenter(override val view: AccountsActivityI) :
+@ActivityScoped
+open class AccountsPresenter @Inject constructor(
+    val activity: Lazy<AccountsActivityI>,
+    override val app: MyApp,
+) :
     SuperPresenter(), AccountsPresenterI {
-
+    override val view: AccountsActivityI get() = activity.get()
     val database: Database get() = view.database
-    override val app: MyApp get() = view.app
 
     /**
      * Called when user clicks `Save` in navigation drawer.
