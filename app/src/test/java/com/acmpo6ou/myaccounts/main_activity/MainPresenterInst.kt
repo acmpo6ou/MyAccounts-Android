@@ -29,6 +29,7 @@ import com.acmpo6ou.myaccounts.database.main_activity.MainModelI
 import com.acmpo6ou.myaccounts.database.main_activity.MainPresenter
 import com.github.ivanshafran.sharedpreferencesmock.SPMockBuilder
 import com.github.javafaker.Faker
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -59,8 +60,10 @@ class MainPresenterInst : NoInternet {
 
     @Before
     fun setup() {
-        val app = MyApp()
-        app.res = resources
+        val app: MyApp = mock {
+            on { res } doReturn resources
+            on { SRC_DIR } doReturn ""
+        }
         val mockPrefs = SPMockBuilder().createSharedPreferences()
 
         view = mock()

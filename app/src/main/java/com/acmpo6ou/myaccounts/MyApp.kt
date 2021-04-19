@@ -37,11 +37,11 @@ open class MyApp : Application() {
 
     // Used to access resources of MainActivity.
     // Because resources from MainActivity are correctly translated.
-    lateinit var res: Resources
+    open lateinit var res: Resources
 
     // path to directory that contains src folder
     open val ACCOUNTS_DIR get() = getExternalFilesDir(null)?.path + "/"
 
     // path to directory that contains databases
-    val SRC_DIR get() = "$ACCOUNTS_DIR/src/"
+    open val SRC_DIR get() = "$ACCOUNTS_DIR/src/"
 }

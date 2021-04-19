@@ -27,6 +27,7 @@ import com.acmpo6ou.myaccounts.database.databases_list.DatabasesModel
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
 import org.junit.Assert.*
+import org.junit.Before
 import org.junit.Test
 import java.io.File
 import java.io.FileNotFoundException
@@ -54,7 +55,12 @@ class DatabasesTests {
 }
 
 class DatabasesModelTests : ModelTest() {
-    val model = DatabasesModel(app)
+    lateinit var model: DatabasesModel
+
+    @Before
+    fun setup() {
+        model = DatabasesModel(app)
+    }
 
     @Test
     fun `getDatabases should return list of Databases that reside in SRC_DIR`() {
