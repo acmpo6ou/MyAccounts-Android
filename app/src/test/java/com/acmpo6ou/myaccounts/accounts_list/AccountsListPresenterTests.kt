@@ -20,7 +20,7 @@
 package com.acmpo6ou.myaccounts.accounts_list
 
 import com.acmpo6ou.myaccounts.account
-import com.acmpo6ou.myaccounts.account.AccountsActivityI
+import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsActivityI
 import com.acmpo6ou.myaccounts.account.accounts_list.AccountsFragmentI
 import com.acmpo6ou.myaccounts.account.accounts_list.AccountsListPresenter
 import com.acmpo6ou.myaccounts.copy

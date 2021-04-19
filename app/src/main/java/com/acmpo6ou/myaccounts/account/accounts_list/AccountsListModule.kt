@@ -22,7 +22,7 @@ package com.acmpo6ou.myaccounts.account.accounts_list
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.account.AccountsActivityI
+import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsActivityI
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

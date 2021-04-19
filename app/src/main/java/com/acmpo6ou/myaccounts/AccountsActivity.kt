@@ -27,9 +27,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.preference.PreferenceManager
-import com.acmpo6ou.myaccounts.account.AccountsActivityI
-import com.acmpo6ou.myaccounts.account.AccountsPresenter
-import com.acmpo6ou.myaccounts.account.AccountsPresenterI
+import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsActivityI
+import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsPresenter
+import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsPresenterI
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
 import com.acmpo6ou.myaccounts.databinding.ActivityAccountsBinding
 import dagger.hilt.android.AndroidEntryPoint

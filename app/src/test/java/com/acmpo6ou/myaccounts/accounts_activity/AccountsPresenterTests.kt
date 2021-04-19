@@ -20,9 +20,9 @@
 package com.acmpo6ou.myaccounts.accounts_activity
 
 import android.content.Context
-import com.acmpo6ou.myaccounts.account.AccountsActivityI
-import com.acmpo6ou.myaccounts.account.AccountsPresenter
-import com.acmpo6ou.myaccounts.account.AccountsPresenterI
+import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsActivityI
+import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsPresenter
+import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsPresenterI
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.ListFragmentI
 import com.acmpo6ou.myaccounts.database.databases_list.Database

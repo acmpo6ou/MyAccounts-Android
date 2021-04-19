@@ -17,7 +17,7 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.account
+package com.acmpo6ou.myaccounts.account.accounts_activity
 
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.SuperPresenter
