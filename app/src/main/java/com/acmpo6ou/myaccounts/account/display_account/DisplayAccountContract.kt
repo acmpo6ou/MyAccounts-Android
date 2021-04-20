@@ -19,17 +19,15 @@
 
 package com.acmpo6ou.myaccounts.account.display_account
 
-import android.content.Context
 import android.net.Uri
 import com.acmpo6ou.myaccounts.database.databases_list.Account
 
 interface DisplayAccountFragmentI {
-    val myContext: Context
     val account: Account
-    val presenter: DisplayAccountPresenterI
 
     fun saveFileDialog(fileName: String)
     fun fileCorrupted()
+
     fun showError(details: String)
     fun showSuccess()
 }

@@ -19,12 +19,18 @@
 
 package com.acmpo6ou.myaccounts.account.display_account
 
-import android.content.ContentResolver
+import android.content.Context
 import android.net.Uri
+import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.scopes.FragmentScoped
 import java.io.FileOutputStream
 import java.util.*
+import javax.inject.Inject
 
-class DisplayAccountModel(var contentResolver: ContentResolver) : DisplayAccountModelI {
+@FragmentScoped
+class DisplayAccountModel @Inject constructor(
+    @ActivityContext private val context: Context,
+) : DisplayAccountModelI {
     /**
      * Decodes given base64 [content] string and writes it to a file.
      *
@@ -32,7 +38,7 @@ class DisplayAccountModel(var contentResolver: ContentResolver) : DisplayAccount
      * @param[content] base64 encoded string, that is a content of the file.
      */
     override fun saveFile(destinationUri: Uri, content: String) {
-        val descriptor = contentResolver.openFileDescriptor(destinationUri, "w")
+        val descriptor = context.contentResolver.openFileDescriptor(destinationUri, "w")
         val destination = FileOutputStream(descriptor?.fileDescriptor)
 
         val data = Base64.getDecoder().decode(content.toByteArray())

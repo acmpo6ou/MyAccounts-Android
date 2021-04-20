@@ -20,13 +20,18 @@
 package com.acmpo6ou.myaccounts.account.display_account
 
 import android.net.Uri
+import dagger.Lazy
+import dagger.hilt.android.scopes.FragmentScoped
+import javax.inject.Inject
 
-class DisplayAccountPresenter(val view: DisplayAccountFragmentI) :
-    DisplayAccountPresenterI {
+@FragmentScoped
+class DisplayAccountPresenter @Inject constructor(
+    private val fragment: Lazy<DisplayAccountFragmentI>,
+    private val model: DisplayAccountModelI,
+) : DisplayAccountPresenterI {
 
-    var model: DisplayAccountModelI = DisplayAccountModel(view.myContext.contentResolver)
+    val view: DisplayAccountFragmentI get() = fragment.get()
     lateinit var selectedFile: String
-
     private val attachedFiles = view.account.attachedFiles
     override val attachedFilesList get() = attachedFiles.keys.sorted()
 

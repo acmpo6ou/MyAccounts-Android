@@ -26,19 +26,21 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
+import dagger.hilt.android.scopes.FragmentScoped
+import javax.inject.Inject
 
-class DisplayAccountAdapter(val view: DisplayAccountFragmentI) :
-    RecyclerView.Adapter<DisplayAccountAdapter.ViewHolder>() {
+@FragmentScoped
+class DisplayAccountAdapter @Inject constructor(
+    private val presenter: DisplayAccountPresenterI,
+) : RecyclerView.Adapter<DisplayAccountAdapter.ViewHolder>() {
 
-    val presenter get() = view.presenter
     private val attachedFiles get() = presenter.attachedFilesList
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
-            ViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.list_item, parent, false)
-            return ViewHolder(view)
-        }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.list_item, parent, false)
+        return ViewHolder(view)
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.fileName.text = attachedFiles[position]
@@ -46,7 +48,7 @@ class DisplayAccountAdapter(val view: DisplayAccountFragmentI) :
         holder.menu.visibility = View.GONE // we don't need the dots menu
     }
 
-    override fun getItemCount(): Int = attachedFiles.size
+    override fun getItemCount() = attachedFiles.size
 
     /**
      * Represents ViewHolder for item of attached files list.

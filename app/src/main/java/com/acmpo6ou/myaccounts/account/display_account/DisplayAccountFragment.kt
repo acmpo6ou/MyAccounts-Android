@@ -21,7 +21,6 @@ package com.acmpo6ou.myaccounts.account.display_account
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -34,45 +33,46 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsActivityI
 import com.acmpo6ou.myaccounts.database.databases_list.Account
 import com.acmpo6ou.myaccounts.databinding.FragmentDisplayAccountBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
     private var binding: FragmentDisplayAccountBinding? = null
     val b: FragmentDisplayAccountBinding get() = binding!!
 
-    override lateinit var presenter: DisplayAccountPresenterI
+    @Inject
+    lateinit var presenter: DisplayAccountPresenterI
+
+    @Inject
     lateinit var adapter: DisplayAccountAdapter
 
+    @Inject
+    lateinit var accountsActivity: AccountsActivityI
+
     override var account = Account("", "", "", "", "", "", true, mutableMapOf())
-    override lateinit var myContext: Context
     val SAVE_FILE_RC = 303
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = FragmentDisplayAccountBinding.inflate(layoutInflater, container, false)
         return b.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        myContext = requireContext()
         arguments?.getString("accountName")?.let {
-            val accountsActivity = activity as AccountsActivity
-            val account = accountsActivity.database.data[it]!!
-
-            this.account = account
+            account = accountsActivity.database.data[it]!!
             initForm(account)
         }
-
-        presenter = DisplayAccountPresenter(this)
-        adapter = DisplayAccountAdapter(this)
 
         b.attachedFilesList.layoutManager = LinearLayoutManager(context)
         b.attachedFilesList.adapter = adapter
