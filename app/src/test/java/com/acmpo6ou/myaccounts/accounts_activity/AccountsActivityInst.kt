@@ -20,37 +20,58 @@
 package com.acmpo6ou.myaccounts.accounts_activity
 
 import androidx.core.view.GravityCompat
+import androidx.test.core.app.ActivityScenario
 import com.acmpo6ou.myaccounts.AccountsActivity
-import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsPresenterI
 import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsBindings
+import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsPresenterI
+import com.acmpo6ou.myaccounts.core.AppModule
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.selectNavigationItem
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
+import dagger.hilt.android.scopes.ActivityScoped
+import dagger.hilt.android.testing.BindValue
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import javax.inject.Singleton
 
-class AccountsActivityTests {
-    private lateinit var activity: AccountsActivity
-    lateinit var spyActivity: AccountsActivity
-    private lateinit var presenter: AccountsPresenterI
+@HiltAndroidTest
+@UninstallModules(AppModule::class, AccountsBindings::class)
+@RunWith(RobolectricTestRunner::class)
+class AccountsActivityInst {
+    @get:Rule
+    var hiltAndroidRule = HiltAndroidRule(this)
 
-    val database = Database("main")
-    lateinit var app: MyApp
+    @BindValue
+    @JvmField
+    @Singleton
+    val app = MyApp()
+
+    @BindValue
+    @JvmField
+    @ActivityScoped
+    val presenter: AccountsPresenterI = mock()
+
+    lateinit var scenario: ActivityScenario<AccountsActivity>
+    lateinit var activity: AccountsActivity
 
     @Before
     fun setup() {
-        app = MyApp()
-        app.databases = mutableListOf(database)
-        presenter = mock()
-
-        activity = AccountsActivity()
-        activity.presenter = presenter
-        activity.app = app
-
-        spyActivity = spy(activity)
-        spyActivity.drawerLayout = mock()
-        doNothing().whenever(spyActivity).confirmBack()
+        app.databases = mutableListOf(Database("main"))
+        scenario = ActivityScenario.launch(AccountsActivity::class.java)
+        scenario.onActivity {
+            it.myContext.setTheme(R.style.Theme_MyAccounts_NoActionBar)
+            activity = it
+        }
     }
 
     @Test

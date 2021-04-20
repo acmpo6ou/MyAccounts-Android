@@ -50,7 +50,6 @@ open class AccountsActivity : SuperActivity(), AccountsActivityI {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        myContext = this
         loadSettings()
 
         b = ActivityAccountsBinding.inflate(layoutInflater)
