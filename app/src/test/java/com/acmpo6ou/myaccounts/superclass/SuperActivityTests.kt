@@ -36,7 +36,7 @@ private open class TestActivity : SuperActivity() {
     override val confirmGoingBackMsg = 0
     override var presenter: SuperPresenterI = mock()
     override val mainFragmentId = 0
-    override val prefs: SharedPreferences = mock()
+    override var prefs: SharedPreferences = mock()
 
     override fun noUpdates(isAutoCheck: Boolean) {
     }

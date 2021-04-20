@@ -21,7 +21,6 @@ package com.acmpo6ou.myaccounts.account.accounts_activity
 
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.SuperPresenter
-import com.acmpo6ou.myaccounts.database.databases_list.Database
 import dagger.Lazy
 import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
@@ -30,10 +29,10 @@ import javax.inject.Inject
 open class AccountsPresenter @Inject constructor(
     val activity: Lazy<AccountsActivityI>,
     override val app: MyApp,
-) :
-    SuperPresenter(), AccountsPresenterI {
+) : SuperPresenter(), AccountsPresenterI {
+
     override val view: AccountsActivityI get() = activity.get()
-    val database: Database get() = view.database
+    val database get() = view.database
 
     /**
      * Called when user clicks `Save` in navigation drawer.
@@ -48,7 +47,7 @@ open class AccountsPresenter @Inject constructor(
      * Called when user presses the back button.
      *
      * Here we decide whether to show a confirmation dialog about unsaved changes or not.
-     * If database is already saved – just go back, when database isn't saved – display
+     * If database is already saved – just go back, when it isn't – display
      * confirmation dialog.
      */
     override fun backPressed() {

@@ -34,11 +34,10 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 open class AccountsActivity : SuperActivity(), AccountsActivityI {
-    override lateinit var b: ActivityAccountsBinding
-
     @Inject
     override lateinit var presenter: AccountsPresenterI
 
+    override lateinit var b: ActivityAccountsBinding
     override val mainFragmentId = R.id.accountsFragment
     override val confirmGoingBackMsg = R.string.confirm_going_back
 

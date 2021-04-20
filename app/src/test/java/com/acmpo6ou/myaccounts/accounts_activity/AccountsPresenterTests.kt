@@ -19,21 +19,18 @@
 
 package com.acmpo6ou.myaccounts.accounts_activity
 
-import android.content.Context
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsActivityI
 import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsPresenter
-import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsPresenterI
-import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.ListFragmentI
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
-import java.io.File
 
 class AccountsPresenterTests {
     lateinit var presenter: AccountsPresenter
-    lateinit var spyPresenter: AccountsPresenterI
+    lateinit var spyPresenter: AccountsPresenter
 
     lateinit var view: AccountsActivityI
     lateinit var mockFragment: ListFragmentI
@@ -44,19 +41,14 @@ class AccountsPresenterTests {
     @Before
     fun setup() {
         app = MyApp()
-
         mockFragment = mock()
-        val context: Context = mock {
-            on { getExternalFilesDir(null) } doReturn File("")
-        }
+
         view = mock {
-            on { app } doReturn app
             on { database } doReturn db
-            on { myContext } doReturn context
             on { mainFragment } doReturn mockFragment
         }
 
-        presenter = AccountsPresenter(view)
+        presenter = AccountsPresenter({ view }, app)
         spyPresenter = spy(presenter)
         doNothing().whenever(spyPresenter).saveDatabase(db.name, db)
     }
@@ -68,21 +60,21 @@ class AccountsPresenterTests {
     }
 
     @Test
-    fun `saveSelected should call saveDatabase when isDatabaseSaved returns false`() {
+    fun `saveSelected should call saveDatabase when database isn't saved`() {
         doReturn(false).whenever(spyPresenter).isDatabaseSaved(db)
         spyPresenter.saveSelected()
         verify(spyPresenter).saveDatabase(db.name, db)
     }
 
     @Test
-    fun `saveSelected should not call saveDatabase when isDatabaseSaved returns true`() {
+    fun `saveSelected should not call saveDatabase when database is already saved`() {
         doReturn(true).whenever(spyPresenter).isDatabaseSaved(db)
         spyPresenter.saveSelected()
         verify(spyPresenter, never()).saveDatabase(db.name, db)
     }
 
     @Test
-    fun `backPressed should call view confirmBack when isDatabaseSaved returns false`() {
+    fun `backPressed should call view confirmBack when database isn't saved`() {
         doReturn(false).whenever(spyPresenter).isDatabaseSaved(db)
         spyPresenter.backPressed()
 
@@ -91,7 +83,7 @@ class AccountsPresenterTests {
     }
 
     @Test
-    fun `backPressed should call view goBack when isDatabaseSaved returns true`() {
+    fun `backPressed should call view goBack when database is saved`() {
         doReturn(true).whenever(spyPresenter).isDatabaseSaved(db)
         spyPresenter.backPressed()
 
