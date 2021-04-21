@@ -19,9 +19,12 @@
 
 package com.acmpo6ou.myaccounts.display_account
 
+import android.content.Context
 import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountModel
 import com.acmpo6ou.myaccounts.accountsDir
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.io.File
@@ -32,7 +35,8 @@ class DisplayAccountModelTests : ModelTest() {
     @Test
     fun `saveFile should save file converting from base64`() {
         setupOutputResolver()
-        val model = DisplayAccountModel(contentResolver)
+        val context: Context = mock { on { contentResolver } doReturn contentResolver }
+        val model = DisplayAccountModel(context)
 
         val decodedContent = "This is a simple file.\nTo test PyQtAccounts.\nHello World!\n"
         val encodedContent =
