@@ -35,6 +35,7 @@ class DisplayAccountAdapter @Inject constructor(
 ) : RecyclerView.Adapter<DisplayAccountAdapter.ViewHolder>() {
 
     private val attachedFiles get() = presenter.attachedFilesList
+    override fun getItemCount() = attachedFiles.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -47,8 +48,6 @@ class DisplayAccountAdapter @Inject constructor(
         holder.attachImage.setImageResource(R.drawable.ic_attached_file)
         holder.menu.visibility = View.GONE // we don't need the dots menu
     }
-
-    override fun getItemCount() = attachedFiles.size
 
     /**
      * Represents ViewHolder for item of attached files list.
