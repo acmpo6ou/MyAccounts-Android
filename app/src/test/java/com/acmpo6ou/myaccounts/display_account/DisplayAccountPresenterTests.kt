@@ -19,7 +19,6 @@
 
 package com.acmpo6ou.myaccounts.display_account
 
-import android.content.Context
 import android.net.Uri
 import com.acmpo6ou.myaccounts.account
 import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountFragmentI
@@ -44,18 +43,15 @@ class DisplayAccountPresenterTests {
 
     @Before
     fun setup() {
-        val mockContext: Context = mock { on { contentResolver } doReturn mock() }
-        val mockAccount = account
-        mockAccount.attachedFiles = mutableMapOf(fileName to content)
+        val fakeAccount = account
+        fakeAccount.attachedFiles = mutableMapOf(fileName to content)
 
         view = mock {
-            on { myContext } doReturn mockContext
-            on { account } doReturn mockAccount
+            on { account } doReturn fakeAccount
         }
         model = mock()
 
-        presenter = DisplayAccountPresenter(view)
-        presenter.model = model
+        presenter = DisplayAccountPresenter(view, model)
     }
 
     @Test
@@ -91,9 +87,10 @@ class DisplayAccountPresenterTests {
     fun `saveFile should handle IllegalArgumentException`() {
         whenever(model.saveFile(destinationUri, content))
             .doAnswer { throw IllegalArgumentException() }
-        presenter.selectedFile = fileName
 
+        presenter.selectedFile = fileName
         presenter.saveFile(destinationUri)
+
         verify(view).fileCorrupted()
         verify(view, never()).showError(anyString())
         verify(view, never()).showSuccess()
@@ -105,9 +102,10 @@ class DisplayAccountPresenterTests {
         val exception = Exception(msg)
         whenever(model.saveFile(destinationUri, content))
             .doAnswer { throw exception }
-        presenter.selectedFile = fileName
 
+        presenter.selectedFile = fileName
         presenter.saveFile(destinationUri)
+
         verify(view).showError(exception.toString())
         verify(view, never()).fileCorrupted()
         verify(view, never()).showSuccess()
