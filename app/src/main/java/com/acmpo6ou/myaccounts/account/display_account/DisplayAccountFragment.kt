@@ -39,6 +39,7 @@ import com.acmpo6ou.myaccounts.database.databases_list.Account
 import com.acmpo6ou.myaccounts.databinding.FragmentDisplayAccountBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -48,15 +49,15 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
     val b: FragmentDisplayAccountBinding get() = binding!!
 
     @Inject
-    lateinit var presenter: DisplayAccountPresenterI
+    lateinit var presenter: Lazy<DisplayAccountPresenterI>
 
     @Inject
-    lateinit var adapter: DisplayAccountAdapter
+    lateinit var adapter: Lazy<DisplayAccountAdapter>
 
     @Inject
     lateinit var accountsActivity: AccountsActivityI
 
-    override var account = Account("", "", "", "", "", "", true, mutableMapOf())
+    override lateinit var account: Account
     val SAVE_FILE_RC = 303
 
     override fun onCreateView(
@@ -75,7 +76,7 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
         }
 
         b.attachedFilesList.layoutManager = LinearLayoutManager(context)
-        b.attachedFilesList.adapter = adapter
+        b.attachedFilesList.adapter = adapter.get()
     }
 
     /**
@@ -135,7 +136,7 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
         super.onActivityResult(requestCode, resultCode, resultData)
         if (resultCode != Activity.RESULT_OK) return
-        if (requestCode == SAVE_FILE_RC) resultData?.data?.let { presenter.saveFile(it) }
+        if (requestCode == SAVE_FILE_RC) resultData?.data?.let { presenter.get().saveFile(it) }
     }
 
     /**
