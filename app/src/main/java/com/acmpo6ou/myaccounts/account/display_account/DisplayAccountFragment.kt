@@ -30,6 +30,7 @@ import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -47,6 +48,7 @@ import javax.inject.Inject
 class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
     private var binding: FragmentDisplayAccountBinding? = null
     val b: FragmentDisplayAccountBinding get() = binding!!
+    override lateinit var account: Account
 
     @Inject
     lateinit var presenter: Lazy<DisplayAccountPresenterI>
@@ -56,9 +58,6 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
 
     @Inject
     lateinit var accountsActivity: AccountsActivityI
-
-    override lateinit var account: Account
-    val SAVE_FILE_RC = 303
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -115,32 +114,30 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
         }
     }
 
+    private val saveFileLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.data?.let { presenter.get().saveFile(it) }
+            }
+        }
+
     /**
      * Used to display save file dialog, so that user can chose location where to save
      * attached file.
      *
-     * Starts intent with [SAVE_FILE_RC] request code.
-     * Shows dialog to choose location using Storage Access Framework.
+     * Displays dialog to choose location using Storage Access Framework.
      * @param[fileName] name of the file we want to save.
      */
-    override fun saveFileDialog(fileName: String) {
-        Intent(Intent.ACTION_CREATE_DOCUMENT)
-            .apply {
-                addCategory(Intent.CATEGORY_OPENABLE)
-                type = "*/*"
-                putExtra(Intent.EXTRA_TITLE, fileName)
-                startActivityForResult(this, SAVE_FILE_RC)
-            }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
-        super.onActivityResult(requestCode, resultCode, resultData)
-        if (resultCode != Activity.RESULT_OK) return
-        if (requestCode == SAVE_FILE_RC) resultData?.data?.let { presenter.get().saveFile(it) }
-    }
+    override fun saveFileDialog(fileName: String) =
+        with(Intent(Intent.ACTION_CREATE_DOCUMENT)) {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "*/*"
+            putExtra(Intent.EXTRA_TITLE, fileName)
+            saveFileLauncher.launch(this)
+        }
 
     /**
-     * Used to display a snackbar with success message.
+     * Displays a snackbar with success message.
      */
     override fun showSuccess() {
         Snackbar.make(
