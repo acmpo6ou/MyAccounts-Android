@@ -167,7 +167,7 @@ fun clickMenuItem(itemLayout: View, itemId: Int) {
 inline fun <reified T : Fragment> launchFragmentInHiltContainer(
     fragmentArgs: Bundle? = null,
     @StyleRes themeResId: Int = R.style.Theme_MyAccounts_NoActionBar,
-    crossinline action: Fragment.() -> Unit = {}
+    crossinline action: Fragment.() -> Unit = {},
 ): T {
     val startActivityIntent = Intent.makeMainActivity(
         ComponentName(
@@ -195,10 +195,12 @@ inline fun <reified T : Fragment> launchFragmentInHiltContainer(
 
 /**
  * Used in tests to get measured and laid out recyclerview.
+ *
  * It finds recycler, measures and lays it out, so that later we can obtain its items.
+ * @param[recyclerId] id of recycler.
  */
-fun Fragment.getRecycler(): RecyclerView {
-    val recycler: RecyclerView = this.view!!.findViewById(R.id.itemsList)
+fun Fragment.getRecycler(recyclerId: Int = R.id.itemsList): RecyclerView {
+    val recycler: RecyclerView = this.view!!.findViewById(recyclerId)
     recycler.measure(0, 0)
     recycler.layout(0, 0, 100, 10000)
     return recycler
