@@ -71,8 +71,9 @@ open class OpenDatabaseViewModel(
      *
      * If there is JsonDecodingException then set corrupted to true, this will lead to
      * displaying error dialog saying that the database is corrupted.
+     *
      * @param[password] password for the database.
-     * @param[databaseIndex] index of database that we need to open.
+     * @param[databaseIndex] database index.
      */
     open suspend fun verifyPassword(password: String, databaseIndex: Int) {
         try {
@@ -101,18 +102,18 @@ open class OpenDatabaseViewModel(
             // keys generated from incorrect passwords
             app.keyCache.remove(password)
         } catch (e: Exception) {
-            // Here we catch Exception because JsonDecodingException is private.
+            e.printStackTrace()
+            // Here we catch Exception because JsonDecodingException is internal.
             // Then we verify that this is the JsonDecodingException by looking at the
             // error message
             if ("JsonDecodingException" in e.toString()) {
-                incorrectPassword.value = false
                 corrupted.value = true
+                incorrectPassword.value = false
             } else {
                 // notify about error and hide loading progress bar
                 errorMsg.value = e.toString()
                 loading.value = false
             }
-            e.printStackTrace()
         }
     }
 
