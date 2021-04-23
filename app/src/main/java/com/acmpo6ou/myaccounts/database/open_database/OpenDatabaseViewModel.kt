@@ -26,45 +26,39 @@ import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.superclass.DatabaseViewModel
 import com.macasaet.fernet.TokenValidationException
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.scopes.FragmentScoped
+import kotlinx.coroutines.*
 import java.io.File
+import javax.inject.Inject
 
-open class OpenDatabaseViewModel : ViewModel(), DatabaseViewModel {
-    override var databaseIndex: Int = 0
-    override lateinit var SRC_DIR: String
-    override lateinit var app: MyApp
-    override lateinit var titleStart: String
+@HiltViewModel
+open class OpenDatabaseViewModel(
+    override val app: MyApp,
+    private var defaultDispatcher: CoroutineDispatcher,
+    private var uiDispatcher: CoroutineDispatcher,
+) : ViewModel(), DatabaseViewModel {
+    @Inject constructor(app: MyApp) : this(app, Dispatchers.Default, Dispatchers.Main)
 
-    override lateinit var defaultDispatcher: CoroutineDispatcher
-    override lateinit var uiDispatcher: CoroutineDispatcher
-    override var coroutineJob: Job? = null
+    var coroutineJob: Job? = null
 
-    override lateinit var _title: MutableLiveData<String>
-    override lateinit var _loading: MutableLiveData<Boolean>
-    override lateinit var errorMsg_: MutableLiveData<String>
-
-    val _incorrectPassword = MutableLiveData(false)
-    val _corrupted = MutableLiveData(false)
-    val _opened = MutableLiveData(false)
-
-    val incorrectPassword get() = _incorrectPassword.value!!
-    val corrupted get() = _corrupted.value!!
-    val opened get() = _opened.value!!
+    override var errorMsg: MutableLiveData<String> = MutableLiveData()
+    var loading: MutableLiveData<Boolean> = MutableLiveData(false)
+    val incorrectPassword = MutableLiveData(false)
+    val corrupted = MutableLiveData(false)
+    val opened = MutableLiveData(false)
 
     /**
      * This method launches verifyPassword coroutine only if it wasn't already launched and
      * password is not empty.
      * @param[password] password needed by verifyPassword coroutine.
      */
-    open fun startPasswordCheck(password: String) {
+    open fun startPasswordCheck(password: String, databaseIndex: Int) {
         if ((coroutineJob == null || !coroutineJob!!.isActive) &&
             password.isNotEmpty()
         ) {
             coroutineJob = viewModelScope.launch(uiDispatcher) {
-                verifyPassword(password)
+                verifyPassword(password, databaseIndex)
             }
         }
     }
@@ -78,29 +72,30 @@ open class OpenDatabaseViewModel : ViewModel(), DatabaseViewModel {
      * If there is JsonDecodingException then set corrupted to true, this will lead to
      * displaying error dialog saying that the database is corrupted.
      * @param[password] password for the database.
+     * @param[databaseIndex] index of database that we need to open.
      */
-    open suspend fun verifyPassword(password: String) {
+    open suspend fun verifyPassword(password: String, databaseIndex: Int) {
         try {
             // show loading because decrypting database takes time
-            _loading.value = true
+            loading.value = true
 
-            val database = databases[databaseIndex].copy()
-            val salt = File("$SRC_DIR/${database.name}.bin").readBytes()
+            val database = app.databases[databaseIndex].copy()
+            val salt = File("${app.SRC_DIR}/${database.name}.bin").readBytes()
 
             database.password = password
             database.salt = salt
 
             // save deserialized database
-            databases[databaseIndex] = openDatabaseAsync(database).await()
+            app.databases[databaseIndex] = openDatabaseAsync(database).await()
 
             // set opened to true to notify fragment about successful
             // database deserialization
-            _opened.value = true
-            _incorrectPassword.value = false
+            opened.value = true
+            incorrectPassword.value = false
         } catch (e: TokenValidationException) {
-            _incorrectPassword.value = true
-            _loading.value = false
             e.printStackTrace()
+            incorrectPassword.value = true
+            loading.value = false
 
             // remove cached key to avoid memory leak, because we don't need to cache
             // keys generated from incorrect passwords
@@ -110,12 +105,12 @@ open class OpenDatabaseViewModel : ViewModel(), DatabaseViewModel {
             // Then we verify that this is the JsonDecodingException by looking at the
             // error message
             if ("JsonDecodingException" in e.toString()) {
-                _incorrectPassword.value = false
-                _corrupted.value = true
+                incorrectPassword.value = false
+                corrupted.value = true
             } else {
                 // notify about error and hide loading progress bar
-                errorMsg = e.toString()
-                loading = false
+                errorMsg.value = e.toString()
+                loading.value = false
             }
             e.printStackTrace()
         }

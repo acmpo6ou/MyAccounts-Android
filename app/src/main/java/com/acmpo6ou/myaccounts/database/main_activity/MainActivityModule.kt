@@ -22,6 +22,7 @@ package com.acmpo6ou.myaccounts.database.main_activity
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import com.acmpo6ou.myaccounts.MainActivity
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -47,13 +48,14 @@ interface MainActivityBindings {
 object MainActivityModule {
     @Provides
     @ActivityScoped
-    fun mainActivity(@ActivityContext activity: Context): MainActivityI {
-        return activity as MainActivityI
-    }
+    fun mainActivityI(@ActivityContext activity: Context) = activity as MainActivityI
 
     @Provides
     @ActivityScoped
-    fun prefs(@ActivityContext activity: Context): SharedPreferences {
-        return PreferenceManager.getDefaultSharedPreferences(activity)
-    }
+    fun mainActivity(@ActivityContext activity: Context) = activity as MainActivity
+
+    @Provides
+    @ActivityScoped
+    fun prefs(@ActivityContext activity: Context): SharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(activity)
 }

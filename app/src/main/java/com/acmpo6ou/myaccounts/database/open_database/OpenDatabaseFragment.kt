@@ -28,9 +28,9 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
@@ -38,14 +38,24 @@ import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.utils.startDatabaseUtil
 import com.acmpo6ou.myaccounts.database.superclass.ErrorFragment
 import com.acmpo6ou.myaccounts.databinding.OpenDatabaseFragmentBinding
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.qualifiers.ActivityContext
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class OpenDatabaseFragment : Fragment(), ErrorFragment {
-    override lateinit var viewModel: OpenDatabaseViewModel
-    var args: OpenDatabaseFragmentArgs? = null
+    override val viewModel: OpenDatabaseViewModel by viewModels()
+    lateinit var args: OpenDatabaseFragmentArgs
 
-    lateinit var app: MyApp
+    @ActivityContext
+    @Inject
     lateinit var myContext: Context
-    override val mainActivity get() = myContext as MainActivity
+
+    @Inject
+    lateinit var app: MyApp
+
+    @Inject
+    override lateinit var mainActivity: MainActivity
     override lateinit var lifecycle: LifecycleOwner
 
     var binding: OpenDatabaseFragmentBinding? = null
@@ -70,7 +80,7 @@ class OpenDatabaseFragment : Fragment(), ErrorFragment {
     private val corruptedObserver = Observer<Boolean> {
         if (!it) return@Observer
 
-        val index = args!!.databaseIndex
+        val index = args.databaseIndex
         val dbName = app.databases[index].name
 
         val errorTitle = myContext.resources.getString(R.string.open_error)
@@ -80,7 +90,7 @@ class OpenDatabaseFragment : Fragment(), ErrorFragment {
 
     // This observer starts AccountsActivity when corresponding Database is opened.
     private val openedObserver = Observer<Boolean> {
-        if (it) startDatabase(args!!.databaseIndex)
+        if (it) startDatabase(args.databaseIndex)
     }
 
     // This observer hides/displays loading progress bar of `Open database` button
@@ -96,9 +106,6 @@ class OpenDatabaseFragment : Fragment(), ErrorFragment {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        myContext = requireContext()
-        app = context.applicationContext as MyApp
-
         arguments?.let {
             args = OpenDatabaseFragmentArgs.fromBundle(it)
         }
@@ -121,12 +128,11 @@ class OpenDatabaseFragment : Fragment(), ErrorFragment {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycle = viewLifecycleOwner
-        viewModel = ViewModelProvider(this).get(OpenDatabaseViewModel::class.java)
         initModel()
 
         // open database when `Open database` button is pressed
         b.openDatabase.setOnClickListener {
-            viewModel.startPasswordCheck(b.databasePassword.text.toString())
+            viewModel.startPasswordCheck(b.databasePassword.text.toString(), args.databaseIndex)
         }
 
         // open database when Enter is pressed in password field
@@ -163,19 +169,15 @@ class OpenDatabaseFragment : Fragment(), ErrorFragment {
      * This method initializes view model providing all needed resources.
      */
     override fun initModel() {
-        val SRC_DIR = myContext.getExternalFilesDir(null)?.path + "/src"
-        val titleStart = myContext.resources.getString(R.string.open_db)
-        viewModel.initialize(app, SRC_DIR, titleStart, args?.databaseIndex)
         super.initModel()
 
         // init observers
         viewModel.apply {
             viewLifecycleOwner.let {
-                _title.observe(it, titleObserver)
-                _incorrectPassword.observe(it, passwordObserver)
-                _corrupted.observe(it, corruptedObserver)
-                _opened.observe(it, openedObserver)
-                _loading.observe(it, loadingObserver)
+                incorrectPassword.observe(it, passwordObserver)
+                corrupted.observe(it, corruptedObserver)
+                opened.observe(it, openedObserver)
+                loading.observe(it, loadingObserver)
             }
         }
     }
