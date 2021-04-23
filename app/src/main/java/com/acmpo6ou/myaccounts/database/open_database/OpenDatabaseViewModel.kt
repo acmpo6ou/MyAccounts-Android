@@ -27,7 +27,6 @@ import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.superclass.DatabaseViewModel
 import com.macasaet.fernet.TokenValidationException
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.scopes.FragmentScoped
 import kotlinx.coroutines.*
 import java.io.File
 import javax.inject.Inject
@@ -38,7 +37,8 @@ open class OpenDatabaseViewModel(
     private var defaultDispatcher: CoroutineDispatcher,
     private var uiDispatcher: CoroutineDispatcher,
 ) : ViewModel(), DatabaseViewModel {
-    @Inject constructor(app: MyApp) : this(app, Dispatchers.Default, Dispatchers.Main)
+    @Inject
+    constructor(app: MyApp) : this(app, Dispatchers.Default, Dispatchers.Main)
 
     var coroutineJob: Job? = null
 
