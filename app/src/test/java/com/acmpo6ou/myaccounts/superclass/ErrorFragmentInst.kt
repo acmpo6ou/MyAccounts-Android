@@ -19,7 +19,7 @@
 
 package com.acmpo6ou.myaccounts.superclass
 
-import android.os.Build
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,10 +28,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
-import com.acmpo6ou.myaccounts.database.superclass.ErrorFragment
+import com.acmpo6ou.myaccounts.core.superclass.ErrorFragment
+import com.acmpo6ou.myaccounts.core.superclass.ErrorViewModel
+import com.acmpo6ou.myaccounts.core.superclass.SuperActivityI
 import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
@@ -42,12 +44,41 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.LooperMode
+
+@RunWith(RobolectricTestRunner::class)
+class ErrorFragmentInst {
+    private val faker = Faker()
+    lateinit var scenario: FragmentScenario<TestFragment>
+    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
+
+    @Before
+    fun setUp() {
+        scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
+        scenario.onFragment {
+            whenever(it.superActivity.myContext).thenReturn(context)
+        }
+    }
+
+    @Test
+    fun `should call showError when errorMsg changes`() {
+        scenario.onFragment {
+            val errorTitle = context.resources.getString(R.string.error_title)
+            val msg = faker.str()
+
+            it.initModel()
+            it.viewModel.errorMsg.value = msg
+            verify(it.superActivity).showError(errorTitle, msg)
+        }
+    }
+}
+
+class TestViewModel : ErrorViewModel {
+    override var errorMsg = MutableLiveData<String>()
+}
 
 class TestFragment : Fragment(), ErrorFragment {
-    override val viewModel = TestDatabaseModel()
-    override val mainActivity: MainActivityI = mock()
+    override val viewModel = TestViewModel()
+    override val superActivity: SuperActivityI = mock()
     override lateinit var lifecycle: LifecycleOwner
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,35 +95,5 @@ class TestFragment : Fragment(), ErrorFragment {
         val b = CreateEditDatabaseFragmentBinding
             .inflate(layoutInflater, container, false)
         return b.root
-    }
-}
-
-@RunWith(RobolectricTestRunner::class)
-@LooperMode(LooperMode.Mode.PAUSED)
-@Config(sdk = [Build.VERSION_CODES.O_MR1])
-class ErrorFragmentInst {
-    private val faker = Faker()
-    lateinit var scenario: FragmentScenario<TestFragment>
-    val context = InstrumentationRegistry.getInstrumentation().targetContext
-
-    @Before
-    fun setUp() {
-        scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
-        scenario.onFragment {
-            whenever(it.mainActivity.myContext).thenReturn(context)
-        }
-    }
-
-    @Test
-    fun `should display call showError when errorMsg changes`() {
-        scenario.onFragment {
-            val errorTitle = context.resources.getString(R.string.error_title)
-            val msg = faker.str()
-
-            it.initModel()
-            it.viewModel.errorMsg = msg
-
-            verify(it.mainActivity).showError(errorTitle, msg)
-        }
     }
 }
