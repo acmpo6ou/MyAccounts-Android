@@ -23,6 +23,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.superclass.DatabaseViewModel
 import com.macasaet.fernet.TokenValidationException
@@ -36,7 +37,7 @@ open class OpenDatabaseViewModel(
     override val app: MyApp,
     private var defaultDispatcher: CoroutineDispatcher,
     private var uiDispatcher: CoroutineDispatcher,
-) : ViewModel(), DatabaseViewModel {
+) : ViewModel(), DatabaseViewModel, DatabaseUtils {
     @Inject
     constructor(app: MyApp) : this(app, Dispatchers.Default, Dispatchers.Main)
 

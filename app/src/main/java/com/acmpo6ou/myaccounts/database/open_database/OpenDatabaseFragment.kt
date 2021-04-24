@@ -55,7 +55,7 @@ class OpenDatabaseFragment : Fragment(), ErrorFragment {
     lateinit var app: MyApp
 
     @Inject
-    override lateinit var mainActivity: MainActivity
+    override lateinit var superActivity: MainActivity
     override lateinit var lifecycle: LifecycleOwner
 
     var binding: OpenDatabaseFragmentBinding? = null
@@ -78,7 +78,7 @@ class OpenDatabaseFragment : Fragment(), ErrorFragment {
         val dbName = app.databases[databaseIndex].name
         val errorTitle = myContext.resources.getString(R.string.open_error)
         val errorMsg = myContext.resources.getString(R.string.corrupted_db, dbName)
-        mainActivity.showError(errorTitle, errorMsg)
+        superActivity.showError(errorTitle, errorMsg)
     }
 
     // Starts AccountsActivity when corresponding Database is opened.
@@ -127,7 +127,7 @@ class OpenDatabaseFragment : Fragment(), ErrorFragment {
         // Set app bar title to `Open <database name>`
         val dbName = app.databases[databaseIndex].name
         val appTitle = myContext.resources.getString(R.string.open_db, dbName)
-        mainActivity.supportActionBar?.title = appTitle
+        superActivity.supportActionBar?.title = appTitle
 
         // open database when `Open database` button is pressed
         b.openDatabase.setOnClickListener {
@@ -135,7 +135,8 @@ class OpenDatabaseFragment : Fragment(), ErrorFragment {
         }
 
         // open database when Enter is pressed in password field
-        b.databasePassword.setOnEditorActionListener { _: TextView, action: Int, keyEvent: KeyEvent? ->
+        b.databasePassword.setOnEditorActionListener {
+            _: TextView, action: Int, keyEvent: KeyEvent? ->
 
             if (keyEvent?.keyCode == KeyEvent.KEYCODE_ENTER ||
                 action == EditorInfo.IME_ACTION_DONE ||
@@ -159,13 +160,10 @@ class OpenDatabaseFragment : Fragment(), ErrorFragment {
 
         // set focus on password field and display keyboard
         b.databasePassword.requestFocus()
-        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm = superActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(b.databasePassword, InputMethodManager.SHOW_IMPLICIT)
     }
 
-    /**
-     * This method initializes view model providing all needed resources.
-     */
     override fun initModel() {
         super.initModel()
 
@@ -187,6 +185,6 @@ class OpenDatabaseFragment : Fragment(), ErrorFragment {
     private fun startDatabase(index: Int) {
         startDatabaseUtil(index, myContext)
         // navigate back to DatabasesFragment
-        mainActivity.findNavController(R.id.nav_host_fragment).navigateUp()
+        superActivity.findNavController(R.id.nav_host_fragment).navigateUp()
     }
 }

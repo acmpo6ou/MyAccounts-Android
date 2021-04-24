@@ -38,7 +38,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : SuperActivity(), MainActivityI {
+open class MainActivity : SuperActivity(), MainActivityI {
     @Inject
     override lateinit var presenter: MainPresenterI
 
