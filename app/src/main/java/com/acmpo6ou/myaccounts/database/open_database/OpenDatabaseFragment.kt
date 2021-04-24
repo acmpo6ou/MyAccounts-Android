@@ -23,7 +23,10 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.*
+import android.view.KeyEvent
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
@@ -61,6 +64,14 @@ class OpenDatabaseFragment : Fragment(), ErrorFragment {
     var binding: OpenDatabaseFragmentBinding? = null
     val b: OpenDatabaseFragmentBinding get() = binding!!
 
+    // Displays error dialog when user tries to open corrupted database
+    private val corruptedObserver = Observer<Boolean> {
+        val errorTitle = myContext.resources.getString(R.string.open_error)
+        val dbName = app.databases[databaseIndex].name
+        val errorMsg = myContext.resources.getString(R.string.corrupted_db, dbName)
+        superActivity.showError(errorTitle, errorMsg)
+    }
+
     // Displays and hides error tip of password field
     private val passwordObserver = Observer<Boolean> {
         if (it) {
@@ -69,21 +80,6 @@ class OpenDatabaseFragment : Fragment(), ErrorFragment {
         } else {
             b.parentPassword.error = null
         }
-    }
-
-    // Displays error dialog when user tries to open corrupted database.
-    private val corruptedObserver = Observer<Boolean> {
-        if (!it) return@Observer
-
-        val dbName = app.databases[databaseIndex].name
-        val errorTitle = myContext.resources.getString(R.string.open_error)
-        val errorMsg = myContext.resources.getString(R.string.corrupted_db, dbName)
-        superActivity.showError(errorTitle, errorMsg)
-    }
-
-    // Starts AccountsActivity when corresponding Database is opened.
-    private val openedObserver = Observer<Boolean> {
-        if (it) startDatabase(databaseIndex)
     }
 
     // Hides/displays loading progress bar of `Open database` button
@@ -95,6 +91,11 @@ class OpenDatabaseFragment : Fragment(), ErrorFragment {
             b.progressLoading.visibility = View.GONE
             b.openDatabase.isEnabled = true
         }
+    }
+
+    // Starts AccountsActivity when corresponding Database is opened
+    private val openedObserver = Observer<Boolean> {
+        startDatabase()
     }
 
     override fun onAttach(context: Context) {
@@ -178,12 +179,8 @@ class OpenDatabaseFragment : Fragment(), ErrorFragment {
         }
     }
 
-    /**
-     * Starts AccountsActivity for given database.
-     * @param[index] index of database for which we want to start AccountsActivity.
-     */
-    private fun startDatabase(index: Int) {
-        startDatabaseUtil(index, myContext)
+    private fun startDatabase() {
+        startDatabaseUtil(databaseIndex, myContext)
         // navigate back to DatabasesFragment
         superActivity.findNavController(R.id.nav_host_fragment).navigateUp()
     }

@@ -43,11 +43,11 @@ open class OpenDatabaseViewModel(
 
     var coroutineJob: Job? = null
 
-    override var errorMsg: MutableLiveData<String> = MutableLiveData()
-    var loading: MutableLiveData<Boolean> = MutableLiveData(false)
-    val incorrectPassword = MutableLiveData(false)
-    val corrupted = MutableLiveData(false)
-    val opened = MutableLiveData(false)
+    override var errorMsg = MutableLiveData<String>()
+    val incorrectPassword = MutableLiveData<Boolean>()
+    var loading = MutableLiveData<Boolean>()
+    val corrupted = MutableLiveData<Boolean>()
+    val opened = MutableLiveData<Boolean>()
 
     /**
      * This method launches verifyPassword coroutine only if it wasn't already launched and

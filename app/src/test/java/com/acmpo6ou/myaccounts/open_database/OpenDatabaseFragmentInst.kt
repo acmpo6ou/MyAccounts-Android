@@ -95,7 +95,7 @@ class OpenDatabaseFragmentInst {
 
     @Before
     fun setUp() {
-        model = OpenDatabaseViewModel(mock(), Dispatchers.Unconfined, Dispatchers.Unconfined)
+        model = OpenDatabaseViewModel(app, Dispatchers.Unconfined, Dispatchers.Unconfined)
         spyModel = spy(model)
 
         app.databases = mutableListOf(Database("main"))
@@ -104,6 +104,15 @@ class OpenDatabaseFragmentInst {
         val bundle = Bundle()
         bundle.putInt("databaseIndex", 0)
         fragment = launchFragmentInHiltContainer(bundle)
+    }
+
+    @Test
+    fun `should display error dialog when corrupted is set to true`() {
+        val errorTitle = context.resources.getString(R.string.open_error)
+        val errorMsg = context.resources.getString(R.string.corrupted_db, "main")
+
+        spyModel.corrupted.value = true
+        verify(superActivity).showError(errorTitle, errorMsg)
     }
 
     @Test
@@ -144,7 +153,7 @@ class OpenDatabaseFragmentInst {
         assertEquals(View.VISIBLE, b.progressLoading.visibility)
         assertFalse(b.openDatabase.isEnabled)
 
-        // when loading false progress bar should be hidden and button - enabled
+        // when loading is false progress bar should be hidden and button - enabled
         spyModel.loading.value = false
         assertEquals(View.GONE, b.progressLoading.visibility)
         assertTrue(b.openDatabase.isEnabled)
