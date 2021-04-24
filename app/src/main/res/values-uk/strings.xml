@@ -46,7 +46,7 @@
     <string name="password_error">Неправильний пароль</string>
     <string name="corrupted_db">База данних %1$s скоріш за все пошкоджена.</string>
     <string name="open_error">Помилка відкриття бази данних</string>
-    <string name="open_db">"Відкрити "</string>
+    <string name="open_db">Відкрити %1$s</string>
     <string name="name_empty">Будь ласка, введіть ім\'я</string>
     <string name="empty_password">Будь ласка, введіть пароль</string>
     <string name="diff_passwords">Паролі не співпадають!</string>
