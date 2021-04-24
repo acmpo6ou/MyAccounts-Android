@@ -17,27 +17,31 @@
  *
  */
 
-package com.acmpo6ou.myaccounts.database.superclass
+package com.acmpo6ou.myaccounts.core.superclass
 
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
 
 /**
- * Provides errorObserver to display error message.
+ * Provides errorObserver to display error dialog.
  */
 interface ErrorFragment {
-    val viewModel: DatabaseViewModel
-    val mainActivity: MainActivityI
+    val viewModel: ErrorViewModel
+    val superActivity: SuperActivityI
     val lifecycle: LifecycleOwner
 
     fun initModel() {
         // Observer to display error dialog
         val errorObserver = Observer<String> {
-            val errorTitle = mainActivity.myContext.resources.getString(R.string.error_title)
-            mainActivity.showError(errorTitle, it)
+            val errorTitle = superActivity.myContext.resources.getString(R.string.error_title)
+            superActivity.showError(errorTitle, it)
         }
         viewModel.errorMsg.observe(lifecycle, errorObserver)
     }
+}
+
+interface ErrorViewModel {
+    var errorMsg: MutableLiveData<String>
 }
