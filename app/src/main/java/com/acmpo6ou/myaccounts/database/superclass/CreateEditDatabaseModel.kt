@@ -52,10 +52,11 @@ abstract class CreateEditDatabaseModel : CreateEditViewModel(), DatabaseUtils {
     }
 
     /**
-     * This method removes all unsupported characters from given database name.
+     * Removes all unsupported characters from given database name.
      *
      * Supported characters are lower and upper ASCII letters, digits and .-_()
      * We should clean the name because it is used as a name for database files.
+     *
      * @param[name] name to clean.
      * @return cleaned from unsupported characters name.
      */

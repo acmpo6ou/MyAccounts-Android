@@ -77,12 +77,10 @@ class CreateEditDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `applyPressed should not call apply if coroutineJob is active`() {
-        spyModel.coroutineJob = mock { on { isActive } doReturn true }
+    fun `applyPressed should call apply if coroutineJob is null`() {
         spyModel.applyPressed(name, password)
-
         runBlocking {
-            verify(spyModel, never()).apply(name, password)
+            verify(spyModel).apply(name, password)
         }
     }
 
@@ -97,11 +95,12 @@ class CreateEditDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `applyPressed should call apply if coroutineJob is null`() {
+    fun `applyPressed should not call apply if coroutineJob is active`() {
+        spyModel.coroutineJob = mock { on { isActive } doReturn true }
         spyModel.applyPressed(name, password)
 
         runBlocking {
-            verify(spyModel).apply(name, password)
+            verify(spyModel, never()).apply(name, password)
         }
     }
 }
