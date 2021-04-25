@@ -21,8 +21,8 @@ package com.acmpo6ou.myaccounts.database.superclass
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.CreateEditViewModel
+import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -31,25 +31,18 @@ import java.security.SecureRandom
 /**
  * Super class for all view models that create/edit databases.
  */
-abstract class CreateEditDatabaseModel : CreateEditViewModel(), DatabaseViewModel {
-    override lateinit var defaultDispatcher: CoroutineDispatcher
-    override lateinit var uiDispatcher: CoroutineDispatcher
-    override var coroutineJob: Job? = null
+abstract class CreateEditDatabaseModel : CreateEditViewModel(), DatabaseUtils {
+    var coroutineJob: Job? = null
+    abstract val uiDispatcher: CoroutineDispatcher
 
-    override lateinit var _title: MutableLiveData<String>
-    override lateinit var _loading: MutableLiveData<Boolean>
-    override lateinit var errorMsg_: MutableLiveData<String>
-
-    override lateinit var app: MyApp
-    override lateinit var SRC_DIR: String
-    override lateinit var titleStart: String
+    val loading = MutableLiveData<Boolean>()
+    override val errorMsg = MutableLiveData<String>()
 
     override val itemNames get() = app.databases.map { it.name }
-    override var databaseIndex: Int = 0
+    var databaseIndex: Int = 0
 
     /**
-     * This method generates purely random salt for encryption.
-     * @return salt for encryption.
+     * Generates purely random salt for encryption.
      */
     open fun generateSalt(): ByteArray {
         val random = SecureRandom()

@@ -20,11 +20,25 @@
 package com.acmpo6ou.myaccounts.database.create_edit_database
 
 import androidx.lifecycle.viewModelScope
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.superclass.CreateEditDatabaseModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import javax.inject.Inject
 
-open class EditDatabaseViewModel : CreateEditDatabaseModel() {
+@HiltViewModel
+open class EditDatabaseViewModel(
+    override val app: MyApp,
+    private val defaultDispatcher: CoroutineDispatcher,
+    override val uiDispatcher: CoroutineDispatcher,
+) : CreateEditDatabaseModel() {
+
+    @Inject
+    constructor(app: MyApp) : this(app, Dispatchers.Default, Dispatchers.Main)
+
     open fun saveDatabaseAsync(oldName: String, database: Database) =
         viewModelScope.async(defaultDispatcher) {
             saveDatabase(oldName, database)
@@ -40,11 +54,11 @@ open class EditDatabaseViewModel : CreateEditDatabaseModel() {
     override suspend fun apply(name: String, password: String) {
         try {
             // display loading progress bar
-            loading = true
+            loading.value = true
 
             // save database
             val cleanedName = fixName(name)
-            val oldDatabase = databases[databaseIndex]
+            val oldDatabase = app.databases[databaseIndex]
             val newDatabase = Database(
                 cleanedName, password,
                 oldDatabase.salt, oldDatabase.data
@@ -57,14 +71,14 @@ open class EditDatabaseViewModel : CreateEditDatabaseModel() {
             }
 
             // add database to the list, sort the list and notify about creation
-            databases[databaseIndex] = newDatabase
-            databases.sortBy { it.name }
-            finished = true
+            app.databases[databaseIndex] = newDatabase
+            app.databases.sortBy { it.name }
+            finished.value = true
         } catch (e: Exception) {
             e.printStackTrace()
             // notify about error and hide loading progress bar
-            errorMsg = e.toString()
-            loading = false
+            errorMsg.value = e.toString()
+            loading.value = false
         }
     }
 
@@ -77,13 +91,13 @@ open class EditDatabaseViewModel : CreateEditDatabaseModel() {
      * @param[name] name to validate.
      */
     override fun validateName(name: String) {
-        val oldName = databases[databaseIndex].name
+        val oldName = app.databases[databaseIndex].name
         val newName = fixName(name)
 
         // it's okay if name didn't change through editing
         if (oldName == newName) {
-            existsNameErr = false
-            emptyNameErr = false
+            existsNameErr.value = false
+            emptyNameErr.value = false
         } else {
             super.validateName(newName)
         }

@@ -20,11 +20,25 @@
 package com.acmpo6ou.myaccounts.database.create_edit_database
 
 import androidx.lifecycle.viewModelScope
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.superclass.CreateEditDatabaseModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import javax.inject.Inject
 
-open class CreateDatabaseViewModel : CreateEditDatabaseModel() {
+@HiltViewModel
+open class CreateDatabaseViewModel(
+    override val app: MyApp,
+    private val defaultDispatcher: CoroutineDispatcher,
+    override val uiDispatcher: CoroutineDispatcher,
+) : CreateEditDatabaseModel() {
+
+    @Inject
+    constructor(app: MyApp) : this(app, Dispatchers.Default, Dispatchers.Main)
+
     open fun createDatabaseAsync(database: Database) =
         viewModelScope.async(defaultDispatcher) {
             createDatabase(database)
@@ -42,7 +56,7 @@ open class CreateDatabaseViewModel : CreateEditDatabaseModel() {
     override suspend fun apply(name: String, password: String) {
         try {
             // display loading progress bar
-            loading = true
+            loading.value = true
 
             // create database
             val cleanedName = fixName(name)
@@ -51,14 +65,14 @@ open class CreateDatabaseViewModel : CreateEditDatabaseModel() {
             createDatabaseAsync(database).await()
 
             // add it to the list, sort the list and notify about creation
-            databases.add(database)
-            databases.sortBy { it.name }
-            finished = true
+            app.databases.add(database)
+            app.databases.sortBy { it.name }
+            finished.value = true
         } catch (e: Exception) {
             e.printStackTrace()
             // notify about error and hide loading progress bar
-            errorMsg = e.toString()
-            loading = false
+            errorMsg.value = e.toString()
+            loading.value = false
         }
     }
 }
