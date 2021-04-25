@@ -39,7 +39,7 @@ import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.utils.startDatabaseUtil
-import com.acmpo6ou.myaccounts.database.superclass.ErrorFragment
+import com.acmpo6ou.myaccounts.core.superclass.ErrorFragment
 import com.acmpo6ou.myaccounts.databinding.OpenDatabaseFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.qualifiers.ActivityContext

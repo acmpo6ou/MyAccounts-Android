@@ -43,5 +43,5 @@ interface ErrorFragment {
 }
 
 interface ErrorViewModel {
-    var errorMsg: MutableLiveData<String>
+    val errorMsg: MutableLiveData<String>
 }

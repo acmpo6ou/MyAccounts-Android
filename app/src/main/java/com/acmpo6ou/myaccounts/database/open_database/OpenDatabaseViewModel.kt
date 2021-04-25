@@ -23,9 +23,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.core.superclass.ErrorViewModel
 import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
 import com.acmpo6ou.myaccounts.database.databases_list.Database
-import com.acmpo6ou.myaccounts.database.superclass.DatabaseViewModel
 import com.macasaet.fernet.TokenValidationException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -35,17 +35,17 @@ import javax.inject.Inject
 @HiltViewModel
 open class OpenDatabaseViewModel(
     override val app: MyApp,
-    private var defaultDispatcher: CoroutineDispatcher,
-    private var uiDispatcher: CoroutineDispatcher,
-) : ViewModel(), DatabaseViewModel, DatabaseUtils {
+    private val defaultDispatcher: CoroutineDispatcher,
+    private val uiDispatcher: CoroutineDispatcher,
+) : ViewModel(), ErrorViewModel, DatabaseUtils {
+
     @Inject
     constructor(app: MyApp) : this(app, Dispatchers.Default, Dispatchers.Main)
-
     var coroutineJob: Job? = null
 
-    override var errorMsg = MutableLiveData<String>()
+    override val errorMsg = MutableLiveData<String>()
     val incorrectPassword = MutableLiveData<Boolean>()
-    var loading = MutableLiveData<Boolean>()
+    val loading = MutableLiveData<Boolean>()
     val corrupted = MutableLiveData<Boolean>()
     val opened = MutableLiveData<Boolean>()
 
