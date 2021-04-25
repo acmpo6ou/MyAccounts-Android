@@ -70,7 +70,7 @@ class EditAccountViewModel : CreateAccountViewModel() {
                 oldAccount!!.copyEmail, attachedFiles
             )
 
-            finished = true // notify about successful edition
+            finished.value = true // notify about successful edition
         } catch (e: Exception) {
             e.printStackTrace()
             errorMsg.value = e.toString()
@@ -90,8 +90,8 @@ class EditAccountViewModel : CreateAccountViewModel() {
 
         // it's okay if name didn't change through editing
         if (oldName == name) {
-            existsNameErr = false
-            emptyNameErr = false
+            existsNameErr.value = false
+            emptyNameErr.value = false
         } else {
             super.validateName(name)
         }

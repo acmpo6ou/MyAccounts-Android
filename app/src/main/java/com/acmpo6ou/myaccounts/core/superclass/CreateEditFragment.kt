@@ -26,9 +26,9 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.utils.GenPassDialog
-import com.acmpo6ou.myaccounts.MyApp
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
@@ -117,7 +117,7 @@ abstract class CreateEditFragment : Fragment() {
             viewLifecycleOwner.let {
                 nameErrors.observe(it, nameErrorObserver)
                 passwordErrors.observe(it, passwordErrorObserver)
-                _finished.observe(it, finishedObserver)
+                finished.observe(it, finishedObserver)
                 applyEnabled.observe(it, applyEnabledObserver)
             }
         }

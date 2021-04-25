@@ -38,7 +38,7 @@ open class CreateAccountViewModel : CreateEditViewModel() {
 
     val notifyAdded = MutableLiveData<Int>()
     val notifyRemoved = MutableLiveData<Int>()
-    val errorMsg = MutableLiveData<String>()
+    override var errorMsg = MutableLiveData<String>()
 
     /**
      * Initializes model with needed resources.
@@ -98,7 +98,7 @@ open class CreateAccountViewModel : CreateEditViewModel() {
                 accountName, username, email, password, date, comment,
                 true, attachedFiles
             )
-            finished = true // notify about creation
+            finished.value = true // notify about creation
         } catch (e: Exception) {
             e.printStackTrace()
             errorMsg.value = e.toString()

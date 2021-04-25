@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.superclass
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.MutableLiveData
 import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.CreateEditViewModel
@@ -31,19 +32,12 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-private open class TestModel : CreateEditViewModel() {
-    override val app: MyApp = MyApp()
-    override val itemNames: List<String> get() = app.databases.map { it.name }
-}
-
 class CreateEditViewModelTests : ModelTest() {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
-
     private val model = TestModel()
-    private lateinit var spyModel: TestModel
-    override val password = faker.str()
 
+    override val password = faker.str()
     @Before
     fun setup() {
         model.app.databases =
@@ -57,32 +51,32 @@ class CreateEditViewModelTests : ModelTest() {
     fun `validateName should change emptyNameErr`() {
         // if name isn't empty emptyNameErr should be false
         model.validateName(faker.str())
-        assertFalse(model.emptyNameErr)
+        assertFalse(model.emptyNameErr.value!!)
 
         // if name is empty emptyNameErr should be true
         model.validateName("")
-        assertTrue(model.emptyNameErr)
+        assertTrue(model.emptyNameErr.value!!)
     }
 
     @Test
     fun `validateName should set existsNameErr to true when Database with such name exists`() {
         model.validateName("main")
-        assertTrue(model.existsNameErr)
+        assertTrue(model.existsNameErr.value!!)
 
         // and even if database is opened
         model.validateName("test") // test is opened
-        assertTrue(model.existsNameErr)
+        assertTrue(model.existsNameErr.value!!)
     }
 
     @Test
     fun `validatePasswords should change emptyPassErr`() {
-        // if passwords are empty - emptyPassErr = true
+        // when passwords are empty
         model.validatePasswords("", "")
-        assertTrue(model.emptyPassErr)
+        assertTrue(model.emptyPassErr.value!!)
 
-        // if passwords are empty - emptyPassErr = false
+        // when they aren't
         model.validatePasswords(faker.str(), faker.str())
-        assertFalse(model.emptyPassErr)
+        assertFalse(model.emptyPassErr.value!!)
     }
 
     @Test
@@ -90,12 +84,18 @@ class CreateEditViewModelTests : ModelTest() {
         val pass1 = faker.str()
         val pass2 = faker.str()
 
-        // if passwords are different - diffPassErr = true
+        // when passwords are different
         model.validatePasswords(pass1, pass2)
-        assertTrue(model.diffPassErr)
+        assertTrue(model.diffPassErr.value!!)
 
-        // if passwords are same - diffPassErr = false
+        // when passwords are same
         model.validatePasswords(pass1, pass1)
-        assertFalse(model.diffPassErr)
+        assertFalse(model.diffPassErr.value!!)
     }
+}
+
+private open class TestModel : CreateEditViewModel() {
+    override val app: MyApp = MyApp()
+    override var errorMsg = MutableLiveData<String>()
+    override val itemNames: List<String> get() = app.databases.map { it.name }
 }

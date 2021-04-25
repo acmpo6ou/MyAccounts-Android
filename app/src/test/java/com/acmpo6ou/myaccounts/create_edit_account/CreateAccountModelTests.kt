@@ -21,7 +21,6 @@ package com.acmpo6ou.myaccounts.create_edit_account
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.*
-import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.account.create_edit_account.CreateAccountViewModel
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.doAnswer
@@ -89,7 +88,7 @@ class CreateAccountModelTests : ModelTest() {
         model.applyPressed("", "", "", "", "", "")
 
         assertEquals(exception.toString(), model.errorMsg.value)
-        assertNotEquals(true, model._finished.value)
+        assertNotEquals(true, model.finished.value)
     }
 
     @Test
@@ -102,7 +101,7 @@ class CreateAccountModelTests : ModelTest() {
             account.date,
             account.comment
         )
-        assertTrue(model.finished)
+        assertTrue(model.finished.value!!)
     }
 
     @Test

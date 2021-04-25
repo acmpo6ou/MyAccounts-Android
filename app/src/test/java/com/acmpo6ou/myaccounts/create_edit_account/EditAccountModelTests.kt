@@ -92,7 +92,7 @@ class EditAccountModelTests : ModelTest() {
             account.comment
         )
         assertEquals(expectedAccount, model.accounts[account.accountName])
-        assertTrue(model.finished)
+        assertTrue(model.finished.value!!)
     }
 
     @Test
@@ -107,7 +107,7 @@ class EditAccountModelTests : ModelTest() {
         model.applyPressed("", "", "", "", "", "")
 
         assertEquals(exception.toString(), model.errorMsg.value)
-        assertNotEquals(true, model._finished.value)
+        assertNotEquals(true, model.finished.value)
     }
 
     @Test
@@ -139,8 +139,8 @@ class EditAccountModelTests : ModelTest() {
     fun `validateName when name of Database didn't change through editing`() {
         // account already exists but it's being edited, so that doesn't count
         model.validateName(account.accountName)
-        assertFalse(model.existsNameErr)
-        assertFalse(model.emptyNameErr)
+        assertFalse(model.existsNameErr.value!!)
+        assertFalse(model.emptyNameErr.value!!)
     }
 
     @Test
