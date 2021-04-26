@@ -56,6 +56,14 @@ class CreateDatabaseModelTests : ModelTest() {
     }
 
     @Test
+    fun `apply should set loading to true`() {
+        runBlocking {
+            spyModel.apply(name, password)
+        }
+        assertTrue(spyModel.loading.value!!)
+    }
+
+    @Test
     fun `apply should call createDatabaseAsync`() {
         runBlocking {
             spyModel.apply(name, password)
@@ -70,22 +78,6 @@ class CreateDatabaseModelTests : ModelTest() {
             spyModel.apply("c/lea  %\$n_name/", password)
         }
         verify(spyModel).createDatabaseAsync(db)
-    }
-
-    @Test
-    fun `apply should handle any error`() {
-        val msg = faker.str()
-        val exception = Exception(msg)
-        whenever(spyModel.createDatabaseAsync(db))
-            .doAnswer {
-                throw exception
-            }
-
-        runBlocking {
-            spyModel.apply(name, password)
-        }
-        assertEquals(exception.toString(), spyModel.errorMsg.value!!)
-        assertFalse(spyModel.loading.value!!)
     }
 
     @Test
@@ -105,10 +97,18 @@ class CreateDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `apply should set loading to true`() {
+    fun `apply should handle any error`() {
+        val msg = faker.str()
+        val exception = Exception(msg)
+        whenever(spyModel.createDatabaseAsync(db))
+            .doAnswer {
+                throw exception
+            }
+
         runBlocking {
             spyModel.apply(name, password)
         }
-        assertTrue(spyModel.loading.value!!)
+        assertEquals(exception.toString(), spyModel.errorMsg.value!!)
+        assertFalse(spyModel.loading.value!!)
     }
 }
