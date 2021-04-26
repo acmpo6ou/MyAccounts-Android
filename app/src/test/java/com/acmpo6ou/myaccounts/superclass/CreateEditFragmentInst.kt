@@ -20,31 +20,32 @@
 package com.acmpo6ou.myaccounts.superclass
 
 import android.content.Context
-import android.os.Build
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.platform.app.InstrumentationRegistry
-import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.create_edit_database.TestDatabaseModel
 import com.acmpo6ou.myaccounts.create_edit_database.TestFragment
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.LooperMode
 
 @RunWith(RobolectricTestRunner::class)
-@LooperMode(LooperMode.Mode.PAUSED)
-@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class CreateEditFragmentInst {
     lateinit var scenario: FragmentScenario<TestFragment>
     val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
-    val app = context.applicationContext as MyApp
+
+    lateinit var model: TestDatabaseModel
+    lateinit var app: MyApp
 
     val faker = Faker()
     val name = faker.str()
@@ -52,10 +53,11 @@ class CreateEditFragmentInst {
     @Before
     fun setup() {
         scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
-        app.res = context.resources
+        app = mock { on { res } doReturn context.resources }
+        model = TestDatabaseModel(app)
 
         scenario.onFragment {
-            it.viewModel.initialize(app, faker.str())
+            it.viewModel = model
             it.initModel()
             it.initForm()
         }
@@ -64,6 +66,7 @@ class CreateEditFragmentInst {
     @Test
     fun `should call validateName when text in nameField changes`() {
         scenario.onFragment {
+            it.viewModel = spy(model)
             it.nameField.setText(name)
             verify(it.viewModel).validateName(name)
         }
@@ -76,18 +79,18 @@ class CreateEditFragmentInst {
 
         scenario.onFragment {
             // name field is empty
-            it.viewModel.emptyNameErr = true
-            it.viewModel.existsNameErr = false
+            it.viewModel.emptyNameErr.value = true
+            it.viewModel.existsNameErr.value = false
             assertEquals(nameEmpty, it.parentName.error)
 
             // name field contains name that is already taken
-            it.viewModel.emptyNameErr = false
-            it.viewModel.existsNameErr = true
+            it.viewModel.emptyNameErr.value = false
+            it.viewModel.existsNameErr.value = true
             assertEquals(nameExists, it.parentName.error)
 
             // name field is filled and contains name that isn't taken
-            it.viewModel.emptyNameErr = false
-            it.viewModel.existsNameErr = false
+            it.viewModel.emptyNameErr.value = false
+            it.viewModel.existsNameErr.value = false
             assertNull(it.parentName.error)
         }
     }
@@ -95,6 +98,7 @@ class CreateEditFragmentInst {
     @Test
     fun `should call validatePasswords when password in either password fields changes`() {
         scenario.onFragment {
+            it.viewModel = spy(model)
             val str = faker.str()
 
             it.passwordField.setText(str)
@@ -112,18 +116,18 @@ class CreateEditFragmentInst {
 
         scenario.onFragment {
             // password fields are empty
-            it.viewModel.emptyPassErr = true
-            it.viewModel.diffPassErr = false
+            it.viewModel.emptyPassErr.value = true
+            it.viewModel.diffPassErr.value = false
             assertEquals(emptyPassword, it.parentPassword.error)
 
             // passwords do not match
-            it.viewModel.emptyPassErr = false
-            it.viewModel.diffPassErr = true
+            it.viewModel.emptyPassErr.value = false
+            it.viewModel.diffPassErr.value = true
             assertEquals(diffPasswords, it.parentPassword.error)
 
             // everything is okay
-            it.viewModel.emptyPassErr = false
-            it.viewModel.diffPassErr = false
+            it.viewModel.emptyPassErr.value = false
+            it.viewModel.diffPassErr.value = false
             assertNull(it.parentPassword.error)
         }
     }
@@ -132,24 +136,24 @@ class CreateEditFragmentInst {
     fun `applyButton should change according to nameErrors and passwordErrors`() {
         scenario.onFragment {
             // there are no errors
-            it.viewModel.emptyNameErr = false
-            it.viewModel.existsNameErr = false
-            it.viewModel.emptyPassErr = false
-            it.viewModel.diffPassErr = false
+            it.viewModel.emptyNameErr.value = false
+            it.viewModel.existsNameErr.value = false
+            it.viewModel.emptyPassErr.value = false
+            it.viewModel.diffPassErr.value = false
             assertTrue(it.applyButton.isEnabled)
 
             // there is a name error
-            it.viewModel.emptyNameErr = true
-            it.viewModel.existsNameErr = false
-            it.viewModel.emptyPassErr = false
-            it.viewModel.diffPassErr = false
+            it.viewModel.emptyNameErr.value = true
+            it.viewModel.existsNameErr.value = false
+            it.viewModel.emptyPassErr.value = false
+            it.viewModel.diffPassErr.value = false
             assertFalse(it.applyButton.isEnabled)
 
             // there is a password error
-            it.viewModel.emptyNameErr = false
-            it.viewModel.existsNameErr = false
-            it.viewModel.emptyPassErr = true
-            it.viewModel.diffPassErr = false
+            it.viewModel.emptyNameErr.value = false
+            it.viewModel.existsNameErr.value = false
+            it.viewModel.emptyPassErr.value = true
+            it.viewModel.diffPassErr.value = false
             assertFalse(it.applyButton.isEnabled)
         }
     }
