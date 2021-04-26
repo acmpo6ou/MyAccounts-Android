@@ -36,7 +36,7 @@ class CreateDatabaseModelTests : ModelTest() {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 
-    val model = CreateDatabaseViewModel()
+    lateinit var model: CreateDatabaseViewModel
     lateinit var spyModel: CreateDatabaseViewModel
 
     private val name = "clean_name"
@@ -45,13 +45,14 @@ class CreateDatabaseModelTests : ModelTest() {
 
     @Before
     fun setup() {
-        val app = MyApp()
+        app = MyApp()
         app.databases = mutableListOf(Database("main"))
+        val spyApp = spy(app) {
+            on { SRC_DIR } doReturn SRC_DIR
+        }
 
-        model.initialize(app, SRC_DIR)
+        model = CreateDatabaseViewModel(spyApp, Dispatchers.Unconfined, Dispatchers.Unconfined)
         spyModel = spy(model) { on { generateSalt() } doReturn salt }
-        spyModel.uiDispatcher = Dispatchers.Unconfined
-        spyModel.defaultDispatcher = Dispatchers.Unconfined
     }
 
     @Test
@@ -83,8 +84,8 @@ class CreateDatabaseModelTests : ModelTest() {
         runBlocking {
             spyModel.apply(name, password)
         }
-        assertEquals(exception.toString(), spyModel.errorMsg)
-        assertFalse(spyModel.loading)
+        assertEquals(exception.toString(), spyModel.errorMsg.value!!)
+        assertFalse(spyModel.loading.value!!)
     }
 
     @Test
@@ -92,7 +93,7 @@ class CreateDatabaseModelTests : ModelTest() {
         runBlocking {
             spyModel.apply(name, password)
         }
-        assertTrue(db in spyModel.databases)
+        assertTrue(db in app.databases)
     }
 
     @Test
@@ -100,7 +101,7 @@ class CreateDatabaseModelTests : ModelTest() {
         runBlocking {
             spyModel.apply(name, password)
         }
-        assertTrue(spyModel.finished)
+        assertTrue(spyModel.finished.value!!)
     }
 
     @Test
@@ -108,6 +109,6 @@ class CreateDatabaseModelTests : ModelTest() {
         runBlocking {
             spyModel.apply(name, password)
         }
-        assertTrue(spyModel.loading)
+        assertTrue(spyModel.loading.value!!)
     }
 }
