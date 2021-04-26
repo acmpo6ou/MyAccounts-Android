@@ -19,24 +19,22 @@
 
 package com.acmpo6ou.myaccounts.database.superclass
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import com.acmpo6ou.myaccounts.MainActivity
-import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.CreateEditFragment
-import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
+import com.acmpo6ou.myaccounts.core.superclass.ErrorFragment
+import com.acmpo6ou.myaccounts.core.superclass.SuperActivityI
 import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
 
 /**
  * Super class for CreateDatabaseFragment and EditDatabaseFragment.
  */
 abstract class CreateEditDatabaseFragment : CreateEditFragment(), ErrorFragment {
-    override val mainActivity: MainActivityI get() = activity as MainActivity
+    override val superActivity get() = activity as SuperActivityI
     override lateinit var lifecycle: LifecycleOwner
     abstract override val viewModel: CreateEditDatabaseModel
 
@@ -50,15 +48,10 @@ abstract class CreateEditDatabaseFragment : CreateEditFragment(), ErrorFragment 
     override val parentName get() = b.parentName
     override val parentPassword get() = b.parentPassword
 
-    // Hides/displays loading progress bar of apply button.
+    // Hides/displays loading progress bar of apply button
     private val loadingObserver = Observer<Boolean> {
-        if (it) {
-            b.progressLoading.visibility = View.VISIBLE
-            b.applyButton.isEnabled = false
-        } else {
-            b.progressLoading.visibility = View.GONE
-            b.applyButton.isEnabled = true
-        }
+        b.progressLoading.visibility = if (it) View.VISIBLE else View.GONE
+        b.applyButton.isEnabled = !it
     }
 
     private var binding: CreateEditDatabaseFragmentBinding? = null
@@ -83,19 +76,8 @@ abstract class CreateEditDatabaseFragment : CreateEditFragment(), ErrorFragment 
         lifecycle = viewLifecycleOwner
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        myContext = requireContext()
-        app = context.applicationContext as MyApp
-    }
-
-    /**
-     * Used to initialize all fields and buttons of the create_edit_database form.
-     */
     override fun initForm() {
         super.initForm()
-
-        // call applyPressed when clicking on the apply button
         applyButton.setOnClickListener {
             viewModel.applyPressed(
                 nameField.text.toString(),
@@ -104,14 +86,8 @@ abstract class CreateEditDatabaseFragment : CreateEditFragment(), ErrorFragment 
         }
     }
 
-    /**
-     * This method initializes view model providing all needed resources.
-     */
     override fun initModel() {
-        val SRC_DIR = myContext.getExternalFilesDir(null)?.path + "/src"
-        viewModel.initialize(app, SRC_DIR)
-
-        viewModel._loading.observe(viewLifecycleOwner, loadingObserver)
+        viewModel.loading.observe(viewLifecycleOwner, loadingObserver)
         super<ErrorFragment>.initModel()
         super<CreateEditFragment>.initModel()
     }
