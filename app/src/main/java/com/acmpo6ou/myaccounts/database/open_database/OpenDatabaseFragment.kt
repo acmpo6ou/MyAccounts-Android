@@ -38,8 +38,8 @@ import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.utils.startDatabaseUtil
 import com.acmpo6ou.myaccounts.core.superclass.ErrorFragment
+import com.acmpo6ou.myaccounts.core.utils.startDatabaseUtil
 import com.acmpo6ou.myaccounts.databinding.OpenDatabaseFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.qualifiers.ActivityContext
@@ -59,7 +59,7 @@ class OpenDatabaseFragment : Fragment(), ErrorFragment {
 
     @Inject
     override lateinit var superActivity: MainActivity
-    override lateinit var lifecycle: LifecycleOwner
+    override lateinit var myLifecycle: LifecycleOwner
 
     var binding: OpenDatabaseFragmentBinding? = null
     val b: OpenDatabaseFragmentBinding get() = binding!!
@@ -122,7 +122,7 @@ class OpenDatabaseFragment : Fragment(), ErrorFragment {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lifecycle = viewLifecycleOwner
+        myLifecycle = viewLifecycleOwner
         initModel()
 
         // Set app bar title to `Open <database name>`

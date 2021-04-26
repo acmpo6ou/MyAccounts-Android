@@ -30,7 +30,7 @@ import com.acmpo6ou.myaccounts.R
 interface ErrorFragment {
     val viewModel: ErrorViewModel
     val superActivity: SuperActivityI
-    val lifecycle: LifecycleOwner
+    val myLifecycle: LifecycleOwner
 
     fun initModel() {
         // Observer to display error dialog
@@ -38,7 +38,7 @@ interface ErrorFragment {
             val errorTitle = superActivity.myContext.resources.getString(R.string.error_title)
             superActivity.showError(errorTitle, it)
         }
-        viewModel.errorMsg.observe(lifecycle, errorObserver)
+        viewModel.errorMsg.observe(myLifecycle, errorObserver)
     }
 }
 

@@ -35,7 +35,7 @@ import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
  */
 abstract class CreateEditDatabaseFragment : CreateEditFragment(), ErrorFragment {
     override val superActivity get() = activity as SuperActivityI
-    override lateinit var lifecycle: LifecycleOwner
+    override lateinit var myLifecycle: LifecycleOwner
     abstract override val viewModel: CreateEditDatabaseModel
 
     override val applyButton get() = b.applyButton
@@ -73,7 +73,7 @@ abstract class CreateEditDatabaseFragment : CreateEditFragment(), ErrorFragment 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lifecycle = viewLifecycleOwner
+        myLifecycle = viewLifecycleOwner
     }
 
     override fun initForm() {

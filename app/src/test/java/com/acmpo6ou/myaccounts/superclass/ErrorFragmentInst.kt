@@ -79,11 +79,11 @@ class TestViewModel : ErrorViewModel {
 class TestFragment : Fragment(), ErrorFragment {
     override val viewModel = TestViewModel()
     override val superActivity: SuperActivityI = mock()
-    override lateinit var lifecycle: LifecycleOwner
+    override lateinit var myLifecycle: LifecycleOwner
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lifecycle = viewLifecycleOwner
+        myLifecycle = viewLifecycleOwner
     }
 
     // dummy onCreateView method
