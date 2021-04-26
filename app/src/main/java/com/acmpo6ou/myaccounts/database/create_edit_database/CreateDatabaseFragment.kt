@@ -23,21 +23,22 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.acmpo6ou.myaccounts.database.superclass.CreateEditDatabaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CreateDatabaseFragment : CreateEditDatabaseFragment() {
-    override lateinit var viewModel: CreateDatabaseViewModel
+    override val viewModel: CreateDatabaseViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CreateDatabaseViewModel::class.java)
         initModel()
         initForm()
 
         // set focus on database name field and display keyboard
         b.databaseName.requestFocus()
-        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm = myContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(b.databaseName, InputMethodManager.SHOW_IMPLICIT)
     }
 }
