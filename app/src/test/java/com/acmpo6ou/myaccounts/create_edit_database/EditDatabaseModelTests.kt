@@ -37,7 +37,7 @@ class EditDatabaseModelTests : ModelTest() {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 
-    val model = EditDatabaseViewModel()
+    lateinit var model: EditDatabaseViewModel
     lateinit var spyModel: EditDatabaseViewModel
 
     private val oldName = "main"
@@ -51,29 +51,30 @@ class EditDatabaseModelTests : ModelTest() {
         app.databases = mutableListOf(Database(oldName, password, salt))
         app.keyCache = mutableMapOf(password to deriveKey(password, salt))
 
-        model.initialize(app, SRC_DIR, faker.str(), 0)
+        val spyApp = spy(app) {
+            on { SRC_DIR } doReturn SRC_DIR
+        }
+
+        model = EditDatabaseViewModel(spyApp, Dispatchers.Unconfined, Dispatchers.Unconfined)
         spyModel = spy(model) { on { generateSalt() } doReturn salt }
 
         doNothing().whenever(spyModel).deleteDatabase(anyString())
         doNothing().whenever(spyModel).createDatabase(any())
-
-        spyModel.uiDispatcher = Dispatchers.Unconfined
-        spyModel.defaultDispatcher = Dispatchers.Unconfined
     }
 
     @Test
     fun `validateName when name of Database didn't change through editing`() {
         // database `main` already exists but it's being edited, so that doesn't count
         model.validateName(oldName)
-        assertFalse(model.existsNameErr)
-        assertFalse(model.emptyNameErr)
+        assertFalse(model.existsNameErr.value!!)
+        assertFalse(model.emptyNameErr.value!!)
     }
 
     @Test
     fun `validateName should use fixName when Database name didn't change through editing`() {
         model.validateName("m/a/i/n/") // will become `main` when cleaned by fixName
-        assertFalse(model.existsNameErr)
-        assertFalse(model.emptyNameErr)
+        assertFalse(model.existsNameErr.value!!)
+        assertFalse(model.emptyNameErr.value!!)
     }
 
     @Test
@@ -102,8 +103,8 @@ class EditDatabaseModelTests : ModelTest() {
         runBlocking {
             spyModel.apply(name, password)
         }
-        assertEquals(exception.toString(), spyModel.errorMsg)
-        assertFalse(spyModel.loading)
+        assertEquals(exception.toString(), spyModel.errorMsg.value!!)
+        assertFalse(spyModel.loading.value!!)
     }
 
     @Test
@@ -112,8 +113,8 @@ class EditDatabaseModelTests : ModelTest() {
             spyModel.apply(name, password)
         }
 
-        assertFalse(Database(oldName, password, salt) in spyModel.databases)
-        assertTrue(db in spyModel.databases)
+        assertFalse(Database(oldName, password, salt) in app.databases)
+        assertTrue(db in app.databases)
     }
 
     @Test
@@ -129,7 +130,7 @@ class EditDatabaseModelTests : ModelTest() {
         runBlocking {
             spyModel.apply(name, password)
         }
-        assertTrue(spyModel.finished)
+        assertTrue(spyModel.finished.value!!)
     }
 
     @Test
@@ -137,6 +138,6 @@ class EditDatabaseModelTests : ModelTest() {
         runBlocking {
             spyModel.apply(name, password)
         }
-        assertTrue(spyModel.loading)
+        assertTrue(spyModel.loading.value!!)
     }
 }
