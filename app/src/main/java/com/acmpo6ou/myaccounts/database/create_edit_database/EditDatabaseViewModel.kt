@@ -45,11 +45,11 @@ open class EditDatabaseViewModel(
         }
 
     /**
-     * This method saves new Database using [saveDatabaseAsync].
+     * Saves new Database using [saveDatabaseAsync].
      * If any error occurred it sets errorMsg to error message.
      *
-     * @param[name] name for the database.
-     * @param[password] password for the database.
+     * @param[name] database name.
+     * @param[password] database password.
      */
     override suspend fun apply(name: String, password: String) {
         try {
@@ -66,9 +66,8 @@ open class EditDatabaseViewModel(
             saveDatabaseAsync(oldDatabase.name, newDatabase).await()
 
             // if password has changed remove old cryptography key from cache
-            if (oldDatabase.password != password) {
+            if (oldDatabase.password != password)
                 app.keyCache.remove(oldDatabase.password)
-            }
 
             // add database to the list, sort the list and notify about creation
             app.databases[databaseIndex] = newDatabase
@@ -83,7 +82,7 @@ open class EditDatabaseViewModel(
     }
 
     /**
-     * This method validates given name, checks whether it's not empty and whether database
+     * Validates given name, checks whether it's not empty and whether database
      * with such name already exists, but it's okay if name doesn't change through editing.
      *
      * If name is empty [emptyNameErr] is set to true.

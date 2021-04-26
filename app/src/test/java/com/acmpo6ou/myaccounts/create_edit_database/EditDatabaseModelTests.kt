@@ -63,22 +63,15 @@ class EditDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `validateName when name of Database didn't change through editing`() {
-        // database `main` already exists but it's being edited, so that doesn't count
-        model.validateName(oldName)
-        assertFalse(model.existsNameErr.value!!)
-        assertFalse(model.emptyNameErr.value!!)
+    fun `apply should set loading to true`() {
+        runBlocking {
+            spyModel.apply(name, password)
+        }
+        assertTrue(spyModel.loading.value!!)
     }
 
     @Test
-    fun `validateName should use fixName when Database name didn't change through editing`() {
-        model.validateName("m/a/i/n/") // will become `main` when cleaned by fixName
-        assertFalse(model.existsNameErr.value!!)
-        assertFalse(model.emptyNameErr.value!!)
-    }
-
-    @Test
-    fun `apply should call saveDatabase`() {
+    fun `apply should call saveDatabaseAsync`() {
         runBlocking {
             spyModel.apply(name, password)
         }
@@ -95,16 +88,11 @@ class EditDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `apply should handle any error`() {
-        val msg = faker.str()
-        val exception = Exception(msg)
-        doAnswer { throw exception }.whenever(spyModel).deleteDatabase(anyString())
-
+    fun `apply should remove cached cryptography key if password has changed`() {
         runBlocking {
-            spyModel.apply(name, password)
+            spyModel.apply(name, "123") // now password is 123
         }
-        assertEquals(exception.toString(), spyModel.errorMsg.value!!)
-        assertFalse(spyModel.loading.value!!)
+        assertFalse(deriveKey(password, salt) in app.keyCache)
     }
 
     @Test
@@ -118,14 +106,6 @@ class EditDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `apply should remove cached cryptography key if password has changed`() {
-        runBlocking {
-            spyModel.apply(name, "123") // now password is 123
-        }
-        assertFalse(deriveKey(password, salt) in app.keyCache)
-    }
-
-    @Test
     fun `apply should set finished to true after successful save of database`() {
         runBlocking {
             spyModel.apply(name, password)
@@ -134,10 +114,30 @@ class EditDatabaseModelTests : ModelTest() {
     }
 
     @Test
-    fun `apply should set loading to true`() {
+    fun `apply should handle any error`() {
+        val msg = faker.str()
+        val exception = Exception(msg)
+        doAnswer { throw exception }.whenever(spyModel).deleteDatabase(anyString())
+
         runBlocking {
             spyModel.apply(name, password)
         }
-        assertTrue(spyModel.loading.value!!)
+        assertEquals(exception.toString(), spyModel.errorMsg.value!!)
+        assertFalse(spyModel.loading.value!!)
+    }
+
+    @Test
+    fun `validateName when name of Database didn't change through editing`() {
+        // database `main` already exists but it's being edited, so that doesn't count
+        model.validateName(oldName)
+        assertFalse(model.existsNameErr.value!!)
+        assertFalse(model.emptyNameErr.value!!)
+    }
+
+    @Test
+    fun `validateName should use fixName when Database name didn't change through editing`() {
+        model.validateName("m/a/i/n/") // will become `main` when cleaned by fixName
+        assertFalse(model.existsNameErr.value!!)
+        assertFalse(model.emptyNameErr.value!!)
     }
 }
