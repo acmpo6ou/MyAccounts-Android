@@ -37,27 +37,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class CreateEditDatabaseFragmentInst {
-    lateinit var scenario: FragmentScenario<TestFragment>
-    lateinit var model: TestDatabaseModel
-    val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
-    lateinit var app: MyApp
-
-    val faker = Faker()
-    val name = faker.str()
-
-    @Before
-    fun setup() {
-        scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
-        app = mock { on { res } doReturn context.resources }
-        model = TestDatabaseModel(app)
-
-        scenario.onFragment {
-            it.viewModel = model
-            it.initModel()
-            it.initForm()
-        }
-    }
+class CreateEditDatabaseFragmentInst : CEFTest() {
 
     @Test
     fun `should display or hide progress bar depending on 'loading' of view model`() {
@@ -93,4 +73,28 @@ class CreateEditDatabaseFragmentInst {
 
 class TestFragment : CreateEditDatabaseFragment() {
     override lateinit var viewModel: TestDatabaseModel
+}
+
+open class CEFTest {
+    lateinit var scenario: FragmentScenario<TestFragment>
+    lateinit var model: TestDatabaseModel
+
+    val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
+    lateinit var app: MyApp
+
+    val faker = Faker()
+    val name = faker.str()
+
+    @Before
+    fun setup() {
+        scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
+        app = mock { on { res } doReturn context.resources }
+        model = TestDatabaseModel(app)
+
+        scenario.onFragment {
+            it.viewModel = model
+            it.initModel()
+            it.initForm()
+        }
+    }
 }

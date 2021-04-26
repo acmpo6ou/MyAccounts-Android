@@ -19,49 +19,18 @@
 
 package com.acmpo6ou.myaccounts.superclass
 
-import android.content.Context
-import androidx.fragment.app.testing.FragmentScenario
-import androidx.fragment.app.testing.launchFragmentInContainer
-import androidx.test.platform.app.InstrumentationRegistry
-import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.create_edit_database.TestDatabaseModel
-import com.acmpo6ou.myaccounts.create_edit_database.TestFragment
+import com.acmpo6ou.myaccounts.create_edit_database.CEFTest
 import com.acmpo6ou.myaccounts.str
-import com.github.javafaker.Faker
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.*
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class CreateEditFragmentInst {
-    lateinit var scenario: FragmentScenario<TestFragment>
-    val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
-
-    lateinit var model: TestDatabaseModel
-    lateinit var app: MyApp
-
-    val faker = Faker()
-    val name = faker.str()
-
-    @Before
-    fun setup() {
-        scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
-        app = mock { on { res } doReturn context.resources }
-        model = TestDatabaseModel(app)
-
-        scenario.onFragment {
-            it.viewModel = model
-            it.initModel()
-            it.initForm()
-        }
-    }
+class CreateEditFragmentInst : CEFTest() {
 
     @Test
     fun `should call validateName when text in nameField changes`() {
