@@ -21,50 +21,52 @@ package com.acmpo6ou.myaccounts.database.create_edit_database
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import com.acmpo6ou.myaccounts.MainActivity
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.database.superclass.CreateEditDatabaseFragment
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+import kotlin.properties.Delegates
 
+@AndroidEntryPoint
 class EditDatabaseFragment : CreateEditDatabaseFragment() {
-    override lateinit var viewModel: EditDatabaseViewModel
-    var args: EditDatabaseFragmentArgs? = null
+    override val viewModel: EditDatabaseViewModel by viewModels()
+    var databaseIndex by Delegates.notNull<Int>()
+
+    @Inject
+    lateinit var app: MyApp
+
+    @Inject
+    override lateinit var superActivity: MainActivity
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(EditDatabaseViewModel::class.java)
+        arguments?.let {
+            val args = EditDatabaseFragmentArgs.fromBundle(it)
+            databaseIndex = args.databaseIndex
+            viewModel.databaseIndex = databaseIndex
+        }
+
         initModel()
         initForm()
     }
 
-    /**
-     * Used to initialize all fields and buttons of the create_edit_database form.
-     */
     override fun initForm() {
         super.initForm()
+        // Set app bar title to `Edit <database name>`
+        val dbName = app.databases[databaseIndex].name
+        val appTitle = myContext.resources.getString(R.string.edit_db, dbName)
+        superActivity.supportActionBar?.title = appTitle
+
         // set name and password fields to data of database being edited
-        args?.let {
-            val database = app.databases[it.databaseIndex]
-            b.databaseName.setText(database.name)
-            b.databasePassword.setText(database.password)
-            b.databaseRepeatPassword.setText(database.password)
-        }
+        val database = app.databases[databaseIndex]
+        b.databaseName.setText(database.name)
+        b.databasePassword.setText(database.password)
+        b.databaseRepeatPassword.setText(database.password)
 
         // change text of apply button from `Create` to `Save`
         b.applyButton.text = myContext.resources.getString(R.string.save)
-    }
-
-    /**
-     * This method initializes view model providing all needed resources.
-     */
-    override fun initModel() {
-        super.initModel()
-        val SRC_DIR = myContext.getExternalFilesDir(null)?.path + "/src"
-        val titleStart = myContext.resources.getString(R.string.edit_db)
-
-        arguments?.let {
-            args = EditDatabaseFragmentArgs.fromBundle(it)
-            val databaseIndex = args!!.databaseIndex
-            viewModel.initialize(app, SRC_DIR, titleStart, databaseIndex)
-        }
     }
 }

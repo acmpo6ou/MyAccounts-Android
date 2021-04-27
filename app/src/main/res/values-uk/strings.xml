@@ -56,7 +56,7 @@
     <string name="big_english_letters">Великі англійські букви</string>
     <string name="small_english_letters">Маленькі англійські букви</string>
     <string name="punctuation">Пунктуація</string>
-    <string name="edit_db">"Редагувати "</string>
+    <string name="edit_db">Редагувати %1$s</string>
     <string name="confirm_going_back">Якщо  ви повністю закриєте програму всі не збережені зміни буде втрачено.</string>
     <string name="cancel">Відміна</string>
     <string name="confirm_account_delete">Ви певні що хочете видалити акаунт %1$s?</string>

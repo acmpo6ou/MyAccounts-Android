@@ -37,9 +37,7 @@ abstract class CreateEditDatabaseModel : CreateEditViewModel(), DatabaseUtils {
 
     val loading = MutableLiveData<Boolean>()
     override val errorMsg = MutableLiveData<String>()
-
     override val itemNames get() = app.databases.map { it.name }
-    var databaseIndex: Int = 0
 
     /**
      * Generates purely random salt for encryption.

@@ -28,6 +28,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import javax.inject.Inject
+import kotlin.properties.Delegates
 
 @HiltViewModel
 open class EditDatabaseViewModel(
@@ -38,6 +39,7 @@ open class EditDatabaseViewModel(
 
     @Inject
     constructor(app: MyApp) : this(app, Dispatchers.Default, Dispatchers.Main)
+    var databaseIndex by Delegates.notNull<Int>()
 
     open fun saveDatabaseAsync(oldName: String, database: Database) =
         viewModelScope.async(defaultDispatcher) {

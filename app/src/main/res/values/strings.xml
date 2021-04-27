@@ -98,7 +98,7 @@
     <string name="big_english_letters">Big english letters</string>
     <string name="small_english_letters">Small english letters</string>
     <string name="punctuation">Punctuation</string>
-    <string name="edit_db">"Edit "</string>
+    <string name="edit_db">Edit %1$s</string>
     <string name="confirm_going_back">If you completely close the app any unsaved changes will be lost.</string>
     <string name="cancel">Cancel</string>
     <string name="confirm_account_delete">Are you sure you want to delete account %1$s?</string>
