@@ -19,62 +19,88 @@
 
 package com.acmpo6ou.myaccounts.create_edit_database
 
-import android.os.Build
-import androidx.fragment.app.testing.FragmentScenario
-import androidx.fragment.app.testing.launchFragmentInContainer
+import android.content.Context
+import android.content.SharedPreferences
+import android.os.Bundle
 import androidx.test.platform.app.InstrumentationRegistry
-import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
-import com.acmpo6ou.myaccounts.database.databases_list.Database
+import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.core.AppModule
 import com.acmpo6ou.myaccounts.database.create_edit_database.EditDatabaseFragment
+import com.acmpo6ou.myaccounts.database.databases_list.Database
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityModule
+import com.acmpo6ou.myaccounts.launchFragmentInHiltContainer
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
+import dagger.hilt.android.scopes.ActivityScoped
+import dagger.hilt.android.testing.BindValue
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.LooperMode
+import javax.inject.Singleton
 
+@HiltAndroidTest
+@UninstallModules(AppModule::class, MainActivityModule::class)
 @RunWith(RobolectricTestRunner::class)
-@LooperMode(LooperMode.Mode.PAUSED)
-@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class EditDatabaseFragmentInst {
-    lateinit var scenario: FragmentScenario<EditDatabaseFragment>
-    val context = InstrumentationRegistry.getInstrumentation().targetContext
-    val app = context.applicationContext as MyApp
+    @get:Rule
+    var hiltAndroidRule = HiltAndroidRule(this)
+
+    val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
+    lateinit var fragment: EditDatabaseFragment
+    private val b get() = fragment.b
+
+    @BindValue
+    @JvmField
+    @ActivityScoped
+    val superActivity: MainActivity = mock()
+
+    @BindValue
+    @JvmField
+    @ActivityScoped
+    val mainActivityI: MainActivityI = mock()
+
+    @BindValue
+    @JvmField
+    @Singleton
+    val sharedPreferences: SharedPreferences = mock()
+
+    @BindValue
+    @Singleton
+    lateinit var app: MyApp
     lateinit var db: Database
 
     @Before
     fun setup() {
         db = Database("main", "123")
-        app.databases = mutableListOf(db)
-        app.res = context.resources
-
-        scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
-        scenario.onFragment {
-            it.app = app
-            it.initModel()
-            it.args = mock { on { databaseIndex } doReturn 0 }
-            it.initForm()
+        app = mock {
+            on { resources } doReturn context.resources
+            on { databases } doReturn mutableListOf(db)
         }
+
+        val bundle = Bundle()
+        bundle.putInt("databaseIndex", 0)
+        fragment = launchFragmentInHiltContainer(bundle)
     }
 
     @Test
     fun `initForm should fill name and password fields`() {
-        scenario.onFragment {
-            assertEquals(db.name, it.b.databaseName.text.toString())
-            assertEquals(db.password, it.b.databasePassword.text.toString())
-            assertEquals(db.password, it.b.databaseRepeatPassword.text.toString())
-        }
+        assertEquals(db.name, b.databaseName.text.toString())
+        assertEquals(db.password, b.databasePassword.text.toString())
+        assertEquals(db.password, b.databaseRepeatPassword.text.toString())
     }
 
     @Test
     fun `initForm should change text of apply button`() {
         val saveText = context.resources.getString(R.string.save)
-        scenario.onFragment {
-            assertEquals(saveText, it.b.applyButton.text)
-        }
+        assertEquals(saveText, b.applyButton.text)
     }
 }
