@@ -92,6 +92,7 @@ open class CEFTest {
         model = TestDatabaseModel(app)
 
         scenario.onFragment {
+            it.myContext = context
             it.viewModel = model
             it.initModel()
             it.initForm()

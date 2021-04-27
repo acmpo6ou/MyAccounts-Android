@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.superclass
 
+import android.app.Dialog
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.create_edit_database.CEFTest
 import com.acmpo6ou.myaccounts.str
@@ -28,6 +29,7 @@ import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.shadows.ShadowAlertDialog
 
 @RunWith(RobolectricTestRunner::class)
 class CreateEditFragmentInst : CEFTest() {
@@ -65,7 +67,7 @@ class CreateEditFragmentInst : CEFTest() {
     }
 
     @Test
-    fun `should call validatePasswords when password in either password fields changes`() {
+    fun `should call validatePasswords when password in either of password fields changes`() {
         scenario.onFragment {
             it.viewModel = spy(model)
             val str = faker.str()
@@ -124,6 +126,15 @@ class CreateEditFragmentInst : CEFTest() {
             it.viewModel.emptyPassErr.value = true
             it.viewModel.diffPassErr.value = false
             assertFalse(it.applyButton.isEnabled)
+        }
+    }
+
+    @Test
+    fun `click on Generate button should display dialog`() {
+        scenario.onFragment {
+            it.buttonGenerate.performClick()
+            val dialog: Dialog? = ShadowAlertDialog.getLatestDialog()
+            assertNotNull(dialog)
         }
     }
 }
