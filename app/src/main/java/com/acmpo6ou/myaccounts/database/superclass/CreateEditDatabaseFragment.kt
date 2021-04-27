@@ -26,14 +26,13 @@ import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.acmpo6ou.myaccounts.core.superclass.CreateEditFragment
-import com.acmpo6ou.myaccounts.core.superclass.ErrorFragment
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivityI
 import com.acmpo6ou.myaccounts.databinding.CreateEditDatabaseFragmentBinding
 
 /**
  * Super class for CreateDatabaseFragment and EditDatabaseFragment.
  */
-abstract class CreateEditDatabaseFragment : CreateEditFragment(), ErrorFragment {
+abstract class CreateEditDatabaseFragment : CreateEditFragment() {
     override val superActivity get() = activity as SuperActivityI
     override lateinit var myLifecycle: LifecycleOwner
     abstract override val viewModel: CreateEditDatabaseModel
@@ -88,7 +87,6 @@ abstract class CreateEditDatabaseFragment : CreateEditFragment(), ErrorFragment 
 
     override fun initModel() {
         viewModel.loading.observe(viewLifecycleOwner, loadingObserver)
-        super<ErrorFragment>.initModel()
-        super<CreateEditFragment>.initModel()
+        super.initModel()
     }
 }

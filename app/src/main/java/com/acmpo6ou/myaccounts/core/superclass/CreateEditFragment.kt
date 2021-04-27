@@ -37,7 +37,7 @@ import javax.inject.Inject
 /**
  * Super class for all fragments that create/edit items.
  */
-abstract class CreateEditFragment : Fragment() {
+abstract class CreateEditFragment : Fragment(), ErrorFragment {
     abstract val nameField: TextInputEditText
     abstract val passwordField: TextInputEditText
     abstract val repeatPasswordField: TextInputEditText
@@ -51,7 +51,7 @@ abstract class CreateEditFragment : Fragment() {
     @Inject
     @ActivityContext
     lateinit var myContext: Context
-    abstract val viewModel: CreateEditViewModel
+    abstract override val viewModel: CreateEditViewModel
 
     // Hides/displays name error tip
     private val nameErrorObserver = Observer<String?> {
@@ -109,7 +109,8 @@ abstract class CreateEditFragment : Fragment() {
         }
     }
 
-    open fun initModel() {
+    override fun initModel() {
+        super.initModel()
         // init observers
         viewModel.apply {
             viewLifecycleOwner.let {

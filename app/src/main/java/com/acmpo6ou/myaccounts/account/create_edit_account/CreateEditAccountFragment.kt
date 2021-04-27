@@ -21,25 +21,23 @@ package com.acmpo6ou.myaccounts.account.create_edit_account
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.superclass.CreateEditFragment
 import com.acmpo6ou.myaccounts.core.utils.getFileName
 import com.acmpo6ou.myaccounts.databinding.CreateEditAccountFragmentBinding
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 /**
  * Super class for all fragments that create/edit accounts.
@@ -47,6 +45,12 @@ import java.util.concurrent.TimeUnit
 abstract class CreateEditAccountFragment : CreateEditFragment() {
     abstract override val viewModel: CreateAccountViewModel
     val LOAD_FILE_RC = 808
+
+    override val superActivity get() = activity as AccountsActivity
+    override lateinit var myLifecycle: LifecycleOwner
+
+    @Inject
+    lateinit var adapter: AttachedFilesAdapter
 
     override val applyButton get() = b.applyButton
     override val buttonGenerate get() = b.accountGenerate
@@ -61,16 +65,6 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
     private var binding: CreateEditAccountFragmentBinding? = null
     val b: CreateEditAccountFragmentBinding get() = binding!!
 
-    // displays error dialog if there is and error loading attached files
-    val errorObserver = Observer<String> {
-        MaterialAlertDialogBuilder(myContext)
-            .setTitle(R.string.error_loading)
-            .setIcon(R.drawable.ic_error)
-            .setNeutralButton("Ok") { _: DialogInterface, _: Int -> }
-            .setMessage(it)
-            .show()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -80,15 +74,14 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
         return b.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        myLifecycle = viewLifecycleOwner
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        myContext = requireContext()
-        app = context.applicationContext as MyApp
     }
 
     /**
@@ -110,11 +103,7 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
         }
     }
 
-    /**
-     * Initializes AttachedFilesAdapter for attachedFilesList recycler view.
-     */
     fun initAdapter() {
-        val adapter = AttachedFilesAdapter(this)
         viewModel.notifyAdded?.observe(viewLifecycleOwner, adapter.addedObserver)
         viewModel.notifyRemoved?.observe(viewLifecycleOwner, adapter.removedObserver)
 
@@ -122,14 +111,6 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
         b.attachedFilesList.adapter = adapter
     }
 
-    override fun initModel() {
-        super.initModel()
-        viewModel.errorMsg.observe(viewLifecycleOwner, errorObserver)
-    }
-
-    /**
-     * Used to initialize all fields and buttons of the create_edit_account form.
-     */
     @SuppressLint("SimpleDateFormat")
     override fun initForm() {
         super.initForm()
