@@ -19,17 +19,15 @@
 
 package com.acmpo6ou.myaccounts.create_edit_account
 
-import android.app.Dialog
+import android.content.Context
 import android.content.Intent
-import android.os.Build
-import android.widget.TextView
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.account.create_edit_account.CreateAccountViewModel
 import com.acmpo6ou.myaccounts.account.create_edit_account.CreateEditAccountFragment
 import com.acmpo6ou.myaccounts.str
-import com.acmpo6ou.myaccounts.account.create_edit_account.CreateAccountViewModel
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.doNothing
 import com.nhaarman.mockitokotlin2.mock
@@ -43,30 +41,23 @@ import org.mockito.ArgumentMatchers.anyString
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.LooperMode
-import org.robolectric.shadows.ShadowAlertDialog
 
 @RunWith(RobolectricTestRunner::class)
-@LooperMode(LooperMode.Mode.PAUSED)
-@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class CreateEditAccountInst {
-    val context = InstrumentationRegistry.getInstrumentation().targetContext
-    class TestFragment : CreateEditAccountFragment() {
-        override val viewModel: CreateAccountViewModel = mock()
-    }
-
     private lateinit var scenario: FragmentScenario<TestFragment>
+    val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     val faker = Faker()
 
     @Before
     fun setup() {
         scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
         scenario.onFragment {
+            it.myContext = context
             it.initForm()
+
             doNothing().whenever(it.viewModel).applyPressed(
-                anyString(), anyString(),
-                anyString(), anyString(), anyString(), anyString()
+                anyString(), anyString(), anyString(),
+                anyString(), anyString(), anyString(),
             )
         }
     }
@@ -109,21 +100,8 @@ class CreateEditAccountInst {
         assertEquals(expectedCategory, intent.categories.first())
         assertEquals(expectedType, intent.type)
     }
+}
 
-    @Test
-    fun `errorObserver should display error dialog`() {
-        val expectedTitle = context.resources.getString(R.string.error_loading)
-        val expectedMsg = faker.str()
-
-        scenario.onFragment {
-            it.errorObserver.onChanged(expectedMsg)
-        }
-
-        val dialog: Dialog = ShadowAlertDialog.getLatestDialog()
-        val title = dialog.findViewById<TextView>(R.id.alertTitle)
-        val message = dialog.findViewById<TextView>(android.R.id.message)
-
-        assertEquals(expectedTitle, title.text)
-        assertEquals(expectedMsg, message.text)
-    }
+class TestFragment : CreateEditAccountFragment() {
+    override val viewModel: CreateAccountViewModel = mock()
 }
