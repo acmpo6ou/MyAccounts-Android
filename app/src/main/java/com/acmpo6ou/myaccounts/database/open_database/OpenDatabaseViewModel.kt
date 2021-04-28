@@ -74,7 +74,6 @@ open class OpenDatabaseViewModel(
      * displaying error dialog saying that the database is corrupted.
      *
      * @param[password] password for the database.
-     * @param[databaseIndex] database index.
      */
     open suspend fun verifyPassword(password: String, databaseIndex: Int) {
         try {
