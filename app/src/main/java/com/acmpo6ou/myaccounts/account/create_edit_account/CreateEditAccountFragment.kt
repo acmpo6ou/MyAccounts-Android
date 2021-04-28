@@ -26,6 +26,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.acmpo6ou.myaccounts.AccountsActivity
@@ -44,8 +45,6 @@ import javax.inject.Inject
  */
 abstract class CreateEditAccountFragment : CreateEditFragment() {
     abstract override val viewModel: CreateAccountViewModel
-    val LOAD_FILE_RC = 808
-
     override val superActivity get() = activity as AccountsActivity
     override lateinit var myLifecycle: LifecycleOwner
 
@@ -68,7 +67,7 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = CreateEditAccountFragmentBinding.inflate(layoutInflater, container, false)
         return b.root
@@ -84,6 +83,16 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
         binding = null
     }
 
+    private val loadFileLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.data?.let {
+                    val fileName = myContext.getFileName(it) ?: ""
+                    viewModel.addFile(it, fileName)
+                }
+            }
+        }
+
     /**
      * Displays dialog to choose file to attach.
      */
@@ -91,21 +100,12 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
         with(Intent(Intent.ACTION_OPEN_DOCUMENT)) {
             addCategory(Intent.CATEGORY_OPENABLE)
             type = "*/*"
-            startActivityForResult(this, LOAD_FILE_RC)
+            loadFileLauncher.launch(this)
         }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != Activity.RESULT_OK) return
-        if (requestCode == LOAD_FILE_RC) data?.data?.let {
-            val fileName = myContext.getFileName(it) ?: ""
-            viewModel.addFile(it, fileName)
-        }
-    }
 
     fun initAdapter() {
-        viewModel.notifyAdded?.observe(viewLifecycleOwner, adapter.addedObserver)
-        viewModel.notifyRemoved?.observe(viewLifecycleOwner, adapter.removedObserver)
+        viewModel.notifyAdded.observe(viewLifecycleOwner, adapter.addedObserver)
+        viewModel.notifyRemoved.observe(viewLifecycleOwner, adapter.removedObserver)
 
         b.attachedFilesList.layoutManager = LinearLayoutManager(context)
         b.attachedFilesList.adapter = adapter
@@ -115,7 +115,6 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
     override fun initForm() {
         super.initForm()
 
-        // call applyPressed when clicking on the apply button
         applyButton.setOnClickListener {
             viewModel.applyPressed(
                 b.accountName.text.toString(),
