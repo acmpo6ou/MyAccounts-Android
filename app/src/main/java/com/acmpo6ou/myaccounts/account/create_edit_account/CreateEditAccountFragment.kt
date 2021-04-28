@@ -29,8 +29,8 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.acmpo6ou.myaccounts.AccountsActivity
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsActivityI
 import com.acmpo6ou.myaccounts.core.superclass.CreateEditFragment
 import com.acmpo6ou.myaccounts.core.utils.getFileName
 import com.acmpo6ou.myaccounts.databinding.CreateEditAccountFragmentBinding
@@ -45,11 +45,10 @@ import javax.inject.Inject
  */
 abstract class CreateEditAccountFragment : CreateEditFragment() {
     abstract override val viewModel: CreateAccountViewModel
-    override val superActivity get() = activity as AccountsActivity
     override lateinit var myLifecycle: LifecycleOwner
 
     @Inject
-    lateinit var adapter: AttachedFilesAdapter
+    override lateinit var superActivity: AccountsActivityI
 
     override val applyButton get() = b.applyButton
     override val buttonGenerate get() = b.accountGenerate
@@ -104,11 +103,17 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
         }
 
     fun initAdapter() {
+        val adapter = AttachedFilesAdapter(this)
         viewModel.notifyAdded.observe(viewLifecycleOwner, adapter.addedObserver)
         viewModel.notifyRemoved.observe(viewLifecycleOwner, adapter.removedObserver)
 
         b.attachedFilesList.layoutManager = LinearLayoutManager(context)
         b.attachedFilesList.adapter = adapter
+    }
+
+    override fun initModel() {
+        super.initModel()
+        viewModel.accounts = superActivity.database.data
     }
 
     @SuppressLint("SimpleDateFormat")

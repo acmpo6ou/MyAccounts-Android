@@ -25,10 +25,14 @@ import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.CreateEditViewModel
 import com.acmpo6ou.myaccounts.database.databases_list.Account
 import com.acmpo6ou.myaccounts.database.databases_list.DbMap
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-open class CreateAccountViewModel : CreateEditViewModel() {
-    override lateinit var app: MyApp
-    lateinit var model: LoadFileModel
+@HiltViewModel
+open class CreateAccountViewModel @Inject constructor(
+    override val app: MyApp,
+    val model: LoadFileModel,
+) : CreateEditViewModel() {
 
     lateinit var accounts: DbMap
     override val itemNames get() = accounts.values.toList().map { it.accountName }
@@ -39,17 +43,6 @@ open class CreateAccountViewModel : CreateEditViewModel() {
     val notifyAdded = MutableLiveData<Int>()
     val notifyRemoved = MutableLiveData<Int>()
     override var errorMsg = MutableLiveData<String>()
-
-    /**
-     * Initializes model with needed resources.
-     * @param[app] application instance used to get resources.
-     * @param[accounts] accounts map.
-     */
-    open fun initialize(app: MyApp, accounts: DbMap) {
-        this.app = app
-        this.accounts = accounts
-        model = LoadFileModel(app.contentResolver)
-    }
 
     /**
      * Adds given [locationUri] to [filePaths] and notifies about addition.
@@ -84,7 +77,7 @@ open class CreateAccountViewModel : CreateEditViewModel() {
         email: String,
         password: String,
         date: String,
-        comment: String
+        comment: String,
     ) {
         val attachedFiles = mutableMapOf<String, String>()
         try {

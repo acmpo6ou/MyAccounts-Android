@@ -23,18 +23,16 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.lifecycle.ViewModelProvider
-import com.acmpo6ou.myaccounts.AccountsActivity
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CreateAccountFragment : CreateEditAccountFragment() {
-    override lateinit var viewModel: CreateAccountViewModel
-    private val accountsActivity get() = activity as? AccountsActivity
+    override val viewModel: CreateAccountViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CreateAccountViewModel::class.java)
-        accountsActivity?.database?.data?.let {
-            viewModel.initialize(app, it)
+        superActivity.database.data.let {
             initModel()
             initAdapter()
         }
@@ -42,7 +40,7 @@ class CreateAccountFragment : CreateEditAccountFragment() {
 
         // set focus on account name field and display keyboard
         b.accountName.requestFocus()
-        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm = myContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(b.accountName, InputMethodManager.SHOW_IMPLICIT)
     }
 }

@@ -19,13 +19,18 @@
 
 package com.acmpo6ou.myaccounts.account.create_edit_account
 
-import android.content.ContentResolver
+import android.content.Context
 import android.net.Uri
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.FileInputStream
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-open class LoadFileModel(val contentResolver: ContentResolver) {
-
+@Singleton
+open class LoadFileModel @Inject constructor(
+    @ApplicationContext private val context: Context,
+) {
     /**
      * Loads file from given [locationUri] and encodes it in Base64 format.
      *
@@ -33,7 +38,7 @@ open class LoadFileModel(val contentResolver: ContentResolver) {
      * @return Base64 encoded file content.
      */
     open fun loadFile(locationUri: Uri): String {
-        val descriptor = contentResolver.openFileDescriptor(locationUri, "r")
+        val descriptor = context.contentResolver.openFileDescriptor(locationUri, "r")
         val location = FileInputStream(descriptor?.fileDescriptor)
 
         val data = location.readBytes()
