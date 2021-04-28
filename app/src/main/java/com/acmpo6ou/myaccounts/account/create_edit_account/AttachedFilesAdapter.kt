@@ -19,7 +19,6 @@
 
 package com.acmpo6ou.myaccounts.account.create_edit_account
 
-import android.content.Context
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
@@ -31,14 +30,9 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
-import dagger.hilt.android.qualifiers.ActivityContext
-import dagger.hilt.android.scopes.FragmentScoped
-import javax.inject.Inject
 
-@FragmentScoped
-class AttachedFilesAdapter @Inject constructor(
+class AttachedFilesAdapter(
     private val view: CreateEditAccountFragment,
-    @ActivityContext private val context: Context,
 ) : RecyclerView.Adapter<AttachedFilesAdapter.ViewHolder>() {
 
     private val attachedFiles get() = view.viewModel.attachedFilesList
@@ -64,13 +58,13 @@ class AttachedFilesAdapter @Inject constructor(
 
         // set popup menu on item
         holder.menu.setOnClickListener { it ->
-            val popup = PopupMenu(context, it)
+            val popup = PopupMenu(view.myContext, it)
             popup.inflate(R.menu.attached_file_item_menu)
 
             // set color of `Remove` item to red
             popup.menu.findItem(R.id.remove_attached_file).let {
                 val spanStr = SpannableString(it.title)
-                val redColor = ContextCompat.getColor(context, R.color.red)
+                val redColor = ContextCompat.getColor(view.myContext, R.color.red)
                 spanStr.setSpan(ForegroundColorSpan(redColor), 0, it.title.length, 0)
                 it.title = spanStr
             }
