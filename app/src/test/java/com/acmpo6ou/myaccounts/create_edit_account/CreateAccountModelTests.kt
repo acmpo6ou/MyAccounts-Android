@@ -22,6 +22,7 @@ package com.acmpo6ou.myaccounts.create_edit_account
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.*
 import com.acmpo6ou.myaccounts.account.create_edit_account.CreateAccountViewModel
+import com.acmpo6ou.myaccounts.account.create_edit_account.LoadFileModel
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.doReturn
@@ -37,25 +38,28 @@ class CreateAccountModelTests : ModelTest() {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 
-    val model = CreateAccountViewModel()
-    private val fileName = Faker().str()
+    lateinit var viewModel: CreateAccountViewModel
+    lateinit var model: LoadFileModel
 
+    private val fileName = Faker().str()
     private val attachedFileName = "test.txt"
     override val location = "$accountsDir/$attachedFileName"
+
     private val decodedContent = "This is a simple file.\nTo test PyQtAccounts.\nHello World!\n"
     private val encodedContent =
         "VGhpcyBpcyBhIHNpbXBsZSBmaWxlLgpUbyB0ZXN0IFB5UXRBY2NvdW50cy4KSGVsbG8gV29ybGQhCg=="
 
     @Before
     fun setup() {
-        val app: MyApp = mock { on { contentResolver } doReturn contentResolver }
-        model.initialize(app, databaseMap.copy())
+        model = mock { on { loadFile(locationUri) } doReturn encodedContent }
+        viewModel = CreateAccountViewModel(mock(), model)
+        viewModel.accounts = databaseMap.copy()
     }
 
     @Test
     fun `applyPressed should create new account`() {
         // prepare attached file to load
-        model.filePaths[attachedFileName] = locationUri
+        viewModel.filePaths[attachedFileName] = locationUri
         File(location).apply {
             createNewFile()
             writeText(decodedContent)
@@ -65,7 +69,7 @@ class CreateAccountModelTests : ModelTest() {
         val expectedAccount = account.copy()
         expectedAccount.attachedFiles = mutableMapOf(attachedFileName to encodedContent)
 
-        model.applyPressed(
+        viewModel.applyPressed(
             account.accountName,
             account.username,
             account.email,
@@ -73,7 +77,7 @@ class CreateAccountModelTests : ModelTest() {
             account.date,
             account.comment
         )
-        assertEquals(expectedAccount, model.accounts[account.accountName])
+        assertEquals(expectedAccount, viewModel.accounts[account.accountName])
     }
 
     @Test
@@ -81,19 +85,18 @@ class CreateAccountModelTests : ModelTest() {
         val msg = faker.str()
         val exception = Exception(msg)
 
-        model.model = mock()
-        doAnswer { throw exception }.whenever(model.model).loadFile(locationUri)
+        doAnswer { throw exception }.whenever(model).loadFile(locationUri)
 
-        model.filePaths[fileName] = locationUri
-        model.applyPressed("", "", "", "", "", "")
+        viewModel.filePaths[fileName] = locationUri
+        viewModel.applyPressed("", "", "", "", "", "")
 
-        assertEquals(exception.toString(), model.errorMsg.value)
-        assertNotEquals(true, model.finished.value)
+        assertEquals(exception.toString(), viewModel.errorMsg.value)
+        assertNotEquals(true, viewModel.finished.value)
     }
 
     @Test
     fun `applyPressed should set finished to true`() {
-        model.applyPressed(
+        viewModel.applyPressed(
             account.accountName,
             account.username,
             account.email,
@@ -101,33 +104,33 @@ class CreateAccountModelTests : ModelTest() {
             account.date,
             account.comment
         )
-        assertTrue(model.finished.value!!)
+        assertTrue(viewModel.finished.value!!)
     }
 
     @Test
     fun `addFile should add file to filePaths`() {
-        model.addFile(locationUri, fileName)
-        assertTrue(fileName in model.filePaths)
-        assertEquals(locationUri, model.filePaths[fileName])
+        viewModel.addFile(locationUri, fileName)
+        assertTrue(fileName in viewModel.filePaths)
+        assertEquals(locationUri, viewModel.filePaths[fileName])
     }
 
     @Test
     fun `addFile should notify about addition`() {
-        model.addFile(locationUri, fileName)
-        assertEquals(0, model.notifyAdded.value)
+        viewModel.addFile(locationUri, fileName)
+        assertEquals(0, viewModel.notifyAdded.value)
     }
 
     @Test
     fun `removeFile should remove file from filePaths`() {
-        model.filePaths[fileName] = locationUri
-        model.removeFile(0)
-        assertFalse(fileName in model.filePaths)
+        viewModel.filePaths[fileName] = locationUri
+        viewModel.removeFile(0)
+        assertFalse(fileName in viewModel.filePaths)
     }
 
     @Test
     fun `removeFile should notify about removal`() {
-        model.filePaths[fileName] = locationUri
-        model.removeFile(0)
-        assertEquals(0, model.notifyRemoved.value)
+        viewModel.filePaths[fileName] = locationUri
+        viewModel.removeFile(0)
+        assertEquals(0, viewModel.notifyRemoved.value)
     }
 }
