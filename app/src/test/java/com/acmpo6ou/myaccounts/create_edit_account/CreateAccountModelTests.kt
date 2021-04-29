@@ -57,57 +57,6 @@ class CreateAccountModelTests : ModelTest() {
     }
 
     @Test
-    fun `applyPressed should create new account`() {
-        // prepare attached file to load
-        viewModel.filePaths[attachedFileName] = locationUri
-        File(location).apply {
-            createNewFile()
-            writeText(decodedContent)
-        }
-        setupInputResolver()
-
-        val expectedAccount = account.copy()
-        expectedAccount.attachedFiles = mutableMapOf(attachedFileName to encodedContent)
-
-        viewModel.applyPressed(
-            account.accountName,
-            account.username,
-            account.email,
-            account.password,
-            account.date,
-            account.comment
-        )
-        assertEquals(expectedAccount, viewModel.accounts[account.accountName])
-    }
-
-    @Test
-    fun `applyPressed should handle any exception`() {
-        val msg = faker.str()
-        val exception = Exception(msg)
-
-        doAnswer { throw exception }.whenever(model).loadFile(locationUri)
-
-        viewModel.filePaths[fileName] = locationUri
-        viewModel.applyPressed("", "", "", "", "", "")
-
-        assertEquals(exception.toString(), viewModel.errorMsg.value)
-        assertNotEquals(true, viewModel.finished.value)
-    }
-
-    @Test
-    fun `applyPressed should set finished to true`() {
-        viewModel.applyPressed(
-            account.accountName,
-            account.username,
-            account.email,
-            account.password,
-            account.date,
-            account.comment
-        )
-        assertTrue(viewModel.finished.value!!)
-    }
-
-    @Test
     fun `addFile should add file to filePaths`() {
         viewModel.addFile(locationUri, fileName)
         assertTrue(fileName in viewModel.filePaths)
@@ -132,5 +81,55 @@ class CreateAccountModelTests : ModelTest() {
         viewModel.filePaths[fileName] = locationUri
         viewModel.removeFile(0)
         assertEquals(0, viewModel.notifyRemoved.value)
+    }
+
+    @Test
+    fun `applyPressed should create new account`() {
+        // prepare attached file to load
+        viewModel.filePaths[attachedFileName] = locationUri
+        File(location).apply {
+            createNewFile()
+            writeText(decodedContent)
+        }
+        setupInputResolver()
+
+        val expectedAccount = account.copy()
+        expectedAccount.attachedFiles = mutableMapOf(attachedFileName to encodedContent)
+
+        viewModel.applyPressed(
+            account.accountName,
+            account.username,
+            account.email,
+            account.password,
+            account.date,
+            account.comment
+        )
+        assertEquals(expectedAccount, viewModel.accounts[account.accountName])
+    }
+
+    @Test
+    fun `applyPressed should set finished to true`() {
+        viewModel.applyPressed(
+            account.accountName,
+            account.username,
+            account.email,
+            account.password,
+            account.date,
+            account.comment
+        )
+        assertTrue(viewModel.finished.value!!)
+    }
+
+    @Test
+    fun `applyPressed should handle any exception`() {
+        val msg = faker.str()
+        val exception = Exception(msg)
+        doAnswer { throw exception }.whenever(model).loadFile(locationUri)
+
+        viewModel.filePaths[fileName] = locationUri
+        viewModel.applyPressed("", "", "", "", "", "")
+
+        assertEquals(exception.toString(), viewModel.errorMsg.value)
+        assertNotEquals(true, viewModel.finished.value)
     }
 }

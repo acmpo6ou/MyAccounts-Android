@@ -47,8 +47,8 @@ open class CreateAccountViewModel @Inject constructor(
     /**
      * Adds given [locationUri] to [filePaths] and notifies about addition.
      *
-     * @param[locationUri] uri containing path to file that needs to be attached.
-     * @param[fileName] name of the file that needs to be attached.
+     * @param[locationUri] uri containing path to file to be attached.
+     * @param[fileName] name of the file to be attached.
      */
     open fun addFile(locationUri: Uri, fileName: String) {
         filePaths[fileName] = locationUri
