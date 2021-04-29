@@ -32,10 +32,8 @@ class CreateAccountFragment : CreateEditAccountFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        superActivity.database.data.let {
-            initModel()
-            initAdapter()
-        }
+        initModel()
+        initAdapter()
         initForm()
 
         // set focus on account name field and display keyboard
