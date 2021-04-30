@@ -21,23 +21,25 @@ package com.acmpo6ou.myaccounts.account.create_edit_account
 
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.database.databases_list.Account
-import com.acmpo6ou.myaccounts.database.databases_list.DbMap
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class EditAccountViewModel : CreateAccountViewModel() {
-    var oldAccount: Account? = null
+@HiltViewModel
+class EditAccountViewModel @Inject constructor(
+    app: MyApp,
+    model: LoadFileModel,
+) : CreateAccountViewModel(app, model) {
+    private lateinit var oldAccount: Account
 
     /**
      * Initializes model with needed resources.
-     * @param[app] application instance used to get resources.
-     * @param[accounts] accounts map.
      * @param[accountName] name of account being edited.
      */
-    fun initialize(app: MyApp, accounts: DbMap, accountName: String) {
-        super.initialize(app, accounts)
-        oldAccount = accounts[accountName]
+    fun initialize(accountName: String) {
+        oldAccount = accounts[accountName]!!
 
         // fill filePaths with existing attached files
-        oldAccount?.attachedFiles?.keys?.forEach {
+        oldAccount.attachedFiles.keys.forEach {
             filePaths[it] = null
         }
     }
@@ -59,15 +61,15 @@ class EditAccountViewModel : CreateAccountViewModel() {
                     attachedFiles[fileName] = content
                 } else {
                     // and add existing ones
-                    attachedFiles[fileName] = oldAccount!!.attachedFiles[fileName] as String
+                    attachedFiles[fileName] = oldAccount.attachedFiles[fileName] as String
                 }
             }
 
             // remove old account and create new one
-            accounts.remove(oldAccount?.accountName)
+            accounts.remove(oldAccount.accountName)
             accounts[accountName] = Account(
                 accountName, username, email, password, date, comment,
-                oldAccount!!.copyEmail, attachedFiles
+                oldAccount.copyEmail, attachedFiles
             )
 
             finished.value = true // notify about successful edition
@@ -86,7 +88,7 @@ class EditAccountViewModel : CreateAccountViewModel() {
      * @param[name] name to validate.
      */
     override fun validateName(name: String) {
-        val oldName = oldAccount?.accountName
+        val oldName = oldAccount.accountName
 
         // it's okay if name didn't change through editing
         if (oldName == name) {

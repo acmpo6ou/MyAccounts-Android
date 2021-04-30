@@ -21,40 +21,37 @@ package com.acmpo6ou.myaccounts.account.create_edit_account
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.ViewModelProvider
-import com.acmpo6ou.myaccounts.AccountsActivity
+import androidx.fragment.app.viewModels
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.database.databases_list.Account
-import com.acmpo6ou.myaccounts.database.databases_list.DbMap
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class EditAccountFragment : CreateEditAccountFragment() {
-    override lateinit var viewModel: EditAccountViewModel
-    private val accountsActivity get() = activity as? AccountsActivity
+    override val viewModel: EditAccountViewModel by viewModels()
+    lateinit var accountName: String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(EditAccountViewModel::class.java)
+        accountName = arguments?.getString("accountName")!!
 
-        val accounts = accountsActivity?.database?.data
-        val accountName = arguments?.getString("accountName")
-
-        if (accounts != null && accountName != null) {
-            viewModel.initialize(app, accounts, accountName)
-            initModel()
-            initAdapter()
-
-            initForm()
-            setAccount(accounts, accountName)
-        }
+        initModel()
+        initAdapter()
+        initForm()
     }
 
-    /**
-     * Fills all form fields with data from provided account.
-     * @param[accounts] database map of accounts.
-     * @param[accountName] name of account to retrieve it from [accounts] map.
-     */
-    fun setAccount(accounts: DbMap, accountName: String) {
-        val account: Account = accounts[accountName]!!
+    override fun initModel() {
+        super.initModel()
+        viewModel.initialize(accountName)
+    }
+
+    override fun initForm() {
+        super.initForm()
+        // change text of apply button from `Create` to `Save`
+        b.applyButton.text = myContext.resources.getString(R.string.save)
+
+        // fill all form fields with data of account being edited
+        val accounts = superActivity.database.data
+        val account = accounts[accountName]!!
 
         b.accountName.setText(account.accountName)
         b.accountUsername.setText(account.username)
@@ -63,12 +60,5 @@ class EditAccountFragment : CreateEditAccountFragment() {
         b.accountRepeatPassword.setText(account.password)
         b.birthDate.text = account.date
         b.accountComment.setText(account.comment)
-    }
-
-    override fun initForm() {
-        super.initForm()
-
-        // change text of apply button from `Create` to `Save`
-        b.applyButton.text = myContext.resources.getString(R.string.save)
     }
 }
