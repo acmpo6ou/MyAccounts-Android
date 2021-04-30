@@ -69,15 +69,22 @@ class EditAccountModelTests : ModelTest() {
     }
 
     @Test
+    fun `initialize should fill filePaths with existing attached files`() {
+        assertTrue(fileName in viewModel.filePaths)
+        assertNull(viewModel.filePaths[fileName])
+        assertTrue(fileName2 in viewModel.filePaths)
+        assertNull(viewModel.filePaths[fileName2])
+    }
+
+    @Test
     fun `applyPressed should create new account`() {
         viewModel.filePaths[attachedFileName] = locationUri
 
         // new account should have old attached files and new ones
         val expectedAccount = account.copy()
-        expectedAccount.attachedFiles = (
-            mutableMapOf(attachedFileName to fileContent) +
-                myAccount.attachedFiles.toMutableMap()
-            ) as MutableMap<String, String>
+        expectedAccount.attachedFiles =
+            (mutableMapOf(attachedFileName to fileContent) + myAccount.attachedFiles)
+                .toMutableMap()
 
         viewModel.applyPressed(
             account.accountName,
@@ -89,19 +96,6 @@ class EditAccountModelTests : ModelTest() {
         )
         assertEquals(expectedAccount, viewModel.accounts[account.accountName])
         assertTrue(viewModel.finished.value!!)
-    }
-
-    @Test
-    fun `applyPressed should handle any exception`() {
-        val msg = faker.str()
-        val exception = Exception(msg)
-        doAnswer { throw exception }.whenever(model).loadFile(locationUri)
-
-        viewModel.filePaths[fileName] = locationUri
-        viewModel.applyPressed("", "", "", "", "", "")
-
-        assertEquals(exception.toString(), viewModel.errorMsg.value)
-        assertNotEquals(true, viewModel.finished.value)
     }
 
     @Test
@@ -119,6 +113,19 @@ class EditAccountModelTests : ModelTest() {
     }
 
     @Test
+    fun `applyPressed should handle any exception`() {
+        val msg = faker.str()
+        val exception = Exception(msg)
+        doAnswer { throw exception }.whenever(model).loadFile(locationUri)
+
+        viewModel.filePaths[fileName] = locationUri
+        viewModel.applyPressed("", "", "", "", "", "")
+
+        assertEquals(exception.toString(), viewModel.errorMsg.value)
+        assertNotEquals(true, viewModel.finished.value)
+    }
+
+    @Test
     fun `applyPressed should not delete old account if there is an error`() {
         doAnswer { throw Exception() }.whenever(model).loadFile(locationUri)
         viewModel.filePaths[fileName] = locationUri
@@ -133,13 +140,5 @@ class EditAccountModelTests : ModelTest() {
         viewModel.validateName(account.accountName)
         assertFalse(viewModel.existsNameErr.value!!)
         assertFalse(viewModel.emptyNameErr.value!!)
-    }
-
-    @Test
-    fun `initialize should fill filePaths with existing attached files`() {
-        assertTrue(fileName in viewModel.filePaths)
-        assertNull(viewModel.filePaths[fileName])
-        assertTrue(fileName2 in viewModel.filePaths)
-        assertNull(viewModel.filePaths[fileName2])
     }
 }

@@ -61,7 +61,7 @@ class EditAccountViewModel @Inject constructor(
                     attachedFiles[fileName] = content
                 } else {
                     // and add existing ones
-                    attachedFiles[fileName] = oldAccount.attachedFiles[fileName] as String
+                    attachedFiles[fileName] = oldAccount.attachedFiles[fileName]!!
                 }
             }
 
@@ -80,7 +80,7 @@ class EditAccountViewModel @Inject constructor(
     }
 
     /**
-     * This method validates given name, checks whether it's not empty and whether account
+     * Validates given name, checks whether it's not empty and whether account
      * with such name already exists, but it's okay if name doesn't change through editing.
      *
      * If name is empty [emptyNameErr] is set to true.
