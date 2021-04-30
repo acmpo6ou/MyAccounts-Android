@@ -19,10 +19,14 @@
 
 package com.acmpo6ou.myaccounts.create_edit_account
 
+import android.net.Uri
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.acmpo6ou.myaccounts.*
+import com.acmpo6ou.myaccounts.account
 import com.acmpo6ou.myaccounts.account.create_edit_account.CreateAccountViewModel
 import com.acmpo6ou.myaccounts.account.create_edit_account.LoadFileModel
+import com.acmpo6ou.myaccounts.copy
+import com.acmpo6ou.myaccounts.databaseMap
+import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.doReturn
@@ -32,9 +36,8 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.io.File
 
-class CreateAccountModelTests : ModelTest() {
+class CreateAccountModelTests {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 
@@ -42,16 +45,12 @@ class CreateAccountModelTests : ModelTest() {
     lateinit var model: LoadFileModel
 
     private val fileName = Faker().str()
-    private val attachedFileName = "test.txt"
-    override val location = "$accountsDir/$attachedFileName"
-
-    private val decodedContent = "This is a simple file.\nTo test PyQtAccounts.\nHello World!\n"
-    private val encodedContent =
-        "VGhpcyBpcyBhIHNpbXBsZSBmaWxlLgpUbyB0ZXN0IFB5UXRBY2NvdW50cy4KSGVsbG8gV29ybGQhCg=="
+    val locationUri: Uri = mock()
+    private val fileContent = Faker().str()
 
     @Before
     fun setup() {
-        model = mock { on { loadFile(locationUri) } doReturn encodedContent }
+        model = mock { on { loadFile(locationUri) } doReturn fileContent }
         viewModel = CreateAccountViewModel(mock(), model)
         viewModel.accounts = databaseMap.copy()
     }
@@ -85,16 +84,9 @@ class CreateAccountModelTests : ModelTest() {
 
     @Test
     fun `applyPressed should create new account`() {
-        // prepare attached file to load
-        viewModel.filePaths[attachedFileName] = locationUri
-        File(location).apply {
-            createNewFile()
-            writeText(decodedContent)
-        }
-        setupInputResolver()
-
+        viewModel.filePaths[fileName] = locationUri
         val expectedAccount = account.copy()
-        expectedAccount.attachedFiles = mutableMapOf(attachedFileName to encodedContent)
+        expectedAccount.attachedFiles = mutableMapOf(fileName to fileContent)
 
         viewModel.applyPressed(
             account.accountName,
@@ -122,7 +114,7 @@ class CreateAccountModelTests : ModelTest() {
 
     @Test
     fun `applyPressed should handle any exception`() {
-        val msg = faker.str()
+        val msg = Faker().str()
         val exception = Exception(msg)
         doAnswer { throw exception }.whenever(model).loadFile(locationUri)
 
