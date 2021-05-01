@@ -64,7 +64,7 @@ fun <R> getProperty(instance: Any, propertyName: String): R {
 }
 
 /**
- * Used to start AccountsActivity for given database.
+ * Starts AccountsActivity for given database.
  * @param[index] index of database for which we want to start AccountsActivity.
  */
 fun startDatabaseUtil(index: Int, context: Context) {
