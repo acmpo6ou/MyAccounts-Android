@@ -33,8 +33,8 @@ interface SettingsUtils {
     val prefs: SharedPreferences
 
     /**
-     * Helper method to change activity locale.
-     * @param[languageCode] language code ot change locale such as `uk` for Ukraine.
+     * Changes activity locale.
+     * @param[languageCode] language code to change locale such as `uk` for Ukraine.
      */
     fun setLocale(languageCode: String) {
         val locale = Locale(languageCode)
@@ -50,19 +50,16 @@ interface SettingsUtils {
      * Loads defined by user settings, such as app locale and screen capture.
      */
     fun loadSettings() {
-        // get locale preference and set locale
+        // set locale
         val localeCode = prefs.getString("language", "default")
-        if (localeCode != "default") {
-            setLocale(localeCode!!)
-        }
+        if (localeCode != "default") setLocale(localeCode!!)
 
-        // get screen capture preference and block screen capture if needed
+        // block screen capture if needed
         val screenCapture = prefs.getBoolean("block_screen_capture", true)
-        if (screenCapture) {
+        if (screenCapture)
             activity.window.setFlags(
                 WindowManager.LayoutParams.FLAG_SECURE,
                 WindowManager.LayoutParams.FLAG_SECURE
             )
-        }
     }
 }

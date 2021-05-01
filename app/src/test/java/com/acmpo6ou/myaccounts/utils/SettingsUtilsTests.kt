@@ -27,16 +27,12 @@ import android.util.DisplayMetrics
 import android.view.Window
 import android.view.WindowManager
 import com.acmpo6ou.myaccounts.core.utils.SettingsUtils
+import com.github.ivanshafran.sharedpreferencesmock.SPMockBuilder
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyString
 import java.util.*
-
-open class TestActivity : SettingsUtils {
-    override lateinit var activity: Activity
-    override lateinit var prefs: SharedPreferences
-}
 
 class SettingsUtilsTests {
     private lateinit var testActivity: TestActivity
@@ -59,6 +55,7 @@ class SettingsUtilsTests {
         }
 
         testActivity = TestActivity()
+        testActivity.prefs = SPMockBuilder().createSharedPreferences()
         testActivity.activity = mock {
             on { resources } doReturn mockResources
             on { window } doReturn mockWindow
@@ -80,43 +77,34 @@ class SettingsUtilsTests {
 
     @Test
     fun `loadSettings should not call setLocale if 'language' setting is set to 'default'`() {
-        spyActivity.prefs = mock {
-            on { getString("language", "default") } doReturn "default"
-        }
-
+        spyActivity.prefs.edit().putString("language", "default").commit()
         spyActivity.loadSettings()
         verify(spyActivity, never()).setLocale(anyString())
     }
 
     @Test
     fun `loadSettings should call setLocale if 'language' setting is other then 'default'`() {
-        spyActivity.prefs = mock {
-            on { getString("language", "default") } doReturn languageCode
-        }
-
+        spyActivity.prefs.edit().putString("language", languageCode).commit()
         spyActivity.loadSettings()
         verify(spyActivity).setLocale(languageCode)
     }
 
     @Test
     fun `loadSettings should block screen capture when 'block_screen_capture' is true`() {
-        testActivity.prefs = mock {
-            on { getString(anyString(), anyString()) } doReturn "default"
-            on { getBoolean("block_screen_capture", true) } doReturn true
-        }
-
+        spyActivity.prefs.edit().putBoolean("block_screen_capture", true).commit()
         testActivity.loadSettings()
         verify(mockWindow).setFlags(secureFlag, secureFlag)
     }
 
     @Test
     fun `loadSettings should not block screen capture when 'block_screen_capture' is false`() {
-        testActivity.prefs = mock {
-            on { getString(anyString(), anyString()) } doReturn "default"
-            on { getBoolean("block_screen_capture", true) } doReturn false
-        }
-
+        spyActivity.prefs.edit().putBoolean("block_screen_capture", false).commit()
         testActivity.loadSettings()
         verify(mockWindow, never()).setFlags(secureFlag, secureFlag)
     }
+}
+
+open class TestActivity : SettingsUtils {
+    override lateinit var activity: Activity
+    override lateinit var prefs: SharedPreferences
 }
