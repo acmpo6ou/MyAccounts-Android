@@ -45,37 +45,32 @@ interface DatabaseUtils {
     val app: MyApp
 
     /**
-     * Used to deserialize json string to database map.
+     * Deserializes json string to database map.
      *
      * @param[jsonStr] json string to deserialize.
-     * @return when [jsonStr] is empty returns empty map, when it's not empty –
-     * deserialized database map.
+     * @return when [jsonStr] is empty returns empty map, otherwise – deserialized database map.
      */
     fun loads(jsonStr: String): DbMap {
         var map = mutableMapOf<String, Account>()
-        if (jsonStr.isNotEmpty()) {
+        if (jsonStr.isNotEmpty())
             map = Json { ignoreUnknownKeys = true }.decodeFromString(jsonStr)
-        }
         return map
     }
 
     /**
-     * Method used to serialize database map to json string.
+     * Serializes database map to json string.
      *
      * @param[data] map to serialize.
-     * @return when [data] is empty returns empty string, when [data] is not empty –
-     * serialized json string.
+     * @return when [data] is empty returns empty string, otherwise – serialized json string.
      */
     fun dumps(data: DbMap): String {
         var json = ""
-        if (data.isNotEmpty()) {
-            json = Json.encodeToString(data)
-        }
+        if (data.isNotEmpty()) json = Json.encodeToString(data)
         return json
     }
 
     /**
-     * This method creates fernet key given password and salt.
+     * Creates fernet key given password and salt.
      *
      * @param[password] key password.
      * @param[salt] salt for key.
@@ -94,7 +89,7 @@ interface DatabaseUtils {
     }
 
     /**
-     * Used to decrypt and deserialize encrypted json string to a database map.
+     * Decrypts and deserializes given json string to a database map.
      *
      * @param[jsonString] encrypted json string to decrypt.
      * @param[password] password for decryption.
@@ -105,7 +100,7 @@ interface DatabaseUtils {
         // Get key from cache if it's there, if not add the key to cache.
         // This is needed because generating cryptography key using deriveKey involves
         // 100 000 iterations which takes a long time, so the keys have to be cached and
-        // generated only if they are not in the cache
+        // generated only if they are'nt in the cache
         val key = app.keyCache.getOrPut(password) { deriveKey(password, salt) }
 
         val validator: Validator<String> = object : StringValidator {
@@ -122,7 +117,7 @@ interface DatabaseUtils {
     }
 
     /**
-     * This method is for database serialization and encryption.
+     * Serializes and encrypts given database.
      *
      * @param[db] Database instance to encrypt.
      * @return encrypted json string.
@@ -156,7 +151,7 @@ interface DatabaseUtils {
     }
 
     /**
-     * Used to open databases by given Database instance.
+     * Opens database by given Database instance.
      *
      * In particular opening database means reading content of corresponding .db file,
      * decrypting and deserializing it, then assigning deserialized database map to `data`
@@ -197,19 +192,16 @@ interface DatabaseUtils {
     }
 
     /**
-     * This method deletes .db and .bin files of database given its name.
+     * Deletes .db and .bin files of database given its name.
      * @param[name] name of database to delete.
      */
     fun deleteDatabase(name: String) {
-        val binFile = File("${app.SRC_DIR}/$name.bin")
-        binFile.delete()
-
-        val dbFile = File("${app.SRC_DIR}/$name.db")
-        dbFile.delete()
+        File("${app.SRC_DIR}/$name.bin").delete()
+        File("${app.SRC_DIR}/$name.db").delete()
     }
 
     /**
-     * This method simply deletes old database (which is determined by [oldName]) and
+     * Deletes old database (which is determined by [oldName]) and
      * creates new one using [database], to more specifically say: it replaces old database
      * with a new one.
      *
