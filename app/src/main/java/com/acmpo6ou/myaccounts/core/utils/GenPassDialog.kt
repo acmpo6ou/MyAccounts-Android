@@ -20,27 +20,27 @@
 package com.acmpo6ou.myaccounts.core.utils
 
 import android.app.Dialog
+import android.content.Context
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
-import androidx.appcompat.app.AppCompatActivity
 import com.acmpo6ou.myaccounts.R
 import com.google.android.material.textfield.TextInputEditText
 import com.shawnlin.numberpicker.NumberPicker
+import java.util.*
 
 /**
- * Dialog to generate password and fill [pass1] and [pass2] password fields of
- * [activity] with it.
+ * Dialog to generate password and fill [pass1] and [pass2] password fields with it.
  *
  * Dialog that contains number picker to choose password length and checkboxes to choose what
  * characters to use to generate password (i.e. digits, letters, etc.).
  */
 open class GenPassDialog(
-    activity: AppCompatActivity,
+    context: Context,
     pass1: TextInputEditText,
-    pass2: TextInputEditText
+    pass2: TextInputEditText,
 ) {
-    val dialog: Dialog = Dialog(activity)
+    val dialog = Dialog(context)
     val generateButton: Button
     val cancelButton: Button
     val length: NumberPicker
@@ -49,29 +49,31 @@ open class GenPassDialog(
     val lowerBox: CheckBox
     val upperBox: CheckBox
     val punctBox: CheckBox
-    val checkBoxes: List<CheckBox>
+    private val checkBoxes: List<CheckBox>
 
     val digits = ('0'..'9').joinToString("")
     val lower = ('a'..'z').joinToString("")
-    val upper = lower.toUpperCase()
+    val upper = lower.toUpperCase(Locale.ROOT)
     val punctuation = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
     val allChars = listOf(digits, lower, upper, punctuation)
 
     init {
-        dialog.setContentView(R.layout.generate_password)
-        generateButton = dialog.findViewById(R.id.generateButton)
-        cancelButton = dialog.findViewById(R.id.cancelButton)
-        length = dialog.findViewById(R.id.passwordLength)
+        dialog.apply {
+            setContentView(R.layout.generate_password)
+            generateButton = findViewById(R.id.generateButton)
+            cancelButton = findViewById(R.id.cancelButton)
+            length = findViewById(R.id.passwordLength)
 
-        // check boxes
-        digitsBox = dialog.findViewById(R.id.numbersBox)
-        lowerBox = dialog.findViewById(R.id.lowerLettersBox)
-        upperBox = dialog.findViewById(R.id.upperLettersBox)
-        punctBox = dialog.findViewById(R.id.punctBox)
+            // check boxes
+            digitsBox = findViewById(R.id.numbersBox)
+            lowerBox = findViewById(R.id.lowerLettersBox)
+            upperBox = findViewById(R.id.upperLettersBox)
+            punctBox = findViewById(R.id.punctBox)
+        }
         checkBoxes = listOf(digitsBox, lowerBox, upperBox, punctBox)
 
-        // set width and height of dialog
-        val width = (activity.resources.displayMetrics.widthPixels * 0.90).toInt()
+        // set width of dialog to 90%
+        val width = (context.resources.displayMetrics.widthPixels * 0.90).toInt()
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
         dialog.window?.setLayout(width, height)
 
@@ -87,15 +89,12 @@ open class GenPassDialog(
             }
 
             // do not proceed if no checkboxes are checked
-            if (chars.isEmpty()) {
-                dialog.dismiss()
-                return@setOnClickListener
+            if (chars.isNotEmpty()) {
+                // generate password and set it on password fields
+                val password = genPass(length.value, chars)
+                pass1.setText(password)
+                pass2.setText(password)
             }
-
-            // generate password and set it on password fields
-            val password = genPass(length.value, chars)
-            pass1.setText(password)
-            pass2.setText(password)
 
             dialog.dismiss()
         }
@@ -109,13 +108,11 @@ open class GenPassDialog(
     /**
      * Generates random password.
      *
-     * @param[len] [Int] number that defines length of generated password.
-     * @param[chars] [List] of [String] of characters from which password will be generated.
+     * @param[len] length of generated password.
+     * @param[chars] list of characters from which password will be generated.
      * @return generated random password.
      */
     open fun genPass(len: Int, chars: List<String>): String {
-        // here we generate the password using [len] parameter and strings
-        // that are passed to genPass and packed to [chars]
         val password = (1..len)
             .map { chars.joinToString("").random() }
             .joinToString("")
@@ -134,16 +131,8 @@ open class GenPassDialog(
 
 /**
  * Checks whether [String] on the left has at least one character from [String] on the right.
- *
- * @param[other] string on the right, i.e. the one from which we check characters.
- * @return boolean value representing whether string on the left contains
- * at least one character from string on the right.
  */
 infix fun String.hasoneof(other: String): Boolean {
-    for (c in other) {
-        if (c in this) {
-            return true
-        }
-    }
+    for (c in other) if (c in this) return true
     return false
 }
