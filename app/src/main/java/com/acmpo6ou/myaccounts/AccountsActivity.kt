@@ -31,6 +31,7 @@ import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
 import com.acmpo6ou.myaccounts.databinding.ActivityAccountsBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 open class AccountsActivity : SuperActivity(), AccountsActivityI {
@@ -41,7 +42,7 @@ open class AccountsActivity : SuperActivity(), AccountsActivityI {
     override val mainFragmentId = R.id.accountsFragment
     override val confirmGoingBackMsg = R.string.confirm_going_back
 
-    var index = 0
+    var index by Delegates.notNull<Int>()
     override var database
         get() = app.databases[index]
         set(value) {

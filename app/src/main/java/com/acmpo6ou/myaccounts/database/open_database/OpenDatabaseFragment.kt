@@ -44,11 +44,12 @@ import com.acmpo6ou.myaccounts.databinding.OpenDatabaseFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
+import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class OpenDatabaseFragment : Fragment(), ErrorFragment {
     override val viewModel: OpenDatabaseViewModel by viewModels()
-    var databaseIndex = 999
+    var databaseIndex by Delegates.notNull<Int>()
 
     @ActivityContext
     @Inject
