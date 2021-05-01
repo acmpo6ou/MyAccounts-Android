@@ -25,7 +25,7 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 
 /**
- * Retrofit service used to communicate with github API.
+ * Retrofit service to communicate with github API.
  */
 interface GitHubService {
     /**
