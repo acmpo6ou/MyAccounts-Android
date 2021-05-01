@@ -44,16 +44,24 @@ open class DbUtils(override val app: MyApp) : DatabaseUtils
 class DatabaseUtilsTests : ModelTest() {
     private lateinit var databaseUtils: DatabaseUtils
     lateinit var spyUtils: DatabaseUtils
+
+    lateinit var myApp: MyApp
     val database = Database("test", "123", salt, mutableMapOf())
 
     @Before
     fun setup() {
+        myApp = MyApp()
+        app = spy(myApp) {
+            on { ACCOUNTS_DIR } doReturn accountsDir
+            on { SRC_DIR } doReturn SRC_DIR
+        }
+
         databaseUtils = DbUtils(app)
         spyUtils = spy(databaseUtils)
     }
 
     /**
-     * This helper method encrypts given map using [password] and [salt].
+     * Encrypts given map using [password] and [salt].
      *
      * @param[map] database map to encrypt.
      * @return encrypted json string of database map.
@@ -87,7 +95,7 @@ class DatabaseUtilsTests : ModelTest() {
 
     @Test
     fun `openDatabase should return Database instance with non empty data property`() {
-        // here we copy `main` database to the fake file system so that we can open it later
+        // copy `main` database to the fake file system so that we can open it later
         copyDatabase("main")
 
         // create corresponding Database instance
