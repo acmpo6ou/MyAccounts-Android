@@ -33,7 +33,7 @@ interface NetUtils {
      * [https://stackoverflow.com/a/53532456/11004423] for more details.
      */
     fun isInternetAvailable(): Boolean {
-        var result = false
+        val result: Boolean
         val cm = myContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkCapabilities = cm.activeNetwork ?: return false
         val actNw = cm.getNetworkCapabilities(networkCapabilities) ?: return false
