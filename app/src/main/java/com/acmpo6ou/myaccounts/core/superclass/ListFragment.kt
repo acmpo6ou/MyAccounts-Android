@@ -34,8 +34,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 
 /**
- * Super class for DatabasesFragment and AccountsFragment – fragments that contain
- * lists of items.
+ * Super class for fragments that contain list of items.
  */
 abstract class ListFragment : Fragment(), ListFragmentI {
     private var binding: FragmentListBinding? = null
@@ -84,24 +83,17 @@ abstract class ListFragment : Fragment(), ListFragmentI {
     }
 
     /**
-     * This method decides whether to show recycler view placeholder (tip that is shown when
+     * Decides whether to show recycler view placeholder (tip that is shown when
      * recycler is empty).
-     *
-     * If there are items in the list it hides placeholder, if there aren't it displays
-     * the placeholder.
+     * If there are items in the list it hides placeholder, otherwise – displays it.
      */
     fun checkListPlaceholder() {
-        if (items.isEmpty()) {
-            b.itemsList.visibility = View.GONE
-            b.noItems.visibility = View.VISIBLE
-        } else {
-            b.itemsList.visibility = View.VISIBLE
-            b.noItems.visibility = View.GONE
-        }
+        b.itemsList.visibility = if (items.isEmpty()) View.GONE else View.VISIBLE
+        b.noItems.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
     }
 
     /**
-     * Used to display a snackbar with success message.
+     * Displays a snackbar with success message.
      */
     override fun showSuccess() {
         Snackbar.make(
@@ -114,14 +106,14 @@ abstract class ListFragment : Fragment(), ListFragmentI {
     }
 
     /**
-     * Used to build and display confirmation dialog.
+     * Builds and displays confirmation dialog.
      *
      * @param[message] message to describe what we asking user to confirm.
      * @param[positiveAction] function to invoke when user confirms an action (i.e. presses
      * the `Yes` button).
      */
     inline fun confirmDialog(message: String, crossinline positiveAction: () -> Unit) {
-        MaterialAlertDialogBuilder(context!!)
+        MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.warning)
             .setMessage(message)
             .setIcon(R.drawable.ic_warning)
@@ -133,7 +125,7 @@ abstract class ListFragment : Fragment(), ListFragmentI {
     }
 
     /**
-     * This method rerenders list after any item have changed.
+     * Rerenders list after any item have changed.
      * @param[i] index of item that have changed.
      */
     override fun notifyChanged(i: Int) {
@@ -143,7 +135,7 @@ abstract class ListFragment : Fragment(), ListFragmentI {
     }
 
     /**
-     * This method rerenders list after any item have been deleted.
+     * Rerenders list after any item have been deleted.
      * @param[i] index of item that have been deleted.
      */
     override fun notifyRemoved(i: Int) {
