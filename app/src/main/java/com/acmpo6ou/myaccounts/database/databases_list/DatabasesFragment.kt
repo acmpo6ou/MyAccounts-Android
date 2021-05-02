@@ -47,8 +47,8 @@ class DatabasesFragment : ListFragment(), DatabasesFragmentI {
     @Inject
     lateinit var mainActivity: MainActivityI
 
-    override val actionCreateItem = R.id.actionCreateDatabase
     override val items get() = app.databases
+    override val actionCreateItem = R.id.actionCreateDatabase
 
     private val exportLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -112,12 +112,11 @@ class DatabasesFragment : ListFragment(), DatabasesFragmentI {
     }
 
     /**
-     * Used to display dialog saying that the error occurred.
+     * Displays error dialog.
      *
      * @param[title] title of error dialog.
      * @param[details] details about the error.
      */
     override fun showError(title: String, details: String) = mainActivity.showError(title, details)
-
     override fun startDatabase(index: Int) = startDatabaseUtil(index, requireContext())
 }
