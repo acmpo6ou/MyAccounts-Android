@@ -48,16 +48,12 @@ import com.acmpo6ou.myaccounts.BuildConfig
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.UpdatesActivity
-import com.acmpo6ou.myaccounts.core.utils.getProperty
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
 
-/**
- * Super class for MainActivity and AccountsActivity.
- */
 abstract class SuperActivity : AppCompatActivity(), SuperActivityI {
     @Inject
     override lateinit var app: MyApp
@@ -71,8 +67,8 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityI {
     override val activity get() = myContext as Activity
 
     abstract val b: ViewBinding
-    lateinit var navView: NavigationView
-    lateinit var drawerLayout: DrawerLayout
+    abstract val navView: NavigationView
+    abstract val drawerLayout: DrawerLayout
 
     lateinit var navController: NavController
     lateinit var appBarConfiguration: AppBarConfiguration
@@ -91,8 +87,6 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityI {
 
     override fun onStart() {
         super.onStart()
-        navView = getProperty(b, "navView")
-        drawerLayout = getProperty(b, "drawerLayout")
         setAppVersion()
 
         // setup navigation controller

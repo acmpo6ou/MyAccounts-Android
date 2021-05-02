@@ -51,7 +51,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
-import org.robolectric.annotation.LooperMode
 import javax.inject.Singleton
 
 @HiltAndroidTest
@@ -60,7 +59,6 @@ import javax.inject.Singleton
     MainActivityBindings::class, DatabasesBindings::class
 )
 @RunWith(RobolectricTestRunner::class)
-@LooperMode(LooperMode.Mode.PAUSED)
 class MainActivityInst : NoInternet {
     @get:Rule
     var hiltAndroidRule = HiltAndroidRule(this)

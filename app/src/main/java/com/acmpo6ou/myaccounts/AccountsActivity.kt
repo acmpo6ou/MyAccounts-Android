@@ -22,6 +22,7 @@ package com.acmpo6ou.myaccounts
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
@@ -29,9 +30,9 @@ import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsActivityI
 import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsPresenterI
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
 import com.acmpo6ou.myaccounts.databinding.ActivityAccountsBinding
+import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 open class AccountsActivity : SuperActivity(), AccountsActivityI {
@@ -39,10 +40,13 @@ open class AccountsActivity : SuperActivity(), AccountsActivityI {
     override lateinit var presenter: AccountsPresenterI
 
     override lateinit var b: ActivityAccountsBinding
+    override lateinit var navView: NavigationView
+    override lateinit var drawerLayout: DrawerLayout
+
     override val mainFragmentId = R.id.accountsFragment
     override val confirmGoingBackMsg = R.string.confirm_going_back
 
-    var index by Delegates.notNull<Int>()
+    var index = 0
     override var database
         get() = app.databases[index]
         set(value) {
@@ -56,6 +60,9 @@ open class AccountsActivity : SuperActivity(), AccountsActivityI {
         b = ActivityAccountsBinding.inflate(layoutInflater)
         setContentView(b.root)
         setSupportActionBar(b.appbar.toolbar)
+
+        navView = b.navView
+        drawerLayout = b.drawerLayout
 
         intent.extras?.let {
             index = it.getInt("databaseIndex")

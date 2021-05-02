@@ -28,7 +28,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.acmpo6ou.myaccounts.AccountsActivity
 import java.io.File
-import kotlin.reflect.KProperty1
 
 /**
  * Extension function to combine 2 LiveData properties into one.
@@ -46,21 +45,6 @@ fun <T, K, R> LiveData<T>.combineWith(
         result.value = block(this.value, liveData.value)
     }
     return result
-}
-
-/**
- * Function to get property from [instance] by [propertyName] string using reflection.
- * Note: it's completely copied from StackOverflow.
- *
- * @param[instance] instance to get property from.
- * @param[propertyName] string with property name.
- * @return property named [propertyName] got from [instance].
- */
-@Suppress("UNCHECKED_CAST")
-fun <R> getProperty(instance: Any, propertyName: String): R {
-    val property =
-        instance::class.members.first { it.name == propertyName } as KProperty1<Any, *>
-    return property.get(instance) as R
 }
 
 /**

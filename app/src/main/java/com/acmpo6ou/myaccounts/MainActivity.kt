@@ -28,11 +28,13 @@ import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentI
 import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
 import com.acmpo6ou.myaccounts.database.main_activity.MainPresenterI
 import com.acmpo6ou.myaccounts.databinding.ActivityMainBinding
+import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -43,8 +45,10 @@ open class MainActivity : SuperActivity(), MainActivityI {
     override lateinit var presenter: MainPresenterI
 
     override lateinit var b: ActivityMainBinding
-    override val mainFragmentId = R.id.databasesFragment
+    override lateinit var navView: NavigationView
+    override lateinit var drawerLayout: DrawerLayout
 
+    override val mainFragmentId = R.id.databasesFragment
     override val confirmGoingBackMsg = R.string.confirm_exit
     override var lastBackPressTime: Long = 0
 
@@ -58,6 +62,9 @@ open class MainActivity : SuperActivity(), MainActivityI {
 
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
+
+        navView = b.navView
+        drawerLayout = b.drawerLayout
 
         setSupportActionBar(b.appbar.toolbar)
         checkPermissions()
