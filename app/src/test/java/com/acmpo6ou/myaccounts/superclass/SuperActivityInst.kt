@@ -22,38 +22,81 @@ package com.acmpo6ou.myaccounts.superclass
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Looper
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.*
+import com.acmpo6ou.myaccounts.core.AppModule
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesBindings
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesModelI
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesPresenterI
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityBindings
+import com.acmpo6ou.myaccounts.database.main_activity.MainModelI
+import com.acmpo6ou.myaccounts.database.main_activity.MainPresenterI
 import com.github.javafaker.Faker
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
+import dagger.hilt.android.scopes.ActivityScoped
+import dagger.hilt.android.testing.BindValue
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.LooperMode
 import org.robolectric.shadows.ShadowAlertDialog
+import javax.inject.Singleton
 
+@HiltAndroidTest
+@UninstallModules(
+    AppModule::class,
+    MainActivityBindings::class, DatabasesBindings::class
+)
 @RunWith(RobolectricTestRunner::class)
-@LooperMode(LooperMode.Mode.PAUSED)
-@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class SuperActivityInst : NoInternet {
+    @get:Rule
+    var hiltAndroidRule = HiltAndroidRule(this)
+
+    @BindValue
+    @JvmField
+    @Singleton
+    val app = MyApp()
+
+    @BindValue
+    @JvmField
+    @ActivityScoped
+    val presenter: MainPresenterI = mock()
+
+    @BindValue
+    @JvmField
+    @ActivityScoped
+    val model: MainModelI = mock()
+
+    @BindValue
+    @JvmField
+    @ActivityScoped
+    val databasesPresenter: DatabasesPresenterI = mock()
+
+    @BindValue
+    @JvmField
+    @ActivityScoped
+    val databasesModel: DatabasesModelI = mock()
+
     // here we use MainActivity instead of SuperActivity because SuperActivity is abstract
     // and MainActivity inherits from SuperActivity
     lateinit var scenario: ActivityScenario<MainActivity>
+
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     private val faker = Faker()
 
@@ -66,6 +109,65 @@ class SuperActivityInst : NoInternet {
         scenario = ActivityScenario.launch(MainActivity::class.java)
         scenario.onActivity {
             it.myContext.setTheme(R.style.Theme_MyAccounts_NoActionBar)
+        }
+    }
+
+    // shortcut
+    private fun selectItem(itemId: Int) = scenario.onActivity {
+        selectNavigationItem(itemId, it)
+    }
+
+    @Test
+    fun `'Check for updates' should call presenter checkUpdatesSelected`() {
+        selectItem(R.id.check_for_updates)
+        verify(presenter).checkUpdatesSelected()
+
+        // all other methods should not be called
+        verifyNoMoreInteractions(presenter)
+    }
+
+    @Test
+    fun `'Changelog' should call presenter navigateToChangelog`() {
+        selectItem(R.id.changelog)
+        verify(presenter).navigateToChangelog()
+
+        // all other methods should not be called
+        verifyNoMoreInteractions(presenter)
+    }
+
+    @Test
+    fun `'Settings' should call presenter navigateToSettings`() {
+        selectItem(R.id.settings)
+        verify(presenter).navigateToSettings()
+
+        // all other methods should not be called
+        verifyNoMoreInteractions(presenter)
+    }
+
+    @Test
+    fun `'About' should call presenter navigateToAbout`() {
+        selectItem(R.id.about)
+        verify(presenter).navigateToAbout()
+
+        // all other methods should not be called
+        verifyNoMoreInteractions(presenter)
+    }
+
+    @Test
+    fun `back button should close nav drawer if it is opened`() {
+        scenario.onActivity {
+            it.drawerLayout = mock { on { isDrawerOpen(GravityCompat.START) } doReturn true }
+            it.onBackPressed()
+            verify(it.drawerLayout).closeDrawer(GravityCompat.START)
+        }
+    }
+
+    @Test
+    fun `back button should not close nav drawer if it isn't opened`() {
+        scenario.onActivity {
+            it.drawerLayout = mock { on { isDrawerOpen(GravityCompat.START) } doReturn false }
+            it.onBackPressed()
+            verify(it.drawerLayout, never()).closeDrawer(GravityCompat.START)
         }
     }
 
