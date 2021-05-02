@@ -28,6 +28,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
@@ -96,6 +97,7 @@ class SuperActivityInst : NoInternet {
     // here we use MainActivity instead of SuperActivity because SuperActivity is abstract
     // and MainActivity inherits from SuperActivity
     lateinit var scenario: ActivityScenario<MainActivity>
+    lateinit var mockController: NavController
 
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     private val faker = Faker()
@@ -109,6 +111,8 @@ class SuperActivityInst : NoInternet {
         scenario = ActivityScenario.launch(MainActivity::class.java)
         scenario.onActivity {
             it.myContext.setTheme(R.style.Theme_MyAccounts_NoActionBar)
+            mockController = mock()
+            it.navController = mockController
         }
     }
 
@@ -118,39 +122,77 @@ class SuperActivityInst : NoInternet {
     }
 
     @Test
-    fun `'Check for updates' should call presenter checkUpdatesSelected`() {
-        selectItem(R.id.check_for_updates)
-        verify(presenter).checkUpdatesSelected()
+    fun `navigation drawer should be locked when current fragment is not mainFragment`() {
+        scenario.onActivity {
+            it.drawerLayout = mock()
+            val navController = it.findNavController(R.id.nav_host_fragment)
 
-        // all other methods should not be called
-        verifyNoMoreInteractions(presenter)
+            navController.navigate(R.id.aboutFragment)
+            verify(it.drawerLayout).setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+        }
     }
 
     @Test
-    fun `'Changelog' should call presenter navigateToChangelog`() {
-        selectItem(R.id.changelog)
-        verify(presenter).navigateToChangelog()
+    fun `navigation drawer should be unlocked when current fragment is mainFragment`() {
+        scenario.onActivity {
+            it.drawerLayout = mock()
+            val navController = it.findNavController(R.id.nav_host_fragment)
 
-        // all other methods should not be called
-        verifyNoMoreInteractions(presenter)
+            navController.navigate(it.mainFragmentId)
+            verify(it.drawerLayout).setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+        }
     }
 
     @Test
-    fun `'Settings' should call presenter navigateToSettings`() {
-        selectItem(R.id.settings)
-        verify(presenter).navigateToSettings()
+    fun `startUpdatesActivity should start appropriate intent`() {
+        val latestVersion = faker.str()
+        scenario.onActivity { it.startUpdatesActivity(latestVersion) }
 
-        // all other methods should not be called
-        verifyNoMoreInteractions(presenter)
+        val intent: Intent = shadowOf(RuntimeEnvironment.application).nextStartedActivity
+        assertEquals(latestVersion, intent.getStringExtra("version"))
     }
 
     @Test
-    fun `'About' should call presenter navigateToAbout`() {
-        selectItem(R.id.about)
-        verify(presenter).navigateToAbout()
+    fun `updatesSnackbar should display snackbar when isAutoCheck is false`() {
+        scenario.onActivity {
+            it.updatesSnackbar(R.string.no_updates, false)
 
-        // all other methods should not be called
-        verifyNoMoreInteractions(presenter)
+            // this is because of some Robolectric main looper problems
+            shadowOf(Looper.getMainLooper()).idle()
+
+            val v: View = it.findViewById(android.R.id.content)
+            val snackbar = v.rootView.findSnackbarTextView()
+            assertEquals(noUpdatesMsg, snackbar?.text)
+        }
+    }
+
+    @Test
+    fun `updatesSnackbar should not display snackbar when isAutoCheck is true`() {
+        scenario.onActivity {
+            it.updatesSnackbar(R.string.no_updates, true)
+
+            // this is because of some Robolectric main looper problems
+            shadowOf(Looper.getMainLooper()).idle()
+
+            // try to get the snackbar
+            val v: View = it.findViewById(android.R.id.content)
+            val snackbar = v.rootView.findSnackbarTextView()
+
+            // but it should be null
+            assertNull(snackbar)
+        }
+    }
+
+    @Test
+    fun `confirmBack should display confirmation dialog`() {
+        scenario.onActivity { it.confirmBack() }
+
+        val dialog = ShadowAlertDialog.getLatestDialog() as AlertDialog
+        val title = dialog.findViewById<TextView>(R.id.alertTitle)
+        val message = dialog.findViewById<TextView>(android.R.id.message)
+
+        assertEquals(goBackTitle, title?.text)
+        assertEquals(confirmExit, message?.text)
     }
 
     @Test
@@ -172,6 +214,34 @@ class SuperActivityInst : NoInternet {
     }
 
     @Test
+    fun `'Check for updates' should call presenter checkUpdatesSelected`() {
+        selectItem(R.id.check_for_updates)
+        verify(presenter).checkUpdatesSelected()
+        verifyNoMoreInteractions(presenter)
+    }
+
+    @Test
+    fun `'Changelog' should navigate to actionChangelog`() {
+        selectItem(R.id.changelog)
+        verify(mockController).navigate(R.id.actionChangelog)
+        verifyNoMoreInteractions(mockController)
+    }
+
+    @Test
+    fun `'Settings' should navigate to actionSettings`() {
+        selectItem(R.id.settings)
+        verify(mockController).navigate(R.id.actionSettings)
+        verifyNoMoreInteractions(mockController)
+    }
+
+    @Test
+    fun `'About' should navigate to actionAbout`() {
+        selectItem(R.id.about)
+        verify(mockController).navigate(R.id.actionAbout)
+        verifyNoMoreInteractions(mockController)
+    }
+
+    @Test
     fun `showError should create dialog with appropriate title and message`() {
         val expectedTitle = faker.str()
         val expectedMsg = faker.str()
@@ -184,92 +254,7 @@ class SuperActivityInst : NoInternet {
         val title = dialog.findViewById<TextView>(R.id.alertTitle)
         val message = dialog.findViewById<TextView>(android.R.id.message)
 
-        assertEquals(
-            "showError created dialog with incorrect title!",
-            expectedTitle, title.text
-        )
-        assertEquals(
-            "showError created dialog with incorrect message!",
-            expectedMsg, message.text
-        )
-    }
-
-    @Test
-    fun `updatesSnackbar should display snackbar when isAutoCheck is false`() {
-        scenario.onActivity {
-            val msg = R.string.no_updates
-            it.updatesSnackbar(msg, false)
-
-            // this is because of some Robolectric main looper problems
-            shadowOf(Looper.getMainLooper()).idle()
-
-            // get the snackbar
-            val v: View = it.findViewById(android.R.id.content)
-            val snackbar = v.rootView.findSnackbarTextView()
-
-            // check the snackbar's message
-            assertEquals(noUpdatesMsg, snackbar?.text)
-        }
-    }
-
-    @Test
-    fun `updatesSnackbar should not display snackbar when isAutoCheck is true`() {
-        scenario.onActivity {
-            val msg = R.string.no_updates
-            it.updatesSnackbar(msg, true)
-
-            // this is because of some Robolectric main looper problems
-            shadowOf(Looper.getMainLooper()).idle()
-
-            // try to get the snackbar
-            val v: View = it.findViewById(android.R.id.content)
-            val snackbar = v.rootView.findSnackbarTextView()
-
-            // but it should be null
-            assertNull(snackbar)
-        }
-    }
-
-    @Test
-    fun `navigation drawer should be locked when current fragment is not mainFragment`() {
-        scenario.onActivity {
-            it.drawerLayout = mock()
-            val navController = it.findNavController(R.id.nav_host_fragment)
-
-            navController.navigate(R.id.aboutFragment)
-            verify(it.drawerLayout).setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-        }
-    }
-
-    @Test
-    fun `navigation drawer should not be locked when current fragment is mainFragment`() {
-        scenario.onActivity {
-            it.drawerLayout = mock()
-            val navController = it.findNavController(R.id.nav_host_fragment)
-
-            navController.navigate(it.mainFragmentId)
-            verify(it.drawerLayout).setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-        }
-    }
-
-    @Test
-    fun `confirmBack should display confirmation dialog`() {
-        scenario.onActivity { it.confirmBack() }
-
-        val dialog = ShadowAlertDialog.getLatestDialog() as AlertDialog
-        val title = dialog.findViewById<TextView>(R.id.alertTitle)
-        val message = dialog.findViewById<TextView>(android.R.id.message)
-
-        assertEquals(goBackTitle, title?.text)
-        assertEquals(confirmExit, message?.text)
-    }
-
-    @Test
-    fun `startUpdatesActivity should start appropriate intent`() {
-        val latestVersion = faker.str()
-        scenario.onActivity { it.startUpdatesActivity(latestVersion) }
-
-        val intent: Intent = shadowOf(RuntimeEnvironment.application).nextStartedActivity
-        assertEquals(latestVersion, intent.getStringExtra("version"))
+        assertEquals(expectedTitle, title.text)
+        assertEquals(expectedMsg, message.text)
     }
 }

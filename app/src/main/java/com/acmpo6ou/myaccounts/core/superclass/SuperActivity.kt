@@ -38,7 +38,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -78,8 +77,11 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityI {
     abstract val mainFragmentId: Int
     override val mainFragment: ListFragment
         get() {
-            val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
-            return navHostFragment?.childFragmentManager?.fragments?.get(0) as ListFragment
+            return supportFragmentManager
+                .findFragmentById(R.id.nav_host_fragment)
+                ?.childFragmentManager
+                ?.fragments
+                ?.first() as ListFragment
         }
 
     override fun onSupportNavigateUp(): Boolean =
@@ -121,21 +123,20 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityI {
     }
 
     /**
-     * Helper method to display a snackbar about updates.
+     * Displays a snackbar about updates.
      *
      * @param[isAutoCheck] if true do not display the snackbar because we should not
      * display it when auto checking for updates.
      */
     fun updatesSnackbar(message: Int, isAutoCheck: Boolean) {
-        if (!isAutoCheck) {
-            Snackbar.make(
-                mainFragment.b.coordinatorLayout,
-                message,
-                Snackbar.LENGTH_LONG
-            )
-                .setAction("HIDE") {}
-                .show()
-        }
+        if (isAutoCheck) return
+
+        Snackbar.make(
+            mainFragment.b.coordinatorLayout,
+            message, Snackbar.LENGTH_LONG
+        )
+            .setAction("HIDE") {}
+            .show()
     }
 
     // updates snackbars
@@ -149,7 +150,7 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityI {
         updatesSnackbar(R.string.no_internet_connection, isAutoCheck)
 
     /**
-     * This method obtains version name and sets it in navigation header.
+     * Obtains version name and sets it in navigation header.
      */
     private fun setAppVersion() {
         val version = BuildConfig.VERSION_NAME
@@ -179,7 +180,6 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityI {
     }
 
     override fun onBackPressed() {
-        // close navigation drawer when Back button is pressed and if it is opened
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
         } else if (navController.currentDestination?.id == mainFragmentId) {
@@ -194,25 +194,15 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityI {
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.check_for_updates -> presenter.checkUpdatesSelected()
-            R.id.changelog -> presenter.navigateToChangelog()
-            R.id.settings -> presenter.navigateToSettings()
-            R.id.about -> presenter.navigateToAbout()
+            R.id.changelog -> navController.navigate(R.id.actionChangelog)
+            R.id.settings -> navController.navigate(R.id.actionSettings)
+            R.id.about -> navController.navigate(R.id.actionAbout)
         }
         return false
     }
 
     /**
-     * Navigates to given destination.
-     * @param[id] id of destination action.
-     */
-    override fun navigateTo(id: Int) {
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navHostFragment.navController.navigate(id)
-    }
-
-    /**
-     * This method will automatically hide the keyboard when any TextView is losing focus.
+     * Automatically hides the keyboard when any TextView is losing focus.
      * Note: this method is completely copied from StackOverflow.
      */
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
@@ -241,8 +231,9 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityI {
     }
 
     /**
-     * Used to display dialog saying that the error has occurred.
-     * @param[title] title of error dialog.
+     * Displays error dialog.
+     *
+     * @param[title] dialog title.
      * @param[details] details about the error.
      */
     override fun showError(title: String, details: String) {

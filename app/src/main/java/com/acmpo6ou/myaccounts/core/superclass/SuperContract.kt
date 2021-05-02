@@ -36,9 +36,7 @@ interface SuperActivityI :
     fun updatesCheckFailed(isAutoCheck: Boolean = false)
     fun noInternetConnection(isAutoCheck: Boolean = false)
 
-    fun navigateTo(id: Int)
     fun showError(title: String, details: String)
-
     fun goBack()
     fun confirmBack()
 }
@@ -47,8 +45,4 @@ interface SuperPresenterI {
     fun backPressed()
     fun saveSelected()
     fun checkUpdatesSelected(isAutoCheck: Boolean = false)
-
-    fun navigateToChangelog()
-    fun navigateToSettings()
-    fun navigateToAbout()
 }
