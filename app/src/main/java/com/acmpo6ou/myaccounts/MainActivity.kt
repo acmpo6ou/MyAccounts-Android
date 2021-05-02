@@ -67,17 +67,13 @@ open class MainActivity : SuperActivity(), MainActivityI {
         drawerLayout = b.drawerLayout
 
         setSupportActionBar(b.appbar.toolbar)
-        checkPermissions()
+        checkStoragePermission()
     }
 
-    /**
-     * Checks if storage permission is granted and if not - requests it.
-     */
-    private fun checkPermissions() {
+    private fun checkStoragePermission() {
         val isGranted = checkCallingOrSelfPermission(permission.WRITE_EXTERNAL_STORAGE)
-        if (isGranted != PackageManager.PERMISSION_GRANTED) {
+        if (isGranted != PackageManager.PERMISSION_GRANTED)
             requestPermissions(arrayOf(permission.WRITE_EXTERNAL_STORAGE), 300)
-        }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
