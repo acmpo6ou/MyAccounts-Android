@@ -34,6 +34,7 @@ import java.io.FileOutputStream
 
 open class ModelTest : DatabaseUtils {
     val faker = Faker()
+    override lateinit var app: MyApp
 
     open val password = "123"
     val jsonDatabase =
@@ -41,7 +42,6 @@ open class ModelTest : DatabaseUtils {
             "\"tom@gmail.com\",\"password\":\"123\",\"date\":\"01.01.1990\"," +
             "\"comment\":\"My gmail account.\"}}"
 
-    override lateinit var app: MyApp
     val contentResolver: ContentResolver = mock()
     private val descriptor: ParcelFileDescriptor = mock()
 
@@ -61,7 +61,7 @@ open class ModelTest : DatabaseUtils {
     }
 
     /**
-     * This method creates empty src folder in a fake file system, it ensures that
+     * Creates empty src folder in a fake file system, it ensures that
      * directory will be empty.
      */
     @Before
@@ -71,9 +71,7 @@ open class ModelTest : DatabaseUtils {
 
         // here we delete accounts folder if it already exists to ensure that it will
         // be empty as is needed for our tests
-        if (accountsFolder.exists()) {
-            accountsFolder.deleteRecursively()
-        }
+        accountsFolder.deleteRecursively()
 
         // then we create accounts folder and src inside it
         srcFolder.mkdirs()
@@ -96,9 +94,9 @@ open class ModelTest : DatabaseUtils {
     }
 
     /**
-     * This is a helper method that will copy our test databases from sampledata folder to
+     * Helper method to copy our test databases from sampledata folder to
      * the fake file system.
-     * @param[name] name of the database that we want to copy to the fake file system
+     * @param[name] name of the database that we want to copy.
      */
     fun copyDatabase(name: String = "database") {
         // this are were we want to copy database .bin and .db files

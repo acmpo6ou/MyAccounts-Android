@@ -88,7 +88,7 @@ val account = Account(
 val databaseMap = mutableMapOf("gmail" to account.copy())
 
 /**
- * Helper method to clone the mutable map.
+ * Clones the mutable map.
  *
  * We need it because the map is *mutable* and changes made to the map will persist between
  * tests.
@@ -96,7 +96,7 @@ val databaseMap = mutableMapOf("gmail" to account.copy())
 fun MutableMap<String, Account>.copy() = this.toMap().toMutableMap()
 
 /**
- * Helper function that generates random Int in specified range, but excluding number
+ * Generates random Int in specified range, but excluding number
  * that is specified in parameter [exception].
  *
  * Example:
@@ -109,14 +109,10 @@ fun MutableMap<String, Account>.copy() = this.toMap().toMutableMap()
  * @return generated random number.
  */
 fun randomIntExcept(exception: Int, start: Int = 0, end: Int = 20): Int {
-    val faker = Faker()
     var res: Int
-
     while (true) {
-        res = faker.number().numberBetween(start, end)
-        if (res != exception) {
-            break
-        }
+        res = Faker().number().numberBetween(start, end)
+        if (res != exception) break
     }
     return res
 }
@@ -125,7 +121,7 @@ fun randomIntExcept(exception: Int, start: Int = 0, end: Int = 20): Int {
 fun Faker.str(): String = this.lorem().sentence()
 
 /**
- * Helper method to simulate selecting an item in navigation drawer.
+ * Simulates selecting an item in navigation drawer.
  *
  * @param[id] item id.
  * @param[view] system under test.
@@ -140,7 +136,7 @@ fun selectNavigationItem(id: Int, view: NavigationView.OnNavigationItemSelectedL
 }
 
 /**
- * Helper method to click on the popup menu item.
+ * Clicks on the popup menu item.
  *
  * @param[itemLayout] layout containing 3 dots to open the popup menu.
  * @param[itemId] id of the item we want to click.
@@ -194,7 +190,7 @@ inline fun <reified T : Fragment> launchFragmentInHiltContainer(
 }
 
 /**
- * Used in tests to get measured and laid out recyclerview.
+ * Returns measured and laid out recyclerview.
  *
  * It finds recycler, measures and lays it out, so that later we can obtain its items.
  * @param[recyclerId] id of recycler.
