@@ -20,7 +20,6 @@
 package com.acmpo6ou.myaccounts.superclass
 
 import com.acmpo6ou.myaccounts.BuildConfig
-import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivityI
 import com.acmpo6ou.myaccounts.core.superclass.SuperPresenter
 import com.acmpo6ou.myaccounts.str
@@ -32,42 +31,15 @@ import org.junit.Test
 import org.mockito.ArgumentMatchers.anyString
 import retrofit2.Call
 
-open class TestSuperPresenter : SuperPresenter() {
-    override var view: SuperActivityI = mock()
-
-    override fun backPressed() {
-    }
-    override fun saveSelected() {
-    }
-}
-
 class SuperPresenterTests {
     private lateinit var presenter: TestSuperPresenter
     private val latestVersion = Faker().str()
 
     @Before
     fun setup() {
-        presenter = TestSuperPresenter()
         val callback: Call<ResponseBody> = mock()
+        presenter = TestSuperPresenter()
         presenter.service = mock { on { getLatestRelease() } doReturn callback }
-    }
-
-    @Test
-    fun `checkForUpdates should call noUpdates when updates aren't available`() {
-        // here we pass version that is exactly the same as installed one, so there are
-        // no updates available
-        presenter.checkForUpdates(BuildConfig.VERSION_NAME)
-        verify(presenter.view).noUpdates()
-        verify(presenter.view, never()).startUpdatesActivity(anyString())
-    }
-
-    @Test
-    fun `checkForUpdates should call startUpdatesActivity when updates are available`() {
-        // here we pass different version then the installed one, so there are
-        // updates available
-        presenter.checkForUpdates(latestVersion)
-        verify(presenter.view).startUpdatesActivity(latestVersion)
-        verify(presenter.view, never()).noUpdates()
     }
 
     @Test
@@ -99,20 +71,29 @@ class SuperPresenterTests {
     }
 
     @Test
-    fun `navigateToChangelog should call navigateTo`() {
-        presenter.navigateToChangelog()
-        verify(presenter.view).navigateTo(R.id.actionChangelog)
+    fun `checkForUpdates should call noUpdates when updates aren't available`() {
+        // here we pass version that is exactly the same as installed one, so there are
+        // no updates available
+        presenter.checkForUpdates(BuildConfig.VERSION_NAME)
+        verify(presenter.view).noUpdates()
+        verify(presenter.view, never()).startUpdatesActivity(anyString())
     }
 
     @Test
-    fun `navigateToSettings should call navigateTo`() {
-        presenter.navigateToSettings()
-        verify(presenter.view).navigateTo(R.id.actionSettings)
+    fun `checkForUpdates should call startUpdatesActivity when updates are available`() {
+        // here we pass different version then the installed one, so there are
+        // updates available
+        presenter.checkForUpdates(latestVersion)
+        verify(presenter.view).startUpdatesActivity(latestVersion)
+        verify(presenter.view, never()).noUpdates()
     }
+}
 
-    @Test
-    fun `navigateToAbout should call navigateTo`() {
-        presenter.navigateToAbout()
-        verify(presenter.view).navigateTo(R.id.actionAbout)
+open class TestSuperPresenter : SuperPresenter() {
+    override var view: SuperActivityI = mock()
+
+    override fun backPressed() {
+    }
+    override fun saveSelected() {
     }
 }

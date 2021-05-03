@@ -28,6 +28,7 @@ interface SuperActivityI :
     NavigationView.OnNavigationItemSelectedListener,
     SettingsUtils,
     NetUtils {
+
     val mainFragment: ListFragmentI
     var app: MyApp
 
