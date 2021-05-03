@@ -98,7 +98,8 @@ class UpdatesActivity : AppCompatActivity(), NetUtils {
         viewModel.downloadEnabled.observe(this, downloadEnabledObserver)
 
         // get update version and changelog and set them on appropriate text views
-        updateVersion = intent?.extras?.getString("version")!!
+        val extras = intent?.extras ?: return
+        updateVersion = extras.getString("version")!!
         b.updateVersion.text = updateVersion
         viewModel.getChangelog(resources.getString(R.string.failed_to_load_changelog))
     }
