@@ -29,13 +29,16 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.io.File
 import java.net.URL
+import javax.inject.Inject
 
-open class UpdatesViewModel : ViewModel() {
+@HiltViewModel
+open class UpdatesViewModel @Inject constructor() : ViewModel() {
     var DOWNLOAD_DIR_FULL = "/storage/emulated/0/Download/"
     private val apkName = "myaccounts-release.apk"
 
