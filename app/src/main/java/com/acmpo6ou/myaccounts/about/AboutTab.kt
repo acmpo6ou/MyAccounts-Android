@@ -44,7 +44,7 @@ class AboutTab : Fragment() {
         aboutLabel.movementMethod = LinkMovementMethod.getInstance()
         val resources = requireActivity().resources
 
-        // load changelog from `raw/about`
+        // load about from `raw/about`
         val about =
             resources.openRawResource(
                 resources.getIdentifier(

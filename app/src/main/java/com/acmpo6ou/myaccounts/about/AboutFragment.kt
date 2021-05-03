@@ -61,7 +61,7 @@ class AboutFragment : Fragment() {
     }
 
     /**
-     * This method connects TabLayout, AboutAdapter and ViewPager2.
+     * Connects TabLayout, AboutAdapter and ViewPager2.
      */
     private fun configureTabLayout() {
         val tabLayout = myView.findViewById<TabLayout>(R.id.tabLayout)
