@@ -75,6 +75,16 @@ android {
         }
     }
 
+    sourceSets {
+        test {
+            java.srcDirs += "$projectDir/src/debug"
+        }
+
+        androidTest {
+            java.srcDirs += "$projectDir/src/debug"
+        }
+    }
+
     hilt {
         enableTransformForLocalTests = true
     }
@@ -163,4 +173,5 @@ dependencies {
     androidTestImplementation 'com.github.javafaker:javafaker:0.18'
 
     debugImplementation "androidx.fragment:fragment-testing:1.2.5"
+    debugImplementation 'com.github.javafaker:javafaker:0.18'
 }
