@@ -63,53 +63,36 @@ class SuperActivityFunc {
     @Before
     fun setup() {
         scenario = ActivityScenario.launch(AccountsActivity::class.java)
+
+        // prepare confirm back dialog
+        scenario.onActivity { it.confirmBack() }
+        Thread.sleep(1000) // wait for dialog to appear
     }
 
     @Test
     fun confirmBack_should_call_presenter_saveSelected_when_Save_is_chosen_in_dialog() {
-        scenario.onActivity {
-            it.confirmBack()
-        }
-        // wait for dialog to appear
-        Thread.sleep(1000)
-
         // choose Save
         onView(withText(R.string.save))
             .inRoot(isDialog())
             .perform(click())
-
         verify(presenter).saveSelected()
     }
 
     @Test
     fun confirmBack_should_not_call_presenter_saveSelected_when_Ok_is_chosen_in_dialog() {
-        scenario.onActivity {
-            it.confirmBack()
-        }
-        // wait for dialog to appear
-        Thread.sleep(1000)
-
         // choose Ok
         onView(withText("Ok"))
             .inRoot(isDialog())
             .perform(click())
-
         verify(presenter, never()).saveSelected()
     }
 
     @Test
     fun confirmBack_should_not_call_presenter_saveSelected_when_Cancel_is_chosen_in_dialog() {
-        scenario.onActivity {
-            it.confirmBack()
-        }
-        // wait for dialog to appear
-        Thread.sleep(1000)
-
         // choose Cancel
         onView(withText(R.string.cancel))
             .inRoot(isDialog())
             .perform(click())
-
         verify(presenter, never()).saveSelected()
     }
 }
