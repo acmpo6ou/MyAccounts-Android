@@ -71,7 +71,12 @@ class DatabasesAdapterInst {
     @BindValue
     @JvmField
     @FragmentScoped
-    val mainActivity: MainActivityI = mock()
+    val mainActivityI: MainActivityI = mock()
+
+    @BindValue
+    @JvmField
+    @FragmentScoped
+    val mainActivity: MainActivity = mock()
 
     @BindValue
     @JvmField
@@ -88,7 +93,7 @@ class DatabasesAdapterInst {
     private lateinit var itemLayout2: View
 
     @Before
-    fun setUp() {
+    fun setup() {
         app.databases = mockDatabases
         hiltAndroidRule.inject()
 
@@ -110,7 +115,7 @@ class DatabasesAdapterInst {
     @Test
     fun `database item should have appropriate name`() {
         val databaseName = itemLayout.findViewById<TextView>(R.id.itemName)
-        assertEquals("main", databaseName?.text)
+        assertEquals("main", databaseName.text)
     }
 
     @Test

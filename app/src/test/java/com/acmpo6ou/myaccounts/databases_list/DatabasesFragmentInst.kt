@@ -51,7 +51,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
-import org.robolectric.annotation.LooperMode
 import org.robolectric.shadows.ShadowAlertDialog
 import javax.inject.Singleton
 
@@ -62,7 +61,6 @@ import javax.inject.Singleton
     MainActivityModule::class,
 )
 @RunWith(RobolectricTestRunner::class)
-@LooperMode(LooperMode.Mode.PAUSED)
 class DatabasesFragmentInst {
     @get:Rule
     var hiltAndroidRule = HiltAndroidRule(this)
@@ -88,7 +86,12 @@ class DatabasesFragmentInst {
     @BindValue
     @JvmField
     @FragmentScoped
-    val mainActivity: MainActivityI = mock()
+    val mainActivityI: MainActivityI = mock()
+
+    @BindValue
+    @JvmField
+    @FragmentScoped
+    val mainActivity: MainActivity = mock()
 
     // get string resources
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -186,7 +189,7 @@ class DatabasesFragmentInst {
         val details = Faker().str()
 
         fragment.showError(title, details)
-        verify(mainActivity).showError(title, details)
+        verify(mainActivityI).showError(title, details)
     }
 
     private fun setupPresenterAndAdapter() {
