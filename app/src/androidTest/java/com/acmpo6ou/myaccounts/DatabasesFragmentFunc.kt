@@ -19,45 +19,73 @@
 
 package com.acmpo6ou.myaccounts
 
-import androidx.fragment.app.testing.FragmentScenario
-import androidx.fragment.app.testing.launchFragmentInContainer
+import android.content.SharedPreferences
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.acmpo6ou.myaccounts.database.databases_list.Database
-import com.acmpo6ou.myaccounts.database.databases_list.DatabasesPresenterI
-import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragment
+import com.acmpo6ou.myaccounts.core.AppModule
+import com.acmpo6ou.myaccounts.database.databases_list.*
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityModule
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
+import dagger.hilt.android.scopes.FragmentScoped
+import dagger.hilt.android.testing.BindValue
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
+import javax.inject.Singleton
 
-@RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
+@UninstallModules(
+    AppModule::class,
+    DatabasesBindings::class, DatabasesModule::class,
+    MainActivityModule::class,
+)
 class DatabasesFragmentFunc {
-    lateinit var scenario: FragmentScenario<DatabasesFragment>
-    lateinit var presenter: DatabasesPresenterI
+    @get:Rule
+    var hiltAndroidRule = HiltAndroidRule(this)
+    lateinit var fragment: DatabasesFragment
+
+    @BindValue
+    @Singleton
+    @JvmField
+    val app: MyApp = mock { on { databases } doReturn mutableListOf(Database("main")) }
+
+    @BindValue
+    @JvmField
+    @Singleton
+    val sharedPreferences: SharedPreferences = mock()
+
+    @BindValue
+    @JvmField
+    @FragmentScoped
+    val presenter: DatabasesPresenterI = mock()
+
+    @BindValue
+    @JvmField
+    @FragmentScoped
+    val mainActivityI: MainActivityI = mock()
+
+    @BindValue
+    @JvmField
+    @FragmentScoped
+    val mainActivity: MainActivity = mock()
 
     @Before
     fun setUp() {
-        scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
-
-        val app = MyApp()
-        app.databases = mutableListOf(Database("main"))
-        presenter = mock()
-
-        scenario.onFragment {
-            it.app = app
-            it.presenter = presenter
-        }
+        fragment = launchFragmentInHiltContainer()
     }
 
     @Test
     fun confirmDelete_should_call_deleteDatabase_when_Yes_is_chosen_in_dialog() {
-        scenario.onFragment {
-            it.confirmDelete(0)
+        launchFragmentInHiltContainer<DatabasesFragment> {
+            (this as DatabasesFragment).confirmDelete(0)
         }
         // wait for dialog to appear
         Thread.sleep(1000)
@@ -70,8 +98,8 @@ class DatabasesFragmentFunc {
 
     @Test
     fun confirmDelete_should_not_call_deleteDatabase_when_No_is_chosen_in_dialog() {
-        scenario.onFragment {
-            it.confirmDelete(0)
+        launchFragmentInHiltContainer<DatabasesFragment> {
+            (this as DatabasesFragment).confirmDelete(0)
         }
         // wait for dialog to appear
         Thread.sleep(1000)
@@ -84,8 +112,8 @@ class DatabasesFragmentFunc {
 
     @Test
     fun confirmClose_should_call_closeDatabase_when_Yes_is_chosen_in_dialog() {
-        scenario.onFragment {
-            it.confirmClose(0)
+        launchFragmentInHiltContainer<DatabasesFragment> {
+            (this as DatabasesFragment).confirmClose(0)
         }
         // wait for dialog to appear
         Thread.sleep(1000)
@@ -98,8 +126,8 @@ class DatabasesFragmentFunc {
 
     @Test
     fun confirmClose_should_not_call_closeDatabase_when_No_is_chosen_in_dialog() {
-        scenario.onFragment {
-            it.confirmClose(0)
+        launchFragmentInHiltContainer<DatabasesFragment> {
+            (this as DatabasesFragment).confirmClose(0)
         }
         // wait for dialog to appear
         Thread.sleep(1000)
