@@ -19,14 +19,9 @@
 
 package com.acmpo6ou.myaccounts.accounts_list
 
-import android.content.Context
-import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.setViewNavController
-import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.MyApp
-import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account
 import com.acmpo6ou.myaccounts.account.accounts_list.AccountsFragment
 import com.acmpo6ou.myaccounts.account.accounts_list.AccountsFragmentDirections.actionDisplayAccount
@@ -42,13 +37,11 @@ import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.shadows.ShadowAlertDialog
 
 @HiltAndroidTest
 @UninstallModules(AppModule::class, AccountsListBindings::class)
@@ -67,10 +60,6 @@ class AccountsFragmentInst {
 
     lateinit var fragment: AccountsFragment
     private lateinit var navController: NavController
-
-    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
-    private val warningTitle = context.resources.getString(R.string.warning)
-    private val confirmDeleteMsg = context.resources.getString(R.string.confirm_account_delete)
 
     @Before
     fun setUp() {
@@ -99,23 +88,5 @@ class AccountsFragmentInst {
 
         val expectedAction = actionEditAccount(account.accountName)
         verify(navController).navigate(expectedAction)
-    }
-
-    @Test
-    fun `confirmDelete should create dialog with appropriate message and title`() {
-        fragment.confirmDelete(0)
-
-        val dialog = ShadowAlertDialog.getLatestDialog() as AlertDialog
-        val title = dialog.findViewById<TextView>(R.id.alertTitle)
-        val message = dialog.findViewById<TextView>(android.R.id.message)
-
-        assertEquals(
-            "confirmDelete created dialog with incorrect title!",
-            warningTitle, title?.text
-        )
-        assertEquals(
-            "confirmDelete created dialog with incorrect message!",
-            String.format(confirmDeleteMsg, account.accountName), message?.text
-        )
     }
 }
