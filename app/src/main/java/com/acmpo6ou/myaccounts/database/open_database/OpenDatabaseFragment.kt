@@ -126,7 +126,7 @@ class OpenDatabaseFragment : Fragment(), ErrorFragment {
         myLifecycle = viewLifecycleOwner
         initModel()
 
-        // Set app bar title to `Open <database name>`
+        // Set toolbar title to `Open <database name>`
         val dbName = app.databases[databaseIndex].name
         val appTitle = myContext.resources.getString(R.string.open_db, dbName)
         superActivity.supportActionBar?.title = appTitle

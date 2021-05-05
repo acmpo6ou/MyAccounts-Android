@@ -55,7 +55,7 @@ class EditDatabaseFragment : CreateEditDatabaseFragment() {
 
     override fun initForm() {
         super.initForm()
-        // Set app bar title to `Edit <database name>`
+        // Set toolbar title to `Edit <database name>`
         val dbName = app.databases[databaseIndex].name
         val appTitle = myContext.resources.getString(R.string.edit_db, dbName)
         superActivity.supportActionBar?.title = appTitle
