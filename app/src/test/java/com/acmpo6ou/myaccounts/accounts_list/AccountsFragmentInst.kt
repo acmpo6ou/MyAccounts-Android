@@ -48,13 +48,11 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.LooperMode
 import org.robolectric.shadows.ShadowAlertDialog
 
 @HiltAndroidTest
 @UninstallModules(AppModule::class, AccountsListBindings::class)
 @RunWith(RobolectricTestRunner::class)
-@LooperMode(LooperMode.Mode.PAUSED)
 class AccountsFragmentInst {
     @get:Rule
     var hiltAndroidRule = HiltAndroidRule(this)
