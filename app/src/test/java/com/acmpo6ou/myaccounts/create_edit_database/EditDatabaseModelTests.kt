@@ -56,6 +56,7 @@ class EditDatabaseModelTests : ModelTest() {
         }
 
         model = EditDatabaseViewModel(spyApp, Dispatchers.Unconfined, Dispatchers.Unconfined)
+        model.databaseIndex = 0
         spyModel = spy(model) { on { generateSalt() } doReturn salt }
 
         doNothing().whenever(spyModel).deleteDatabase(anyString())
