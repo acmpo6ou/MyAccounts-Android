@@ -19,14 +19,19 @@
 
 package com.acmpo6ou.myaccounts
 
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.core.AppModule
 import com.acmpo6ou.myaccounts.database.databases_list.*
 import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
 import com.acmpo6ou.myaccounts.database.main_activity.MainActivityModule
+import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
@@ -36,7 +41,6 @@ import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import javax.inject.Singleton
@@ -50,12 +54,14 @@ import javax.inject.Singleton
 class DatabasesFragmentFunc {
     @get:Rule
     var hiltAndroidRule = HiltAndroidRule(this)
-    lateinit var fragment: DatabasesFragment
+
+    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
+    private val dbName = Faker().str()
 
     @BindValue
     @Singleton
     @JvmField
-    val app: MyApp = mock { on { databases } doReturn mutableListOf(Database("main")) }
+    val app: MyApp = mock { on { databases } doReturn mutableListOf(Database(dbName)) }
 
     @BindValue
     @JvmField
@@ -77,11 +83,6 @@ class DatabasesFragmentFunc {
     @FragmentScoped
     val mainActivity: MainActivity = mock()
 
-    @Before
-    fun setUp() {
-        fragment = launchFragmentInHiltContainer()
-    }
-
     @Test
     fun confirmDelete_should_call_deleteDatabase_when_Yes_is_chosen_in_dialog() {
         launchFragmentInHiltContainer<DatabasesFragment> {
@@ -89,6 +90,10 @@ class DatabasesFragmentFunc {
         }
         // wait for dialog to appear
         Thread.sleep(1000)
+
+        // check dialog message
+        val msg = context.resources.getString(R.string.confirm_delete, dbName)
+        onView(withId(android.R.id.message)).check(matches(withText(msg)))
 
         // choose Yes
         onView(withId(android.R.id.button1)).perform(click())
@@ -104,6 +109,10 @@ class DatabasesFragmentFunc {
         // wait for dialog to appear
         Thread.sleep(1000)
 
+        // check dialog message
+        val msg = context.resources.getString(R.string.confirm_delete, dbName)
+        onView(withId(android.R.id.message)).check(matches(withText(msg)))
+
         // choose No
         onView(withId(android.R.id.button2)).perform(click())
 
@@ -118,6 +127,10 @@ class DatabasesFragmentFunc {
         // wait for dialog to appear
         Thread.sleep(1000)
 
+        // check dialog message
+        val msg = context.resources.getString(R.string.confirm_close, dbName)
+        onView(withId(android.R.id.message)).check(matches(withText(msg)))
+
         // choose Yes
         onView(withId(android.R.id.button1)).perform(click())
 
@@ -131,6 +144,10 @@ class DatabasesFragmentFunc {
         }
         // wait for dialog to appear
         Thread.sleep(1000)
+
+        // check dialog message
+        val msg = context.resources.getString(R.string.confirm_close, dbName)
+        onView(withId(android.R.id.message)).check(matches(withText(msg)))
 
         // choose No
         onView(withId(android.R.id.button2)).perform(click())
