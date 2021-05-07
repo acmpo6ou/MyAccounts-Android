@@ -20,12 +20,9 @@
 package com.acmpo6ou.myaccounts.open_database
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.acmpo6ou.myaccounts.copy
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.database.Database
-import com.acmpo6ou.myaccounts.databaseMap
-import com.acmpo6ou.myaccounts.str
-import com.acmpo6ou.myaccounts.ui.database.OpenDatabaseViewModel
+import com.acmpo6ou.myaccounts.*
+import com.acmpo6ou.myaccounts.database.databases_list.Database
+import com.acmpo6ou.myaccounts.database.open_database.OpenDatabaseViewModel
 import com.github.javafaker.Faker
 import com.macasaet.fernet.TokenValidationException
 import com.nhaarman.mockitokotlin2.*
@@ -41,47 +38,112 @@ class OpenDatabaseViewModelTests {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 
+    private lateinit var model: OpenDatabaseViewModel
     private lateinit var spyModel: OpenDatabaseViewModel
-    private val faker = Faker()
-    private val password = "123"
 
-    val SRC_DIR = "sampledata/src/"
-    private val titleStart = faker.str()
-    private val salt = "0123456789abcdef".toByteArray()
+    private val faker = Faker()
     lateinit var app: MyApp
+    lateinit var spyApp: MyApp
+
+    private val password = "123"
+    val SRC_DIR = "sampledata/src/"
 
     @Before
     fun setup() {
         app = MyApp()
         app.databases = mutableListOf(Database("main"))
+        spyApp = spy(app) {
+            on { SRC_DIR } doReturn SRC_DIR
+        }
 
-        // init spyModel
-        spyModel = spy()
-        spyModel.initialize(app, SRC_DIR, titleStart, 0)
-        spyModel.defaultDispatcher = Dispatchers.Unconfined
-        spyModel.uiDispatcher = Dispatchers.Unconfined
+        model = OpenDatabaseViewModel(spyApp, Dispatchers.Unconfined, Dispatchers.Unconfined)
+        spyModel = spy(model)
+    }
+
+    @Test
+    fun `startPasswordCheck should not launch verifyPassword if password is empty`() {
+        spyModel.startPasswordCheck("", 0)
+        runBlocking {
+            verify(spyModel, never()).verifyPassword("", 0)
+        }
+    }
+
+    @Test
+    fun `startPasswordCheck should launch verifyPassword if passwordJob is null`() {
+        spyModel.startPasswordCheck(password, 0)
+        runBlocking {
+            verify(spyModel).verifyPassword(password, 0)
+        }
+    }
+
+    @Test
+    fun `startPasswordCheck should launch verifyPassword if passwordJob isn't active`() {
+        spyModel.coroutineJob = mock { on { isActive } doReturn false }
+        spyModel.startPasswordCheck(password, 0)
+
+        runBlocking {
+            verify(spyModel).verifyPassword(password, 0)
+        }
+    }
+
+    @Test
+    fun `verifyPassword should set loading to true`() {
+        runBlocking {
+            spyModel.verifyPassword(password, 0)
+        }
+        assertTrue(spyModel.loading.value!!)
+    }
+
+    @Test
+    fun `verifyPassword should save deserialized Database to the list`() {
+        val expectedDatabase = Database("main", password, salt, databaseMap.copy())
+
+        runBlocking {
+            spyModel.verifyPassword(password, 0)
+        }
+        assertEquals(expectedDatabase.toString(), app.databases[0].toString())
+    }
+
+    @Test
+    fun `verifyPassword should set opened to true after successful deserialization`() {
+        runBlocking {
+            spyModel.verifyPassword(password, 0)
+        }
+        assertTrue(spyModel.opened.value!!)
     }
 
     @Test
     fun `verifyPassword should set incorrectPassword to true if there is TokenValidation error`() {
         doAnswer {
             throw TokenValidationException("")
-        }.whenever(spyModel).openDatabaseAsync(app.databases[0])
+        }.whenever(spyModel).openDatabaseAsync(any())
 
         runBlocking {
-            spyModel.verifyPassword(faker.str())
+            spyModel.verifyPassword(faker.str(), 0)
         }
-        assertTrue(spyModel.incorrectPassword)
+        assertTrue(spyModel.incorrectPassword.value!!)
+    }
+
+    @Test
+    fun `verifyPassword should set loading to false when password is incorrect`() {
+        doAnswer {
+            throw TokenValidationException("")
+        }.whenever(spyModel).openDatabaseAsync(any())
+
+        runBlocking {
+            spyModel.verifyPassword(faker.str(), 0)
+        }
+        assertFalse(spyModel.loading.value!!)
     }
 
     @Test
     fun `verifyPassword should remove key from cache if password is incorrect`() {
         doAnswer {
             throw TokenValidationException("")
-        }.whenever(spyModel).openDatabaseAsync(app.databases[0])
+        }.whenever(spyModel).openDatabaseAsync(any())
 
         runBlocking {
-            spyModel.verifyPassword(faker.str())
+            spyModel.verifyPassword(faker.str(), 0)
         }
         assertTrue(app.keyCache.isEmpty())
     }
@@ -95,85 +157,9 @@ class OpenDatabaseViewModelTests {
         }.whenever(spyModel).openDatabaseAsync(any())
 
         runBlocking {
-            spyModel.verifyPassword(faker.str())
+            spyModel.verifyPassword(faker.str(), 0)
         }
-        assertTrue(spyModel.corrupted)
-    }
-
-    @Test
-    fun `verifyPassword should save deserialized Database to the list`() {
-        val expectedDatabase = Database("main", password, salt, databaseMap.copy())
-
-        runBlocking {
-            spyModel.verifyPassword(password)
-        }
-        assertEquals(expectedDatabase.toString(), app.databases[0].toString())
-    }
-
-    @Test
-    fun `verifyPassword should set isOpened to true after successful deserialization`() {
-        runBlocking {
-            spyModel.verifyPassword(password)
-        }
-        assertTrue(spyModel.opened)
-    }
-
-    @Test
-    fun `verifyPassword should set loading to true`() {
-        runBlocking {
-            spyModel.verifyPassword(password)
-        }
-        assertTrue(spyModel.loading)
-    }
-
-    @Test
-    fun `verifyPassword should set loading to false when password is incorrect`() {
-        doAnswer {
-            throw TokenValidationException("")
-        }.whenever(spyModel).openDatabaseAsync(app.databases[0])
-
-        runBlocking {
-            spyModel.verifyPassword(faker.str())
-        }
-        assertFalse(spyModel.loading)
-    }
-
-    @Test
-    fun `startPasswordCheck should not start verifyPassword if passwordJob already active`() {
-        spyModel.coroutineJob = mock { on { isActive } doReturn true }
-        spyModel.startPasswordCheck(password)
-
-        runBlocking {
-            verify(spyModel, never()).verifyPassword(password)
-        }
-    }
-
-    @Test
-    fun `startPasswordCheck should not start verifyPassword if password is empty`() {
-        spyModel.startPasswordCheck("")
-
-        runBlocking {
-            verify(spyModel, never()).verifyPassword("")
-        }
-    }
-
-    @Test
-    fun `startPasswordCheck should start verifyPassword if passwordJob isn't active`() {
-        spyModel.coroutineJob = mock { on { isActive } doReturn false }
-        spyModel.startPasswordCheck(password)
-
-        runBlocking {
-            verify(spyModel).verifyPassword(password)
-        }
-    }
-
-    @Test
-    fun `startPasswordCheck should start verifyPassword if passwordJob is null`() {
-        spyModel.startPasswordCheck(password)
-
-        runBlocking {
-            verify(spyModel).verifyPassword(password)
-        }
+        assertTrue(spyModel.corrupted.value!!)
     }
 
     @Test
@@ -185,9 +171,19 @@ class OpenDatabaseViewModelTests {
         }.whenever(spyModel).openDatabaseAsync(any())
 
         runBlocking {
-            spyModel.verifyPassword(password)
+            spyModel.verifyPassword(password, 0)
         }
-        assertEquals(exception.toString(), spyModel.errorMsg)
-        assertFalse(spyModel.loading)
+        assertEquals(exception.toString(), spyModel.errorMsg.value!!)
+        assertFalse(spyModel.loading.value!!)
+    }
+
+    @Test
+    fun `startPasswordCheck should not start verifyPassword if passwordJob already active`() {
+        spyModel.coroutineJob = mock { on { isActive } doReturn true }
+        spyModel.startPasswordCheck(password, 0)
+
+        runBlocking {
+            verify(spyModel, never()).verifyPassword(password, 0)
+        }
     }
 }

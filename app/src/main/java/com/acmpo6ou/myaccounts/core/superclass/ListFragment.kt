@@ -19,7 +19,6 @@
 
 package com.acmpo6ou.myaccounts.core.superclass
 
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -30,16 +29,14 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.databinding.FragmentListBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 
 /**
- * Super class for DatabaseFragment and AccountsFragment – fragments that contain
- * lists of items.
+ * Super class for fragments that contain list of items.
  */
-abstract class ListFragment : Fragment(), ListFragmentInter {
+abstract class ListFragment : Fragment(), ListFragmentI {
     private var binding: FragmentListBinding? = null
     val b: FragmentListBinding get() = binding!!
 
@@ -47,15 +44,6 @@ abstract class ListFragment : Fragment(), ListFragmentInter {
     abstract val adapter: RecyclerView.Adapter<*>
     abstract val presenter: ListPresenter
     abstract val actionCreateItem: Int
-
-    override lateinit var myContext: Context
-    lateinit var app: MyApp
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        myContext = context
-        app = context.applicationContext as MyApp
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -78,7 +66,7 @@ abstract class ListFragment : Fragment(), ListFragmentInter {
             view.findNavController().navigate(actionCreateItem)
         }
 
-        b.itemsList.layoutManager = LinearLayoutManager(myContext)
+        b.itemsList.layoutManager = LinearLayoutManager(context)
         b.itemsList.adapter = adapter
 
         // listener to hide/display FAB when scrolling, so that the FAB doesn't prevent from
@@ -95,24 +83,17 @@ abstract class ListFragment : Fragment(), ListFragmentInter {
     }
 
     /**
-     * This method decides whether to show recycler view placeholder (tip that is shown when
+     * Decides whether to show recycler view placeholder (tip that is shown when
      * recycler is empty).
-     *
-     * If there are items in the list it hides placeholder, if there aren't it displays
-     * the placeholder.
+     * If there are items in the list it hides placeholder, otherwise – displays it.
      */
     fun checkListPlaceholder() {
-        if (items.isEmpty()) {
-            b.itemsList.visibility = View.GONE
-            b.noItems.visibility = View.VISIBLE
-        } else {
-            b.itemsList.visibility = View.VISIBLE
-            b.noItems.visibility = View.GONE
-        }
+        b.itemsList.visibility = if (items.isEmpty()) View.GONE else View.VISIBLE
+        b.noItems.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
     }
 
     /**
-     * Used to display a snackbar with success message.
+     * Displays a snackbar with success message.
      */
     override fun showSuccess() {
         Snackbar.make(
@@ -125,14 +106,14 @@ abstract class ListFragment : Fragment(), ListFragmentInter {
     }
 
     /**
-     * Used to build and display confirmation dialog.
+     * Builds and displays confirmation dialog.
      *
      * @param[message] message to describe what we asking user to confirm.
      * @param[positiveAction] function to invoke when user confirms an action (i.e. presses
      * the `Yes` button).
      */
     inline fun confirmDialog(message: String, crossinline positiveAction: () -> Unit) {
-        MaterialAlertDialogBuilder(myContext)
+        MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.warning)
             .setMessage(message)
             .setIcon(R.drawable.ic_warning)
@@ -144,7 +125,7 @@ abstract class ListFragment : Fragment(), ListFragmentInter {
     }
 
     /**
-     * This method rerenders list after any item have changed.
+     * Rerenders list after any item have changed.
      * @param[i] index of item that have changed.
      */
     override fun notifyChanged(i: Int) {
@@ -154,7 +135,7 @@ abstract class ListFragment : Fragment(), ListFragmentInter {
     }
 
     /**
-     * This method rerenders list after any item have been deleted.
+     * Rerenders list after any item have been deleted.
      * @param[i] index of item that have been deleted.
      */
     override fun notifyRemoved(i: Int) {

@@ -27,22 +27,32 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Environment
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
 import androidx.core.text.HtmlCompat.fromHtml
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import com.acmpo6ou.myaccounts.core.NetUtils
+import com.acmpo6ou.myaccounts.core.UpdatesViewModel
+import com.acmpo6ou.myaccounts.core.utils.NetUtils
 import com.acmpo6ou.myaccounts.databinding.UpdatesActivityBinding
-import com.acmpo6ou.myaccounts.ui.UpdatesViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.qualifiers.ActivityContext
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class UpdatesActivity : AppCompatActivity(), NetUtils {
     private var binding: UpdatesActivityBinding? = null
     val b: UpdatesActivityBinding get() = binding!!
 
-    lateinit var viewModel: UpdatesViewModel
-    lateinit var updateVersion: String
+    @Inject
+    @ActivityContext
     override lateinit var myContext: Context
+
+    @Inject
+    lateinit var downloadManager: DownloadManager
+
+    val viewModel: UpdatesViewModel by viewModels()
+    lateinit var updateVersion: String
 
     private val changelogObserver = Observer<String> {
         b.changelogText.text = fromHtml(it, HtmlCompat.FROM_HTML_MODE_COMPACT)
@@ -63,7 +73,6 @@ class UpdatesActivity : AppCompatActivity(), NetUtils {
         super.onCreate(savedInstanceState)
         binding = UpdatesActivityBinding.inflate(layoutInflater)
         setContentView(b.root)
-        myContext = this
 
         // go back when clicking the `Later` button
         b.updateLater.setOnClickListener {
@@ -77,7 +86,6 @@ class UpdatesActivity : AppCompatActivity(), NetUtils {
                 return@setOnClickListener
             }
 
-            val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
             viewModel.removeOldApk()
             viewModel.downloadUpdate(
                 updateVersion, downloadManager,
@@ -86,15 +94,12 @@ class UpdatesActivity : AppCompatActivity(), NetUtils {
         }
 
         registerReceiver(onComplete, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
-        viewModel = ViewModelProvider(this).get(UpdatesViewModel::class.java)
-
         viewModel.changelog.observe(this, changelogObserver)
         viewModel.downloadEnabled.observe(this, downloadEnabledObserver)
 
         // get update version and changelog and set them on appropriate text views
-        val extras = intent.extras ?: return
+        val extras = intent?.extras ?: return
         updateVersion = extras.getString("version")!!
-
         b.updateVersion.text = updateVersion
         viewModel.getChangelog(resources.getString(R.string.failed_to_load_changelog))
     }

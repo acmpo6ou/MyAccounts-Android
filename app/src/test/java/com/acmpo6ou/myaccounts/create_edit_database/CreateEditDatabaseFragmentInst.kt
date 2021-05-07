@@ -20,75 +20,35 @@
 package com.acmpo6ou.myaccounts.create_edit_database
 
 import android.content.Context
-import android.os.Build
 import android.view.View
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.platform.app.InstrumentationRegistry
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.MyApp
 import com.acmpo6ou.myaccounts.database.superclass.CreateEditDatabaseFragment
-import com.acmpo6ou.myaccounts.database.superclass.CreateEditDatabaseModel
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
-import com.nhaarman.mockitokotlin2.doNothing
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.LooperMode
-
-class TestFragment : CreateEditDatabaseFragment() {
-    override var viewModel: TestModel = spy()
-}
-
-open class TestModel : CreateEditDatabaseModel() {
-    override suspend fun apply(name: String, password: String) {
-    }
-}
 
 @RunWith(RobolectricTestRunner::class)
-@LooperMode(LooperMode.Mode.PAUSED)
-@Config(sdk = [Build.VERSION_CODES.O_MR1])
-class CreateEditDatabaseFragmentInst {
-    lateinit var scenario: FragmentScenario<TestFragment>
-    lateinit var model: TestModel
-    val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
-    val app = context.applicationContext as MyApp
-
-    val faker = Faker()
-    val name = faker.str()
-
-    @Before
-    fun setup() {
-        scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
-        app.res = context.resources
-
-        model = TestModel()
-        model.initialize(app, faker.str())
-
-        scenario.onFragment {
-            it.viewModel = model
-            it.initModel()
-            it.initForm()
-        }
-    }
+class CreateEditDatabaseFragmentInst : CEFTest() {
 
     @Test
     fun `should display or hide progress bar depending on 'loading' of view model`() {
         scenario.onFragment {
             // when loading is true progress bar should be displayed and button - disabled
-            it.viewModel._loading.value = true
+            it.viewModel.loading.value = true
             assertEquals(View.VISIBLE, it.b.progressLoading.visibility)
             assertFalse(it.b.applyButton.isEnabled)
 
-            // when loading false progress bar should be hidden and button - enabled
-            it.viewModel._loading.value = false
+            // when loading is false progress bar should be hidden and button - enabled
+            it.viewModel.loading.value = false
             assertEquals(View.GONE, it.b.progressLoading.visibility)
             assertTrue(it.b.applyButton.isEnabled)
         }
@@ -107,6 +67,35 @@ class CreateEditDatabaseFragmentInst {
 
             it.applyButton.performClick()
             verify(it.viewModel).applyPressed(name, pass)
+        }
+    }
+}
+
+class TestFragment : CreateEditDatabaseFragment() {
+    override lateinit var viewModel: TestDatabaseModel
+}
+
+open class CEFTest {
+    lateinit var scenario: FragmentScenario<TestFragment>
+    lateinit var model: TestDatabaseModel
+
+    val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
+    lateinit var app: MyApp
+
+    val faker = Faker()
+    val name = faker.str()
+
+    @Before
+    fun setup() {
+        scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
+        app = mock { on { res } doReturn context.resources }
+        model = TestDatabaseModel(app)
+
+        scenario.onFragment {
+            it.myContext = context
+            it.viewModel = model
+            it.initModel()
+            it.initForm()
         }
     }
 }

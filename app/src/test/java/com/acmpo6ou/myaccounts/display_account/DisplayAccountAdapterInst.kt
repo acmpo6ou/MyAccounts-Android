@@ -19,59 +19,69 @@
 
 package com.acmpo6ou.myaccounts.display_account
 
-import android.os.Build
 import android.view.View
-import androidx.fragment.app.testing.FragmentScenario
-import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.account.DisplayAccountPresenterInter
+import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsActivityI
+import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsModule
+import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountBindings
+import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountFragment
+import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountPresenterI
+import com.acmpo6ou.myaccounts.getRecycler
+import com.acmpo6ou.myaccounts.launchFragmentInHiltContainer
 import com.acmpo6ou.myaccounts.str
-import com.acmpo6ou.myaccounts.ui.account.DisplayAccountFragment
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import dagger.hilt.android.scopes.FragmentScoped
+import dagger.hilt.android.testing.BindValue
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
+@HiltAndroidTest
+@UninstallModules(DisplayAccountBindings::class, AccountsModule::class)
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
-@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class DisplayAccountAdapterInst {
-    lateinit var scenario: FragmentScenario<DisplayAccountFragment>
-    lateinit var presenter: DisplayAccountPresenterInter
-    private val fileName = Faker().str()
+    @get:Rule
+    var hiltAndroidRule = HiltAndroidRule(this)
 
-    var recycler: RecyclerView? = null
-    var itemLayout: View? = null
+    @BindValue
+    @JvmField
+    @FragmentScoped
+    val activity: AccountsActivityI = mock()
+
+    private val fileName = Faker().str()
+    private lateinit var recycler: RecyclerView
+    private lateinit var itemLayout: View
+
+    @BindValue
+    @JvmField
+    @FragmentScoped
+    val presenter: DisplayAccountPresenterI = mock {
+        on { attachedFilesList } doReturn listOf(fileName)
+    }
 
     @Before
     fun setUp() {
-        scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
-
-        presenter = mock {
-            on { attachedFilesList } doReturn listOf(fileName)
+        hiltAndroidRule.inject()
+        launchFragmentInHiltContainer<DisplayAccountFragment> {
+            recycler = this.getRecycler(R.id.attachedFilesList)
         }
-
-        scenario.onFragment {
-            it.presenter = presenter
-            recycler = it.view?.findViewById(R.id.attachedFilesList)
-        }
-
-        // measure and lay recycler out as is needed so we can obtain its items
-        recycler?.measure(0, 0)
-        recycler?.layout(0, 0, 100, 10000)
-        itemLayout = recycler?.getChildAt(0)
+        itemLayout = recycler.getChildAt(0)
     }
 
     @Test
     fun `should call presenter fileSelected when item is selected`() {
-        itemLayout?.performClick()
+        itemLayout.performClick()
         verify(presenter).fileSelected(fileName)
     }
 }

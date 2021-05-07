@@ -19,15 +19,15 @@
 
 package com.acmpo6ou.myaccounts.main_activity
 
-import android.content.ContentResolver
-import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.database.Database
-import com.acmpo6ou.myaccounts.database.MainActivityInter
-import com.acmpo6ou.myaccounts.database.MainModelInter
-import com.acmpo6ou.myaccounts.database.MainPresenter
+import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.SRC_DIR
+import com.acmpo6ou.myaccounts.accountsDir
+import com.acmpo6ou.myaccounts.database.databases_list.Database
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
+import com.acmpo6ou.myaccounts.database.main_activity.MainModelI
+import com.acmpo6ou.myaccounts.database.main_activity.MainPresenter
 import com.github.ivanshafran.sharedpreferencesmock.SPMockBuilder
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.*
@@ -38,39 +38,30 @@ import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito.spy
 import java.io.File
 import java.time.LocalDate
-import java.util.*
 
 class MainPresenterTests {
     lateinit var presenter: MainPresenter
     lateinit var spyPresenter: MainPresenter
 
-    lateinit var view: MainActivityInter
-    lateinit var model: MainModelInter
-    lateinit var mockPrefs: SharedPreferences
+    lateinit var app: MyApp
+    lateinit var view: MainActivityI
+    lateinit var model: MainModelI
 
+    lateinit var mockPrefs: SharedPreferences
     private val locationUri: Uri = mock()
-    private val accountsDir = "/dev/shm/accounts"
-    val app = MyApp()
 
     @Before
     fun setup() {
-        app.databases = mutableListOf(Database("test", "123"))
-        val resolver: ContentResolver = mock()
-        val context: Context = mock { on { contentResolver } doReturn resolver }
-
-        mockPrefs = SPMockBuilder().createSharedPreferences()
-        model = mock()
-        doReturn(false).whenever(model).isDatabaseSaved(app.databases[0], app)
-
-        view = mock {
-            on { ACCOUNTS_DIR } doReturn accountsDir
-            on { app } doReturn MainPresenterTests@app
-            on { myContext } doReturn context
-            on { prefs } doReturn mockPrefs
+        app = mock {
+            on { SRC_DIR } doReturn SRC_DIR
+            on { databases } doReturn mutableListOf(Database("test", "123"))
         }
 
-        presenter = MainPresenter(view)
-        presenter.model = model
+        view = mock()
+        model = mock()
+        mockPrefs = SPMockBuilder().createSharedPreferences()
+
+        presenter = MainPresenter({ view }, model, app, mockPrefs)
         spyPresenter = spy(presenter)
     }
 
@@ -78,8 +69,8 @@ class MainPresenterTests {
         val filesList = listOf("main", "main")
         val sizesList = listOf(
             100, // size of db file should be not less then 100
-            16
-        ) // size of bin file should be exactly 16
+            16, // size of bin file should be exactly 16
+        )
 
         // mock model to return correct file sizes, count and names
         model = mock {
@@ -87,12 +78,6 @@ class MainPresenterTests {
             on { countFiles(locationUri) } doReturn 2
             on { getSizes(locationUri) } doReturn sizesList
         }
-    }
-
-    @Test
-    fun `importSelected should call view importDialog`() {
-        presenter.importSelected()
-        verify(view).importDialog()
     }
 
     @Test
@@ -107,7 +92,6 @@ class MainPresenterTests {
         doReturn(false).whenever(spyPresenter).isTimeToUpdate()
         spyPresenter.autocheckForUpdates()
         verify(spyPresenter, never()).checkUpdatesSelected(anyBoolean())
-        verify(spyPresenter, never()).checkUpdatesSelected()
     }
 
     @Test
@@ -141,6 +125,26 @@ class MainPresenterTests {
     }
 
     @Test
+    fun `fixSrcFolder should create SRC_DIR if it doesn't exist`() {
+        // here we delete accounts folder if it already exists to ensure that it will
+        // be empty as is needed for our test
+        val accountsFolder = File(accountsDir)
+        accountsFolder.deleteRecursively()
+
+        presenter.fixSrcFolder()
+
+        // the src folder should be created
+        val srcDir = File(SRC_DIR)
+        assertTrue(srcDir.exists())
+    }
+
+    @Test
+    fun `importSelected should call view importDialog`() {
+        presenter.importSelected()
+        verify(view).importDialog()
+    }
+
+    @Test
     fun `checkTarFile should call importDatabase if there are no errors`() {
         mockCorrectModel()
         spyPresenter.model = model
@@ -151,23 +155,6 @@ class MainPresenterTests {
         verify(view, never()).showError(anyString(), anyString())
     }
 
-    @Test
-    fun `fixSrcFolder should create SRC_DIR if it doesn't exist`() {
-        // here we delete accounts folder if it already exists to ensure that it will
-        // be empty as is needed for our tests
-        val accountsFolder = File(accountsDir)
-        if (accountsFolder.exists()) accountsFolder.deleteRecursively()
-
-        presenter.fixSrcFolder()
-
-        // the src folder should be created
-        val srcDir = File("$accountsDir/src")
-        assertTrue(srcDir.exists())
-    }
-
-    /**
-     * Helper method used by next 2 tests. Simulates importing of database named `main`.
-     */
     private fun importMainDatabase() {
         mockCorrectModel()
         doReturn("main").whenever(model).importDatabase(locationUri)
@@ -189,7 +176,7 @@ class MainPresenterTests {
 
     @Test
     fun `backPressed should call confirmBack when there are unsaved databases`() {
-        doReturn(false).whenever(model).isDatabaseSaved(any(), eq(app))
+        doReturn(false).whenever(model).isDatabaseSaved(any())
         presenter.backPressed()
 
         verify(view).confirmBack()
@@ -199,7 +186,7 @@ class MainPresenterTests {
 
     @Test
     fun `backPressed should call showExitTip when there are opened databases`() {
-        doReturn(true).whenever(model).isDatabaseSaved(any(), eq(app))
+        doReturn(true).whenever(model).isDatabaseSaved(any())
         presenter.backPressed()
 
         verify(view).showExitTip()
@@ -209,7 +196,7 @@ class MainPresenterTests {
 
     @Test
     fun `backPressed should call goBack when there are no opened databases`() {
-        app.databases = mutableListOf(Database("main"))
+        whenever(app.databases).thenReturn(mutableListOf(Database("main")))
         presenter.backPressed()
 
         verify(view).goBack()
@@ -219,17 +206,19 @@ class MainPresenterTests {
 
     @Test
     fun `saveSelected should save all unsaved databases`() {
-        app.databases = mutableListOf(
-            Database("main"),
-            Database("test", "123"), // unsaved
-            Database("saved", "123")
+        whenever(app.databases).doReturn(
+            mutableListOf(
+                Database("main"),
+                Database("test", "123"), // unsaved
+                Database("saved", "123")
+            )
         )
-        doReturn(false).whenever(model).isDatabaseSaved(app.databases[1], app)
-        doReturn(true).whenever(model).isDatabaseSaved(app.databases[2], app)
+        whenever(model.isDatabaseSaved(app.databases[1])).thenReturn(false)
+        whenever(model.isDatabaseSaved(app.databases[2])).thenReturn(true)
 
         presenter.saveSelected()
-        verify(model).saveDatabase("test", app.databases[1], app)
-        verify(model, never()).saveDatabase("main", app.databases[0], app)
-        verify(model, never()).saveDatabase("saved", app.databases[2], app)
+        verify(model).saveDatabase("test", app.databases[1])
+        verify(model, never()).saveDatabase("main", app.databases[0])
+        verify(model, never()).saveDatabase("saved", app.databases[2])
     }
 }

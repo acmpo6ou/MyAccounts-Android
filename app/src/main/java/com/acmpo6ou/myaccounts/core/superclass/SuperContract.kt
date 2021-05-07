@@ -19,17 +19,17 @@
 
 package com.acmpo6ou.myaccounts.core.superclass
 
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.core.NetUtils
-import com.acmpo6ou.myaccounts.core.SettingsUtils
+import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.core.utils.NetUtils
+import com.acmpo6ou.myaccounts.core.utils.SettingsUtils
 import com.google.android.material.navigation.NavigationView
 
-interface SuperActivityInter :
+interface SuperActivityI :
     NavigationView.OnNavigationItemSelectedListener,
     SettingsUtils,
     NetUtils {
-    val mainFragment: ListFragmentInter
-    val ACCOUNTS_DIR: String
+
+    val mainFragment: ListFragmentI
     var app: MyApp
 
     fun startUpdatesActivity(version: String)
@@ -37,19 +37,13 @@ interface SuperActivityInter :
     fun updatesCheckFailed(isAutoCheck: Boolean = false)
     fun noInternetConnection(isAutoCheck: Boolean = false)
 
-    fun navigateTo(id: Int)
     fun showError(title: String, details: String)
-
     fun goBack()
     fun confirmBack()
 }
 
-interface SuperPresenterInter {
+interface SuperPresenterI {
     fun backPressed()
     fun saveSelected()
     fun checkUpdatesSelected(isAutoCheck: Boolean = false)
-
-    fun navigateToChangelog()
-    fun navigateToSettings()
-    fun navigateToAbout()
 }

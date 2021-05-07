@@ -22,64 +22,58 @@ package com.acmpo6ou.myaccounts
 import android.Manifest.permission
 import android.app.Activity
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
-import androidx.preference.PreferenceManager
-import com.acmpo6ou.myaccounts.core.MyApp
+import androidx.drawerlayout.widget.DrawerLayout
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
-import com.acmpo6ou.myaccounts.database.MainActivityInter
-import com.acmpo6ou.myaccounts.database.MainPresenter
-import com.acmpo6ou.myaccounts.database.MainPresenterInter
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentI
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
+import com.acmpo6ou.myaccounts.database.main_activity.MainPresenterI
 import com.acmpo6ou.myaccounts.databinding.ActivityMainBinding
-import com.acmpo6ou.myaccounts.ui.database.DatabaseFragment
+import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-class MainActivity : SuperActivity(), MainActivityInter {
-    val IMPORT_RC = 202
+@AndroidEntryPoint
+open class MainActivity : SuperActivity(), MainActivityI {
+    @Inject
+    override lateinit var presenter: MainPresenterI
 
     override lateinit var b: ActivityMainBinding
-    override lateinit var prefs: SharedPreferences
-    override lateinit var presenter: MainPresenterInter
+    override lateinit var navView: NavigationView
+    override lateinit var drawerLayout: DrawerLayout
 
+    override val mainFragmentId = R.id.databasesFragment
     override val confirmGoingBackMsg = R.string.confirm_exit
     override var lastBackPressTime: Long = 0
-    override val mainFragmentId = R.id.databaseFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_MyAccounts_NoActionBar)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         super.onCreate(savedInstanceState)
 
-        myContext = this
-        prefs = PreferenceManager.getDefaultSharedPreferences(this)
         loadSettings()
+        app.res = resources
 
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
 
-        ACCOUNTS_DIR = getExternalFilesDir(null)!!.path + "/"
-        app = applicationContext as MyApp
-        app.res = resources
+        navView = b.navView
+        drawerLayout = b.drawerLayout
 
-        // setup presenter and action bar
-        presenter = MainPresenter(this)
         setSupportActionBar(b.appbar.toolbar)
-
-        checkPermissions()
+        checkStoragePermission()
     }
 
-    /**
-     * Checks if storage permission is granted and if not - requests it.
-     */
-    private fun checkPermissions() {
+    private fun checkStoragePermission() {
         val isGranted = checkCallingOrSelfPermission(permission.WRITE_EXTERNAL_STORAGE)
-        if (isGranted != PackageManager.PERMISSION_GRANTED) {
+        if (isGranted != PackageManager.PERMISSION_GRANTED)
             requestPermissions(arrayOf(permission.WRITE_EXTERNAL_STORAGE), 300)
-        }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -94,23 +88,21 @@ class MainActivity : SuperActivity(), MainActivityInter {
         return false
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
-        super.onActivityResult(requestCode, resultCode, resultData)
-        if (resultCode != Activity.RESULT_OK) return
-        if (requestCode == IMPORT_RC) resultData?.data?.let { presenter.checkTarFile(it) }
-    }
+    private val importLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.data?.let { presenter.checkTarFile(it) }
+            }
+        }
 
     /**
-     * Used to display import dialog where user can choose database that he wants to import.
-     *
-     * Starts intent with [IMPORT_RC] request code.
-     * Shows dialog to choose location using Storage Access Framework.
+     * Displays import dialog where user can choose database that he wants to import.
      */
     override fun importDialog() =
-        Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+        with(Intent(Intent.ACTION_OPEN_DOCUMENT)) {
             addCategory(Intent.CATEGORY_OPENABLE)
             type = "application/x-tar"
-            startActivityForResult(this, IMPORT_RC)
+            importLauncher.launch(this)
         }
 
     override fun showExitTip() {
@@ -124,11 +116,11 @@ class MainActivity : SuperActivity(), MainActivityInter {
     }
 
     /**
-     * This method calls notifyChanged on DatabaseFragment to rerender the list.
+     * This method calls notifyChanged on DatabasesFragment to rerender the list.
      * @param[i] index of Database that were added to databases list.
      */
     override fun notifyChanged(i: Int) {
-        val databaseFragment = mainFragment as DatabaseFragment
-        databaseFragment.notifyChanged(i)
+        val databasesFragment = mainFragment as DatabasesFragmentI
+        databasesFragment.notifyChanged(i)
     }
 }

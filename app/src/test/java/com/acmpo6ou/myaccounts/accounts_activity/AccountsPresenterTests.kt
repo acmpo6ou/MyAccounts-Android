@@ -19,24 +19,21 @@
 
 package com.acmpo6ou.myaccounts.accounts_activity
 
-import android.content.Context
-import com.acmpo6ou.myaccounts.account.AccountsActivityInter
-import com.acmpo6ou.myaccounts.account.AccountsPresenter
-import com.acmpo6ou.myaccounts.account.AccountsPresenterInter
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.core.superclass.ListFragmentInter
-import com.acmpo6ou.myaccounts.database.Database
+import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsActivityI
+import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsPresenter
+import com.acmpo6ou.myaccounts.core.superclass.ListFragmentI
+import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
-import java.io.File
 
 class AccountsPresenterTests {
     lateinit var presenter: AccountsPresenter
-    lateinit var spyPresenter: AccountsPresenterInter
+    lateinit var spyPresenter: AccountsPresenter
 
-    lateinit var view: AccountsActivityInter
-    lateinit var mockFragment: ListFragmentInter
+    lateinit var view: AccountsActivityI
+    lateinit var mockFragment: ListFragmentI
 
     val db = Database("main")
     lateinit var app: MyApp
@@ -44,21 +41,16 @@ class AccountsPresenterTests {
     @Before
     fun setup() {
         app = MyApp()
-
         mockFragment = mock()
-        val context: Context = mock {
-            on { getExternalFilesDir(null) } doReturn File("")
-        }
+
         view = mock {
-            on { app } doReturn app
             on { database } doReturn db
-            on { myContext } doReturn context
             on { mainFragment } doReturn mockFragment
         }
 
-        presenter = AccountsPresenter(view)
+        presenter = AccountsPresenter({ view }, app)
         spyPresenter = spy(presenter)
-        doNothing().whenever(spyPresenter).saveDatabase(db.name, db, app)
+        doNothing().whenever(spyPresenter).saveDatabase(db.name, db)
     }
 
     @Test
@@ -68,22 +60,22 @@ class AccountsPresenterTests {
     }
 
     @Test
-    fun `saveSelected should call saveDatabase when isDatabaseSaved returns false`() {
-        doReturn(false).whenever(spyPresenter).isDatabaseSaved(db, app)
+    fun `saveSelected should call saveDatabase when database isn't saved`() {
+        doReturn(false).whenever(spyPresenter).isDatabaseSaved(db)
         spyPresenter.saveSelected()
-        verify(spyPresenter).saveDatabase(db.name, db, app)
+        verify(spyPresenter).saveDatabase(db.name, db)
     }
 
     @Test
-    fun `saveSelected should not call saveDatabase when isDatabaseSaved returns true`() {
-        doReturn(true).whenever(spyPresenter).isDatabaseSaved(db, app)
+    fun `saveSelected should not call saveDatabase when database is already saved`() {
+        doReturn(true).whenever(spyPresenter).isDatabaseSaved(db)
         spyPresenter.saveSelected()
-        verify(spyPresenter, never()).saveDatabase(db.name, db, app)
+        verify(spyPresenter, never()).saveDatabase(db.name, db)
     }
 
     @Test
-    fun `backPressed should call view confirmBack when isDatabaseSaved returns false`() {
-        doReturn(false).whenever(spyPresenter).isDatabaseSaved(db, app)
+    fun `backPressed should call view confirmBack when database isn't saved`() {
+        doReturn(false).whenever(spyPresenter).isDatabaseSaved(db)
         spyPresenter.backPressed()
 
         verify(view).confirmBack()
@@ -91,8 +83,8 @@ class AccountsPresenterTests {
     }
 
     @Test
-    fun `backPressed should call view goBack when isDatabaseSaved returns true`() {
-        doReturn(true).whenever(spyPresenter).isDatabaseSaved(db, app)
+    fun `backPressed should call view goBack when database is saved`() {
+        doReturn(true).whenever(spyPresenter).isDatabaseSaved(db)
         spyPresenter.backPressed()
 
         verify(view).goBack()

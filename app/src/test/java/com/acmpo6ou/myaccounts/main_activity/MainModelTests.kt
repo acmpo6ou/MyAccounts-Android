@@ -19,19 +19,46 @@
 
 package com.acmpo6ou.myaccounts.main_activity
 
-import com.acmpo6ou.myaccounts.ModelTest
-import com.acmpo6ou.myaccounts.database.MainModel
+import com.acmpo6ou.myaccounts.*
+import com.acmpo6ou.myaccounts.database.main_activity.MainModel
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import java.io.File
 
 class MainModelTests : ModelTest() {
-    private var model = MainModel(accountsDir, contentResolver)
+    lateinit var model: MainModel
 
     @Before
     fun setup() {
         setupInputResolver()
+        val app: MyApp = mock {
+            on { contentResolver } doReturn contentResolver
+            on { ACCOUNTS_DIR } doReturn accountsDir
+        }
+        model = MainModel(app)
+    }
+
+    @Test
+    fun `countFiles should return number of files in tar file`() {
+        val count = model.countFiles(locationUri)
+        assertEquals(2, count)
+    }
+
+    @Test
+    fun `getNames should return list of names`() {
+        val expectedList = listOf("main", "main")
+        val actualList = model.getNames(locationUri)
+        assertEquals(expectedList, actualList)
+    }
+
+    @Test
+    fun `getSizes should return list of file sizes`() {
+        val expectedList = listOf(268, 16) // sizes of .db and .bin files
+        val actualList = model.getSizes(locationUri)
+        assertEquals(expectedList, actualList)
     }
 
     @Test
@@ -90,32 +117,12 @@ class MainModelTests : ModelTest() {
         assertEquals(
             "importDatabase must extract only .db and .bin files from given tar!",
             1, // there must be only one directory – `src`
-            filesList.size
+            filesList?.size
         )
         assertEquals(
             "importDatabase must extract only .db and .bin files from given tar!",
             "src", // the only directory must be `src`
-            filesList.first()
+            filesList?.first()
         )
-    }
-
-    @Test
-    fun `countFiles should return number of files in tar file`() {
-        val count = model.countFiles(locationUri)
-        assertEquals(2, count)
-    }
-
-    @Test
-    fun `getNames should return list of names`() {
-        val expectedList = listOf("main", "main")
-        val actualList = model.getNames(locationUri)
-        assertEquals(expectedList, actualList)
-    }
-
-    @Test
-    fun `getSizes should return list of file sizes`() {
-        val expectedList = listOf(268, 16) // sizes of .db and .bin files
-        val actualList = model.getSizes(locationUri)
-        assertEquals(expectedList, actualList)
     }
 }

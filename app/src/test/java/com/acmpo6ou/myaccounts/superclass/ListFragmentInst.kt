@@ -19,9 +19,6 @@
 
 package com.acmpo6ou.myaccounts.superclass
 
-import android.content.Context
-import android.os.Build
-import android.os.Looper
 import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.testing.FragmentScenario
@@ -29,11 +26,9 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.superclass.ListFragment
 import com.acmpo6ou.myaccounts.core.superclass.ListPresenter
-import com.acmpo6ou.myaccounts.findSnackbarTextView
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.mock
@@ -43,24 +38,10 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.Shadows
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.LooperMode
-
-class TestListFragment : ListFragment() {
-    override var items: List<String> = listOf()
-    override val actionCreateItem = Faker().number().randomDigit()
-    override val adapter: RecyclerView.Adapter<*> = mock()
-    override val presenter: ListPresenter = mock()
-}
 
 @RunWith(RobolectricTestRunner::class)
-@LooperMode(LooperMode.Mode.PAUSED)
-@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class ListFragmentInst {
     lateinit var scenario: FragmentScenario<TestListFragment>
-    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
-    private val successMessage = context.resources.getString(R.string.success_message)
 
     @Before
     fun setup() {
@@ -89,11 +70,11 @@ class ListFragmentInst {
             it.items = listOf()
             it.checkListPlaceholder()
 
-            // placeholder should be invisible
+            // placeholder should be visible
             val placeholder = it.view?.findViewById<TextView>(R.id.no_items)
             assertEquals(View.VISIBLE, placeholder?.visibility)
 
-            // while the list should be visible
+            // while the list should be invisible
             val list = it.view?.findViewById<RecyclerView>(R.id.itemsList)
             assertEquals(View.GONE, list?.visibility)
         }
@@ -111,20 +92,11 @@ class ListFragmentInst {
             verify(navController).navigate(it.actionCreateItem)
         }
     }
+}
 
-    @Test
-    fun `showSuccess should display snackbar`() {
-        scenario.onFragment {
-            it.showSuccess()
-
-            // this is because of some Robolectric main looper problems
-            Shadows.shadowOf(Looper.getMainLooper()).idle()
-
-            val snackbar: TextView? = it.view?.findSnackbarTextView()
-            assertEquals(
-                "showSuccess snackbar has incorrect message!",
-                successMessage, snackbar?.text
-            )
-        }
-    }
+class TestListFragment : ListFragment() {
+    override var items: List<String> = listOf()
+    override val actionCreateItem = Faker().number().randomDigit()
+    override val adapter: RecyclerView.Adapter<*> = mock()
+    override val presenter: ListPresenter = mock()
 }

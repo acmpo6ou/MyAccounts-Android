@@ -20,7 +20,11 @@
 package com.acmpo6ou.myaccounts.create_edit_account
 
 import com.acmpo6ou.myaccounts.ModelTest
-import com.acmpo6ou.myaccounts.account.LoadFileModel
+import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.account.create_edit_account.LoadFileModel
+import com.acmpo6ou.myaccounts.accountsDir
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.io.File
@@ -40,7 +44,8 @@ class LoadFileModelTests : ModelTest() {
         }
 
         setupInputResolver()
-        val model = LoadFileModel(contentResolver)
+        val app: MyApp = mock { on { contentResolver } doReturn contentResolver }
+        val model = LoadFileModel(app)
 
         val content = model.loadFile(locationUri)
         assertEquals(encodedContent, content)

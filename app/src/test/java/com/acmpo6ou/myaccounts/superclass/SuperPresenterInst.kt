@@ -19,7 +19,7 @@
 
 package com.acmpo6ou.myaccounts.superclass
 
-import com.acmpo6ou.myaccounts.core.GitHubService
+import com.acmpo6ou.myaccounts.core.utils.GitHubService
 import com.nhaarman.mockitokotlin2.*
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -30,7 +30,9 @@ import retrofit2.Retrofit
 import kotlin.random.Random
 
 class SuperPresenterInst {
-    @get:Rule val mockWebServer = MockWebServer()
+    @get:Rule
+    val mockWebServer = MockWebServer()
+
     private val service: GitHubService by lazy {
         Retrofit.Builder()
             .baseUrl(mockWebServer.url("/"))
@@ -54,8 +56,7 @@ class SuperPresenterInst {
     }
 
     /**
-     * Helper method used to generate random version string and json
-     * containing this version string.
+     * Generates random version string and json containing this version string.
      */
     private fun generateVersion() {
         val versionNums = List(10) { Random.nextInt(0, 100) }

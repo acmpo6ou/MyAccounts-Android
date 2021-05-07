@@ -19,93 +19,143 @@
 
 package com.acmpo6ou.myaccounts.open_database
 
-import android.os.Build
+import android.content.Context
+import android.content.SharedPreferences
+import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.testing.FragmentScenario
-import androidx.fragment.app.testing.launchFragmentInContainer
-import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.str
-import com.acmpo6ou.myaccounts.ui.database.OpenDatabaseFragment
-import com.acmpo6ou.myaccounts.ui.database.OpenDatabaseViewModel
+import android.view.inputmethod.InputMethodManager
+import androidx.test.platform.app.InstrumentationRegistry
+import com.acmpo6ou.myaccounts.*
+import com.acmpo6ou.myaccounts.core.AppModule
+import com.acmpo6ou.myaccounts.database.databases_list.Database
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityModule
+import com.acmpo6ou.myaccounts.database.open_database.OpenDatabaseFragment
+import com.acmpo6ou.myaccounts.database.open_database.OpenDatabaseViewModel
 import com.github.javafaker.Faker
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
+import dagger.hilt.android.scopes.ActivityScoped
+import dagger.hilt.android.testing.BindValue
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.LooperMode
+import javax.inject.Singleton
 
+@HiltAndroidTest
+@UninstallModules(AppModule::class, MainActivityModule::class)
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
-@LooperMode(LooperMode.Mode.PAUSED)
-@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class OpenDatabaseFragmentInst {
-    lateinit var scenario: FragmentScenario<OpenDatabaseFragment>
-    private var model: OpenDatabaseViewModel = spy()
+    @get:Rule
+    var hiltAndroidRule = HiltAndroidRule(this)
+
+    @BindValue
+    @JvmField
+    @Singleton
+    val app = MyApp()
+
+    private val imm: InputMethodManager = mock()
+    @BindValue
+    @JvmField
+    @ActivityScoped
+    val superActivity: MainActivity = mock {
+        on { getSystemService(Context.INPUT_METHOD_SERVICE) } doReturn imm
+    }
+
+    @BindValue
+    @JvmField
+    @ActivityScoped
+    val mainActivityI: MainActivityI = mock()
+
+    @BindValue
+    @JvmField
+    @Singleton
+    val sharedPreferences: SharedPreferences = mock()
+
+    @BindValue
+    lateinit var spyModel: OpenDatabaseViewModel
+    lateinit var model: OpenDatabaseViewModel
+
+    lateinit var fragment: OpenDatabaseFragment
+    private val b get() = fragment.b
+
+    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     private val faker = Faker()
 
     @Before
     fun setUp() {
-        scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
-        model.uiDispatcher = Dispatchers.Unconfined
-        model.defaultDispatcher = Dispatchers.Unconfined
+        model = OpenDatabaseViewModel(app, Dispatchers.Unconfined, Dispatchers.Unconfined)
+        spyModel = spy(model)
+
+        app.databases = mutableListOf(Database("main"))
+        hiltAndroidRule.inject()
+
+        val bundle = Bundle()
+        bundle.putInt("databaseIndex", 0)
+        fragment = launchFragmentInHiltContainer(bundle)
+    }
+
+    @Test
+    fun `should display error dialog when corrupted is set to true`() {
+        val errorTitle = context.resources.getString(R.string.open_error)
+        val errorMsg = context.resources.getString(R.string.corrupted_db, "main")
+
+        spyModel.corrupted.value = true
+        verify(superActivity).showError(errorTitle, errorMsg)
     }
 
     @Test
     fun `'Open database' button should call startPasswordCheck`() {
-        scenario.onFragment {
-            it.viewModel = model
-            val txt = faker.str()
-            it.b.databasePassword.setText(txt)
+        val password = faker.str()
+        b.databasePassword.setText(password)
 
-            it.b.openDatabase.performClick()
-            verify(model).startPasswordCheck(txt)
-        }
+        b.openDatabase.performClick()
+        verify(spyModel).startPasswordCheck(password, 0)
     }
 
     @Test
     fun `error tip should change when incorrectPassword changes`() {
-        scenario.onFragment {
-            val errorMsg = it.myContext.resources.getString(R.string.password_error)
+        val errorMsg = context.resources.getString(R.string.password_error)
 
-            // error tip should appear when incorrectPassword is true
-            it.viewModel._incorrectPassword.value = true
-            assertEquals(errorMsg, it.b.parentPassword.error)
+        // error tip should appear when incorrectPassword is true
+        spyModel.incorrectPassword.value = true
+        assertEquals(errorMsg, b.parentPassword.error)
 
-            // and disappear when incorrectPassword is false
-            it.viewModel._incorrectPassword.value = false
-            assertNull(it.b.parentPassword.error)
-        }
+        // and disappear when incorrectPassword is false
+        spyModel.incorrectPassword.value = false
+        assertNull(b.parentPassword.error)
     }
 
     @Test
     fun `error tip should be hidden when password changes`() {
-        scenario.onFragment {
-            it.viewModel._incorrectPassword.value = true
-            assertNotNull(it.b.parentPassword.error)
+        spyModel.incorrectPassword.value = true
+        assertNotNull(b.parentPassword.error)
 
-            it.b.databasePassword.setText(faker.str())
-            assertNull(it.b.parentPassword.error)
-        }
+        b.databasePassword.setText(faker.str())
+        assertNull(b.parentPassword.error)
     }
 
     @Test
     fun `should display or hide progress bar depending on 'loading' of view model`() {
-        scenario.onFragment {
-            // when loading is true progress bar should be displayed and button - disabled
-            it.viewModel._loading.value = true
-            assertEquals(View.VISIBLE, it.b.progressLoading.visibility)
-            assertFalse(it.b.openDatabase.isEnabled)
+        // when loading is true progress bar should be displayed and button - disabled
+        spyModel.loading.value = true
+        assertEquals(View.VISIBLE, b.progressLoading.visibility)
+        assertFalse(b.openDatabase.isEnabled)
 
-            // when loading false progress bar should be hidden and button - enabled
-            it.viewModel._loading.value = false
-            assertEquals(View.GONE, it.b.progressLoading.visibility)
-            assertTrue(it.b.openDatabase.isEnabled)
-        }
+        // when loading is false progress bar should be hidden and button - enabled
+        spyModel.loading.value = false
+        assertEquals(View.GONE, b.progressLoading.visibility)
+        assertTrue(b.openDatabase.isEnabled)
     }
 }

@@ -22,8 +22,9 @@ package com.acmpo6ou.myaccounts
 import android.content.ContentResolver
 import android.net.Uri
 import android.os.ParcelFileDescriptor
-import com.acmpo6ou.myaccounts.core.DatabaseUtils
+import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
 import com.github.javafaker.Faker
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
@@ -33,18 +34,13 @@ import java.io.FileOutputStream
 
 open class ModelTest : DatabaseUtils {
     val faker = Faker()
+    override lateinit var app: MyApp
 
     open val password = "123"
-    var salt = "0123456789abcdef".toByteArray() // 16 bytes of salt
     val jsonDatabase =
         "{\"gmail\":{\"account\":\"gmail\",\"name\":\"Tom\",\"email\":" +
             "\"tom@gmail.com\",\"password\":\"123\",\"date\":\"01.01.1990\"," +
             "\"comment\":\"My gmail account.\"}}"
-
-    // this is where model will create delete and edit databases during testing
-    // /dev/shm/ is a fake in-memory file system
-    val accountsDir = "/dev/shm/accounts/"
-    override val SRC_DIR = "${accountsDir}src/"
 
     val contentResolver: ContentResolver = mock()
     private val descriptor: ParcelFileDescriptor = mock()
@@ -55,8 +51,17 @@ open class ModelTest : DatabaseUtils {
     open val location = "sampledata/tar/main.tar"
     open val destination = "$accountsDir/main.tar"
 
+    @Before
+    fun setupApp() {
+        app = mock {
+            on { ACCOUNTS_DIR } doReturn accountsDir
+            on { SRC_DIR } doReturn SRC_DIR
+            on { contentResolver } doReturn contentResolver
+        }
+    }
+
     /**
-     * This method creates empty src folder in a fake file system, it ensures that
+     * Creates empty src folder in a fake file system, it ensures that
      * directory will be empty.
      */
     @Before
@@ -66,9 +71,7 @@ open class ModelTest : DatabaseUtils {
 
         // here we delete accounts folder if it already exists to ensure that it will
         // be empty as is needed for our tests
-        if (accountsFolder.exists()) {
-            accountsFolder.deleteRecursively()
-        }
+        accountsFolder.deleteRecursively()
 
         // then we create accounts folder and src inside it
         srcFolder.mkdirs()
@@ -91,10 +94,9 @@ open class ModelTest : DatabaseUtils {
     }
 
     /**
-     * This is a helper method that will copy our test databases from sampledata folder to
+     * Helper method to copy our test databases from sampledata folder to
      * the fake file system.
-     *
-     * @param[name] name of the database that we want to copy to the fake file system
+     * @param[name] name of the database that we want to copy.
      */
     fun copyDatabase(name: String = "database") {
         // this are were we want to copy database .bin and .db files

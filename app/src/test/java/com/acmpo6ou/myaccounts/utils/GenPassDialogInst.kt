@@ -19,71 +19,56 @@
 
 package com.acmpo6ou.myaccounts.utils
 
-import android.os.Build
-import androidx.test.core.app.ActivityScenario
-import com.acmpo6ou.myaccounts.MainActivity
-import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.GenPassDialog
-import com.acmpo6ou.myaccounts.core.hasoneof
+import android.content.Context
+import androidx.test.platform.app.InstrumentationRegistry
+import com.acmpo6ou.myaccounts.core.utils.GenPassDialog
+import com.acmpo6ou.myaccounts.core.utils.hasoneof
 import com.google.android.material.textfield.TextInputEditText
 import com.nhaarman.mockitokotlin2.*
 import junit.framework.TestCase.assertTrue
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyString
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.LooperMode
 
 @RunWith(RobolectricTestRunner::class)
-@LooperMode(LooperMode.Mode.PAUSED)
-@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class GenPassDialogInst {
-    lateinit var scenario: ActivityScenario<MainActivity>
-    lateinit var dialog: GenPassDialog
+    val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
+    private lateinit var dialog: GenPassDialog
 
-    val pass1: TextInputEditText = mock()
-    val pass2: TextInputEditText = mock()
+    private val pass1: TextInputEditText = mock()
+    private val pass2: TextInputEditText = mock()
 
     @Before
     fun setup() {
-        scenario = ActivityScenario.launch(MainActivity::class.java)
-        scenario.onActivity {
-            it.myContext.setTheme(R.style.Theme_MyAccounts_NoActionBar)
-            dialog = GenPassDialog(it, pass1, pass2)
-        }
+        dialog = GenPassDialog(context, pass1, pass2)
     }
 
     @Test
     fun `click on generateButton should generate password of correct length`() {
-        scenario.onActivity {
-            // default length should be 16
-            assertEquals(16, dialog.length.value)
+        // default length should be 16
+        assertEquals(16, dialog.length.value)
 
-            dialog.generateButton.performClick()
-            verify(pass1).setText(argThat<String> { length == 16 })
-        }
+        dialog.generateButton.performClick()
+        verify(pass1).setText(argThat<String> { length == 16 })
     }
 
     @Test
     fun `click on generateButton should generate password using correct characters`() {
-        scenario.onActivity {
-            // password should contain only upper letters and digits
-            dialog.lowerBox.isChecked = false
-            dialog.punctBox.isChecked = false
+        // password should contain only upper letters and digits
+        dialog.lowerBox.isChecked = false
+        dialog.punctBox.isChecked = false
 
-            dialog.generateButton.performClick()
-            argumentCaptor<String> {
-                verify(pass1).setText(capture())
+        dialog.generateButton.performClick()
+        argumentCaptor<String> {
+            verify(pass1).setText(capture())
 
-                assertTrue(firstValue hasoneof dialog.digits)
-                assertTrue(firstValue hasoneof dialog.upper)
-                assertFalse(firstValue hasoneof dialog.lower)
-                assertFalse(firstValue hasoneof dialog.punctuation)
-            }
+            assertTrue(firstValue hasoneof dialog.digits)
+            assertTrue(firstValue hasoneof dialog.upper)
+            assertFalse(firstValue hasoneof dialog.lower)
+            assertFalse(firstValue hasoneof dialog.punctuation)
         }
     }
 
@@ -106,6 +91,7 @@ class GenPassDialogInst {
         }
 
         // check passwords
+        assertNotEquals("", text1)
         assertEquals(text1, text2)
     }
 

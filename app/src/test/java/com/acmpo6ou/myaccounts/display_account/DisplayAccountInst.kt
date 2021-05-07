@@ -21,32 +21,55 @@ package com.acmpo6ou.myaccounts.display_account
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.SystemClock
 import android.view.MotionEvent
-import androidx.fragment.app.testing.FragmentScenario
-import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account
+import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsActivityI
+import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsModule
+import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountBindings
+import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountFragment
+import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountPresenterI
+import com.acmpo6ou.myaccounts.launchFragmentInHiltContainer
 import com.acmpo6ou.myaccounts.str
-import com.acmpo6ou.myaccounts.ui.account.DisplayAccountFragment
 import com.github.javafaker.Faker
+import com.nhaarman.mockitokotlin2.mock
+import dagger.hilt.android.scopes.FragmentScoped
+import dagger.hilt.android.testing.BindValue
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
-import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 
+@HiltAndroidTest
+@UninstallModules(DisplayAccountBindings::class, AccountsModule::class)
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
-@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class DisplayAccountInst {
-    lateinit var scenario: FragmentScenario<DisplayAccountFragment>
+    @get:Rule
+    var hiltAndroidRule = HiltAndroidRule(this)
+
+    @BindValue
+    @JvmField
+    @FragmentScoped
+    val activity: AccountsActivityI = mock()
+
+    @BindValue
+    @JvmField
+    @FragmentScoped
+    val presenter: DisplayAccountPresenterI = mock()
+
+    lateinit var fragment: DisplayAccountFragment
+    private val b get() = fragment.b
     val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
 
     private val usernameStr = context.resources.getString(R.string.username_)
@@ -55,54 +78,51 @@ class DisplayAccountInst {
     private val commentStr = context.resources.getString(R.string.comment_)
 
     @Before
-    fun setUp() {
-        scenario = launchFragmentInContainer(themeResId = R.style.Theme_MyAccounts_NoActionBar)
+    fun setup() {
+        hiltAndroidRule.inject()
+        fragment = launchFragmentInHiltContainer()
     }
 
     @Test
     fun `initForm should fill all text views with data`() {
-        scenario.onFragment {
-            it.initForm(account)
+        fragment.initForm(account)
 
-            assertEquals("$usernameStr ${account.username}", it.b.accountUsername.text.toString())
-            assertEquals("$emailStr ${account.email}", it.b.accountEmail.text.toString())
-            assertEquals("$passwordStr ${"•".repeat(16)}", it.b.accountPassword.text.toString())
-            assertEquals(account.date, it.b.birthDate.text.toString())
-            assertEquals("$commentStr\n${account.comment}", it.b.accountComment.text.toString())
-        }
+        assertEquals("$usernameStr ${account.username}", b.accountUsername.text.toString())
+        assertEquals("$emailStr ${account.email}", b.accountEmail.text.toString())
+        assertEquals("$passwordStr ${"•".repeat(16)}", b.accountPassword.text.toString())
+        assertEquals(account.date, b.birthDate.text.toString())
+        assertEquals("$commentStr\n${account.comment}", b.accountComment.text.toString())
     }
 
     @Test
-    fun `should hide display or hide password when pressing and releasing password label`() {
-        scenario.onFragment {
-            it.initForm(account)
+    fun `should display or hide password when pressing and releasing password label`() {
+        fragment.initForm(account)
 
-            // when touching password label password should be displayed
-            it.b.accountPassword.dispatchTouchEvent(
-                MotionEvent.obtain(
-                    SystemClock.uptimeMillis(),
-                    SystemClock.uptimeMillis(),
-                    MotionEvent.ACTION_DOWN, 0F, 0F, 0
-                )
+        // when touching password label password should be displayed
+        b.accountPassword.dispatchTouchEvent(
+            MotionEvent.obtain(
+                SystemClock.uptimeMillis(),
+                SystemClock.uptimeMillis(),
+                MotionEvent.ACTION_DOWN, 0F, 0F, 0
             )
-            assertEquals(
-                "$passwordStr ${account.password}",
-                it.b.accountPassword.text.toString()
-            )
+        )
+        assertEquals(
+            "$passwordStr ${account.password}",
+            b.accountPassword.text.toString()
+        )
 
-            // when releasing password label password should be hidden
-            it.b.accountPassword.dispatchTouchEvent(
-                MotionEvent.obtain(
-                    SystemClock.uptimeMillis(),
-                    SystemClock.uptimeMillis(),
-                    MotionEvent.ACTION_UP, 0F, 0F, 0
-                )
+        // when releasing password label password should be hidden
+        b.accountPassword.dispatchTouchEvent(
+            MotionEvent.obtain(
+                SystemClock.uptimeMillis(),
+                SystemClock.uptimeMillis(),
+                MotionEvent.ACTION_UP, 0F, 0F, 0
             )
-            assertEquals(
-                "$passwordStr ${"•".repeat(16)}",
-                it.b.accountPassword.text.toString()
-            )
-        }
+        )
+        assertEquals(
+            "$passwordStr ${"•".repeat(16)}",
+            b.accountPassword.text.toString()
+        )
     }
 
     @Test
@@ -112,7 +132,7 @@ class DisplayAccountInst {
         val expectedType = "*/*"
         val expectedTitle = Faker().str()
 
-        scenario.onFragment { it.saveFileDialog(expectedTitle) }
+        fragment.saveFileDialog(expectedTitle)
         val intent: Intent = shadowOf(RuntimeEnvironment.application).nextStartedActivity
 
         assertEquals(expectedAction, intent.action)

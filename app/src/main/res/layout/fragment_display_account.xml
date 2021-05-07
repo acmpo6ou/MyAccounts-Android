@@ -25,7 +25,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="16dp"
-    tools:context=".ui.account.DisplayAccountFragment">
+    tools:context=".account.display_account.DisplayAccountFragment">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"

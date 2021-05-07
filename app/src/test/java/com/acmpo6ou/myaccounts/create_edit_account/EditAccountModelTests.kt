@@ -22,11 +22,11 @@ package com.acmpo6ou.myaccounts.create_edit_account
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.account
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.database.Account
-import com.acmpo6ou.myaccounts.database.DbMap
+import com.acmpo6ou.myaccounts.account.create_edit_account.EditAccountViewModel
+import com.acmpo6ou.myaccounts.account.create_edit_account.LoadFileModel
+import com.acmpo6ou.myaccounts.database.databases_list.Account
+import com.acmpo6ou.myaccounts.database.databases_list.DbMap
 import com.acmpo6ou.myaccounts.str
-import com.acmpo6ou.myaccounts.ui.account.EditAccountViewModel
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.doReturn
@@ -36,25 +36,21 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.io.File
 
 class EditAccountModelTests : ModelTest() {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 
-    val model = EditAccountViewModel()
+    lateinit var viewModel: EditAccountViewModel
+    lateinit var model: LoadFileModel
 
     lateinit var myAccount: Account
     lateinit var dbMap: DbMap
 
     private val fileName = Faker().str()
     private val fileName2 = Faker().str()
-
-    private val attachedFileName = "test.txt"
-    override val location = "$accountsDir/$attachedFileName"
-    private val decodedContent = "This is a simple file.\nTo test PyQtAccounts.\nHello World!\n"
-    private val encodedContent =
-        "VGhpcyBpcyBhIHNpbXBsZSBmaWxlLgpUbyB0ZXN0IFB5UXRBY2NvdW50cy4KSGVsbG8gV29ybGQhCg=="
+    private val attachedFileName = Faker().str()
+    private val fileContent = Faker().str()
 
     @Before
     fun setup() {
@@ -65,28 +61,32 @@ class EditAccountModelTests : ModelTest() {
         )
         dbMap = mutableMapOf(account.accountName to myAccount)
 
-        val app: MyApp = mock { on { contentResolver } doReturn contentResolver }
-        model.initialize(app, dbMap, account.accountName)
+        model = mock { on { loadFile(locationUri) } doReturn fileContent }
+        viewModel = EditAccountViewModel(mock(), model).apply {
+            accounts = dbMap
+            initialize(account.accountName)
+        }
+    }
+
+    @Test
+    fun `initialize should fill filePaths with existing attached files`() {
+        assertTrue(fileName in viewModel.filePaths)
+        assertNull(viewModel.filePaths[fileName])
+        assertTrue(fileName2 in viewModel.filePaths)
+        assertNull(viewModel.filePaths[fileName2])
     }
 
     @Test
     fun `applyPressed should create new account`() {
-        // prepare attached file to load
-        model.filePaths[attachedFileName] = locationUri
-        File(location).apply {
-            createNewFile()
-            writeText(decodedContent)
-        }
-        setupInputResolver()
+        viewModel.filePaths[attachedFileName] = locationUri
 
         // new account should have old attached files and new ones
         val expectedAccount = account.copy()
-        expectedAccount.attachedFiles = (
-            mutableMapOf(attachedFileName to encodedContent) +
-                myAccount.attachedFiles.toMutableMap()
-            ) as MutableMap<String, String>
+        expectedAccount.attachedFiles =
+            (mutableMapOf(attachedFileName to fileContent) + myAccount.attachedFiles)
+                .toMutableMap()
 
-        model.applyPressed(
+        viewModel.applyPressed(
             account.accountName,
             account.username,
             account.email,
@@ -94,28 +94,13 @@ class EditAccountModelTests : ModelTest() {
             account.date,
             account.comment
         )
-        assertEquals(expectedAccount, model.accounts[account.accountName])
-        assertTrue(model.finished)
-    }
-
-    @Test
-    fun `applyPressed should handle any exception`() {
-        val msg = faker.str()
-        val exception = Exception(msg)
-
-        model.model = mock()
-        doAnswer { throw exception }.whenever(model.model).loadFile(locationUri)
-
-        model.filePaths[fileName] = locationUri
-        model.applyPressed("", "", "", "", "", "")
-
-        assertEquals(exception.toString(), model.errorMsg.value)
-        assertNotEquals(true, model._finished.value)
+        assertEquals(expectedAccount, viewModel.accounts[account.accountName])
+        assertTrue(viewModel.finished.value!!)
     }
 
     @Test
     fun `applyPressed should delete old account`() {
-        model.applyPressed(
+        viewModel.applyPressed(
             "habr",
             account.username,
             account.email,
@@ -123,34 +108,37 @@ class EditAccountModelTests : ModelTest() {
             account.date,
             account.comment
         )
-        assertFalse(account.accountName in model.accounts)
-        assertTrue("habr" in model.accounts)
+        assertFalse(account.accountName in viewModel.accounts)
+        assertTrue("habr" in viewModel.accounts)
+    }
+
+    @Test
+    fun `applyPressed should handle any exception`() {
+        val msg = faker.str()
+        val exception = Exception(msg)
+        doAnswer { throw exception }.whenever(model).loadFile(locationUri)
+
+        viewModel.filePaths[fileName] = locationUri
+        viewModel.applyPressed("", "", "", "", "", "")
+
+        assertEquals(exception.toString(), viewModel.errorMsg.value)
+        assertNotEquals(true, viewModel.finished.value)
     }
 
     @Test
     fun `applyPressed should not delete old account if there is an error`() {
-        model.model = mock()
-        doAnswer { throw Exception() }.whenever(model.model).loadFile(locationUri)
+        doAnswer { throw Exception() }.whenever(model).loadFile(locationUri)
+        viewModel.filePaths[fileName] = locationUri
 
-        model.filePaths[fileName] = locationUri
-        model.applyPressed("", "", "", "", "", "")
-
-        assertTrue(account.accountName in model.accounts)
+        viewModel.applyPressed("", "", "", "", "", "")
+        assertTrue(account.accountName in viewModel.accounts)
     }
 
     @Test
     fun `validateName when name of Database didn't change through editing`() {
         // account already exists but it's being edited, so that doesn't count
-        model.validateName(account.accountName)
-        assertFalse(model.existsNameErr)
-        assertFalse(model.emptyNameErr)
-    }
-
-    @Test
-    fun `initialize should fill filePaths with existing attached files`() {
-        assertTrue(fileName in model.filePaths)
-        assertNull(model.filePaths[fileName])
-        assertTrue(fileName2 in model.filePaths)
-        assertNull(model.filePaths[fileName2])
+        viewModel.validateName(account.accountName)
+        assertFalse(viewModel.existsNameErr.value!!)
+        assertFalse(viewModel.emptyNameErr.value!!)
     }
 }

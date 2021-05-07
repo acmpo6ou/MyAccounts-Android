@@ -23,6 +23,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.MenuItem
@@ -37,44 +38,50 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.viewbinding.ViewBinding
 import com.acmpo6ou.myaccounts.BuildConfig
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.UpdatesActivity
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.core.getProperty
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.qualifiers.ActivityContext
+import javax.inject.Inject
 
-/**
- * Super class for MainActivity and AccountsActivity.
- */
-abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
-    override lateinit var ACCOUNTS_DIR: String
-    override lateinit var myContext: Context
+abstract class SuperActivity : AppCompatActivity(), SuperActivityI {
+    @Inject
     override lateinit var app: MyApp
+
+    @Inject
+    override lateinit var prefs: SharedPreferences
+
+    @Inject
+    @ActivityContext
+    override lateinit var myContext: Context
     override val activity get() = myContext as Activity
 
     abstract val b: ViewBinding
-    lateinit var navView: NavigationView
-    lateinit var drawerLayout: DrawerLayout
+    abstract val navView: NavigationView
+    abstract val drawerLayout: DrawerLayout
 
     lateinit var navController: NavController
     lateinit var appBarConfiguration: AppBarConfiguration
     abstract val confirmGoingBackMsg: Int
-    abstract val presenter: SuperPresenterInter
+    abstract val presenter: SuperPresenterI
 
     abstract val mainFragmentId: Int
     override val mainFragment: ListFragment
         get() {
-            val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
-            return navHostFragment?.childFragmentManager?.fragments?.get(0) as ListFragment
+            return supportFragmentManager
+                .findFragmentById(R.id.nav_host_fragment)
+                ?.childFragmentManager
+                ?.fragments
+                ?.first() as ListFragment
         }
 
     override fun onSupportNavigateUp(): Boolean =
@@ -82,8 +89,6 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
 
     override fun onStart() {
         super.onStart()
-        navView = getProperty(b, "navView")
-        drawerLayout = getProperty(b, "drawerLayout")
         setAppVersion()
 
         // setup navigation controller
@@ -118,21 +123,20 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
     }
 
     /**
-     * Helper method to display a snackbar about updates.
+     * Displays a snackbar about updates.
      *
      * @param[isAutoCheck] if true do not display the snackbar because we should not
      * display it when auto checking for updates.
      */
     fun updatesSnackbar(message: Int, isAutoCheck: Boolean) {
-        if (!isAutoCheck) {
-            Snackbar.make(
-                mainFragment.b.coordinatorLayout,
-                message,
-                Snackbar.LENGTH_LONG
-            )
-                .setAction("HIDE") {}
-                .show()
-        }
+        if (isAutoCheck) return
+
+        Snackbar.make(
+            mainFragment.b.coordinatorLayout,
+            message, Snackbar.LENGTH_LONG
+        )
+            .setAction("HIDE") {}
+            .show()
     }
 
     // updates snackbars
@@ -146,7 +150,7 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
         updatesSnackbar(R.string.no_internet_connection, isAutoCheck)
 
     /**
-     * This method obtains version name and sets it in navigation header.
+     * Obtains version name and sets it in navigation header.
      */
     private fun setAppVersion() {
         val version = BuildConfig.VERSION_NAME
@@ -176,7 +180,6 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
     }
 
     override fun onBackPressed() {
-        // close navigation drawer when Back button is pressed and if it is opened
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
         } else if (navController.currentDestination?.id == mainFragmentId) {
@@ -191,25 +194,15 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.check_for_updates -> presenter.checkUpdatesSelected()
-            R.id.changelog -> presenter.navigateToChangelog()
-            R.id.settings -> presenter.navigateToSettings()
-            R.id.about -> presenter.navigateToAbout()
+            R.id.changelog -> navController.navigate(R.id.actionChangelog)
+            R.id.settings -> navController.navigate(R.id.actionSettings)
+            R.id.about -> navController.navigate(R.id.actionAbout)
         }
         return false
     }
 
     /**
-     * Navigates to given destination.
-     * @param[id] id of destination action.
-     */
-    override fun navigateTo(id: Int) {
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navHostFragment.navController.navigate(id)
-    }
-
-    /**
-     * This method will automatically hide the keyboard when any TextView is losing focus.
+     * Automatically hides the keyboard when any TextView is losing focus.
      * Note: this method is completely copied from StackOverflow.
      */
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
@@ -238,8 +231,9 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityInter {
     }
 
     /**
-     * Used to display dialog saying that the error has occurred.
-     * @param[title] title of error dialog.
+     * Displays error dialog.
+     *
+     * @param[title] dialog title.
      * @param[details] details about the error.
      */
     override fun showError(title: String, details: String) {

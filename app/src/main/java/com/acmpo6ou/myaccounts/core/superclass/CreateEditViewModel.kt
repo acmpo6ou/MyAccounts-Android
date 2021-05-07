@@ -21,47 +21,29 @@ package com.acmpo6ou.myaccounts.core.superclass
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.core.combineWith
+import com.acmpo6ou.myaccounts.core.utils.combineWith
 
 /**
- * Super class for all view models that are responsible for creating/editing items.
+ * Super class for all view models that create/edit items.
  */
-abstract class CreateEditViewModel : ViewModel() {
+abstract class CreateEditViewModel : ViewModel(), ErrorViewModel {
     abstract val itemNames: List<String>
     abstract val app: MyApp
+    val finished = MutableLiveData<Boolean>()
 
-    private val emptyNameErr_ = MutableLiveData(true)
-    private val existsNameErr_ = MutableLiveData(false)
+    val emptyNameErr = MutableLiveData(true)
+    val existsNameErr = MutableLiveData(false)
 
-    private val emptyPassErr_ = MutableLiveData(true)
-    private val diffPassErr_ = MutableLiveData(false)
-
-    var emptyNameErr
-        get() = emptyNameErr_.value!!
-        set(value) { emptyNameErr_.value = value }
-    var existsNameErr
-        get() = existsNameErr_.value!!
-        set(value) { existsNameErr_.value = value }
-
-    var diffPassErr
-        get() = diffPassErr_.value!!
-        set(value) { diffPassErr_.value = value }
-    var emptyPassErr
-        get() = emptyPassErr_.value!!
-        set(value) { emptyPassErr_.value = value }
-
-    val _finished = MutableLiveData<Boolean>()
-    var finished
-        get() = _finished.value!!
-        set(value) { _finished.value = value }
+    val emptyPassErr = MutableLiveData(true)
+    val diffPassErr = MutableLiveData(false)
 
     /**
      * This LiveData property provides error message according
-     * to emptyNameErr_ and existsNameErr_ live data values.
+     * to emptyNameErr and existsNameErr live data values.
      */
-    val nameErrors = emptyNameErr_.combineWith(existsNameErr_) {
+    val nameErrors = emptyNameErr.combineWith(existsNameErr) {
         empty: Boolean?, exists: Boolean? ->
 
         var msg: String? = null
@@ -75,9 +57,9 @@ abstract class CreateEditViewModel : ViewModel() {
 
     /**
      * This LiveData property provides error message according
-     * to emptyPassErr_ and diffPassErr_ live data values.
+     * to emptyPassErr and diffPassErr live data values.
      */
-    val passwordErrors = emptyPassErr_.combineWith(diffPassErr_) {
+    val passwordErrors = emptyPassErr.combineWith(diffPassErr) {
         empty: Boolean?, different: Boolean? ->
 
         var msg: String? = null
@@ -114,8 +96,8 @@ abstract class CreateEditViewModel : ViewModel() {
      */
     open fun validateName(name: String) {
         val cleanedName = fixName(name)
-        emptyNameErr = cleanedName.isEmpty()
-        existsNameErr = cleanedName in itemNames
+        emptyNameErr.value = cleanedName.isEmpty()
+        existsNameErr.value = cleanedName in itemNames
     }
 
     /**
@@ -128,7 +110,7 @@ abstract class CreateEditViewModel : ViewModel() {
      * @param[pass2] second password.
      */
     open fun validatePasswords(pass1: String, pass2: String) {
-        emptyPassErr = pass1.isEmpty()
-        diffPassErr = pass1 != pass2
+        emptyPassErr.value = pass1.isEmpty()
+        diffPassErr.value = pass1 != pass2
     }
 }

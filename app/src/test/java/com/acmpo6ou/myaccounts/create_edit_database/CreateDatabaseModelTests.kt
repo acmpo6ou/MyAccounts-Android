@@ -20,11 +20,9 @@
 package com.acmpo6ou.myaccounts.create_edit_database
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.acmpo6ou.myaccounts.ModelTest
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.database.Database
-import com.acmpo6ou.myaccounts.str
-import com.acmpo6ou.myaccounts.ui.database.CreateDatabaseViewModel
+import com.acmpo6ou.myaccounts.*
+import com.acmpo6ou.myaccounts.database.create_edit_database.CreateDatabaseViewModel
+import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -38,7 +36,7 @@ class CreateDatabaseModelTests : ModelTest() {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 
-    val model = CreateDatabaseViewModel()
+    lateinit var model: CreateDatabaseViewModel
     lateinit var spyModel: CreateDatabaseViewModel
 
     private val name = "clean_name"
@@ -47,13 +45,22 @@ class CreateDatabaseModelTests : ModelTest() {
 
     @Before
     fun setup() {
-        val app = MyApp()
+        app = MyApp()
         app.databases = mutableListOf(Database("main"))
+        val spyApp = spy(app) {
+            on { SRC_DIR } doReturn SRC_DIR
+        }
 
-        model.initialize(app, SRC_DIR)
+        model = CreateDatabaseViewModel(spyApp, Dispatchers.Unconfined, Dispatchers.Unconfined)
         spyModel = spy(model) { on { generateSalt() } doReturn salt }
-        spyModel.uiDispatcher = Dispatchers.Unconfined
-        spyModel.defaultDispatcher = Dispatchers.Unconfined
+    }
+
+    @Test
+    fun `apply should set loading to true`() {
+        runBlocking {
+            spyModel.apply(name, password)
+        }
+        assertTrue(spyModel.loading.value!!)
     }
 
     @Test
@@ -74,6 +81,22 @@ class CreateDatabaseModelTests : ModelTest() {
     }
 
     @Test
+    fun `apply should add created Database to the list`() {
+        runBlocking {
+            spyModel.apply(name, password)
+        }
+        assertTrue(db in app.databases)
+    }
+
+    @Test
+    fun `apply should set finished to true`() {
+        runBlocking {
+            spyModel.apply(name, password)
+        }
+        assertTrue(spyModel.finished.value!!)
+    }
+
+    @Test
     fun `apply should handle any error`() {
         val msg = faker.str()
         val exception = Exception(msg)
@@ -85,31 +108,7 @@ class CreateDatabaseModelTests : ModelTest() {
         runBlocking {
             spyModel.apply(name, password)
         }
-        assertEquals(exception.toString(), spyModel.errorMsg)
-        assertFalse(spyModel.loading)
-    }
-
-    @Test
-    fun `apply should add created Database to the list`() {
-        runBlocking {
-            spyModel.apply(name, password)
-        }
-        assertTrue(db in spyModel.databases)
-    }
-
-    @Test
-    fun `apply should set finished to true`() {
-        runBlocking {
-            spyModel.apply(name, password)
-        }
-        assertTrue(spyModel.finished)
-    }
-
-    @Test
-    fun `apply should set loading to true`() {
-        runBlocking {
-            spyModel.apply(name, password)
-        }
-        assertTrue(spyModel.loading)
+        assertEquals(exception.toString(), spyModel.errorMsg.value!!)
+        assertFalse(spyModel.loading.value!!)
     }
 }

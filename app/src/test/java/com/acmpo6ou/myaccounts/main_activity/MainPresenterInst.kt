@@ -22,16 +22,11 @@ package com.acmpo6ou.myaccounts.main_activity
 import android.content.Context
 import android.content.res.Resources
 import android.net.Uri
-import android.os.Build
 import androidx.test.platform.app.InstrumentationRegistry
-import com.acmpo6ou.myaccounts.NoInternet
-import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.database.MainActivityInter
-import com.acmpo6ou.myaccounts.database.MainModelInter
-import com.acmpo6ou.myaccounts.database.MainPresenter
-import com.acmpo6ou.myaccounts.randomIntExcept
-import com.acmpo6ou.myaccounts.str
+import com.acmpo6ou.myaccounts.*
+import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
+import com.acmpo6ou.myaccounts.database.main_activity.MainModelI
+import com.acmpo6ou.myaccounts.database.main_activity.MainPresenter
 import com.github.ivanshafran.sharedpreferencesmock.SPMockBuilder
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.doReturn
@@ -42,16 +37,14 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 import java.io.File
 import java.io.IOException
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class MainPresenterInst : NoInternet {
     lateinit var presenter: MainPresenter
-    lateinit var model: MainModelInter
-    private lateinit var view: MainActivityInter
+    lateinit var model: MainModelI
+    private lateinit var view: MainActivityI
 
     private val faker = Faker()
     private val locationUri: Uri = mock()
@@ -59,6 +52,7 @@ class MainPresenterInst : NoInternet {
     // get string resources
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     private val resources: Resources = context.resources
+
     private val importErrorTitle = resources.getString(R.string.import_error_title)
     private val import2FilesMsg = resources.getString(R.string.import_2_files)
     private val importExistsMsg = resources.getString(R.string.db_exists)
@@ -66,17 +60,15 @@ class MainPresenterInst : NoInternet {
 
     @Before
     fun setup() {
-        val mockPrefs = SPMockBuilder().createSharedPreferences()
-        view = mock {
-            on { myContext } doReturn context
-            on { ACCOUNTS_DIR } doReturn ""
-            on { prefs } doReturn mockPrefs
-            on { app } doReturn context.applicationContext as MyApp
+        val app: MyApp = mock {
+            on { res } doReturn resources
+            on { SRC_DIR } doReturn ""
         }
-        model = mock()
+        val mockPrefs = SPMockBuilder().createSharedPreferences()
 
-        presenter = MainPresenter(view)
-        presenter.model = model
+        view = mock()
+        model = mock()
+        presenter = MainPresenter({ view }, model, app, mockPrefs)
     }
 
     @Test
@@ -84,8 +76,8 @@ class MainPresenterInst : NoInternet {
         // correct tar file would have 2 files
         // here we return anything but 2 as is needed for test
         whenever(model.countFiles(locationUri)).thenReturn(randomIntExcept(2))
-        presenter.checkTarFile(locationUri)
 
+        presenter.checkTarFile(locationUri)
         verify(view).showError(importErrorTitle, import2FilesMsg)
     }
 
@@ -113,7 +105,8 @@ class MainPresenterInst : NoInternet {
         val sizesList = listOf(
             // size of db file should be not less then 100
             100,
-            // size of bin file should be exactly 16
+            // size of bin file should be exactly 16, here we return anything but 16
+            // as is needed for the test
             randomIntExcept(16, 0, 200)
         )
 
@@ -131,10 +124,11 @@ class MainPresenterInst : NoInternet {
         // mock model to return fake sizes, correct files count and file names
         val filesList = listOf("main", "main")
         val sizesList = listOf(
-            // size of db file should be not less then 100
+            // size of db file should be not less then 100, here we return number lower
+            // then 100 as is needed for our test
             faker.number().numberBetween(0, 90),
-            16
-        ) // size of bin file should be exactly 16
+            16 // size of bin file should be exactly 16
+        )
 
         whenever(model.getNames(locationUri)).thenReturn(filesList)
         whenever(model.countFiles(locationUri)).thenReturn(2)
@@ -146,23 +140,23 @@ class MainPresenterInst : NoInternet {
     }
 
     @Test
-    fun `importDatabase should handle IOException`() {
-        whenever(model.importDatabase(locationUri)).thenAnswer {
-            throw IOException()
-        }
-        presenter.importDatabase(locationUri)
-
-        verify(view).showError(importErrorTitle, ioError)
-    }
-
-    @Test
     fun `importDatabase should handle FileAlreadyExistsException`() {
         whenever(model.importDatabase(locationUri)).thenAnswer {
             throw FileAlreadyExistsException(File(""))
         }
-        presenter.importDatabase(locationUri)
 
+        presenter.importDatabase(locationUri)
         verify(view).showError(importErrorTitle, importExistsMsg)
+    }
+
+    @Test
+    fun `importDatabase should handle IOException`() {
+        whenever(model.importDatabase(locationUri)).thenAnswer {
+            throw IOException()
+        }
+
+        presenter.importDatabase(locationUri)
+        verify(view).showError(importErrorTitle, ioError)
     }
 
     @Test
@@ -172,8 +166,8 @@ class MainPresenterInst : NoInternet {
         whenever(model.importDatabase(locationUri)).thenAnswer {
             throw exception
         }
-        presenter.importDatabase(locationUri)
 
+        presenter.importDatabase(locationUri)
         verify(view).showError(importErrorTitle, exception.toString())
     }
 }

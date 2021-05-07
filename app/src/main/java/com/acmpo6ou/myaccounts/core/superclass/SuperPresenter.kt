@@ -21,19 +21,15 @@ package com.acmpo6ou.myaccounts.core.superclass
 
 import android.util.Log
 import com.acmpo6ou.myaccounts.BuildConfig
-import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.GitHubService
+import com.acmpo6ou.myaccounts.core.utils.GitHubService
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 
-/**
- * Super class for MainPresenter and AccountsPresenter.
- */
-abstract class SuperPresenter : SuperPresenterInter {
-    abstract val view: SuperActivityInter
+abstract class SuperPresenter : SuperPresenterI {
+    abstract val view: SuperActivityI
 
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://api.github.com")
@@ -41,12 +37,12 @@ abstract class SuperPresenter : SuperPresenterInter {
     var service: GitHubService = retrofit.create(GitHubService::class.java)
 
     /**
-     * This method is called when user clicks `Check for updates` in navigation drawer
+     * Called when user clicks `Check for updates` in navigation drawer
      * or when auto checking for updates.
      *
      * Uses [service] to get json of latest release from which it extracts app's latest
      * version using regex.
-     * If response is unsuccessful display snackbar about failure to check for updates.
+     * If response is unsuccessful displays snackbar about failure to check for updates.
      *
      * @param[isAutoCheck] set this to true when auto checking for updates to avoid displaying
      * of updates snackbars.
@@ -78,12 +74,12 @@ abstract class SuperPresenter : SuperPresenterInter {
     }
 
     /**
-     * This methods determines whether there are updates available by given [latestVersion].
+     * Determines whether there are updates available by given [latestVersion].
      *
      * If [latestVersion] is different then currently installed one, then there are updates
      * available, otherwise they aren't.
      * Depending on whether there are updates or not we launch UpdatesActivity or display a
-     * snackbar that there are no updates.
+     * snackbar saying that there are no updates.
      *
      * @param[latestVersion] latest app version that is available on github releases.
      * @param[isAutoCheck] set this to true when auto checking for updates to avoid displaying
@@ -96,13 +92,4 @@ abstract class SuperPresenter : SuperPresenterInter {
             view.noUpdates(isAutoCheck)
         }
     }
-
-    // Called when user clicks `Changelog` in navigation drawer.
-    override fun navigateToChangelog() = view.navigateTo(R.id.actionChangelog)
-
-    // Called when user clicks `Settings` in navigation drawer.
-    override fun navigateToSettings() = view.navigateTo(R.id.actionSettings)
-
-    // Called when user clicks `About` in navigation drawer.
-    override fun navigateToAbout() = view.navigateTo(R.id.actionAbout)
 }

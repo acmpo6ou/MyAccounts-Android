@@ -19,10 +19,14 @@
 
 package com.acmpo6ou.myaccounts.create_edit_account
 
+import android.net.Uri
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.acmpo6ou.myaccounts.*
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.ui.account.CreateAccountViewModel
+import com.acmpo6ou.myaccounts.account
+import com.acmpo6ou.myaccounts.account.create_edit_account.CreateAccountViewModel
+import com.acmpo6ou.myaccounts.account.create_edit_account.LoadFileModel
+import com.acmpo6ou.myaccounts.copy
+import com.acmpo6ou.myaccounts.databaseMap
+import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.doReturn
@@ -32,103 +36,92 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.io.File
 
-class CreateAccountModelTests : ModelTest() {
+class CreateAccountModelTests {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 
-    val model = CreateAccountViewModel()
-    private val fileName = Faker().str()
+    lateinit var viewModel: CreateAccountViewModel
+    lateinit var model: LoadFileModel
 
-    private val attachedFileName = "test.txt"
-    override val location = "$accountsDir/$attachedFileName"
-    private val decodedContent = "This is a simple file.\nTo test PyQtAccounts.\nHello World!\n"
-    private val encodedContent =
-        "VGhpcyBpcyBhIHNpbXBsZSBmaWxlLgpUbyB0ZXN0IFB5UXRBY2NvdW50cy4KSGVsbG8gV29ybGQhCg=="
+    private val fileName = Faker().str()
+    val locationUri: Uri = mock()
+    private val fileContent = Faker().str()
 
     @Before
     fun setup() {
-        val app: MyApp = mock { on { contentResolver } doReturn contentResolver }
-        model.initialize(app, databaseMap.copy())
-    }
-
-    @Test
-    fun `applyPressed should create new account`() {
-        // prepare attached file to load
-        model.filePaths[attachedFileName] = locationUri
-        File(location).apply {
-            createNewFile()
-            writeText(decodedContent)
-        }
-        setupInputResolver()
-
-        val expectedAccount = account.copy()
-        expectedAccount.attachedFiles = mutableMapOf(attachedFileName to encodedContent)
-
-        model.applyPressed(
-            account.accountName,
-            account.username,
-            account.email,
-            account.password,
-            account.date,
-            account.comment
-        )
-        assertEquals(expectedAccount, model.accounts[account.accountName])
-    }
-
-    @Test
-    fun `applyPressed should handle any exception`() {
-        val msg = faker.str()
-        val exception = Exception(msg)
-
-        model.model = mock()
-        doAnswer { throw exception }.whenever(model.model).loadFile(locationUri)
-
-        model.filePaths[fileName] = locationUri
-        model.applyPressed("", "", "", "", "", "")
-
-        assertEquals(exception.toString(), model.errorMsg.value)
-        assertNotEquals(true, model._finished.value)
-    }
-
-    @Test
-    fun `applyPressed should set finished to true`() {
-        model.applyPressed(
-            account.accountName,
-            account.username,
-            account.email,
-            account.password,
-            account.date,
-            account.comment
-        )
-        assertTrue(model.finished)
+        model = mock { on { loadFile(locationUri) } doReturn fileContent }
+        viewModel = CreateAccountViewModel(mock(), model)
+        viewModel.accounts = databaseMap.copy()
     }
 
     @Test
     fun `addFile should add file to filePaths`() {
-        model.addFile(locationUri, fileName)
-        assertTrue(fileName in model.filePaths)
-        assertEquals(locationUri, model.filePaths[fileName])
+        viewModel.addFile(locationUri, fileName)
+        assertTrue(fileName in viewModel.filePaths)
+        assertEquals(locationUri, viewModel.filePaths[fileName])
     }
 
     @Test
     fun `addFile should notify about addition`() {
-        model.addFile(locationUri, fileName)
-        assertEquals(0, model.notifyAdded.value)
+        viewModel.addFile(locationUri, fileName)
+        assertEquals(0, viewModel.notifyAdded.value)
     }
 
     @Test
     fun `removeFile should remove file from filePaths`() {
-        model.filePaths[fileName] = locationUri
-        model.removeFile(0)
-        assertFalse(fileName in model.filePaths)
+        viewModel.filePaths[fileName] = locationUri
+        viewModel.removeFile(0)
+        assertFalse(fileName in viewModel.filePaths)
     }
 
     @Test
     fun `removeFile should notify about removal`() {
-        model.filePaths[fileName] = locationUri
-        model.removeFile(0)
-        assertEquals(0, model.notifyRemoved.value)
+        viewModel.filePaths[fileName] = locationUri
+        viewModel.removeFile(0)
+        assertEquals(0, viewModel.notifyRemoved.value)
+    }
+
+    @Test
+    fun `applyPressed should create new account`() {
+        viewModel.filePaths[fileName] = locationUri
+        val expectedAccount = account.copy()
+        expectedAccount.attachedFiles = mutableMapOf(fileName to fileContent)
+
+        viewModel.applyPressed(
+            account.accountName,
+            account.username,
+            account.email,
+            account.password,
+            account.date,
+            account.comment
+        )
+        assertEquals(expectedAccount, viewModel.accounts[account.accountName])
+    }
+
+    @Test
+    fun `applyPressed should set finished to true`() {
+        viewModel.applyPressed(
+            account.accountName,
+            account.username,
+            account.email,
+            account.password,
+            account.date,
+            account.comment
+        )
+        assertTrue(viewModel.finished.value!!)
+    }
+
+    @Test
+    fun `applyPressed should handle any exception`() {
+        val msg = Faker().str()
+        val exception = Exception(msg)
+        doAnswer { throw exception }.whenever(model).loadFile(locationUri)
+
+        viewModel.filePaths[fileName] = locationUri
+        viewModel.applyPressed("", "", "", "", "", "")
+
+        assertEquals(exception.toString(), viewModel.errorMsg.value)
+        assertNotEquals(true, viewModel.finished.value)
     }
 }

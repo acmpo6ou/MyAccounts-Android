@@ -23,19 +23,21 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.core.GenPassDialog
-import com.acmpo6ou.myaccounts.core.MyApp
+import com.acmpo6ou.myaccounts.core.utils.GenPassDialog
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import dagger.hilt.android.qualifiers.ActivityContext
+import javax.inject.Inject
 
 /**
- * Super class for all fragments that edit/create items.
+ * Super class for all fragments that create/edit items.
  */
-abstract class CreateEditFragment : Fragment() {
+abstract class CreateEditFragment : Fragment(), ErrorFragment {
     abstract val nameField: TextInputEditText
     abstract val passwordField: TextInputEditText
     abstract val repeatPasswordField: TextInputEditText
@@ -46,10 +48,10 @@ abstract class CreateEditFragment : Fragment() {
     abstract val buttonGenerate: Button
     abstract val applyButton: Button
 
-    lateinit var app: MyApp
+    @Inject
+    @ActivityContext
     lateinit var myContext: Context
-    abstract val viewModel: CreateEditViewModel
-    private val superActivity get() = myContext as SuperActivity
+    abstract override val viewModel: CreateEditViewModel
 
     // Hides/displays name error tip
     private val nameErrorObserver = Observer<String?> {
@@ -67,15 +69,14 @@ abstract class CreateEditFragment : Fragment() {
         applyButton.isEnabled = it
     }
 
-    // This observer invoked when database/account is successfully created/edited.
-    // It navigates back to the main fragment.
+    // Invoked when database/account is successfully created/edited.
+    // Navigates back to the main fragment.
     private val finishedObserver = Observer<Boolean> {
-        superActivity.findNavController(R.id.nav_host_fragment).navigateUp()
+        (myContext as AppCompatActivity)
+            .findNavController(R.id.nav_host_fragment)
+            .navigateUp()
     }
 
-    /**
-     * Used to initialize all fields and buttons of the form.
-     */
     open fun initForm() {
         // when name is changed validate it using model to display error in case
         // such name already exists or the name is empty
@@ -104,20 +105,18 @@ abstract class CreateEditFragment : Fragment() {
 
         // display generate password dialog when `Generate` button is pressed
         buttonGenerate.setOnClickListener {
-            GenPassDialog(superActivity, passwordField, repeatPasswordField)
+            GenPassDialog(myContext, passwordField, repeatPasswordField)
         }
     }
 
-    /**
-     * This method initializes view model providing all needed resources.
-     */
-    open fun initModel() {
+    override fun initModel() {
+        super.initModel()
         // init observers
         viewModel.apply {
             viewLifecycleOwner.let {
                 nameErrors.observe(it, nameErrorObserver)
                 passwordErrors.observe(it, passwordErrorObserver)
-                _finished.observe(it, finishedObserver)
+                finished.observe(it, finishedObserver)
                 applyEnabled.observe(it, applyEnabledObserver)
             }
         }

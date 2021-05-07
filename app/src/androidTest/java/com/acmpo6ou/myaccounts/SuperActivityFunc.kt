@@ -19,87 +19,80 @@
 
 package com.acmpo6ou.myaccounts
 
-import android.content.Context
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
-import com.acmpo6ou.myaccounts.account.AccountsPresenterInter
-import com.acmpo6ou.myaccounts.core.MyApp
-import com.acmpo6ou.myaccounts.database.Database
-import com.nhaarman.mockitokotlin2.*
+import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsBindings
+import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsPresenterI
+import com.acmpo6ou.myaccounts.core.AppModule
+import com.acmpo6ou.myaccounts.database.databases_list.Database
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
+import dagger.hilt.android.scopes.ActivityScoped
+import dagger.hilt.android.testing.BindValue
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
+import javax.inject.Singleton
 
-@RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
+@UninstallModules(AppModule::class, AccountsBindings::class)
 class SuperActivityFunc {
+    @get:Rule(order = 0)
+    var hiltAndroidRule = HiltAndroidRule(this)
+
     lateinit var scenario: ActivityScenario<AccountsActivity>
-    lateinit var presenter: AccountsPresenterInter
-    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
+
+    @BindValue
+    @Singleton
+    @JvmField
+    val app: MyApp = mock { on { databases } doReturn mutableListOf(Database("main")) }
+
+    @BindValue
+    @JvmField
+    @ActivityScoped
+    val presenter: AccountsPresenterI = mock()
 
     @Before
     fun setup() {
-        val app = context.applicationContext as MyApp
-        app.databases = mutableListOf(Database("main"))
-
-        presenter = mock()
-        doNothing().whenever(presenter).saveSelected()
-
         scenario = ActivityScenario.launch(AccountsActivity::class.java)
-        scenario.onActivity {
-            it.presenter = presenter
-        }
+
+        // prepare confirm back dialog
+        scenario.onActivity { it.confirmBack() }
+        Thread.sleep(1000) // wait for dialog to appear
     }
 
     @Test
     fun confirmBack_should_call_presenter_saveSelected_when_Save_is_chosen_in_dialog() {
-        scenario.onActivity {
-            it.confirmBack()
-        }
-        // wait for dialog to appear
-        Thread.sleep(1000)
-
         // choose Save
         onView(withText(R.string.save))
             .inRoot(isDialog())
             .perform(click())
-
         verify(presenter).saveSelected()
     }
 
     @Test
     fun confirmBack_should_not_call_presenter_saveSelected_when_Ok_is_chosen_in_dialog() {
-        scenario.onActivity {
-            it.confirmBack()
-        }
-        // wait for dialog to appear
-        Thread.sleep(1000)
-
         // choose Ok
         onView(withText("Ok"))
             .inRoot(isDialog())
             .perform(click())
-
         verify(presenter, never()).saveSelected()
     }
 
     @Test
     fun confirmBack_should_not_call_presenter_saveSelected_when_Cancel_is_chosen_in_dialog() {
-        scenario.onActivity {
-            it.confirmBack()
-        }
-        // wait for dialog to appear
-        Thread.sleep(1000)
-
         // choose Cancel
         onView(withText(R.string.cancel))
             .inRoot(isDialog())
             .perform(click())
-
         verify(presenter, never()).saveSelected()
     }
 }
