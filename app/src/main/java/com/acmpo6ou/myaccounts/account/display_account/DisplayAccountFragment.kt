@@ -24,11 +24,13 @@ import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings.ACTION_INPUT_METHOD_SETTINGS
 import android.view.LayoutInflater
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -109,8 +111,27 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
             true
         }
 
-        if (account.attachedFiles.isEmpty()) {
-            b.attachedFilesLabel.visibility = View.GONE
+        if (account.attachedFiles.isEmpty()) b.attachedFilesLabel.visibility = View.GONE
+
+        b.copyPassword.setOnClickListener {
+            checkBoardEnabled()
+        }
+    }
+
+    /**
+     * Checks whether MyAccountsBoard service is enabled in settings by user.
+     * If it isn't goes to input method settings to allow user to enable the service.
+     */
+    private fun checkBoardEnabled() {
+        val im = requireContext().getSystemService(InputMethodManager::class.java)
+        val isGranted =
+            im.enabledInputMethodList.any { it.packageName == context?.packageName }
+
+        if (!isGranted) {
+            Intent(ACTION_INPUT_METHOD_SETTINGS).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(this)
+            }
         }
     }
 
