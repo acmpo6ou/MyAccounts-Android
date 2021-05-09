@@ -126,6 +126,7 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
             checkBoardEnabled()
             showChangeInputMethodDialog()
             app.password = account.password
+            passwordCopied()
         }
     }
 
@@ -157,6 +158,18 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
         )
         val defaultInputMethod = ComponentName.unflattenFromString(defaultIME)?.packageName
         if (defaultInputMethod != context?.packageName) inputManager.showInputMethodPicker()
+    }
+
+    /**
+     * Displays snackbar saying that password is copied.
+     */
+    private fun passwordCopied() {
+        Snackbar.make(
+            b.displayAccountLayout,
+            R.string.copied, Snackbar.LENGTH_LONG
+        )
+            .setAction("HIDE") {}
+            .show()
     }
 
     private val saveFileLauncher =
