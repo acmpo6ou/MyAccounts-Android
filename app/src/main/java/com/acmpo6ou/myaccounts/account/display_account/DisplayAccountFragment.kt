@@ -115,6 +115,7 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
 
         b.copyPassword.setOnClickListener {
             checkBoardEnabled()
+            showChangeInputMethodDialog()
         }
     }
 
@@ -134,6 +135,11 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
             }
         }
     }
+
+    private fun showChangeInputMethodDialog() =
+        requireContext()
+            .getSystemService(InputMethodManager::class.java)
+            .showInputMethodPicker()
 
     private val saveFileLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
