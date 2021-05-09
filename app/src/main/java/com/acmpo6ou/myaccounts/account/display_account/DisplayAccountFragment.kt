@@ -21,9 +21,11 @@ package com.acmpo6ou.myaccounts.account.display_account
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.ComponentName
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.provider.Settings.ACTION_INPUT_METHOD_SETTINGS
 import android.view.LayoutInflater
 import android.view.MotionEvent.ACTION_DOWN
@@ -64,6 +66,9 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
 
     @Inject
     lateinit var app: MyApp
+
+    @Inject
+    lateinit var inputManager: InputMethodManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -129,9 +134,9 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
      * If it isn't goes to input method settings to allow user to enable the service.
      */
     private fun checkBoardEnabled() {
-        val im = requireContext().getSystemService(InputMethodManager::class.java)
-        val isGranted =
-            im.enabledInputMethodList.any { it.packageName == context?.packageName }
+        val isGranted = inputManager
+            .enabledInputMethodList
+            .any { it.packageName == context?.packageName }
 
         if (!isGranted) {
             Intent(ACTION_INPUT_METHOD_SETTINGS).apply {
@@ -141,10 +146,18 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
         }
     }
 
-    private fun showChangeInputMethodDialog() =
-        requireContext()
-            .getSystemService(InputMethodManager::class.java)
-            .showInputMethodPicker()
+    /**
+     * Displays InputMethodPicker dialog for user to chose MyAccountsBoard as current keyboard
+     * if it isn't already current.
+     */
+    private fun showChangeInputMethodDialog() {
+        val defaultIME = Settings.Secure.getString(
+            context?.contentResolver,
+            Settings.Secure.DEFAULT_INPUT_METHOD
+        )
+        val defaultInputMethod = ComponentName.unflattenFromString(defaultIME)?.packageName
+        if (defaultInputMethod != context?.packageName) inputManager.showInputMethodPicker()
+    }
 
     private val saveFileLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
