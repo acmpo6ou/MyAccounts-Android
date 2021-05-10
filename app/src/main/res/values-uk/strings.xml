@@ -77,4 +77,6 @@
     <string name="remove">Вилучити</string>
     <string name="attach_file">Прикріпити файл</string>
     <string name="error_loading">Помилка завантаження прикріплених файлів!</string>
+    <string name="paste_password">Вставити пароль</string>
+    <string name="you_didn_t_copy_the_password">Пароль не скопійовано!</string>
 </resources>
