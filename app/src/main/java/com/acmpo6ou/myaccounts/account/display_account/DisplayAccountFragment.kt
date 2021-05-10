@@ -120,6 +120,17 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
             true
         }
 
+        // listener to hide/display FAB when scrolling, so that the FAB doesn't prevent from
+        // reading possibly long comment
+        b.scrollView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+            val dy = scrollY - oldScrollY
+            if (dy > 0) {
+                b.copyPassword.hide()
+            } else if (dy < 0) {
+                b.copyPassword.show()
+            }
+        }
+
         if (account.attachedFiles.isEmpty()) b.attachedFilesLabel.visibility = View.GONE
 
         b.copyPassword.setOnClickListener {
