@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.account.display_account
 
 import android.content.Context
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.acmpo6ou.myaccounts.R
 import dagger.Binds
@@ -55,4 +56,9 @@ object DisplayAccountModule {
             .fragments.first()
             as DisplayAccountFragment
     }
+
+    @Provides
+    @FragmentScoped
+    fun inputMethodManager(@ActivityContext activity: Context): InputMethodManager =
+        activity.getSystemService(InputMethodManager::class.java)
 }

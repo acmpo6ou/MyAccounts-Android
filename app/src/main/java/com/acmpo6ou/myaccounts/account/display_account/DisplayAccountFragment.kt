@@ -21,19 +21,24 @@ package com.acmpo6ou.myaccounts.account.display_account
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.ComponentName
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
+import android.provider.Settings.ACTION_INPUT_METHOD_SETTINGS
 import android.view.LayoutInflater
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsActivityI
 import com.acmpo6ou.myaccounts.database.databases_list.Account
@@ -58,6 +63,12 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
 
     @Inject
     lateinit var accountsActivity: AccountsActivityI
+
+    @Inject
+    lateinit var app: MyApp
+
+    @Inject
+    lateinit var inputManager: InputMethodManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -109,9 +120,67 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
             true
         }
 
-        if (account.attachedFiles.isEmpty()) {
-            b.attachedFilesLabel.visibility = View.GONE
+        // listener to hide/display FAB when scrolling, so that the FAB doesn't prevent from
+        // reading possibly long comment
+        b.scrollView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+            val dy = scrollY - oldScrollY
+            if (dy > 0) {
+                b.copyPassword.hide()
+            } else if (dy < 0) {
+                b.copyPassword.show()
+            }
         }
+
+        if (account.attachedFiles.isEmpty()) b.attachedFilesLabel.visibility = View.GONE
+
+        b.copyPassword.setOnClickListener {
+            checkBoardEnabled()
+            showChangeInputMethodDialog()
+            app.password = account.password
+            passwordCopied()
+        }
+    }
+
+    /**
+     * Checks whether MyAccountsBoard service is enabled in settings by user.
+     * If it isn't goes to input method settings to allow user to enable the service.
+     */
+    private fun checkBoardEnabled() {
+        val isGranted = inputManager
+            .enabledInputMethodList
+            .any { it.packageName == context?.packageName }
+
+        if (!isGranted) {
+            Intent(ACTION_INPUT_METHOD_SETTINGS).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(this)
+            }
+        }
+    }
+
+    /**
+     * Displays InputMethodPicker dialog for user to chose MyAccountsBoard as current keyboard
+     * if it isn't already current.
+     */
+    private fun showChangeInputMethodDialog() {
+        val defaultIME = Settings.Secure.getString(
+            context?.contentResolver,
+            Settings.Secure.DEFAULT_INPUT_METHOD
+        )
+        val defaultInputMethod = ComponentName.unflattenFromString(defaultIME)?.packageName
+        if (defaultInputMethod != context?.packageName) inputManager.showInputMethodPicker()
+    }
+
+    /**
+     * Displays snackbar saying that password is copied.
+     */
+    private fun passwordCopied() {
+        Snackbar.make(
+            b.displayAccountLayout,
+            R.string.copied, Snackbar.LENGTH_LONG
+        )
+            .setAction("HIDE") {}
+            .show()
     }
 
     private val saveFileLauncher =

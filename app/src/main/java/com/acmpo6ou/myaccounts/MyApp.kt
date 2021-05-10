@@ -39,6 +39,9 @@ open class MyApp : Application() {
     // Because resources from MainActivity are correctly translated.
     open lateinit var res: Resources
 
+    // Used by MyAccountsBoard service to safely copy and paste password
+    var password = ""
+
     // path to directory that contains src folder
     open val ACCOUNTS_DIR get() = getExternalFilesDir(null)?.path + "/"
 

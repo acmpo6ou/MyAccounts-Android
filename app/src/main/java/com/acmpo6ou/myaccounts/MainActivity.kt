@@ -70,10 +70,14 @@ open class MainActivity : SuperActivity(), MainActivityI {
         checkStoragePermission()
     }
 
+    private val permissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+        }
+
     private fun checkStoragePermission() {
         val isGranted = checkCallingOrSelfPermission(permission.WRITE_EXTERNAL_STORAGE)
         if (isGranted != PackageManager.PERMISSION_GRANTED)
-            requestPermissions(arrayOf(permission.WRITE_EXTERNAL_STORAGE), 300)
+            permissionLauncher.launch(permission.WRITE_EXTERNAL_STORAGE)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

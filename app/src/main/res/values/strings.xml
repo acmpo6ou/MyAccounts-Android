@@ -118,4 +118,6 @@
     <string name="remove">Remove</string>
     <string name="attach_file">Attach file</string>
     <string name="error_loading">Error loading attached files!</string>
+    <string name="paste_password">Paste password</string>
+    <string name="you_didn_t_copy_the_password">You didn\'t copy the password!</string>
 </resources>

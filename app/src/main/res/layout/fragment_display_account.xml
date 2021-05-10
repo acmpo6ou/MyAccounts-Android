@@ -166,5 +166,15 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/copyPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/green"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_copy"
+        app:tint="@color/white" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
