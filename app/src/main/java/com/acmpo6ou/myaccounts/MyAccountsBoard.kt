@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts
 
 import android.inputmethodservice.InputMethodService
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.TextView
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,19 +29,23 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MyAccountsBoard : InputMethodService() {
+
     @Inject
     lateinit var app: MyApp
+
+    @Inject
+    lateinit var inputManager: InputMethodManager
 
     override fun onCreateInputView(): View {
         val view = layoutInflater.inflate(R.layout.myaccounts_board, null)
         val pasteButton = view.findViewById<Button>(R.id.pastePassword)
-        val noPassword = view.findViewById<TextView>(R.id.noPassword)
 
-        pasteButton.visibility = if (app.password.isNotEmpty()) View.VISIBLE else View.GONE
+        val noPassword = view.findViewById<TextView>(R.id.noPassword)
         noPassword.visibility = if (app.password.isEmpty()) View.VISIBLE else View.GONE
 
         pasteButton.setOnClickListener {
             currentInputConnection.commitText(app.password, 1)
+            inputManager.showInputMethodPicker()
         }
         return view
     }
