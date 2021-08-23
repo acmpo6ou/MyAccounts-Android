@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts.create_edit_database
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.*
+import com.acmpo6ou.myaccounts.core.MyApplication
 import com.acmpo6ou.myaccounts.database.create_edit_database.EditDatabaseViewModel
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.nhaarman.mockitokotlin2.*
@@ -47,7 +48,7 @@ class EditDatabaseModelTests : ModelTest() {
 
     @Before
     fun setup() {
-        app = MyApp()
+        app = MyApplication()
         app.databases = mutableListOf(Database(oldName, password, salt))
         app.keyCache = mutableMapOf(password to deriveKey(password, salt))
 
@@ -93,7 +94,7 @@ class EditDatabaseModelTests : ModelTest() {
         runBlocking {
             spyModel.apply(name, "123") // now password is 123
         }
-        assertFalse(deriveKey(password, salt) in app.keyCache)
+        assertFalse(deriveKey(password, salt) in app.keyCache.values)
     }
 
     @Test
