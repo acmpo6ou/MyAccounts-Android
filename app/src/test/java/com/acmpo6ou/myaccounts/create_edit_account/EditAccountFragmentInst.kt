@@ -27,6 +27,7 @@ import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsActivityI
 import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsModule
 import com.acmpo6ou.myaccounts.account.create_edit_account.EditAccountFragment
 import com.acmpo6ou.myaccounts.core.AppModule
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock

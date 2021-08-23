@@ -17,22 +17,10 @@
  *
  */
 
-package com.acmpo6ou.myaccounts
+package com.acmpo6ou.myaccounts.core
 
-import android.app.Application
-import android.content.Context
-import androidx.test.runner.AndroidJUnitRunner
+import com.acmpo6ou.myaccounts.MyApp
+import dagger.hilt.android.HiltAndroidApp
 
-class HiltTestRunner : AndroidJUnitRunner() {
-    override fun newApplication(
-        cl: ClassLoader?,
-        className: String?,
-        context: Context?,
-    ): Application {
-        return super.newApplication(
-            cl,
-            HiltTestApplication_Application::class.java.name,
-            context
-        )
-    }
-}
+@HiltAndroidApp
+open class MyApplication : MyApp()

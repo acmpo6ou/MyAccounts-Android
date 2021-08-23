@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts.create_edit_database
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.*
+import com.acmpo6ou.myaccounts.core.MyApplication
 import com.acmpo6ou.myaccounts.database.create_edit_database.CreateDatabaseViewModel
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.nhaarman.mockitokotlin2.*
@@ -45,7 +46,7 @@ class CreateDatabaseModelTests : ModelTest() {
 
     @Before
     fun setup() {
-        app = MyApp()
+        app = MyApplication()
         app.databases = mutableListOf(Database("main"))
         val spyApp = spy(app) {
             on { SRC_DIR } doReturn SRC_DIR

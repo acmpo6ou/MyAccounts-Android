@@ -21,6 +21,8 @@ package com.acmpo6ou.myaccounts.open_database
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.*
+import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.core.MyApplication
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.open_database.OpenDatabaseViewModel
 import com.github.javafaker.Faker
@@ -50,7 +52,7 @@ class OpenDatabaseViewModelTests {
 
     @Before
     fun setup() {
-        app = MyApp()
+        app = MyApplication()
         app.databases = mutableListOf(Database("main"))
         spyApp = spy(app) {
             on { SRC_DIR } doReturn SRC_DIR

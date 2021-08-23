@@ -20,9 +20,9 @@
 package com.acmpo6ou.myaccounts.create_edit_account
 
 import com.acmpo6ou.myaccounts.ModelTest
-import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.account.create_edit_account.LoadFileModel
 import com.acmpo6ou.myaccounts.accountsDir
+import com.acmpo6ou.myaccounts.MyApp
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import org.junit.Assert.assertEquals

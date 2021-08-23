@@ -22,6 +22,7 @@ package com.acmpo6ou.myaccounts.superclass
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.acmpo6ou.myaccounts.ModelTest
+import com.acmpo6ou.myaccounts.core.MyApplication
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.superclass.CreateEditViewModel
 import com.acmpo6ou.myaccounts.database.databases_list.Database
@@ -95,7 +96,7 @@ class CreateEditViewModelTests : ModelTest() {
 }
 
 private open class TestModel : CreateEditViewModel() {
-    override val app: MyApp = MyApp()
+    override val app: MyApp = MyApplication()
     override var errorMsg = MutableLiveData<String>()
     override val itemNames: List<String> get() = app.databases.map { it.name }
 }

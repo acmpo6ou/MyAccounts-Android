@@ -38,9 +38,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsActivityI
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.database.databases_list.Account
 import com.acmpo6ou.myaccounts.databinding.FragmentDisplayAccountBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

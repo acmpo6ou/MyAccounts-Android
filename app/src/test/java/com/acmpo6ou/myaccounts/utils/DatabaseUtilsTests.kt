@@ -20,6 +20,8 @@
 package com.acmpo6ou.myaccounts.utils
 
 import com.acmpo6ou.myaccounts.*
+import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.core.MyApplication
 import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.databases_list.DbMap
@@ -50,7 +52,7 @@ class DatabaseUtilsTests : ModelTest() {
 
     @Before
     fun setup() {
-        myApp = MyApp()
+        myApp = MyApplication()
         app = spy(myApp) {
             on { ACCOUNTS_DIR } doReturn accountsDir
             on { SRC_DIR } doReturn SRC_DIR
