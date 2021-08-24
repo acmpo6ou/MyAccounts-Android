@@ -45,6 +45,7 @@ class MyAccountsBoard : InputMethodService() {
 
         pasteButton.setOnClickListener {
             currentInputConnection.commitText(app.password, 1)
+            app.password = "" // remove password once pasted
             inputManager.showInputMethodPicker()
         }
         return view
