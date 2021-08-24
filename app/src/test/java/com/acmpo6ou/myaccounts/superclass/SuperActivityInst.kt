@@ -34,7 +34,6 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.*
 import com.acmpo6ou.myaccounts.core.AppModule
-import com.acmpo6ou.myaccounts.core.MyApplication
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesBindings
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesModelI
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesPresenterI
