@@ -65,7 +65,7 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
     lateinit var accountsActivity: AccountsActivityI
 
     @Inject
-    lateinit var app: MyApp
+    override lateinit var app: MyApp
 
     @Inject
     lateinit var inputManager: InputMethodManager

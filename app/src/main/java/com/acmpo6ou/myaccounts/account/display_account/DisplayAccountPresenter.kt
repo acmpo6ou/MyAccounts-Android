@@ -64,4 +64,7 @@ class DisplayAccountPresenter @Inject constructor(
             view.showError(e.toString())
         }
     }
+
+    fun startRemovePassTimer(time: Int = 60) {
+    }
 }
