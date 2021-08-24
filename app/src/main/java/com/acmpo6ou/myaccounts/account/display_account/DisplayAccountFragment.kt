@@ -38,9 +38,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsActivityI
-import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.database.databases_list.Account
 import com.acmpo6ou.myaccounts.databinding.FragmentDisplayAccountBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -134,16 +134,17 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
         if (account.attachedFiles.isEmpty()) b.attachedFilesLabel.visibility = View.GONE
 
         b.copyPassword.setOnClickListener {
-            checkBoardEnabled()
-            showChangeInputMethodDialog()
             app.password = account.password
             passwordCopied()
+
+            checkBoardEnabled()
+            showChangeInputMethodDialog()
         }
     }
 
     /**
      * Checks whether MyAccountsBoard service is enabled in settings by user.
-     * If it isn't goes to input method settings to allow user to enable the service.
+     * If it isn't, goes to input method settings to allow user to enable the service.
      */
     private fun checkBoardEnabled() {
         val isGranted = inputManager
