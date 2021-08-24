@@ -136,17 +136,16 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
         b.copyPassword.setOnClickListener {
             app.password = account.password
             passwordCopied()
-
-            checkBoardEnabled()
-            showChangeInputMethodDialog()
+            if (checkBoardEnabled()) showChangeInputMethodDialog()
         }
     }
 
     /**
      * Checks whether MyAccountsBoard service is enabled in settings by user.
      * If it isn't, goes to input method settings to allow user to enable the service.
+     * @return boolean indicating whether MyAccountsBoard service is enabled.
      */
-    private fun checkBoardEnabled() {
+    private fun checkBoardEnabled(): Boolean {
         val isGranted = inputManager
             .enabledInputMethodList
             .any { it.packageName == context?.packageName }
@@ -157,6 +156,7 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
                 startActivity(this)
             }
         }
+        return isGranted
     }
 
     /**
