@@ -36,4 +36,10 @@
         android:key="block_screen_capture"
         android:summary="@string/block_screen_capture_summary"
         android:title="@string/block_screen_capture" />
+    <SwitchPreference
+        android:defaultValue="true"
+        android:icon="@drawable/ic_fingerprint"
+        android:key="lock_app"
+        android:summary="@string/lock_app_summary"
+        android:title="@string/lock_app_title" />
 </PreferenceScreen>

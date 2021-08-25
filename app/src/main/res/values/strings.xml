@@ -120,4 +120,6 @@
     <string name="error_loading">Error loading attached files!</string>
     <string name="paste_password">Paste password</string>
     <string name="you_didn_t_copy_the_password">You didn\'t copy the password!</string>
+    <string name="lock_app_title">Lock app with fingerprint</string>
+    <string name="lock_app_summary">Lock app with fingerprint when it is minimized and there are opened databases</string>
 </resources>
