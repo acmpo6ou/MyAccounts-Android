@@ -44,9 +44,9 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.viewbinding.ViewBinding
 import com.acmpo6ou.myaccounts.BuildConfig
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.UpdatesActivity
-import com.acmpo6ou.myaccounts.MyApp
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -76,13 +76,11 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityI {
 
     abstract val mainFragmentId: Int
     override val mainFragment: ListFragment
-        get() {
-            return supportFragmentManager
-                .findFragmentById(R.id.nav_host_fragment)
-                ?.childFragmentManager
-                ?.fragments
-                ?.first() as ListFragment
-        }
+        get() = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment)
+            ?.childFragmentManager
+            ?.fragments
+            ?.first() as ListFragment
 
     override fun onSupportNavigateUp(): Boolean =
         navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
