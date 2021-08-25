@@ -21,7 +21,9 @@ package com.acmpo6ou.myaccounts.account.display_account
 
 import android.net.Uri
 import dagger.hilt.android.scopes.FragmentScoped
+import java.util.*
 import javax.inject.Inject
+import kotlin.concurrent.schedule
 
 @FragmentScoped
 class DisplayAccountPresenter @Inject constructor(
@@ -65,6 +67,15 @@ class DisplayAccountPresenter @Inject constructor(
         }
     }
 
-    fun startRemovePassTimer(time: Int = 60) {
+    /**
+     * Starts timer to auto remove password from safe clipboard. This is done for security.
+     * @param[time] time to wait before removing password, during tests we can specify it as 0
+     * to not wait 60 seconds.
+     */
+    override fun startRemovePassTimer(time: Long) {
+        Timer().schedule(time) {
+            view.app.password = ""
+            cancel()
+        }
     }
 }

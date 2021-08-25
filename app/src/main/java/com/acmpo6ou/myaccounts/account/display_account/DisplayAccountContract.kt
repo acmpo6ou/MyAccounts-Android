@@ -39,6 +39,7 @@ interface DisplayAccountPresenterI {
 
     fun fileSelected(fileName: String)
     fun saveFile(destinationUri: Uri)
+    fun startRemovePassTimer(time: Long = 60_000)
 }
 
 interface DisplayAccountModelI {

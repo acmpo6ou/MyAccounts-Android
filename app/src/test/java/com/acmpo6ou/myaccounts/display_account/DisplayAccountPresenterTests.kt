@@ -28,8 +28,9 @@ import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountPresenter
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.*
+import org.awaitility.kotlin.await
+import org.awaitility.kotlin.until
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyString
@@ -119,7 +120,7 @@ class DisplayAccountPresenterTests {
         app.password = Faker().str()
         whenever(view.app).doReturn(app)
 
-        presenter.startRemovePassTimer(0) // we set time to 0 to avoid wait during tests
-        assertTrue(app.password.isEmpty())
+        presenter.startRemovePassTimer(0) // we set time to 0 to avoid waiting during tests
+        await until { app.password.isEmpty() }
     }
 }

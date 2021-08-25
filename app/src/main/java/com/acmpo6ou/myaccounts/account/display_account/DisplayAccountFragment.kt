@@ -136,7 +136,9 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
         b.copyPassword.setOnClickListener {
             app.password = account.password
             passwordCopied()
+
             if (checkBoardEnabled()) showChangeInputMethodDialog()
+            presenter.get().startRemovePassTimer()
         }
     }
 
