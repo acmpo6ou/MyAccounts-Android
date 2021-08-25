@@ -37,16 +37,15 @@ class MyAccountsBoard : InputMethodService() {
     @Inject
     lateinit var inputManager: InputMethodManager
 
-    var view: View? = null
+    var noPassword: View? = null
 
     override fun onCreateInputView(): View {
         val view = layoutInflater.inflate(R.layout.myaccounts_board, null)
-        this.view = view
         val pasteButton = view.findViewById<Button>(R.id.pastePassword)
 
         // if password wasn't copied display warning
-        val noPassword = view.findViewById<TextView>(R.id.noPassword)
-        noPassword.visibility = if (app.password.isEmpty()) View.VISIBLE else View.GONE
+        noPassword = view.findViewById<TextView>(R.id.noPassword)
+        noPassword?.visibility = if (app.password.isEmpty()) View.VISIBLE else View.GONE
 
         pasteButton.setOnClickListener {
             currentInputConnection.commitText(app.password, 1)
@@ -60,7 +59,6 @@ class MyAccountsBoard : InputMethodService() {
         super.onStartInputView(info, restarting)
         // since password may be auto removed from safe clipboard we need to update
         // visibility of the noPassword warning
-        val noPassword = view?.findViewById<TextView>(R.id.noPassword)
         noPassword?.visibility = if (app.password.isEmpty()) View.VISIBLE else View.GONE
     }
 }
