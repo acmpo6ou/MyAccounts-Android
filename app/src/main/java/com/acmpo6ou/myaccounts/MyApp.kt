@@ -62,12 +62,13 @@ open class MyApp : Application(), LifecycleObserver {
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
     }
 
+    /**
+     * Starts [LockActivity] to lock the app.
+     */
     open fun startLockActivity() {
-        Intent(this, AccountsActivity::class.java).apply {
-            flags = FLAG_ACTIVITY_NEW_TASK
-            putExtra("databaseIndex", 0)
-            startActivity(this)
-        }
+        val intent = Intent(this, LockActivity::class.java)
+        intent.flags = FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
