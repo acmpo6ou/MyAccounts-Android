@@ -17,9 +17,11 @@
  *
  */
 
-package com.acmpo6ou.myaccounts
+package com.acmpo6ou.myaccounts.my_app
 
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.database.databases_list.Database
+import com.acmpo6ou.myaccounts.str
 import com.github.ivanshafran.sharedpreferencesmock.SPMockBuilder
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.never
