@@ -20,11 +20,19 @@
 package com.acmpo6ou.myaccounts
 
 import android.app.Application
+import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.content.SharedPreferences
 import android.content.res.Resources
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.preference.PreferenceManager
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.macasaet.fernet.Key
 
-open class MyApp : Application() {
+open class MyApp : Application(), LifecycleObserver {
     // list of Databases that is used almost by every fragment and activity
     open var databases = mutableListOf<Database>()
 
@@ -45,4 +53,25 @@ open class MyApp : Application() {
 
     // path to directory that contains databases
     open val SRC_DIR get() = "$ACCOUNTS_DIR/src/"
+
+    lateinit var prefs: SharedPreferences
+
+    override fun onCreate() {
+        super.onCreate()
+        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+        prefs = PreferenceManager.getDefaultSharedPreferences(this)
+    }
+
+    open fun startLockActivity() {
+        Intent(this, AccountsActivity::class.java).apply {
+            flags = FLAG_ACTIVITY_NEW_TASK
+            putExtra("databaseIndex", 0)
+            startActivity(this)
+        }
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    open fun onAppForegrounded() {
+        startLockActivity()
+    }
 }
