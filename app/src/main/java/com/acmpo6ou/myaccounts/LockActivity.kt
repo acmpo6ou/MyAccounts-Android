@@ -27,4 +27,8 @@ class LockActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lock)
     }
+
+    override fun onBackPressed() {
+        // Do not allow going back from LockActivity
+    }
 }
