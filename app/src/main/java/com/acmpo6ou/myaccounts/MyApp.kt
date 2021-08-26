@@ -71,6 +71,11 @@ open class MyApp : Application(), LifecycleObserver {
         startActivity(intent)
     }
 
+    /**
+     * When user minimizes or in any other way leaves the app we should lock it when he comes
+     * back. This is done for security. Note however, that app is locked only if user has lock_app
+     * setting turned on and there are opened databases.
+     */
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     open fun onAppForegrounded() {
         val openedDbs = databases.filter { it.isOpen }
