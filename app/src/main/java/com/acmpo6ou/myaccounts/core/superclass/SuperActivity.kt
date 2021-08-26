@@ -158,7 +158,7 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityI {
     }
 
     /**
-     * Displays confirmation dialog asking user to confirm does he really wan't to go back
+     * Displays confirmation dialog asking user to confirm does he really want to go back
      * with unsaved changes.
      */
     override fun confirmBack() {
