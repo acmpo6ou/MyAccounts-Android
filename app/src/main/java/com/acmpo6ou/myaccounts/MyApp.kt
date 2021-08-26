@@ -72,6 +72,8 @@ open class MyApp : Application(), LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     open fun onAppForegrounded() {
-        startLockActivity()
+        val openedDbs = databases.filter { it.isOpen }
+        if (prefs.getBoolean("lock_app", true) && openedDbs.isNotEmpty())
+            startLockActivity()
     }
 }

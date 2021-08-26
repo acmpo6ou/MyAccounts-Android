@@ -19,7 +19,10 @@
 
 package com.acmpo6ou.myaccounts
 
+import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.github.ivanshafran.sharedpreferencesmock.SPMockBuilder
+import com.github.javafaker.Faker
+import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
@@ -35,9 +38,34 @@ class MyAppTests {
     }
 
     @Test
-    fun `should call startLockActivity when lock_app setting is turned on`() {
+    fun `onAppForegrounded should call startLockActivity when lock_app setting is true`() {
+        app.databases = mutableListOf(Database("main", Faker().str()))
         app.prefs.edit().putBoolean("lock_app", true).commit()
+
         app.onAppForegrounded()
         verify(app).startLockActivity()
+    }
+
+    @Test
+    fun `onAppForegrounded should NOT call startLockActivity when lock_app setting is false`() {
+        app.databases = mutableListOf(Database("main", Faker().str()))
+        app.prefs.edit().putBoolean("lock_app", false).commit()
+
+        app.onAppForegrounded()
+        verify(app, never()).startLockActivity()
+    }
+
+    @Test
+    fun `onAppForegrounded should call startLockActivity when there are opened databases`() {
+        app.databases = mutableListOf(Database("main", Faker().str()))
+        app.onAppForegrounded()
+        verify(app).startLockActivity()
+    }
+
+    @Test
+    fun `onAppForegrounded should NOT call startLockActivity when no database is opened`() {
+        app.databases = mutableListOf(Database("main"))
+        app.onAppForegrounded()
+        verify(app, never()).startLockActivity()
     }
 }
