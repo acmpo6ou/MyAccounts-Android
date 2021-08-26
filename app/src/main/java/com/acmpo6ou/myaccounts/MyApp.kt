@@ -55,6 +55,7 @@ open class MyApp : Application(), LifecycleObserver {
     open val SRC_DIR get() = "$ACCOUNTS_DIR/src/"
 
     lateinit var prefs: SharedPreferences
+    var isLocked = false
 
     override fun onCreate() {
         super.onCreate()
@@ -74,12 +75,13 @@ open class MyApp : Application(), LifecycleObserver {
     /**
      * When user minimizes or in any other way leaves the app we should lock it when he comes
      * back. This is done for security. Note however, that app is locked only if user has lock_app
-     * setting turned on and there are opened databases.
+     * setting turned on and there are opened databases. Also we should not lock the app if it's
+     * already locked.
      */
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     open fun onAppForegrounded() {
         val openedDbs = databases.filter { it.isOpen }
-        if (prefs.getBoolean("lock_app", true) && openedDbs.isNotEmpty())
+        if (prefs.getBoolean("lock_app", true) && openedDbs.isNotEmpty() && !isLocked)
             startLockActivity()
     }
 }

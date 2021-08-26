@@ -70,4 +70,22 @@ class MyAppTests {
         app.onAppForegrounded()
         verify(app, never()).startLockActivity()
     }
+
+    @Test
+    fun `onAppForegrounded should NOT call startLockActivity when app is already locked`() {
+        app.databases = mutableListOf(Database("main", Faker().str()))
+        app.isLocked = true
+
+        app.onAppForegrounded()
+        verify(app, never()).startLockActivity()
+    }
+
+    @Test
+    fun `onAppForegrounded SHOULD call startLockActivity when app isn't locked yet`() {
+        app.databases = mutableListOf(Database("main", Faker().str()))
+        app.isLocked = false
+
+        app.onAppForegrounded()
+        verify(app).startLockActivity()
+    }
 }
