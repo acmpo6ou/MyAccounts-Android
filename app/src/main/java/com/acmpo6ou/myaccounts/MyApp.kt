@@ -70,6 +70,7 @@ open class MyApp : Application(), LifecycleObserver {
         val intent = Intent(this, LockActivity::class.java)
         intent.flags = FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
+        isLocked = true
     }
 
     /**

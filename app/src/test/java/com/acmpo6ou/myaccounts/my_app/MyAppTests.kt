@@ -27,6 +27,8 @@ import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -87,5 +89,12 @@ class MyAppTests {
 
         app.onAppForegrounded()
         verify(app).startLockActivity()
+    }
+
+    @Test
+    fun `startLockActivity should set isLocked to true`() {
+        assertFalse(app.isLocked)
+        app.startLockActivity()
+        assertTrue(app.isLocked)
     }
 }
