@@ -1,3 +1,9 @@
+<h4>v1.4.2</h4>
+<p>  •  password is now auto removed from clipboard once pasted</p>
+<p>  •  also password is auto removed after a minute if it's not pasted</p>
+<p>  •  added option to settings to block app with fingerprint when you minimize it</p>
+<br/>
+
 <h4>v1.3.0</h4>
 <p>  •  added the ability to safely copy password</p>
 <br/>
