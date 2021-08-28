@@ -48,8 +48,8 @@ android {
         minSdkVersion 26
         //noinspection OldTargetApi
         targetSdkVersion 30
-        versionCode 7
-        versionName "1.3.0"
+        versionCode 8
+        versionName "1.4.2"
         setProperty("archivesBaseName", "myaccounts") // name will be myaccounts-release.apk
 
         testInstrumentationRunner "com.acmpo6ou.myaccounts.HiltTestRunner"
@@ -91,7 +91,7 @@ dependencies {
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2'
 
     // Android
     implementation 'androidx.core:core-ktx:1.6.0'
@@ -125,12 +125,12 @@ dependencies {
     implementation 'org.kamranzafar:jtar:2.3'
 
     // Internet
-    implementation 'com.squareup.retrofit2:retrofit:2.7.2'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     testImplementation "com.squareup.okhttp3:mockwebserver:3.12.0"
 
     // Coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1-native-mt'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1-native-mt'
 
     // Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
@@ -146,18 +146,18 @@ dependencies {
     kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hilt_version"
 
     // Test runners
-    testImplementation 'junit:junit:4.13.1'
-    testImplementation 'org.robolectric:robolectric:4.4'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.6.1'
     //noinspection GradleDependency
     testImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 
     // Test tools
     testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0'
-    testImplementation 'com.github.javafaker:javafaker:0.18'
+    testImplementation 'com.github.javafaker:javafaker:1.0.2'
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
 
-    testImplementation 'org.awaitility:awaitility:4.0.3'
-    testImplementation 'org.awaitility:awaitility-kotlin:4.0.3'
+    testImplementation 'org.awaitility:awaitility:4.1.0'
+    testImplementation 'org.awaitility:awaitility-kotlin:4.1.0'
 
     // Espresso
     //noinspection GradleDependency
@@ -175,11 +175,11 @@ dependencies {
 
     // Espresso test tools
     androidTestImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0'
-    androidTestImplementation 'org.mockito:mockito-android:3.6.0'
-    androidTestImplementation 'com.github.javafaker:javafaker:0.18'
+    androidTestImplementation 'org.mockito:mockito-android:3.12.4'
+    androidTestImplementation 'com.github.javafaker:javafaker:1.0.2'
 
     //noinspection GradleDependency
     debugImplementation "androidx.fragment:fragment-testing:1.2.5"
-    debugImplementation 'com.github.javafaker:javafaker:0.18'
+    debugImplementation 'com.github.javafaker:javafaker:1.0.2'
     debugImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
 }
