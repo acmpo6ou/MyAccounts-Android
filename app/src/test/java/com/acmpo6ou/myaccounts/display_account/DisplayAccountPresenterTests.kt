@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.display_account
 
 import android.net.Uri
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.account
 import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountFragmentI
 import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountModelI
@@ -27,6 +28,8 @@ import com.acmpo6ou.myaccounts.account.display_account.DisplayAccountPresenter
 import com.acmpo6ou.myaccounts.str
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.*
+import org.awaitility.kotlin.await
+import org.awaitility.kotlin.until
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -109,5 +112,15 @@ class DisplayAccountPresenterTests {
         verify(view).showError(exception.toString())
         verify(view, never()).fileCorrupted()
         verify(view, never()).showSuccess()
+    }
+
+    @Test
+    fun `startRemovePassTimer should remove password from safe clipboard`() {
+        val app = MyApp()
+        app.password = Faker().str()
+        whenever(view.app).doReturn(app)
+
+        presenter.startRemovePassTimer(0) // we set time to 0 to avoid waiting during tests
+        await until { app.password.isEmpty() }
     }
 }

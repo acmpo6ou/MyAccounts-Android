@@ -79,4 +79,9 @@
     <string name="error_loading">Помилка завантаження прикріплених файлів!</string>
     <string name="paste_password">Вставити пароль</string>
     <string name="you_didn_t_copy_the_password">Пароль не скопійовано!</string>
+    <string name="lock_app_title">Блокувати програму</string>
+    <string name="lock_app_summary">Блокувати програму відбитком пальця коли вона згорнута і є відкриті бази данних</string>
+    <string name="app_lock_tip">Для безпеки ми блокуємо програму коли є відкриті бази данних. Скористайтесь відбитком пальця аби розблокувати.</string>
+    <string name="app_is_locked">Програму заблоковано</string>
+    <string name="authenticate">Розблокувати</string>
 </resources>

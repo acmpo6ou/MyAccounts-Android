@@ -24,9 +24,9 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.MainActivity
-import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.AppModule
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.database.create_edit_database.EditDatabaseFragment
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI

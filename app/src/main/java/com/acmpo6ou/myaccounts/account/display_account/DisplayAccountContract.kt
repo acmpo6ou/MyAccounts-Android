@@ -20,10 +20,12 @@
 package com.acmpo6ou.myaccounts.account.display_account
 
 import android.net.Uri
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.database.databases_list.Account
 
 interface DisplayAccountFragmentI {
     val account: Account
+    val app: MyApp
 
     fun saveFileDialog(fileName: String)
     fun fileCorrupted()
@@ -37,6 +39,7 @@ interface DisplayAccountPresenterI {
 
     fun fileSelected(fileName: String)
     fun saveFile(destinationUri: Uri)
+    fun startRemovePassTimer(time: Long = 60_000)
 }
 
 interface DisplayAccountModelI {

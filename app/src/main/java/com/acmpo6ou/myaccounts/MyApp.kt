@@ -20,13 +20,19 @@
 package com.acmpo6ou.myaccounts
 
 import android.app.Application
+import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.content.SharedPreferences
 import android.content.res.Resources
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.preference.PreferenceManager
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.macasaet.fernet.Key
-import dagger.hilt.android.HiltAndroidApp
 
-@HiltAndroidApp
-open class MyApp : Application() {
+open class MyApp : Application(), LifecycleObserver {
     // list of Databases that is used almost by every fragment and activity
     open var databases = mutableListOf<Database>()
 
@@ -47,4 +53,36 @@ open class MyApp : Application() {
 
     // path to directory that contains databases
     open val SRC_DIR get() = "$ACCOUNTS_DIR/src/"
+
+    lateinit var prefs: SharedPreferences
+    var isLocked = false
+
+    override fun onCreate() {
+        super.onCreate()
+        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+        prefs = PreferenceManager.getDefaultSharedPreferences(this)
+    }
+
+    /**
+     * Starts [LockActivity] to lock the app.
+     */
+    open fun startLockActivity() {
+        val intent = Intent(this, LockActivity::class.java)
+        intent.flags = FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        isLocked = true
+    }
+
+    /**
+     * When user minimizes or in any other way leaves the app we should lock it when he comes
+     * back. This is done for security. Note however, that app is locked only if user has lock_app
+     * setting turned on and there are opened databases. Also we should not lock the app if it's
+     * already locked.
+     */
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    open fun onAppForegrounded() {
+        val openedDbs = databases.filter { it.isOpen }
+        if (prefs.getBoolean("lock_app", true) && openedDbs.isNotEmpty() && !isLocked)
+            startLockActivity()
+    }
 }

@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts
 
 import android.inputmethodservice.InputMethodService
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.TextView
@@ -36,17 +37,28 @@ class MyAccountsBoard : InputMethodService() {
     @Inject
     lateinit var inputManager: InputMethodManager
 
+    var noPassword: View? = null
+
     override fun onCreateInputView(): View {
         val view = layoutInflater.inflate(R.layout.myaccounts_board, null)
         val pasteButton = view.findViewById<Button>(R.id.pastePassword)
 
-        val noPassword = view.findViewById<TextView>(R.id.noPassword)
-        noPassword.visibility = if (app.password.isEmpty()) View.VISIBLE else View.GONE
+        // if password wasn't copied display warning
+        noPassword = view.findViewById<TextView>(R.id.noPassword)
+        noPassword?.visibility = if (app.password.isEmpty()) View.VISIBLE else View.GONE
 
         pasteButton.setOnClickListener {
             currentInputConnection.commitText(app.password, 1)
+            app.password = "" // remove password once pasted
             inputManager.showInputMethodPicker()
         }
         return view
+    }
+
+    override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
+        super.onStartInputView(info, restarting)
+        // since password may be auto removed from safe clipboard we need to update
+        // visibility of the noPassword warning
+        noPassword?.visibility = if (app.password.isEmpty()) View.VISIBLE else View.GONE
     }
 }

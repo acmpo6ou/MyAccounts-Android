@@ -24,6 +24,7 @@ import android.content.res.Resources
 import android.net.Uri
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.*
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
 import com.acmpo6ou.myaccounts.database.main_activity.MainModelI
 import com.acmpo6ou.myaccounts.database.main_activity.MainPresenter

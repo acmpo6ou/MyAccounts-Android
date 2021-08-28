@@ -20,6 +20,7 @@
 package com.acmpo6ou.myaccounts.databases_list
 
 import android.net.Uri
+import com.acmpo6ou.myaccounts.core.MyApplication
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
 import com.acmpo6ou.myaccounts.database.databases_list.Database
@@ -58,7 +59,7 @@ open class DatabasesPresenterTest : DatabaseUtils {
 
     @Before
     fun setupApp() {
-        app = MyApp()
+        app = MyApplication()
         app.keyCache = mutableMapOf("123" to deriveKey("123", salt))
     }
 }

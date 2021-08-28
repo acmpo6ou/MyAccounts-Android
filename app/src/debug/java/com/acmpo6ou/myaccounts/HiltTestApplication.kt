@@ -19,20 +19,7 @@
 
 package com.acmpo6ou.myaccounts
 
-import android.app.Application
-import android.content.Context
-import androidx.test.runner.AndroidJUnitRunner
+import dagger.hilt.android.testing.CustomTestApplication
 
-class HiltTestRunner : AndroidJUnitRunner() {
-    override fun newApplication(
-        cl: ClassLoader?,
-        className: String?,
-        context: Context?,
-    ): Application {
-        return super.newApplication(
-            cl,
-            HiltTestApplication_Application::class.java.name,
-            context
-        )
-    }
-}
+@CustomTestApplication(MyApp::class)
+interface HiltTestApplication

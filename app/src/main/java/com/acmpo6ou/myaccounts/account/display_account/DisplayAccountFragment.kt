@@ -65,7 +65,7 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
     lateinit var accountsActivity: AccountsActivityI
 
     @Inject
-    lateinit var app: MyApp
+    override lateinit var app: MyApp
 
     @Inject
     lateinit var inputManager: InputMethodManager
@@ -134,18 +134,20 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
         if (account.attachedFiles.isEmpty()) b.attachedFilesLabel.visibility = View.GONE
 
         b.copyPassword.setOnClickListener {
-            checkBoardEnabled()
-            showChangeInputMethodDialog()
             app.password = account.password
             passwordCopied()
+
+            if (checkBoardEnabled()) showChangeInputMethodDialog()
+            presenter.get().startRemovePassTimer()
         }
     }
 
     /**
      * Checks whether MyAccountsBoard service is enabled in settings by user.
-     * If it isn't goes to input method settings to allow user to enable the service.
+     * If it isn't, goes to input method settings to allow user to enable the service.
+     * @return boolean indicating whether MyAccountsBoard service is enabled.
      */
-    private fun checkBoardEnabled() {
+    private fun checkBoardEnabled(): Boolean {
         val isGranted = inputManager
             .enabledInputMethodList
             .any { it.packageName == context?.packageName }
@@ -156,6 +158,7 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
                 startActivity(this)
             }
         }
+        return isGranted
     }
 
     /**

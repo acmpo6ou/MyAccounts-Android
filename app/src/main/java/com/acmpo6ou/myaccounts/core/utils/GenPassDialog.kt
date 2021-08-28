@@ -53,7 +53,7 @@ open class GenPassDialog(
 
     val digits = ('0'..'9').joinToString("")
     val lower = ('a'..'z').joinToString("")
-    val upper = lower.toUpperCase(Locale.ROOT)
+    val upper = lower.uppercase(Locale.ROOT)
     val punctuation = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
     val allChars = listOf(digits, lower, upper, punctuation)
 

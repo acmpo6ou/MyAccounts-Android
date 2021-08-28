@@ -41,6 +41,7 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -139,5 +140,19 @@ class DisplayAccountInst {
         assertEquals(expectedType, intent.type)
         assertEquals(expectedCategory, intent.categories.first())
         assertEquals(expectedTitle, intent.getStringExtra(Intent.EXTRA_TITLE))
+    }
+
+    @Test
+    fun `copyPassword should copy password to safe clipboard`() {
+        fragment.initForm(account)
+        assertTrue(fragment.app.password.isEmpty()) // app.password is our safe clipboard
+
+        try {
+            fragment.b.copyPassword.performClick()
+        } catch (e: NullPointerException) {
+            // because Robolectric cannot provide to us InputMethodManager it will be null
+            // but it's okay we only care about whether password was copied
+        }
+        assertEquals(account.password, fragment.app.password)
     }
 }

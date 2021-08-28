@@ -76,13 +76,11 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityI {
 
     abstract val mainFragmentId: Int
     override val mainFragment: ListFragment
-        get() {
-            return supportFragmentManager
-                .findFragmentById(R.id.nav_host_fragment)
-                ?.childFragmentManager
-                ?.fragments
-                ?.first() as ListFragment
-        }
+        get() = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment)
+            ?.childFragmentManager
+            ?.fragments
+            ?.first() as ListFragment
 
     override fun onSupportNavigateUp(): Boolean =
         navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
@@ -160,7 +158,7 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityI {
     }
 
     /**
-     * Displays confirmation dialog asking user to confirm does he really wan't to go back
+     * Displays confirmation dialog asking user to confirm does he really want to go back
      * with unsaved changes.
      */
     override fun confirmBack() {
