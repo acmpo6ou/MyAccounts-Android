@@ -110,7 +110,6 @@ class SuperActivityInst : NoInternet {
     fun setup() {
         scenario = ActivityScenario.launch(MainActivity::class.java)
         scenario.onActivity {
-            it.myContext.setTheme(R.style.Theme_MyAccounts_NoActionBar)
             mockController = mock()
             it.navController = mockController
         }
