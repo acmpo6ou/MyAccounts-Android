@@ -39,17 +39,17 @@ open class ModelTest : DatabaseUtils {
     open val password = "123"
     val jsonDatabase =
         "{\"gmail\":{\"account\":\"gmail\",\"name\":\"Tom\",\"email\":" +
-            "\"tom@gmail.com\",\"password\":\"123\",\"date\":\"01.01.1990\"," +
-            "\"comment\":\"My gmail account.\"}}"
+                "\"tom@gmail.com\",\"password\":\"123\",\"date\":\"01.01.1990\"," +
+                "\"comment\":\"My gmail account.\"}}"
 
     val contentResolver: ContentResolver = mock()
     private val descriptor: ParcelFileDescriptor = mock()
 
-    val locationUri: Uri = mock()
-    val destinationUri: Uri = mock()
-
     open val location = "sampledata/src/main.dba"
     open val destination = "$accountsDir/main.dba"
+
+    val locationUri: Uri = mock { on { path } doReturn location }
+    val destinationUri: Uri = mock()
 
     @Before
     fun setupApp() {

@@ -21,10 +21,10 @@ package com.acmpo6ou.myaccounts.database.main_activity
 
 import android.net.Uri
 import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.SRC_DIR
 import dagger.hilt.android.scopes.ActivityScoped
-import org.kamranzafar.jtar.TarEntry
-import org.kamranzafar.jtar.TarInputStream
-import java.io.*
+import java.io.File
+import java.io.FileInputStream
 import javax.inject.Inject
 
 @ActivityScoped
@@ -61,58 +61,26 @@ class MainModel @Inject constructor(override val app: MyApp) : MainModelI {
     }
 
     /**
-     * Imports database from given tar archive.
+     * Imports database from given .dba file.
      *
-     * Extracts .db and .bin files from given tar archive to src directory.
-     * @param[locationUri] uri containing tar archive that in turn contains database files
-     * we need to extract.
+     * Copies given .dba file to src directory.
+     * @param[locationUri] uri containing .dba file.
      * @return name of imported database that is later used by presenter.
      */
     override fun importDatabase(locationUri: Uri): String {
-        // get tar file
         val descriptor = app.contentResolver.openFileDescriptor(locationUri, "r")
         val location = FileInputStream(descriptor?.fileDescriptor)
 
-        // open tar file
-        val inputStream = TarInputStream(BufferedInputStream(location))
+        val name = File(locationUri.path).nameWithoutExtension
+        val file = File("$SRC_DIR/$name.dba")
 
-        // get first file from tar
-        var entry: TarEntry? = inputStream.nextEntry
-        var name = ""
+        if (file.exists())
+            throw FileAlreadyExistsException(file)
 
-        // extract database files from tar archive
-        while (entry != null) {
-            // extract only .db and .bin files, skip all other such as tar headers
-            if (!(
-                entry.name.endsWith(".db") || entry.name.endsWith(".bin")
-                )
-            ) {
-                entry = inputStream.nextEntry
-                continue
-            }
-
-            // check if the file with such name already exist
-            val file = File("${app.ACCOUNTS_DIR}${entry.name}")
-            if (file.exists()) throw FileAlreadyExistsException(file)
-
-            name = cleanName(entry.name)
-
-            // create file we want to extract
-            val outStream = FileOutputStream("${app.ACCOUNTS_DIR}${entry.name}")
-            val dest = BufferedOutputStream(outStream)
-
-            // write data into previously created file
-            val size = entry.size.toInt()
-            val data = ByteArray(size)
-            inputStream.read(data)
-            dest.write(data)
-
-            // flush buffers and proceed to next file
-            dest.flush()
-            dest.close()
-            entry = inputStream.nextEntry
+        location.use {
+            file.writeBytes(it.readBytes())
         }
-        inputStream.close()
+
         return name
     }
 }
