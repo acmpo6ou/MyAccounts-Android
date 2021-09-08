@@ -32,6 +32,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
 import java.io.FileNotFoundException
+import java.io.FileOutputStream
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.TemporalAmount
@@ -100,7 +101,7 @@ interface DatabaseUtils {
         // Get key from cache if it's there, if not add the key to cache.
         // This is needed because generating cryptography key using deriveKey involves
         // 100 000 iterations which takes a long time, so the keys have to be cached and
-        // generated only if they are'nt in the cache
+        // generated only if they aren't in the cache
         val key = app.keyCache.getOrPut(password) { deriveKey(password, salt) }
 
         val validator: Validator<String> = object : StringValidator {
@@ -169,26 +170,23 @@ interface DatabaseUtils {
     }
 
     /**
-     * Creates .db and .bin files for database given Database instance.
+     * Creates .dba file given Database instance.
      *
      * @param[database] Database instance from which database name, password and salt are
-     * extracted for database files creation.
+     * extracted for database file creation.
      */
     fun createDatabase(database: Database) {
         val name = database.name
+        val file = File("${app.SRC_DIR}/$name.dba")
+        file.createNewFile()
 
-        // create salt file
-        val saltFile = File("${app.SRC_DIR}/$name.bin")
-        saltFile.createNewFile()
-        saltFile.writeBytes(database.salt!!)
+        FileOutputStream(file).use {
+            it.write(database.salt!!) // write salt
 
-        // create database file
-        val databaseFile = File("${app.SRC_DIR}/$name.db")
-        databaseFile.createNewFile()
-
-        // encrypt and write database to .db file
-        val token = encryptDatabase(database)
-        databaseFile.writeText(token)
+            // encrypt and write database
+            val token = encryptDatabase(database)
+            it.write(token.toByteArray())
+        }
     }
 
     /**

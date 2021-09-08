@@ -20,7 +20,6 @@
 package com.acmpo6ou.myaccounts.utils
 
 import com.acmpo6ou.myaccounts.*
-import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.MyApplication
 import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
 import com.acmpo6ou.myaccounts.database.databases_list.Database
@@ -36,6 +35,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.time.Duration
 import java.time.Instant
@@ -190,26 +190,24 @@ class DatabaseUtilsTests : ModelTest() {
     }
 
     @Test
-    fun `createDatabase should create db file given Database instance`() {
+    fun `createDatabase should create dba file given Database instance`() {
         val database = Database("main", "123", salt, databaseMap)
         createDatabase(database)
 
-        // this .db file createDatabase should create for us
-        val dbContent = File("$SRC_DIR/main.db").readBytes()
+        val file = File("$SRC_DIR/main.dba")
+        val saltContent = ByteArray(16)
+        var dbContent: ByteArray
 
-        // here we decrypt data saved to .db file to check that it was encrypted correctly
+        FileInputStream(file).use {
+            it.read(saltContent)
+            dbContent = it.readBytes()
+        }
+
+        // here we decrypt data saved to .dba file to check that it was encrypted correctly
         val data = decryptStr(String(dbContent), "123", salt)
+
         assertEquals(jsonDatabase, data)
-    }
-
-    @Test
-    fun `createDatabase should create salt file given Database instance`() {
-        val database = Database("main", "123", salt)
-        createDatabase(database)
-
-        // this salt file createDatabase should create for us
-        val binContent = File("$SRC_DIR/main.bin").readBytes()
-        assertEquals(String(salt), String(binContent))
+        assertEquals(String(salt), String(saltContent))
     }
 
     @Test
