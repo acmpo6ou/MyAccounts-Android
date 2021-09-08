@@ -124,7 +124,7 @@ class MainActivityInst : NoInternet {
     fun `importDialog should start appropriate intent`() {
         val expectedAction = Intent.ACTION_OPEN_DOCUMENT
         val expectedCategory = Intent.CATEGORY_OPENABLE
-        val expectedType = "application/x-tar"
+        val expectedType = "application/octet-stream"
 
         scenario.onActivity { it.importDialog() }
 
