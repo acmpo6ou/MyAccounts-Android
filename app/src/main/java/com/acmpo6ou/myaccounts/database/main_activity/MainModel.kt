@@ -99,37 +99,14 @@ class MainModel @Inject constructor(override val app: MyApp) : MainModelI {
     }
 
     /**
-     * Gets file sizes of given tar file.
+     * Returns size of .dba file user tries to import.
      *
      * @param[locationUri] uri containing tar file.
-     * @return list of file sizes.
      */
-    override fun getSizes(locationUri: Uri): List<Int> {
-        val list = mutableListOf<Int>()
-
-        // get tar file
+    override fun getSize(locationUri: Uri): Int {
         val descriptor = app.contentResolver.openFileDescriptor(locationUri, "r")
         val location = FileInputStream(descriptor?.fileDescriptor)
-
-        // open tar file
-        val inputStream = TarInputStream(BufferedInputStream(location))
-
-        // get first file from tar
-        var entry: TarEntry? = inputStream.nextEntry
-
-        while (entry != null) {
-            val name = entry.name
-            // we need only files with .db or .bin extensions and if they start with `src/`
-            // skip all other files such as tar headers
-            if (name.startsWith("src/") &&
-                (name.endsWith(".db") || name.endsWith(".bin"))
-            ) {
-                list.add(entry.size.toInt())
-            }
-            entry = inputStream.nextEntry
-        }
-        inputStream.close()
-        return list
+        return location.available()
     }
 
     /**

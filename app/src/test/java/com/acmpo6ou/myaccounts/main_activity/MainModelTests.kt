@@ -20,7 +20,6 @@
 package com.acmpo6ou.myaccounts.main_activity
 
 import com.acmpo6ou.myaccounts.*
-import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.database.main_activity.MainModel
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
@@ -43,23 +42,9 @@ class MainModelTests : ModelTest() {
     }
 
     @Test
-    fun `countFiles should return number of files in tar file`() {
-        val count = model.countFiles(locationUri)
-        assertEquals(2, count)
-    }
-
-    @Test
-    fun `getNames should return list of names`() {
-        val expectedList = listOf("main", "main")
-        val actualList = model.getNames(locationUri)
-        assertEquals(expectedList, actualList)
-    }
-
-    @Test
-    fun `getSizes should return list of file sizes`() {
-        val expectedList = listOf(268, 16) // sizes of .db and .bin files
-        val actualList = model.getSizes(locationUri)
-        assertEquals(expectedList, actualList)
+    fun `getSize should return file size`() {
+        val size = model.getSize(locationUri)
+        assertEquals(284, size)
     }
 
     @Test
