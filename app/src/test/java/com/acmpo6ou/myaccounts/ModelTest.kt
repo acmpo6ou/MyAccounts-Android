@@ -99,15 +99,8 @@ open class ModelTest : DatabaseUtils {
      * @param[name] name of the database that we want to copy.
      */
     fun copyDatabase(name: String = "database") {
-        // this are were we want to copy database .bin and .db files
-        val binDestination = File("$SRC_DIR$name.bin")
-        val dbDestination = File("$SRC_DIR$name.db")
-
-        // this are the database files that we want to copy
-        val binFile = File("sampledata/src/$name.bin")
-        val dbFile = File("sampledata/src/$name.db")
-
-        binFile.copyTo(binDestination)
+        val dbFile = File("sampledata/src/$name.dba")
+        val dbDestination = File("$SRC_DIR$name.dba")
         dbFile.copyTo(dbDestination)
     }
 }
