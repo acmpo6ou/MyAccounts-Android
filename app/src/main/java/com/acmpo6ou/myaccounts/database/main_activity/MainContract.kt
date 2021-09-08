@@ -39,8 +39,6 @@ interface MainActivityI : SuperActivityI {
 }
 
 interface MainModelI : DatabaseUtils {
-    fun countFiles(location: Uri): Int
-    fun getNames(locationUri: Uri): List<String>
     fun getSize(locationUri: Uri): Int
     fun importDatabase(locationUri: Uri): String
 }

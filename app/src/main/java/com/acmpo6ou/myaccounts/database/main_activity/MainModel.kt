@@ -27,10 +27,6 @@ import org.kamranzafar.jtar.TarInputStream
 import java.io.*
 import javax.inject.Inject
 
-/**
- * Contains various methods for working with database tar files. Methods for importing
- * database, counting files in database tar file etc.
- */
 @ActivityScoped
 class MainModel @Inject constructor(override val app: MyApp) : MainModelI {
 
@@ -51,51 +47,6 @@ class MainModel @Inject constructor(override val app: MyApp) : MainModelI {
         name = dbRe.replace(name, "")
         name = binRe.replace(name, "")
         return name
-    }
-
-    /**
-     * Counts number of files that present in given tar file.
-     *
-     * @param[location] uri containing tar file.
-     * @return number of counted files in tar file.
-     */
-    override fun countFiles(location: Uri): Int {
-        return getNames(location).size
-    }
-
-    /**
-     * Gets a list of names of files from tar file.
-     *
-     * @param[locationUri] uri containing tar file.
-     * @return list of file names from tar file.
-     */
-    override fun getNames(locationUri: Uri): List<String> {
-        val list = mutableListOf<String>()
-
-        // get tar file
-        val descriptor = app.contentResolver.openFileDescriptor(locationUri, "r")
-        val location = FileInputStream(descriptor?.fileDescriptor)
-
-        // open tar file
-        val inputStream = TarInputStream(BufferedInputStream(location))
-
-        // get first file from tar
-        var entry: TarEntry? = inputStream.nextEntry
-
-        while (entry != null) {
-            var name = entry.name
-            // Extract only files with .db or .bin extensions and if they start with `src/`.
-            // Skip all other files such as tar headers
-            if (name.startsWith("src/") &&
-                (name.endsWith(".db") || name.endsWith(".bin"))
-            ) {
-                name = cleanName(name)
-                list.add(name)
-            }
-            entry = inputStream.nextEntry
-        }
-        inputStream.close()
-        return list
     }
 
     /**
