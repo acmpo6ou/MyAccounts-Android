@@ -31,25 +31,6 @@ import javax.inject.Inject
 class MainModel @Inject constructor(override val app: MyApp) : MainModelI {
 
     /**
-     * Cleans database name from .db or .bin extension and `src/` path.
-     *
-     * @param[databaseName] database name to clean.
-     * @return database name cleaned from `.db` or `.bin` and `src/`.
-     */
-    private fun cleanName(databaseName: String): String {
-        // this needs to be removed from the name
-        val srcRe = Regex("^src/")
-        val dbRe = Regex("\\.db$")
-        val binRe = Regex("\\.bin$")
-
-        // clean file name from extension and `src` folder
-        var name = srcRe.replace(databaseName, "")
-        name = dbRe.replace(name, "")
-        name = binRe.replace(name, "")
-        return name
-    }
-
-    /**
      * Returns size of .dba file user tries to import.
      *
      * @param[locationUri] uri containing tar file.
