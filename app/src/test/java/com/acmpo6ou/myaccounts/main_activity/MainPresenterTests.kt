@@ -21,9 +21,9 @@ package com.acmpo6ou.myaccounts.main_activity
 
 import android.content.SharedPreferences
 import android.net.Uri
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.SRC_DIR
 import com.acmpo6ou.myaccounts.accountsDir
-import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
 import com.acmpo6ou.myaccounts.database.main_activity.MainModelI
@@ -58,26 +58,14 @@ class MainPresenterTests {
         }
 
         view = mock()
-        model = mock()
         mockPrefs = SPMockBuilder().createSharedPreferences()
+
+        model = mock {
+            on { getSize(locationUri) } doReturn 116
+        }
 
         presenter = MainPresenter({ view }, model, app, mockPrefs)
         spyPresenter = spy(presenter)
-    }
-
-    private fun mockCorrectModel() {
-        val filesList = listOf("main", "main")
-        val sizesList = listOf(
-            100, // size of db file should be not less then 100
-            16, // size of bin file should be exactly 16
-        )
-
-        // mock model to return correct file sizes, count and names
-        model = mock {
-            on { getNames(locationUri) } doReturn filesList
-            on { countFiles(locationUri) } doReturn 2
-            on { getSizes(locationUri) } doReturn sizesList
-        }
     }
 
     @Test
@@ -146,7 +134,6 @@ class MainPresenterTests {
 
     @Test
     fun `checkTarFile should call importDatabase if there are no errors`() {
-        mockCorrectModel()
         spyPresenter.model = model
         doNothing().`when`(spyPresenter).importDatabase(locationUri)
 
@@ -156,7 +143,6 @@ class MainPresenterTests {
     }
 
     private fun importMainDatabase() {
-        mockCorrectModel()
         doReturn("main").whenever(model).importDatabase(locationUri)
         presenter.model = model
         presenter.importDatabase(locationUri)
