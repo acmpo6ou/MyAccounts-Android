@@ -31,6 +31,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.time.Duration
@@ -152,18 +153,25 @@ interface DatabaseUtils {
     }
 
     /**
-     * Opens database by given Database instance.
+     * Opens database given Database instance.
      *
-     * In particular opening database means reading content of corresponding .db file,
+     * In particular opening database means reading content of corresponding .dba file,
      * decrypting and deserializing it, then assigning deserialized database map to `data`
      * property of given Database.
      *
      * @param[database] Database instance with password, name and salt to open database.
-     * @return same Database instance but with `data` property filled with deserialized
+     * @return same Database instance but with `data` property set to deserialized
      * database map.
      */
     fun openDatabase(database: Database): Database {
-        val jsonStr = File("${app.SRC_DIR}/${database.name}.db").readText()
+        val file = File("${app.SRC_DIR}/${database.name}.dba")
+        val jsonStr: String
+
+        FileInputStream(file).use {
+            it.channel.position(16) // skip 16 bytes of salt
+            jsonStr = String(it.readBytes())
+        }
+
         val data = decryptDatabase(jsonStr, database.password!!, database.salt!!)
         database.data = data
         return database
