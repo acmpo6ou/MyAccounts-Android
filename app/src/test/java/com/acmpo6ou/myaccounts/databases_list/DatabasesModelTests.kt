@@ -21,7 +21,6 @@ package com.acmpo6ou.myaccounts.databases_list
 
 import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.SRC_DIR
-import com.acmpo6ou.myaccounts.accountsDir
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesModel
 import com.acmpo6ou.myaccounts.str
@@ -86,36 +85,13 @@ class DatabasesModelTests : ModelTest() {
         // export database `main` to the fake file system
         model.exportDatabase("main", destinationUri)
 
-        // check that database tar file was exported properly
-        val exportedTar = String(
-            File("$accountsDir/main.tar").readBytes()
-        )
         val expectedDb = String(
-            File("$SRC_DIR/main.db").readBytes()
+            File("sampledata/src/main.dba").readBytes()
         )
-        val expectedBin = String(
-            File("$SRC_DIR/main.bin").readBytes()
+        val exportedDb = String(
+            File("$SRC_DIR/main.dba").readBytes()
         )
-
-        // check that files are present and they reside in `src` folder
-        assertTrue(
-            "exportDatabase incorrect export: tar file doesn't contain .db file!",
-            "src/main.db" in exportedTar
-        )
-        assertTrue(
-            "exportDatabase incorrect export: tar file doesn't contain .bin file!",
-            "src/main.bin" in exportedTar
-        )
-
-        // check that files have appropriate content
-        assertTrue(
-            "exportDatabase incorrect export: content of .db file is incorrect!",
-            expectedDb in exportedTar
-        )
-        assertTrue(
-            "exportDatabase incorrect export: content of .bin file is incorrect!",
-            expectedBin in exportedTar
-        )
+        assertEquals(expectedDb, exportedDb)
     }
 
     @Test

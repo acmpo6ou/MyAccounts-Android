@@ -24,11 +24,7 @@ import com.acmpo6ou.myaccounts.MyApp
 import dagger.hilt.android.scopes.FragmentScoped
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.kamranzafar.jtar.TarEntry
-import org.kamranzafar.jtar.TarOutputStream
-import java.io.BufferedOutputStream
 import java.io.File
-import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import javax.inject.Inject
 
@@ -108,40 +104,16 @@ class DatabasesModel @Inject constructor(
     }
 
     /**
-     * Used to export database as tar file to given destination.
-     *
-     * Tar file structure:
-     * ( where main is database name )
-     * src
-     * ├── main.bin – salt file.
-     * └── main.db  – encrypted database file.
+     * Exports database to given destination.
      *
      * @param[name] name of the database to export.
      * @param[destinationUri] uri with path to folder where we want to export database.
      */
     override fun exportDatabase(name: String, destinationUri: Uri) {
-        // get tar file
         val descriptor = app.contentResolver.openFileDescriptor(destinationUri, "w")
         val destination = FileOutputStream(descriptor?.fileDescriptor)
 
-        // create tar file
-        val outStream = TarOutputStream(BufferedOutputStream(destination))
-
-        // salt and database files to compress to the tar file
-        val dbFiles = listOf(
-            File("${app.SRC_DIR}$name.db"),
-            File("${app.SRC_DIR}$name.bin"),
-        )
-
-        // each file is added to tar file
-        for (f in dbFiles) {
-            if (!f.exists()) throw FileNotFoundException(f.name)
-
-            val entry = TarEntry(f, "src/${f.name}")
-            outStream.putNextEntry(entry)
-            outStream.write(f.readBytes())
-        }
-        outStream.flush()
-        outStream.close()
+        val dbFile = File("${app.SRC_DIR}$name.dba").readBytes()
+        destination.write(dbFile)
     }
 }
