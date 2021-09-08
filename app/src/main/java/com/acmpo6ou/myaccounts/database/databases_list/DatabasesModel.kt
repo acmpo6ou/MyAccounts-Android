@@ -86,20 +86,19 @@ class DatabasesModel @Inject constructor(
 ) : DatabasesModelI {
 
     /**
-     * Used to get a list of Database instances – databases that reside in src directory.
-     * @return list of databases that are found in src directory.
+     * Returns a list of Database instances – databases that reside in src directory.
      */
     override fun getDatabases(): DbList {
         val databases = mutableListOf<Database>()
         // src folder where all database files are stored
         val src = File(app.SRC_DIR)
 
-        // walk through all files in src directory, for each file whose extension is .db
+        // walk through all files in src directory, for each file whose extension is .dba
         // add corresponding Database instance to [databases] list passing through
-        // as a parameter name of that file without .db extension
+        // as a parameter name of that file without .dba extension
         src.list()?.forEach {
-            if (it.endsWith(".db")) {
-                val name = it.removeSuffix(".db")
+            if (it.endsWith(".dba")) {
+                val name = it.removeSuffix(".dba")
                 val database = Database(name)
                 databases.add(database)
             }
