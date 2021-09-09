@@ -133,11 +133,11 @@ class MainPresenterTests {
     }
 
     @Test
-    fun `checkTarFile should call importDatabase if there are no errors`() {
+    fun `checkDbaFile should call importDatabase if there are no errors`() {
         spyPresenter.model = model
         doNothing().`when`(spyPresenter).importDatabase(locationUri)
 
-        spyPresenter.checkTarFile(locationUri)
+        spyPresenter.checkDbaFile(locationUri)
         verify(spyPresenter).importDatabase(locationUri)
         verify(view, never()).showError(anyString(), anyString())
     }

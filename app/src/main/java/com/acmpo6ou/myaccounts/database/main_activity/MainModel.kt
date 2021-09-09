@@ -33,7 +33,7 @@ class MainModel @Inject constructor(override val app: MyApp) : MainModelI {
     /**
      * Returns size of .dba file user tries to import.
      *
-     * @param[locationUri] uri containing tar file.
+     * @param[locationUri] uri containing .dba file.
      */
     override fun getSize(locationUri: Uri): Int {
         val descriptor = app.contentResolver.openFileDescriptor(locationUri, "r")

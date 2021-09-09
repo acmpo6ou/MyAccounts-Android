@@ -95,7 +95,7 @@ open class MainActivity : SuperActivity(), MainActivityI {
     private val importLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                result.data?.data?.let { presenter.checkTarFile(it) }
+                result.data?.data?.let { presenter.checkDbaFile(it) }
             }
         }
 

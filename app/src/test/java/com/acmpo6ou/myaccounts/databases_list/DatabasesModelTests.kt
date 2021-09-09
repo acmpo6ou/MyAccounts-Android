@@ -78,7 +78,7 @@ class DatabasesModelTests : ModelTest() {
     }
 
     @Test
-    fun `exportDatabase should export database tar to given location`() {
+    fun `exportDatabase should copy database dba file to given location`() {
         setupOutputResolver()
         copyDatabase("main")
 
