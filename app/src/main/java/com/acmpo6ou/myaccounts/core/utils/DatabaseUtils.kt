@@ -201,8 +201,9 @@ interface DatabaseUtils {
      * Deletes database .dba file given its name.
      * @param[name] name of database to delete.
      */
-    fun deleteDatabase(name: String) =
+    fun deleteDatabase(name: String) {
         File("${app.SRC_DIR}/$name.dba").delete()
+    }
 
     /**
      * Deletes old database (which is determined by [oldName]) and
