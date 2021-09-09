@@ -67,8 +67,8 @@ class DatabasesFragment : ListFragment(), DatabasesFragmentI {
         val name = items[i].name
         Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
-            type = "application/x-tar"
-            putExtra(Intent.EXTRA_TITLE, "$name.tar")
+            type = "application/octet-stream"
+            putExtra(Intent.EXTRA_TITLE, "$name.dba")
             exportLauncher.launch(this)
         }
     }
