@@ -21,7 +21,6 @@ package com.acmpo6ou.myaccounts.database.main_activity
 
 import android.net.Uri
 import com.acmpo6ou.myaccounts.MyApp
-import com.acmpo6ou.myaccounts.SRC_DIR
 import dagger.hilt.android.scopes.ActivityScoped
 import java.io.File
 import java.io.FileInputStream
@@ -53,7 +52,7 @@ class MainModel @Inject constructor(override val app: MyApp) : MainModelI {
         val location = FileInputStream(descriptor?.fileDescriptor)
 
         val name = File(locationUri.path).nameWithoutExtension
-        val file = File("$SRC_DIR/$name.dba")
+        val file = File("${app.SRC_DIR}/$name.dba")
 
         if (file.exists())
             throw FileAlreadyExistsException(file)
