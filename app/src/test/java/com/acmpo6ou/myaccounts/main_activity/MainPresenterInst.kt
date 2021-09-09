@@ -23,11 +23,13 @@ import android.content.Context
 import android.content.res.Resources
 import android.net.Uri
 import androidx.test.platform.app.InstrumentationRegistry
-import com.acmpo6ou.myaccounts.*
 import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.NoInternet
+import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
 import com.acmpo6ou.myaccounts.database.main_activity.MainModelI
 import com.acmpo6ou.myaccounts.database.main_activity.MainPresenter
+import com.acmpo6ou.myaccounts.str
 import com.github.ivanshafran.sharedpreferencesmock.SPMockBuilder
 import com.github.javafaker.Faker
 import com.nhaarman.mockitokotlin2.doReturn
@@ -55,7 +57,6 @@ class MainPresenterInst : NoInternet {
     private val resources: Resources = context.resources
 
     private val importErrorTitle = resources.getString(R.string.import_error_title)
-    private val import2FilesMsg = resources.getString(R.string.import_2_files)
     private val importExistsMsg = resources.getString(R.string.db_exists)
     private val ioError = resources.getString(R.string.io_error)
 
@@ -73,71 +74,13 @@ class MainPresenterInst : NoInternet {
     }
 
     @Test
-    fun `checkTarFile should check number of files in tar file`() {
-        // correct tar file would have 2 files
-        // here we return anything but 2 as is needed for test
-        whenever(model.countFiles(locationUri)).thenReturn(randomIntExcept(2))
+    fun `checkDbaFile should check dba file size`() {
+        val size = faker.random().nextInt(0, 115) // we need incorrect size
+        doReturn(size).whenever(model).getSize(locationUri)
 
-        presenter.checkTarFile(locationUri)
-        verify(view).showError(importErrorTitle, import2FilesMsg)
-    }
-
-    @Test
-    fun `checkTarFile should check names of files`() {
-        // mock model to return fake names and correct files count
-        val filesList = listOf(
-            faker.name().name(),
-            faker.name().name()
-        )
-        whenever(model.getNames(locationUri)).thenReturn(filesList)
-        whenever(model.countFiles(locationUri)).thenReturn(2)
-
-        presenter.checkTarFile(locationUri)
-        val importDifferentNamesMsg = resources.getString(
-            R.string.import_diff_names, filesList[0], filesList[1]
-        )
-        verify(view).showError(importErrorTitle, importDifferentNamesMsg)
-    }
-
-    @Test
-    fun `checkTarFile should check bin file size`() {
-        // mock model to return fake sizes, correct files count and file names
-        val filesList = listOf("main", "main")
-        val sizesList = listOf(
-            // size of db file should be not less then 100
-            100,
-            // size of bin file should be exactly 16, here we return anything but 16
-            // as is needed for the test
-            randomIntExcept(16, 0, 200)
-        )
-
-        whenever(model.getNames(locationUri)).thenReturn(filesList)
-        whenever(model.countFiles(locationUri)).thenReturn(2)
-        whenever(model.getSizes(locationUri)).thenReturn(sizesList)
-
-        presenter.checkTarFile(locationUri)
-        val importBinSizeMsg = resources.getString(R.string.import_bin_size, sizesList[1])
-        verify(view).showError(importErrorTitle, importBinSizeMsg)
-    }
-
-    @Test
-    fun `checkTarFile should check db file size`() {
-        // mock model to return fake sizes, correct files count and file names
-        val filesList = listOf("main", "main")
-        val sizesList = listOf(
-            // size of db file should be not less then 100, here we return number lower
-            // then 100 as is needed for our test
-            faker.number().numberBetween(0, 90),
-            16 // size of bin file should be exactly 16
-        )
-
-        whenever(model.getNames(locationUri)).thenReturn(filesList)
-        whenever(model.countFiles(locationUri)).thenReturn(2)
-        whenever(model.getSizes(locationUri)).thenReturn(sizesList)
-
-        presenter.checkTarFile(locationUri)
-        val importBinSizeMsg = resources.getString(R.string.import_db_size, sizesList[0])
-        verify(view).showError(importErrorTitle, importBinSizeMsg)
+        presenter.checkDbaFile(locationUri)
+        val importSizeMsg = resources.getString(R.string.import_dba_size, size)
+        verify(view).showError(importErrorTitle, importSizeMsg)
     }
 
     @Test

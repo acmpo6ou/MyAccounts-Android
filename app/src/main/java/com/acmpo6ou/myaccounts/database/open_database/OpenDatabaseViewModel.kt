@@ -67,10 +67,10 @@ open class OpenDatabaseViewModel(
     /**
      * Tries to open database using given password and handling all errors.
      *
-     * If there is TokenValidationException then set incorrectPassword to true, this will
+     * If there is TokenValidationException sets incorrectPassword to true, this will
      * lead to error message displaying near the password field.
      *
-     * If there is JsonDecodingException then set corrupted to true, this will lead to
+     * If there is JsonDecodingException sets corrupted to true, this will lead to
      * displaying error dialog saying that the database is corrupted.
      *
      * @param[password] password for the database.
@@ -81,7 +81,10 @@ open class OpenDatabaseViewModel(
             loading.value = true
 
             val database = app.databases[databaseIndex].copy()
-            val salt = File("${app.SRC_DIR}/${database.name}.bin").readBytes()
+            val salt = ByteArray(16)
+            File("${app.SRC_DIR}/${database.name}.dba").inputStream().use {
+                it.read(salt)
+            }
 
             database.password = password
             database.salt = salt
@@ -120,7 +123,7 @@ open class OpenDatabaseViewModel(
     /**
      * Used to open databases by given Database instance.
      *
-     * In particular opening database means reading content of corresponding .db file,
+     * In particular opening database means reading content of corresponding .dba file,
      * decrypting and deserializing it, then assigning deserialized database map to `data`
      * property of given Database.
      *
@@ -128,7 +131,7 @@ open class OpenDatabaseViewModel(
      * cryptography key which takes a long time and would freeze the ui.
      *
      * @param[database] Database instance with password, name and salt to open database.
-     * @return same Database instance but with `data` property filled with deserialized
+     * @return same Database instance but with `data` property set to deserialized
      * database map.
      */
     open fun openDatabaseAsync(database: Database) =

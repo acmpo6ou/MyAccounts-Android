@@ -31,7 +31,9 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileNotFoundException
+import java.io.FileOutputStream
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.TemporalAmount
@@ -100,7 +102,7 @@ interface DatabaseUtils {
         // Get key from cache if it's there, if not add the key to cache.
         // This is needed because generating cryptography key using deriveKey involves
         // 100 000 iterations which takes a long time, so the keys have to be cached and
-        // generated only if they are'nt in the cache
+        // generated only if they aren't in the cache
         val key = app.keyCache.getOrPut(password) { deriveKey(password, salt) }
 
         val validator: Validator<String> = object : StringValidator {
@@ -151,53 +153,56 @@ interface DatabaseUtils {
     }
 
     /**
-     * Opens database by given Database instance.
+     * Opens database given Database instance.
      *
-     * In particular opening database means reading content of corresponding .db file,
+     * In particular opening database means reading content of corresponding .dba file,
      * decrypting and deserializing it, then assigning deserialized database map to `data`
      * property of given Database.
      *
      * @param[database] Database instance with password, name and salt to open database.
-     * @return same Database instance but with `data` property filled with deserialized
+     * @return same Database instance but with `data` property set to deserialized
      * database map.
      */
     fun openDatabase(database: Database): Database {
-        val jsonStr = File("${app.SRC_DIR}/${database.name}.db").readText()
+        val file = File("${app.SRC_DIR}/${database.name}.dba")
+        val jsonStr: String
+
+        FileInputStream(file).use {
+            it.channel.position(16) // skip 16 bytes of salt
+            jsonStr = String(it.readBytes())
+        }
+
         val data = decryptDatabase(jsonStr, database.password!!, database.salt!!)
         database.data = data
         return database
     }
 
     /**
-     * Creates .db and .bin files for database given Database instance.
+     * Creates .dba file given Database instance.
      *
      * @param[database] Database instance from which database name, password and salt are
-     * extracted for database files creation.
+     * extracted for database file creation.
      */
     fun createDatabase(database: Database) {
         val name = database.name
+        val file = File("${app.SRC_DIR}/$name.dba")
+        file.createNewFile()
 
-        // create salt file
-        val saltFile = File("${app.SRC_DIR}/$name.bin")
-        saltFile.createNewFile()
-        saltFile.writeBytes(database.salt!!)
+        FileOutputStream(file).use {
+            it.write(database.salt!!) // write salt
 
-        // create database file
-        val databaseFile = File("${app.SRC_DIR}/$name.db")
-        databaseFile.createNewFile()
-
-        // encrypt and write database to .db file
-        val token = encryptDatabase(database)
-        databaseFile.writeText(token)
+            // encrypt and write database
+            val token = encryptDatabase(database)
+            it.write(token.toByteArray())
+        }
     }
 
     /**
-     * Deletes .db and .bin files of database given its name.
+     * Deletes database .dba file given its name.
      * @param[name] name of database to delete.
      */
     fun deleteDatabase(name: String) {
-        File("${app.SRC_DIR}/$name.bin").delete()
-        File("${app.SRC_DIR}/$name.db").delete()
+        File("${app.SRC_DIR}/$name.dba").delete()
     }
 
     /**

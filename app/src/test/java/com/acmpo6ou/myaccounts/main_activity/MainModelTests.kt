@@ -19,8 +19,10 @@
 
 package com.acmpo6ou.myaccounts.main_activity
 
-import com.acmpo6ou.myaccounts.*
+import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.SRC_DIR
+import com.acmpo6ou.myaccounts.accountsDir
 import com.acmpo6ou.myaccounts.database.main_activity.MainModel
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
@@ -43,50 +45,22 @@ class MainModelTests : ModelTest() {
     }
 
     @Test
-    fun `countFiles should return number of files in tar file`() {
-        val count = model.countFiles(locationUri)
-        assertEquals(2, count)
+    fun `getSize should return file size`() {
+        val size = model.getSize(locationUri)
+        assertEquals(284, size)
     }
 
     @Test
-    fun `getNames should return list of names`() {
-        val expectedList = listOf("main", "main")
-        val actualList = model.getNames(locationUri)
-        assertEquals(expectedList, actualList)
-    }
-
-    @Test
-    fun `getSizes should return list of file sizes`() {
-        val expectedList = listOf(268, 16) // sizes of .db and .bin files
-        val actualList = model.getSizes(locationUri)
-        assertEquals(expectedList, actualList)
-    }
-
-    @Test
-    fun `importDatabase should extract given tar file to src folder`() {
+    fun `importDatabase should copy given dba file to src folder`() {
         model.importDatabase(locationUri)
 
-        // check that all database files are imported correctly
-        val expectedBin = String(salt)
-        val expectedDb = String(
-            File("sampledata/src/main.db").readBytes()
+        val expected = String(
+            File("sampledata/src/main.dba").readBytes()
         )
-
-        val actualBin = String(
-            File("$SRC_DIR/main.bin").readBytes()
+        val actual = String(
+            File("$SRC_DIR/main.dba").readBytes()
         )
-        val actualDb = String(
-            File("$SRC_DIR/main.db").readBytes()
-        )
-
-        assertEquals(
-            "importDatabase incorrectly imported .db file!",
-            expectedDb, actualDb
-        )
-        assertEquals(
-            "importDatabase incorrectly imported .bin file!",
-            expectedBin, actualBin
-        )
+        assertEquals(expected, actual)
     }
 
     @Test
@@ -105,25 +79,5 @@ class MainModelTests : ModelTest() {
         } catch (e: FileAlreadyExistsException) {
             // everything is okay - test should pass
         }
-    }
-
-    @Test
-    fun `importDatabase should extract database files only`() {
-        model.importDatabase(locationUri)
-
-        // there should be no other files in parent of `src` folder
-        val srcParent = File(accountsDir)
-        val filesList = srcParent.list()
-
-        assertEquals(
-            "importDatabase must extract only .db and .bin files from given tar!",
-            1, // there must be only one directory – `src`
-            filesList?.size
-        )
-        assertEquals(
-            "importDatabase must extract only .db and .bin files from given tar!",
-            "src", // the only directory must be `src`
-            filesList?.first()
-        )
     }
 }

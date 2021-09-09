@@ -21,7 +21,6 @@ package com.acmpo6ou.myaccounts.databases_list
 
 import com.acmpo6ou.myaccounts.ModelTest
 import com.acmpo6ou.myaccounts.SRC_DIR
-import com.acmpo6ou.myaccounts.accountsDir
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.databases_list.DatabasesModel
 import com.acmpo6ou.myaccounts.str
@@ -30,7 +29,6 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import java.io.File
-import java.io.FileNotFoundException
 
 class DatabasesTests {
     private val faker = Faker()
@@ -79,55 +77,19 @@ class DatabasesModelTests : ModelTest() {
     }
 
     @Test
-    fun `exportDatabase should export database tar to given location`() {
+    fun `exportDatabase should copy database dba file to given location`() {
         setupOutputResolver()
         copyDatabase("main")
 
         // export database `main` to the fake file system
         model.exportDatabase("main", destinationUri)
 
-        // check that database tar file was exported properly
-        val exportedTar = String(
-            File("$accountsDir/main.tar").readBytes()
-        )
         val expectedDb = String(
-            File("$SRC_DIR/main.db").readBytes()
+            File("sampledata/src/main.dba").readBytes()
         )
-        val expectedBin = String(
-            File("$SRC_DIR/main.bin").readBytes()
+        val exportedDb = String(
+            File("$SRC_DIR/main.dba").readBytes()
         )
-
-        // check that files are present and they reside in `src` folder
-        assertTrue(
-            "exportDatabase incorrect export: tar file doesn't contain .db file!",
-            "src/main.db" in exportedTar
-        )
-        assertTrue(
-            "exportDatabase incorrect export: tar file doesn't contain .bin file!",
-            "src/main.bin" in exportedTar
-        )
-
-        // check that files have appropriate content
-        assertTrue(
-            "exportDatabase incorrect export: content of .db file is incorrect!",
-            expectedDb in exportedTar
-        )
-        assertTrue(
-            "exportDatabase incorrect export: content of .bin file is incorrect!",
-            expectedBin in exportedTar
-        )
-    }
-
-    @Test
-    fun `exportDatabase should throw FileNotFoundException if there are no db or bin files`() {
-        setupOutputResolver()
-        // there is no database named `testing` so we can't export it, because there are no
-        // testing.db and testing.bin files
-        try {
-            model.exportDatabase("testing", destinationUri)
-            assert(false) // if there is no exception thrown the test will fail
-        } catch (e: FileNotFoundException) {
-            // if this exception were thrown its okay, test should pass
-        }
+        assertEquals(expectedDb, exportedDb)
     }
 }

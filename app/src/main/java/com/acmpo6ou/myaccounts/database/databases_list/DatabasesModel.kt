@@ -24,11 +24,7 @@ import com.acmpo6ou.myaccounts.MyApp
 import dagger.hilt.android.scopes.FragmentScoped
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.kamranzafar.jtar.TarEntry
-import org.kamranzafar.jtar.TarOutputStream
-import java.io.BufferedOutputStream
 import java.io.File
-import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import javax.inject.Inject
 
@@ -86,20 +82,19 @@ class DatabasesModel @Inject constructor(
 ) : DatabasesModelI {
 
     /**
-     * Used to get a list of Database instances – databases that reside in src directory.
-     * @return list of databases that are found in src directory.
+     * Returns a list of Database instances – databases that reside in src directory.
      */
     override fun getDatabases(): DbList {
         val databases = mutableListOf<Database>()
         // src folder where all database files are stored
         val src = File(app.SRC_DIR)
 
-        // walk through all files in src directory, for each file whose extension is .db
+        // walk through all files in src directory, for each file whose extension is .dba
         // add corresponding Database instance to [databases] list passing through
-        // as a parameter name of that file without .db extension
+        // as a parameter name of that file without .dba extension
         src.list()?.forEach {
-            if (it.endsWith(".db")) {
-                val name = it.removeSuffix(".db")
+            if (it.endsWith(".dba")) {
+                val name = it.removeSuffix(".dba")
                 val database = Database(name)
                 databases.add(database)
             }
@@ -109,40 +104,16 @@ class DatabasesModel @Inject constructor(
     }
 
     /**
-     * Used to export database as tar file to given destination.
-     *
-     * Tar file structure:
-     * ( where main is database name )
-     * src
-     * ├── main.bin – salt file.
-     * └── main.db  – encrypted database file.
+     * Exports database to given destination.
      *
      * @param[name] name of the database to export.
      * @param[destinationUri] uri with path to folder where we want to export database.
      */
     override fun exportDatabase(name: String, destinationUri: Uri) {
-        // get tar file
         val descriptor = app.contentResolver.openFileDescriptor(destinationUri, "w")
         val destination = FileOutputStream(descriptor?.fileDescriptor)
 
-        // create tar file
-        val outStream = TarOutputStream(BufferedOutputStream(destination))
-
-        // salt and database files to compress to the tar file
-        val dbFiles = listOf(
-            File("${app.SRC_DIR}$name.db"),
-            File("${app.SRC_DIR}$name.bin"),
-        )
-
-        // each file is added to tar file
-        for (f in dbFiles) {
-            if (!f.exists()) throw FileNotFoundException(f.name)
-
-            val entry = TarEntry(f, "src/${f.name}")
-            outStream.putNextEntry(entry)
-            outStream.write(f.readBytes())
-        }
-        outStream.flush()
-        outStream.close()
+        val dbFile = File("${app.SRC_DIR}$name.dba").readBytes()
+        destination.write(dbFile)
     }
 }

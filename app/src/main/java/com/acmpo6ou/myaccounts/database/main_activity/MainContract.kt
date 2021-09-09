@@ -26,7 +26,7 @@ import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
 
 interface MainPresenterI : SuperPresenterI {
     fun importSelected()
-    fun checkTarFile(location: Uri)
+    fun checkDbaFile(location: Uri)
     fun isTimeToUpdate(): Boolean
 }
 
@@ -39,8 +39,6 @@ interface MainActivityI : SuperActivityI {
 }
 
 interface MainModelI : DatabaseUtils {
-    fun countFiles(location: Uri): Int
-    fun getNames(locationUri: Uri): List<String>
-    fun getSizes(locationUri: Uri): List<Int>
+    fun getSize(locationUri: Uri): Int
     fun importDatabase(locationUri: Uri): String
 }

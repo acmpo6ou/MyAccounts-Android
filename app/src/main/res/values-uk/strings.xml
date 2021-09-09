@@ -38,10 +38,6 @@
     <string name="delete_error_title">Помилка під час видалення бази данних</string>
     <string name="no_updates">Немає оновленнь.</string>
     <string name="import_error_title">Помилка імпорту</string>
-    <string name="import_2_files">Ваш tar файл повинен мати ідеально 2 файли: .db і .bin</string>
-    <string name="import_diff_names">Tar файл повинен мати .db і .bin файли з однаковими іменами. Наприклад: main.db і main.bin. Ваші: %1$s.db %2$s.bin</string>
-    <string name="import_bin_size">"файл .bin повинен мати розмір ідеально 16 байтів, ваш: %1$d"</string>
-    <string name="import_db_size">"файл .db повинен мати розмір не менше 100 байтів, ваш: %1$d"</string>
     <string name="db_exists">База данних з таким іменем вже існує.</string>
     <string name="password_error">Неправильний пароль</string>
     <string name="corrupted_db">База данних %1$s скоріш за все пошкоджена.</string>
@@ -84,4 +80,5 @@
     <string name="app_lock_tip">Для безпеки ми блокуємо програму коли є відкриті бази данних. Скористайтесь відбитком пальця аби розблокувати.</string>
     <string name="app_is_locked">Програму заблоковано</string>
     <string name="authenticate">Розблокувати</string>
+    <string name="import_dba_size">".dba файл повинен мати як мінімум 116 байтів, ваш має: "</string>
 </resources>

@@ -69,7 +69,6 @@ class AccountsActivityInst {
         app.databases = mutableListOf(Database("main"))
         scenario = ActivityScenario.launch(AccountsActivity::class.java)
         scenario.onActivity {
-            it.myContext.setTheme(R.style.Theme_MyAccounts_NoActionBar)
             activity = it
         }
     }

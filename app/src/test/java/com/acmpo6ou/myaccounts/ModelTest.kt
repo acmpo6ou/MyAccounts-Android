@@ -39,17 +39,17 @@ open class ModelTest : DatabaseUtils {
     open val password = "123"
     val jsonDatabase =
         "{\"gmail\":{\"account\":\"gmail\",\"name\":\"Tom\",\"email\":" +
-            "\"tom@gmail.com\",\"password\":\"123\",\"date\":\"01.01.1990\"," +
-            "\"comment\":\"My gmail account.\"}}"
+                "\"tom@gmail.com\",\"password\":\"123\",\"date\":\"01.01.1990\"," +
+                "\"comment\":\"My gmail account.\"}}"
 
     val contentResolver: ContentResolver = mock()
     private val descriptor: ParcelFileDescriptor = mock()
 
-    val locationUri: Uri = mock()
-    val destinationUri: Uri = mock()
+    open val location = "sampledata/src/main.dba"
+    open val destination = "$accountsDir/main.dba"
 
-    open val location = "sampledata/tar/main.tar"
-    open val destination = "$accountsDir/main.tar"
+    val locationUri: Uri = mock { on { path } doReturn location }
+    val destinationUri: Uri = mock()
 
     @Before
     fun setupApp() {
@@ -99,15 +99,8 @@ open class ModelTest : DatabaseUtils {
      * @param[name] name of the database that we want to copy.
      */
     fun copyDatabase(name: String = "database") {
-        // this are were we want to copy database .bin and .db files
-        val binDestination = File("$SRC_DIR$name.bin")
-        val dbDestination = File("$SRC_DIR$name.db")
-
-        // this are the database files that we want to copy
-        val binFile = File("sampledata/src/$name.bin")
-        val dbFile = File("sampledata/src/$name.db")
-
-        binFile.copyTo(binDestination)
+        val dbFile = File("sampledata/src/$name.dba")
+        val dbDestination = File("$SRC_DIR$name.dba")
         dbFile.copyTo(dbDestination)
     }
 }

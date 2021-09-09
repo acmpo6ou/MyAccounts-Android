@@ -86,52 +86,25 @@ open class MainPresenter @Inject constructor(
     override fun importSelected() = view.importDialog()
 
     /**
-     * This method checks given tar file on validity.
+     * Checks given .dba file on validity.
      *
-     * It checks whether the tar file has appropriate files, does it have appropriate
-     * number of them and so on.
-     * @param[location] uri containing tar file that we need to check.
+     * It checks whether the file has appropriate size.
+     * @param[location] uri containing .dba file that we need to check.
      */
-    override fun checkTarFile(location: Uri) {
-        var errorDetails: String? = null
+    override fun checkDbaFile(location: Uri) {
+        val fileSize = model.getSize(location)
 
-        // get everything we need (file names and sizes etc.)
-        val fileCount = model.countFiles(location)
-        val fileNames = model.getNames(location)
-        val fileSizes = model.getSizes(location)
-
-        // check that there are only 2 files
-        if (fileCount != 2) {
-            errorDetails = app.res.getString(R.string.import_2_files)
-        }
-        // check that files have the same name
-        else if (fileNames[0] != fileNames[1]) {
-            errorDetails = app.res.getString(
-                R.string.import_diff_names, fileNames[0], fileNames[1]
-            )
-        }
-        // check that .bin file has exactly 16 bytes of salt in it
-        else if (fileSizes[1] != 16) {
-            errorDetails = app.res.getString(R.string.import_bin_size, fileSizes[1])
-        }
-        // check that .db file has at least 100 bytes in it
-        else if (fileSizes[0] < 100) {
-            errorDetails = app.res.getString(R.string.import_db_size, fileSizes[0])
-        }
-        // if there are no errors - call importDatabase
-        else {
-            importDatabase(location)
-        }
-
-        // if there are any errors display error dialog
-        if (errorDetails != null) {
+        if (fileSize < 116) {
             val errorTitle = app.res.getString(R.string.import_error_title)
-            view.showError(errorTitle, errorDetails)
+            val importSizeMsg = app.res.getString(R.string.import_dba_size, fileSize)
+            view.showError(errorTitle, importSizeMsg)
+        } else {
+            importDatabase(location)
         }
     }
 
     /**
-     * This method calls model.importDatabase() handling all errors.
+     * Calls model.importDatabase() handling all errors.
      *
      * After import, it adds database to the list which then sorts and
      * notifies about changes.

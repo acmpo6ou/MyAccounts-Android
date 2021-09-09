@@ -95,7 +95,7 @@ open class MainActivity : SuperActivity(), MainActivityI {
     private val importLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                result.data?.data?.let { presenter.checkTarFile(it) }
+                result.data?.data?.let { presenter.checkDbaFile(it) }
             }
         }
 
@@ -105,7 +105,7 @@ open class MainActivity : SuperActivity(), MainActivityI {
     override fun importDialog() =
         with(Intent(Intent.ACTION_OPEN_DOCUMENT)) {
             addCategory(Intent.CATEGORY_OPENABLE)
-            type = "application/x-tar"
+            type = "application/octet-stream"
             importLauncher.launch(this)
         }
 
