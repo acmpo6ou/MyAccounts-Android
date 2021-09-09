@@ -123,7 +123,7 @@ open class OpenDatabaseViewModel(
     /**
      * Used to open databases by given Database instance.
      *
-     * In particular opening database means reading content of corresponding .db file,
+     * In particular opening database means reading content of corresponding .dba file,
      * decrypting and deserializing it, then assigning deserialized database map to `data`
      * property of given Database.
      *
@@ -131,7 +131,7 @@ open class OpenDatabaseViewModel(
      * cryptography key which takes a long time and would freeze the ui.
      *
      * @param[database] Database instance with password, name and salt to open database.
-     * @return same Database instance but with `data` property filled with deserialized
+     * @return same Database instance but with `data` property set to deserialized
      * database map.
      */
     open fun openDatabaseAsync(database: Database) =
