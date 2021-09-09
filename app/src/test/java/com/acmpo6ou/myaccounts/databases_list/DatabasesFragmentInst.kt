@@ -115,8 +115,8 @@ class DatabasesFragmentInst {
     fun `exportDialog should start appropriate intent`() {
         val expectedAction = Intent.ACTION_CREATE_DOCUMENT
         val expectedCategory = Intent.CATEGORY_OPENABLE
-        val expectedType = "application/x-tar"
-        val expectedTitle = "main.tar"
+        val expectedType = "application/octet-stream"
+        val expectedTitle = "main.dba"
 
         fragment.exportDialog(0)
 
