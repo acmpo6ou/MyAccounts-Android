@@ -211,7 +211,7 @@ class DatabaseUtilsTests : ModelTest() {
     }
 
     @Test
-    fun `deleteDatabase should remove db and bin files from disk`() {
+    fun `deleteDatabase should remove dba file from disk`() {
         // create empty database so that we can delete it later
         val database = Database("main", "123", salt)
         createDatabase(database)
