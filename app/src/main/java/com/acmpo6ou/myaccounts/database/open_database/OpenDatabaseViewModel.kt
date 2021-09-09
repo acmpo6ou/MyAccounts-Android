@@ -67,10 +67,10 @@ open class OpenDatabaseViewModel(
     /**
      * Tries to open database using given password and handling all errors.
      *
-     * If there is TokenValidationException then set incorrectPassword to true, this will
+     * If there is TokenValidationException sets incorrectPassword to true, this will
      * lead to error message displaying near the password field.
      *
-     * If there is JsonDecodingException then set corrupted to true, this will lead to
+     * If there is JsonDecodingException sets corrupted to true, this will lead to
      * displaying error dialog saying that the database is corrupted.
      *
      * @param[password] password for the database.
@@ -81,7 +81,10 @@ open class OpenDatabaseViewModel(
             loading.value = true
 
             val database = app.databases[databaseIndex].copy()
-            val salt = File("${app.SRC_DIR}/${database.name}.bin").readBytes()
+            val salt = ByteArray(16)
+            File("${app.SRC_DIR}/${database.name}.dba").inputStream().use {
+                it.read(salt)
+            }
 
             database.password = password
             database.salt = salt
