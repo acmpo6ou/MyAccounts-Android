@@ -29,7 +29,6 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import java.io.File
-import java.io.FileNotFoundException
 
 class DatabasesTests {
     private val faker = Faker()
@@ -92,18 +91,5 @@ class DatabasesModelTests : ModelTest() {
             File("$SRC_DIR/main.dba").readBytes()
         )
         assertEquals(expectedDb, exportedDb)
-    }
-
-    @Test
-    fun `exportDatabase should throw FileNotFoundException if there are no db or bin files`() {
-        setupOutputResolver()
-        // there is no database named `testing` so we can't export it, because there are no
-        // testing.db and testing.bin files
-        try {
-            model.exportDatabase("testing", destinationUri)
-            assert(false) // if there is no exception thrown the test will fail
-        } catch (e: FileNotFoundException) {
-            // if this exception were thrown its okay, test should pass
-        }
     }
 }
