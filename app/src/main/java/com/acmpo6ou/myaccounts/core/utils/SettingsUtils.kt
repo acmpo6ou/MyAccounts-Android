@@ -22,7 +22,6 @@ package com.acmpo6ou.myaccounts.core.utils
 import android.app.Activity
 import android.content.SharedPreferences
 import android.view.WindowManager
-import java.util.*
 
 /**
  * Contains helper methods to load app settings.
@@ -33,27 +32,9 @@ interface SettingsUtils {
     val prefs: SharedPreferences
 
     /**
-     * Changes activity locale.
-     * @param[languageCode] language code to change locale such as `uk` for Ukraine.
-     */
-    fun setLocale(languageCode: String) {
-        val locale = Locale(languageCode)
-        Locale.setDefault(locale)
-
-        val resources = activity.resources
-        val config = resources.configuration
-        config.setLocale(locale)
-        resources.updateConfiguration(config, resources.displayMetrics)
-    }
-
-    /**
-     * Loads defined by user settings, such as app locale and screen capture.
+     * Loads user defined settings, such as screen capture.
      */
     fun loadSettings() {
-        // set locale
-        val localeCode = prefs.getString("language", "default")
-        if (localeCode != "default") setLocale(localeCode!!)
-
         // block screen capture if needed
         val screenCapture = prefs.getBoolean("block_screen_capture", true)
         if (screenCapture)
