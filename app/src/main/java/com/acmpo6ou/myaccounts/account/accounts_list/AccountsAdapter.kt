@@ -31,6 +31,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.database.databases_list.Account
+import com.caverock.androidsvg.SVGImageView
 import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
@@ -45,7 +46,7 @@ class AccountsAdapter @Inject constructor(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.list_item, parent, false)
+            .inflate(R.layout.account_item, parent, false)
         return ViewHolder(view)
     }
 
@@ -86,7 +87,8 @@ class AccountsAdapter @Inject constructor(
      * Represents ViewHolder for item of accounts list.
      */
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var accountName: TextView = view.findViewById(R.id.itemName)
+        var accountIcon: SVGImageView = view.findViewById(R.id.accountIcon)
+        var accountName: TextView = view.findViewById(R.id.accountName)
         var menu: TextView = view.findViewById(R.id.dots_menu)
 
         init {
