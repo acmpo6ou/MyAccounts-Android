@@ -31,8 +31,6 @@ import com.github.ivanshafran.sharedpreferencesmock.SPMockBuilder
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
-import org.mockito.ArgumentMatchers.anyString
-import java.util.*
 
 class SettingsUtilsTests {
     private lateinit var testActivity: TestActivity
@@ -42,9 +40,6 @@ class SettingsUtilsTests {
     private val mockConfig: Configuration = mock()
     private val displayMetrics: DisplayMetrics = mock()
     private val mockWindow: Window = mock()
-
-    private val languageCode = "uk"
-    private val expectedLocale = Locale(languageCode)
     private val secureFlag = WindowManager.LayoutParams.FLAG_SECURE
 
     @Before
@@ -61,32 +56,6 @@ class SettingsUtilsTests {
             on { window } doReturn mockWindow
         }
         spyActivity = spy(testActivity)
-    }
-
-    @Test
-    fun `setLocale should change locale of resources configuration`() {
-        testActivity.setLocale(languageCode)
-        verify(mockConfig).setLocale(expectedLocale)
-    }
-
-    @Test
-    fun `setLocale should update configuration of resources`() {
-        testActivity.setLocale(languageCode)
-        verify(mockResources).updateConfiguration(mockConfig, displayMetrics)
-    }
-
-    @Test
-    fun `loadSettings should not call setLocale if 'language' setting is set to 'default'`() {
-        spyActivity.prefs.edit().putString("language", "default").commit()
-        spyActivity.loadSettings()
-        verify(spyActivity, never()).setLocale(anyString())
-    }
-
-    @Test
-    fun `loadSettings should call setLocale if 'language' setting is other then 'default'`() {
-        spyActivity.prefs.edit().putString("language", languageCode).commit()
-        spyActivity.loadSettings()
-        verify(spyActivity).setLocale(languageCode)
     }
 
     @Test

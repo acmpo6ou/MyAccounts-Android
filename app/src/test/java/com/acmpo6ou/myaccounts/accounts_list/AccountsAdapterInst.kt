@@ -76,7 +76,7 @@ class AccountsAdapterInst {
 
     @Test
     fun `account item should have appropriate name`() {
-        val accountName = itemLayout.findViewById<TextView>(R.id.itemName)
+        val accountName = itemLayout.findViewById<TextView>(R.id.accountName)
         assertEquals(account.accountName, accountName?.text)
     }
 
