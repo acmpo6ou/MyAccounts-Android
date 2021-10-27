@@ -22,12 +22,10 @@ package com.acmpo6ou.myaccounts.accounts_list
 import android.content.res.AssetManager
 import com.acmpo6ou.myaccounts.account.accounts_list.AccountsAdapter
 import com.caverock.androidsvg.SVGImageView
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Before
 import org.junit.Test
+import org.mockito.ArgumentMatchers.anyString
 
 class AccountsAdapterTests {
     private lateinit var adapter: AccountsAdapter
@@ -65,5 +63,12 @@ class AccountsAdapterTests {
         // `git` goes before `gitrepo` in assets, but `gitrepo` will have a better score
         adapter.loadAccountIcon(mockImage, "gitrepo")
         verify(mockImage).setImageAsset("gitrepo.svg")
+    }
+
+    @Test
+    fun `loadAccountIcon should NOT call loadAccountIcon if there is no match`() {
+        // because we have a default icon
+        adapter.loadAccountIcon(mockImage, "there will be no match")
+        verify(mockImage, never()).setImageAsset(anyString())
     }
 }
