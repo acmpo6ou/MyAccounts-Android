@@ -34,6 +34,7 @@ import com.acmpo6ou.myaccounts.database.databases_list.Account
 import com.caverock.androidsvg.SVGImageView
 import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.scopes.FragmentScoped
+import me.xdrop.fuzzywuzzy.FuzzySearch
 import javax.inject.Inject
 
 @FragmentScoped
@@ -43,6 +44,18 @@ class AccountsAdapter @Inject constructor(
 ) : RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
 
     private val accountsList: List<Account> get() = presenter.accountsList
+    private val icons = context.assets.list("")?.map { it.removeSuffix(".svg") }
+
+    /**
+     * Loads account icon into [image] given [accountName].
+     */
+    fun loadAccountIcon(image: SVGImageView, accountName: String) {
+        val matches = FuzzySearch.extractAll(accountName, icons, 80)
+        if (matches.isNotEmpty()) {
+            val icon = matches.first().string
+            image.setImageAsset("$icon.svg")
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -55,6 +68,8 @@ class AccountsAdapter @Inject constructor(
 
         // set account item name
         holder.accountName.text = account.accountName
+
+        loadAccountIcon(holder.accountIcon, account.accountName)
 
         // set popup menu on item
         holder.menu.setOnClickListener { it ->

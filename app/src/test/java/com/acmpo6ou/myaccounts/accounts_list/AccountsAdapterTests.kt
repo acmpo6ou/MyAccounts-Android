@@ -34,7 +34,8 @@ class AccountsAdapterTests {
     private lateinit var mockImage: SVGImageView
 
     private val mockAssets: AssetManager =
-        mock { on { list("") } doReturn arrayOf("gmail.svg") }
+        mock {
+            on { list("") } doReturn arrayOf("gmail.svg", "git.svg", "gitrepo.svg") }
 
     @Before
     fun setup() {
