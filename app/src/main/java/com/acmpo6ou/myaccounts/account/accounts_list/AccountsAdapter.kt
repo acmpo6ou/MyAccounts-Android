@@ -50,7 +50,7 @@ class AccountsAdapter @Inject constructor(
      * Loads account icon into [image] given [accountName].
      */
     fun loadAccountIcon(image: SVGImageView, accountName: String) {
-        val matches = FuzzySearch.extractAll(accountName, icons, 80)
+        val matches = FuzzySearch.extractSorted(accountName, icons, 80)
         if (matches.isNotEmpty()) {
             val icon = matches.first().string
             image.setImageAsset("$icon.svg")

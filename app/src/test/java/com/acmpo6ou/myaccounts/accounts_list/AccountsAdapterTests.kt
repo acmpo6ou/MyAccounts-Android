@@ -59,4 +59,11 @@ class AccountsAdapterTests {
         adapter.loadAccountIcon(mockImage, "_gmail")
         verify(mockImage, times(2)).setImageAsset("gmail.svg")
     }
+
+    @Test
+    fun `loadAccountIcon should load icon with the best score`() {
+        // `git` goes before `gitrepo` in assets, but `gitrepo` will have a better score
+        adapter.loadAccountIcon(mockImage, "gitrepo")
+        verify(mockImage).setImageAsset("gitrepo.svg")
+    }
 }
