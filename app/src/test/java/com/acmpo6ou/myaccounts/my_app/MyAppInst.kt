@@ -22,7 +22,7 @@ package com.acmpo6ou.myaccounts.my_app
 import android.content.Intent
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.MyApp
-import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -37,6 +37,6 @@ class MyAppInst {
     fun `startLockActivity should start appropriate intent`() {
         app.startLockActivity()
         val intent: Intent = Shadows.shadowOf(RuntimeEnvironment.application).nextStartedActivity
-        assertEquals(".LockActivity", intent.component!!.shortClassName)
+        assertTrue(".LockActivity" in intent.component!!.shortClassName)
     }
 }
