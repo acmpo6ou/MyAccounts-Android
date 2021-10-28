@@ -35,7 +35,7 @@ class AccountsAdapterTests {
 
     private val mockAssets: AssetManager =
         mock {
-            on { list("") } doReturn arrayOf("gmail.svg", "git.svg", "gitrepo.svg") }
+            on { list("") } doReturn arrayOf("gmail.svg", "git.svg", "github.svg") }
 
     @Before
     fun setup() {
@@ -61,10 +61,10 @@ class AccountsAdapterTests {
     }
 
     @Test
-    fun `loadAccountIcon should load icon with the best score`() {
-        // `git` goes before `gitrepo` in assets, but `gitrepo` will have a better score
-        adapter.loadAccountIcon(mockImage, "gitrepo")
-        verify(mockImage).setImageAsset("gitrepo.svg")
+    fun `loadAccountIcon should load icon with the best match`() {
+        // `git` goes before `github` in assets, but `github` will have a better (exact) match
+        adapter.loadAccountIcon(mockImage, "github")
+        verify(mockImage).setImageAsset("github.svg")
     }
 
     @Test
