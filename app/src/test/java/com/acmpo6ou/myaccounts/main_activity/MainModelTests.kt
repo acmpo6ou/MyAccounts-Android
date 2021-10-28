@@ -25,6 +25,7 @@ import com.acmpo6ou.myaccounts.SRC_DIR
 import com.acmpo6ou.myaccounts.accountsDir
 import com.acmpo6ou.myaccounts.database.main_activity.MainModel
 import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.spy
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -37,7 +38,7 @@ class MainModelTests : ModelTest() {
     @Before
     fun setup() {
         setupInputResolver()
-        val app: MyApp = spy() {
+        val app: MyApp = spy {
             on { contentResolver } doReturn contentResolver
             on { ACCOUNTS_DIR } doReturn accountsDir
         }
@@ -65,6 +66,16 @@ class MainModelTests : ModelTest() {
 
     @Test
     fun `importDatabase should return name of imported database`() {
+        val name = model.importDatabase(locationUri)
+        assertEquals("main", name)
+    }
+
+    @Test
+    fun `importDatabase should return clean name`() {
+        val location = "/primary:main.dba" // the `primary:` part should be cleaned out
+        locationUri = mock { on { path } doReturn location }
+        setupInputResolver()
+
         val name = model.importDatabase(locationUri)
         assertEquals("main", name)
     }
