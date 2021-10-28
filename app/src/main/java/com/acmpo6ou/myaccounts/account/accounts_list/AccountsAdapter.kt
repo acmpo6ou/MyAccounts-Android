@@ -34,7 +34,6 @@ import com.acmpo6ou.myaccounts.database.databases_list.Account
 import com.caverock.androidsvg.SVGImageView
 import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.scopes.FragmentScoped
-import me.xdrop.fuzzywuzzy.FuzzySearch
 import javax.inject.Inject
 
 @FragmentScoped
@@ -44,17 +43,24 @@ class AccountsAdapter @Inject constructor(
 ) : RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
 
     private val accountsList: List<Account> get() = presenter.accountsList
-    private val icons = context.assets.list("")?.map { it.removeSuffix(".svg") }
+
+    // it's important to sort icon names by length (longer names first) because this way we will
+    // have better matches
+    private val icons = context.assets.list("")!!
+        .map { it.removeSuffix(".svg") }
+        .sortedByDescending { it.length }
 
     /**
      * Loads account icon into [image] given [accountName].
      */
     fun loadAccountIcon(image: SVGImageView, accountName: String) {
-        val matches = FuzzySearch.extractSorted(accountName, icons, 80)
-        if (matches.isNotEmpty()) {
-            val icon = matches.first().string
-            image.setImageAsset("$icon.svg")
+        for (icon in icons) {
+            if (icon in accountName) {
+                image.setImageAsset("$icon.svg")
+                return
+            }
         }
+        image.setImageAsset("account.svg")
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

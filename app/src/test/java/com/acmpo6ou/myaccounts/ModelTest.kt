@@ -48,7 +48,7 @@ open class ModelTest : DatabaseUtils {
     open val location = "sampledata/src/main.dba"
     open val destination = "$accountsDir/main.dba"
 
-    val locationUri: Uri = mock { on { path } doReturn location }
+    var locationUri: Uri = mock { on { path } doReturn location }
     val destinationUri: Uri = mock()
 
     @Before

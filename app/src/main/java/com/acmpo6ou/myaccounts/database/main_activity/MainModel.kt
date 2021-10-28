@@ -51,7 +51,9 @@ class MainModel @Inject constructor(override val app: MyApp) : MainModelI {
         val descriptor = app.contentResolver.openFileDescriptor(locationUri, "r")
         val location = FileInputStream(descriptor?.fileDescriptor)
 
-        val name = File(locationUri.path).nameWithoutExtension
+        // remove `primary:` part that is added to path for some reason
+        val cleanedPath = locationUri.path!!.replace("primary:", "")
+        val name = File(cleanedPath).nameWithoutExtension
         val file = File("${app.SRC_DIR}/$name.dba")
 
         if (file.exists())

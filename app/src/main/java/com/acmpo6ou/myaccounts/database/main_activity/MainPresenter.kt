@@ -62,7 +62,7 @@ open class MainPresenter @Inject constructor(
     fun fixSrcFolder() = File(app.SRC_DIR).mkdirs()
 
     /**
-     * This method checks whether it's time to check for updates.
+     * Checks whether it's time to check for updates.
      * Application should check for updates only once a day.
      *
      * @return boolean value indicating whether it is time to check for updates.

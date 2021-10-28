@@ -22,10 +22,12 @@ package com.acmpo6ou.myaccounts.accounts_list
 import android.content.res.AssetManager
 import com.acmpo6ou.myaccounts.account.accounts_list.AccountsAdapter
 import com.caverock.androidsvg.SVGImageView
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Test
-import org.mockito.ArgumentMatchers.anyString
 
 class AccountsAdapterTests {
     private lateinit var adapter: AccountsAdapter
@@ -33,7 +35,7 @@ class AccountsAdapterTests {
 
     private val mockAssets: AssetManager =
         mock {
-            on { list("") } doReturn arrayOf("gmail.svg", "git.svg", "gitrepo.svg") }
+            on { list("") } doReturn arrayOf("gmail.svg", "git.svg", "github.svg") }
 
     @Before
     fun setup() {
@@ -59,16 +61,15 @@ class AccountsAdapterTests {
     }
 
     @Test
-    fun `loadAccountIcon should load icon with the best score`() {
-        // `git` goes before `gitrepo` in assets, but `gitrepo` will have a better score
-        adapter.loadAccountIcon(mockImage, "gitrepo")
-        verify(mockImage).setImageAsset("gitrepo.svg")
+    fun `loadAccountIcon should load icon with the best match`() {
+        // `git` goes before `github` in assets, but `github` will have a better (exact) match
+        adapter.loadAccountIcon(mockImage, "github")
+        verify(mockImage).setImageAsset("github.svg")
     }
 
     @Test
-    fun `loadAccountIcon should NOT call loadAccountIcon if there is no match`() {
-        // because we have a default icon
+    fun `loadAccountIcon should load default icon if there is no match`() {
         adapter.loadAccountIcon(mockImage, "there will be no match")
-        verify(mockImage, never()).setImageAsset(anyString())
+        verify(mockImage).setImageAsset("account.svg")
     }
 }
