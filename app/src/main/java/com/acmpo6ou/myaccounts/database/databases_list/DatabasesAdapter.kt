@@ -82,11 +82,9 @@ class DatabasesAdapter @Inject constructor(
                 it.title = spanStr
             }
 
-            // if database isn't open then we can't edit or close it
-            if (!database.isOpen) {
-                popup.menu.findItem(R.id.edit_database_item).isEnabled = false
+            // if database isn't opened we can't close it
+            if (!database.isOpen)
                 popup.menu.findItem(R.id.close_database_item).isEnabled = false
-            }
 
             popup.setOnMenuItemClickListener {
                 when (it.itemId) {

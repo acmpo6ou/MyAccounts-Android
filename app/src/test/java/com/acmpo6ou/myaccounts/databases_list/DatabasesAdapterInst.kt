@@ -158,13 +158,7 @@ class DatabasesAdapterInst {
 
     @Test
     fun `clicking on 'Edit' should call editSelected`() {
-        clickMenuItem(itemLayout2, R.id.edit_database_item)
-        verify(presenter).editSelected(1)
-    }
-
-    @Test
-    fun `clicking on 'Edit' should not call editSelected when database is closed`() {
         clickMenuItem(itemLayout, R.id.edit_database_item)
-        verify(presenter, never()).editSelected(0)
+        verify(presenter).editSelected(0)
     }
 }
