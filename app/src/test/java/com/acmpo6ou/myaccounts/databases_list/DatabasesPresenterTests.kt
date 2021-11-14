@@ -56,9 +56,17 @@ class DatabasesPresenterTests : DatabasesPresenterTest() {
     }
 
     @Test
-    fun `editSelected should call navigateToEdit passing through database index`() {
+    fun `editSelected should call navigateToRename if database is closed`() {
         presenter.editSelected(0)
-        verify(view).navigateToEdit(0)
+        verify(view).navigateToRename(0)
+        verifyNoMoreInteractions(view)
+    }
+
+    @Test
+    fun `editSelected should call navigateToEdit if database is opened`() {
+        presenter.editSelected(1)
+        verify(view).navigateToEdit(1)
+        verifyNoMoreInteractions(view)
     }
 
     @Test

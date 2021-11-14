@@ -102,6 +102,8 @@ class DatabasesFragment : ListFragment(), DatabasesFragmentI {
         view?.findNavController()?.navigate(action)
     }
 
+    override fun navigateToRename(i: Int) {}
+
     /**
      * Navigates to OpenDatabaseFragment passing database index.
      * @param[i] index of database we want to open.
