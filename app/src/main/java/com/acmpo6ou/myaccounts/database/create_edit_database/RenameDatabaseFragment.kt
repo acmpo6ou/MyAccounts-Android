@@ -19,6 +19,7 @@
 
 package com.acmpo6ou.myaccounts.database.create_edit_database
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -27,8 +28,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.databinding.RenameDatabaseFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
 import kotlin.properties.Delegates
 
@@ -45,6 +48,10 @@ class RenameDatabaseFragment : Fragment() {
 
     @Inject
     lateinit var superActivity: MainActivity
+
+    @Inject
+    @ActivityContext
+    lateinit var myContext: Context
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,5 +72,17 @@ class RenameDatabaseFragment : Fragment() {
             val args = RenameDatabaseFragmentArgs.fromBundle(it)
             databaseIndex = args.databaseIndex
         }
+        initForm()
+    }
+
+    fun initForm() {
+        val dbName = app.databases[databaseIndex].name
+
+        // Set toolbar title to `Rename <database name>`
+        val appTitle = myContext.resources.getString(R.string.rename_db, dbName)
+        superActivity.supportActionBar?.title = appTitle
+
+        // fill databaseName field with database name
+        b.databaseName.setText(dbName)
     }
 }
