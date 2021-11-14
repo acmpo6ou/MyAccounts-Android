@@ -27,12 +27,14 @@ import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.core.AppModule
 import com.acmpo6ou.myaccounts.database.create_edit_database.RenameDatabaseFragment
+import com.acmpo6ou.myaccounts.database.create_edit_database.RenameDatabaseViewModel
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
 import com.acmpo6ou.myaccounts.database.main_activity.MainActivityModule
 import com.acmpo6ou.myaccounts.launchFragmentInHiltContainer
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
 import dagger.hilt.android.scopes.ActivityScoped
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -53,8 +55,12 @@ class RenameDatabaseFragmentInst {
     @get:Rule
     var hiltAndroidRule = HiltAndroidRule(this)
 
+    class TestRenameFragment : RenameDatabaseFragment() {
+        override lateinit var viewModel: RenameDatabaseViewModel
+    }
+
     val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
-    lateinit var fragment: RenameDatabaseFragment
+    private lateinit var fragment: TestRenameFragment
     private val b get() = fragment.b
 
 
@@ -94,5 +100,14 @@ class RenameDatabaseFragmentInst {
     @Test
     fun `initForm should fill name field`() {
         assertEquals(db.name, b.databaseName.text.toString())
+    }
+
+    @Test
+    fun `press on saveButton should call savePressed`() {
+        fragment.viewModel = mock()
+        b.databaseName.setText(db.name)
+
+        b.saveButton.performClick()
+        verify(fragment.viewModel).savePressed(db.name)
     }
 }

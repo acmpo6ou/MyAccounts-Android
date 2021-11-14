@@ -36,8 +36,8 @@ import javax.inject.Inject
 import kotlin.properties.Delegates
 
 @AndroidEntryPoint
-class RenameDatabaseFragment : Fragment() {
-    val viewModel: RenameDatabaseViewModel by viewModels()
+open class RenameDatabaseFragment : Fragment() {
+    open val viewModel: RenameDatabaseViewModel by viewModels()
     var databaseIndex by Delegates.notNull<Int>()
 
     private var binding: RenameDatabaseFragmentBinding? = null
@@ -84,5 +84,9 @@ class RenameDatabaseFragment : Fragment() {
 
         // fill databaseName field with database name
         b.databaseName.setText(dbName)
+
+        b.saveButton.setOnClickListener {
+            viewModel.savePressed(b.databaseName.text.toString())
+        }
     }
 }
