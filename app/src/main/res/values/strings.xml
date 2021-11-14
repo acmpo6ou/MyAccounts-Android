@@ -122,4 +122,5 @@
     <string name="app_lock_tip">For security app is locked when there are any opened databases. Use your fingerprint to unlock it.</string>
     <string name="app_is_locked">App is locked</string>
     <string name="authenticate">Authenticate</string>
+    <string name="rename_db_tip">Note: you need to open the database to edit its password.</string>
 </resources>
