@@ -56,7 +56,7 @@ class RenameDatabaseFragmentInst {
     var hiltAndroidRule = HiltAndroidRule(this)
 
     class TestRenameFragment : RenameDatabaseFragment() {
-        override lateinit var viewModel: RenameDatabaseViewModel
+        override var viewModel = RenameDatabaseViewModel(mock())
     }
 
     val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -67,7 +67,7 @@ class RenameDatabaseFragmentInst {
     @BindValue
     @JvmField
     @ActivityScoped
-    val superActivity: MainActivity = mock()
+    val superActivity: MainActivity = mock { on { myContext } doReturn context }
 
     @BindValue
     @JvmField
