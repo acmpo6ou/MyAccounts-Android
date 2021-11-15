@@ -62,4 +62,14 @@ class RenameDatabaseModelTests : ModelTest() {
         assertTrue(newFile.exists())
         assertFalse(oldFile.exists())
     }
+
+    @Test
+    fun `savePressed should use fixName`() {
+        model.savePressed("c/lea  %\$n_name/") // the name should be cleaned
+        val oldFile = File("$SRC_DIR/$oldName.dba")
+        val newFile = File("$SRC_DIR/$newName.dba")
+
+        assertTrue(newFile.exists())
+        assertFalse(oldFile.exists())
+    }
 }
