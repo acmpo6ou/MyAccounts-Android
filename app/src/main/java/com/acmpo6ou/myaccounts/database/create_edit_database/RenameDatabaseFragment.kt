@@ -26,6 +26,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
@@ -53,6 +54,11 @@ open class RenameDatabaseFragment : Fragment() {
     @ActivityContext
     lateinit var myContext: Context
 
+    // Hides/displays name error tip
+    private val nameErrorObserver = Observer<String?> {
+        b.parentName.error = it
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -71,6 +77,7 @@ open class RenameDatabaseFragment : Fragment() {
         arguments?.let {
             val args = RenameDatabaseFragmentArgs.fromBundle(it)
             databaseIndex = args.databaseIndex
+            viewModel.databaseIndex = databaseIndex
         }
         initForm()
     }
