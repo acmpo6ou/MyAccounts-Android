@@ -16,7 +16,7 @@ open class RenameDatabaseViewModel @Inject constructor(
     override val app: MyApp,
 ) : NameErrorModel(), DbNameModel, ValidateDbName, ErrorViewModel {
 
-    override val errorMsg = MutableLiveData("")
+    override val errorMsg = MutableLiveData<String>()
     override val itemNames get() = app.databases.map { it.name }
     override var databaseIndex by Delegates.notNull<Int>()
 
