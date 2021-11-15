@@ -34,6 +34,7 @@ import com.acmpo6ou.myaccounts.database.main_activity.MainActivityModule
 import com.acmpo6ou.myaccounts.launchFragmentInHiltContainer
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
 import dagger.hilt.android.scopes.ActivityScoped
 import dagger.hilt.android.testing.BindValue
@@ -55,14 +56,12 @@ class RenameDatabaseFragmentInst {
     @get:Rule
     var hiltAndroidRule = HiltAndroidRule(this)
 
-    class TestRenameFragment : RenameDatabaseFragment() {
-        override var viewModel = RenameDatabaseViewModel(mock())
-    }
+    @BindValue
+    lateinit var viewModel: RenameDatabaseViewModel
 
     val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
-    private lateinit var fragment: TestRenameFragment
+    private lateinit var fragment: RenameDatabaseFragment
     private val b get() = fragment.b
-
 
     @BindValue
     @JvmField
@@ -92,6 +91,11 @@ class RenameDatabaseFragmentInst {
             on { databases } doReturn mutableListOf(db)
         }
 
+        viewModel = RenameDatabaseViewModel(app)
+        setupFragment()
+    }
+
+    private fun setupFragment() {
         val bundle = Bundle()
         bundle.putInt("databaseIndex", 0)
         fragment = launchFragmentInHiltContainer(bundle)
@@ -104,9 +108,11 @@ class RenameDatabaseFragmentInst {
 
     @Test
     fun `press on saveButton should call savePressed`() {
-        fragment.viewModel = mock()
-        b.databaseName.setText(db.name)
+        val model = RenameDatabaseViewModel(app)
+        viewModel = spy(model)
+        setupFragment()
 
+        b.databaseName.setText(db.name)
         b.saveButton.performClick()
         verify(fragment.viewModel).savePressed(db.name)
     }
