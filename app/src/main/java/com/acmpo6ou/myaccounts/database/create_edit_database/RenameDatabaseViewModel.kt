@@ -19,11 +19,14 @@ open class RenameDatabaseViewModel @Inject constructor(
     override fun fixName(name: String) = super<DbNameModel>.fixName(name)
 
     open fun savePressed(name: String) {
-        val oldName = app.databases[databaseIndex].name
+        val db = app.databases[databaseIndex]
+        val oldName = db.name
         val newName = fixName(name)
 
         val oldFile = File("${app.SRC_DIR}/$oldName.dba")
         val newFile = File("${app.SRC_DIR}/$newName.dba")
+
         oldFile.renameTo(newFile)
+        db.name = newName
     }
 }

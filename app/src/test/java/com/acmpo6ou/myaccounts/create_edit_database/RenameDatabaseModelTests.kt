@@ -26,8 +26,7 @@ import com.acmpo6ou.myaccounts.database.create_edit_database.RenameDatabaseViewM
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.spy
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import java.io.File
@@ -42,7 +41,7 @@ class RenameDatabaseModelTests : ModelTest() {
     @Before
     fun setup() {
         copyDatabase(oldName)
-        val app = MyApplication()
+        app = MyApplication()
         app.databases = mutableListOf(Database(oldName))
 
         val spyApp = spy(app) {
@@ -71,5 +70,11 @@ class RenameDatabaseModelTests : ModelTest() {
 
         assertTrue(newFile.exists())
         assertFalse(oldFile.exists())
+    }
+
+    @Test
+    fun `savePressed should update name property of Database`() {
+        model.savePressed(newName)
+        assertEquals(newName, app.databases[0].name)
     }
 }

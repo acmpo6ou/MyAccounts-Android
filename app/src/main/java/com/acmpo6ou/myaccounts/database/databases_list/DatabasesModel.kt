@@ -64,7 +64,7 @@ typealias DbList = MutableList<Database>
  * considered open when [password] is not null.
  */
 data class Database(
-    val name: String,
+    var name: String,
     var password: String? = null,
     var salt: ByteArray? = null,
     var data: DbMap = mutableMapOf()
