@@ -26,10 +26,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.core.superclass.ErrorFragment
 import com.acmpo6ou.myaccounts.databinding.RenameDatabaseFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.qualifiers.ActivityContext
@@ -37,8 +39,9 @@ import javax.inject.Inject
 import kotlin.properties.Delegates
 
 @AndroidEntryPoint
-open class RenameDatabaseFragment : Fragment() {
-    open val viewModel: RenameDatabaseViewModel by viewModels()
+open class RenameDatabaseFragment : Fragment(), ErrorFragment {
+    override val viewModel: RenameDatabaseViewModel by viewModels()
+    override lateinit var myLifecycle: LifecycleOwner
     var databaseIndex by Delegates.notNull<Int>()
 
     private var binding: RenameDatabaseFragmentBinding? = null
@@ -48,7 +51,7 @@ open class RenameDatabaseFragment : Fragment() {
     lateinit var app: MyApp
 
     @Inject
-    lateinit var superActivity: MainActivity
+    override lateinit var superActivity: MainActivity
 
     @Inject
     @ActivityContext
@@ -79,7 +82,10 @@ open class RenameDatabaseFragment : Fragment() {
             databaseIndex = args.databaseIndex
             viewModel.databaseIndex = databaseIndex
         }
+
+        myLifecycle = viewLifecycleOwner
         initForm()
+        initModel()
     }
 
     fun initForm() {

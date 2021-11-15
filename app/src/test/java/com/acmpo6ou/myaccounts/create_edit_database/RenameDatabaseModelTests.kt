@@ -19,22 +19,26 @@
 
 package com.acmpo6ou.myaccounts.create_edit_database
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.acmpo6ou.myaccounts.ModelTest
+import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.SRC_DIR
 import com.acmpo6ou.myaccounts.core.MyApplication
 import com.acmpo6ou.myaccounts.database.create_edit_database.RenameDatabaseViewModel
 import com.acmpo6ou.myaccounts.database.databases_list.Database
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.spy
+import com.acmpo6ou.myaccounts.str
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import java.io.File
 
 class RenameDatabaseModelTests : ModelTest() {
-    lateinit var model: RenameDatabaseViewModel
-    lateinit var spyModel: RenameDatabaseViewModel
+    @get:Rule
+    val taskExecutorRule = InstantTaskExecutorRule()
 
+    lateinit var model: RenameDatabaseViewModel
     private val oldName = "main"
     private val newName = "clean_name"
 
@@ -76,5 +80,17 @@ class RenameDatabaseModelTests : ModelTest() {
     fun `savePressed should update name property of Database`() {
         model.savePressed(newName)
         assertEquals(newName, app.databases[0].name)
+    }
+
+    @Test
+    fun `savePressed should handle any error`() {
+        val mockApp: MyApp = mock()
+        val msg = faker.str()
+        val exception = Exception(msg)
+        doAnswer { throw exception }.whenever(mockApp).databases
+
+        model = RenameDatabaseViewModel(mockApp)
+        model.savePressed(newName)
+        assertEquals(exception.toString(), model.errorMsg.value!!)
     }
 }
