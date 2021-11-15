@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ExternalDependencies">
     <plugin id="IdeaVIM" />
+    <plugin id="com.nbadal.ktlint" />
     <plugin id="izhangzhihao.rainbow.brackets" />
     <plugin id="lermitage.intellij.extra.icons" />
     <plugin id="org.intellij.plugins.markdown" />
