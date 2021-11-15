@@ -21,6 +21,8 @@ package com.acmpo6ou.myaccounts.database.create_edit_database
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,7 +65,8 @@ open class RenameDatabaseFragment : Fragment(), ErrorFragment {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         binding = RenameDatabaseFragmentBinding.inflate(layoutInflater, container, false)
@@ -84,8 +87,8 @@ open class RenameDatabaseFragment : Fragment(), ErrorFragment {
         }
 
         myLifecycle = viewLifecycleOwner
-        initForm()
         initModel()
+        initForm()
     }
 
     fun initForm() {
@@ -97,9 +100,25 @@ open class RenameDatabaseFragment : Fragment(), ErrorFragment {
 
         // fill databaseName field with database name
         b.databaseName.setText(dbName)
+        viewModel.validateName(dbName)
 
         b.saveButton.setOnClickListener {
             viewModel.savePressed(b.databaseName.text.toString())
         }
+
+        // when name is changed validate it using model to display error in case
+        // such name already exists or the name is empty
+        b.databaseName.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) =
+                viewModel.validateName(s.toString())
+        })
+    }
+
+    override fun initModel() {
+        super.initModel()
+        viewModel.nameErrors.observe(myLifecycle, nameErrorObserver)
     }
 }
