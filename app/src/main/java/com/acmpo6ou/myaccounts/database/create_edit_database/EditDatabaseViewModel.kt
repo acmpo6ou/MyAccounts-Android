@@ -23,6 +23,7 @@ import androidx.lifecycle.viewModelScope
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.superclass.CreateEditDatabaseModel
+import com.acmpo6ou.myaccounts.database.superclass.ValidateDbName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -35,16 +36,21 @@ open class EditDatabaseViewModel(
     override val app: MyApp,
     private val defaultDispatcher: CoroutineDispatcher,
     override val uiDispatcher: CoroutineDispatcher,
-) : CreateEditDatabaseModel() {
+) : CreateEditDatabaseModel(), ValidateDbName {
 
     @Inject
     constructor(app: MyApp) : this(app, Dispatchers.Default, Dispatchers.Main)
-    var databaseIndex by Delegates.notNull<Int>()
+    override var databaseIndex by Delegates.notNull<Int>()
 
     open fun saveDatabaseAsync(oldName: String, database: Database) =
         viewModelScope.async(defaultDispatcher) {
             saveDatabase(oldName, database)
         }
+
+    override fun validateName(name: String) = super<ValidateDbName>.validateName(name)
+    override fun superValidateName(name: String) {
+        super<CreateEditDatabaseModel>.validateName(name)
+    }
 
     /**
      * Saves new Database using [saveDatabaseAsync].
@@ -80,27 +86,6 @@ open class EditDatabaseViewModel(
             // notify about error and hide loading progress bar
             errorMsg.value = e.toString()
             loading.value = false
-        }
-    }
-
-    /**
-     * Validates given name, checks whether it's not empty and whether database
-     * with such name already exists, but it's okay if name doesn't change through editing.
-     *
-     * If name is empty [emptyNameErr] is set to true.
-     * If database with such name already exists [existsNameErr] is set to true.
-     * @param[name] name to validate.
-     */
-    override fun validateName(name: String) {
-        val oldName = app.databases[databaseIndex].name
-        val newName = fixName(name)
-
-        // it's okay if name didn't change through editing
-        if (oldName == newName) {
-            existsNameErr.value = false
-            emptyNameErr.value = false
-        } else {
-            super.validateName(newName)
         }
     }
 }

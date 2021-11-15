@@ -37,7 +37,7 @@ abstract class NameErrorModel : ViewModel() {
      * to emptyNameErr and existsNameErr live data values.
      */
     val nameErrors = emptyNameErr.combineWith(existsNameErr) {
-            empty: Boolean?, exists: Boolean? ->
+        empty: Boolean?, exists: Boolean? ->
 
         var msg: String? = null
         if (empty!!) {
