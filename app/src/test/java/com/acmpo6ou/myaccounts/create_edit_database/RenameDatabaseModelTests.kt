@@ -64,6 +64,7 @@ class RenameDatabaseModelTests : ModelTest() {
 
         assertTrue(newFile.exists())
         assertFalse(oldFile.exists())
+        assertTrue(model.finished.value!!)
     }
 
     @Test
@@ -74,6 +75,7 @@ class RenameDatabaseModelTests : ModelTest() {
 
         assertTrue(newFile.exists())
         assertFalse(oldFile.exists())
+        assertTrue(model.finished.value!!)
     }
 
     @Test
@@ -91,6 +93,8 @@ class RenameDatabaseModelTests : ModelTest() {
 
         model = RenameDatabaseViewModel(mockApp)
         model.savePressed(newName)
+
         assertEquals(exception.toString(), model.errorMsg.value!!)
+        assertFalse(model.finished.value!!)
     }
 }

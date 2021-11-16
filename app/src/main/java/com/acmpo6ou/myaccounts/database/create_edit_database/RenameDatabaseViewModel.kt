@@ -16,9 +16,11 @@ open class RenameDatabaseViewModel @Inject constructor(
     override val app: MyApp,
 ) : NameErrorModel(), DbNameModel, ValidateDbName, ErrorViewModel {
 
-    override val errorMsg = MutableLiveData<String>()
     override val itemNames get() = app.databases.map { it.name }
     override var databaseIndex by Delegates.notNull<Int>()
+
+    override val errorMsg = MutableLiveData<String>()
+    val finished = MutableLiveData(false)
 
     override fun fixName(name: String) = super<DbNameModel>.fixName(name)
     override fun validateName(name: String) =
@@ -37,6 +39,7 @@ open class RenameDatabaseViewModel @Inject constructor(
 
             oldFile.renameTo(newFile)
             db.name = newName
+            finished.value = true
         } catch (e: Exception) {
             e.printStackTrace()
             errorMsg.value = e.toString()
