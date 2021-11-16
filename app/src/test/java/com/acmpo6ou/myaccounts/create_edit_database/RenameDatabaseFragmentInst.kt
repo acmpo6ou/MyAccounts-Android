@@ -41,7 +41,7 @@ import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
-import org.junit.Assert.assertEquals
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -87,7 +87,7 @@ class RenameDatabaseFragmentInst {
     fun setup() {
         db = Database("main")
         app = mock {
-            on { resources } doReturn context.resources
+            on { res } doReturn context.resources
             on { databases } doReturn mutableListOf(db)
         }
 
@@ -115,5 +115,14 @@ class RenameDatabaseFragmentInst {
         b.databaseName.setText(db.name)
         b.saveButton.performClick()
         verify(fragment.viewModel).savePressed(db.name)
+    }
+
+    @Test
+    fun `save button should be disabled when name field is empty`() {
+        // at first is should be enabled because it contains database name
+        assertTrue(b.saveButton.isEnabled)
+
+        b.databaseName.setText("")
+        assertFalse(b.saveButton.isEnabled)
     }
 }

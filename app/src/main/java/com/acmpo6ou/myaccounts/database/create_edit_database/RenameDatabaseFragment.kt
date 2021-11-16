@@ -59,9 +59,12 @@ open class RenameDatabaseFragment : Fragment(), ErrorFragment {
     @ActivityContext
     lateinit var myContext: Context
 
-    // Hides/displays name error tip
     private val nameErrorObserver = Observer<String?> {
+        // hide/display name error tip
         b.parentName.error = it
+
+        // enable/disable Save button depending on whether there are errors
+        b.saveButton.isEnabled = it == null
     }
 
     override fun onCreateView(
