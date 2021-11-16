@@ -26,10 +26,12 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
@@ -65,6 +67,13 @@ open class RenameDatabaseFragment : Fragment(), ErrorFragment {
 
         // enable/disable Save button depending on whether there are errors
         b.saveButton.isEnabled = it == null
+    }
+
+    // navigate back to the main fragment when database is successfully renamed
+    private val finishedObserver = Observer<Boolean> {
+        if (it) (myContext as AppCompatActivity)
+            .findNavController(R.id.nav_host_fragment)
+            .navigateUp()
     }
 
     override fun onCreateView(
@@ -123,5 +132,6 @@ open class RenameDatabaseFragment : Fragment(), ErrorFragment {
     override fun initModel() {
         super.initModel()
         viewModel.nameErrors.observe(myLifecycle, nameErrorObserver)
+        viewModel.finished.observe(myLifecycle, finishedObserver)
     }
 }
