@@ -31,8 +31,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.*
 import com.acmpo6ou.myaccounts.core.AppModule
 import com.acmpo6ou.myaccounts.database.databases_list.*
-import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentDirections.actionEditDatabase
-import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentDirections.actionOpenDatabase
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentDirections.*
 import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
 import com.acmpo6ou.myaccounts.database.main_activity.MainActivityModule
 import com.github.javafaker.Faker
@@ -163,6 +162,15 @@ class DatabasesFragmentInst {
 
         assertEquals(warningTitle, title?.text)
         assertEquals(String.format(confirmCloseMsg, "main"), message?.text)
+    }
+
+    @Test
+    fun `navigateToRename should pass appropriate database index`() {
+        mockNavController()
+        fragment.navigateToRename(0)
+
+        val expectedAction = actionRenameDatabase(0)
+        verify(navController).navigate(expectedAction)
     }
 
     @Test

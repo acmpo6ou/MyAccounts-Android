@@ -19,7 +19,6 @@
 
 package com.acmpo6ou.myaccounts.database.databases_list
 
-import android.content.Intent
 import android.net.Uri
 import com.acmpo6ou.myaccounts.core.superclass.ListFragmentI
 import com.acmpo6ou.myaccounts.core.superclass.ListPresenter
@@ -48,14 +47,14 @@ interface DatabasesFragmentI : ListFragmentI {
     fun exportDialog(i: Int)
     fun showError(title: String, details: String)
 
+    fun startDatabase(index: Int)
     fun confirmDelete(i: Int)
-    fun confirmClose(i: Int)
 
-    fun navigateToEdit(i: Int)
+    fun confirmClose(i: Int)
     fun navigateToOpen(i: Int)
 
-    fun startDatabase(index: Int)
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
+    fun navigateToEdit(i: Int)
+    fun navigateToRename(i: Int)
 }
 
 interface DatabasesModelI : DatabaseUtils {

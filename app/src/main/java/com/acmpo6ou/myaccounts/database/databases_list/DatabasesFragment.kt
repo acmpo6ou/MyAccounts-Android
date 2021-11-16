@@ -27,8 +27,7 @@ import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.superclass.ListFragment
 import com.acmpo6ou.myaccounts.core.utils.startDatabaseUtil
-import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentDirections.actionEditDatabase
-import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentDirections.actionOpenDatabase
+import com.acmpo6ou.myaccounts.database.databases_list.DatabasesFragmentDirections.*
 import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -99,6 +98,15 @@ class DatabasesFragment : ListFragment(), DatabasesFragmentI {
      */
     override fun navigateToEdit(i: Int) {
         val action = actionEditDatabase(i)
+        view?.findNavController()?.navigate(action)
+    }
+
+    /**
+     * Navigates to RenameDatabaseFragment passing database index.
+     * @param[i] index of database we want to rename.
+     */
+    override fun navigateToRename(i: Int) {
+        val action = actionRenameDatabase(i)
         view?.findNavController()?.navigate(action)
     }
 

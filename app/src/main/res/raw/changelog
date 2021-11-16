@@ -1,3 +1,7 @@
+<h4>v2.2.0</h4>
+<p>  •  allow renaming database even when it is closed</p>
+<br/>
+
 <h4>v2.1.2</h4>
 <p>  •  fixed icon searching algorithm to load account icons faster</p>
 <p>  •  fixed 'primary:' part sometimes appearing in database name when importing</p>

@@ -31,7 +31,7 @@ import java.security.SecureRandom
 /**
  * Super class for all view models that create/edit databases.
  */
-abstract class CreateEditDatabaseModel : CreateEditViewModel(), DatabaseUtils {
+abstract class CreateEditDatabaseModel : CreateEditViewModel(), DbNameModel, DatabaseUtils {
     var coroutineJob: Job? = null
     abstract val uiDispatcher: CoroutineDispatcher
 
@@ -49,20 +49,7 @@ abstract class CreateEditDatabaseModel : CreateEditViewModel(), DatabaseUtils {
         return salt
     }
 
-    /**
-     * Removes all unsupported characters from given database name.
-     *
-     * Supported characters are lower and upper ASCII letters, digits and .-_()
-     * We should clean the name because it is used as a name for database files.
-     *
-     * @param[name] name to clean.
-     * @return cleaned from unsupported characters name.
-     */
-    override fun fixName(name: String): String {
-        val supported =
-            (('A'..'Z') + ('a'..'z') + ('0'..'9')).joinToString("") + ".-_()"
-        return name.filter { it in supported }
-    }
+    override fun fixName(name: String) = super<DbNameModel>.fixName(name)
 
     /**
      * Called when user presses apply button.

@@ -71,6 +71,13 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/actionRenameDatabase"
+            app:destination="@id/renameDatabaseFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -81,8 +88,8 @@
     <fragment
         android:id="@+id/editDatabaseFragment"
         android:name="com.acmpo6ou.myaccounts.database.create_edit_database.EditDatabaseFragment"
-        android:label="Edit database"
-        tools:layout="@layout/create_edit_database_fragment" >
+        tools:layout="@layout/create_edit_database_fragment"
+        android:label="Edit database">
         <argument
             android:name="databaseIndex"
             app:argType="integer" />
@@ -110,4 +117,13 @@
         android:name="com.acmpo6ou.myaccounts.about.AboutFragment"
         android:label="About"
         tools:layout="@layout/fragment_about" />
+    <fragment
+        android:id="@+id/renameDatabaseFragment"
+        android:name="com.acmpo6ou.myaccounts.database.create_edit_database.RenameDatabaseFragment"
+        android:label="Rename database"
+        tools:layout="@layout/rename_database_fragment" >
+        <argument
+            android:name="databaseIndex"
+            app:argType="integer" />
+    </fragment>
 </navigation>

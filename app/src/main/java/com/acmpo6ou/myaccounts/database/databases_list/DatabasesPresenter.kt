@@ -128,10 +128,17 @@ open class DatabasesPresenter @Inject constructor(
     /**
      * Called when user selects `Edit` in database item popup menu.
      *
-     * Using navigateToEdit navigates to EditDatabaseFragment passing through database index.
-     * @param[i] index of database we want to edit.
+     * If database user tries to edit is opened – navigates to EditDatabaseFragment, otherwise –
+     * to RenameDatabaseFragment.
+     * @param[i] index of database we want to edit/rename.
      */
-    override fun editSelected(i: Int) = view.navigateToEdit(i)
+    override fun editSelected(i: Int) {
+        if (databases[i].isOpen) {
+            view.navigateToEdit(i)
+        } else {
+            view.navigateToRename(i)
+        }
+    }
 
     /**
      * Called when user selects `Close` in database item popup menu.

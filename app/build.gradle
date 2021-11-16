@@ -18,7 +18,7 @@
  */
 
 buildscript {
-    ext.kotlin_version = '1.5.30'
+    ext.kotlin_version = '1.5.31'
     repositories {
         mavenCentral()
         jcenter()
@@ -48,8 +48,8 @@ android {
         minSdkVersion 26
         //noinspection OldTargetApi
         targetSdkVersion 30
-        versionCode 12
-        versionName "2.1.2"
+        versionCode 13
+        versionName "2.2.0"
         setProperty("archivesBaseName", "myaccounts") // name will be myaccounts-release.apk
 
         testInstrumentationRunner "com.acmpo6ou.myaccounts.HiltTestRunner"
@@ -94,7 +94,6 @@ android {
 dependencies {
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2'
 
     // Android
@@ -102,11 +101,11 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.lifecycle:lifecycle-process:2.3.1'
     implementation "androidx.biometric:biometric:1.1.0"
-    kapt 'androidx.databinding:databinding-compiler-common:7.0.1'
+    kapt 'androidx.databinding:databinding-compiler-common:7.0.3'
 
     // Navigation
     final nav_version = "2.3.5"
