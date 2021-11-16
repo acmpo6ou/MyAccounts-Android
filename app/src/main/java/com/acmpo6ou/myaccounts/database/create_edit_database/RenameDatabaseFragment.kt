@@ -23,9 +23,12 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -127,6 +130,19 @@ open class RenameDatabaseFragment : Fragment(), ErrorFragment {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) =
                 viewModel.validateName(s.toString())
         })
+
+        // save changes when Enter is pressed in name field
+        b.databaseName.setOnEditorActionListener {
+                _: TextView, action: Int, keyEvent: KeyEvent? ->
+
+            if (keyEvent?.keyCode == KeyEvent.KEYCODE_ENTER ||
+                action == EditorInfo.IME_ACTION_DONE ||
+                action == EditorInfo.IME_ACTION_NEXT
+            ) {
+                b.saveButton.performClick()
+            }
+            false
+        }
     }
 
     override fun initModel() {
