@@ -25,6 +25,11 @@ allprojects {
         maven { url 'https://jitpack.io' }
         jcenter()
     }
+
+    // Uncomment this for parallel execution of unit tests
+//    tasks.withType(Test) {
+//        maxParallelForks = Runtime.runtime.availableProcessors()
+//    }
 }
 
 task clean(type: Delete) {
