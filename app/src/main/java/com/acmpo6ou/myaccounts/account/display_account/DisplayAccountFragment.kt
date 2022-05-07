@@ -107,7 +107,7 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
         b.accountEmail.text = "$emailStr ${account.email}"
         b.accountPassword.text = "$passwordStr ${"•".repeat(16)}"
         b.birthDate.text = account.date
-        b.accountComment.text = "$commentStr\n${account.comment}"
+        b.accountComment.text = "$commentStr\n${"•".repeat(16)}"
 
         // display password only when password label is held, otherwise hide it
         b.accountPassword.setOnTouchListener { v, event ->
@@ -116,6 +116,17 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
                 view.text = "$passwordStr ${account.password}"
             } else if (event.action == ACTION_UP) {
                 view.text = "$passwordStr ${"•".repeat(16)}"
+            }
+            true
+        }
+
+        // display comment only when comment label is held, otherwise hide it
+        b.accountComment.setOnTouchListener { v, event ->
+            val view = v as TextView
+            if (event.action == ACTION_DOWN) {
+                view.text = "$commentStr\n${account.comment}"
+            } else if (event.action == ACTION_UP) {
+                view.text = "$commentStr\n${"•".repeat(16)}"
             }
             true
         }
