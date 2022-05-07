@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021. Bohdan Kolvakh
+ * Copyright (c) 2020-2022. Bohdan Kolvakh
  * This file is part of MyAccounts.
  *
  * MyAccounts is free software: you can redistribute it and/or modify
