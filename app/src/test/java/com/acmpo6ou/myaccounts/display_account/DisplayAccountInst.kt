@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021. Bohdan Kolvakh
+ * Copyright (c) 2020-2022. Bohdan Kolvakh
  * This file is part of MyAccounts.
  *
  * MyAccounts is free software: you can redistribute it and/or modify
@@ -92,7 +92,7 @@ class DisplayAccountInst {
         assertEquals("$emailStr ${account.email}", b.accountEmail.text.toString())
         assertEquals("$passwordStr ${"•".repeat(16)}", b.accountPassword.text.toString())
         assertEquals(account.date, b.birthDate.text.toString())
-        assertEquals("$commentStr\n${account.comment}", b.accountComment.text.toString())
+        assertEquals("$commentStr\n${"•".repeat(16)}", b.accountComment.text.toString())
     }
 
     @Test
@@ -123,6 +123,37 @@ class DisplayAccountInst {
         assertEquals(
             "$passwordStr ${"•".repeat(16)}",
             b.accountPassword.text.toString()
+        )
+    }
+
+    @Test
+    fun `should display or hide comment when pressing and releasing comment label`() {
+        fragment.initForm(account)
+
+        // when touching comment label comment should be displayed
+        b.accountComment.dispatchTouchEvent(
+            MotionEvent.obtain(
+                SystemClock.uptimeMillis(),
+                SystemClock.uptimeMillis(),
+                MotionEvent.ACTION_DOWN, 0F, 0F, 0
+            )
+        )
+        assertEquals(
+            "$commentStr\n${account.comment}",
+            b.accountComment.text.toString()
+        )
+
+        // when releasing comment label comment should be hidden
+        b.accountComment.dispatchTouchEvent(
+            MotionEvent.obtain(
+                SystemClock.uptimeMillis(),
+                SystemClock.uptimeMillis(),
+                MotionEvent.ACTION_UP, 0F, 0F, 0
+            )
+        )
+        assertEquals(
+            "$commentStr\n${"•".repeat(16)}",
+            b.accountComment.text.toString()
         )
     }
 

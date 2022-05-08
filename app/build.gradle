@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021. Bohdan Kolvakh
+ * Copyright (c) 2020-2022. Bohdan Kolvakh
  * This file is part of MyAccounts.
  *
  * MyAccounts is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
  */
 
 buildscript {
-    ext.kotlin_version = '1.5.31'
+    ext.kotlin_version = '1.6.21'
     repositories {
         mavenCentral()
         jcenter()
@@ -40,7 +40,6 @@ apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
     buildFeatures.viewBinding = true
 
     defaultConfig {
@@ -101,11 +100,11 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.lifecycle:lifecycle-process:2.3.1'
     implementation "androidx.biometric:biometric:1.1.0"
-    kapt 'androidx.databinding:databinding-compiler-common:7.0.3'
+    kapt 'androidx.databinding:databinding-compiler-common:7.1.3'
 
     // Navigation
     final nav_version = "2.3.5"

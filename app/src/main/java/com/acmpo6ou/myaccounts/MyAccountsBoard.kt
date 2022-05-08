@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021. Bohdan Kolvakh
+ * Copyright (c) 2020-2022. Bohdan Kolvakh
  * This file is part of MyAccounts.
  *
  * MyAccounts is free software: you can redistribute it and/or modify
@@ -48,7 +48,9 @@ class MyAccountsBoard : InputMethodService() {
         noPassword?.visibility = if (app.password.isEmpty()) View.VISIBLE else View.GONE
 
         pasteButton.setOnClickListener {
-            currentInputConnection.commitText(app.password, 1)
+            for (c in app.password) {
+                currentInputConnection.commitText(c.toString(), 1)
+            }
             app.password = "" // remove password once pasted
             inputManager.showInputMethodPicker()
         }

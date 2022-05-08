@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021. Bohdan Kolvakh
+ * Copyright (c) 2020-2022. Bohdan Kolvakh
  * This file is part of MyAccounts.
  *
  * MyAccounts is free software: you can redistribute it and/or modify
@@ -19,10 +19,8 @@
 
 package com.acmpo6ou.myaccounts
 
-import android.Manifest.permission
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
@@ -67,17 +65,6 @@ open class MainActivity : SuperActivity(), MainActivityI {
         drawerLayout = b.drawerLayout
 
         setSupportActionBar(b.appbar.toolbar)
-        checkStoragePermission()
-    }
-
-    private val permissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-        }
-
-    private fun checkStoragePermission() {
-        val isGranted = checkCallingOrSelfPermission(permission.WRITE_EXTERNAL_STORAGE)
-        if (isGranted != PackageManager.PERMISSION_GRANTED)
-            permissionLauncher.launch(permission.WRITE_EXTERNAL_STORAGE)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
