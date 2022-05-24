@@ -10,7 +10,6 @@
 
     <application
         android:name=".core.MyApplication"
-        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
@@ -24,6 +23,7 @@
         <service
             android:name=".MyAccountsBoard"
             android:label="MyAccounts Board"
+            android:exported="true"
             android:permission="android.permission.BIND_INPUT_METHOD"
             tools:ignore="IntentFilterExportedReceiver">
             <intent-filter>
@@ -59,6 +59,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/splashScreenTheme"
             tools:ignore="IntentFilterExportedReceiver,LockedOrientationActivity">
