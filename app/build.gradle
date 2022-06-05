@@ -47,8 +47,8 @@ android {
         minSdkVersion 26
         //noinspection OldTargetApi
         targetSdkVersion 31
-        versionCode 14
-        versionName "2.3.2"
+        versionCode 15
+        versionName "2.4.0"
         setProperty("archivesBaseName", "myaccounts") // name will be myaccounts-release.apk
 
         testInstrumentationRunner "com.acmpo6ou.myaccounts.HiltTestRunner"
