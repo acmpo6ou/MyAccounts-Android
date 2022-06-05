@@ -66,11 +66,9 @@ class MainPresenterInst : NoInternet {
             on { res } doReturn resources
             on { SRC_DIR } doReturn ""
         }
-        val mockPrefs = SPMockBuilder().createSharedPreferences()
-
         view = mock()
         model = mock()
-        presenter = MainPresenter({ view }, model, app, mockPrefs)
+        presenter = MainPresenter({ view }, model, app)
     }
 
     @Test

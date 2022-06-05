@@ -22,7 +22,6 @@ package com.acmpo6ou.myaccounts.core.superclass
 import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Rect
 import android.os.Bundle
@@ -46,7 +45,6 @@ import androidx.viewbinding.ViewBinding
 import com.acmpo6ou.myaccounts.BuildConfig
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.UpdatesActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -111,16 +109,6 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityI {
     }
 
     /**
-     * Starts UpdatesActivity passing [version] as extra.
-     * @param[version] update version.
-     */
-    override fun startUpdatesActivity(version: String) {
-        val intent = Intent(this, UpdatesActivity::class.java)
-        intent.putExtra("version", version)
-        startActivity(intent)
-    }
-
-    /**
      * Displays a snackbar about updates.
      *
      * @param[isAutoCheck] if true do not display the snackbar because we should not
@@ -136,16 +124,6 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityI {
             .setAction("HIDE") {}
             .show()
     }
-
-    // updates snackbars
-    override fun noUpdates(isAutoCheck: Boolean) =
-        updatesSnackbar(R.string.no_updates, isAutoCheck)
-
-    override fun updatesCheckFailed(isAutoCheck: Boolean) =
-        updatesSnackbar(R.string.updates_check_failed, isAutoCheck)
-
-    override fun noInternetConnection(isAutoCheck: Boolean) =
-        updatesSnackbar(R.string.no_internet_connection, isAutoCheck)
 
     /**
      * Obtains version name and sets it in navigation header.
@@ -191,7 +169,6 @@ abstract class SuperActivity : AppCompatActivity(), SuperActivityI {
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.check_for_updates -> presenter.checkUpdatesSelected()
             R.id.changelog -> navController.navigate(R.id.actionChangelog)
             R.id.settings -> navController.navigate(R.id.actionSettings)
             R.id.about -> navController.navigate(R.id.actionAbout)

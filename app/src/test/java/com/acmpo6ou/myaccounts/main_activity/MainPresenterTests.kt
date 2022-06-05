@@ -28,16 +28,13 @@ import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.database.main_activity.MainActivityI
 import com.acmpo6ou.myaccounts.database.main_activity.MainModelI
 import com.acmpo6ou.myaccounts.database.main_activity.MainPresenter
-import com.github.ivanshafran.sharedpreferencesmock.SPMockBuilder
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import org.mockito.ArgumentMatchers.anyBoolean
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito.spy
 import java.io.File
-import java.time.LocalDate
 
 class MainPresenterTests {
     lateinit var presenter: MainPresenter
@@ -58,58 +55,12 @@ class MainPresenterTests {
         }
 
         view = mock()
-        mockPrefs = SPMockBuilder().createSharedPreferences()
-
         model = mock {
             on { getSize(locationUri) } doReturn 116
         }
 
-        presenter = MainPresenter({ view }, model, app, mockPrefs)
+        presenter = MainPresenter({ view }, model, app)
         spyPresenter = spy(presenter)
-    }
-
-    @Test
-    fun `autocheckForUpdates should call checkUpdatesSelected if it's time to autocheck`() {
-        doReturn(true).whenever(spyPresenter).isTimeToUpdate()
-        spyPresenter.autocheckForUpdates()
-        verify(spyPresenter).checkUpdatesSelected(true)
-    }
-
-    @Test
-    fun `autocheckForUpdates should not call checkUpdatesSelected if it's not time to autocheck`() {
-        doReturn(false).whenever(spyPresenter).isTimeToUpdate()
-        spyPresenter.autocheckForUpdates()
-        verify(spyPresenter, never()).checkUpdatesSelected(anyBoolean())
-    }
-
-    @Test
-    fun `isTimeToUpdate should return true if app didn't check for updates today`() {
-        val date = LocalDate.MIN.toEpochDay()
-        mockPrefs.edit().putLong("last_update_check", date).commit()
-        assertTrue(presenter.isTimeToUpdate())
-    }
-
-    @Test
-    fun `isTimeToUpdate should return false if app did check for updates today`() {
-        val date = LocalDate.now().toEpochDay()
-        mockPrefs.edit().putLong("last_update_check", date).commit()
-        assertFalse(presenter.isTimeToUpdate())
-    }
-
-    @Test
-    fun `isTimeToUpdate should set last_update_check`() {
-        // last time we checked for updates was long time ago
-        val date = LocalDate.MIN.toEpochDay()
-        mockPrefs.edit().putLong("last_update_check", date).commit()
-        presenter.isTimeToUpdate()
-
-        // last_update_check should be set to today date because last time we checked for
-        // updates were today
-        val today = LocalDate.now()
-        val lastCheck = LocalDate.ofEpochDay(
-            mockPrefs.getLong("last_update_check", 0L)
-        )
-        assertEquals(today, lastCheck)
     }
 
     @Test

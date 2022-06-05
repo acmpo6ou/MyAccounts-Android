@@ -95,9 +95,6 @@ class MainActivityInst : NoInternet {
     @Before
     fun setup() {
         scenario = launch(MainActivity::class.java)
-        scenario.onActivity {
-            it.myContext.setTheme(R.style.Theme_MyAccounts_NoActionBar)
-        }
     }
 
     @Test

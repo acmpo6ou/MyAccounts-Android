@@ -27,7 +27,6 @@ import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
 interface MainPresenterI : SuperPresenterI {
     fun importSelected()
     fun checkDbaFile(location: Uri)
-    fun isTimeToUpdate(): Boolean
 }
 
 interface MainActivityI : SuperActivityI {

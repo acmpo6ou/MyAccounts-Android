@@ -19,23 +19,18 @@
 
 package com.acmpo6ou.myaccounts.core.superclass
 
+import android.content.Context
 import com.acmpo6ou.myaccounts.MyApp
-import com.acmpo6ou.myaccounts.core.utils.NetUtils
 import com.acmpo6ou.myaccounts.core.utils.SettingsUtils
 import com.google.android.material.navigation.NavigationView
 
 interface SuperActivityI :
     NavigationView.OnNavigationItemSelectedListener,
-    SettingsUtils,
-    NetUtils {
+    SettingsUtils {
 
     val mainFragment: ListFragmentI
+    var myContext: Context
     var app: MyApp
-
-    fun startUpdatesActivity(version: String)
-    fun noUpdates(isAutoCheck: Boolean = false)
-    fun updatesCheckFailed(isAutoCheck: Boolean = false)
-    fun noInternetConnection(isAutoCheck: Boolean = false)
 
     fun showError(title: String, details: String)
     fun goBack()
@@ -45,5 +40,4 @@ interface SuperActivityI :
 interface SuperPresenterI {
     fun backPressed()
     fun saveSelected()
-    fun checkUpdatesSelected(isAutoCheck: Boolean = false)
 }

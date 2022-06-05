@@ -19,7 +19,6 @@
 
 package com.acmpo6ou.myaccounts.database.main_activity
 
-import android.content.SharedPreferences
 import android.net.Uri
 import com.acmpo6ou.myaccounts.MyApp
 import com.acmpo6ou.myaccounts.R
@@ -29,7 +28,6 @@ import dagger.Lazy
 import dagger.hilt.android.scopes.ActivityScoped
 import java.io.File
 import java.io.IOException
-import java.time.LocalDate
 import javax.inject.Inject
 
 @ActivityScoped
@@ -37,48 +35,19 @@ open class MainPresenter @Inject constructor(
     private val activity: Lazy<MainActivityI>,
     var model: MainModelI,
     private val app: MyApp,
-    private val prefs: SharedPreferences,
 ) : SuperPresenter(), MainPresenterI {
 
     var databases by app::databases
     override val view: MainActivityI get() = activity.get()
 
     init {
-        // This methods are called on app startup
         fixSrcFolder()
-        autocheckForUpdates()
-    }
-
-    /**
-     * Checks for updates if it's time to.
-     */
-    fun autocheckForUpdates() {
-        if (isTimeToUpdate()) checkUpdatesSelected(true)
     }
 
     /**
      * Creates src folder if it doesn't exist.
      */
     fun fixSrcFolder() = File(app.SRC_DIR).mkdirs()
-
-    /**
-     * Checks whether it's time to check for updates.
-     * Application should check for updates only once a day.
-     *
-     * @return boolean value indicating whether it is time to check for updates.
-     */
-    override fun isTimeToUpdate(): Boolean {
-        // get last time we checked for updates
-        val lastCheck = LocalDate.ofEpochDay(
-            prefs.getLong("last_update_check", LocalDate.MIN.toEpochDay())
-        )
-
-        // now last time when we checked for updates is today
-        prefs.edit()
-            .putLong("last_update_check", LocalDate.now().toEpochDay())
-            .apply()
-        return lastCheck < LocalDate.now()
-    }
 
     /**
      * Called when user clicks `Import database` in navigation drawer.

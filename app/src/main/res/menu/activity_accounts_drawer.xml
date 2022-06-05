@@ -28,10 +28,6 @@
             android:icon="@drawable/ic_save"
             android:title="@string/save" />
         <item
-            android:id="@+id/check_for_updates"
-            android:icon="@drawable/ic_check_for_updates"
-            android:title="@string/check_for_updates" />
-        <item
             android:id="@+id/changelog"
             android:icon="@drawable/ic_changelog"
             android:title="@string/changelog" />

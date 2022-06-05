@@ -51,7 +51,6 @@ open class MainActivity : SuperActivity(), MainActivityI {
     override var lastBackPressTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.Theme_MyAccounts_NoActionBar)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         super.onCreate(savedInstanceState)
 

@@ -21,7 +21,6 @@ package com.acmpo6ou.myaccounts.superclass
 
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import android.os.Looper
 import android.view.View
 import android.widget.TextView
@@ -54,7 +53,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.shadows.ShadowAlertDialog
 import javax.inject.Singleton
@@ -143,15 +141,6 @@ class SuperActivityInst : NoInternet {
     }
 
     @Test
-    fun `startUpdatesActivity should start appropriate intent`() {
-        val latestVersion = faker.str()
-        scenario.onActivity { it.startUpdatesActivity(latestVersion) }
-
-        val intent: Intent = shadowOf(RuntimeEnvironment.application).nextStartedActivity
-        assertEquals(latestVersion, intent.getStringExtra("version"))
-    }
-
-    @Test
     fun `updatesSnackbar should display snackbar when isAutoCheck is false`() {
         scenario.onActivity {
             it.updatesSnackbar(R.string.no_updates, false)
@@ -210,13 +199,6 @@ class SuperActivityInst : NoInternet {
             it.onBackPressed()
             verify(it.drawerLayout, never()).closeDrawer(GravityCompat.START)
         }
-    }
-
-    @Test
-    fun `'Check for updates' should call presenter checkUpdatesSelected`() {
-        selectItem(R.id.check_for_updates)
-        verify(presenter).checkUpdatesSelected()
-        verifyNoMoreInteractions(presenter)
     }
 
     @Test
