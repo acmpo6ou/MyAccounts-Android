@@ -30,4 +30,9 @@
         <item name="errorTextColor">@color/red</item>
         <item name="errorIconTint">@color/red</item>
     </style>
+
+    <style name="Theme.MyAccounts.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="postSplashScreenTheme">@style/Theme.MyAccounts.NoActionBar</item>
+    </style>
 </resources>

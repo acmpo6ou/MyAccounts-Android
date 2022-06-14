@@ -25,6 +25,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.acmpo6ou.myaccounts.core.superclass.SuperActivity
@@ -51,6 +52,7 @@ open class MainActivity : SuperActivity(), MainActivityI {
     override var lastBackPressTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         super.onCreate(savedInstanceState)
 
