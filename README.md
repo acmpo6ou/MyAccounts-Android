@@ -10,7 +10,7 @@ You can easily manage your accounts and store them safely in encrypted databases
 The interface of MyAccounts is common and easy to use.
 MyAccounts is completely free and open source project.
 
-## Download
-You can download the `.apk` file at our [releases](https://github.com/Acmpo6ou/MyAccounts/releases/latest).
+## Install
+<a href='https://play.google.com/store/apps/details?id=com.acmpo6ou.myaccounts&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img height="100" alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
 
-Copyright (c) 2020 Bohdan Kolvakh
+Or you can download the `.apk` file at our [releases](https://github.com/Acmpo6ou/MyAccounts/releases/latest).
