@@ -54,6 +54,9 @@ open class AccountsActivity : SuperActivity(), AccountsActivityI {
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        intent.extras?.let {
+            index = it.getInt("databaseIndex")
+        }
         super.onCreate(savedInstanceState)
         loadSettings()
 
@@ -63,10 +66,6 @@ open class AccountsActivity : SuperActivity(), AccountsActivityI {
 
         navView = b.navView
         drawerLayout = b.drawerLayout
-
-        intent.extras?.let {
-            index = it.getInt("databaseIndex")
-        }
         supportActionBar?.title = database.name
 
         navController = findNavController(R.id.nav_host_fragment)
