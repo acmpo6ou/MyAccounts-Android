@@ -141,7 +141,7 @@ abstract class CreateEditAccountFragment : CreateEditFragment() {
             builder.setTitleText(R.string.pick_date)
 
             val currentlyPickedDate = SimpleDateFormat("dd.MM.yyyy")
-                .parse(b.birthDate.text.toString())
+                .parse(b.birthDate.text.toString())!!
                 .time + TimeUnit.DAYS.toMillis(1)
             builder.setSelection(currentlyPickedDate)
 
