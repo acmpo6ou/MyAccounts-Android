@@ -48,6 +48,7 @@ class LockActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        setTheme(R.style.Theme_MyAccounts_NoActionBar)
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lock)
