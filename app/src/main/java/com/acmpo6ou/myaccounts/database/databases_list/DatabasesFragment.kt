@@ -51,80 +51,50 @@ class DatabasesFragment : ListFragment(), DatabasesFragmentI {
 
     private val exportLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                result.data?.data?.let { presenter.exportDatabase(it) }
-            }
+            if (result.resultCode == Activity.RESULT_OK)
+                result.data?.data?.let {
+                    presenter.exportDatabase(it)
+                }
         }
 
-    /**
-     * Displays export dialog so that user can choose location where to export database.
-     *
-     * @param[i] index of database we want to export, used to get database name that will be
-     * default in export dialog.
-     */
-    override fun exportDialog(i: Int) {
-        val name = items[i].name
+    override fun exportDialog(database: Database) {
         Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
             type = "application/octet-stream"
-            putExtra(Intent.EXTRA_TITLE, "$name.dba")
+            putExtra(Intent.EXTRA_TITLE, "${database.name}.dba")
             exportLauncher.launch(this)
         }
     }
 
-    /**
-     * Displays a dialog for user to confirm deletion of database.
-     * @param[i] - database index.
-     */
-    override fun confirmDelete(i: Int) {
-        val name = items[i].name
-        val message = resources.getString(R.string.confirm_delete, name)
-        confirmDialog(message) { presenter.deleteDatabase(i) }
+    override fun confirmDelete(database: Database) {
+        val message =
+            resources.getString(R.string.confirm_delete, database.name)
+        confirmDialog(message) { presenter.deleteDatabase(database) }
     }
 
-    /**
-     * Displays a dialog for user to confirm closing of database.
-     * @param[i] - database index.
-     */
-    override fun confirmClose(i: Int) {
-        val name = items[i].name
-        val message = resources.getString(R.string.confirm_close, name)
-        confirmDialog(message) { presenter.closeDatabase(i) }
+    override fun confirmClose(database: Database) {
+        val message =
+            resources.getString(R.string.confirm_close, database.name)
+        confirmDialog(message) { presenter.closeDatabase(database) }
     }
 
-    /**
-     * Navigates to EditDatabaseFragment passing database index.
-     * @param[i] index of database we want to edit.
-     */
-    override fun navigateToEdit(i: Int) {
-        val action = actionEditDatabase(i)
+    override fun navigateToEdit(index: Int) {
+        val action = actionEditDatabase(index)
         view?.findNavController()?.navigate(action)
     }
 
-    /**
-     * Navigates to RenameDatabaseFragment passing database index.
-     * @param[i] index of database we want to rename.
-     */
-    override fun navigateToRename(i: Int) {
-        val action = actionRenameDatabase(i)
+    override fun navigateToRename(index: Int) {
+        val action = actionRenameDatabase(index)
         view?.findNavController()?.navigate(action)
     }
 
-    /**
-     * Navigates to OpenDatabaseFragment passing database index.
-     * @param[i] index of database we want to open.
-     */
-    override fun navigateToOpen(i: Int) {
-        val action = actionOpenDatabase(i)
+    override fun navigateToOpen(index: Int) {
+        val action = actionOpenDatabase(index)
         view?.findNavController()?.navigate(action)
     }
 
-    /**
-     * Displays error dialog.
-     *
-     * @param[title] title of error dialog.
-     * @param[details] details about the error.
-     */
-    override fun showError(title: String, details: String) = mainActivity.showError(title, details)
-    override fun startDatabase(index: Int) = startDatabaseUtil(index, requireContext())
+    override fun showError(title: String, details: String) =
+        mainActivity.showError(title, details)
+    override fun startDatabase(index: Int) =
+        startDatabaseUtil(index, requireContext())
 }
