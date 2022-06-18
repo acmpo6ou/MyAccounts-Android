@@ -36,42 +36,26 @@ open class DatabasesPresenter @Inject constructor(
 ) : DatabasesPresenterI {
 
     val view: DatabasesFragmentI get() = fragment.get()
-    var exportIndex: Int? = null
     override var databases by app::databases
+
+    // used by exportDatabase to determine what database to export.
+    private var databaseToExport: Database? = null
 
     init {
         databases = model.getDatabases()
     }
 
-    /**
-     * Called when user selects `Export` in database item popup menu.
-     *
-     * Should save [i] in [exportIndex] as it will be used by [exportDatabase] to determine
-     * what database to export.
-     * Also it calls exportDialog to display dialog where user can choose export location.
-     * @param[i] index of database we want to export.
-     */
-    override fun exportSelected(i: Int) {
-        exportIndex = i
-        view.exportDialog(i)
+    override fun exportSelected(database: Database) {
+        databaseToExport = database
+        view.exportDialog(database)
     }
 
-    /**
-     * Used to export database to user defined location.
-     *
-     * Calls model.exportDatabase() in try-catch block handling all errors.
-     * When error occurred calls view.showError() passing through appropriate error
-     * details to display dialog about error.
-     * If there are no errors - displays snackbar with success message.
-     * @param[locationUri] uri containing path where to export database.
-     */
     override fun exportDatabase(locationUri: Uri) {
         var errorDetails: String? = null
 
         try {
-            exportIndex?.let {
-                val name = databases[it].name
-                model.exportDatabase(name, locationUri)
+            databaseToExport?.let {
+                model.exportDatabase(it.name, locationUri)
             }
             // if there are no errors display snackbar about success
             view.showSuccess()
@@ -96,27 +80,19 @@ open class DatabasesPresenter @Inject constructor(
         }
     }
 
-    /**
-     * Called when user selects `Delete` in database item popup menu.
-     *
-     * Calls confirmDelete to display a dialog about confirmation of database deletion.
-     * @param[i] index of database we want to delete.
-     */
-    override fun deleteSelected(i: Int) = view.confirmDelete(i)
+    override fun deleteSelected(database: Database) =
+        view.confirmDelete(database)
 
-    /**
-     * Calls model.deleteDatabase() in try-catch block handling all errors.
-     * @param[i] database index.
-     */
-    override fun deleteDatabase(i: Int) {
+    override fun deleteDatabase(database: Database) {
         try {
             // remove cryptography key of database from cache
-            app.keyCache.remove(databases[i].password)
+            app.keyCache.remove(database.password)
 
             // remove database from disk
-            model.deleteDatabase(databases[i].name)
+            model.deleteDatabase(database.name)
 
-            databases.removeAt(i)
+            val i = databases.indexOf(database)
+            databases.remove(database)
             view.notifyRemoved(i)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -125,45 +101,29 @@ open class DatabasesPresenter @Inject constructor(
         }
     }
 
-    /**
-     * Called when user selects `Edit` in database item popup menu.
-     *
-     * If database user tries to edit is opened – navigates to EditDatabaseFragment, otherwise –
-     * to RenameDatabaseFragment.
-     * @param[i] index of database we want to edit/rename.
-     */
-    override fun editSelected(i: Int) {
-        if (databases[i].isOpen) {
-            view.navigateToEdit(i)
-        } else {
-            view.navigateToRename(i)
-        }
+    override fun editSelected(database: Database) {
+        val index = databases.indexOf(database)
+        if (database.isOpen)
+            view.navigateToEdit(index)
+        else
+            view.navigateToRename(index)
+    }
+
+    override fun closeSelected(database: Database) {
+        if (model.isDatabaseSaved(database))
+            closeDatabase(database)
+        else
+            view.confirmClose(database)
     }
 
     /**
-     * Called when user selects `Close` in database item popup menu.
-     *
-     * Checks whether database we want to close is saved, if it is –
-     * calls closeDatabase to close the database, if it's not – calls confirmClose to ask
-     * user for confirmation.
-     * @param[i] index of database we want to close.
+     * Resets database password effectively "closing" the database.
+     * It also removes database's cryptography key from cache.
      */
-    override fun closeSelected(i: Int) {
-        if (model.isDatabaseSaved(databases[i])) {
-            closeDatabase(i)
-        } else {
-            view.confirmClose(i)
-        }
-    }
-
-    /**
-     * Used to reset database password in this way "closing" the database.
-     * It also removes cryptography key of database from cache.
-     * @param[i] - database index.
-     */
-    override fun closeDatabase(i: Int) {
-        app.keyCache.remove(databases[i].password)
-        databases[i].password = null
+    override fun closeDatabase(database: Database) {
+        app.keyCache.remove(database.password)
+        database.password = null
+        val i = databases.indexOf(database)
         view.notifyChanged(i)
     }
 
@@ -171,13 +131,13 @@ open class DatabasesPresenter @Inject constructor(
      * Called when user selects item in database list.
      *
      * If selected database is closed should navigate to OpenDatabaseFragment, if it
-     * is opened - call view.startDatabase() passing through database index.
+     * is opened - start AccountsActivity.
      */
-    override fun openDatabase(i: Int) {
-        if (databases[i].isOpen) {
-            view.startDatabase(i)
-        } else {
-            view.navigateToOpen(i)
-        }
+    override fun openDatabase(database: Database) {
+        val index = databases.indexOf(database)
+        if (database.isOpen)
+            view.startDatabase(index)
+        else
+            view.navigateToOpen(index)
     }
 }

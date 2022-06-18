@@ -27,34 +27,33 @@ import com.acmpo6ou.myaccounts.core.utils.DatabaseUtils
 interface DatabasesPresenterI : ListPresenter {
     val databases: DbList
 
-    fun exportSelected(i: Int)
+    fun exportSelected(database: Database)
     fun exportDatabase(locationUri: Uri)
 
-    fun deleteSelected(i: Int)
-    fun deleteDatabase(i: Int)
+    fun deleteSelected(database: Database)
+    fun deleteDatabase(database: Database)
 
-    fun closeSelected(i: Int)
-    fun closeDatabase(i: Int)
+    fun closeSelected(database: Database)
+    fun closeDatabase(database: Database)
 
-    fun editSelected(i: Int)
-    fun openDatabase(i: Int)
+    fun editSelected(database: Database)
+    fun openDatabase(database: Database)
 }
 
 interface DatabasesFragmentI : ListFragmentI {
     val presenter: DatabasesPresenterI
     val adapter: DatabasesAdapter
 
-    fun exportDialog(i: Int)
+    fun exportDialog(database: Database)
     fun showError(title: String, details: String)
-
     fun startDatabase(index: Int)
-    fun confirmDelete(i: Int)
 
-    fun confirmClose(i: Int)
-    fun navigateToOpen(i: Int)
+    fun confirmDelete(database: Database)
+    fun confirmClose(database: Database)
 
-    fun navigateToEdit(i: Int)
-    fun navigateToRename(i: Int)
+    fun navigateToOpen(index: Int)
+    fun navigateToEdit(index: Int)
+    fun navigateToRename(index: Int)
 }
 
 interface DatabasesModelI : DatabaseUtils {
