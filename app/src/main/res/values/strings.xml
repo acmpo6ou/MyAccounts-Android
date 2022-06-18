@@ -125,24 +125,24 @@
     <string name="authenticate">Authenticate</string>
     <string name="rename_db_tip">Note: you need to open the database to edit its password.</string>
     <string name="copy_paste_onboarding">
-        Copying and pasting into a clipboard is unsafe since any program can access the it.
-        Instead, you\'ll have to temporarily switch to "MyAccounts Board" keyboard,
-        which is a special keyboard that contains only one button: "Paste password"
-        To switch to MyAccounts Board, you\'ll need to enable it in settings;
-        you\'ll need to do this only once.
+Copying and pasting into a clipboard is unsafe since any program can access it.
+Instead, you\'ll have to temporarily switch to \"MyAccounts Board\" keyboard,
+which is a special keyboard that contains only one button: \"Paste password\"\n
+To switch to MyAccounts Board, you\'ll need to enable it in settings;
+you\'ll need to do this only once.\n\n
 
-        Here is how it works:
-        1. you press the "copy password" button
-        2. a dialog appears where you need to select "MyAccounts Board",
-        to switch from your keyboard to ours
-        3. you go to a field where you need to paste the password
-        4. MyAccounts Board keyboard appears
-        5. you press the "paste password" button, at which point the password
-        is pasted into the field
-        6. a dialog appears that you use to switch back to your keyboard
+Here is how it works:\n
+1. you press the \"copy password\" button\n
+2. a dialog appears where you need to select \"MyAccounts Board\",
+to switch from your keyboard to ours\n
+3. you go to a field where you need to paste the password\n
+4. MyAccounts Board keyboard appears\n
+5. you press the \"paste password\" button, at which point the password
+is pasted into the field\n
+6. a dialog appears that you use to switch back to your keyboard\n\n
 
-        This way, you can safely copy and paste passwords.
-        Once you press OK, we will redirect you to settings, where you
-        can enable MyAccounts Board.
+This way, you can safely copy and paste passwords.
+Once you press OK, we will redirect you to settings, where you
+can enable MyAccounts Board.
     </string>
 </resources>
