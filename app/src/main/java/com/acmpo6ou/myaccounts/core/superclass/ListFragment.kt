@@ -124,23 +124,15 @@ abstract class ListFragment : Fragment(), ListFragmentI {
             .show()
     }
 
-    /**
-     * Rerenders list after any item have changed.
-     * @param[i] index of item that have changed.
-     */
-    override fun notifyChanged(i: Int) {
-        adapter.notifyItemChanged(i)
-        adapter.notifyItemRangeChanged(i, 1)
+    override fun notifyInserted(i: Int) {
+        adapter.notifyItemInserted(i)
         checkListPlaceholder()
     }
 
-    /**
-     * Rerenders list after any item have been deleted.
-     * @param[i] index of item that have been deleted.
-     */
+    override fun notifyChanged(i: Int) = adapter.notifyItemChanged(i)
+
     override fun notifyRemoved(i: Int) {
         adapter.notifyItemRemoved(i)
-        adapter.notifyItemRangeRemoved(i, 1)
         checkListPlaceholder()
     }
 }

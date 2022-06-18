@@ -107,12 +107,8 @@ open class MainActivity : SuperActivity(), MainActivityI {
             .show()
     }
 
-    /**
-     * This method calls notifyChanged on DatabasesFragment to rerender the list.
-     * @param[i] index of Database that were added to databases list.
-     */
-    override fun notifyChanged(i: Int) {
+    override fun notifyInserted(i: Int) {
         val databasesFragment = mainFragment as DatabasesFragmentI
-        databasesFragment.notifyChanged(i)
+        databasesFragment.notifyInserted(i)
     }
 }

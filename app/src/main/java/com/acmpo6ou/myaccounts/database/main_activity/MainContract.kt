@@ -34,7 +34,7 @@ interface MainActivityI : SuperActivityI {
 
     fun importDialog()
     fun showExitTip()
-    fun notifyChanged(i: Int)
+    fun notifyInserted(i: Int)
 }
 
 interface MainModelI : DatabaseUtils {

@@ -91,7 +91,7 @@ open class MainPresenter @Inject constructor(
 
             // notify about changes in the list
             val i = databases.indexOf(db)
-            view.notifyChanged(i)
+            view.notifyInserted(i)
         } catch (e: FileAlreadyExistsException) {
             e.printStackTrace()
             errorDetails = app.res.getString(R.string.db_exists)

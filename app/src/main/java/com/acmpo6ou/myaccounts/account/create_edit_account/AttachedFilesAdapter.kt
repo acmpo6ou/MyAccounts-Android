@@ -39,12 +39,10 @@ class AttachedFilesAdapter(
     override fun getItemCount() = attachedFiles.size
 
     val addedObserver = Observer<Int> {
-        notifyItemChanged(it)
-        notifyItemRangeChanged(it, 1)
+        notifyItemInserted(it)
     }
     val removedObserver = Observer<Int> {
         notifyItemRemoved(it)
-        notifyItemRangeRemoved(it, 1)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

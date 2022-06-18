@@ -23,6 +23,7 @@ interface ListPresenter
 
 interface ListFragmentI {
     fun showSuccess()
+    fun notifyInserted(i: Int)
     fun notifyChanged(i: Int)
     fun notifyRemoved(i: Int)
 }
