@@ -84,14 +84,15 @@ class DatabasesAdapter @Inject constructor(
 
             // if database isn't opened we can't close it
             if (!database.isOpen)
-                popup.menu.findItem(R.id.close_database_item).isEnabled = false
+                popup.menu.findItem(R.id.close_database_item)
+                    .isEnabled = false
 
             popup.setOnMenuItemClickListener {
                 when (it.itemId) {
-                    R.id.export_database_item -> presenter.exportSelected(position)
-                    R.id.delete_database_item -> presenter.deleteSelected(position)
-                    R.id.edit_database_item -> presenter.editSelected(position)
-                    R.id.close_database_item -> presenter.closeSelected(position)
+                    R.id.export_database_item -> presenter.exportSelected(database)
+                    R.id.delete_database_item -> presenter.deleteSelected(database)
+                    R.id.edit_database_item -> presenter.editSelected(database)
+                    R.id.close_database_item -> presenter.closeSelected(database)
                     else -> return@setOnMenuItemClickListener false
                 }
                 true
@@ -100,9 +101,6 @@ class DatabasesAdapter @Inject constructor(
         }
     }
 
-    /**
-     * Represents ViewHolder for item of databases list.
-     */
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var lockImage: ImageView = view.findViewById(R.id.itemIcon)
         var databaseName: TextView = view.findViewById(R.id.itemName)
@@ -113,7 +111,8 @@ class DatabasesAdapter @Inject constructor(
             // or start AccountsActivity for given database, this behaviour is decided in
             // openDatabase method of presenter
             view.setOnClickListener {
-                presenter.openDatabase(bindingAdapterPosition)
+                val database = databases[bindingAdapterPosition]
+                presenter.openDatabase(database)
             }
         }
     }
