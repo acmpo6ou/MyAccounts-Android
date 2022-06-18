@@ -24,6 +24,7 @@ import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account.accounts_list.AccountsFragmentDirections.actionDisplayAccount
 import com.acmpo6ou.myaccounts.account.accounts_list.AccountsFragmentDirections.actionEditAccount
 import com.acmpo6ou.myaccounts.core.superclass.ListFragment
+import com.acmpo6ou.myaccounts.database.databases_list.Account
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -38,31 +39,21 @@ class AccountsFragment : ListFragment(), AccountsFragmentI {
     override val items get() = presenter.accountsList
     override val actionCreateItem = R.id.actionCreateAccount
 
-    /**
-     * Navigates to DisplayAccountFragment passing account name.
-     * @param[name] name of account we want to display.
-     */
     override fun navigateToDisplay(name: String) {
         val action = actionDisplayAccount(name)
         view?.findNavController()?.navigate(action)
     }
 
-    /**
-     * Navigates to EditAccountFragment passing account name.
-     * @param[name] name of account we want to edit.
-     */
     override fun navigateToEdit(name: String) {
         val action = actionEditAccount(name)
         view?.findNavController()?.navigate(action)
     }
 
-    /**
-     * Displays a dialog for user to confirm deletion of account.
-     * @param[i] - account index.
-     */
-    override fun confirmDelete(i: Int) {
-        val name = presenter.accountsList[i].accountName
-        val message = resources.getString(R.string.confirm_account_delete, name)
-        confirmDialog(message) { presenter.deleteAccount(i) }
+    override fun confirmDelete(account: Account) {
+        val message = resources.getString(
+            R.string.confirm_account_delete,
+            account.accountName,
+        )
+        confirmDialog(message) { presenter.deleteAccount(account) }
     }
 }

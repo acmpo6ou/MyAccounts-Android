@@ -29,15 +29,15 @@ interface AccountsFragmentI : ListFragmentI {
 
     fun navigateToDisplay(name: String)
     fun navigateToEdit(name: String)
-    fun confirmDelete(i: Int)
+    fun confirmDelete(account: Account)
 }
 
 interface AccountsListPresenterI : ListPresenter {
     val accounts: DbMap
     val accountsList: List<Account>
 
-    fun displayAccount(i: Int)
-    fun editAccount(i: Int)
-    fun deleteSelected(i: Int)
-    fun deleteAccount(i: Int)
+    fun displayAccount(account: Account)
+    fun editAccount(account: Account)
+    fun deleteSelected(account: Account)
+    fun deleteAccount(account: Account)
 }

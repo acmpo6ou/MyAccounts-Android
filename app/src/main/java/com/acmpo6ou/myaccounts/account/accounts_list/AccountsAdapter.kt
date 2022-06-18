@@ -30,7 +30,6 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.acmpo6ou.myaccounts.R
-import com.acmpo6ou.myaccounts.database.databases_list.Account
 import com.caverock.androidsvg.SVGImageView
 import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.scopes.FragmentScoped
@@ -42,7 +41,7 @@ class AccountsAdapter @Inject constructor(
     @ActivityContext private val context: Context,
 ) : RecyclerView.Adapter<AccountsAdapter.ViewHolder>() {
 
-    private val accountsList: List<Account> get() = presenter.accountsList
+    private val accountsList get() = presenter.accountsList
 
     // it's important to sort icon names by length (longer names first) because this way we will
     // have better matches
@@ -92,8 +91,8 @@ class AccountsAdapter @Inject constructor(
 
             popup.setOnMenuItemClickListener {
                 when (it.itemId) {
-                    R.id.edit_account_item -> presenter.editAccount(position)
-                    R.id.delete_account_item -> presenter.deleteSelected(position)
+                    R.id.edit_account_item -> presenter.editAccount(account)
+                    R.id.delete_account_item -> presenter.deleteSelected(account)
                     else -> return@setOnMenuItemClickListener false
                 }
                 true
@@ -104,9 +103,6 @@ class AccountsAdapter @Inject constructor(
 
     override fun getItemCount(): Int = accountsList.size
 
-    /**
-     * Represents ViewHolder for item of accounts list.
-     */
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var accountIcon: SVGImageView = view.findViewById(R.id.accountIcon)
         var accountName: TextView = view.findViewById(R.id.accountName)
@@ -115,7 +111,8 @@ class AccountsAdapter @Inject constructor(
         init {
             // navigate to DisplayAccountFragment when account item is selected
             view.setOnClickListener {
-                presenter.displayAccount(bindingAdapterPosition)
+                val account = accountsList[bindingAdapterPosition]
+                presenter.displayAccount(account)
             }
         }
     }
