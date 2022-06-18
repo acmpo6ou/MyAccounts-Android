@@ -163,12 +163,19 @@ class DisplayAccountFragment : Fragment(), DisplayAccountFragmentI {
             .enabledInputMethodList
             .any { it.packageName == context?.packageName }
 
-        if (!isGranted) {
-            Intent(ACTION_INPUT_METHOD_SETTINGS).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                startActivity(this)
+        // display onboarding dialog explaining safe copy and paste feature
+        if (!isGranted) MaterialAlertDialogBuilder(this.requireContext())
+            .setTitle("Note")
+            .setIcon(R.drawable.ic_about)
+            .setNeutralButton("Ok") { _: DialogInterface, _: Int ->
+                Intent(ACTION_INPUT_METHOD_SETTINGS).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(this)
+                }
             }
-        }
+            .setMessage(R.string.copy_paste_onboarding)
+            .show()
+
         return isGranted
     }
 
