@@ -1,3 +1,8 @@
+<h4>v2.5.4</h4>
+<p>  •  replaced PyQtAccounts links with PyAccounts</p>
+<p>  •  minor improvements</p>
+<br/>
+
 <h4>v2.5.2</h4>
 <p>  •  fixed critical bugs when removing accounts or databases</p>
 <p>  •  added copy paste onboarding</p>
