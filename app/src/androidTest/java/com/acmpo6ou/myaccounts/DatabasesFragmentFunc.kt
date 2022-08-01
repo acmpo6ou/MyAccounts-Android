@@ -86,7 +86,7 @@ class DatabasesFragmentFunc {
     @Test
     fun confirmDelete_should_call_deleteDatabase_when_Yes_is_chosen_in_dialog() {
         launchFragmentInHiltContainer<DatabasesFragment> {
-            (this as DatabasesFragment).confirmDelete(0)
+            (this as DatabasesFragment).confirmDelete(app.databases[0])
         }
         // wait for dialog to appear
         Thread.sleep(1000)
@@ -98,13 +98,13 @@ class DatabasesFragmentFunc {
         // choose Yes
         onView(withId(android.R.id.button1)).perform(click())
 
-        verify(presenter).deleteDatabase(0)
+        verify(presenter).deleteDatabase(app.databases[0])
     }
 
     @Test
     fun confirmDelete_should_not_call_deleteDatabase_when_No_is_chosen_in_dialog() {
         launchFragmentInHiltContainer<DatabasesFragment> {
-            (this as DatabasesFragment).confirmDelete(0)
+            (this as DatabasesFragment).confirmDelete(app.databases[0])
         }
         // wait for dialog to appear
         Thread.sleep(1000)
@@ -116,13 +116,13 @@ class DatabasesFragmentFunc {
         // choose No
         onView(withId(android.R.id.button2)).perform(click())
 
-        verify(presenter, never()).deleteDatabase(0)
+        verify(presenter, never()).deleteDatabase(app.databases[0])
     }
 
     @Test
     fun confirmClose_should_call_closeDatabase_when_Yes_is_chosen_in_dialog() {
         launchFragmentInHiltContainer<DatabasesFragment> {
-            (this as DatabasesFragment).confirmClose(0)
+            (this as DatabasesFragment).confirmClose(app.databases[0])
         }
         // wait for dialog to appear
         Thread.sleep(1000)
@@ -134,13 +134,13 @@ class DatabasesFragmentFunc {
         // choose Yes
         onView(withId(android.R.id.button1)).perform(click())
 
-        verify(presenter).closeDatabase(0)
+        verify(presenter).closeDatabase(app.databases[0])
     }
 
     @Test
     fun confirmClose_should_not_call_closeDatabase_when_No_is_chosen_in_dialog() {
         launchFragmentInHiltContainer<DatabasesFragment> {
-            (this as DatabasesFragment).confirmClose(0)
+            (this as DatabasesFragment).confirmClose(app.databases[0])
         }
         // wait for dialog to appear
         Thread.sleep(1000)
@@ -152,6 +152,6 @@ class DatabasesFragmentFunc {
         // choose No
         onView(withId(android.R.id.button2)).perform(click())
 
-        verify(presenter, never()).closeDatabase(0)
+        verify(presenter, never()).closeDatabase(app.databases[0])
     }
 }

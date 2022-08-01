@@ -59,8 +59,9 @@ class AccountsFragmentFunc {
 
     @Before
     fun setup() {
+        context.setTheme(R.style.Theme_MyAccounts_NoActionBar)
         launchFragmentInHiltContainer<AccountsFragment> {
-            (this as AccountsFragment).confirmDelete(0)
+            (this as AccountsFragment).confirmDelete(account)
         }
         // wait for dialog to appear
         Thread.sleep(1000)
@@ -73,12 +74,12 @@ class AccountsFragmentFunc {
     @Test
     fun confirmDelete_should_call_deleteAccount_when_Yes_is_chosen_in_dialog() {
         onView(withId(android.R.id.button1)).perform(click()) // choose Yes
-        verify(presenter).deleteAccount(0)
+        verify(presenter).deleteAccount(account)
     }
 
     @Test
     fun confirmDelete_should_not_call_deleteAccount_when_No_is_chosen_in_dialog() {
         onView(withId(android.R.id.button2)).perform(click()) // choose No
-        verify(presenter, never()).deleteAccount(0)
+        verify(presenter, never()).deleteAccount(account)
     }
 }
