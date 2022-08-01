@@ -54,7 +54,7 @@ class AccountsAdapter @Inject constructor(
      */
     fun loadAccountIcon(image: SVGImageView, accountName: String) {
         for (icon in icons) {
-            if (icon in accountName) {
+            if (icon in accountName.lowercase()) {
                 image.setImageAsset("$icon.svg")
                 return
             }
