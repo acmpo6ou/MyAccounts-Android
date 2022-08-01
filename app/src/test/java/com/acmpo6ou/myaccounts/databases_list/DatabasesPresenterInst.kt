@@ -23,6 +23,7 @@ import android.content.Context
 import android.content.res.Resources
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
+import com.acmpo6ou.myaccounts.database.databases_list.Database
 import com.acmpo6ou.myaccounts.str
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.verify
@@ -98,7 +99,7 @@ class DatabasesPresenterInst : DatabasesPresenterTest() {
             .thenAnswer {
                 throw exception
             }
-        presenter.deleteDatabase(0)
+        presenter.deleteDatabase(Database("main"))
 
         verify(view).showError(deleteErrorTitle, exception.toString())
     }

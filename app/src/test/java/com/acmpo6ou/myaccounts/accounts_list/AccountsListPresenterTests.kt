@@ -51,31 +51,31 @@ class AccountsListPresenterTests {
 
     @Test
     fun `displayAccount should call view navigateToDisplay`() {
-        presenter.displayAccount(0)
+        presenter.displayAccount(account)
         verify(view).navigateToDisplay(account.accountName)
     }
 
     @Test
     fun `editAccount should call view navigateToEdit`() {
-        presenter.editAccount(0)
+        presenter.editAccount(account)
         verify(view).navigateToEdit(account.accountName)
     }
 
     @Test
     fun `deleteSelected should call view confirmDelete`() {
-        presenter.deleteSelected(0)
-        verify(view).confirmDelete(0)
+        presenter.deleteSelected(account)
+        verify(view).confirmDelete(account)
     }
 
     @Test
     fun `deleteAccount should remove account from 'accounts' map`() {
-        presenter.deleteAccount(0)
+        presenter.deleteAccount(account)
         assertFalse(account in presenter.accountsList)
     }
 
     @Test
     fun `deleteAccount should call view notifyRemoved`() {
-        presenter.deleteAccount(0)
+        presenter.deleteAccount(account)
         verify(view).notifyRemoved(0)
     }
 }

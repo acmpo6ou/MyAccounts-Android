@@ -106,12 +106,6 @@ class MainPresenterTests {
     }
 
     @Test
-    fun `importDatabase should call notifyChanged`() {
-        importMainDatabase()
-        verify(view).notifyChanged(0)
-    }
-
-    @Test
     fun `backPressed should call confirmBack when there are unsaved databases`() {
         doReturn(false).whenever(model).isDatabaseSaved(any())
         presenter.backPressed()

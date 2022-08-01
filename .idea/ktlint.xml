@@ -8,6 +8,7 @@
         <option value="import-ordering" />
         <option value="trailing-comma" />
         <option value="package-name" />
+        <option value="no-wildcard-imports" />
       </list>
     </disabledRules>
   </component>

@@ -83,18 +83,18 @@ class AccountsAdapterInst {
     @Test
     fun `clicking on 'Edit' should call editAccount`() {
         clickMenuItem(itemLayout, R.id.edit_account_item)
-        verify(presenter).editAccount(0)
+        verify(presenter).editAccount(account)
     }
 
     @Test
     fun `clicking on 'Delete' should call deleteSelected`() {
         clickMenuItem(itemLayout, R.id.delete_account_item)
-        verify(presenter).deleteSelected(0)
+        verify(presenter).deleteSelected(account)
     }
 
     @Test
     fun `click on recycler item should call displayAccount`() {
         itemLayout.performClick()
-        verify(presenter).displayAccount(0)
+        verify(presenter).displayAccount(account)
     }
 }

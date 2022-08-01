@@ -53,7 +53,7 @@ open class DatabasesPresenterTest : DatabaseUtils {
     }
 
     fun callExportDatabase() {
-        presenter.exportIndex = 1
+        presenter.databaseToExport = presenter.databases[1]
         presenter.exportDatabase(locationUri)
     }
 

@@ -56,7 +56,8 @@ import javax.inject.Singleton
 @HiltAndroidTest
 @UninstallModules(
     AppModule::class,
-    DatabasesBindings::class, DatabasesModule::class,
+    DatabasesBindings::class,
+    DatabasesModule::class,
     MainActivityModule::class,
 )
 @RunWith(RobolectricTestRunner::class)
@@ -117,32 +118,36 @@ class DatabasesFragmentInst {
         val expectedType = "application/octet-stream"
         val expectedTitle = "main.dba"
 
-        fragment.exportDialog(0)
+        fragment.exportDialog(app.databases[0])
 
         // check all intent properties
         val intent: Intent = shadowOf(RuntimeEnvironment.application).nextStartedActivity
 
         assertEquals(
             "exportDatabase: incorrect intent action!",
-            expectedAction, intent.action
+            expectedAction,
+            intent.action
         )
         assertEquals(
             "exportDatabase: incorrect intent category!",
-            expectedCategory, intent.categories.first()
+            expectedCategory,
+            intent.categories.first()
         )
         assertEquals(
             "exportDatabase: incorrect intent type!",
-            expectedType, intent.type
+            expectedType,
+            intent.type
         )
         assertEquals(
             "exportDatabase: incorrect intent title!",
-            expectedTitle, intent.getStringExtra(Intent.EXTRA_TITLE)
+            expectedTitle,
+            intent.getStringExtra(Intent.EXTRA_TITLE)
         )
     }
 
     @Test
     fun `confirmDelete should create dialog with appropriate message and title`() {
-        fragment.confirmDelete(0)
+        fragment.confirmDelete(app.databases[0])
 
         val dialog = ShadowAlertDialog.getLatestDialog() as AlertDialog
         val title = dialog.findViewById<TextView>(R.id.alertTitle)
@@ -154,7 +159,7 @@ class DatabasesFragmentInst {
 
     @Test
     fun `confirmClose should create dialog with appropriate message and title`() {
-        fragment.confirmClose(0)
+        fragment.confirmClose(app.databases[0])
 
         val dialog = ShadowAlertDialog.getLatestDialog() as AlertDialog
         val title = dialog.findViewById<TextView>(R.id.alertTitle)
@@ -215,7 +220,7 @@ class DatabasesFragmentInst {
     @Test
     fun `when closing database lock icon should change`() {
         setupPresenterAndAdapter()
-        fragment.presenter.closeDatabase(1)
+        fragment.presenter.closeDatabase(app.databases[1])
         val recycler = fragment.getRecycler()
 
         // check that lock icon changed to locked
@@ -227,7 +232,7 @@ class DatabasesFragmentInst {
     @Test
     fun `when deleting database it should disappear from recycler`() {
         setupPresenterAndAdapter()
-        fragment.presenter.deleteDatabase(0)
+        fragment.presenter.deleteDatabase(app.databases[0])
         val recycler = fragment.getRecycler()
 
         // check that the first database is `test` as `main` was deleted

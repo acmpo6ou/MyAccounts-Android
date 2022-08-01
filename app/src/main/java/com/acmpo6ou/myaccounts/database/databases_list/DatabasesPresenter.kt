@@ -39,7 +39,7 @@ open class DatabasesPresenter @Inject constructor(
     override var databases by app::databases
 
     // used by exportDatabase to determine what database to export.
-    private var databaseToExport: Database? = null
+    var databaseToExport: Database? = null
 
     init {
         databases = model.getDatabases()

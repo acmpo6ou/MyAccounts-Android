@@ -33,14 +33,8 @@ class DatabasesPresenterTests : DatabasesPresenterTest() {
 
     @Test
     fun `exportSelected should call exportDialog`() {
-        presenter.exportSelected(0)
-        verify(view).exportDialog(0)
-    }
-
-    @Test
-    fun `exportSelected should save database index to exportIndex`() {
-        presenter.exportSelected(1)
-        assertEquals(1, presenter.exportIndex)
+        presenter.exportSelected(presenter.databases[0])
+        verify(view).exportDialog(presenter.databases[0])
     }
 
     @Test
@@ -57,14 +51,14 @@ class DatabasesPresenterTests : DatabasesPresenterTest() {
 
     @Test
     fun `editSelected should call navigateToRename if database is closed`() {
-        presenter.editSelected(0)
+        presenter.editSelected(presenter.databases[0])
         verify(view).navigateToRename(0)
         verifyNoMoreInteractions(view)
     }
 
     @Test
     fun `editSelected should call navigateToEdit if database is opened`() {
-        presenter.editSelected(1)
+        presenter.editSelected(presenter.databases[1])
         verify(view).navigateToEdit(1)
         verifyNoMoreInteractions(view)
     }
@@ -74,39 +68,39 @@ class DatabasesPresenterTests : DatabasesPresenterTest() {
         val spyPresenter = spy(presenter)
         doReturn(true).`when`(model).isDatabaseSaved(any())
 
-        spyPresenter.closeSelected(0)
-        verify(spyPresenter).closeDatabase(0)
+        spyPresenter.closeSelected(presenter.databases[0])
+        verify(spyPresenter).closeDatabase(presenter.databases[0])
     }
 
     @Test
     fun `closeSelected should call view confirmClose when database isn't saved`() {
         doReturn(false).`when`(model).isDatabaseSaved(any())
-        presenter.closeSelected(0)
-        verify(view).confirmClose(0)
+        presenter.closeSelected(presenter.databases[0])
+        verify(view).confirmClose(presenter.databases[0])
     }
 
     @Test
     fun `closeDatabase should remove cryptography key from cache`() {
-        presenter.closeDatabase(1)
+        presenter.closeDatabase(presenter.databases[1])
         assertTrue(app.keyCache.isEmpty())
     }
 
     @Test
     fun `closeDatabase should reset database password`() {
-        presenter.closeDatabase(1)
+        presenter.closeDatabase(presenter.databases[1])
         assertNull(presenter.databases[1].password)
     }
 
     @Test
     fun `closeDatabase should call notifyChanged`() {
-        presenter.closeDatabase(1)
+        presenter.closeDatabase(presenter.databases[1])
         verify(view).notifyChanged(1)
     }
 
     @Test
     fun `openDatabase should navigate to OpenDatabaseFragment if database is closed`() {
         // first database is closed
-        presenter.openDatabase(0)
+        presenter.openDatabase(presenter.databases[0])
         verify(view).navigateToOpen(0)
 
         // startDatabase should not be called
@@ -116,7 +110,7 @@ class DatabasesPresenterTests : DatabasesPresenterTest() {
     @Test
     fun `openDatabase should call startDatabase passing database index if database is opened`() {
         // second database is opened
-        presenter.openDatabase(1)
+        presenter.openDatabase(presenter.databases[1])
         verify(view).startDatabase(1)
 
         // navigateToOpen should not be called
@@ -125,40 +119,40 @@ class DatabasesPresenterTests : DatabasesPresenterTest() {
 
     @Test
     fun `deleteSelected should call confirmDelete`() {
-        presenter.deleteSelected(0)
-        verify(view).confirmDelete(0)
+        presenter.deleteSelected(presenter.databases[0])
+        verify(view).confirmDelete(presenter.databases[0])
     }
 
     @Test
     fun `deleteDatabase should call model deleteDatabase passing name`() {
-        presenter.deleteDatabase(0)
+        presenter.deleteDatabase(presenter.databases[0])
         verify(model).deleteDatabase("main")
     }
 
     @Test
     fun `deleteDatabase should remove database from list`() {
-        presenter.deleteDatabase(0)
+        presenter.deleteDatabase(presenter.databases[0])
         assertEquals("test", presenter.databases[0].name)
         assertEquals(1, presenter.databases.size)
     }
 
     @Test
     fun `deleteDatabase should call notifyRemoved`() {
-        presenter.deleteDatabase(0)
+        presenter.deleteDatabase(presenter.databases[0])
         verify(view).notifyRemoved(0)
     }
 
     @Test
     fun `deleteDatabase should remove corresponding key from cache if it is there`() {
         // there is a key for second database (it's opened) and it has to be removed
-        presenter.deleteDatabase(1)
+        presenter.deleteDatabase(presenter.databases[1])
         assertTrue(app.keyCache.isEmpty())
     }
 
     @Test
     fun `deleteDatabase should not remove anything from cache if there is no key to remove`() {
         // there is no key for first database (it's closed), so nothing should be removed
-        presenter.deleteDatabase(0)
+        presenter.deleteDatabase(presenter.databases[0])
         assertEquals(1, app.keyCache.size)
     }
 }

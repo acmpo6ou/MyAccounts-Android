@@ -109,7 +109,7 @@ class DatabasesAdapterInst {
     @Test
     fun `click on recycler item should call openDatabase`() {
         itemLayout.performClick()
-        verify(presenter).openDatabase(0)
+        verify(presenter).openDatabase(mockDatabases[0])
     }
 
     @Test
@@ -135,30 +135,30 @@ class DatabasesAdapterInst {
     @Test
     fun `clicking on 'Close' should call closeSelected`() {
         clickMenuItem(itemLayout2, R.id.close_database_item)
-        verify(presenter).closeSelected(1)
+        verify(presenter).closeSelected(mockDatabases[1])
     }
 
     @Test
     fun `clicking on 'Close' should not call closeSelected when database is already closed`() {
         clickMenuItem(itemLayout, R.id.close_database_item)
-        verify(presenter, never()).closeSelected(0)
+        verify(presenter, never()).closeSelected(mockDatabases[0])
     }
 
     @Test
     fun `clicking on 'Delete' should call deleteSelected`() {
         clickMenuItem(itemLayout, R.id.delete_database_item)
-        verify(presenter).deleteSelected(0)
+        verify(presenter).deleteSelected(mockDatabases[0])
     }
 
     @Test
     fun `clicking on 'Export' should call exportSelected`() {
         clickMenuItem(itemLayout, R.id.export_database_item)
-        verify(presenter).exportSelected(0)
+        verify(presenter).exportSelected(mockDatabases[0])
     }
 
     @Test
     fun `clicking on 'Edit' should call editSelected`() {
         clickMenuItem(itemLayout, R.id.edit_database_item)
-        verify(presenter).editSelected(0)
+        verify(presenter).editSelected(mockDatabases[0])
     }
 }
