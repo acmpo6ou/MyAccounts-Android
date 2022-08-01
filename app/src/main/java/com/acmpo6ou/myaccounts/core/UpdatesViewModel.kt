@@ -62,7 +62,7 @@ open class UpdatesViewModel @Inject constructor() : ViewModel() {
      */
     open fun downloadUpdate(updateVersion: String, manager: DownloadManager, downloadDir: String) {
         val uri = Uri.parse(
-            "https://github.com/Acmpo6ou/MyAccounts/releases/download/" +
+            "https://github.com/acmpo6ou/MyAccounts/releases/download/" +
                 "v$updateVersion/$apkName"
         )
         manager.enqueue(
@@ -98,7 +98,7 @@ open class UpdatesViewModel @Inject constructor() : ViewModel() {
     @Suppress("BlockingMethodInNonBlockingContext")
     private fun getChangelogAsync() = viewModelScope.async(Dispatchers.Default) {
         URL(
-            "https://raw.githubusercontent.com/Acmpo6ou/MyAccounts/" +
+            "https://raw.githubusercontent.com/acmpo6ou/MyAccounts/" +
                 "master/app/src/main/res/raw/changelog"
         )
             .openStream()

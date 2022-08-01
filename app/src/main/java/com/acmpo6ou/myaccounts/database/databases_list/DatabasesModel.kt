@@ -31,7 +31,7 @@ import javax.inject.Inject
 /**
  * Represents account, it stores all account data such as name, password, email, etc.
  *
- * Note: the [copyEmail] property is not used by MyAccounts but it's used by PyQtAccounts,
+ * Note: the [copyEmail] property is not used by MyAccounts but it's used by PyAccounts,
  * so we have to list it here.
  */
 @Serializable
