@@ -19,10 +19,12 @@
 
 package com.acmpo6ou.myaccounts.accounts_list
 
+import android.content.Context
 import android.view.View
 import android.widget.TextView
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.*
 import com.acmpo6ou.myaccounts.account.accounts_list.AccountsFragment
 import com.acmpo6ou.myaccounts.account.accounts_list.AccountsListBindings
@@ -61,11 +63,13 @@ class AccountsAdapterInst {
 
     private lateinit var recycler: RecyclerView
     private lateinit var itemLayout: View
+    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
 
     @Before
     fun setUp() {
+        context.setTheme(R.style.Theme_MyAccounts_NoActionBar)
         hiltAndroidRule.inject()
-        launchFragmentInHiltContainer<AccountsFragment> {
+        launchFragmentInHiltContainer<AccountsFragment>() {
             recycler = this.getRecycler()
             Navigation.setViewNavController(this.requireView(), mock())
         }

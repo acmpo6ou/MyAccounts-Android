@@ -19,8 +19,10 @@
 
 package com.acmpo6ou.myaccounts.display_account
 
+import android.content.Context
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsActivityI
 import com.acmpo6ou.myaccounts.account.accounts_activity.AccountsModule
@@ -53,6 +55,7 @@ import org.robolectric.annotation.LooperMode
 class DisplayAccountAdapterInst {
     @get:Rule
     var hiltAndroidRule = HiltAndroidRule(this)
+    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
 
     @BindValue
     @JvmField
@@ -72,6 +75,7 @@ class DisplayAccountAdapterInst {
 
     @Before
     fun setUp() {
+        context.setTheme(R.style.Theme_MyAccounts_NoActionBar)
         hiltAndroidRule.inject()
         launchFragmentInHiltContainer<DisplayAccountFragment> {
             recycler = this.getRecycler(R.id.attachedFilesList)

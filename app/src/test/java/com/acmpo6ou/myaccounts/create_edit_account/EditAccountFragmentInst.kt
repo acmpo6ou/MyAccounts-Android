@@ -67,6 +67,7 @@ class EditAccountFragmentInst {
 
     @Before
     fun setup() {
+        context.setTheme(R.style.Theme_MyAccounts_NoActionBar)
         hiltAndroidRule.inject()
         val bundle = Bundle()
         bundle.putString("accountName", account.accountName)

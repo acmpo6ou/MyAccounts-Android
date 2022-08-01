@@ -80,6 +80,7 @@ class EditDatabaseFragmentInst {
 
     @Before
     fun setup() {
+        context.setTheme(R.style.Theme_MyAccounts_NoActionBar)
         db = Database("main", "123")
         app = mock {
             on { resources } doReturn context.resources

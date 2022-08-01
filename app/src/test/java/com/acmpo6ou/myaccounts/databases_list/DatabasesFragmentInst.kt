@@ -101,6 +101,7 @@ class DatabasesFragmentInst {
 
     @Before
     fun setUp() {
+        context.setTheme(R.style.Theme_MyAccounts_NoActionBar)
         app.databases = mutableListOf(Database("main"))
         hiltAndroidRule.inject()
         fragment = launchFragmentInHiltContainer()
@@ -143,30 +144,6 @@ class DatabasesFragmentInst {
             expectedTitle,
             intent.getStringExtra(Intent.EXTRA_TITLE)
         )
-    }
-
-    @Test
-    fun `confirmDelete should create dialog with appropriate message and title`() {
-        fragment.confirmDelete(app.databases[0])
-
-        val dialog = ShadowAlertDialog.getLatestDialog() as AlertDialog
-        val title = dialog.findViewById<TextView>(R.id.alertTitle)
-        val message = dialog.findViewById<TextView>(android.R.id.message)
-
-        assertEquals(warningTitle, title?.text)
-        assertEquals(String.format(confirmDeleteMsg, "main"), message?.text)
-    }
-
-    @Test
-    fun `confirmClose should create dialog with appropriate message and title`() {
-        fragment.confirmClose(app.databases[0])
-
-        val dialog = ShadowAlertDialog.getLatestDialog() as AlertDialog
-        val title = dialog.findViewById<TextView>(R.id.alertTitle)
-        val message = dialog.findViewById<TextView>(android.R.id.message)
-
-        assertEquals(warningTitle, title?.text)
-        assertEquals(String.format(confirmCloseMsg, "main"), message?.text)
     }
 
     @Test

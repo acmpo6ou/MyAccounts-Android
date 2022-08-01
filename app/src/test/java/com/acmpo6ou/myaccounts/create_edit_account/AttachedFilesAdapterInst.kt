@@ -75,6 +75,7 @@ class AttachedFilesAdapterInst {
 
     @Before
     fun setUp() {
+        context.setTheme(R.style.Theme_MyAccounts_NoActionBar)
         hiltAndroidRule.inject()
         fragment = launchFragmentInHiltContainer()
 

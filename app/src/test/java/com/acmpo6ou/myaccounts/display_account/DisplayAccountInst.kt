@@ -80,6 +80,7 @@ class DisplayAccountInst {
 
     @Before
     fun setup() {
+        context.setTheme(R.style.Theme_MyAccounts_NoActionBar)
         hiltAndroidRule.inject()
         fragment = launchFragmentInHiltContainer()
     }

@@ -19,9 +19,12 @@
 
 package com.acmpo6ou.myaccounts.accounts_list
 
+import android.content.Context
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.setViewNavController
+import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.account
 import com.acmpo6ou.myaccounts.account.accounts_list.AccountsFragment
 import com.acmpo6ou.myaccounts.account.accounts_list.AccountsFragmentDirections.actionDisplayAccount
@@ -60,9 +63,11 @@ class AccountsFragmentInst {
 
     lateinit var fragment: AccountsFragment
     private lateinit var navController: NavController
+    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
 
     @Before
     fun setUp() {
+        context.setTheme(R.style.Theme_MyAccounts_NoActionBar)
         hiltAndroidRule.inject()
         fragment = launchFragmentInHiltContainer()
     }

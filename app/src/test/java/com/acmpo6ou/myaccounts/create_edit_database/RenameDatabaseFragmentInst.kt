@@ -25,6 +25,7 @@ import android.os.Bundle
 import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.MainActivity
 import com.acmpo6ou.myaccounts.MyApp
+import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.core.AppModule
 import com.acmpo6ou.myaccounts.database.create_edit_database.RenameDatabaseFragment
 import com.acmpo6ou.myaccounts.database.create_edit_database.RenameDatabaseViewModel
@@ -85,6 +86,7 @@ class RenameDatabaseFragmentInst {
 
     @Before
     fun setup() {
+        context.setTheme(R.style.Theme_MyAccounts_NoActionBar)
         db = Database("main")
         app = mock {
             on { res } doReturn context.resources

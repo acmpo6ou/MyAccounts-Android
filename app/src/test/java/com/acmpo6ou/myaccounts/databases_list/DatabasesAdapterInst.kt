@@ -19,11 +19,13 @@
 
 package com.acmpo6ou.myaccounts.databases_list
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.platform.app.InstrumentationRegistry
 import com.acmpo6ou.myaccounts.*
 import com.acmpo6ou.myaccounts.core.AppModule
 import com.acmpo6ou.myaccounts.database.databases_list.Database
@@ -59,6 +61,7 @@ import javax.inject.Singleton
 class DatabasesAdapterInst {
     @get:Rule
     var hiltAndroidRule = HiltAndroidRule(this)
+    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
 
     @BindValue
     @JvmField
@@ -94,6 +97,7 @@ class DatabasesAdapterInst {
 
     @Before
     fun setup() {
+        context.setTheme(R.style.Theme_MyAccounts_NoActionBar)
         app.databases = mockDatabases
         hiltAndroidRule.inject()
 
