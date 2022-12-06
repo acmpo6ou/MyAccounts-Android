@@ -63,7 +63,7 @@ class AttachedFilesAdapter(
             popup.menu.findItem(R.id.remove_attached_file).let {
                 val spanStr = SpannableString(it.title)
                 val redColor = ContextCompat.getColor(view.myContext, R.color.red)
-                spanStr.setSpan(ForegroundColorSpan(redColor), 0, it.title.length, 0)
+                spanStr.setSpan(ForegroundColorSpan(redColor), 0, it.title?.length ?: 0, 0)
                 it.title = spanStr
             }
 

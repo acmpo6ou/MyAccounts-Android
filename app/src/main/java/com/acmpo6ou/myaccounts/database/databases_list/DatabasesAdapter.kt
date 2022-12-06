@@ -78,7 +78,7 @@ class DatabasesAdapter @Inject constructor(
             popup.menu.findItem(R.id.delete_database_item).let {
                 val spanStr = SpannableString(it.title)
                 val redColor = ContextCompat.getColor(context, R.color.red)
-                spanStr.setSpan(ForegroundColorSpan(redColor), 0, it.title.length, 0)
+                spanStr.setSpan(ForegroundColorSpan(redColor), 0, it.title?.length ?: 0, 0)
                 it.title = spanStr
             }
 
