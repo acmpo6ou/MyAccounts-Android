@@ -53,7 +53,6 @@ open class MainActivity : SuperActivity(), MainActivityI {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         super.onCreate(savedInstanceState)
 
         loadSettings()
