@@ -27,7 +27,9 @@ import android.widget.CheckBox
 import com.acmpo6ou.myaccounts.R
 import com.google.android.material.textfield.TextInputEditText
 import com.shawnlin.numberpicker.NumberPicker
+import java.security.SecureRandom
 import java.util.*
+import kotlin.streams.asSequence
 
 /**
  * Dialog to generate password and fill [pass1] and [pass2] password fields with it.
@@ -113,13 +115,16 @@ open class GenPassDialog(
      * @return generated random password.
      */
     open fun genPass(len: Int, chars: List<String>): String {
-        val password = (1..len)
-            .map { chars.joinToString("").random() }
+        val source = chars.joinToString("")
+        val password = SecureRandom()
+            .ints(len.toLong(), 0, source.length)
+            .asSequence()
+            .map(source::get)
             .joinToString("")
 
         // because password generates randomly it not necessary will contain all characters that are
         // specified in [chars], so here we check that generated password contains at least one
-        // character from each string specified in [chars] and if not we generate password again
+        // character from each string specified in [chars] and if not, we generate password again
         for (seq in chars) {
             if (!(password hasoneof seq)) {
                 return genPass(len, chars)
