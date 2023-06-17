@@ -21,9 +21,14 @@ package com.acmpo6ou.myaccounts.core.superclass
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import androidx.core.view.ViewCompat.animate
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,6 +37,7 @@ import com.acmpo6ou.myaccounts.R
 import com.acmpo6ou.myaccounts.databinding.FragmentListBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+
 
 /**
  * Super class for fragments that contain list of items.
@@ -48,7 +54,7 @@ abstract class ListFragment : Fragment(), ListFragmentI {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = FragmentListBinding.inflate(layoutInflater, container, false)
         return b.root
@@ -132,7 +138,20 @@ abstract class ListFragment : Fragment(), ListFragmentI {
     override fun notifyChanged(i: Int) = adapter.notifyItemChanged(i)
 
     override fun notifyRemoved(i: Int) {
-        adapter.notifyItemRemoved(i)
-        checkListPlaceholder()
+        val anim = AnimationUtils.loadAnimation(
+            requireContext(),
+            android.R.anim.slide_out_right,
+        )
+        anim.duration = 300
+        val item = b.itemsList.layoutManager?.findViewByPosition(i)
+        item?.animate()
+            ?.translationX(item.width.toFloat())
+            ?.alpha(0f)
+            ?.duration = 300
+
+        Handler(Looper.getMainLooper()).postDelayed(Runnable {
+            adapter.notifyItemRemoved(i)
+            checkListPlaceholder()
+        }, anim.duration)
     }
 }
