@@ -133,21 +133,21 @@ inline fun <reified T : Fragment> launchFragmentInHiltContainer(
             ApplicationProvider.getApplicationContext(),
             HiltActivityForTest::class.java
         )
-    ).putExtra(FragmentScenario.EmptyFragmentActivity.THEME_EXTRAS_BUNDLE_KEY, themeResId)
+    ).putExtra("androidx.fragment.app.testing.FragmentScenario.EmptyFragmentActivity.THEME_EXTRAS_BUNDLE_KEY", themeResId)
 
-    var fragment: Fragment? = null
+    var fragment = Fragment()
     ActivityScenario.launch<HiltActivityForTest>(startActivityIntent).onActivity { activity ->
         fragment = activity.supportFragmentManager.fragmentFactory.instantiate(
             Preconditions.checkNotNull(T::class.java.classLoader),
             T::class.java.name
         )
-        fragment!!.arguments = fragmentArgs
+        fragment.arguments = fragmentArgs
         activity.supportFragmentManager
             .beginTransaction()
-            .add(android.R.id.content, fragment!!, "")
+            .add(android.R.id.content, fragment, "")
             .commitNow()
 
-        fragment!!.action()
+        fragment.action()
     }
     return fragment as T
 }
