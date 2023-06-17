@@ -67,9 +67,7 @@ private fun View.findSnackbarLayout(): Snackbar.SnackbarLayout? {
     return null
 }
 
-// this is where we will create delete and edit databases during testing
-// /dev/shm/ is a fake in-memory file system
-const val accountsDir = "/dev/shm/accounts/"
+const val accountsDir = "/tmp/myaccounts/"
 const val SRC_DIR = "$accountsDir/src/"
 val salt = "0123456789abcdef".toByteArray() // 16 bytes of salt
 
