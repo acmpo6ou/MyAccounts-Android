@@ -88,6 +88,7 @@ android {
             java.srcDirs += "$projectDir/src/debug"
         }
     }
+    namespace 'com.acmpo6ou.myaccounts'
 }
 
 dependencies {
