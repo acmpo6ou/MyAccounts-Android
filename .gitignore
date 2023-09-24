@@ -113,3 +113,4 @@ lint/tmp/
 projectFilesBackup/*
 app/release/*
 release.myaccounts.jks
+.idea/migrations.xml
