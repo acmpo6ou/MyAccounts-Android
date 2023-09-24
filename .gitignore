@@ -114,3 +114,4 @@ projectFilesBackup/*
 app/release/*
 release.myaccounts.jks
 .idea/migrations.xml
+.idea/androidTestResultsUserPreferences.xml
