@@ -46,8 +46,8 @@ android {
         applicationId "com.acmpo6ou.myaccounts"
         minSdkVersion 26
         targetSdkVersion 33
-        versionCode 19
-        versionName "2.6.3"
+        versionCode 20
+        versionName '2.6.6'
         setProperty("archivesBaseName", "myaccounts") // name will be myaccounts-release.apk
         testInstrumentationRunner "com.acmpo6ou.myaccounts.HiltTestRunner"
     }
