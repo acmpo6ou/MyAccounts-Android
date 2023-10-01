@@ -45,7 +45,8 @@ open class GenPassDialog(
     val dialog = Dialog(context)
     val generateButton: Button
     val cancelButton: Button
-    val length: NumberPicker
+    val minLength: NumberPicker
+    val maxLength: NumberPicker
 
     val digitsBox: CheckBox
     val lowerBox: CheckBox
@@ -64,9 +65,9 @@ open class GenPassDialog(
             setContentView(R.layout.generate_password)
             generateButton = findViewById(R.id.generateButton)
             cancelButton = findViewById(R.id.cancelButton)
-            length = findViewById(R.id.passwordLength)
+            minLength = findViewById(R.id.minLength)
+            maxLength = findViewById(R.id.maxLength)
 
-            // check boxes
             digitsBox = findViewById(R.id.numbersBox)
             lowerBox = findViewById(R.id.lowerLettersBox)
             upperBox = findViewById(R.id.upperLettersBox)
@@ -74,7 +75,7 @@ open class GenPassDialog(
         }
         checkBoxes = listOf(digitsBox, lowerBox, upperBox, punctBox)
 
-        // set width of dialog to 90%
+        // set dialog width to 90%
         val width = (context.resources.displayMetrics.widthPixels * 0.90).toInt()
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
         dialog.window?.setLayout(width, height)
@@ -93,7 +94,7 @@ open class GenPassDialog(
             // do not proceed if no checkboxes are checked
             if (chars.isNotEmpty()) {
                 // generate password and set it on password fields
-                val password = genPass(length.value, chars)
+                val password = genPass(minLength.value, maxLength.value, chars)
                 pass1.setText(password)
                 pass2.setText(password)
             }
@@ -108,16 +109,24 @@ open class GenPassDialog(
     }
 
     /**
-     * Generates random password.
+     * Generates random password of random length between [minLength] and [maxLength].
      *
-     * @param[len] length of generated password.
+     * @param[minLength] minimum password length.
+     * @param[maxLength] maximum password length.
      * @param[chars] list of characters from which password will be generated.
-     * @return generated random password.
      */
-    open fun genPass(len: Int, chars: List<String>): String {
+    open fun genPass(minLength: Int, maxLength: Int, chars: List<String>): String {
         val source = chars.joinToString("")
-        val password = SecureRandom()
-            .ints(len.toLong(), 0, source.length)
+        val secureRandom = SecureRandom()
+
+        val length = secureRandom
+            .ints(1, minLength, maxLength)
+            .asSequence()
+            .first()
+            .toLong()
+
+        val password = secureRandom
+            .ints(length, 0, source.length)
             .asSequence()
             .map(source::get)
             .joinToString("")
@@ -127,7 +136,7 @@ open class GenPassDialog(
         // character from each string specified in [chars] and if not, we generate password again
         for (seq in chars) {
             if (!(password hasoneof seq)) {
-                return genPass(len, chars)
+                return genPass(minLength, maxLength, chars)
             }
         }
         return password
