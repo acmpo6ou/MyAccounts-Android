@@ -80,6 +80,14 @@ open class GenPassDialog(
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
         dialog.window?.setLayout(width, height)
 
+        // prevent setting minLength to a higher value than maxLength
+        minLength.setOnValueChangedListener { _: NumberPicker, _: Int, value: Int ->
+            maxLength.minValue = value
+        }
+        maxLength.setOnValueChangedListener { _: NumberPicker, _: Int, value: Int ->
+            minLength.maxValue = value
+        }
+
         generateButton.setOnClickListener {
             // get all selected checkboxes
             val chars = mutableListOf<String>()
@@ -101,6 +109,7 @@ open class GenPassDialog(
 
             dialog.dismiss()
         }
+
         cancelButton.setOnClickListener {
             dialog.dismiss()
         }
@@ -119,11 +128,15 @@ open class GenPassDialog(
         val source = chars.joinToString("")
         val secureRandom = SecureRandom()
 
-        val length = secureRandom
-            .ints(1, minLength, maxLength)
-            .asSequence()
-            .first()
-            .toLong()
+        val length = if (minLength == maxLength) {
+            minLength.toLong()
+        } else {
+            secureRandom
+                .ints(1, minLength, maxLength)
+                .asSequence()
+                .first()
+                .toLong()
+        }
 
         val password = secureRandom
             .ints(length, 0, source.length)

@@ -21,6 +21,7 @@ package com.acmpo6ou.myaccounts.utils
 
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
+import com.acmpo6ou.myaccounts.TestApplication
 import com.acmpo6ou.myaccounts.core.utils.GenPassDialog
 import com.acmpo6ou.myaccounts.core.utils.hasoneof
 import com.google.android.material.textfield.TextInputEditText
@@ -32,14 +33,16 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyString
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
+@Config(application = TestApplication::class)
 @RunWith(RobolectricTestRunner::class)
 class GenPassDialogInst {
     val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     private lateinit var dialog: GenPassDialog
 
-    private val pass1: TextInputEditText = mock()
-    private val pass2: TextInputEditText = mock()
+    private val pass1 = TextInputEditText(context)
+    private val pass2 = TextInputEditText(context)
 
     @Before
     fun setup() {
@@ -48,11 +51,10 @@ class GenPassDialogInst {
 
     @Test
     fun `click on generateButton should generate password of correct length`() {
-        // default length should be 16
-        assertEquals(16, dialog.length.value)
-
         dialog.generateButton.performClick()
-        verify(pass1).setText(argThat<String> { length == 16 })
+        val length = pass1.text!!.length
+        assertEquals(length, pass2.text!!.length)
+        assertTrue(length in 16..32)
     }
 
     @Test
@@ -62,37 +64,11 @@ class GenPassDialogInst {
         dialog.punctBox.isChecked = false
 
         dialog.generateButton.performClick()
-        argumentCaptor<String> {
-            verify(pass1).setText(capture())
-
-            assertTrue(firstValue hasoneof dialog.digits)
-            assertTrue(firstValue hasoneof dialog.upper)
-            assertFalse(firstValue hasoneof dialog.lower)
-            assertFalse(firstValue hasoneof dialog.punctuation)
-        }
-    }
-
-    @Test
-    fun `generated password should be set on password fields`() {
-        // passwords from both fields
-        var text1 = ""
-        var text2 = ""
-
-        dialog.generateButton.performClick()
-
-        // get passwords from fields
-        argumentCaptor<String> {
-            verify(pass1).setText(capture())
-            text1 = firstValue
-        }
-        argumentCaptor<String> {
-            verify(pass2).setText(capture())
-            text2 = firstValue
-        }
-
-        // check passwords
-        assertNotEquals("", text1)
-        assertEquals(text1, text2)
+        val password = pass1.text.toString()
+        assertTrue(password hasoneof dialog.digits)
+        assertTrue(password hasoneof dialog.upper)
+        assertFalse(password hasoneof dialog.lower)
+        assertFalse(password hasoneof dialog.punctuation)
     }
 
     @Test
@@ -104,13 +80,13 @@ class GenPassDialogInst {
         dialog.punctBox.isChecked = false
 
         dialog.generateButton.performClick()
-        verify(pass1, never()).setText(anyString())
-        verify(pass2, never()).setText(anyString())
+        assertTrue(pass1.text.isNullOrEmpty())
+        assertTrue(pass2.text.isNullOrEmpty())
     }
 
     @Test
     fun `genPass should generate password from passed characters only`() {
-        val password = dialog.genPass(16, listOf(dialog.digits, dialog.lower))
+        val password = dialog.genPass(16, 32, listOf(dialog.digits, dialog.lower))
         assertTrue(password hasoneof dialog.digits)
         assertTrue(password hasoneof dialog.lower)
         assertFalse(password hasoneof dialog.upper)
@@ -119,7 +95,7 @@ class GenPassDialogInst {
 
     @Test
     fun `genPass should generate password of specified length`() {
-        val password = dialog.genPass(16, dialog.allChars)
+        val password = dialog.genPass(16, 16, dialog.allChars)
         assertEquals(16, password.length)
     }
 }
