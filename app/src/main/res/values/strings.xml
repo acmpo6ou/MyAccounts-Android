@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (c) 2020-2022. Bohdan Kolvakh
+  ~ Copyright (c) 2020-2023. Bohdan Kolvakh
   ~ This file is part of MyAccounts.
   ~
   ~ MyAccounts is free software: you can redistribute it and/or modify
@@ -89,7 +89,8 @@
     <string name="empty_password">Please, provide a password</string>
     <string name="diff_passwords">Passwords do not match!</string>
     <string name="error_title">Error</string>
-    <string name="length_">Length:</string>
+    <string name="min_length">Min length:</string>
+    <string name="max_length">Max length:</string>
     <string name="numbers">Digits</string>
     <string name="big_english_letters">Big english letters</string>
     <string name="small_english_letters">Small english letters</string>
